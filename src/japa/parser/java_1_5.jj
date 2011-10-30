@@ -2043,6 +2043,10 @@ Expression UnaryExpression():
 }
 {
   (
+	  ret = PreIncrementExpression()
+	|
+	  ret = PreDecrementExpression()
+	|
 	  ( "+" { op = UnaryExpr.Operator.positive; line=token.beginLine; column=token.beginColumn;} |
 	    "-" { op = UnaryExpr.Operator.negative; line=token.beginLine; column=token.beginColumn;}
 	  ) ret = UnaryExpression()
@@ -2060,10 +2064,6 @@ Expression UnaryExpression():
 	  	 }
 	  }
 	|
-	  ret = PreIncrementExpression()
-	|
-	  ret = PreDecrementExpression()
-	|
 	  ret = UnaryExpressionNotPlusMinus()
   )
   { return ret; }
@@ -2076,7 +2076,7 @@ Expression PreIncrementExpression():
 	int column;
 }
 {
-  "++" {line=token.beginLine; column=token.beginColumn;} ret = PrimaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, UnaryExpr.Operator.preIncrement); }
+  "++" {line=token.beginLine; column=token.beginColumn;} ret = UnaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, UnaryExpr.Operator.preIncrement); }
   { return ret; }
 }
 
@@ -2087,7 +2087,7 @@ Expression PreDecrementExpression():
 	int column;
 }
 {
-  "--" {line=token.beginLine; column=token.beginColumn;} ret = PrimaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, UnaryExpr.Operator.preDecrement); }
+  "--" {line=token.beginLine; column=token.beginColumn;} ret = UnaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, UnaryExpr.Operator.preDecrement); }
   { return ret; }
 }
 
@@ -2104,24 +2104,12 @@ Expression UnaryExpressionNotPlusMinus():
 	    "!" { op = UnaryExpr.Operator.not;     line=token.beginLine; column=token.beginColumn;}
 	  ) ret = UnaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, op); }
 	|
-	  LOOKAHEAD( CastLookahead() )
+	  LOOKAHEAD( CastExpression() )
 	  ret = CastExpression()
 	|
-	  ret = PostfixExpression()
+      ret = PostfixExpression()
   )
   { return ret; }
-}
-
-// This production is to determine lookahead only.  The LOOKAHEAD specifications
-// below are not used, but they are there just to indicate that we know about
-// this.
-void CastLookahead():
-{}
-{
-  LOOKAHEAD("(" Type() "[")
-  "(" Type() "[" "]"
-|
-  "(" Type() ")" UnaryExpression()
 }
 
 Expression PostfixExpression():
@@ -2148,7 +2136,13 @@ Expression CastExpression():
 	int column;
 }
 {
-  "(" {line=token.beginLine; column=token.beginColumn;} type = Type() ")" ret = UnaryExpression() { ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
+  "(" {line=token.beginLine; column=token.beginColumn;} 
+  (
+  	  LOOKAHEAD(2)
+  	  type = PrimitiveType() ")" ret = UnaryExpression() { ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
+  	|
+  	  type = ReferenceType() ")" ret = UnaryExpressionNotPlusMinus() { ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
+  )
   { return ret; }
 }
 

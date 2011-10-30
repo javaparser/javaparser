@@ -3,6 +3,8 @@
  */
 package japa.parser.ast.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import japa.parser.ast.BlockComment;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
@@ -85,13 +87,15 @@ import japa.parser.ast.type.ReferenceType;
 import japa.parser.ast.type.VoidType;
 import japa.parser.ast.type.WildcardType;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
-import junit.framework.TestCase;
+
+import org.junit.Test;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public class TestNodePositions extends TestCase {
+public class TestNodePositions {
 
+    @Test
     public void testNodePositions() throws Exception {
         String source = TestHelper.readClass("./test", DumperTestClass.class);
         CompilationUnit cu = TestHelper.parserString(source);

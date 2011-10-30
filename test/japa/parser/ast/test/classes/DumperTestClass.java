@@ -35,6 +35,13 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
 
     ;
 
+    {
+        int z = 0, y = 0;
+        int a = (z) + y;
+        a = (+z) + y;
+        byte b = (byte) +y;
+    }
+
     @Deprecated()
     static class Ugly {
 

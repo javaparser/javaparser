@@ -30,12 +30,13 @@ import japa.parser.ast.visitor.GenericVisitorAdapter;
 import japa.parser.ast.visitor.ModifierVisitorAdapter;
 import japa.parser.ast.visitor.VoidVisitor;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
-import junit.framework.TestCase;
+
+import org.junit.Test;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public class TestAdapters extends TestCase {
+public class TestAdapters {
 
     class ConcreteVoidVisitorAdapter extends VoidVisitorAdapter {
 
@@ -65,14 +66,17 @@ public class TestAdapters extends TestCase {
         cu.accept(visitor, null);
     }
 
+    @Test
     public void testVoidVisitorAdapter() throws Exception {
         doTest(new ConcreteVoidVisitorAdapter());
     }
 
+    @Test
     public void testGenericVisitorAdapter() throws Exception {
         doTest(new ConcreteGenericVisitorAdapter());
     }
 
+    @Test
     public void testModifierVisitorAdapter() throws Exception {
         doTest(new ConcreteModifierVisitorAdapter());
     }

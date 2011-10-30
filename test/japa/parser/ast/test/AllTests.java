@@ -3,23 +3,18 @@
  */
 package japa.parser.ast.test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
 /**
  * @author Julio Vilmar Gesser
  */
+@RunWith(value = Suite.class)
+@SuiteClasses(value = {//
+TestAdapters.class, //
+        TestNodePositions.class, //
+        TestDumper.class })
 public class AllTests {
-
-    public static Test suite() {
-        TestSuite suite = new TestSuite("Test for japa.parser.ast.test");
-        //$JUnit-BEGIN$
-        suite.addTestSuite(TestAdapters.class);
-        suite.addTestSuite(TestNodePositions.class);
-        suite.addTestSuite(TestDumper.class);
-        //$JUnit-END$
-        return suite;
-    }
 
 }

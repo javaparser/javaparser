@@ -21,15 +21,17 @@
  */
 package japa.parser.ast.test;
 
+import static org.junit.Assert.assertEquals;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.test.classes.DumperTestClass;
 import japa.parser.ast.test.classes.JavadocTestClass;
-import junit.framework.TestCase;
+
+import org.junit.Test;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public class TestDumper extends TestCase {
+public class TestDumper {
 
     public void testDumpVisitor() throws Exception {
         String source = TestHelper.readClass("./test", DumperTestClass.class);
@@ -37,6 +39,7 @@ public class TestDumper extends TestCase {
         assertEquals(source, cu.toString());
     }
 
+    @Test
     public void testJavadoc() throws Exception {
         String source = TestHelper.readClass("./test", JavadocTestClass.class);
         CompilationUnit cu = TestHelper.parserString(source);
@@ -44,6 +47,7 @@ public class TestDumper extends TestCase {
         assertEquals(19, cu.getComments().size());
     }
 
+    @Test
     public void testComments() throws Exception {
         final String source_with_comment = //
         "package japa.parser.javacc;\n" + //

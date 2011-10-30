@@ -32,6 +32,10 @@ bugs and feature enhacement and download the latest version:
 Version history
 ---------------
 
+1.0.7 (2009-04-12)
+- Issue 19 fixed: 
+- Tests changed to run with junit 4 
+
 1.0.6 (2009-01-11)
 - Issue 11 fixed: changed method get/setPakage to get/setPackage in the class CompilationUnit
 - Created new visitor adapter to help AST modification: ModifierVisitorAdapter
