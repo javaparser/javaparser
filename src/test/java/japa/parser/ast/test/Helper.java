@@ -44,8 +44,13 @@ final class Helper {
 		return clazz.getResourceAsStream("/" + clazz.getName().replace('.', '/') + ".java");
 	}
 
+	@Deprecated
 	public static CompilationUnit parserClass(final String sourceFolder, final Class<?> clazz) throws ParseException {
 		return JavaParser.parse(getInputStream(sourceFolder, clazz));
+	}
+
+	public static CompilationUnit parserClass(InputStream inputStream) throws ParseException {
+		return JavaParser.parse(inputStream);
 	}
 
 	public static CompilationUnit parserString(final String source) throws ParseException {
@@ -68,6 +73,7 @@ final class Helper {
 		}
 	}
 
+	@Deprecated
 	public static String readClass(final String sourceFolder, final Class<?> clazz) throws IOException {
 		return readStream(getInputStream(sourceFolder, clazz));
 	}
