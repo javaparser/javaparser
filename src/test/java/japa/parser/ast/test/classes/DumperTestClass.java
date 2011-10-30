@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 import static java.util.Map.Entry;
 import java.applet.*;
+import org.junit.Ignore;
 
+@Ignore
 @Deprecated
 public class DumperTestClass<T extends List<int[]>, X> extends Base implements Serializable {
 
@@ -282,7 +284,6 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
         }
     }
 
-    @AnnotationTest(value = "x")
     public static CompilationUnit parse(@Deprecated File file) throws ParseException, IOException {
         String a = ((String) "qwe");
         String x = ((String) clz1.getName());
@@ -321,7 +322,6 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
 
     class A<T extends Integer & Serializable> implements XXX, Serializable {
 
-        @AnnotationTest
         public <ABC> A(Integer integer, ABC string) throws Exception, IOException {
         }
     }
@@ -344,23 +344,6 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
             }
         };
     }
-
-    @Documented
-    public @interface AnnotationTest {
-
-        String value() default "asd";
-
-        @Deprecated
-        int[] valueI() default { 1, 2 };
-
-        AnnotationTest valueA1() default @AnnotationTest;
-
-        AnnotationTest valueA2() default @AnnotationTest("qwe");
-
-        AnnotationTest valueA3() default @AnnotationTest(value = "qwe", valueI = { 1 });
-    }
-
-    ;
 }
 
 class Base {

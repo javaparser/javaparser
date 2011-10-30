@@ -1,9 +1,12 @@
 package japa.parser.ast.test.classes;
 
+import org.junit.Ignore;
+
 /**
  * Javadoc 1
  * @author Julio Vilmar Gesser
  */
+@Ignore
 public abstract class JavadocTestClass {
 
     ;

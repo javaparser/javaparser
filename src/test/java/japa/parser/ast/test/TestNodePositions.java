@@ -95,549 +95,470 @@ import org.junit.Test;
  */
 public class TestNodePositions {
 
-    @Test
-    public void testNodePositions() throws Exception {
-    	String source = Helper.readClass("./src/test/java", DumperTestClass.class);
-        CompilationUnit cu = Helper.parserString(source);
-
-        cu.accept(new TestVisitor(source), null);
-    }
-
-    void doTest(String source, Node node) {
-        String parsed = node.toString();
-
-        assertTrue(node.getClass().getName() + ": " + parsed, node.getBeginLine() >= 0);
-        assertTrue(node.getClass().getName() + ": " + parsed, node.getBeginColumn() >= 0);
-        assertTrue(node.getClass().getName() + ": " + parsed, node.getEndLine() >= 0);
-        assertTrue(node.getClass().getName() + ": " + parsed, node.getEndColumn() >= 0);
-
-        if (node.getBeginLine() == node.getEndLine()) {
-            assertTrue(node.getClass().getName() + ": " + parsed, node.getBeginColumn() <= node.getEndColumn());
-        } else {
-            assertTrue(node.getClass().getName() + ": " + parsed, node.getBeginLine() <= node.getEndLine());
-        }
-
-        String substr = substring(source, node.getBeginLine(), node.getBeginColumn(), node.getEndLine(), node.getEndColumn());
-        assertEquals(node.getClass().getName(), trimLines(parsed), trimLines(substr));
-    }
-
-    private String trimLines(String str) {
-        String[] split = str.split("\n");
-        StringBuilder ret = new StringBuilder();
-        for (int i = 0; i < split.length; i++) {
-            ret.append(split[i].trim());
-            if (i < split.length - 1) {
-                ret.append("\n");
-            }
-        }
-
-        return ret.toString();
-    }
-
-    private String substring(String source, int beginLine, int beginColumn, int endLine, int endColumn) {
-        int pos = 0;
-        while (beginLine > 1) {
-            if (source.charAt(pos) == '\n') {
-                beginLine--;
-                endLine--;
-            }
-            pos++;
-        }
-        int start = pos + beginColumn - 1;
-
-        while (endLine > 1) {
-            if (source.charAt(pos) == '\n') {
-                endLine--;
-            }
-            pos++;
-        }
-        int end = pos + endColumn;
-
-        return source.substring(start, end);
-    }
-
-    class TestVisitor extends VoidVisitorAdapter<Object> {
-
-        private final String source;
-
-        public TestVisitor(String source) {
-            this.source = source;
-        }
-
-        @Override
-        public void visit(AnnotationDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(AnnotationMemberDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ArrayAccessExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ArrayCreationExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ArrayInitializerExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(AssertStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(AssignExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(BinaryExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(BlockComment n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(BlockStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(BooleanLiteralExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(BreakStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(CastExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(CatchClause n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(CharLiteralExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ClassExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ClassOrInterfaceDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ClassOrInterfaceType n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(CompilationUnit n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ConditionalExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ConstructorDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ContinueStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(DoStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(DoubleLiteralExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(EmptyMemberDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(EmptyStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(EmptyTypeDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(EnclosedExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(EnumConstantDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(EnumDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ExplicitConstructorInvocationStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ExpressionStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(FieldAccessExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(FieldDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ForeachStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ForStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(IfStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ImportDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(InitializerDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(InstanceOfExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(IntegerLiteralExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(IntegerLiteralMinValueExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(JavadocComment n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(LabeledStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(LineComment n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(LongLiteralExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(LongLiteralMinValueExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(MarkerAnnotationExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(MemberValuePair n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(MethodCallExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(MethodDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(NameExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(NormalAnnotationExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(NullLiteralExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ObjectCreationExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(PackageDeclaration n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(Parameter n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(PrimitiveType n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(QualifiedNameExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ReferenceType n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ReturnStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(SingleMemberAnnotationExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(StringLiteralExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(SuperExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(SwitchEntryStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(SwitchStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(SynchronizedStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ThisExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(ThrowStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(TryStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(TypeDeclarationStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(TypeParameter n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(UnaryExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(VariableDeclarationExpr n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(VariableDeclarator n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(VariableDeclaratorId n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(VoidType n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(WhileStmt n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(WildcardType n, Object arg) {
-            doTest(source, n);
-            super.visit(n, arg);
-        }
-
-    }
+	@Test public void testNodePositions() throws Exception {
+		final String source = Helper.readClass("./src/test/java", DumperTestClass.class);
+		final CompilationUnit cu = Helper.parserString(source);
+
+		cu.accept(new TestVisitor(source), null);
+	}
+
+	void doTest(final String source, final Node node) {
+		final String parsed = node.toString();
+
+		assertTrue(node.getClass().getName() + ": " + parsed, node.getBeginLine() >= 0);
+		assertTrue(node.getClass().getName() + ": " + parsed, node.getBeginColumn() >= 0);
+		assertTrue(node.getClass().getName() + ": " + parsed, node.getEndLine() >= 0);
+		assertTrue(node.getClass().getName() + ": " + parsed, node.getEndColumn() >= 0);
+
+		if (node.getBeginLine() == node.getEndLine()) {
+			assertTrue(node.getClass().getName() + ": " + parsed, node.getBeginColumn() <= node.getEndColumn());
+		} else {
+			assertTrue(node.getClass().getName() + ": " + parsed, node.getBeginLine() <= node.getEndLine());
+		}
+
+		final String substr = substring(source, node.getBeginLine(), node.getBeginColumn(), node.getEndLine(),
+				node.getEndColumn());
+		assertEquals(node.getClass().getName(), trimLines(substr), trimLines(parsed));
+	}
+
+	private String trimLines(final String str) {
+		final String[] split = str.split("\n");
+		final StringBuilder ret = new StringBuilder();
+		for (int i = 0; i < split.length; i++) {
+			ret.append(split[i].trim());
+			if (i < split.length - 1) {
+				ret.append("\n");
+			}
+		}
+
+		return ret.toString();
+	}
+
+	private String substring(final String source, int beginLine, final int beginColumn, int endLine, final int endColumn) {
+		int pos = 0;
+		while (beginLine > 1) {
+			if (source.charAt(pos) == '\n') {
+				beginLine--;
+				endLine--;
+			}
+			pos++;
+		}
+		final int start = pos + beginColumn - 1;
+
+		while (endLine > 1) {
+			if (source.charAt(pos) == '\n') {
+				endLine--;
+			}
+			pos++;
+		}
+		final int end = pos + endColumn;
+
+		return source.substring(start, end);
+	}
+
+	class TestVisitor extends VoidVisitorAdapter<Object> {
+
+		private final String source;
+
+		public TestVisitor(final String source) {
+			this.source = source;
+		}
+
+		@Override public void visit(final AnnotationDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final AnnotationMemberDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ArrayAccessExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ArrayCreationExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ArrayInitializerExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final AssertStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final AssignExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final BinaryExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final BlockComment n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final BlockStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final BooleanLiteralExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final BreakStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final CastExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final CatchClause n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final CharLiteralExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ClassExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ClassOrInterfaceDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ClassOrInterfaceType n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final CompilationUnit n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ConditionalExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ConstructorDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ContinueStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final DoStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final DoubleLiteralExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final EmptyMemberDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final EmptyStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final EmptyTypeDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final EnclosedExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final EnumConstantDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final EnumDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ExpressionStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final FieldAccessExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final FieldDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ForeachStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ForStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final IfStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ImportDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final InitializerDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final InstanceOfExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final IntegerLiteralExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final IntegerLiteralMinValueExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final JavadocComment n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final LabeledStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final LineComment n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final LongLiteralExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final LongLiteralMinValueExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final MarkerAnnotationExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final MemberValuePair n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final MethodCallExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final MethodDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final NameExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final NormalAnnotationExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final NullLiteralExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ObjectCreationExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final PackageDeclaration n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final Parameter n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final PrimitiveType n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final QualifiedNameExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ReferenceType n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ReturnStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final SingleMemberAnnotationExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final StringLiteralExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final SuperExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final SwitchEntryStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final SwitchStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final SynchronizedStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ThisExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final ThrowStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final TryStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final TypeDeclarationStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final TypeParameter n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final UnaryExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final VariableDeclarationExpr n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final VariableDeclarator n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final VariableDeclaratorId n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final VoidType n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final WhileStmt n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+		@Override public void visit(final WildcardType n, final Object arg) {
+			doTest(source, n);
+			super.visit(n, arg);
+		}
+
+	}
 
 }

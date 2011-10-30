@@ -8,6 +8,8 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.junit.Ignore;
+
 /*
  * Created on 14/10/2007
  */
@@ -15,6 +17,7 @@ import java.io.IOException;
 /**
  * @author Julio Vilmar Gesser
  */
+@Ignore
 public class TestRunner {
 
     private static final File ROOT = // 
