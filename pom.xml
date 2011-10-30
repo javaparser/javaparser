@@ -31,6 +31,9 @@
 			<organizationUrl>http://www.Soluvas.com/</organizationUrl>
 		</contributor>
 	</contributors>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<scm>
 		<url>http://code.google.com/p/javaparser/source/browse/</url>
 		<connection>svn:http://javaparser.googlecode.com/svn/branches/mavenized/JavaParser</connection>
@@ -67,6 +70,19 @@
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>javacc-maven-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>javacc</id>
+						<goals>
+							<goal>javacc</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
