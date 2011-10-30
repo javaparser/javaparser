@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Júlio Vilmar Gesser.
+ * Copyright (C) 2008 Jï¿½lio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -26,54 +26,50 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringBufferInputStream;
 
 /**
  * @author Julio Vilmar Gesser
  */
 final class Helper {
 
-    private Helper() {
-        // hide the constructor
-    }
+	private Helper() {
+		// hide the constructor
+	}
 
-    private static File getFile(String sourceFolder, Class< ? > clazz) {
-        return new File(sourceFolder, clazz.getName().replace('.', '/') + ".java");
-    }
+	private static InputStream getInputStream(final String sourceFolder, final Class<?> clazz) {
+		return clazz.getResourceAsStream("/" + clazz.getName().replace('.', '/') + ".java");
+	}
 
-    public static CompilationUnit parserClass(String sourceFolder, Class< ? > clazz) throws ParseException {
-        try {
-            return JavaParser.parse(getFile(sourceFolder, clazz));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public static CompilationUnit parserClass(final String sourceFolder, final Class<?> clazz) throws ParseException {
+		return JavaParser.parse(getInputStream(sourceFolder, clazz));
+	}
 
-    public static CompilationUnit parserString(String source) throws ParseException {
-        return JavaParser.parse(new StringBufferInputStream(source));
-    }
+	public static CompilationUnit parserString(final String source) throws ParseException {
+		// FIXME potential encoding bug in getBytes()
+		return JavaParser.parse(new ByteArrayInputStream(source.getBytes()));
+	}
 
-    public static String readFile(File file) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        try {
-            StringBuilder ret = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                ret.append(line);
-                ret.append("\n");
-            }
-            return ret.toString();
-        } finally {
-            reader.close();
-        }
-    }
+	public static String readStream(final InputStream inputStream) throws IOException {
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		try {
+			final StringBuilder ret = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				ret.append(line);
+				ret.append("\n");
+			}
+			return ret.toString();
+		} finally {
+			reader.close();
+		}
+	}
 
-    public static String readClass(String sourceFolder, Class< ? > clazz) throws IOException {
-        return readFile(getFile(sourceFolder, clazz));
-    }
+	public static String readClass(final String sourceFolder, final Class<?> clazz) throws IOException {
+		return readStream(getInputStream(sourceFolder, clazz));
+	}
 
 }

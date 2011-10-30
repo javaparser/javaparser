@@ -80,7 +80,6 @@ import japa.parser.ast.stmt.ThrowStmt;
 import japa.parser.ast.stmt.TryStmt;
 import japa.parser.ast.stmt.TypeDeclarationStmt;
 import japa.parser.ast.stmt.WhileStmt;
-import japa.parser.ast.test.classes.DumperTestClass;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.type.PrimitiveType;
 import japa.parser.ast.type.ReferenceType;
@@ -96,7 +95,7 @@ import org.junit.Test;
 public class TestNodePositions {
 
 	@Test public void testNodePositions() throws Exception {
-		final String source = Helper.readClass("./src/test/java", DumperTestClass.class);
+		String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
 		final CompilationUnit cu = Helper.parserString(source);
 
 		cu.accept(new TestVisitor(source), null);

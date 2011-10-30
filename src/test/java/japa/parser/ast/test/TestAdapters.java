@@ -23,8 +23,6 @@ package japa.parser.ast.test;
 
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.test.classes.DumperTestClass;
-import japa.parser.ast.test.classes.JavadocTestClass;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 import japa.parser.ast.visitor.ModifierVisitorAdapter;

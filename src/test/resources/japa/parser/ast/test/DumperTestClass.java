@@ -1,4 +1,4 @@
-package japa.parser.ast.test.classes;
+package japa.parser.ast.test;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;

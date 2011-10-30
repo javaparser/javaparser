@@ -1,4 +1,4 @@
-package japa.parser.ast.test.classes;
+package japa.parser.ast.test;
 
 import org.junit.Ignore;
 
