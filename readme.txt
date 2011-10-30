@@ -32,6 +32,14 @@ bugs and feature enhacement and download the latest version:
 Version history
 ---------------
 
+1.0.8 (2010-01-17)
+- Fixed issues:
+	- Issue 17: A refactor suggestion for AnnotationExpr and its subclasses
+	- Issue 21: Java 5 JavaParser compiled JARs
+	- Issue 22: Please use java.lang.reflect.Modifier constants in japa.parser.ast.body.ModifierSet
+	- Issue 27: Implement the "equal" method
+	- Issue 30: equals and hashCode methods
+
 1.0.7 (2009-04-12)
 - Issue 19 fixed: 
 - Tests changed to run with junit 4 

@@ -31,8 +31,6 @@ import java.util.List;
  */
 public final class NormalAnnotationExpr extends AnnotationExpr {
 
-    private NameExpr name;
-
     private List<MemberValuePair> pairs;
 
     public NormalAnnotationExpr() {
@@ -59,16 +57,8 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         v.visit(this, arg);
     }
 
-    public NameExpr getName() {
-        return name;
-    }
-
     public List<MemberValuePair> getPairs() {
         return pairs;
-    }
-
-    public void setName(NameExpr name) {
-        this.name = name;
     }
 
     public void setPairs(List<MemberValuePair> pairs) {

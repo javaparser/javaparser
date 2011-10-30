@@ -29,8 +29,6 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class MarkerAnnotationExpr extends AnnotationExpr {
 
-    private NameExpr name;
-
     public MarkerAnnotationExpr() {
     }
 
@@ -51,14 +49,6 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
-    }
-
-    public NameExpr getName() {
-        return name;
-    }
-
-    public void setName(NameExpr name) {
-        this.name = name;
     }
 
 }

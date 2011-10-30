@@ -17,9 +17,9 @@ import java.io.StringBufferInputStream;
 /**
  * @author Julio Vilmar Gesser
  */
-final class TestHelper {
+final class Helper {
 
-    private TestHelper() {
+    private Helper() {
         // hide the constructor
     }
 

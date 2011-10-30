@@ -14,7 +14,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses(value = {//
 TestAdapters.class, //
         TestNodePositions.class, //
-        TestDumper.class })
+        TestDumper.class, //
+        TestHashCodeEquals.class })
 public class AllTests {
 
 }

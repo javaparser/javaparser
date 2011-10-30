@@ -22,6 +22,7 @@
 package japa.parser.ast;
 
 import japa.parser.ast.visitor.DumpVisitor;
+import japa.parser.ast.visitor.EqualsVisitor;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
@@ -182,6 +183,16 @@ public abstract class Node {
         DumpVisitor visitor = new DumpVisitor();
         accept(visitor, null);
         return visitor.getSource();
+    }
+
+    @Override
+    public final int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsVisitor.equals(this, (Node) obj);
     }
 
 }

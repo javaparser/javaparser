@@ -38,31 +38,31 @@ import org.junit.Test;
  */
 public class TestAdapters {
 
-    class ConcreteVoidVisitorAdapter extends VoidVisitorAdapter {
+    static class ConcreteVoidVisitorAdapter extends VoidVisitorAdapter {
 
     }
 
-    class ConcreteGenericVisitorAdapter extends GenericVisitorAdapter {
+    static class ConcreteGenericVisitorAdapter extends GenericVisitorAdapter {
 
     }
 
-    class ConcreteModifierVisitorAdapter extends ModifierVisitorAdapter {
+    static class ConcreteModifierVisitorAdapter extends ModifierVisitorAdapter {
 
     }
 
     private void doTest(VoidVisitor< ? > visitor) throws ParseException {
-        CompilationUnit cu = TestHelper.parserClass("./test", DumperTestClass.class);
+        CompilationUnit cu = Helper.parserClass("./test", DumperTestClass.class);
         cu.accept(visitor, null);
 
-        cu = TestHelper.parserClass("./test", JavadocTestClass.class);
+        cu = Helper.parserClass("./test", JavadocTestClass.class);
         cu.accept(visitor, null);
     }
 
     private void doTest(GenericVisitor< ? , ? > visitor) throws ParseException {
-        CompilationUnit cu = TestHelper.parserClass("./test", DumperTestClass.class);
+        CompilationUnit cu = Helper.parserClass("./test", DumperTestClass.class);
         cu.accept(visitor, null);
 
-        cu = TestHelper.parserClass("./test", JavadocTestClass.class);
+        cu = Helper.parserClass("./test", JavadocTestClass.class);
         cu.accept(visitor, null);
     }
 

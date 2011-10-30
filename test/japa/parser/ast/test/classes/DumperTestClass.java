@@ -29,6 +29,8 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
 
     byte bye = 0;
 
+    byte byebye[] = null;
+
     short sh1, sh2 = 1;
 
     List<String>[][] arrLS = (List<String>[][]) new List<?>[10][];

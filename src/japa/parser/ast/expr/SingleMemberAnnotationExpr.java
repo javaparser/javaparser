@@ -29,8 +29,6 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 
-    private NameExpr name;
-
     private Expression memberValue;
 
     public SingleMemberAnnotationExpr() {
@@ -61,16 +59,8 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         return memberValue;
     }
 
-    public NameExpr getName() {
-        return name;
-    }
-
     public void setMemberValue(Expression memberValue) {
         this.memberValue = memberValue;
-    }
-
-    public void setName(NameExpr name) {
-        this.name = name;
     }
 
 }

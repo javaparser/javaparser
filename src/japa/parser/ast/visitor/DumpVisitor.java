@@ -117,7 +117,7 @@ import java.util.List;
 
 public final class DumpVisitor implements VoidVisitor<Object> {
 
-    private class SourcePrinter {
+    private static class SourcePrinter {
 
         private int level = 0;
 

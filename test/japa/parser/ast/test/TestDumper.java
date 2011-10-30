@@ -33,16 +33,17 @@ import org.junit.Test;
  */
 public class TestDumper {
 
+    @Test
     public void testDumpVisitor() throws Exception {
-        String source = TestHelper.readClass("./test", DumperTestClass.class);
-        CompilationUnit cu = TestHelper.parserString(source);
+        String source = Helper.readClass("./test", DumperTestClass.class);
+        CompilationUnit cu = Helper.parserString(source);
         assertEquals(source, cu.toString());
     }
 
     @Test
     public void testJavadoc() throws Exception {
-        String source = TestHelper.readClass("./test", JavadocTestClass.class);
-        CompilationUnit cu = TestHelper.parserString(source);
+        String source = Helper.readClass("./test", JavadocTestClass.class);
+        CompilationUnit cu = Helper.parserString(source);
         assertEquals(source, cu.toString());
         assertEquals(19, cu.getComments().size());
     }
@@ -83,7 +84,7 @@ public class TestDumper {
                 "}\n" + //
                 "";
 
-        CompilationUnit cu = TestHelper.parserString(source_with_comment);
+        CompilationUnit cu = Helper.parserString(source_with_comment);
         assertEquals(source_without_comment, cu.toString());
         assertEquals(6, cu.getComments().size());
     }
