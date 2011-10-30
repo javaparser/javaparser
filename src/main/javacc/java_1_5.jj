@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Júlio Vilmar Gesser.
+ * Copyright (C) 2008 JÃºlio Vilmar Gesser.
  *
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -29,7 +29,7 @@ options {
 
 PARSER_BEGIN(ASTParser)
 /*
- * Copyright (C) 2008 Júlio Vilmar Gesser.
+ * Copyright (C) 2008 Jï¿½lio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -58,11 +58,11 @@ import japa.parser.ast.type.*;
 
 /**
  * <p>This class was generated automatically by javacc, do not edit.</p>
- * @author Júlio Vilmar Gesser
+ * @author JÃºlio Vilmar Gesser
  */
 final class ASTParser {
 
-    private List<Comment> comments = null;
+    private List<Comment> comments = new ArrayList<Comment>();
 
     void reset(InputStream in, String encoding) {
         ReInit(in, encoding);
@@ -2476,7 +2476,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
   (
   	"."
   	(
-  	// TODO: está deixando passar "this.this", verificar na JLS se é possível
+  	// TODO: estï¿½ deixando passar "this.this", verificar na JLS se ï¿½ possï¿½vel
 		"this" { ret = new ThisExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope); }
 	  |
 	  	ret = AllocationExpression(scope)
