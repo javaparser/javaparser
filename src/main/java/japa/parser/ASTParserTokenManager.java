@@ -29,47 +29,6 @@ import japa.parser.ast.type.*;
 /** Token Manager. */
 public class ASTParserTokenManager implements ASTParserConstants
 {
-    private List<Comment> comments;
-    private final Stack<JavadocComment> javadocStack = new Stack<JavadocComment>();
-    private JavadocComment lastJavadoc;
-
-    void pushJavadoc() {
-        javadocStack.push(lastJavadoc);
-    }
-
-    JavadocComment popJavadoc() {
-        return javadocStack.pop();
-    }
-
-    List<Comment> getComments() {
-        return comments;
-    }
-
-    void clearComments() {
-        comments = null;
-        javadocStack.clear();
-        lastJavadoc = null;
-    }
-
-    private void CommonTokenAction(Token token) {
-        lastJavadoc = null;
-        if (token.specialToken != null) {
-                if(comments == null) {
-                    comments = new LinkedList<Comment>();
-                }
-            Token special = token.specialToken;
-            if(special.kind == JAVA_DOC_COMMENT) {
-                lastJavadoc = new JavadocComment(special.beginLine, special.beginColumn, special.endLine, special.endColumn, special.image.substring(3, special.image.length()-2));
-                comments.add(lastJavadoc);
-            } else if(special.kind == SINGLE_LINE_COMMENT) {
-                LineComment comment = new LineComment(special.beginLine, special.beginColumn, special.endLine, special.endColumn, special.image.substring(2));
-                comments.add(comment);
-            } else if(special.kind == MULTI_LINE_COMMENT) {
-                BlockComment comment = new BlockComment(special.beginLine, special.beginColumn, special.endLine, special.endColumn, special.image.substring(2, special.image.length()-2));
-                comments.add(comment);
-            }
-        }
-    }
 
   /** Debug output. */
   public  java.io.PrintStream debugStream = System.out;
@@ -1792,7 +1751,7 @@ private static final boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, lo
    {
       case 0:
          return ((jjbitVec2[i2] & l2) != 0L);
-      default : 
+      default :
          if ((jjbitVec0[i1] & l1) != 0L)
             return true;
          return false;
@@ -1882,7 +1841,7 @@ private static final boolean jjCanMove_1(int hiByte, int i1, int i2, long l1, lo
          return ((jjbitVec41[i2] & l2) != 0L);
       case 255:
          return ((jjbitVec42[i2] & l2) != 0L);
-      default : 
+      default :
          if ((jjbitVec3[i1] & l1) != 0L)
             return true;
          return false;
@@ -1976,7 +1935,7 @@ private static final boolean jjCanMove_2(int hiByte, int i1, int i2, long l1, lo
          return ((jjbitVec67[i2] & l2) != 0L);
       case 255:
          return ((jjbitVec68[i2] & l2) != 0L);
-      default : 
+      default :
          if ((jjbitVec3[i1] & l1) != 0L)
             return true;
          return false;
@@ -2011,9 +1970,9 @@ null, null, null, null, null, null, "\50", "\51", "\173", "\175", "\133", "\135"
 
 /** Lexer state names. */
 public static final String[] lexStateNames = {
-   "DEFAULT", 
-   "IN_JAVA_DOC_COMMENT", 
-   "IN_MULTI_LINE_COMMENT", 
+   "DEFAULT",
+   "IN_JAVA_DOC_COMMENT",
+   "IN_MULTI_LINE_COMMENT",
 };
 
 /** Lex State array. */
@@ -2130,17 +2089,16 @@ public Token getNextToken()
 
   EOFLoop :
   for (;;)
-  {   
-   try   
-   {     
+  {
+   try
+   {
       curChar = input_stream.BeginToken();
-   }     
+   }
    catch(java.io.IOException e)
-   {        
+   {
       jjmatchedKind = 0;
       matchedToken = jjFillToken();
       matchedToken.specialToken = specialToken;
-      CommonTokenAction(matchedToken);
       return matchedToken;
    }
    image = jjimage;
@@ -2191,7 +2149,6 @@ public Token getNextToken()
            TokenLexicalActions(matchedToken);
        if (jjnewLexState[jjmatchedKind] != -1)
          curLexState = jjnewLexState[jjmatchedKind];
-           CommonTokenAction(matchedToken);
            return matchedToken;
         }
         else if ((jjtoSkip[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 077))) != 0L)
@@ -2208,7 +2165,7 @@ public Token getNextToken()
               }
               SkipLexicalActions(matchedToken);
            }
-           else 
+           else
               SkipLexicalActions(null);
          if (jjnewLexState[jjmatchedKind] != -1)
            curLexState = jjnewLexState[jjmatchedKind];
@@ -2267,7 +2224,7 @@ void MoreLexicalActions()
          jjimageLen = 0;
                    input_stream.backup(1);
          break;
-      default : 
+      default :
          break;
    }
 }
@@ -2289,7 +2246,7 @@ void TokenLexicalActions(Token matchedToken)
      ((ASTParser.GTToken)matchedToken).realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
          break;
-      default : 
+      default :
          break;
    }
 }

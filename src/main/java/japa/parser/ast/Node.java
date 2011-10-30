@@ -46,6 +46,8 @@ public abstract class Node {
      */
     private Object data;
 
+    private Comment comment;
+
     public Node() {
     }
 
@@ -102,12 +104,19 @@ public abstract class Node {
     }
 
     /**
+     * Use this to retrieve comment associated to this node.
+     */
+    public final Comment getComment() {
+        return comment;
+    }
+
+    /**
      * Use this to retrieve additional information associated to this node.
      */
     public final Object getData() {
         return data;
     }
-
+    
     /**
      * Return the end column of this node.
      * 
@@ -144,6 +153,14 @@ public abstract class Node {
      */
     public final void setBeginLine(int beginLine) {
         this.beginLine = beginLine;
+    }
+
+
+    /**
+     * Use this to store additional information to this node.
+     */
+    public final void setComment(Comment comment) {
+        this.comment = comment;
     }
 
     /**
