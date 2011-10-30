@@ -33,7 +33,7 @@ public class TestRunner {
     private void visitAllJavaFiles(FileFilter callback, File dir) {
         File[] listFiles = dir.listFiles(new FileFilter() {
 
-            public boolean accept(File file) {
+            @Override public boolean accept(File file) {
                 return file.isDirectory() || file.getName().endsWith(".java");
             }
 
@@ -56,7 +56,7 @@ public class TestRunner {
     public void run() {
         visitAllJavaFiles(new FileFilter() {
 
-            public boolean accept(File javaFile) {
+            @Override public boolean accept(File javaFile) {
                 //System.out.println("Visiting file: " + javaFile.getPath());
                 try {
                     runTest(javaFile);
