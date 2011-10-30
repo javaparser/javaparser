@@ -97,7 +97,7 @@ public class TestNodePositions {
 
     @Test
     public void testNodePositions() throws Exception {
-        String source = Helper.readClass("./test", DumperTestClass.class);
+    	String source = Helper.readClass("./src/test/java", DumperTestClass.class);
         CompilationUnit cu = Helper.parserString(source);
 
         cu.accept(new TestVisitor(source), null);

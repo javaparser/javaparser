@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Júlio Vilmar Gesser.
+ * Copyright (C) 2008 Jï¿½lio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -51,18 +51,18 @@ public class TestAdapters {
     }
 
     private void doTest(VoidVisitor< ? > visitor) throws ParseException {
-        CompilationUnit cu = Helper.parserClass("./test", DumperTestClass.class);
+        CompilationUnit cu = Helper.parserClass("./src/test/java", DumperTestClass.class);
         cu.accept(visitor, null);
 
-        cu = Helper.parserClass("./test", JavadocTestClass.class);
+        cu = Helper.parserClass("./src/test/java", JavadocTestClass.class);
         cu.accept(visitor, null);
     }
 
     private void doTest(GenericVisitor< ? , ? > visitor) throws ParseException {
-        CompilationUnit cu = Helper.parserClass("./test", DumperTestClass.class);
+        CompilationUnit cu = Helper.parserClass("./src/test/java", DumperTestClass.class);
         cu.accept(visitor, null);
 
-        cu = Helper.parserClass("./test", JavadocTestClass.class);
+        cu = Helper.parserClass("./src/test/java", JavadocTestClass.class);
         cu.accept(visitor, null);
     }
 

@@ -1,12 +1,17 @@
 <project name="JavaParserBuilder" default="all">
 
-	<!-- current version -->
-	<property name="version" value="1.0.8" />
+	<!-- external configurations -->
+	<!-- the file must have the properties: 
+		build.version
+		googlecode.user
+		googlecode.password 
+	-->
+	<property file="../../JavaParser-ant/build.properties" />
 
 	<!-- package build properties -->
 	<property name="source.dir" location="../" />
 	<property name="temp.dir" value="${user.home}/Desktop/" />
-	<property name="file.name" value="javaparser-${version}" />
+	<property name="file.name" value="javaparser-${build.version}" />
 
 	<property name="src.file.name" value="${file.name}-src.zip" />
 	<property name="bin.jar.name" value="${file.name}.jar" />
@@ -17,14 +22,12 @@
 	<property name="bin.temp.jar" value="${temp.dir}/${bin.jar.name}" />
 
 
-	<!-- googlecode properties -->
+	<!-- googlecode taskdef -->
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="ant-googlecode-0.0.1.jar" name="gcupload" />
-	<property name="googlecode.user" value="jgesser" />
-	<!-- the file must have a property named "googlecode.password" -->
-	<property file="../../JavaParser-ant/pass.txt" />
+	<!-- googlecode properties -->
 	<property name="googlecode.project" value="javaparser" />
-	<property name="googlecode.file.summary.src" value="Java1.5 parser and AST release ${version} (source)" />
-	<property name="googlecode.file.summary.bin" value="Java1.5 parser and AST release ${version} (binary)" />
+	<property name="googlecode.file.summary.src" value="Java1.5 parser and AST release ${build.version} (source)" />
+	<property name="googlecode.file.summary.bin" value="Java1.5 parser and AST release ${build.version} (binary)" />
 	<property name="googlecode.file.labels.src" value="Featured, Type-Source, OpSys-All" />
 	<property name="googlecode.file.labels.bin" value="Featured, Type-Archive, OpSys-All" />
 
@@ -74,6 +77,10 @@
 	</target>
 
 	<target name="all" description="default">
+		<fail unless="build.version" message="Invalid contents for file 'build.properties', missing 'build.version'." />
+		<fail unless="googlecode.user" message="Invalid contents for file 'build.properties', missing 'googlecode.user'." />
+		<fail unless="googlecode.password" message="Invalid contents for file 'build.properties', missing 'googlecode.password'." />
+
 		<antcall target="clean" />
 
 		<antcall target="build-src" />

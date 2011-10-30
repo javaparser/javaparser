@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 Jï¿½lio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -35,14 +35,14 @@ public class TestDumper {
 
     @Test
     public void testDumpVisitor() throws Exception {
-        String source = Helper.readClass("./test", DumperTestClass.class);
+        String source = Helper.readClass("./src/test/java", DumperTestClass.class);
         CompilationUnit cu = Helper.parserString(source);
         assertEquals(source, cu.toString());
     }
 
     @Test
     public void testJavadoc() throws Exception {
-        String source = Helper.readClass("./test", JavadocTestClass.class);
+        String source = Helper.readClass("./src/test/java", JavadocTestClass.class);
         CompilationUnit cu = Helper.parserString(source);
         assertEquals(source, cu.toString());
         assertEquals(19, cu.getComments().size());
