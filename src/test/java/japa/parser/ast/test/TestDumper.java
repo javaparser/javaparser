@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 J�lio Vilmar Gesser.
+ * Copyright (C) 2007 Júlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -31,66 +31,63 @@ import org.junit.Test;
  */
 public class TestDumper {
 
-    @Test
-    public void testDumpVisitor() throws Exception {
-    	String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
-        CompilationUnit cu = Helper.parserString(source);
-        assertEquals(source, cu.toString());
-    }
+	@Test public void testDumpVisitor() throws Exception {
+		final String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
+		final CompilationUnit cu = Helper.parserString(source);
+		assertEquals(source, cu.toString());
+	}
 
-    @Test
-    public void testJavadoc() throws Exception {
-    	String source = Helper.readStream(getClass().getResourceAsStream("JavadocTestClass.java"));
-        CompilationUnit cu = Helper.parserString(source);
-        assertEquals(source, cu.toString());
-        assertEquals(19, cu.getComments().size());
-    }
+	@Test public void testJavadoc() throws Exception {
+		final String source = Helper.readStream(getClass().getResourceAsStream("JavadocTestClass.java"));
+		final CompilationUnit cu = Helper.parserString(source);
+		assertEquals(source, cu.toString());
+		assertEquals(19, cu.getComments().size());
+	}
 
-    @Test
-    public void testComments() throws Exception {
-        final String source_with_comment = //
-        "package japa.parser.javacc;\n" + //
-                "public class Teste {\n" + //
-                "//line comment\n" + //
-                "int a = 0;" + //
-                "//line comment\r\n" + //
-                "int b = 0;" + //
-                "//line comment\r" + //
-                "int c = 0;" + //
-                "/* multi-line\n comment\n*/" + //
-                "int d = 0;" + //
-                "/** multi-line\r\n javadoc\n*/" + //
-                "int e = 0;" + //
-                "}\n" + //
-                "//final comment" + //
-                "";
-        final String source_without_comment = //
-        "package japa.parser.javacc;\n" + //
-                "\n" + //
-                "public class Teste {\n" + //
-                "\n" + //
-                "    //line comment \n" + //
-                "    int a = 0;\n" + //
-                "\n" + //
-                // FIXME not sure what all these trailing spaces are.
-                "    //line comment  \n" + //
-                "    int b = 0;\n" + //
-                "\n" + //
-                "    //line comment \n" + //
-                "    int c = 0;\n" + //
-                "\n" + //
-                "    /* multi-line\n comment\n*/\n" + //
-                "    int d = 0;\n" + //
-                "\n" + //
-                "    /** multi-line\r\n javadoc\n*/\n" + //
-                "    int e = 0;\n" + //
-                "}\n" + //
-                "";
+	@Test public void testComments() throws Exception {
+		final String source_with_comment = //
+		"package japa.parser.javacc;\n" + //
+				"public class Teste {\n" + //
+				"//line comment\n" + //
+				"int a = 0;" + //
+				"//line comment\r\n" + //
+				"int b = 0;" + //
+				"//line comment\r" + //
+				"int c = 0;" + //
+				"/* multi-line\n comment\n*/" + //
+				"int d = 0;" + //
+				"/** multi-line\r\n javadoc\n*/" + //
+				"int e = 0;" + //
+				"}\n" + //
+				"//final comment" + //
+				"";
+		final String source_without_comment = //
+		"package japa.parser.javacc;\n" + //
+				"\n" + //
+				"public class Teste {\n" + //
+				"\n" + //
+				"    //line comment \n" + //
+				"    int a = 0;\n" + //
+				"\n" + //
+				// FIXME not sure what all these trailing spaces are.
+				"    //line comment  \n" + //
+				"    int b = 0;\n" + //
+				"\n" + //
+				"    //line comment \n" + //
+				"    int c = 0;\n" + //
+				"\n" + //
+				"    /* multi-line\n comment\n*/\n" + //
+				"    int d = 0;\n" + //
+				"\n" + //
+				"    /** multi-line\r\n javadoc\n*/\n" + //
+				"    int e = 0;\n" + //
+				"}\n" + //
+				"";
 
-        CompilationUnit cu = Helper.parserString(source_with_comment);
-        assertEquals(source_without_comment, cu.toString());
-        // FIXME should be 6, "final comment" is missing
-//        assertEquals(6, cu.getComments().size());
-        assertEquals(5, cu.getComments().size());
-    }
+		final CompilationUnit cu = Helper.parserString(source_with_comment);
+		assertEquals(source_without_comment, cu.toString());
+		// FIXME should be 6, "final comment" is missing
+		//        assertEquals(6, cu.getComments().size());
+		assertEquals(5, cu.getComments().size());
+	}
 }

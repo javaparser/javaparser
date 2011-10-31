@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -31,47 +31,46 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class CatchClause extends Node {
 
-    private Parameter except;
+	private Parameter except;
 
-    private BlockStmt catchBlock;
+	private BlockStmt catchBlock;
 
-    public CatchClause() {
-    }
+	public CatchClause() {
+	}
 
-    public CatchClause(Parameter except, BlockStmt catchBlock) {
-        this.except = except;
-        this.catchBlock = catchBlock;
-    }
+	public CatchClause(final Parameter except, final BlockStmt catchBlock) {
+		this.except = except;
+		this.catchBlock = catchBlock;
+	}
 
-    public CatchClause(int beginLine, int beginColumn, int endLine, int endColumn, Parameter except, BlockStmt catchBlock) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.except = except;
-        this.catchBlock = catchBlock;
-    }
+	public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final Parameter except, final BlockStmt catchBlock) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.except = except;
+		this.catchBlock = catchBlock;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public BlockStmt getCatchBlock() {
-        return catchBlock;
-    }
+	public BlockStmt getCatchBlock() {
+		return catchBlock;
+	}
 
-    public Parameter getExcept() {
-        return except;
-    }
+	public Parameter getExcept() {
+		return except;
+	}
 
-    public void setCatchBlock(BlockStmt catchBlock) {
-        this.catchBlock = catchBlock;
-    }
+	public void setCatchBlock(final BlockStmt catchBlock) {
+		this.catchBlock = catchBlock;
+	}
 
-    public void setExcept(Parameter except) {
-        this.except = except;
-    }
+	public void setExcept(final Parameter except) {
+		this.except = except;
+	}
 }

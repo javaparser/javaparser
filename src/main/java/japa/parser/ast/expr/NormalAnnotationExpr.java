@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -31,38 +31,37 @@ import java.util.List;
  */
 public final class NormalAnnotationExpr extends AnnotationExpr {
 
-    private List<MemberValuePair> pairs;
+	private List<MemberValuePair> pairs;
 
-    public NormalAnnotationExpr() {
-    }
+	public NormalAnnotationExpr() {
+	}
 
-    public NormalAnnotationExpr(NameExpr name, List<MemberValuePair> pairs) {
-        this.name = name;
-        this.pairs = pairs;
-    }
+	public NormalAnnotationExpr(final NameExpr name, final List<MemberValuePair> pairs) {
+		this.name = name;
+		this.pairs = pairs;
+	}
 
-    public NormalAnnotationExpr(int beginLine, int beginColumn, int endLine, int endColumn, NameExpr name, List<MemberValuePair> pairs) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.name = name;
-        this.pairs = pairs;
-    }
+	public NormalAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final NameExpr name, final List<MemberValuePair> pairs) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.name = name;
+		this.pairs = pairs;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public List<MemberValuePair> getPairs() {
-        return pairs;
-    }
+	public List<MemberValuePair> getPairs() {
+		return pairs;
+	}
 
-    public void setPairs(List<MemberValuePair> pairs) {
-        this.pairs = pairs;
-    }
+	public void setPairs(final List<MemberValuePair> pairs) {
+		this.pairs = pairs;
+	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -29,40 +29,39 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class PrimitiveType extends Type {
 
-    public enum Primitive {
-        Boolean, Char, Byte, Short, Int, Long, Float, Double
-    }
+	public enum Primitive {
+		Boolean, Char, Byte, Short, Int, Long, Float, Double
+	}
 
-    private Primitive type;
+	private Primitive type;
 
-    public PrimitiveType() {
-    }
+	public PrimitiveType() {
+	}
 
-    public PrimitiveType(Primitive type) {
-        this.type = type;
-    }
+	public PrimitiveType(final Primitive type) {
+		this.type = type;
+	}
 
-    public PrimitiveType(int beginLine, int beginColumn, int endLine, int endColumn, Primitive type) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.type = type;
-    }
+	public PrimitiveType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final Primitive type) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.type = type;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public Primitive getType() {
-        return type;
-    }
+	public Primitive getType() {
+		return type;
+	}
 
-    public void setType(Primitive type) {
-        this.type = type;
-    }
+	public void setType(final Primitive type) {
+		this.type = type;
+	}
 
 }

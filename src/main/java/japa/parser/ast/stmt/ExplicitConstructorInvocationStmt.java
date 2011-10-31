@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -33,70 +33,70 @@ import java.util.List;
  */
 public final class ExplicitConstructorInvocationStmt extends Statement {
 
-    private List<Type> typeArgs;
+	private List<Type> typeArgs;
 
-    private boolean isThis;
+	private boolean isThis;
 
-    private Expression expr;
+	private Expression expr;
 
-    private List<Expression> args;
+	private List<Expression> args;
 
-    public ExplicitConstructorInvocationStmt() {
-    }
+	public ExplicitConstructorInvocationStmt() {
+	}
 
-    public ExplicitConstructorInvocationStmt(boolean isThis, Expression expr, List<Expression> args) {
-        this.isThis = isThis;
-        this.expr = expr;
-        this.args = args;
-    }
+	public ExplicitConstructorInvocationStmt(final boolean isThis, final Expression expr, final List<Expression> args) {
+		this.isThis = isThis;
+		this.expr = expr;
+		this.args = args;
+	}
 
-    public ExplicitConstructorInvocationStmt(int beginLine, int beginColumn, int endLine, int endColumn, List<Type> typeArgs, boolean isThis, Expression expr, List<Expression> args) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.typeArgs = typeArgs;
-        this.isThis = isThis;
-        this.expr = expr;
-        this.args = args;
-    }
+	public ExplicitConstructorInvocationStmt(final int beginLine, final int beginColumn, final int endLine,
+			final int endColumn, final List<Type> typeArgs, final boolean isThis, final Expression expr,
+			final List<Expression> args) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.typeArgs = typeArgs;
+		this.isThis = isThis;
+		this.expr = expr;
+		this.args = args;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public List<Expression> getArgs() {
-        return args;
-    }
+	public List<Expression> getArgs() {
+		return args;
+	}
 
-    public Expression getExpr() {
-        return expr;
-    }
+	public Expression getExpr() {
+		return expr;
+	}
 
-    public List<Type> getTypeArgs() {
-        return typeArgs;
-    }
+	public List<Type> getTypeArgs() {
+		return typeArgs;
+	}
 
-    public boolean isThis() {
-        return isThis;
-    }
+	public boolean isThis() {
+		return isThis;
+	}
 
-    public void setArgs(List<Expression> args) {
-        this.args = args;
-    }
+	public void setArgs(final List<Expression> args) {
+		this.args = args;
+	}
 
-    public void setExpr(Expression expr) {
-        this.expr = expr;
-    }
+	public void setExpr(final Expression expr) {
+		this.expr = expr;
+	}
 
-    public void setThis(boolean isThis) {
-        this.isThis = isThis;
-    }
+	public void setThis(final boolean isThis) {
+		this.isThis = isThis;
+	}
 
-    public void setTypeArgs(List<Type> typeArgs) {
-        this.typeArgs = typeArgs;
-    }
+	public void setTypeArgs(final List<Type> typeArgs) {
+		this.typeArgs = typeArgs;
+	}
 }

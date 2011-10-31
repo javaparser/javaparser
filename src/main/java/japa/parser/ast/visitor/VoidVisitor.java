@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -102,176 +102,178 @@ import japa.parser.ast.type.VoidType;
 import japa.parser.ast.type.WildcardType;
 
 /**
+ * A visitor that does not return anything.
+ * 
  * @author Julio Vilmar Gesser
  */
 public interface VoidVisitor<A> {
 
-    //- Compilation Unit ----------------------------------
+	//- Compilation Unit ----------------------------------
 
-    public void visit(CompilationUnit n, A arg);
+	void visit(CompilationUnit n, A arg);
 
-    public void visit(PackageDeclaration n, A arg);
+	void visit(PackageDeclaration n, A arg);
 
-    public void visit(ImportDeclaration n, A arg);
+	void visit(ImportDeclaration n, A arg);
 
-    public void visit(TypeParameter n, A arg);
+	void visit(TypeParameter n, A arg);
 
-    public void visit(LineComment n, A arg);
+	void visit(LineComment n, A arg);
 
-    public void visit(BlockComment n, A arg);
+	void visit(BlockComment n, A arg);
 
-    //- Body ----------------------------------------------
+	//- Body ----------------------------------------------
 
-    public void visit(ClassOrInterfaceDeclaration n, A arg);
+	void visit(ClassOrInterfaceDeclaration n, A arg);
 
-    public void visit(EnumDeclaration n, A arg);
+	void visit(EnumDeclaration n, A arg);
 
-    public void visit(EmptyTypeDeclaration n, A arg);
+	void visit(EmptyTypeDeclaration n, A arg);
 
-    public void visit(EnumConstantDeclaration n, A arg);
+	void visit(EnumConstantDeclaration n, A arg);
 
-    public void visit(AnnotationDeclaration n, A arg);
+	void visit(AnnotationDeclaration n, A arg);
 
-    public void visit(AnnotationMemberDeclaration n, A arg);
+	void visit(AnnotationMemberDeclaration n, A arg);
 
-    public void visit(FieldDeclaration n, A arg);
+	void visit(FieldDeclaration n, A arg);
 
-    public void visit(VariableDeclarator n, A arg);
+	void visit(VariableDeclarator n, A arg);
 
-    public void visit(VariableDeclaratorId n, A arg);
+	void visit(VariableDeclaratorId n, A arg);
 
-    public void visit(ConstructorDeclaration n, A arg);
+	void visit(ConstructorDeclaration n, A arg);
 
-    public void visit(MethodDeclaration n, A arg);
+	void visit(MethodDeclaration n, A arg);
 
-    public void visit(Parameter n, A arg);
+	void visit(Parameter n, A arg);
 
-    public void visit(EmptyMemberDeclaration n, A arg);
+	void visit(EmptyMemberDeclaration n, A arg);
 
-    public void visit(InitializerDeclaration n, A arg);
+	void visit(InitializerDeclaration n, A arg);
 
-    public void visit(JavadocComment n, A arg);
+	void visit(JavadocComment n, A arg);
 
-    //- Type ----------------------------------------------
+	//- Type ----------------------------------------------
 
-    public void visit(ClassOrInterfaceType n, A arg);
+	void visit(ClassOrInterfaceType n, A arg);
 
-    public void visit(PrimitiveType n, A arg);
+	void visit(PrimitiveType n, A arg);
 
-    public void visit(ReferenceType n, A arg);
+	void visit(ReferenceType n, A arg);
 
-    public void visit(VoidType n, A arg);
+	void visit(VoidType n, A arg);
 
-    public void visit(WildcardType n, A arg);
+	void visit(WildcardType n, A arg);
 
-    //- Expression ----------------------------------------
+	//- Expression ----------------------------------------
 
-    public void visit(ArrayAccessExpr n, A arg);
+	void visit(ArrayAccessExpr n, A arg);
 
-    public void visit(ArrayCreationExpr n, A arg);
+	void visit(ArrayCreationExpr n, A arg);
 
-    public void visit(ArrayInitializerExpr n, A arg);
+	void visit(ArrayInitializerExpr n, A arg);
 
-    public void visit(AssignExpr n, A arg);
+	void visit(AssignExpr n, A arg);
 
-    public void visit(BinaryExpr n, A arg);
+	void visit(BinaryExpr n, A arg);
 
-    public void visit(CastExpr n, A arg);
+	void visit(CastExpr n, A arg);
 
-    public void visit(ClassExpr n, A arg);
+	void visit(ClassExpr n, A arg);
 
-    public void visit(ConditionalExpr n, A arg);
+	void visit(ConditionalExpr n, A arg);
 
-    public void visit(EnclosedExpr n, A arg);
+	void visit(EnclosedExpr n, A arg);
 
-    public void visit(FieldAccessExpr n, A arg);
+	void visit(FieldAccessExpr n, A arg);
 
-    public void visit(InstanceOfExpr n, A arg);
+	void visit(InstanceOfExpr n, A arg);
 
-    public void visit(StringLiteralExpr n, A arg);
+	void visit(StringLiteralExpr n, A arg);
 
-    public void visit(IntegerLiteralExpr n, A arg);
+	void visit(IntegerLiteralExpr n, A arg);
 
-    public void visit(LongLiteralExpr n, A arg);
+	void visit(LongLiteralExpr n, A arg);
 
-    public void visit(IntegerLiteralMinValueExpr n, A arg);
+	void visit(IntegerLiteralMinValueExpr n, A arg);
 
-    public void visit(LongLiteralMinValueExpr n, A arg);
+	void visit(LongLiteralMinValueExpr n, A arg);
 
-    public void visit(CharLiteralExpr n, A arg);
+	void visit(CharLiteralExpr n, A arg);
 
-    public void visit(DoubleLiteralExpr n, A arg);
+	void visit(DoubleLiteralExpr n, A arg);
 
-    public void visit(BooleanLiteralExpr n, A arg);
+	void visit(BooleanLiteralExpr n, A arg);
 
-    public void visit(NullLiteralExpr n, A arg);
+	void visit(NullLiteralExpr n, A arg);
 
-    public void visit(MethodCallExpr n, A arg);
+	void visit(MethodCallExpr n, A arg);
 
-    public void visit(NameExpr n, A arg);
+	void visit(NameExpr n, A arg);
 
-    public void visit(ObjectCreationExpr n, A arg);
+	void visit(ObjectCreationExpr n, A arg);
 
-    public void visit(QualifiedNameExpr n, A arg);
+	void visit(QualifiedNameExpr n, A arg);
 
-    public void visit(ThisExpr n, A arg);
+	void visit(ThisExpr n, A arg);
 
-    public void visit(SuperExpr n, A arg);
+	void visit(SuperExpr n, A arg);
 
-    public void visit(UnaryExpr n, A arg);
+	void visit(UnaryExpr n, A arg);
 
-    public void visit(VariableDeclarationExpr n, A arg);
+	void visit(VariableDeclarationExpr n, A arg);
 
-    public void visit(MarkerAnnotationExpr n, A arg);
+	void visit(MarkerAnnotationExpr n, A arg);
 
-    public void visit(SingleMemberAnnotationExpr n, A arg);
+	void visit(SingleMemberAnnotationExpr n, A arg);
 
-    public void visit(NormalAnnotationExpr n, A arg);
+	void visit(NormalAnnotationExpr n, A arg);
 
-    public void visit(MemberValuePair n, A arg);
+	void visit(MemberValuePair n, A arg);
 
-    //- Statements ----------------------------------------
+	//- Statements ----------------------------------------
 
-    public void visit(ExplicitConstructorInvocationStmt n, A arg);
+	void visit(ExplicitConstructorInvocationStmt n, A arg);
 
-    public void visit(TypeDeclarationStmt n, A arg);
+	void visit(TypeDeclarationStmt n, A arg);
 
-    public void visit(AssertStmt n, A arg);
+	void visit(AssertStmt n, A arg);
 
-    public void visit(BlockStmt n, A arg);
+	void visit(BlockStmt n, A arg);
 
-    public void visit(LabeledStmt n, A arg);
+	void visit(LabeledStmt n, A arg);
 
-    public void visit(EmptyStmt n, A arg);
+	void visit(EmptyStmt n, A arg);
 
-    public void visit(ExpressionStmt n, A arg);
+	void visit(ExpressionStmt n, A arg);
 
-    public void visit(SwitchStmt n, A arg);
+	void visit(SwitchStmt n, A arg);
 
-    public void visit(SwitchEntryStmt n, A arg);
+	void visit(SwitchEntryStmt n, A arg);
 
-    public void visit(BreakStmt n, A arg);
+	void visit(BreakStmt n, A arg);
 
-    public void visit(ReturnStmt n, A arg);
+	void visit(ReturnStmt n, A arg);
 
-    public void visit(IfStmt n, A arg);
+	void visit(IfStmt n, A arg);
 
-    public void visit(WhileStmt n, A arg);
+	void visit(WhileStmt n, A arg);
 
-    public void visit(ContinueStmt n, A arg);
+	void visit(ContinueStmt n, A arg);
 
-    public void visit(DoStmt n, A arg);
+	void visit(DoStmt n, A arg);
 
-    public void visit(ForeachStmt n, A arg);
+	void visit(ForeachStmt n, A arg);
 
-    public void visit(ForStmt n, A arg);
+	void visit(ForStmt n, A arg);
 
-    public void visit(ThrowStmt n, A arg);
+	void visit(ThrowStmt n, A arg);
 
-    public void visit(SynchronizedStmt n, A arg);
+	void visit(SynchronizedStmt n, A arg);
 
-    public void visit(TryStmt n, A arg);
+	void visit(TryStmt n, A arg);
 
-    public void visit(CatchClause n, A arg);
+	void visit(CatchClause n, A arg);
 
 }

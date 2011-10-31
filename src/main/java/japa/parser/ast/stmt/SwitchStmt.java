@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -32,47 +32,46 @@ import java.util.List;
  */
 public final class SwitchStmt extends Statement {
 
-    private Expression selector;
+	private Expression selector;
 
-    private List<SwitchEntryStmt> entries;
+	private List<SwitchEntryStmt> entries;
 
-    public SwitchStmt() {
-    }
+	public SwitchStmt() {
+	}
 
-    public SwitchStmt(Expression selector, List<SwitchEntryStmt> entries) {
-        this.selector = selector;
-        this.entries = entries;
-    }
+	public SwitchStmt(final Expression selector, final List<SwitchEntryStmt> entries) {
+		this.selector = selector;
+		this.entries = entries;
+	}
 
-    public SwitchStmt(int beginLine, int beginColumn, int endLine, int endColumn, Expression selector, List<SwitchEntryStmt> entries) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.selector = selector;
-        this.entries = entries;
-    }
+	public SwitchStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final Expression selector, final List<SwitchEntryStmt> entries) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.selector = selector;
+		this.entries = entries;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public List<SwitchEntryStmt> getEntries() {
-        return entries;
-    }
+	public List<SwitchEntryStmt> getEntries() {
+		return entries;
+	}
 
-    public Expression getSelector() {
-        return selector;
-    }
+	public Expression getSelector() {
+		return selector;
+	}
 
-    public void setEntries(List<SwitchEntryStmt> entries) {
-        this.entries = entries;
-    }
+	public void setEntries(final List<SwitchEntryStmt> entries) {
+		this.entries = entries;
+	}
 
-    public void setSelector(Expression selector) {
-        this.selector = selector;
-    }
+	public void setSelector(final Expression selector) {
+		this.selector = selector;
+	}
 }

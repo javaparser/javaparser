@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -34,82 +34,82 @@ import java.util.List;
  */
 public final class ObjectCreationExpr extends Expression {
 
-    private Expression scope;
+	private Expression scope;
 
-    private ClassOrInterfaceType type;
+	private ClassOrInterfaceType type;
 
-    private List<Type> typeArgs;
+	private List<Type> typeArgs;
 
-    private List<Expression> args;
+	private List<Expression> args;
 
-    private List<BodyDeclaration> anonymousClassBody;
+	private List<BodyDeclaration> anonymousClassBody;
 
-    public ObjectCreationExpr() {
-    }
+	public ObjectCreationExpr() {
+	}
 
-    public ObjectCreationExpr(Expression scope, ClassOrInterfaceType type, List<Expression> args) {
-        this.scope = scope;
-        this.type = type;
-        this.args = args;
-    }
+	public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final List<Expression> args) {
+		this.scope = scope;
+		this.type = type;
+		this.args = args;
+	}
 
-    public ObjectCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression scope, ClassOrInterfaceType type, List<Type> typeArgs, List<Expression> args, List<BodyDeclaration> anonymousBody) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.scope = scope;
-        this.type = type;
-        this.typeArgs = typeArgs;
-        this.args = args;
-        this.anonymousClassBody = anonymousBody;
-    }
+	public ObjectCreationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
+			final List<Expression> args, final List<BodyDeclaration> anonymousBody) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.scope = scope;
+		this.type = type;
+		this.typeArgs = typeArgs;
+		this.args = args;
+		this.anonymousClassBody = anonymousBody;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public List<BodyDeclaration> getAnonymousClassBody() {
-        return anonymousClassBody;
-    }
+	public List<BodyDeclaration> getAnonymousClassBody() {
+		return anonymousClassBody;
+	}
 
-    public List<Expression> getArgs() {
-        return args;
-    }
+	public List<Expression> getArgs() {
+		return args;
+	}
 
-    public Expression getScope() {
-        return scope;
-    }
+	public Expression getScope() {
+		return scope;
+	}
 
-    public ClassOrInterfaceType getType() {
-        return type;
-    }
+	public ClassOrInterfaceType getType() {
+		return type;
+	}
 
-    public List<Type> getTypeArgs() {
-        return typeArgs;
-    }
+	public List<Type> getTypeArgs() {
+		return typeArgs;
+	}
 
-    public void setAnonymousClassBody(List<BodyDeclaration> anonymousClassBody) {
-        this.anonymousClassBody = anonymousClassBody;
-    }
+	public void setAnonymousClassBody(final List<BodyDeclaration> anonymousClassBody) {
+		this.anonymousClassBody = anonymousClassBody;
+	}
 
-    public void setArgs(List<Expression> args) {
-        this.args = args;
-    }
+	public void setArgs(final List<Expression> args) {
+		this.args = args;
+	}
 
-    public void setScope(Expression scope) {
-        this.scope = scope;
-    }
+	public void setScope(final Expression scope) {
+		this.scope = scope;
+	}
 
-    public void setType(ClassOrInterfaceType type) {
-        this.type = type;
-    }
+	public void setType(final ClassOrInterfaceType type) {
+		this.type = type;
+	}
 
-    public void setTypeArgs(List<Type> typeArgs) {
-        this.typeArgs = typeArgs;
-    }
+	public void setTypeArgs(final List<Type> typeArgs) {
+		this.typeArgs = typeArgs;
+	}
 
 }

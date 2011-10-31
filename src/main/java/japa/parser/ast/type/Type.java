@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -28,11 +28,11 @@ import japa.parser.ast.Node;
  */
 public abstract class Type extends Node {
 
-    public Type() {
-    }
+	public Type() {
+	}
 
-    public Type(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn);
-    }
+	public Type(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
+		super(beginLine, beginColumn, endLine, endColumn);
+	}
 
 }

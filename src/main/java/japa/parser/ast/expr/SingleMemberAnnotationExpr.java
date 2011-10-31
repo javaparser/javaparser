@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -29,38 +29,37 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 
-    private Expression memberValue;
+	private Expression memberValue;
 
-    public SingleMemberAnnotationExpr() {
-    }
+	public SingleMemberAnnotationExpr() {
+	}
 
-    public SingleMemberAnnotationExpr(NameExpr name, Expression memberValue) {
-        this.name = name;
-        this.memberValue = memberValue;
-    }
+	public SingleMemberAnnotationExpr(final NameExpr name, final Expression memberValue) {
+		this.name = name;
+		this.memberValue = memberValue;
+	}
 
-    public SingleMemberAnnotationExpr(int beginLine, int beginColumn, int endLine, int endColumn, NameExpr name, Expression memberValue) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.name = name;
-        this.memberValue = memberValue;
-    }
+	public SingleMemberAnnotationExpr(final int beginLine, final int beginColumn, final int endLine,
+			final int endColumn, final NameExpr name, final Expression memberValue) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.name = name;
+		this.memberValue = memberValue;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public Expression getMemberValue() {
-        return memberValue;
-    }
+	public Expression getMemberValue() {
+		return memberValue;
+	}
 
-    public void setMemberValue(Expression memberValue) {
-        this.memberValue = memberValue;
-    }
+	public void setMemberValue(final Expression memberValue) {
+		this.memberValue = memberValue;
+	}
 
 }

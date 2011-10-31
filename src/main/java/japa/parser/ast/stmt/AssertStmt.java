@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -30,51 +30,50 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class AssertStmt extends Statement {
 
-    private Expression check;
+	private Expression check;
 
-    private Expression msg;
+	private Expression msg;
 
-    public AssertStmt() {
-    }
+	public AssertStmt() {
+	}
 
-    public AssertStmt(Expression check) {
-        this.check = check;
-    }
+	public AssertStmt(final Expression check) {
+		this.check = check;
+	}
 
-    public AssertStmt(Expression check, Expression msg) {
-        this.check = check;
-        this.msg = msg;
-    }
+	public AssertStmt(final Expression check, final Expression msg) {
+		this.check = check;
+		this.msg = msg;
+	}
 
-    public AssertStmt(int beginLine, int beginColumn, int endLine, int endColumn, Expression check, Expression msg) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.check = check;
-        this.msg = msg;
-    }
+	public AssertStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final Expression check, final Expression msg) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.check = check;
+		this.msg = msg;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public Expression getCheck() {
-        return check;
-    }
+	public Expression getCheck() {
+		return check;
+	}
 
-    public Expression getMessage() {
-        return msg;
-    }
+	public Expression getMessage() {
+		return msg;
+	}
 
-    public void setCheck(Expression check) {
-        this.check = check;
-    }
+	public void setCheck(final Expression check) {
+		this.check = check;
+	}
 
-    public void setMessage(Expression msg) {
-        this.msg = msg;
-    }
+	public void setMessage(final Expression msg) {
+		this.msg = msg;
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 J�lio Vilmar Gesser.
+ * Copyright (C) 2008 Júlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -36,47 +36,44 @@ import org.junit.Test;
  */
 public class TestAdapters {
 
-    static class ConcreteVoidVisitorAdapter extends VoidVisitorAdapter<Object> {
+	static class ConcreteVoidVisitorAdapter extends VoidVisitorAdapter<Object> {
 
-    }
+	}
 
-    static class ConcreteGenericVisitorAdapter extends GenericVisitorAdapter<Object, Object> {
+	static class ConcreteGenericVisitorAdapter extends GenericVisitorAdapter<Object, Object> {
 
-    }
+	}
 
-    static class ConcreteModifierVisitorAdapter extends ModifierVisitorAdapter<Object> {
+	static class ConcreteModifierVisitorAdapter extends ModifierVisitorAdapter<Object> {
 
-    }
+	}
 
-    private void doTest(VoidVisitor< ? > visitor) throws ParseException {
-        CompilationUnit cu = Helper.parserClass(getClass().getResourceAsStream("DumperTestClass.java"));
-        cu.accept(visitor, null);
+	private void doTest(final VoidVisitor<?> visitor) throws ParseException {
+		CompilationUnit cu = Helper.parserClass(getClass().getResourceAsStream("DumperTestClass.java"));
+		cu.accept(visitor, null);
 
-        cu = Helper.parserClass(getClass().getResourceAsStream("JavadocTestClass.java"));
-        cu.accept(visitor, null);
-    }
+		cu = Helper.parserClass(getClass().getResourceAsStream("JavadocTestClass.java"));
+		cu.accept(visitor, null);
+	}
 
-    private void doTest(GenericVisitor< ? , ? > visitor) throws ParseException {
-        CompilationUnit cu = Helper.parserClass(getClass().getResourceAsStream("DumperTestClass.java"));
-        cu.accept(visitor, null);
+	private void doTest(final GenericVisitor<?, ?> visitor) throws ParseException {
+		CompilationUnit cu = Helper.parserClass(getClass().getResourceAsStream("DumperTestClass.java"));
+		cu.accept(visitor, null);
 
-        cu = Helper.parserClass(getClass().getResourceAsStream("JavadocTestClass.java"));
-        cu.accept(visitor, null);
-    }
+		cu = Helper.parserClass(getClass().getResourceAsStream("JavadocTestClass.java"));
+		cu.accept(visitor, null);
+	}
 
-    @Test
-    public void testVoidVisitorAdapter() throws Exception {
-        doTest(new ConcreteVoidVisitorAdapter());
-    }
+	@Test public void testVoidVisitorAdapter() throws Exception {
+		doTest(new ConcreteVoidVisitorAdapter());
+	}
 
-    @Test
-    public void testGenericVisitorAdapter() throws Exception {
-        doTest(new ConcreteGenericVisitorAdapter());
-    }
+	@Test public void testGenericVisitorAdapter() throws Exception {
+		doTest(new ConcreteGenericVisitorAdapter());
+	}
 
-    @Test
-    public void testModifierVisitorAdapter() throws Exception {
-        doTest(new ConcreteModifierVisitorAdapter());
-    }
+	@Test public void testModifierVisitorAdapter() throws Exception {
+		doTest(new ConcreteModifierVisitorAdapter());
+	}
 
 }

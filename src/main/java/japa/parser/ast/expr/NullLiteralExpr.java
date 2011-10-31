@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -29,20 +29,18 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class NullLiteralExpr extends LiteralExpr {
 
-    public NullLiteralExpr() {
-    }
+	public NullLiteralExpr() {
+	}
 
-    public NullLiteralExpr(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn);
-    }
+	public NullLiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
+		super(beginLine, beginColumn, endLine, endColumn);
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 }

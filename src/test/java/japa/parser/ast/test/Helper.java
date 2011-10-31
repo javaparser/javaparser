@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 J�lio Vilmar Gesser.
+ * Copyright (C) 2008 Júlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -44,12 +44,12 @@ final class Helper {
 		return clazz.getResourceAsStream("/" + clazz.getName().replace('.', '/') + ".java");
 	}
 
-	@Deprecated
-	public static CompilationUnit parserClass(final String sourceFolder, final Class<?> clazz) throws ParseException {
+	@Deprecated public static CompilationUnit parserClass(final String sourceFolder, final Class<?> clazz)
+			throws ParseException {
 		return JavaParser.parse(getInputStream(sourceFolder, clazz));
 	}
 
-	public static CompilationUnit parserClass(InputStream inputStream) throws ParseException {
+	public static CompilationUnit parserClass(final InputStream inputStream) throws ParseException {
 		return JavaParser.parse(inputStream);
 	}
 
@@ -73,8 +73,7 @@ final class Helper {
 		}
 	}
 
-	@Deprecated
-	public static String readClass(final String sourceFolder, final Class<?> clazz) throws IOException {
+	@Deprecated public static String readClass(final String sourceFolder, final Class<?> clazz) throws IOException {
 		return readStream(getInputStream(sourceFolder, clazz));
 	}
 

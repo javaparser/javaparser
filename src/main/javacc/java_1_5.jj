@@ -29,7 +29,7 @@ options {
 
 PARSER_BEGIN(ASTParser)
 /*
- * Copyright (C) 2008 J�lio Vilmar Gesser.
+ * Copyright (C) 2008 Júlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -2476,7 +2476,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
   (
   	"."
   	(
-  	// TODO: est� deixando passar "this.this", verificar na JLS se � poss�vel
+  	// TODO: est? deixando passar "this.this", verificar na JLS se ? poss?vel
 		"this" { ret = new ThisExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope); }
 	  |
 	  	ret = AllocationExpression(scope)

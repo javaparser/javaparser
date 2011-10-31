@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 J�lio Vilmar Gesser.
+ * Copyright (C) 2008 Júlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -113,716 +113,716 @@ import japa.parser.ast.type.WildcardType;
  */
 public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
-    @Override public void visit(AnnotationDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        if (n.getMembers() != null) {
-            for (BodyDeclaration member : n.getMembers()) {
-                member.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(AnnotationMemberDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        n.getType().accept(this, arg);
-        if (n.getDefaultValue() != null) {
-            n.getDefaultValue().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(ArrayAccessExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getName().accept(this, arg);
-        n.getIndex().accept(this, arg);
-    }
-
-    @Override public void visit(ArrayCreationExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getType().accept(this, arg);
-        if (n.getDimensions() != null) {
-            for (Expression dim : n.getDimensions()) {
-                dim.accept(this, arg);
-            }
-        } else {
-            n.getInitializer().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(ArrayInitializerExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getValues() != null) {
-            for (Expression expr : n.getValues()) {
-                expr.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(AssertStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getCheck().accept(this, arg);
-        if (n.getMessage() != null) {
-            n.getMessage().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(AssignExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getTarget().accept(this, arg);
-        n.getValue().accept(this, arg);
-    }
-
-    @Override public void visit(BinaryExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getLeft().accept(this, arg);
-        n.getRight().accept(this, arg);
-    }
-
-    @Override public void visit(BlockComment n, A arg) {
-      visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(BlockStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getStmts() != null) {
-            for (Statement s : n.getStmts()) {
-                s.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(BooleanLiteralExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(BreakStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(CastExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getType().accept(this, arg);
-        n.getExpr().accept(this, arg);
-    }
-
-    @Override public void visit(CatchClause n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getExcept().accept(this, arg);
-        n.getCatchBlock().accept(this, arg);
-    }
-
-    @Override public void visit(CharLiteralExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(ClassExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getType().accept(this, arg);
-    }
-
-    @Override public void visit(ClassOrInterfaceDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        if (n.getTypeParameters() != null) {
-            for (TypeParameter t : n.getTypeParameters()) {
-                t.accept(this, arg);
-            }
-        }
-        if (n.getExtends() != null) {
-            for (ClassOrInterfaceType c : n.getExtends()) {
-                c.accept(this, arg);
-            }
-        }
-
-        if (n.getImplements() != null) {
-            for (ClassOrInterfaceType c : n.getImplements()) {
-                c.accept(this, arg);
-            }
-        }
-        if (n.getMembers() != null) {
-            for (BodyDeclaration member : n.getMembers()) {
-                member.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(ClassOrInterfaceType n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getScope() != null) {
-            n.getScope().accept(this, arg);
-        }
-        if (n.getTypeArgs() != null) {
-            for (Type t : n.getTypeArgs()) {
-                t.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(CompilationUnit n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getPackage() != null) {
-            n.getPackage().accept(this, arg);
-        }
-        if (n.getImports() != null) {
-            for (ImportDeclaration i : n.getImports()) {
-                i.accept(this, arg);
-            }
-        }
-        if (n.getTypes() != null) {
-            for (TypeDeclaration typeDeclaration : n.getTypes()) {
-                typeDeclaration.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(ConditionalExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getCondition().accept(this, arg);
-        n.getThenExpr().accept(this, arg);
-        n.getElseExpr().accept(this, arg);
-    }
-
-    @Override public void visit(ConstructorDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        if (n.getTypeParameters() != null) {
-            for (TypeParameter t : n.getTypeParameters()) {
-                t.accept(this, arg);
-            }
-        }
-        if (n.getParameters() != null) {
-            for (Parameter p : n.getParameters()) {
-                p.accept(this, arg);
-            }
-        }
-        if (n.getThrows() != null) {
-            for (NameExpr name : n.getThrows()) {
-                name.accept(this, arg);
-            }
-        }
-        n.getBlock().accept(this, arg);
-    }
-
-    @Override public void visit(ContinueStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(DoStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getBody().accept(this, arg);
-        n.getCondition().accept(this, arg);
-    }
-
-    @Override public void visit(DoubleLiteralExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(EmptyMemberDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(EmptyStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(EmptyTypeDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(EnclosedExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getInner().accept(this, arg);
-    }
-
-    @Override public void visit(EnumConstantDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        if (n.getArgs() != null) {
-            for (Expression e : n.getArgs()) {
-                e.accept(this, arg);
-            }
-        }
-        if (n.getClassBody() != null) {
-            for (BodyDeclaration member : n.getClassBody()) {
-                member.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(EnumDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        if (n.getImplements() != null) {
-            for (ClassOrInterfaceType c : n.getImplements()) {
-                c.accept(this, arg);
-            }
-        }
-        if (n.getEntries() != null) {
-            for (EnumConstantDeclaration e : n.getEntries()) {
-                e.accept(this, arg);
-            }
-        }
-        if (n.getMembers() != null) {
-            for (BodyDeclaration member : n.getMembers()) {
-                member.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(ExplicitConstructorInvocationStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (!n.isThis()) {
-            if (n.getExpr() != null) {
-                n.getExpr().accept(this, arg);
-            }
-        }
-        if (n.getTypeArgs() != null) {
-            for (Type t : n.getTypeArgs()) {
-                t.accept(this, arg);
-            }
-        }
-        if (n.getArgs() != null) {
-            for (Expression e : n.getArgs()) {
-                e.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(ExpressionStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getExpression().accept(this, arg);
-    }
-
-    @Override public void visit(FieldAccessExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getScope().accept(this, arg);
-    }
-
-    @Override public void visit(FieldDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        n.getType().accept(this, arg);
-        for (VariableDeclarator var : n.getVariables()) {
-            var.accept(this, arg);
-        }
-    }
-
-    @Override public void visit(ForeachStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getVariable().accept(this, arg);
-        n.getIterable().accept(this, arg);
-        n.getBody().accept(this, arg);
-    }
-
-    @Override public void visit(ForStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getInit() != null) {
-            for (Expression e : n.getInit()) {
-                e.accept(this, arg);
-            }
-        }
-        if (n.getCompare() != null) {
-            n.getCompare().accept(this, arg);
-        }
-        if (n.getUpdate() != null) {
-            for (Expression e : n.getUpdate()) {
-                e.accept(this, arg);
-            }
-        }
-        n.getBody().accept(this, arg);
-    }
-
-    @Override public void visit(IfStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getCondition().accept(this, arg);
-        n.getThenStmt().accept(this, arg);
-        if (n.getElseStmt() != null) {
-            n.getElseStmt().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(ImportDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getName().accept(this, arg);
-    }
-
-    @Override public void visit(InitializerDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        n.getBlock().accept(this, arg);
-    }
-
-    @Override public void visit(InstanceOfExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getExpr().accept(this, arg);
-        n.getType().accept(this, arg);
-    }
-
-    @Override public void visit(IntegerLiteralExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(IntegerLiteralMinValueExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(JavadocComment n, A arg) {
-      visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(LabeledStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getStmt().accept(this, arg);
-    }
-
-    @Override public void visit(LineComment n, A arg) {
-      visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(LongLiteralExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(LongLiteralMinValueExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(MarkerAnnotationExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getName().accept(this, arg);
-    }
-
-    @Override public void visit(MemberValuePair n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getValue().accept(this, arg);
-    }
-
-    @Override public void visit(MethodCallExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getScope() != null) {
-            n.getScope().accept(this, arg);
-        }
-        if (n.getTypeArgs() != null) {
-            for (Type t : n.getTypeArgs()) {
-                t.accept(this, arg);
-            }
-        }
-        if (n.getArgs() != null) {
-            for (Expression e : n.getArgs()) {
-                e.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(MethodDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getJavaDoc() != null) {
-            n.getJavaDoc().accept(this, arg);
-        }
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        if (n.getTypeParameters() != null) {
-            for (TypeParameter t : n.getTypeParameters()) {
-                t.accept(this, arg);
-            }
-        }
-        n.getType().accept(this, arg);
-        if (n.getParameters() != null) {
-            for (Parameter p : n.getParameters()) {
-                p.accept(this, arg);
-            }
-        }
-        if (n.getThrows() != null) {
-            for (NameExpr name : n.getThrows()) {
-                name.accept(this, arg);
-            }
-        }
-        if (n.getBody() != null) {
-            n.getBody().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(NameExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(NormalAnnotationExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getName().accept(this, arg);
-        if (n.getPairs() != null) {
-            for (MemberValuePair m : n.getPairs()) {
-                m.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(NullLiteralExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(ObjectCreationExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getScope() != null) {
-            n.getScope().accept(this, arg);
-        }
-        if (n.getTypeArgs() != null) {
-            for (Type t : n.getTypeArgs()) {
-                t.accept(this, arg);
-            }
-        }
-        n.getType().accept(this, arg);
-        if (n.getArgs() != null) {
-            for (Expression e : n.getArgs()) {
-                e.accept(this, arg);
-            }
-        }
-        if (n.getAnonymousClassBody() != null) {
-            for (BodyDeclaration member : n.getAnonymousClassBody()) {
-                member.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(PackageDeclaration n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        n.getName().accept(this, arg);
-    }
-
-    @Override public void visit(Parameter n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        n.getType().accept(this, arg);
-        n.getId().accept(this, arg);
-    }
-
-    @Override public void visit(PrimitiveType n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(QualifiedNameExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getQualifier().accept(this, arg);
-    }
-
-    @Override public void visit(ReferenceType n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getType().accept(this, arg);
-    }
-
-    @Override public void visit(ReturnStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getExpr() != null) {
-            n.getExpr().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(SingleMemberAnnotationExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getName().accept(this, arg);
-        n.getMemberValue().accept(this, arg);
-    }
-
-    @Override public void visit(StringLiteralExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(SuperExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getClassExpr() != null) {
-            n.getClassExpr().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(SwitchEntryStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getLabel() != null) {
-            n.getLabel().accept(this, arg);
-        }
-        if (n.getStmts() != null) {
-            for (Statement s : n.getStmts()) {
-                s.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(SwitchStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getSelector().accept(this, arg);
-        if (n.getEntries() != null) {
-            for (SwitchEntryStmt e : n.getEntries()) {
-                e.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(SynchronizedStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getExpr().accept(this, arg);
-        n.getBlock().accept(this, arg);
-    }
-
-    @Override public void visit(ThisExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getClassExpr() != null) {
-            n.getClassExpr().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(ThrowStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getExpr().accept(this, arg);
-    }
-
-    @Override public void visit(TryStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getTryBlock().accept(this, arg);
-        if (n.getCatchs() != null) {
-            for (CatchClause c : n.getCatchs()) {
-                c.accept(this, arg);
-            }
-        }
-        if (n.getFinallyBlock() != null) {
-            n.getFinallyBlock().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(TypeDeclarationStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getTypeDeclaration().accept(this, arg);
-    }
-
-    @Override public void visit(TypeParameter n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getTypeBound() != null) {
-            for (ClassOrInterfaceType c : n.getTypeBound()) {
-                c.accept(this, arg);
-            }
-        }
-    }
-
-    @Override public void visit(UnaryExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getExpr().accept(this, arg);
-    }
-
-    @Override public void visit(VariableDeclarationExpr n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr a : n.getAnnotations()) {
-                a.accept(this, arg);
-            }
-        }
-        n.getType().accept(this, arg);
-        for (VariableDeclarator v : n.getVars()) {
-            v.accept(this, arg);
-        }
-    }
-
-    @Override public void visit(VariableDeclarator n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getId().accept(this, arg);
-        if (n.getInit() != null) {
-            n.getInit().accept(this, arg);
-        }
-    }
-
-    @Override public void visit(VariableDeclaratorId n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(VoidType n, A arg) {
-    	visitComment(n.getComment(), arg);
-    }
-
-    @Override public void visit(WhileStmt n, A arg) {
-    	visitComment(n.getComment(), arg);
-        n.getCondition().accept(this, arg);
-        n.getBody().accept(this, arg);
-    }
-
-    @Override public void visit(WildcardType n, A arg) {
-    	visitComment(n.getComment(), arg);
-        if (n.getExtends() != null) {
-            n.getExtends().accept(this, arg);
-        }
-        if (n.getSuper() != null) {
-            n.getSuper().accept(this, arg);
-        }
-    }
-
-    private void visitComment(Comment n, A arg) {
-      if (n != null) {
-         n.accept(this, arg);
-      }
-    }
+	@Override public void visit(final AnnotationDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		if (n.getMembers() != null) {
+			for (final BodyDeclaration member : n.getMembers()) {
+				member.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final AnnotationMemberDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		n.getType().accept(this, arg);
+		if (n.getDefaultValue() != null) {
+			n.getDefaultValue().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final ArrayAccessExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getName().accept(this, arg);
+		n.getIndex().accept(this, arg);
+	}
+
+	@Override public void visit(final ArrayCreationExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getType().accept(this, arg);
+		if (n.getDimensions() != null) {
+			for (final Expression dim : n.getDimensions()) {
+				dim.accept(this, arg);
+			}
+		} else {
+			n.getInitializer().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final ArrayInitializerExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getValues() != null) {
+			for (final Expression expr : n.getValues()) {
+				expr.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final AssertStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getCheck().accept(this, arg);
+		if (n.getMessage() != null) {
+			n.getMessage().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final AssignExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getTarget().accept(this, arg);
+		n.getValue().accept(this, arg);
+	}
+
+	@Override public void visit(final BinaryExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getLeft().accept(this, arg);
+		n.getRight().accept(this, arg);
+	}
+
+	@Override public void visit(final BlockComment n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final BlockStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getStmts() != null) {
+			for (final Statement s : n.getStmts()) {
+				s.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final BooleanLiteralExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final BreakStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final CastExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getType().accept(this, arg);
+		n.getExpr().accept(this, arg);
+	}
+
+	@Override public void visit(final CatchClause n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getExcept().accept(this, arg);
+		n.getCatchBlock().accept(this, arg);
+	}
+
+	@Override public void visit(final CharLiteralExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final ClassExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getType().accept(this, arg);
+	}
+
+	@Override public void visit(final ClassOrInterfaceDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		if (n.getTypeParameters() != null) {
+			for (final TypeParameter t : n.getTypeParameters()) {
+				t.accept(this, arg);
+			}
+		}
+		if (n.getExtends() != null) {
+			for (final ClassOrInterfaceType c : n.getExtends()) {
+				c.accept(this, arg);
+			}
+		}
+
+		if (n.getImplements() != null) {
+			for (final ClassOrInterfaceType c : n.getImplements()) {
+				c.accept(this, arg);
+			}
+		}
+		if (n.getMembers() != null) {
+			for (final BodyDeclaration member : n.getMembers()) {
+				member.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final ClassOrInterfaceType n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getScope() != null) {
+			n.getScope().accept(this, arg);
+		}
+		if (n.getTypeArgs() != null) {
+			for (final Type t : n.getTypeArgs()) {
+				t.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final CompilationUnit n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getPackage() != null) {
+			n.getPackage().accept(this, arg);
+		}
+		if (n.getImports() != null) {
+			for (final ImportDeclaration i : n.getImports()) {
+				i.accept(this, arg);
+			}
+		}
+		if (n.getTypes() != null) {
+			for (final TypeDeclaration typeDeclaration : n.getTypes()) {
+				typeDeclaration.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final ConditionalExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getCondition().accept(this, arg);
+		n.getThenExpr().accept(this, arg);
+		n.getElseExpr().accept(this, arg);
+	}
+
+	@Override public void visit(final ConstructorDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		if (n.getTypeParameters() != null) {
+			for (final TypeParameter t : n.getTypeParameters()) {
+				t.accept(this, arg);
+			}
+		}
+		if (n.getParameters() != null) {
+			for (final Parameter p : n.getParameters()) {
+				p.accept(this, arg);
+			}
+		}
+		if (n.getThrows() != null) {
+			for (final NameExpr name : n.getThrows()) {
+				name.accept(this, arg);
+			}
+		}
+		n.getBlock().accept(this, arg);
+	}
+
+	@Override public void visit(final ContinueStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final DoStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getBody().accept(this, arg);
+		n.getCondition().accept(this, arg);
+	}
+
+	@Override public void visit(final DoubleLiteralExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final EmptyMemberDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final EmptyStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final EmptyTypeDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final EnclosedExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getInner().accept(this, arg);
+	}
+
+	@Override public void visit(final EnumConstantDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		if (n.getArgs() != null) {
+			for (final Expression e : n.getArgs()) {
+				e.accept(this, arg);
+			}
+		}
+		if (n.getClassBody() != null) {
+			for (final BodyDeclaration member : n.getClassBody()) {
+				member.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final EnumDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		if (n.getImplements() != null) {
+			for (final ClassOrInterfaceType c : n.getImplements()) {
+				c.accept(this, arg);
+			}
+		}
+		if (n.getEntries() != null) {
+			for (final EnumConstantDeclaration e : n.getEntries()) {
+				e.accept(this, arg);
+			}
+		}
+		if (n.getMembers() != null) {
+			for (final BodyDeclaration member : n.getMembers()) {
+				member.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final ExplicitConstructorInvocationStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (!n.isThis()) {
+			if (n.getExpr() != null) {
+				n.getExpr().accept(this, arg);
+			}
+		}
+		if (n.getTypeArgs() != null) {
+			for (final Type t : n.getTypeArgs()) {
+				t.accept(this, arg);
+			}
+		}
+		if (n.getArgs() != null) {
+			for (final Expression e : n.getArgs()) {
+				e.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final ExpressionStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getExpression().accept(this, arg);
+	}
+
+	@Override public void visit(final FieldAccessExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getScope().accept(this, arg);
+	}
+
+	@Override public void visit(final FieldDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		n.getType().accept(this, arg);
+		for (final VariableDeclarator var : n.getVariables()) {
+			var.accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final ForeachStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getVariable().accept(this, arg);
+		n.getIterable().accept(this, arg);
+		n.getBody().accept(this, arg);
+	}
+
+	@Override public void visit(final ForStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getInit() != null) {
+			for (final Expression e : n.getInit()) {
+				e.accept(this, arg);
+			}
+		}
+		if (n.getCompare() != null) {
+			n.getCompare().accept(this, arg);
+		}
+		if (n.getUpdate() != null) {
+			for (final Expression e : n.getUpdate()) {
+				e.accept(this, arg);
+			}
+		}
+		n.getBody().accept(this, arg);
+	}
+
+	@Override public void visit(final IfStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getCondition().accept(this, arg);
+		n.getThenStmt().accept(this, arg);
+		if (n.getElseStmt() != null) {
+			n.getElseStmt().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final ImportDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getName().accept(this, arg);
+	}
+
+	@Override public void visit(final InitializerDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		n.getBlock().accept(this, arg);
+	}
+
+	@Override public void visit(final InstanceOfExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getExpr().accept(this, arg);
+		n.getType().accept(this, arg);
+	}
+
+	@Override public void visit(final IntegerLiteralExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final IntegerLiteralMinValueExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final JavadocComment n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final LabeledStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getStmt().accept(this, arg);
+	}
+
+	@Override public void visit(final LineComment n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final LongLiteralExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final LongLiteralMinValueExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final MarkerAnnotationExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getName().accept(this, arg);
+	}
+
+	@Override public void visit(final MemberValuePair n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getValue().accept(this, arg);
+	}
+
+	@Override public void visit(final MethodCallExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getScope() != null) {
+			n.getScope().accept(this, arg);
+		}
+		if (n.getTypeArgs() != null) {
+			for (final Type t : n.getTypeArgs()) {
+				t.accept(this, arg);
+			}
+		}
+		if (n.getArgs() != null) {
+			for (final Expression e : n.getArgs()) {
+				e.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final MethodDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getJavaDoc() != null) {
+			n.getJavaDoc().accept(this, arg);
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		if (n.getTypeParameters() != null) {
+			for (final TypeParameter t : n.getTypeParameters()) {
+				t.accept(this, arg);
+			}
+		}
+		n.getType().accept(this, arg);
+		if (n.getParameters() != null) {
+			for (final Parameter p : n.getParameters()) {
+				p.accept(this, arg);
+			}
+		}
+		if (n.getThrows() != null) {
+			for (final NameExpr name : n.getThrows()) {
+				name.accept(this, arg);
+			}
+		}
+		if (n.getBody() != null) {
+			n.getBody().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final NameExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final NormalAnnotationExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getName().accept(this, arg);
+		if (n.getPairs() != null) {
+			for (final MemberValuePair m : n.getPairs()) {
+				m.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final NullLiteralExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final ObjectCreationExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getScope() != null) {
+			n.getScope().accept(this, arg);
+		}
+		if (n.getTypeArgs() != null) {
+			for (final Type t : n.getTypeArgs()) {
+				t.accept(this, arg);
+			}
+		}
+		n.getType().accept(this, arg);
+		if (n.getArgs() != null) {
+			for (final Expression e : n.getArgs()) {
+				e.accept(this, arg);
+			}
+		}
+		if (n.getAnonymousClassBody() != null) {
+			for (final BodyDeclaration member : n.getAnonymousClassBody()) {
+				member.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final PackageDeclaration n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		n.getName().accept(this, arg);
+	}
+
+	@Override public void visit(final Parameter n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		n.getType().accept(this, arg);
+		n.getId().accept(this, arg);
+	}
+
+	@Override public void visit(final PrimitiveType n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final QualifiedNameExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getQualifier().accept(this, arg);
+	}
+
+	@Override public void visit(final ReferenceType n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getType().accept(this, arg);
+	}
+
+	@Override public void visit(final ReturnStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getExpr() != null) {
+			n.getExpr().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final SingleMemberAnnotationExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getName().accept(this, arg);
+		n.getMemberValue().accept(this, arg);
+	}
+
+	@Override public void visit(final StringLiteralExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final SuperExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getClassExpr() != null) {
+			n.getClassExpr().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final SwitchEntryStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getLabel() != null) {
+			n.getLabel().accept(this, arg);
+		}
+		if (n.getStmts() != null) {
+			for (final Statement s : n.getStmts()) {
+				s.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final SwitchStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getSelector().accept(this, arg);
+		if (n.getEntries() != null) {
+			for (final SwitchEntryStmt e : n.getEntries()) {
+				e.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final SynchronizedStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getExpr().accept(this, arg);
+		n.getBlock().accept(this, arg);
+	}
+
+	@Override public void visit(final ThisExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getClassExpr() != null) {
+			n.getClassExpr().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final ThrowStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getExpr().accept(this, arg);
+	}
+
+	@Override public void visit(final TryStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getTryBlock().accept(this, arg);
+		if (n.getCatchs() != null) {
+			for (final CatchClause c : n.getCatchs()) {
+				c.accept(this, arg);
+			}
+		}
+		if (n.getFinallyBlock() != null) {
+			n.getFinallyBlock().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final TypeDeclarationStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getTypeDeclaration().accept(this, arg);
+	}
+
+	@Override public void visit(final TypeParameter n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getTypeBound() != null) {
+			for (final ClassOrInterfaceType c : n.getTypeBound()) {
+				c.accept(this, arg);
+			}
+		}
+	}
+
+	@Override public void visit(final UnaryExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getExpr().accept(this, arg);
+	}
+
+	@Override public void visit(final VariableDeclarationExpr n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		n.getType().accept(this, arg);
+		for (final VariableDeclarator v : n.getVars()) {
+			v.accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final VariableDeclarator n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getId().accept(this, arg);
+		if (n.getInit() != null) {
+			n.getInit().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(final VariableDeclaratorId n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final VoidType n, final A arg) {
+		visitComment(n.getComment(), arg);
+	}
+
+	@Override public void visit(final WhileStmt n, final A arg) {
+		visitComment(n.getComment(), arg);
+		n.getCondition().accept(this, arg);
+		n.getBody().accept(this, arg);
+	}
+
+	@Override public void visit(final WildcardType n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getExtends() != null) {
+			n.getExtends().accept(this, arg);
+		}
+		if (n.getSuper() != null) {
+			n.getSuper().accept(this, arg);
+		}
+	}
+
+	private void visitComment(final Comment n, final A arg) {
+		if (n != null) {
+			n.accept(this, arg);
+		}
+	}
 }

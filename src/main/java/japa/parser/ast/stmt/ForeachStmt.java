@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -31,59 +31,58 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class ForeachStmt extends Statement {
 
-    private VariableDeclarationExpr var;
+	private VariableDeclarationExpr var;
 
-    private Expression iterable;
+	private Expression iterable;
 
-    private Statement body;
+	private Statement body;
 
-    public ForeachStmt() {
-    }
+	public ForeachStmt() {
+	}
 
-    public ForeachStmt(VariableDeclarationExpr var, Expression iterable, Statement body) {
-        this.var = var;
-        this.iterable = iterable;
-        this.body = body;
-    }
+	public ForeachStmt(final VariableDeclarationExpr var, final Expression iterable, final Statement body) {
+		this.var = var;
+		this.iterable = iterable;
+		this.body = body;
+	}
 
-    public ForeachStmt(int beginLine, int beginColumn, int endLine, int endColumn, VariableDeclarationExpr var, Expression iterable, Statement body) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.var = var;
-        this.iterable = iterable;
-        this.body = body;
-    }
+	public ForeachStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final VariableDeclarationExpr var, final Expression iterable, final Statement body) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.var = var;
+		this.iterable = iterable;
+		this.body = body;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public Statement getBody() {
-        return body;
-    }
+	public Statement getBody() {
+		return body;
+	}
 
-    public Expression getIterable() {
-        return iterable;
-    }
+	public Expression getIterable() {
+		return iterable;
+	}
 
-    public VariableDeclarationExpr getVariable() {
-        return var;
-    }
+	public VariableDeclarationExpr getVariable() {
+		return var;
+	}
 
-    public void setBody(Statement body) {
-        this.body = body;
-    }
+	public void setBody(final Statement body) {
+		this.body = body;
+	}
 
-    public void setIterable(Expression iterable) {
-        this.iterable = iterable;
-    }
+	public void setIterable(final Expression iterable) {
+		this.iterable = iterable;
+	}
 
-    public void setVariable(VariableDeclarationExpr var) {
-        this.var = var;
-    }
+	public void setVariable(final VariableDeclarationExpr var) {
+		this.var = var;
+	}
 }

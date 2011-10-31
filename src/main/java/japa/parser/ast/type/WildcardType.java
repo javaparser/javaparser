@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -29,52 +29,51 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class WildcardType extends Type {
 
-    private ReferenceType ext;
+	private ReferenceType ext;
 
-    private ReferenceType sup;
+	private ReferenceType sup;
 
-    public WildcardType() {
-    }
+	public WildcardType() {
+	}
 
-    public WildcardType(ReferenceType ext) {
-        this.ext = ext;
-    }
+	public WildcardType(final ReferenceType ext) {
+		this.ext = ext;
+	}
 
-    public WildcardType(ReferenceType ext, ReferenceType sup) {
-        this.ext = ext;
-        this.sup = sup;
-    }
+	public WildcardType(final ReferenceType ext, final ReferenceType sup) {
+		this.ext = ext;
+		this.sup = sup;
+	}
 
-    public WildcardType(int beginLine, int beginColumn, int endLine, int endColumn, ReferenceType ext, ReferenceType sup) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.ext = ext;
-        this.sup = sup;
-    }
+	public WildcardType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final ReferenceType ext, final ReferenceType sup) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.ext = ext;
+		this.sup = sup;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public ReferenceType getExtends() {
-        return ext;
-    }
+	public ReferenceType getExtends() {
+		return ext;
+	}
 
-    public ReferenceType getSuper() {
-        return sup;
-    }
+	public ReferenceType getSuper() {
+		return sup;
+	}
 
-    public void setExtends(ReferenceType ext) {
-        this.ext = ext;
-    }
+	public void setExtends(final ReferenceType ext) {
+		this.ext = ext;
+	}
 
-    public void setSuper(ReferenceType sup) {
-        this.sup = sup;
-    }
+	public void setSuper(final ReferenceType sup) {
+		this.sup = sup;
+	}
 
 }

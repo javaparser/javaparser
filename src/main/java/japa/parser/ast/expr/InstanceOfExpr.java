@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
+ * Copyright (C) 2007 JÃºlio Vilmar Gesser.
  * 
  * This file is part of Java 1.5 parser and Abstract Syntax Tree.
  *
@@ -30,48 +30,47 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class InstanceOfExpr extends Expression {
 
-    private Expression expr;
+	private Expression expr;
 
-    private Type type;
+	private Type type;
 
-    public InstanceOfExpr() {
-    }
+	public InstanceOfExpr() {
+	}
 
-    public InstanceOfExpr(Expression expr, Type type) {
-        this.expr = expr;
-        this.type = type;
-    }
+	public InstanceOfExpr(final Expression expr, final Type type) {
+		this.expr = expr;
+		this.type = type;
+	}
 
-    public InstanceOfExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression expr, Type type) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.expr = expr;
-        this.type = type;
-    }
+	public InstanceOfExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+			final Expression expr, final Type type) {
+		super(beginLine, beginColumn, endLine, endColumn);
+		this.expr = expr;
+		this.type = type;
+	}
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
+	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public Expression getExpr() {
-        return expr;
-    }
+	public Expression getExpr() {
+		return expr;
+	}
 
-    public Type getType() {
-        return type;
-    }
+	public Type getType() {
+		return type;
+	}
 
-    public void setExpr(Expression expr) {
-        this.expr = expr;
-    }
+	public void setExpr(final Expression expr) {
+		this.expr = expr;
+	}
 
-    public void setType(Type type) {
-        this.type = type;
-    }
+	public void setType(final Type type) {
+		this.type = type;
+	}
 
 }
