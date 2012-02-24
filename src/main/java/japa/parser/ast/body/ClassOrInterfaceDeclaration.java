@@ -38,7 +38,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 
 	private List<TypeParameter> typeParameters;
 
-	// TODO why is this a list when we only have single inheritance?
+	// Can contain more than one item if this is an interface
 	private List<ClassOrInterfaceType> extendsList;
 
 	private List<ClassOrInterfaceType> implementsList;
