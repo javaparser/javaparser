@@ -166,7 +166,18 @@ public final class JavaParser {
 		return new ASTParser(reader).CompilationUnit();
 	}
 
-	public static BlockStmt parseBlock(String blockStatement)
+	/**
+	 * Parses the Java block contained in a {@link String} and returns a
+	 * {@link BlockStmt} that represents it.
+	 * 
+	 * @param blockStatement
+	 *            {@link String} containing Java block code
+	 * @return BlockStmt representing the Java block
+	 * @throws ParseException
+	 *             if the source code has parser errors
+	 * @throws IOException
+	 */
+	public static BlockStmt parseBlock(final String blockStatement)
 			throws ParseException {
 		StringReader sr = new StringReader(blockStatement);
 		BlockStmt result = new ASTParser(sr).Block();
@@ -174,7 +185,18 @@ public final class JavaParser {
 		return result;
 	}
 
-	public static Statement parseStatement(String statement)
+	/**
+	 * Parses the Java statement contained in a {@link String} and returns a
+	 * {@link Statement} that represents it.
+	 * 
+	 * @param statement
+	 *            {@link String} containing Java statement code
+	 * @return Statement representing the Java statement
+	 * @throws ParseException
+	 *             if the source code has parser errors
+	 * @throws IOException
+	 */
+	public static Statement parseStatement(final String statement)
 			throws ParseException {
 		StringReader sr = new StringReader(statement);
 		Statement stmt = new ASTParser(sr).Statement();
@@ -182,7 +204,18 @@ public final class JavaParser {
 		return stmt;
 	}
 
-	public static ImportDeclaration parseImport(String importDeclaration)
+	/**
+	 * Parses the Java import contained in a {@link String} and returns a
+	 * {@link ImportDeclaration} that represents it.
+	 * 
+	 * @param importDeclaration
+	 *            {@link String} containing Java import code
+	 * @return ImportDeclaration representing the Java import declaration
+	 * @throws ParseException
+	 *             if the source code has parser errors
+	 * @throws IOException
+	 */
+	public static ImportDeclaration parseImport(final String importDeclaration)
 			throws ParseException {
 		StringReader sr = new StringReader(importDeclaration);
 		ImportDeclaration id = new ASTParser(sr).ImportDeclaration();
@@ -190,15 +223,37 @@ public final class JavaParser {
 		return id;
 	}
 
-	public static Expression parseExpression(String conditional)
+	/**
+	 * Parses the Java expression contained in a {@link String} and returns a
+	 * {@link Expression} that represents it.
+	 * 
+	 * @param expression
+	 *            {@link String} containing Java expression
+	 * @return Expression representing the Java expression
+	 * @throws ParseException
+	 *             if the source code has parser errors
+	 * @throws IOException
+	 */
+	public static Expression parseExpression(final String expression)
 			throws ParseException {
-		StringReader sr = new StringReader(conditional);
+		StringReader sr = new StringReader(expression);
 		Expression e = new ASTParser(sr).Expression();
 		sr.close();
 		return e;
 	}
 
-	public static AnnotationExpr parseAnnotation(String annotation)
+	/**
+	 * Parses the Java annotation contained in a {@link String} and returns a
+	 * {@link AnnotationExpr} that represents it.
+	 * 
+	 * @param annotation
+	 *            {@link String} containing Java annotation
+	 * @return AnnotationExpr representing the Java annotation
+	 * @throws ParseException
+	 *             if the source code has parser errors
+	 * @throws IOException
+	 */
+	public static AnnotationExpr parseAnnotation(final String annotation)
 			throws ParseException {
 		StringReader sr = new StringReader(annotation);
 		AnnotationExpr ae = new ASTParser(sr).Annotation();
@@ -206,7 +261,18 @@ public final class JavaParser {
 		return ae;
 	}
 
-	public static BodyDeclaration parseBodyDeclaration(String body)
+	/**
+	 * Parses the Java body declaration(e.g fields or methods) contained in a
+	 * {@link String} and returns a {@link BodyDeclaration} that represents it.
+	 * 
+	 * @param body
+	 *            {@link String} containing Java body declaration
+	 * @return BodyDeclaration representing the Java annotation
+	 * @throws ParseException
+	 *             if the source code has parser errors
+	 * @throws IOException
+	 */
+	public static BodyDeclaration parseBodyDeclaration(final String body)
 			throws ParseException {
 		StringReader sr = new StringReader(body);
 		BodyDeclaration bd = new ASTParser(sr).AnnotationBodyDeclaration();
