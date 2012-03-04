@@ -38,15 +38,15 @@ public final class MemberValuePair extends Node {
 	}
 
 	public MemberValuePair(final String name, final Expression value) {
-		this.name = name;
-		this.value = value;
+		setName(name);
+		setValue(value);
 	}
 
 	public MemberValuePair(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final String name, final Expression value) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.name = name;
-		this.value = value;
+		setName(name);
+		setValue(value);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -71,6 +71,10 @@ public final class MemberValuePair extends Node {
 
 	public void setValue(final Expression value) {
 		this.value = value;
+		
+		if(this.value != null){
+			this.value.setParentNode(this);
+		}
 	}
 
 }

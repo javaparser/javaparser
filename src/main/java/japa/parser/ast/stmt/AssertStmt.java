@@ -38,19 +38,21 @@ public final class AssertStmt extends Statement {
 	}
 
 	public AssertStmt(final Expression check) {
-		this.check = check;
+		setCheck(check);
 	}
 
 	public AssertStmt(final Expression check, final Expression msg) {
-		this.check = check;
-		this.msg = msg;
+		setCheck(check);
+		setMessage(msg);
 	}
 
 	public AssertStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression check, final Expression msg) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.check = check;
-		this.msg = msg;
+		
+		setCheck(check);
+		setMessage(msg);
+		
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -71,9 +73,15 @@ public final class AssertStmt extends Statement {
 
 	public void setCheck(final Expression check) {
 		this.check = check;
+		if(this.check!=null){
+			this.check.setParentNode(this);
+		}
 	}
 
 	public void setMessage(final Expression msg) {
 		this.msg = msg;
+		if(this.msg!=null){
+			this.msg.setParentNode(this);
+		}
 	}
 }

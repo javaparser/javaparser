@@ -39,15 +39,15 @@ public final class CatchClause extends Node {
 	}
 
 	public CatchClause(final Parameter except, final BlockStmt catchBlock) {
-		this.except = except;
-		this.catchBlock = catchBlock;
+		setExcept(except);
+		setCatchBlock(catchBlock);
 	}
 
 	public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Parameter except, final BlockStmt catchBlock) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.except = except;
-		this.catchBlock = catchBlock;
+		setExcept(except);
+		setCatchBlock(catchBlock);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -68,9 +68,15 @@ public final class CatchClause extends Node {
 
 	public void setCatchBlock(final BlockStmt catchBlock) {
 		this.catchBlock = catchBlock;
+		if(this.catchBlock!=null){
+			this.catchBlock.setParentNode(this);
+		}
 	}
 
 	public void setExcept(final Parameter except) {
 		this.except = except;
+		if(this.except!=null){
+			this.except.setParentNode(this);
+		}
 	}
 }

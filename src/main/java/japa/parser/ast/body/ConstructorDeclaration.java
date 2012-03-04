@@ -28,6 +28,7 @@ import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -51,28 +52,28 @@ public final class ConstructorDeclaration extends BodyDeclaration {
     }
 
     public ConstructorDeclaration(int modifiers, String name) {
-        this.modifiers = modifiers;
-        this.name = name;
+        setModifiers(modifiers);
+        setName(name);
     }
 
     public ConstructorDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
         super(annotations, javaDoc);
-        this.modifiers = modifiers;
-        this.typeParameters = typeParameters;
-        this.name = name;
-        this.parameters = parameters;
-        this.throws_ = throws_;
-        this.block = block;
+        setModifiers(modifiers);
+        setTypeParameters(typeParameters);
+        setName(name);
+        setParameters(parameters);
+        setThrows(throws_);
+        setBlock(block);
     }
 
     public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
         super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
-        this.modifiers = modifiers;
-        this.typeParameters = typeParameters;
-        this.name = name;
-        this.parameters = parameters;
-        this.throws_ = throws_;
-        this.block = block;
+        setModifiers(modifiers);
+        setTypeParameters(typeParameters);
+        setName(name);
+        setParameters(parameters);
+        setThrows(throws_);
+        setBlock(block);
     }
 
     @Override
@@ -129,13 +130,37 @@ public final class ConstructorDeclaration extends BodyDeclaration {
 
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
+        
+        if(this.parameters!=null){
+        	Iterator<Parameter> it = this.parameters.iterator();
+        	while(it.hasNext()){
+        		Parameter current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 
     public void setThrows(List<NameExpr> throws_) {
         this.throws_ = throws_;
+        
+        if(this.throws_!=null){
+        	Iterator<NameExpr> it = this.throws_.iterator();
+        	while(it.hasNext()){
+        		NameExpr current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
+        
+        if(this.typeParameters!=null){
+        	Iterator<TypeParameter> it = typeParameters.iterator();
+        	while(it.hasNext()){
+        		TypeParameter current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 }

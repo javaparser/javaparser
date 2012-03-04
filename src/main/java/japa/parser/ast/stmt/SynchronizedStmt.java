@@ -38,22 +38,25 @@ public final class SynchronizedStmt extends Statement {
 	}
 
 	public SynchronizedStmt(final Expression expr, final BlockStmt block) {
-		this.expr = expr;
-		this.block = block;
+		setExpr(expr);
+		setBlock(block);
 	}
 
-	public SynchronizedStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Expression expr, final BlockStmt block) {
+	public SynchronizedStmt(final int beginLine, final int beginColumn,
+			final int endLine, final int endColumn, final Expression expr,
+			final BlockStmt block) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.expr = expr;
-		this.block = block;
+		setExpr(expr);
+		setBlock(block);
 	}
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+	@Override
+	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+	@Override
+	public <A> void accept(final VoidVisitor<A> v, final A arg) {
 		v.visit(this, arg);
 	}
 
@@ -67,10 +70,16 @@ public final class SynchronizedStmt extends Statement {
 
 	public void setBlock(final BlockStmt block) {
 		this.block = block;
+		if (this.block != null) {
+			this.block.setParentNode(this);
+		}
 	}
 
 	public void setExpr(final Expression expr) {
 		this.expr = expr;
+		if (this.expr != null) {
+			this.expr.setParentNode(this);
+		}
 	}
 
 }

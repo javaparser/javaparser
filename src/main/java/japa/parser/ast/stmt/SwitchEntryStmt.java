@@ -25,6 +25,7 @@ import japa.parser.ast.expr.Expression;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -40,22 +41,25 @@ public final class SwitchEntryStmt extends Statement {
 	}
 
 	public SwitchEntryStmt(final Expression label, final List<Statement> stmts) {
-		this.label = label;
-		this.stmts = stmts;
+		setLabel(label);
+		setStmts(stmts);
 	}
 
-	public SwitchEntryStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Expression label, final List<Statement> stmts) {
+	public SwitchEntryStmt(final int beginLine, final int beginColumn,
+			final int endLine, final int endColumn, final Expression label,
+			final List<Statement> stmts) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.label = label;
-		this.stmts = stmts;
+		setLabel(label);
+		setStmts(stmts);
 	}
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+	@Override
+	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+	@Override
+	public <A> void accept(final VoidVisitor<A> v, final A arg) {
 		v.visit(this, arg);
 	}
 
@@ -69,9 +73,20 @@ public final class SwitchEntryStmt extends Statement {
 
 	public void setLabel(final Expression label) {
 		this.label = label;
+		if(this.label!=null){
+			this.label.setParentNode(this);
+		}
 	}
 
 	public void setStmts(final List<Statement> stmts) {
 		this.stmts = stmts;
+		if (this.stmts != null) {
+			Iterator<Statement> it = this.stmts.iterator();
+
+			while (it.hasNext()) {
+				Statement current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 }

@@ -36,7 +36,7 @@ public final class QualifiedNameExpr extends NameExpr {
 
 	public QualifiedNameExpr(final NameExpr scope, final String name) {
 		super(name);
-		this.qualifier = scope;
+		setQualifier(scope);
 	}
 
 	public QualifiedNameExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
@@ -59,6 +59,9 @@ public final class QualifiedNameExpr extends NameExpr {
 
 	public void setQualifier(final NameExpr qualifier) {
 		this.qualifier = qualifier;
+		if(this.qualifier != null){
+			this.qualifier.setParentNode(this);
+		}
 	}
 
 }

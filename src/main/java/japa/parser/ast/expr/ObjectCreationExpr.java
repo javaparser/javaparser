@@ -27,6 +27,7 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -48,20 +49,20 @@ public final class ObjectCreationExpr extends Expression {
 	}
 
 	public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final List<Expression> args) {
-		this.scope = scope;
-		this.type = type;
-		this.args = args;
+		setScope(scope);
+		setType(type);
+		setArgs(args);
 	}
 
 	public ObjectCreationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
 			final List<Expression> args, final List<BodyDeclaration> anonymousBody) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.scope = scope;
-		this.type = type;
-		this.typeArgs = typeArgs;
-		this.args = args;
-		this.anonymousClassBody = anonymousBody;
+		setScope(scope);
+		setType(type);
+		setTypeArgs(typeArgs);
+		setArgs(args);
+		setAnonymousClassBody(anonymousBody);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -94,22 +95,49 @@ public final class ObjectCreationExpr extends Expression {
 
 	public void setAnonymousClassBody(final List<BodyDeclaration> anonymousClassBody) {
 		this.anonymousClassBody = anonymousClassBody;
+		if ( this.anonymousClassBody != null){
+			Iterator<BodyDeclaration> it = anonymousClassBody.iterator();
+			while(it.hasNext()){
+				BodyDeclaration current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setArgs(final List<Expression> args) {
 		this.args = args;
+		if(this.args != null ){
+			Iterator<Expression> it = args.iterator();
+			while(it.hasNext()){
+				Expression current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setScope(final Expression scope) {
 		this.scope = scope;
+		if(this.scope != null){
+			this.scope.setParentNode(this);
+		}
 	}
 
 	public void setType(final ClassOrInterfaceType type) {
 		this.type = type;
+		if(this.type != null){
+			this.type.setParentNode(this);
+		}
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
 		this.typeArgs = typeArgs;
+		if(this.typeArgs!=null){
+			Iterator<Type> it = typeArgs.iterator();
+			while(it.hasNext()){
+				Type current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 }

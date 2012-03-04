@@ -35,7 +35,7 @@ public final class EnclosedExpr extends Expression {
 	}
 
 	public EnclosedExpr(final Expression inner) {
-		this.inner = inner;
+		setInner(inner);
 	}
 
 	public EnclosedExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
@@ -58,6 +58,9 @@ public final class EnclosedExpr extends Expression {
 
 	public void setInner(final Expression inner) {
 		this.inner = inner;
+		if(this.inner!=null){
+			this.inner.setParentNode(this);
+		}
 	}
 
 }

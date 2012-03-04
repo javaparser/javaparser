@@ -24,6 +24,7 @@ package japa.parser.ast.stmt;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -40,25 +41,29 @@ public final class TryStmt extends Statement {
 	public TryStmt() {
 	}
 
-	public TryStmt(final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
-		this.tryBlock = tryBlock;
-		this.catchs = catchs;
-		this.finallyBlock = finallyBlock;
+	public TryStmt(final BlockStmt tryBlock, final List<CatchClause> catchs,
+			final BlockStmt finallyBlock) {
+		setTryBlock(tryBlock);
+		setCatchs(catchs);
+		setFinallyBlock(finallyBlock);
 	}
 
-	public TryStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
+	public TryStmt(final int beginLine, final int beginColumn,
+			final int endLine, final int endColumn, final BlockStmt tryBlock,
+			final List<CatchClause> catchs, final BlockStmt finallyBlock) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.tryBlock = tryBlock;
-		this.catchs = catchs;
-		this.finallyBlock = finallyBlock;
+		setTryBlock(tryBlock);
+		setCatchs(catchs);
+		setFinallyBlock(finallyBlock);
 	}
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+	@Override
+	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+	@Override
+	public <A> void accept(final VoidVisitor<A> v, final A arg) {
 		v.visit(this, arg);
 	}
 
@@ -76,13 +81,28 @@ public final class TryStmt extends Statement {
 
 	public void setCatchs(final List<CatchClause> catchs) {
 		this.catchs = catchs;
+
+		if (this.catchs != null) {
+			Iterator<CatchClause> it = this.catchs.iterator();
+
+			while (it.hasNext()) {
+				CatchClause current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setFinallyBlock(final BlockStmt finallyBlock) {
 		this.finallyBlock = finallyBlock;
+		if (this.finallyBlock != null) {
+			this.finallyBlock.setParentNode(this);
+		}
 	}
 
 	public void setTryBlock(final BlockStmt tryBlock) {
 		this.tryBlock = tryBlock;
+		if (this.tryBlock != null) {
+			this.tryBlock.setParentNode(this);
+		}
 	}
 }

@@ -25,6 +25,7 @@ import japa.parser.ast.expr.Expression;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,28 +44,32 @@ public final class ForStmt extends Statement {
 	public ForStmt() {
 	}
 
-	public ForStmt(final List<Expression> init, final Expression compare, final List<Expression> update,
-			final Statement body) {
-		this.compare = compare;
-		this.init = init;
-		this.update = update;
-		this.body = body;
+	public ForStmt(final List<Expression> init, final Expression compare,
+			final List<Expression> update, final Statement body) {
+		setCompare(compare);
+		setInit(init);
+		setUpdate(update);
+		setBody(body);
 	}
 
-	public ForStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final List<Expression> init, final Expression compare, final List<Expression> update, final Statement body) {
+	public ForStmt(final int beginLine, final int beginColumn,
+			final int endLine, final int endColumn,
+			final List<Expression> init, final Expression compare,
+			final List<Expression> update, final Statement body) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.compare = compare;
-		this.init = init;
-		this.update = update;
-		this.body = body;
+		setCompare(compare);
+		setInit(init);
+		setUpdate(update);
+		setBody(body);
 	}
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+	@Override
+	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+	@Override
+	public <A> void accept(final VoidVisitor<A> v, final A arg) {
 		v.visit(this, arg);
 	}
 
@@ -86,17 +91,37 @@ public final class ForStmt extends Statement {
 
 	public void setBody(final Statement body) {
 		this.body = body;
+		if (this.body != null) {
+			this.body.setParentNode(this);
+		}
 	}
 
 	public void setCompare(final Expression compare) {
 		this.compare = compare;
+		if (this.compare != null) {
+			this.compare.setParentNode(this);
+		}
 	}
 
 	public void setInit(final List<Expression> init) {
 		this.init = init;
+		if (this.init != null) {
+			Iterator<Expression> it = init.iterator();
+			while (it.hasNext()) {
+				Expression current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setUpdate(final List<Expression> update) {
 		this.update = update;
+		if (this.update != null) {
+			Iterator<Expression> it = this.update.iterator();
+			while (it.hasNext()) {
+				Expression current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 }

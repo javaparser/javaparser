@@ -48,15 +48,15 @@ public final class UnaryExpr extends Expression {
 	}
 
 	public UnaryExpr(final Expression expr, final Operator op) {
-		this.expr = expr;
-		this.op = op;
+		setExpr(expr);
+		setOperator(op);
 	}
 
 	public UnaryExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression expr, final Operator op) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.expr = expr;
-		this.op = op;
+		setExpr(expr);
+		setOperator(op);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -77,6 +77,9 @@ public final class UnaryExpr extends Expression {
 
 	public void setExpr(final Expression expr) {
 		this.expr = expr;
+		if(this.expr != null){
+			this.expr.setParentNode(this);
+		}
 	}
 
 	public void setOperator(final Operator op) {

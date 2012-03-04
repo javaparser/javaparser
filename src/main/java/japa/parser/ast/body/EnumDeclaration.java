@@ -26,6 +26,7 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -46,14 +47,14 @@ public final class EnumDeclaration extends TypeDeclaration {
 
     public EnumDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
         super(annotations, javaDoc, modifiers, name, members);
-        this.implementsList = implementsList;
-        this.entries = entries;
+        setImplements(implementsList);
+        setEntries(entries);
     }
 
     public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
         super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc, modifiers, name, members);
-        this.implementsList = implementsList;
-        this.entries = entries;
+        setImplements(implementsList);
+        setEntries(entries);
     }
 
     @Override
@@ -76,9 +77,23 @@ public final class EnumDeclaration extends TypeDeclaration {
 
     public void setEntries(List<EnumConstantDeclaration> entries) {
         this.entries = entries;
+        if(this.entries!=null){
+        	Iterator<EnumConstantDeclaration> it = this.entries.iterator();
+        	while(it.hasNext()){
+        		EnumConstantDeclaration current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 
     public void setImplements(List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
+        if(this.implementsList!=null){
+        	Iterator<ClassOrInterfaceType> it = this.implementsList.iterator();
+        	while(it.hasNext()){
+        		ClassOrInterfaceType current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 }

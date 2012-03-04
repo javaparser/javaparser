@@ -38,15 +38,15 @@ public final class WhileStmt extends Statement {
 	}
 
 	public WhileStmt(final Expression condition, final Statement body) {
-		this.condition = condition;
-		this.body = body;
+		setCondition(condition);
+		setBody(body);
 	}
 
 	public WhileStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression condition, final Statement body) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.condition = condition;
-		this.body = body;
+		setCondition(condition);
+		setBody(body);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -67,9 +67,15 @@ public final class WhileStmt extends Statement {
 
 	public void setBody(final Statement body) {
 		this.body = body;
+		if(this.body!=null){
+			this.body.setParentNode(this);
+		}
 	}
 
 	public void setCondition(final Expression condition) {
 		this.condition = condition;
+		if(this.condition!=null){
+			this.condition.setParentNode(this);
+		}
 	}
 }

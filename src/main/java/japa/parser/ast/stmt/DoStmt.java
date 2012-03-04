@@ -38,15 +38,15 @@ public final class DoStmt extends Statement {
 	}
 
 	public DoStmt(final Statement body, final Expression condition) {
-		this.body = body;
-		this.condition = condition;
+		setBody(body);
+		setCondition(condition);
 	}
 
 	public DoStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Statement body, final Expression condition) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.body = body;
-		this.condition = condition;
+		setBody(body);
+		setCondition(condition);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -67,9 +67,15 @@ public final class DoStmt extends Statement {
 
 	public void setBody(final Statement body) {
 		this.body = body;
+		if(this.body!=null){
+			this.body.setParentNode(this);
+		}
 	}
 
 	public void setCondition(final Expression condition) {
 		this.condition = condition;
+		if(this.condition!=null){
+			this.condition.setParentNode(this);
+		}
 	}
 }

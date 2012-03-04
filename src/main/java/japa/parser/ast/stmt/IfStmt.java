@@ -40,17 +40,17 @@ public final class IfStmt extends Statement {
 	}
 
 	public IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
-		this.condition = condition;
-		this.thenStmt = thenStmt;
-		this.elseStmt = elseStmt;
+		setCondition(condition);
+		setThenStmt(thenStmt);
+		setElseStmt(elseStmt);
 	}
 
 	public IfStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression condition, final Statement thenStmt, final Statement elseStmt) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.condition = condition;
-		this.thenStmt = thenStmt;
-		this.elseStmt = elseStmt;
+		setCondition(condition);
+		setThenStmt(thenStmt);
+		setElseStmt(elseStmt);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -75,13 +75,22 @@ public final class IfStmt extends Statement {
 
 	public void setCondition(final Expression condition) {
 		this.condition = condition;
+		if(this.condition!=null){
+			this.condition.setParentNode(this);
+		}
 	}
 
 	public void setElseStmt(final Statement elseStmt) {
 		this.elseStmt = elseStmt;
+		if(this.elseStmt!=null){
+			this.elseStmt.setParentNode(this);
+		}
 	}
 
 	public void setThenStmt(final Statement thenStmt) {
 		this.thenStmt = thenStmt;
+		if(this.thenStmt!=null){		
+			this.thenStmt.setParentNode(this);
+		}
 	}
 }

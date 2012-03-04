@@ -36,13 +36,13 @@ public final class ExpressionStmt extends Statement {
 	}
 
 	public ExpressionStmt(final Expression expr) {
-		this.expr = expr;
+		setExpression(expr);
 	}
 
 	public ExpressionStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression expr) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.expr = expr;
+		setExpression(expr);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -59,5 +59,8 @@ public final class ExpressionStmt extends Statement {
 
 	public void setExpression(final Expression expr) {
 		this.expr = expr;
+		if(this.expr!=null){
+			this.expr.setParentNode(this);
+		}
 	}
 }

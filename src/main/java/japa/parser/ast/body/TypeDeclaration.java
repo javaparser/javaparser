@@ -23,6 +23,7 @@ package japa.parser.ast.body;
 
 import japa.parser.ast.expr.AnnotationExpr;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,61 +31,76 @@ import java.util.List;
  */
 public abstract class TypeDeclaration extends BodyDeclaration {
 
-    private String name;
+	private String name;
 
-    private int modifiers;
+	private int modifiers;
 
-    private List<BodyDeclaration> members;
+	private List<BodyDeclaration> members;
 
-    public TypeDeclaration() {
-    }
+	public TypeDeclaration() {
+	}
 
-    public TypeDeclaration(int modifiers, String name) {
-        this.name = name;
-        this.modifiers = modifiers;
-    }
+	public TypeDeclaration(int modifiers, String name) {
+		setName(name);
+		setModifiers(modifiers);
+	}
 
-    public TypeDeclaration(List<AnnotationExpr> annotations, JavadocComment javaDoc, int modifiers, String name, List<BodyDeclaration> members) {
-        super(annotations, javaDoc);
-        this.name = name;
-        this.modifiers = modifiers;
-        this.members = members;
-    }
+	public TypeDeclaration(List<AnnotationExpr> annotations,
+			JavadocComment javaDoc, int modifiers, String name,
+			List<BodyDeclaration> members) {
+		super(annotations, javaDoc);
+		setName(name);
+		setModifiers(modifiers);
+		setMembers(members);
+	}
 
-    public TypeDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, JavadocComment javaDoc, int modifiers, String name, List<BodyDeclaration> members) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
-        this.name = name;
-        this.modifiers = modifiers;
-        this.members = members;
-    }
+	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
+			int endColumn, List<AnnotationExpr> annotations,
+			JavadocComment javaDoc, int modifiers, String name,
+			List<BodyDeclaration> members) {
+		super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
+		setName(name);
+		setModifiers(modifiers);
+		setMembers(members);
+	}
 
-    public final List<BodyDeclaration> getMembers() {
-        return members;
-    }
+	public final List<BodyDeclaration> getMembers() {
+		return members;
+	}
 
-    /**
-     * Return the modifiers of this type declaration.
-     * 
-     * @see ModifierSet
-     * @return modifiers
-     */
-    public final int getModifiers() {
-        return modifiers;
-    }
+	/**
+	 * Return the modifiers of this type declaration.
+	 * 
+	 * @see ModifierSet
+	 * @return modifiers
+	 */
+	public final int getModifiers() {
+		return modifiers;
+	}
 
-    public final String getName() {
-        return name;
-    }
+	public final String getName() {
+		return name;
+	}
 
-    public void setMembers(List<BodyDeclaration> members) {
-        this.members = members;
-    }
+	public void setMembers(List<BodyDeclaration> members) {
+		this.members = members;
+		if (this.members != null) {
+			Iterator<BodyDeclaration> it = members.iterator();
 
-    public final void setModifiers(int modifiers) {
-        this.modifiers = modifiers;
-    }
+			while (it.hasNext()) {
 
-    public final void setName(String name) {
-        this.name = name;
-    }
+				BodyDeclaration current = it.next();
+				current.setParentNode(this);
+
+			}
+		}
+	}
+
+	public final void setModifiers(int modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	public final void setName(String name) {
+		this.name = name;
+	}
 }

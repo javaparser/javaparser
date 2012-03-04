@@ -40,25 +40,30 @@ public final class ForeachStmt extends Statement {
 	public ForeachStmt() {
 	}
 
-	public ForeachStmt(final VariableDeclarationExpr var, final Expression iterable, final Statement body) {
-		this.var = var;
-		this.iterable = iterable;
-		this.body = body;
+	public ForeachStmt(final VariableDeclarationExpr var,
+			final Expression iterable, final Statement body) {
+		setVariable(var);
+		setIterable(iterable);
+		setBody(body);
 	}
 
-	public ForeachStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final VariableDeclarationExpr var, final Expression iterable, final Statement body) {
+	public ForeachStmt(final int beginLine, final int beginColumn,
+			final int endLine, final int endColumn,
+			final VariableDeclarationExpr var, final Expression iterable,
+			final Statement body) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.var = var;
-		this.iterable = iterable;
-		this.body = body;
+		setVariable(var);
+		setIterable(iterable);
+		setBody(body);
 	}
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+	@Override
+	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+	@Override
+	public <A> void accept(final VoidVisitor<A> v, final A arg) {
 		v.visit(this, arg);
 	}
 
@@ -76,13 +81,22 @@ public final class ForeachStmt extends Statement {
 
 	public void setBody(final Statement body) {
 		this.body = body;
+		if (this.body != null) {
+			this.body.setParentNode(this);
+		}
 	}
 
 	public void setIterable(final Expression iterable) {
 		this.iterable = iterable;
+		if (this.iterable != null) {
+			this.iterable.setParentNode(this);
+		}
 	}
 
 	public void setVariable(final VariableDeclarationExpr var) {
 		this.var = var;
+		if (this.var != null) {
+			this.var.setParentNode(this);
+		}
 	}
 }

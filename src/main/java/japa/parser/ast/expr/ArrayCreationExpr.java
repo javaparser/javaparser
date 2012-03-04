@@ -25,6 +25,7 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,33 +45,33 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public ArrayCreationExpr(Type type, int arrayCount, ArrayInitializerExpr initializer) {
-        this.type = type;
-        this.arrayCount = arrayCount;
-        this.initializer = initializer;
-        this.dimensions = null;
+        setType(type);
+        setArrayCount(arrayCount);
+        setInitializer(initializer);
+        setDimensions(null);
     }
 
     public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, int arrayCount, ArrayInitializerExpr initializer) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.type = type;
-        this.arrayCount = arrayCount;
-        this.initializer = initializer;
-        this.dimensions = null;
+        setType(type);
+        setArrayCount(arrayCount);
+        setInitializer(initializer);
+        setDimensions(null);
     }
 
     public ArrayCreationExpr(Type type, List<Expression> dimensions, int arrayCount) {
-        this.type = type;
-        this.arrayCount = arrayCount;
-        this.dimensions = dimensions;
-        this.initializer = null;
+        setType(type);
+        setArrayCount(arrayCount);
+        setDimensions(dimensions);
+        setInitializer(null);
     }
 
     public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, List<Expression> dimensions, int arrayCount) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.type = type;
-        this.arrayCount = arrayCount;
-        this.dimensions = dimensions;
-        this.initializer = null;
+        setType(type);
+        setArrayCount(arrayCount);
+        setDimensions(dimensions);
+        setInitializer(null);
     }
 
     @Override
@@ -105,14 +106,27 @@ public final class ArrayCreationExpr extends Expression {
 
     public void setDimensions(List<Expression> dimensions) {
         this.dimensions = dimensions;
+        if(this.dimensions!=null){
+        	Iterator<Expression> it = dimensions.iterator();
+        	while(it.hasNext()){
+        		Expression current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 
     public void setInitializer(ArrayInitializerExpr initializer) {
         this.initializer = initializer;
+        if(this.initializer!=null){
+        	this.initializer.setParentNode(this);
+        }
     }
 
     public void setType(Type type) {
         this.type = type;
+        if(this.type!=null){
+        	this.type.setParentNode(this);
+        }
     }
 
 }

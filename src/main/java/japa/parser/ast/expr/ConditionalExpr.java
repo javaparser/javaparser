@@ -39,16 +39,16 @@ public final class ConditionalExpr extends Expression {
     }
 
     public ConditionalExpr(Expression condition, Expression thenExpr, Expression elseExpr) {
-        this.condition = condition;
-        this.thenExpr = thenExpr;
-        this.elseExpr = elseExpr;
+        setCondition(condition);
+        setThenExpr(thenExpr);
+        setElseExpr(elseExpr);
     }
 
     public ConditionalExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression condition, Expression thenExpr, Expression elseExpr) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.condition = condition;
-        this.thenExpr = thenExpr;
-        this.elseExpr = elseExpr;
+        setCondition(condition);
+        setThenExpr(thenExpr);
+        setElseExpr(elseExpr);
     }
 
     @Override
@@ -75,14 +75,23 @@ public final class ConditionalExpr extends Expression {
 
     public void setCondition(Expression condition) {
         this.condition = condition;
+        if(this.condition!=null){
+        	this.condition.setParentNode(this);
+        }
     }
 
     public void setElseExpr(Expression elseExpr) {
         this.elseExpr = elseExpr;
+        if(this.elseExpr!=null){
+        	this.elseExpr.setParentNode(this);
+        }
     }
 
     public void setThenExpr(Expression thenExpr) {
         this.thenExpr = thenExpr;
+        if(this.thenExpr!=null){
+        	this.thenExpr.setParentNode(this);
+        }
     }
 
 }

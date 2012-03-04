@@ -36,13 +36,13 @@ public final class TypeDeclarationStmt extends Statement {
 	}
 
 	public TypeDeclarationStmt(final TypeDeclaration typeDecl) {
-		this.typeDecl = typeDecl;
+		setTypeDeclaration(typeDecl);
 	}
 
 	public TypeDeclarationStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final TypeDeclaration typeDecl) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.typeDecl = typeDecl;
+		setTypeDeclaration(typeDecl);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -59,5 +59,8 @@ public final class TypeDeclarationStmt extends Statement {
 
 	public void setTypeDeclaration(final TypeDeclaration typeDecl) {
 		this.typeDecl = typeDecl;
+		if(this.typeDecl!=null){
+			this.typeDecl.setParentNode(this);
+		}
 	}
 }

@@ -38,13 +38,13 @@ public final class VariableDeclaratorId extends Node {
     }
 
     public VariableDeclaratorId(String name) {
-        this.name = name;
+       setName(name);
     }
 
     public VariableDeclaratorId(int beginLine, int beginColumn, int endLine, int endColumn, String name, int arrayCount) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.name = name;
-        this.arrayCount = arrayCount;
+        setName(name);
+        setArrayCount(arrayCount);
     }
 
     @Override

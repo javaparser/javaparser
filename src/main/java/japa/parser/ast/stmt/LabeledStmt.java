@@ -37,15 +37,15 @@ public final class LabeledStmt extends Statement {
 	}
 
 	public LabeledStmt(final String label, final Statement stmt) {
-		this.label = label;
-		this.stmt = stmt;
+		setLabel(label);
+		setStmt(stmt);
 	}
 
 	public LabeledStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final String label, final Statement stmt) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.label = label;
-		this.stmt = stmt;
+		setLabel(label);
+		setStmt(stmt);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -70,5 +70,8 @@ public final class LabeledStmt extends Statement {
 
 	public void setStmt(final Statement stmt) {
 		this.stmt = stmt;
+		if(this.stmt!=null){
+			this.stmt.setParentNode(this);
+		}
 	}
 }

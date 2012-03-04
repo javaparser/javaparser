@@ -48,23 +48,23 @@ public final class Parameter extends Node {
     }
 
     public Parameter(Type type, VariableDeclaratorId id) {
-        this.type = type;
-        this.id = id;
+        setType(type);
+        setId(id);
     }
 
     public Parameter(int modifiers, Type type, VariableDeclaratorId id) {
-        this.modifiers = modifiers;
-        this.type = type;
-        this.id = id;
+        setModifiers(modifiers);
+        setType(type);
+        setId(id);
     }
 
     public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.modifiers = modifiers;
-        this.annotations = annotations;
-        this.type = type;
-        this.isVarArgs = isVarArgs;
-        this.id = id;
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setType(type);
+        setVarArgs(isVarArgs);
+        setId(id);
     }
 
     @Override
@@ -109,6 +109,9 @@ public final class Parameter extends Node {
 
     public void setId(VariableDeclaratorId id) {
         this.id = id;
+        if(this.id!=null){
+        	this.id.setParentNode(this);
+        }
     }
 
     public void setModifiers(int modifiers) {
@@ -117,6 +120,9 @@ public final class Parameter extends Node {
 
     public void setType(Type type) {
         this.type = type;
+        if(this.type!=null){
+        	this.type.setParentNode(this);
+        }
     }
 
     public void setVarArgs(boolean isVarArgs) {

@@ -40,6 +40,8 @@ public abstract class Node {
 	private int endLine;
 
 	private int endColumn;
+	
+	private Node parentNode;
 
 	/**
 	 * This attribute can store additional information from semantic analysis.
@@ -207,5 +209,15 @@ public abstract class Node {
 	@Override public boolean equals(final Object obj) {
 		return EqualsVisitor.equals(this, (Node) obj);
 	}
+
+	public Node getParentNode() {
+		return parentNode;
+	}
+
+	public void setParentNode(Node parentNode) {
+		this.parentNode = parentNode;
+	}
+	
+	
 
 }

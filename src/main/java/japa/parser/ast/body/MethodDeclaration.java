@@ -29,6 +29,7 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -56,30 +57,30 @@ public final class MethodDeclaration extends BodyDeclaration {
 	}
 
 	public MethodDeclaration(final int modifiers, final Type type, final String name) {
-		this.modifiers = modifiers;
-		this.type = type;
-		this.name = name;
+		setModifiers(modifiers);
+		setType(type);
+		setName(name);
 	}
 
 	public MethodDeclaration(final int modifiers, final Type type, final String name, final List<Parameter> parameters) {
-		this.modifiers = modifiers;
-		this.type = type;
-		this.name = name;
-		this.parameters = parameters;
+		setModifiers(modifiers);
+		setType(type);
+		setName(name);
+		setParameters(parameters);
 	}
 
 	public MethodDeclaration(final JavadocComment javaDoc, final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
 		super(annotations, javaDoc);
-		this.modifiers = modifiers;
-		this.typeParameters = typeParameters;
-		this.type = type;
-		this.name = name;
-		this.parameters = parameters;
-		this.arrayCount = arrayCount;
-		this.throws_ = throws_;
-		this.body = block;
+		setModifiers(modifiers);
+		setTypeParameters(typeParameters);
+		setType(type);
+		setName(name);
+		setParameters(parameters);
+		setArrayCount(arrayCount);
+		setThrows(throws_);
+		setBody(block);
 	}
 
 	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
@@ -87,14 +88,14 @@ public final class MethodDeclaration extends BodyDeclaration {
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
-		this.modifiers = modifiers;
-		this.typeParameters = typeParameters;
-		this.type = type;
-		this.name = name;
-		this.parameters = parameters;
-		this.arrayCount = arrayCount;
-		this.throws_ = throws_;
-		this.body = block;
+		setModifiers(modifiers);
+		setTypeParameters(typeParameters);
+		setType(type);
+		setName(name);
+		setParameters(parameters);
+		setArrayCount(arrayCount);
+		setThrows(throws_);
+		setBody(block);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -150,6 +151,9 @@ public final class MethodDeclaration extends BodyDeclaration {
 
 	public void setBody(final BlockStmt body) {
 		this.body = body;
+		if(this.body!=null){
+			this.body.setParentNode(this);
+		}
 	}
 
 	public void setModifiers(final int modifiers) {
@@ -162,14 +166,31 @@ public final class MethodDeclaration extends BodyDeclaration {
 
 	public void setParameters(final List<Parameter> parameters) {
 		this.parameters = parameters;
+		if(this.parameters!=null){
+			Iterator<Parameter> it = this.parameters.iterator();
+			while(it.hasNext()){
+				Parameter current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setThrows(final List<NameExpr> throws_) {
 		this.throws_ = throws_;
+		if(this.throws_!=null){
+			Iterator<NameExpr> it = this.throws_.iterator();
+			while(it.hasNext()){
+				NameExpr current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setType(final Type type) {
 		this.type = type;
+		if(this.type!=null){
+			this.type.setParentNode(this);
+		}
 	}
 
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {

@@ -44,14 +44,14 @@ public final class InitializerDeclaration extends BodyDeclaration {
 
     public InitializerDeclaration(JavadocComment javaDoc, boolean isStatic, BlockStmt block) {
         super(null, javaDoc);
-        this.isStatic = isStatic;
-        this.block = block;
+        setStatic(isStatic);
+        setBlock(block);
     }
 
     public InitializerDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, boolean isStatic, BlockStmt block) {
         super(beginLine, beginColumn, endLine, endColumn, null, javaDoc);
-        this.isStatic = isStatic;
-        this.block = block;
+        setStatic(isStatic);
+        setBlock(block);
     }
 
     @Override
@@ -74,6 +74,9 @@ public final class InitializerDeclaration extends BodyDeclaration {
 
     public void setBlock(BlockStmt block) {
         this.block = block;
+        if(this.block!=null){
+        	this.block.setParentNode(this);
+        }
     }
 
     public void setStatic(boolean isStatic) {

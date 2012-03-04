@@ -39,18 +39,18 @@ public final class VariableDeclarator extends Node {
     }
 
     public VariableDeclarator(VariableDeclaratorId id) {
-        this.id = id;
+        setId(id);
     }
 
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
-        this.id = id;
-        this.init = init;
+    	setId(id);
+    	setInit(init);
     }
 
     public VariableDeclarator(int beginLine, int beginColumn, int endLine, int endColumn, VariableDeclaratorId id, Expression init) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.id = id;
-        this.init = init;
+        setId(id);
+        setInit(init);
     }
 
     @Override
@@ -73,10 +73,16 @@ public final class VariableDeclarator extends Node {
 
     public void setId(VariableDeclaratorId id) {
         this.id = id;
+        if(this.id!=null){
+        	this.id.setParentNode(this);
+        }
     }
 
     public void setInit(Expression init) {
         this.init = init;
+        if(this.init!=null){
+        	this.init.setParentNode(this);
+        }
     }
 
 }

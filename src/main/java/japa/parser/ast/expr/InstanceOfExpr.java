@@ -38,15 +38,15 @@ public final class InstanceOfExpr extends Expression {
 	}
 
 	public InstanceOfExpr(final Expression expr, final Type type) {
-		this.expr = expr;
-		this.type = type;
+		setExpr(expr);
+		setType(type);
 	}
 
 	public InstanceOfExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression expr, final Type type) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.expr = expr;
-		this.type = type;
+		setExpr(expr);
+		setType(type);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -67,10 +67,16 @@ public final class InstanceOfExpr extends Expression {
 
 	public void setExpr(final Expression expr) {
 		this.expr = expr;
+		if(this.expr!=null){
+			this.expr.setParentNode(this);
+		}
 	}
 
 	public void setType(final Type type) {
 		this.type = type;
+		if(this.type!=null){
+			this.type.setParentNode(this);
+		}
 	}
 
 }

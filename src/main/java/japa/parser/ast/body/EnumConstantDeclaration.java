@@ -26,6 +26,7 @@ import japa.parser.ast.expr.Expression;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,21 +44,21 @@ public final class EnumConstantDeclaration extends BodyDeclaration {
     }
 
     public EnumConstantDeclaration(String name) {
-        this.name = name;
+        setName(name);
     }
 
     public EnumConstantDeclaration(JavadocComment javaDoc, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
         super(annotations, javaDoc);
-        this.name = name;
-        this.args = args;
-        this.classBody = classBody;
+        setName(name);
+        setArgs(args);
+        setClassBody(classBody);
     }
 
     public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
         super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
-        this.name = name;
-        this.args = args;
-        this.classBody = classBody;
+        setName(name);
+        setArgs(args);
+        setClassBody(classBody);
     }
 
     @Override
@@ -84,10 +85,24 @@ public final class EnumConstantDeclaration extends BodyDeclaration {
 
     public void setArgs(List<Expression> args) {
         this.args = args;
+        if(this.args!=null){
+        	Iterator<Expression> it = args.iterator();
+        	while(it.hasNext()){
+        		Expression current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 
     public void setClassBody(List<BodyDeclaration> classBody) {
         this.classBody = classBody;
+        if(this.classBody!=null){
+        	Iterator<BodyDeclaration> it = this.classBody.iterator();
+        	while(it.hasNext()){
+        		BodyDeclaration current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 
     public void setName(String name) {

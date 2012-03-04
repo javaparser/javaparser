@@ -27,6 +27,7 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 
 	public ClassOrInterfaceDeclaration(final int modifiers, final boolean isInterface, final String name) {
 		super(modifiers, name);
-		this.interface_ = isInterface;
+		setInterface(isInterface);
 	}
 
 	public ClassOrInterfaceDeclaration(final JavadocComment javaDoc, final int modifiers,
@@ -56,10 +57,10 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
 		super(annotations, javaDoc, modifiers, name, members);
-		this.interface_ = isInterface;
-		this.typeParameters = typeParameters;
-		this.extendsList = extendsList;
-		this.implementsList = implementsList;
+		setInterface(isInterface);
+		setTypeParameters(typeParameters);
+		setExtends(extendsList);
+		setImplements(implementsList);
 	}
 
 	public ClassOrInterfaceDeclaration(final int beginLine, final int beginColumn, final int endLine,
@@ -68,10 +69,10 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc, modifiers, name, members);
-		this.interface_ = isInterface;
-		this.typeParameters = typeParameters;
-		this.extendsList = extendsList;
-		this.implementsList = implementsList;
+		setInterface(isInterface);
+		setTypeParameters(typeParameters);
+		setExtends(extendsList);
+		setImplements(implementsList);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -100,10 +101,25 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 
 	public void setExtends(final List<ClassOrInterfaceType> extendsList) {
 		this.extendsList = extendsList;
+		if(this.extendsList!=null){
+			Iterator<ClassOrInterfaceType> it = extendsList.iterator();
+			while(it.hasNext()){
+				ClassOrInterfaceType current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setImplements(final List<ClassOrInterfaceType> implementsList) {
 		this.implementsList = implementsList;
+		if(this.implementsList!=null){
+			Iterator<ClassOrInterfaceType> it = this.implementsList.iterator();
+			while(it.hasNext()){
+				ClassOrInterfaceType current = it.next();
+				current.setParentNode(this);
+			}
+			
+		}
 	}
 
 	public void setInterface(final boolean interface_) {
@@ -112,5 +128,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
 		this.typeParameters = typeParameters;
+		if(this.typeParameters!=null){
+			Iterator<TypeParameter> it = this.typeParameters.iterator();
+			while(it.hasNext()){
+				TypeParameter current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 }

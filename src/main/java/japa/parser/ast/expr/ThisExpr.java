@@ -35,13 +35,13 @@ public final class ThisExpr extends Expression {
 	}
 
 	public ThisExpr(final Expression classExpr) {
-		this.classExpr = classExpr;
+		setClassExpr(classExpr);
 	}
 
 	public ThisExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression classExpr) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.classExpr = classExpr;
+		setClassExpr(classExpr);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -58,6 +58,9 @@ public final class ThisExpr extends Expression {
 
 	public void setClassExpr(final Expression classExpr) {
 		this.classExpr = classExpr;
+		if(this.classExpr != null){
+			this.classExpr.setParentNode(this);
+		}
 	}
 
 }

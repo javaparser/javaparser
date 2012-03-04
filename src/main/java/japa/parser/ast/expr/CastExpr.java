@@ -38,14 +38,14 @@ public final class CastExpr extends Expression {
     }
 
     public CastExpr(Type type, Expression expr) {
-        this.type = type;
-        this.expr = expr;
+    	setType(type);
+    	setExpr(expr);
     }
 
     public CastExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, Expression expr) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.type = type;
-        this.expr = expr;
+        setType(type);
+    	setExpr(expr);
     }
 
     @Override
@@ -68,10 +68,16 @@ public final class CastExpr extends Expression {
 
     public void setExpr(Expression expr) {
         this.expr = expr;
+        if(this.expr!=null){
+        	this.expr.setParentNode(this);
+        }
     }
 
     public void setType(Type type) {
         this.type = type;
+        if(this.type!=null){
+        	this.type.setParentNode(this);
+        }
     }
 
 }

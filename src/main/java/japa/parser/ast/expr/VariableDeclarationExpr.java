@@ -27,6 +27,7 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -46,24 +47,24 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public VariableDeclarationExpr(final Type type, final List<VariableDeclarator> vars) {
-		this.type = type;
-		this.vars = vars;
+		setType(type);
+		setVars(vars);
 	}
 
 	public VariableDeclarationExpr(final int modifiers, final Type type, final List<VariableDeclarator> vars) {
-		this.modifiers = modifiers;
-		this.type = type;
-		this.vars = vars;
+		setModifiers(modifiers);
+		setType(type);
+		setVars(vars);
 	}
 
 	public VariableDeclarationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
 			final List<VariableDeclarator> vars) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.modifiers = modifiers;
-		this.annotations = annotations;
-		this.type = type;
-		this.vars = vars;
+		setModifiers(modifiers);
+		setAnnotations(annotations);
+		setType(type);
+		setVars(vars);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -98,6 +99,12 @@ public final class VariableDeclarationExpr extends Expression {
 
 	public void setAnnotations(final List<AnnotationExpr> annotations) {
 		this.annotations = annotations;
+		if(this.annotations != null){
+			Iterator<AnnotationExpr> it = annotations.iterator();
+			while(it.hasNext()){
+				it.next().setParentNode(this);
+			}
+		}
 	}
 
 	public void setModifiers(final int modifiers) {
@@ -106,9 +113,18 @@ public final class VariableDeclarationExpr extends Expression {
 
 	public void setType(final Type type) {
 		this.type = type;
+		if(type!=null){
+			this.type.setParentNode(this);
+		}
 	}
 
 	public void setVars(final List<VariableDeclarator> vars) {
 		this.vars = vars;
+		if(this.vars != null){
+			Iterator<VariableDeclarator> it = vars.iterator();
+			while(it.hasNext()){
+				it.next().setParentNode(this);
+			}
+		}
 	}
 }

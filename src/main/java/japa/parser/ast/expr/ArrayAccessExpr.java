@@ -37,14 +37,14 @@ public final class ArrayAccessExpr extends Expression {
     }
 
     public ArrayAccessExpr(Expression name, Expression index) {
-        this.name = name;
-        this.index = index;
+        setName(name);
+        setIndex(index);
     }
 
     public ArrayAccessExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression name, Expression index) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.name = name;
-        this.index = index;
+        setName(name);
+        setIndex(index);
     }
 
     @Override
@@ -67,10 +67,16 @@ public final class ArrayAccessExpr extends Expression {
 
     public void setIndex(Expression index) {
         this.index = index;
+        if(this.index!=null){
+        	this.index.setParentNode(this);
+        }
     }
 
     public void setName(Expression name) {
         this.name = name;
+        if(this.name!=null){
+        	this.name.setParentNode(this);
+        }
     }
 
 }

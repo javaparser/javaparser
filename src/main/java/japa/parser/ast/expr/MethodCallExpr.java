@@ -25,6 +25,7 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,23 +45,23 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public MethodCallExpr(final Expression scope, final String name) {
-		this.scope = scope;
-		this.name = name;
+		setScope(scope);
+		setName(name);
 	}
 
 	public MethodCallExpr(final Expression scope, final String name, final List<Expression> args) {
-		this.scope = scope;
-		this.name = name;
-		this.args = args;
+		setScope(scope);
+		setName(name);
+		setArgs(args);
 	}
 
 	public MethodCallExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression scope, final List<Type> typeArgs, final String name, final List<Expression> args) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.scope = scope;
-		this.typeArgs = typeArgs;
-		this.name = name;
-		this.args = args;
+		setScope(scope);
+		setTypeArgs(typeArgs);
+		setName(name);
+		setArgs(args);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -89,6 +90,12 @@ public final class MethodCallExpr extends Expression {
 
 	public void setArgs(final List<Expression> args) {
 		this.args = args;
+		if(this.args != null){
+			Iterator<Expression> it = args.iterator();
+			while(it.hasNext()){
+				it.next().setParentNode(this);
+			}
+		}
 	}
 
 	public void setName(final String name) {
@@ -97,10 +104,19 @@ public final class MethodCallExpr extends Expression {
 
 	public void setScope(final Expression scope) {
 		this.scope = scope;
+		if(this.scope!=null){
+			this.scope.setParentNode(this);
+		}
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
 		this.typeArgs = typeArgs;
+		if(this.typeArgs!=null){
+			Iterator<Type> it = this.typeArgs.iterator();
+			while(it.hasNext()){
+				it.next().setParentNode(this);
+			}
+		}
 	}
 
 }

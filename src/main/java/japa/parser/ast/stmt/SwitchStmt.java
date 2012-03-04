@@ -25,6 +25,7 @@ import japa.parser.ast.expr.Expression;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,23 +40,27 @@ public final class SwitchStmt extends Statement {
 	public SwitchStmt() {
 	}
 
-	public SwitchStmt(final Expression selector, final List<SwitchEntryStmt> entries) {
-		this.selector = selector;
-		this.entries = entries;
+	public SwitchStmt(final Expression selector,
+			final List<SwitchEntryStmt> entries) {
+		setSelector(selector);
+		setEntries(entries);
 	}
 
-	public SwitchStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Expression selector, final List<SwitchEntryStmt> entries) {
+	public SwitchStmt(final int beginLine, final int beginColumn,
+			final int endLine, final int endColumn, final Expression selector,
+			final List<SwitchEntryStmt> entries) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.selector = selector;
-		this.entries = entries;
+		setSelector(selector);
+		setEntries(entries);
 	}
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+	@Override
+	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+	@Override
+	public <A> void accept(final VoidVisitor<A> v, final A arg) {
 		v.visit(this, arg);
 	}
 
@@ -69,9 +74,21 @@ public final class SwitchStmt extends Statement {
 
 	public void setEntries(final List<SwitchEntryStmt> entries) {
 		this.entries = entries;
+
+		if (this.entries != null) {
+			Iterator<SwitchEntryStmt> it = entries.iterator();
+
+			while (it.hasNext()) {
+				SwitchEntryStmt current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setSelector(final Expression selector) {
 		this.selector = selector;
+		if (this.selector != null) {
+			this.selector.setParentNode(this);
+		}
 	}
 }

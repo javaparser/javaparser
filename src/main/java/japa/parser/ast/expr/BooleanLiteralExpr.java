@@ -35,12 +35,12 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     }
 
     public BooleanLiteralExpr(boolean value) {
-        this.value = value;
+    	setValue(value);
     }
 
     public BooleanLiteralExpr(int beginLine, int beginColumn, int endLine, int endColumn, boolean value) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.value = value;
+        setValue(value);
     }
 
     @Override

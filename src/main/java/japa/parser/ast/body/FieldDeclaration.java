@@ -27,6 +27,7 @@ import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,30 +45,31 @@ public final class FieldDeclaration extends BodyDeclaration {
     }
 
     public FieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
-        this.modifiers = modifiers;
-        this.type = type;
-        this.variables = new ArrayList<VariableDeclarator>();
-        this.variables.add(variable);
+    	setModifiers(modifiers);
+    	setType(type);
+    	List<VariableDeclarator> aux = new ArrayList<VariableDeclarator>();
+    	aux.add(variable);
+    	setVariables(aux);
     }
 
     public FieldDeclaration(int modifiers, Type type, List<VariableDeclarator> variables) {
-        this.modifiers = modifiers;
-        this.type = type;
-        this.variables = variables;
+    	setModifiers(modifiers);
+    	setType(type);
+    	setVariables(variables);
     }
 
     public FieldDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
         super(annotations, javaDoc);
-        this.modifiers = modifiers;
-        this.type = type;
-        this.variables = variables;
+        setModifiers(modifiers);
+    	setType(type);
+    	setVariables(variables);
     }
 
     public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
         super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
-        this.modifiers = modifiers;
-        this.type = type;
-        this.variables = variables;
+        setModifiers(modifiers);
+    	setType(type);
+    	setVariables(variables);
     }
 
     @Override
@@ -104,9 +106,19 @@ public final class FieldDeclaration extends BodyDeclaration {
 
     public void setType(Type type) {
         this.type = type;
+        if(this.type!=null){
+        	this.type.setParentNode(this);
+        }
     }
 
     public void setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
+        if(this.variables!=null){
+        	Iterator<VariableDeclarator> it = variables.iterator();
+        	while(it.hasNext()){
+        		VariableDeclarator current = it.next();
+        		current.setParentNode(this);
+        	}
+        }
     }
 }

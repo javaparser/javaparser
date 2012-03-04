@@ -26,6 +26,7 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,27 +45,31 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	public ExplicitConstructorInvocationStmt() {
 	}
 
-	public ExplicitConstructorInvocationStmt(final boolean isThis, final Expression expr, final List<Expression> args) {
-		this.isThis = isThis;
-		this.expr = expr;
-		this.args = args;
+	public ExplicitConstructorInvocationStmt(final boolean isThis,
+			final Expression expr, final List<Expression> args) {
+		setThis(isThis);
+		setExpr(expr);
+		setArgs(args);
 	}
 
-	public ExplicitConstructorInvocationStmt(final int beginLine, final int beginColumn, final int endLine,
-			final int endColumn, final List<Type> typeArgs, final boolean isThis, final Expression expr,
-			final List<Expression> args) {
+	public ExplicitConstructorInvocationStmt(final int beginLine,
+			final int beginColumn, final int endLine, final int endColumn,
+			final List<Type> typeArgs, final boolean isThis,
+			final Expression expr, final List<Expression> args) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.typeArgs = typeArgs;
-		this.isThis = isThis;
-		this.expr = expr;
-		this.args = args;
+		setTypeArgs(typeArgs);
+		setThis(isThis);
+		setExpr(expr);
+		setArgs(args);
 	}
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+	@Override
+	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+	@Override
+	public <A> void accept(final VoidVisitor<A> v, final A arg) {
 		v.visit(this, arg);
 	}
 
@@ -86,10 +91,20 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 
 	public void setArgs(final List<Expression> args) {
 		this.args = args;
+		if (this.args != null) {
+			Iterator<Expression> it = this.args.iterator();
+			while (it.hasNext()) {
+				Expression current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 
 	public void setExpr(final Expression expr) {
 		this.expr = expr;
+		if (this.expr != null) {
+			this.expr.setParentNode(this);
+		}
 	}
 
 	public void setThis(final boolean isThis) {
@@ -98,5 +113,12 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 
 	public void setTypeArgs(final List<Type> typeArgs) {
 		this.typeArgs = typeArgs;
+		if (this.typeArgs != null) {
+			Iterator<Type> it = this.typeArgs.iterator();
+			while (it.hasNext()) {
+				Type current = it.next();
+				current.setParentNode(this);
+			}
+		}
 	}
 }
