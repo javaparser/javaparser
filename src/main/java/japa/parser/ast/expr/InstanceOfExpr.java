@@ -67,16 +67,11 @@ public final class InstanceOfExpr extends Expression {
 
 	public void setExpr(final Expression expr) {
 		this.expr = expr;
-		if(this.expr!=null){
-			this.expr.setParentNode(this);
-		}
+		setAsParentNodeOf(this.expr);
 	}
 
 	public void setType(final Type type) {
 		this.type = type;
-		if(this.type!=null){
-			this.type.setParentNode(this);
-		}
+		setAsParentNodeOf(this.type);
 	}
-
 }

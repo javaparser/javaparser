@@ -59,9 +59,6 @@ public final class QualifiedNameExpr extends NameExpr {
 
 	public void setQualifier(final NameExpr qualifier) {
 		this.qualifier = qualifier;
-		if(this.qualifier != null){
-			this.qualifier.setParentNode(this);
-		}
+		setAsParentNodeOf(this.qualifier);
 	}
-
 }

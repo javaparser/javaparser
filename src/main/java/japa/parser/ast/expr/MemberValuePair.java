@@ -71,10 +71,6 @@ public final class MemberValuePair extends Node {
 
 	public void setValue(final Expression value) {
 		this.value = value;
-		
-		if(this.value != null){
-			this.value.setParentNode(this);
-		}
+		setAsParentNodeOf(this.value);
 	}
-
 }

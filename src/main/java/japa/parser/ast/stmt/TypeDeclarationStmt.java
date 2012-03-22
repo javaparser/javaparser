@@ -59,8 +59,6 @@ public final class TypeDeclarationStmt extends Statement {
 
 	public void setTypeDeclaration(final TypeDeclaration typeDecl) {
 		this.typeDecl = typeDecl;
-		if(this.typeDecl!=null){
-			this.typeDecl.setParentNode(this);
-		}
+		setAsParentNodeOf(this.typeDecl);
 	}
 }

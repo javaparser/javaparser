@@ -24,7 +24,6 @@ package japa.parser.ast.stmt;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -81,28 +80,16 @@ public final class TryStmt extends Statement {
 
 	public void setCatchs(final List<CatchClause> catchs) {
 		this.catchs = catchs;
-
-		if (this.catchs != null) {
-			Iterator<CatchClause> it = this.catchs.iterator();
-
-			while (it.hasNext()) {
-				CatchClause current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.catchs);
 	}
 
 	public void setFinallyBlock(final BlockStmt finallyBlock) {
 		this.finallyBlock = finallyBlock;
-		if (this.finallyBlock != null) {
-			this.finallyBlock.setParentNode(this);
-		}
+		setAsParentNodeOf(this.finallyBlock);
 	}
 
 	public void setTryBlock(final BlockStmt tryBlock) {
 		this.tryBlock = tryBlock;
-		if (this.tryBlock != null) {
-			this.tryBlock.setParentNode(this);
-		}
+		setAsParentNodeOf(this.tryBlock);
 	}
 }

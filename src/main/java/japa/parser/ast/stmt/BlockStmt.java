@@ -24,7 +24,6 @@ package japa.parser.ast.stmt;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -63,12 +62,6 @@ public final class BlockStmt extends Statement {
 
 	public void setStmts(final List<Statement> stmts) {
 		this.stmts = stmts;
-		if (this.stmts != null) {
-			Iterator<Statement> it = this.stmts.iterator();
-			while (it.hasNext()) {
-				Statement stmt = it.next();
-				stmt.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.stmts);
 	}
 }

@@ -60,9 +60,6 @@ public final class ClassExpr extends Expression {
 
     public void setType(Type type) {
         this.type = type;
-        if(type!=null){
-        	this.type.setParentNode(this);
-        }
+		setAsParentNodeOf(this.type);
     }
-
 }

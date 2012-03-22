@@ -59,8 +59,6 @@ public final class ExpressionStmt extends Statement {
 
 	public void setExpression(final Expression expr) {
 		this.expr = expr;
-		if(this.expr!=null){
-			this.expr.setParentNode(this);
-		}
+		setAsParentNodeOf(this.expr);
 	}
 }

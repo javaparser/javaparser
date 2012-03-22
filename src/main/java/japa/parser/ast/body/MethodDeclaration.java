@@ -29,7 +29,6 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -151,9 +150,7 @@ public final class MethodDeclaration extends BodyDeclaration {
 
 	public void setBody(final BlockStmt body) {
 		this.body = body;
-		if(this.body!=null){
-			this.body.setParentNode(this);
-		}
+		setAsParentNodeOf(this.body);
 	}
 
 	public void setModifiers(final int modifiers) {
@@ -166,31 +163,17 @@ public final class MethodDeclaration extends BodyDeclaration {
 
 	public void setParameters(final List<Parameter> parameters) {
 		this.parameters = parameters;
-		if(this.parameters!=null){
-			Iterator<Parameter> it = this.parameters.iterator();
-			while(it.hasNext()){
-				Parameter current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.parameters);
 	}
 
 	public void setThrows(final List<NameExpr> throws_) {
 		this.throws_ = throws_;
-		if(this.throws_!=null){
-			Iterator<NameExpr> it = this.throws_.iterator();
-			while(it.hasNext()){
-				NameExpr current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.throws_);
 	}
 
 	public void setType(final Type type) {
 		this.type = type;
-		if(this.type!=null){
-			this.type.setParentNode(this);
-		}
+		setAsParentNodeOf(this.type);
 	}
 
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {

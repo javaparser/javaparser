@@ -67,16 +67,11 @@ public final class ArrayAccessExpr extends Expression {
 
     public void setIndex(Expression index) {
         this.index = index;
-        if(this.index!=null){
-        	this.index.setParentNode(this);
-        }
+		setAsParentNodeOf(this.index);
     }
 
     public void setName(Expression name) {
         this.name = name;
-        if(this.name!=null){
-        	this.name.setParentNode(this);
-        }
+		setAsParentNodeOf(this.name);
     }
-
 }

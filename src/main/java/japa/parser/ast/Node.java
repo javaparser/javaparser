@@ -21,6 +21,9 @@
  */
 package japa.parser.ast;
 
+import java.util.Iterator;
+import java.util.List;
+
 import japa.parser.ast.visitor.DumpVisitor;
 import japa.parser.ast.visitor.EqualsVisitor;
 import japa.parser.ast.visitor.GenericVisitor;
@@ -217,7 +220,20 @@ public abstract class Node {
 	public void setParentNode(Node parentNode) {
 		this.parentNode = parentNode;
 	}
-	
-	
 
+	protected void setAsParentNodeOf(List<? extends Node> childNodes) {
+		if(childNodes != null){
+			Iterator<? extends Node> it = childNodes.iterator();
+			while(it.hasNext()){
+				Node current = it.next();
+				current.setParentNode(this);
+			}
+		}
+	}
+
+	protected void setAsParentNodeOf(Node childNode) {
+		if(childNode != null){
+			childNode.setParentNode(this);
+		}
+	}
 }

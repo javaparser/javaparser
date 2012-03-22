@@ -24,7 +24,6 @@ package japa.parser.ast.expr;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -62,14 +61,6 @@ public final class ArrayInitializerExpr extends Expression {
 
     public void setValues(List<Expression> values) {
         this.values = values;
-        if(this.values!=null){
-        	Iterator<Expression> it = this.values.iterator();
-        	
-        	while(it.hasNext()){
-        		Expression current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.values);
     }
-
 }

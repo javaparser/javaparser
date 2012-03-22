@@ -26,7 +26,6 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -91,20 +90,12 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 
 	public void setArgs(final List<Expression> args) {
 		this.args = args;
-		if (this.args != null) {
-			Iterator<Expression> it = this.args.iterator();
-			while (it.hasNext()) {
-				Expression current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.args);
 	}
 
 	public void setExpr(final Expression expr) {
 		this.expr = expr;
-		if (this.expr != null) {
-			this.expr.setParentNode(this);
-		}
+		setAsParentNodeOf(this.expr);
 	}
 
 	public void setThis(final boolean isThis) {
@@ -113,12 +104,6 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 
 	public void setTypeArgs(final List<Type> typeArgs) {
 		this.typeArgs = typeArgs;
-		if (this.typeArgs != null) {
-			Iterator<Type> it = this.typeArgs.iterator();
-			while (it.hasNext()) {
-				Type current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.typeArgs);
 	}
 }
