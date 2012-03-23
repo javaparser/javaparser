@@ -110,715 +110,1480 @@ import japa.parser.ast.type.WildcardType;
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A> {
+public abstract class GenericVisitorAdapter<R, A> implements
+		GenericVisitor<R, A> {
 
-	@Override public R visit(final AnnotationDeclaration n, final A arg) {
+	@Override
+	public R visit(final AnnotationDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getMembers() != null) {
 			for (final BodyDeclaration member : n.getMembers()) {
-				member.accept(this, arg);
+				{
+					R result = member.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final AnnotationMemberDeclaration n, final A arg) {
+	@Override
+	public R visit(final AnnotationMemberDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getType().accept(this, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getDefaultValue() != null) {
-			n.getDefaultValue().accept(this, arg);
+			{
+				R result = n.getDefaultValue().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ArrayAccessExpr n, final A arg) {
-		n.getName().accept(this, arg);
-		n.getIndex().accept(this, arg);
+	@Override
+	public R visit(final ArrayAccessExpr n, final A arg) {
+		{
+			R result = n.getName().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getIndex().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final ArrayCreationExpr n, final A arg) {
-		n.getType().accept(this, arg);
+	@Override
+	public R visit(final ArrayCreationExpr n, final A arg) {
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getDimensions() != null) {
 			for (final Expression dim : n.getDimensions()) {
-				dim.accept(this, arg);
+				{
+					R result = dim.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		} else {
-			n.getInitializer().accept(this, arg);
+			{
+				R result = n.getInitializer().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ArrayInitializerExpr n, final A arg) {
+	@Override
+	public R visit(final ArrayInitializerExpr n, final A arg) {
 		if (n.getValues() != null) {
 			for (final Expression expr : n.getValues()) {
-				expr.accept(this, arg);
+				{
+					R result = expr.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final AssertStmt n, final A arg) {
-		n.getCheck().accept(this, arg);
+	@Override
+	public R visit(final AssertStmt n, final A arg) {
+		{
+			R result = n.getCheck().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getMessage() != null) {
-			n.getMessage().accept(this, arg);
+			{
+				R result = n.getMessage().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final AssignExpr n, final A arg) {
-		n.getTarget().accept(this, arg);
-		n.getValue().accept(this, arg);
+	@Override
+	public R visit(final AssignExpr n, final A arg) {
+		{
+			R result = n.getTarget().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getValue().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final BinaryExpr n, final A arg) {
-		n.getLeft().accept(this, arg);
-		n.getRight().accept(this, arg);
+	@Override
+	public R visit(final BinaryExpr n, final A arg) {
+		{
+			R result = n.getLeft().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getRight().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final BlockStmt n, final A arg) {
+	@Override
+	public R visit(final BlockStmt n, final A arg) {
 		if (n.getStmts() != null) {
 			for (final Statement s : n.getStmts()) {
-				s.accept(this, arg);
+				{
+					R result = s.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 
 	}
 
-	@Override public R visit(final BooleanLiteralExpr n, final A arg) {
+	@Override
+	public R visit(final BooleanLiteralExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final BreakStmt n, final A arg) {
+	@Override
+	public R visit(final BreakStmt n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final CastExpr n, final A arg) {
-		n.getType().accept(this, arg);
-		n.getExpr().accept(this, arg);
+	@Override
+	public R visit(final CastExpr n, final A arg) {
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getExpr().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final CatchClause n, final A arg) {
-		n.getExcept().accept(this, arg);
-		n.getCatchBlock().accept(this, arg);
+	@Override
+	public R visit(final CatchClause n, final A arg) {
+		{
+			R result = n.getExcept().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getCatchBlock().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 
 	}
 
-	@Override public R visit(final CharLiteralExpr n, final A arg) {
+	@Override
+	public R visit(final CharLiteralExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final ClassExpr n, final A arg) {
-		n.getType().accept(this, arg);
+	@Override
+	public R visit(final ClassExpr n, final A arg) {
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final ClassOrInterfaceDeclaration n, final A arg) {
+	@Override
+	public R visit(final ClassOrInterfaceDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getTypeParameters() != null) {
 			for (final TypeParameter t : n.getTypeParameters()) {
-				t.accept(this, arg);
+				{
+					R result = t.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getExtends() != null) {
 			for (final ClassOrInterfaceType c : n.getExtends()) {
-				c.accept(this, arg);
+				{
+					R result = c.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 
 		if (n.getImplements() != null) {
 			for (final ClassOrInterfaceType c : n.getImplements()) {
-				c.accept(this, arg);
+				{
+					R result = c.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getMembers() != null) {
 			for (final BodyDeclaration member : n.getMembers()) {
-				member.accept(this, arg);
+				{
+					R result = member.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ClassOrInterfaceType n, final A arg) {
+	@Override
+	public R visit(final ClassOrInterfaceType n, final A arg) {
 		if (n.getScope() != null) {
-			n.getScope().accept(this, arg);
+			{
+				R result = n.getScope().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getTypeArgs() != null) {
 			for (final Type t : n.getTypeArgs()) {
-				t.accept(this, arg);
+				{
+					R result = t.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final CompilationUnit n, final A arg) {
+	@Override
+	public R visit(final CompilationUnit n, final A arg) {
 		if (n.getPackage() != null) {
-			n.getPackage().accept(this, arg);
+			{
+				R result = n.getPackage().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getImports() != null) {
 			for (final ImportDeclaration i : n.getImports()) {
-				i.accept(this, arg);
+				{
+					R result = i.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getTypes() != null) {
 			for (final TypeDeclaration typeDeclaration : n.getTypes()) {
-				typeDeclaration.accept(this, arg);
+				{
+					R result = typeDeclaration.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ConditionalExpr n, final A arg) {
-		n.getCondition().accept(this, arg);
-		n.getThenExpr().accept(this, arg);
-		n.getElseExpr().accept(this, arg);
+	@Override
+	public R visit(final ConditionalExpr n, final A arg) {
+		{
+			R result = n.getCondition().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getThenExpr().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getElseExpr().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final ConstructorDeclaration n, final A arg) {
+	@Override
+	public R visit(final ConstructorDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getTypeParameters() != null) {
 			for (final TypeParameter t : n.getTypeParameters()) {
-				t.accept(this, arg);
+				{
+					R result = t.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getParameters() != null) {
 			for (final Parameter p : n.getParameters()) {
-				p.accept(this, arg);
+				{
+					R result = p.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getThrows() != null) {
 			for (final NameExpr name : n.getThrows()) {
-				name.accept(this, arg);
+				{
+					R result = name.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getBlock().accept(this, arg);
-		return null;
-	}
-
-	@Override public R visit(final ContinueStmt n, final A arg) {
-		return null;
-	}
-
-	@Override public R visit(final DoStmt n, final A arg) {
-		n.getBody().accept(this, arg);
-		n.getCondition().accept(this, arg);
-		return null;
-	}
-
-	@Override public R visit(final DoubleLiteralExpr n, final A arg) {
-		return null;
-	}
-
-	@Override public R visit(final EmptyMemberDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+		{
+			R result = n.getBlock().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final EmptyStmt n, final A arg) {
+	@Override
+	public R visit(final ContinueStmt n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final EmptyTypeDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+	@Override
+	public R visit(final DoStmt n, final A arg) {
+		{
+			R result = n.getBody().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getCondition().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final EnclosedExpr n, final A arg) {
-		n.getInner().accept(this, arg);
+	@Override
+	public R visit(final DoubleLiteralExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final EnumConstantDeclaration n, final A arg) {
+	@Override
+	public R visit(final EmptyMemberDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(final EmptyStmt n, final A arg) {
+		return null;
+	}
+
+	@Override
+	public R visit(final EmptyTypeDeclaration n, final A arg) {
+		if (n.getJavaDoc() != null) {
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(final EnclosedExpr n, final A arg) {
+		{
+			R result = n.getInner().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(final EnumConstantDeclaration n, final A arg) {
+		if (n.getJavaDoc() != null) {
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getArgs() != null) {
 			for (final Expression e : n.getArgs()) {
-				e.accept(this, arg);
+				{
+					R result = e.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getClassBody() != null) {
 			for (final BodyDeclaration member : n.getClassBody()) {
-				member.accept(this, arg);
+				{
+					R result = member.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final EnumDeclaration n, final A arg) {
+	@Override
+	public R visit(final EnumDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getImplements() != null) {
 			for (final ClassOrInterfaceType c : n.getImplements()) {
-				c.accept(this, arg);
+				{
+					R result = c.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getEntries() != null) {
 			for (final EnumConstantDeclaration e : n.getEntries()) {
-				e.accept(this, arg);
+				{
+					R result = e.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getMembers() != null) {
 			for (final BodyDeclaration member : n.getMembers()) {
-				member.accept(this, arg);
+				{
+					R result = member.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ExplicitConstructorInvocationStmt n, final A arg) {
+	@Override
+	public R visit(final ExplicitConstructorInvocationStmt n, final A arg) {
 		if (!n.isThis()) {
 			if (n.getExpr() != null) {
-				n.getExpr().accept(this, arg);
+				{
+					R result = n.getExpr().accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getTypeArgs() != null) {
 			for (final Type t : n.getTypeArgs()) {
-				t.accept(this, arg);
+				{
+					R result = t.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getArgs() != null) {
 			for (final Expression e : n.getArgs()) {
-				e.accept(this, arg);
+				{
+					R result = e.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ExpressionStmt n, final A arg) {
-		n.getExpression().accept(this, arg);
+	@Override
+	public R visit(final ExpressionStmt n, final A arg) {
+		{
+			R result = n.getExpression().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final FieldAccessExpr n, final A arg) {
-		n.getScope().accept(this, arg);
+	@Override
+	public R visit(final FieldAccessExpr n, final A arg) {
+		{
+			R result = n.getScope().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final FieldDeclaration n, final A arg) {
+	@Override
+	public R visit(final FieldDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getType().accept(this, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		for (final VariableDeclarator var : n.getVariables()) {
-			var.accept(this, arg);
+			{
+				R result = var.accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ForeachStmt n, final A arg) {
-		n.getVariable().accept(this, arg);
-		n.getIterable().accept(this, arg);
-		n.getBody().accept(this, arg);
+	@Override
+	public R visit(final ForeachStmt n, final A arg) {
+		{
+			R result = n.getVariable().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getIterable().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getBody().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final ForStmt n, final A arg) {
+	@Override
+	public R visit(final ForStmt n, final A arg) {
 		if (n.getInit() != null) {
 			for (final Expression e : n.getInit()) {
-				e.accept(this, arg);
+				{
+					R result = e.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getCompare() != null) {
-			n.getCompare().accept(this, arg);
+			{
+				R result = n.getCompare().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getUpdate() != null) {
 			for (final Expression e : n.getUpdate()) {
-				e.accept(this, arg);
+				{
+					R result = e.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getBody().accept(this, arg);
+		{
+			R result = n.getBody().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final IfStmt n, final A arg) {
-		n.getCondition().accept(this, arg);
-		n.getThenStmt().accept(this, arg);
+	@Override
+	public R visit(final IfStmt n, final A arg) {
+		{
+			R result = n.getCondition().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getThenStmt().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getElseStmt() != null) {
-			n.getElseStmt().accept(this, arg);
+			{
+				R result = n.getElseStmt().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ImportDeclaration n, final A arg) {
-		n.getName().accept(this, arg);
+	@Override
+	public R visit(final ImportDeclaration n, final A arg) {
+		{
+			R result = n.getName().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final InitializerDeclaration n, final A arg) {
+	@Override
+	public R visit(final InitializerDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
-		n.getBlock().accept(this, arg);
+		{
+			R result = n.getBlock().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final InstanceOfExpr n, final A arg) {
-		n.getExpr().accept(this, arg);
-		n.getType().accept(this, arg);
+	@Override
+	public R visit(final InstanceOfExpr n, final A arg) {
+		{
+			R result = n.getExpr().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final IntegerLiteralExpr n, final A arg) {
+	@Override
+	public R visit(final IntegerLiteralExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final IntegerLiteralMinValueExpr n, final A arg) {
+	@Override
+	public R visit(final IntegerLiteralMinValueExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final JavadocComment n, final A arg) {
+	@Override
+	public R visit(final JavadocComment n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final LabeledStmt n, final A arg) {
-		n.getStmt().accept(this, arg);
+	@Override
+	public R visit(final LabeledStmt n, final A arg) {
+		{
+			R result = n.getStmt().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final LongLiteralExpr n, final A arg) {
+	@Override
+	public R visit(final LongLiteralExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final LongLiteralMinValueExpr n, final A arg) {
+	@Override
+	public R visit(final LongLiteralMinValueExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final MarkerAnnotationExpr n, final A arg) {
-		n.getName().accept(this, arg);
+	@Override
+	public R visit(final MarkerAnnotationExpr n, final A arg) {
+		{
+			R result = n.getName().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final MemberValuePair n, final A arg) {
-		n.getValue().accept(this, arg);
+	@Override
+	public R visit(final MemberValuePair n, final A arg) {
+		{
+			R result = n.getValue().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final MethodCallExpr n, final A arg) {
+	@Override
+	public R visit(final MethodCallExpr n, final A arg) {
 		if (n.getScope() != null) {
-			n.getScope().accept(this, arg);
+			{
+				R result = n.getScope().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getTypeArgs() != null) {
 			for (final Type t : n.getTypeArgs()) {
-				t.accept(this, arg);
+				{
+					R result = t.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getArgs() != null) {
 			for (final Expression e : n.getArgs()) {
-				e.accept(this, arg);
+				{
+					R result = e.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final MethodDeclaration n, final A arg) {
+	@Override
+	public R visit(final MethodDeclaration n, final A arg) {
 		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
+			{
+				R result = n.getJavaDoc().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getTypeParameters() != null) {
 			for (final TypeParameter t : n.getTypeParameters()) {
-				t.accept(this, arg);
+				{
+					R result = t.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getType().accept(this, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getParameters() != null) {
 			for (final Parameter p : n.getParameters()) {
-				p.accept(this, arg);
+				{
+					R result = p.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getThrows() != null) {
 			for (final NameExpr name : n.getThrows()) {
-				name.accept(this, arg);
+				{
+					R result = name.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getBody() != null) {
-			n.getBody().accept(this, arg);
-		}
-		return null;
-	}
-
-	@Override public R visit(final NameExpr n, final A arg) {
-		return null;
-	}
-
-	@Override public R visit(final NormalAnnotationExpr n, final A arg) {
-		n.getName().accept(this, arg);
-		if (n.getPairs() != null) {
-			for (final MemberValuePair m : n.getPairs()) {
-				m.accept(this, arg);
+			{
+				R result = n.getBody().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final NullLiteralExpr n, final A arg) {
+	@Override
+	public R visit(final NameExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final ObjectCreationExpr n, final A arg) {
+	@Override
+	public R visit(final NormalAnnotationExpr n, final A arg) {
+		{
+			R result = n.getName().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		if (n.getPairs() != null) {
+			for (final MemberValuePair m : n.getPairs()) {
+				{
+					R result = m.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(final NullLiteralExpr n, final A arg) {
+		return null;
+	}
+
+	@Override
+	public R visit(final ObjectCreationExpr n, final A arg) {
 		if (n.getScope() != null) {
-			n.getScope().accept(this, arg);
+			{
+				R result = n.getScope().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getTypeArgs() != null) {
 			for (final Type t : n.getTypeArgs()) {
-				t.accept(this, arg);
+				{
+					R result = t.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getType().accept(this, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getArgs() != null) {
 			for (final Expression e : n.getArgs()) {
-				e.accept(this, arg);
+				{
+					R result = e.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getAnonymousClassBody() != null) {
 			for (final BodyDeclaration member : n.getAnonymousClassBody()) {
-				member.accept(this, arg);
+				{
+					R result = member.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final PackageDeclaration n, final A arg) {
+	@Override
+	public R visit(final PackageDeclaration n, final A arg) {
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getName().accept(this, arg);
+		{
+			R result = n.getName().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final Parameter n, final A arg) {
+	@Override
+	public R visit(final Parameter n, final A arg) {
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getType().accept(this, arg);
-		n.getId().accept(this, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getId().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final PrimitiveType n, final A arg) {
+	@Override
+	public R visit(final PrimitiveType n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final QualifiedNameExpr n, final A arg) {
-		n.getQualifier().accept(this, arg);
+	@Override
+	public R visit(final QualifiedNameExpr n, final A arg) {
+		{
+			R result = n.getQualifier().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final ReferenceType n, final A arg) {
-		n.getType().accept(this, arg);
+	@Override
+	public R visit(final ReferenceType n, final A arg) {
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final ReturnStmt n, final A arg) {
+	@Override
+	public R visit(final ReturnStmt n, final A arg) {
 		if (n.getExpr() != null) {
-			n.getExpr().accept(this, arg);
+			{
+				R result = n.getExpr().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final SingleMemberAnnotationExpr n, final A arg) {
-		n.getName().accept(this, arg);
-		n.getMemberValue().accept(this, arg);
+	@Override
+	public R visit(final SingleMemberAnnotationExpr n, final A arg) {
+		{
+			R result = n.getName().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getMemberValue().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final StringLiteralExpr n, final A arg) {
+	@Override
+	public R visit(final StringLiteralExpr n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final SuperExpr n, final A arg) {
+	@Override
+	public R visit(final SuperExpr n, final A arg) {
 		if (n.getClassExpr() != null) {
-			n.getClassExpr().accept(this, arg);
+			{
+				R result = n.getClassExpr().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final SwitchEntryStmt n, final A arg) {
+	@Override
+	public R visit(final SwitchEntryStmt n, final A arg) {
 		if (n.getLabel() != null) {
-			n.getLabel().accept(this, arg);
+			{
+				R result = n.getLabel().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getStmts() != null) {
 			for (final Statement s : n.getStmts()) {
-				s.accept(this, arg);
+				{
+					R result = s.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final SwitchStmt n, final A arg) {
-		n.getSelector().accept(this, arg);
+	@Override
+	public R visit(final SwitchStmt n, final A arg) {
+		{
+			R result = n.getSelector().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getEntries() != null) {
 			for (final SwitchEntryStmt e : n.getEntries()) {
-				e.accept(this, arg);
+				{
+					R result = e.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 
 	}
 
-	@Override public R visit(final SynchronizedStmt n, final A arg) {
-		n.getExpr().accept(this, arg);
-		n.getBlock().accept(this, arg);
-		return null;
-	}
-
-	@Override public R visit(final ThisExpr n, final A arg) {
-		if (n.getClassExpr() != null) {
-			n.getClassExpr().accept(this, arg);
+	@Override
+	public R visit(final SynchronizedStmt n, final A arg) {
+		{
+			R result = n.getExpr().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getBlock().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final ThrowStmt n, final A arg) {
-		n.getExpr().accept(this, arg);
+	@Override
+	public R visit(final ThisExpr n, final A arg) {
+		if (n.getClassExpr() != null) {
+			{
+				R result = n.getClassExpr().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final TryStmt n, final A arg) {
-		n.getTryBlock().accept(this, arg);
+	@Override
+	public R visit(final ThrowStmt n, final A arg) {
+		{
+			R result = n.getExpr().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(final TryStmt n, final A arg) {
+		{
+			R result = n.getTryBlock().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getCatchs() != null) {
 			for (final CatchClause c : n.getCatchs()) {
-				c.accept(this, arg);
+				{
+					R result = c.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		if (n.getFinallyBlock() != null) {
-			n.getFinallyBlock().accept(this, arg);
+			{
+				R result = n.getFinallyBlock().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final TypeDeclarationStmt n, final A arg) {
-		n.getTypeDeclaration().accept(this, arg);
+	@Override
+	public R visit(final TypeDeclarationStmt n, final A arg) {
+		{
+			R result = n.getTypeDeclaration().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final TypeParameter n, final A arg) {
+	@Override
+	public R visit(final TypeParameter n, final A arg) {
 		if (n.getTypeBound() != null) {
 			for (final ClassOrInterfaceType c : n.getTypeBound()) {
-				c.accept(this, arg);
+				{
+					R result = c.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final UnaryExpr n, final A arg) {
-		n.getExpr().accept(this, arg);
+	@Override
+	public R visit(final UnaryExpr n, final A arg) {
+		{
+			R result = n.getExpr().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final VariableDeclarationExpr n, final A arg) {
+	@Override
+	public R visit(final VariableDeclarationExpr n, final A arg) {
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
-		n.getType().accept(this, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		for (final VariableDeclarator v : n.getVars()) {
-			v.accept(this, arg);
+			{
+				R result = v.accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final VariableDeclarator n, final A arg) {
-		n.getId().accept(this, arg);
+	@Override
+	public R visit(final VariableDeclarator n, final A arg) {
+		{
+			R result = n.getId().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getInit() != null) {
-			n.getInit().accept(this, arg);
+			{
+				R result = n.getInit().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final VariableDeclaratorId n, final A arg) {
+	@Override
+	public R visit(final VariableDeclaratorId n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final VoidType n, final A arg) {
+	@Override
+	public R visit(final VoidType n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final WhileStmt n, final A arg) {
-		n.getCondition().accept(this, arg);
-		n.getBody().accept(this, arg);
+	@Override
+	public R visit(final WhileStmt n, final A arg) {
+		{
+			R result = n.getCondition().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			R result = n.getBody().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
-	@Override public R visit(final WildcardType n, final A arg) {
+	@Override
+	public R visit(final WildcardType n, final A arg) {
 		if (n.getExtends() != null) {
-			n.getExtends().accept(this, arg);
+			{
+				R result = n.getExtends().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		if (n.getSuper() != null) {
-			n.getSuper().accept(this, arg);
+			{
+				R result = n.getSuper().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
 		}
 		return null;
 	}
 
-	@Override public R visit(final BlockComment n, final A arg) {
+	@Override
+	public R visit(final BlockComment n, final A arg) {
 		return null;
 	}
 
-	@Override public R visit(final LineComment n, final A arg) {
+	@Override
+	public R visit(final LineComment n, final A arg) {
 		return null;
 	}
 
