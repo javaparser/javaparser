@@ -25,7 +25,6 @@ import japa.parser.ast.expr.Expression;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -73,20 +72,11 @@ public final class SwitchEntryStmt extends Statement {
 
 	public void setLabel(final Expression label) {
 		this.label = label;
-		if(this.label!=null){
-			this.label.setParentNode(this);
-		}
+		setAsParentNodeOf(this.label);
 	}
 
 	public void setStmts(final List<Statement> stmts) {
 		this.stmts = stmts;
-		if (this.stmts != null) {
-			Iterator<Statement> it = this.stmts.iterator();
-
-			while (it.hasNext()) {
-				Statement current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.stmts);
 	}
 }

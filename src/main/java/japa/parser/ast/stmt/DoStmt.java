@@ -67,15 +67,11 @@ public final class DoStmt extends Statement {
 
 	public void setBody(final Statement body) {
 		this.body = body;
-		if(this.body!=null){
-			this.body.setParentNode(this);
-		}
+		setAsParentNodeOf(this.body);
 	}
 
 	public void setCondition(final Expression condition) {
 		this.condition = condition;
-		if(this.condition!=null){
-			this.condition.setParentNode(this);
-		}
+		setAsParentNodeOf(this.condition);
 	}
 }

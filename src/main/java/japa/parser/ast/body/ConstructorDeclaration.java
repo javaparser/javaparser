@@ -28,7 +28,6 @@ import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -130,37 +129,16 @@ public final class ConstructorDeclaration extends BodyDeclaration {
 
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
-        
-        if(this.parameters!=null){
-        	Iterator<Parameter> it = this.parameters.iterator();
-        	while(it.hasNext()){
-        		Parameter current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.parameters);
     }
 
     public void setThrows(List<NameExpr> throws_) {
         this.throws_ = throws_;
-        
-        if(this.throws_!=null){
-        	Iterator<NameExpr> it = this.throws_.iterator();
-        	while(it.hasNext()){
-        		NameExpr current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.throws_);
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
-        
-        if(this.typeParameters!=null){
-        	Iterator<TypeParameter> it = typeParameters.iterator();
-        	while(it.hasNext()){
-        		TypeParameter current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.typeParameters);
     }
 }

@@ -24,7 +24,6 @@ package japa.parser.ast.expr;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -63,13 +62,6 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 
 	public void setPairs(final List<MemberValuePair> pairs) {
 		this.pairs = pairs;
-		
-		if(this.pairs!=null){
-			Iterator<MemberValuePair> it = this.pairs.iterator();
-			while(it.hasNext()){
-				it.next().setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.pairs);
 	}
-
 }

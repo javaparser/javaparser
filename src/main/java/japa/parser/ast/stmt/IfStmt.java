@@ -75,22 +75,16 @@ public final class IfStmt extends Statement {
 
 	public void setCondition(final Expression condition) {
 		this.condition = condition;
-		if(this.condition!=null){
-			this.condition.setParentNode(this);
-		}
+		setAsParentNodeOf(this.condition);
 	}
 
 	public void setElseStmt(final Statement elseStmt) {
 		this.elseStmt = elseStmt;
-		if(this.elseStmt!=null){
-			this.elseStmt.setParentNode(this);
-		}
+		setAsParentNodeOf(this.elseStmt);
 	}
 
 	public void setThenStmt(final Statement thenStmt) {
 		this.thenStmt = thenStmt;
-		if(this.thenStmt!=null){		
-			this.thenStmt.setParentNode(this);
-		}
+		setAsParentNodeOf(this.thenStmt);
 	}
 }

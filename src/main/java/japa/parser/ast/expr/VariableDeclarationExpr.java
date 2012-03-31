@@ -27,7 +27,6 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -99,12 +98,7 @@ public final class VariableDeclarationExpr extends Expression {
 
 	public void setAnnotations(final List<AnnotationExpr> annotations) {
 		this.annotations = annotations;
-		if(this.annotations != null){
-			Iterator<AnnotationExpr> it = annotations.iterator();
-			while(it.hasNext()){
-				it.next().setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.annotations);
 	}
 
 	public void setModifiers(final int modifiers) {
@@ -113,18 +107,11 @@ public final class VariableDeclarationExpr extends Expression {
 
 	public void setType(final Type type) {
 		this.type = type;
-		if(type!=null){
-			this.type.setParentNode(this);
-		}
+		setAsParentNodeOf(this.type);
 	}
 
 	public void setVars(final List<VariableDeclarator> vars) {
 		this.vars = vars;
-		if(this.vars != null){
-			Iterator<VariableDeclarator> it = vars.iterator();
-			while(it.hasNext()){
-				it.next().setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.vars);
 	}
 }

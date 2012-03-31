@@ -70,16 +70,11 @@ public final class SynchronizedStmt extends Statement {
 
 	public void setBlock(final BlockStmt block) {
 		this.block = block;
-		if (this.block != null) {
-			this.block.setParentNode(this);
-		}
+		setAsParentNodeOf(this.block);
 	}
 
 	public void setExpr(final Expression expr) {
 		this.expr = expr;
-		if (this.expr != null) {
-			this.expr.setParentNode(this);
-		}
+		setAsParentNodeOf(this.expr);
 	}
-
 }

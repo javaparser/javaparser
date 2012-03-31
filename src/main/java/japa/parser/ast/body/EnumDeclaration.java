@@ -26,7 +26,6 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -77,23 +76,11 @@ public final class EnumDeclaration extends TypeDeclaration {
 
     public void setEntries(List<EnumConstantDeclaration> entries) {
         this.entries = entries;
-        if(this.entries!=null){
-        	Iterator<EnumConstantDeclaration> it = this.entries.iterator();
-        	while(it.hasNext()){
-        		EnumConstantDeclaration current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.entries);
     }
 
     public void setImplements(List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
-        if(this.implementsList!=null){
-        	Iterator<ClassOrInterfaceType> it = this.implementsList.iterator();
-        	while(it.hasNext()){
-        		ClassOrInterfaceType current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.implementsList);
     }
 }

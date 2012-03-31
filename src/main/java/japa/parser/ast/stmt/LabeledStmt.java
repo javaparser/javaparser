@@ -70,8 +70,6 @@ public final class LabeledStmt extends Statement {
 
 	public void setStmt(final Statement stmt) {
 		this.stmt = stmt;
-		if(this.stmt!=null){
-			this.stmt.setParentNode(this);
-		}
+		setAsParentNodeOf(this.stmt);
 	}
 }

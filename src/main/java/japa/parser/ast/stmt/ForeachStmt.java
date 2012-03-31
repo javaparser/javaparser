@@ -81,22 +81,16 @@ public final class ForeachStmt extends Statement {
 
 	public void setBody(final Statement body) {
 		this.body = body;
-		if (this.body != null) {
-			this.body.setParentNode(this);
-		}
+		setAsParentNodeOf(this.body);
 	}
 
 	public void setIterable(final Expression iterable) {
 		this.iterable = iterable;
-		if (this.iterable != null) {
-			this.iterable.setParentNode(this);
-		}
+		setAsParentNodeOf(this.iterable);
 	}
 
 	public void setVariable(final VariableDeclarationExpr var) {
 		this.var = var;
-		if (this.var != null) {
-			this.var.setParentNode(this);
-		}
+		setAsParentNodeOf(this.var);
 	}
 }

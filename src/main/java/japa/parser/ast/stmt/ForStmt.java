@@ -25,7 +25,6 @@ import japa.parser.ast.expr.Expression;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -91,37 +90,21 @@ public final class ForStmt extends Statement {
 
 	public void setBody(final Statement body) {
 		this.body = body;
-		if (this.body != null) {
-			this.body.setParentNode(this);
-		}
+		setAsParentNodeOf(this.body);
 	}
 
 	public void setCompare(final Expression compare) {
 		this.compare = compare;
-		if (this.compare != null) {
-			this.compare.setParentNode(this);
-		}
+		setAsParentNodeOf(this.compare);
 	}
 
 	public void setInit(final List<Expression> init) {
 		this.init = init;
-		if (this.init != null) {
-			Iterator<Expression> it = init.iterator();
-			while (it.hasNext()) {
-				Expression current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.init);
 	}
 
 	public void setUpdate(final List<Expression> update) {
 		this.update = update;
-		if (this.update != null) {
-			Iterator<Expression> it = this.update.iterator();
-			while (it.hasNext()) {
-				Expression current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.update);
 	}
 }

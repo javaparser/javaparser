@@ -23,7 +23,6 @@ package japa.parser.ast.body;
 
 import japa.parser.ast.expr.AnnotationExpr;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -84,16 +83,7 @@ public abstract class TypeDeclaration extends BodyDeclaration {
 
 	public void setMembers(List<BodyDeclaration> members) {
 		this.members = members;
-		if (this.members != null) {
-			Iterator<BodyDeclaration> it = members.iterator();
-
-			while (it.hasNext()) {
-
-				BodyDeclaration current = it.next();
-				current.setParentNode(this);
-
-			}
-		}
+		setAsParentNodeOf(this.members);
 	}
 
 	public final void setModifiers(int modifiers) {
