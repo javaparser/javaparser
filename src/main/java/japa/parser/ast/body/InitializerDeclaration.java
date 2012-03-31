@@ -74,9 +74,7 @@ public final class InitializerDeclaration extends BodyDeclaration {
 
     public void setBlock(BlockStmt block) {
         this.block = block;
-        if(this.block!=null){
-        	this.block.setParentNode(this);
-        }
+		setAsParentNodeOf(this.block);
     }
 
     public void setStatic(boolean isStatic) {

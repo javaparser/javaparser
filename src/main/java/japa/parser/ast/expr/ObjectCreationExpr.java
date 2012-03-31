@@ -27,7 +27,6 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -95,49 +94,26 @@ public final class ObjectCreationExpr extends Expression {
 
 	public void setAnonymousClassBody(final List<BodyDeclaration> anonymousClassBody) {
 		this.anonymousClassBody = anonymousClassBody;
-		if ( this.anonymousClassBody != null){
-			Iterator<BodyDeclaration> it = anonymousClassBody.iterator();
-			while(it.hasNext()){
-				BodyDeclaration current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.anonymousClassBody);
 	}
 
 	public void setArgs(final List<Expression> args) {
 		this.args = args;
-		if(this.args != null ){
-			Iterator<Expression> it = args.iterator();
-			while(it.hasNext()){
-				Expression current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.args);
 	}
 
 	public void setScope(final Expression scope) {
 		this.scope = scope;
-		if(this.scope != null){
-			this.scope.setParentNode(this);
-		}
+		setAsParentNodeOf(this.scope);
 	}
 
 	public void setType(final ClassOrInterfaceType type) {
 		this.type = type;
-		if(this.type != null){
-			this.type.setParentNode(this);
-		}
+		setAsParentNodeOf(this.type);
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
 		this.typeArgs = typeArgs;
-		if(this.typeArgs!=null){
-			Iterator<Type> it = typeArgs.iterator();
-			while(it.hasNext()){
-				Type current = it.next();
-				current.setParentNode(this);
-			}
-		}
+		setAsParentNodeOf(this.typeArgs);
 	}
-
 }

@@ -77,13 +77,10 @@ public final class UnaryExpr extends Expression {
 
 	public void setExpr(final Expression expr) {
 		this.expr = expr;
-		if(this.expr != null){
-			this.expr.setParentNode(this);
-		}
+		setAsParentNodeOf(this.expr);
 	}
 
 	public void setOperator(final Operator op) {
 		this.op = op;
 	}
-
 }

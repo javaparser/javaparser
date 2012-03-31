@@ -68,15 +68,11 @@ public final class CatchClause extends Node {
 
 	public void setCatchBlock(final BlockStmt catchBlock) {
 		this.catchBlock = catchBlock;
-		if(this.catchBlock!=null){
-			this.catchBlock.setParentNode(this);
-		}
+		setAsParentNodeOf(this.catchBlock);
 	}
 
 	public void setExcept(final Parameter except) {
 		this.except = except;
-		if(this.except!=null){
-			this.except.setParentNode(this);
-		}
+		setAsParentNodeOf(this.except);
 	}
 }

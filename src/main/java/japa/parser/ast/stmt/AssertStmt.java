@@ -73,15 +73,11 @@ public final class AssertStmt extends Statement {
 
 	public void setCheck(final Expression check) {
 		this.check = check;
-		if(this.check!=null){
-			this.check.setParentNode(this);
-		}
+		setAsParentNodeOf(this.check);
 	}
 
 	public void setMessage(final Expression msg) {
 		this.msg = msg;
-		if(this.msg!=null){
-			this.msg.setParentNode(this);
-		}
+		setAsParentNodeOf(this.msg);
 	}
 }

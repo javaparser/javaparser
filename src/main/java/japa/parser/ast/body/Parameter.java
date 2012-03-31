@@ -109,9 +109,7 @@ public final class Parameter extends Node {
 
     public void setId(VariableDeclaratorId id) {
         this.id = id;
-        if(this.id!=null){
-        	this.id.setParentNode(this);
-        }
+		setAsParentNodeOf(this.id);
     }
 
     public void setModifiers(int modifiers) {
@@ -120,9 +118,7 @@ public final class Parameter extends Node {
 
     public void setType(Type type) {
         this.type = type;
-        if(this.type!=null){
-        	this.type.setParentNode(this);
-        }
+		setAsParentNodeOf(this.type);
     }
 
     public void setVarArgs(boolean isVarArgs) {

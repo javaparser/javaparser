@@ -73,16 +73,11 @@ public final class VariableDeclarator extends Node {
 
     public void setId(VariableDeclaratorId id) {
         this.id = id;
-        if(this.id!=null){
-        	this.id.setParentNode(this);
-        }
+		setAsParentNodeOf(this.id);
     }
 
     public void setInit(Expression init) {
         this.init = init;
-        if(this.init!=null){
-        	this.init.setParentNode(this);
-        }
+		setAsParentNodeOf(this.init);
     }
-
 }

@@ -97,9 +97,7 @@ public final class BinaryExpr extends Expression {
 
     public void setLeft(Expression left) {
         this.left = left;
-        if(this.left!=null){
-        	this.left.setParentNode(this);
-        }
+		setAsParentNodeOf(this.left);
     }
 
     public void setOperator(Operator op) {
@@ -108,9 +106,6 @@ public final class BinaryExpr extends Expression {
 
     public void setRight(Expression right) {
         this.right = right;
-        if(this.right!=null){
-        	this.right.setParentNode(this);
-        }
+		setAsParentNodeOf(this.right);
     }
-
 }

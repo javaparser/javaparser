@@ -25,7 +25,6 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -106,27 +105,16 @@ public final class ArrayCreationExpr extends Expression {
 
     public void setDimensions(List<Expression> dimensions) {
         this.dimensions = dimensions;
-        if(this.dimensions!=null){
-        	Iterator<Expression> it = dimensions.iterator();
-        	while(it.hasNext()){
-        		Expression current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.dimensions);
     }
 
     public void setInitializer(ArrayInitializerExpr initializer) {
         this.initializer = initializer;
-        if(this.initializer!=null){
-        	this.initializer.setParentNode(this);
-        }
+		setAsParentNodeOf(this.initializer);
     }
 
     public void setType(Type type) {
         this.type = type;
-        if(this.type!=null){
-        	this.type.setParentNode(this);
-        }
+		setAsParentNodeOf(this.type);
     }
-
 }

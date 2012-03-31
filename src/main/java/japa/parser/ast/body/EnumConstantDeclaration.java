@@ -26,7 +26,6 @@ import japa.parser.ast.expr.Expression;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -85,24 +84,12 @@ public final class EnumConstantDeclaration extends BodyDeclaration {
 
     public void setArgs(List<Expression> args) {
         this.args = args;
-        if(this.args!=null){
-        	Iterator<Expression> it = args.iterator();
-        	while(it.hasNext()){
-        		Expression current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.args);
     }
 
     public void setClassBody(List<BodyDeclaration> classBody) {
         this.classBody = classBody;
-        if(this.classBody!=null){
-        	Iterator<BodyDeclaration> it = this.classBody.iterator();
-        	while(it.hasNext()){
-        		BodyDeclaration current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.classBody);
     }
 
     public void setName(String name) {

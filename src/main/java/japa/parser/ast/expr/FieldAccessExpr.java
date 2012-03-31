@@ -25,7 +25,6 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -81,23 +80,11 @@ public final class FieldAccessExpr extends Expression {
 
 	public void setScope(final Expression scope) {
 		this.scope = scope;
-		if(this.scope!=null){
-			this.scope.setParentNode(this);
-		}
+		setAsParentNodeOf(this.scope);
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
 		this.typeArgs = typeArgs;
-		
-		if(typeArgs!=null){
-			
-			Iterator<Type> it = typeArgs.iterator();
-			
-			while(it.hasNext()){
-				it.next().setParentNode(this);
-			}
-			
-		}
+		setAsParentNodeOf(this.typeArgs);
 	}
-
 }

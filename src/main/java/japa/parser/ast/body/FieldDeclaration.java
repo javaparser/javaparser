@@ -27,7 +27,6 @@ import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -106,19 +105,11 @@ public final class FieldDeclaration extends BodyDeclaration {
 
     public void setType(Type type) {
         this.type = type;
-        if(this.type!=null){
-        	this.type.setParentNode(this);
-        }
+		setAsParentNodeOf(this.type);
     }
 
     public void setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
-        if(this.variables!=null){
-        	Iterator<VariableDeclarator> it = variables.iterator();
-        	while(it.hasNext()){
-        		VariableDeclarator current = it.next();
-        		current.setParentNode(this);
-        	}
-        }
+		setAsParentNodeOf(this.variables);
     }
 }

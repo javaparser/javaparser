@@ -24,7 +24,6 @@ package japa.parser.ast.body;
 import japa.parser.ast.Node;
 import japa.parser.ast.expr.AnnotationExpr;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -61,24 +60,11 @@ public abstract class BodyDeclaration extends Node {
 
     public final void setJavaDoc(JavadocComment javaDoc) {
         this.javaDoc = javaDoc;
-        if(this.javaDoc!=null){
-        	this.javaDoc.setParentNode(this);
-        }
+		setAsParentNodeOf(this.javaDoc);
     }
 
     public final void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
-        if(this.annotations!=null){
-        	
-        	Iterator<AnnotationExpr> it = this.annotations.iterator();
-        	while(it.hasNext()){
-        		AnnotationExpr current = it.next();
-        		current.setParentNode(this);
-        	}
-        	
-        }
+		setAsParentNodeOf(this.annotations);
     }
-    
-    
-
 }
