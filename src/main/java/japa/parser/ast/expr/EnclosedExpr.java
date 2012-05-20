@@ -41,7 +41,7 @@ public final class EnclosedExpr extends Expression {
 	public EnclosedExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression inner) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.inner = inner;
+		setInner(inner);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

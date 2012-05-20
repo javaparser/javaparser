@@ -37,15 +37,15 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 	}
 
 	public NormalAnnotationExpr(final NameExpr name, final List<MemberValuePair> pairs) {
-		this.name = name;
-		this.pairs = pairs;
+		setName(name);
+		setPairs(pairs);
 	}
 
 	public NormalAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final NameExpr name, final List<MemberValuePair> pairs) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.name = name;
-		this.pairs = pairs;
+		setName(name);
+		setPairs(pairs);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

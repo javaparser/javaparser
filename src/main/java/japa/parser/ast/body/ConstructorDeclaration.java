@@ -117,6 +117,7 @@ public final class ConstructorDeclaration extends BodyDeclaration {
 
     public void setBlock(BlockStmt block) {
         this.block = block;
+		setAsParentNodeOf(this.block);
     }
 
     public void setModifiers(int modifiers) {

@@ -37,19 +37,19 @@ public final class ReferenceType extends Type {
 	}
 
 	public ReferenceType(final Type type) {
-		this.type = type;
+		setType(type);
 	}
 
 	public ReferenceType(final Type type, final int arrayCount) {
-		this.type = type;
-		this.arrayCount = arrayCount;
+		setType(type);
+		setArrayCount(arrayCount);
 	}
 
 	public ReferenceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Type type, final int arrayCount) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.type = type;
-		this.arrayCount = arrayCount;
+		setType(type);
+		setArrayCount(arrayCount);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -74,6 +74,7 @@ public final class ReferenceType extends Type {
 
 	public void setType(final Type type) {
 		this.type = type;
+		setAsParentNodeOf(this.type);
 	}
 
 }

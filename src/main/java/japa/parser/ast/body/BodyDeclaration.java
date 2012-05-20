@@ -46,8 +46,8 @@ public abstract class BodyDeclaration extends Node {
 
     public BodyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, JavadocComment javaDoc) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.javaDoc = javaDoc;
-        this.annotations = annotations;
+    	setJavaDoc(javaDoc);
+    	setAnnotations(annotations);
     }
 
     public final JavadocComment getJavaDoc() {

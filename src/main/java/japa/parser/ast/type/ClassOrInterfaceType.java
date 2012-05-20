@@ -41,20 +41,20 @@ public final class ClassOrInterfaceType extends Type {
 	}
 
 	public ClassOrInterfaceType(final String name) {
-		this.name = name;
+		setName(name);
 	}
 
 	public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
-		this.scope = scope;
-		this.name = name;
+		setScope(scope);
+		setName(name);
 	}
 
 	public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.scope = scope;
-		this.name = name;
-		this.typeArgs = typeArgs;
+		setScope(scope);
+		setName(name);
+		setTypeArgs(typeArgs);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -83,9 +83,11 @@ public final class ClassOrInterfaceType extends Type {
 
 	public void setScope(final ClassOrInterfaceType scope) {
 		this.scope = scope;
+		setAsParentNodeOf(this.scope);
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
 		this.typeArgs = typeArgs;
+		setAsParentNodeOf(this.typeArgs);
 	}
 }
