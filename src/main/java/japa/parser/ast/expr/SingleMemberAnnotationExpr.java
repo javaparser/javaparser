@@ -35,15 +35,15 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 	}
 
 	public SingleMemberAnnotationExpr(final NameExpr name, final Expression memberValue) {
-		this.name = name;
-		this.memberValue = memberValue;
+		setName(name);
+		setMemberValue(memberValue);
 	}
 
 	public SingleMemberAnnotationExpr(final int beginLine, final int beginColumn, final int endLine,
 			final int endColumn, final NameExpr name, final Expression memberValue) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.name = name;
-		this.memberValue = memberValue;
+		setName(name);
+		setMemberValue(memberValue);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

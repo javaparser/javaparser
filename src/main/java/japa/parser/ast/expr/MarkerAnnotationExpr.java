@@ -33,13 +33,13 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
 	}
 
 	public MarkerAnnotationExpr(final NameExpr name) {
-		this.name = name;
+		setName(name);
 	}
 
 	public MarkerAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final NameExpr name) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.name = name;
+		setName(name);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
