@@ -37,19 +37,19 @@ public final class WildcardType extends Type {
 	}
 
 	public WildcardType(final ReferenceType ext) {
-		this.ext = ext;
+		setExtends(ext);
 	}
 
 	public WildcardType(final ReferenceType ext, final ReferenceType sup) {
-		this.ext = ext;
-		this.sup = sup;
+		setExtends(ext);
+		setSuper(sup);
 	}
 
 	public WildcardType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final ReferenceType ext, final ReferenceType sup) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.ext = ext;
-		this.sup = sup;
+		setExtends(ext);
+		setSuper(sup);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -70,10 +70,12 @@ public final class WildcardType extends Type {
 
 	public void setExtends(final ReferenceType ext) {
 		this.ext = ext;
+		setAsParentNodeOf(this.ext);
 	}
 
 	public void setSuper(final ReferenceType sup) {
 		this.sup = sup;
+		setAsParentNodeOf(this.sup);
 	}
 
 }

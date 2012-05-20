@@ -178,5 +178,6 @@ public final class MethodDeclaration extends BodyDeclaration {
 
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
 		this.typeParameters = typeParameters;
+		setAsParentNodeOf(typeParameters);
 	}
 }

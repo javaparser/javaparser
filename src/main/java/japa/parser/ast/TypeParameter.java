@@ -56,15 +56,15 @@ public final class TypeParameter extends Node {
 	}
 
 	public TypeParameter(final String name, final List<ClassOrInterfaceType> typeBound) {
-		this.name = name;
-		this.typeBound = typeBound;
+		setName(name);
+		setTypeBound(typeBound);
 	}
 
 	public TypeParameter(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final String name, final List<ClassOrInterfaceType> typeBound) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.name = name;
-		this.typeBound = typeBound;
+		setName(name);
+		setTypeBound(typeBound);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -112,6 +112,7 @@ public final class TypeParameter extends Node {
 	 */
 	public void setTypeBound(final List<ClassOrInterfaceType> typeBound) {
 		this.typeBound = typeBound;
+		setAsParentNodeOf(typeBound);
 	}
 
 }
