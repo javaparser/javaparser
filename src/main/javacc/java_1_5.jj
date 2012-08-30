@@ -2912,12 +2912,17 @@ IfStmt IfStatement():
 	int line;
 	int column;
        Comment cmmt = getComment();
+       Comment thenCmmt = null;
+       Comment elseCmmt = null;
 }
 {
-  "if" {line=token.beginLine; column=token.beginColumn;} "(" condition = Expression() ")" thenStmt = Statement() [ LOOKAHEAD(1) "else" elseStmt = Statement() ]
+  "if" {line=token.beginLine; column=token.beginColumn;} "(" condition = Expression() ")" {thenCmmt = getComment();} thenStmt = Statement() [ LOOKAHEAD(1) "else" {elseCmmt = getComment();} elseStmt = Statement() ]
   { 
       IfStmt tmp = new IfStmt(line, column, token.endLine, token.endColumn,condition, thenStmt, elseStmt);
-      tmp.setComment(cmmt); 
+      tmp.setComment(cmmt);
+      thenStmt.setComment(thenCmmt);
+      if (elseStmt != null)
+          elseStmt.setComment(elseCmmt);
       return tmp;
   }
 }
