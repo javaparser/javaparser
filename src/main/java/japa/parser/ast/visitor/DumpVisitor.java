@@ -1185,11 +1185,32 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printer.print("if (");
 		n.getCondition().accept(this, arg);
-		printer.print(") ");
+		final boolean thenBlock = n.getThenStmt() instanceof BlockStmt;
+		if (thenBlock) // block statement should start on the same line
+			printer.print(") ");
+		else {
+			printer.printLn(")");
+			printer.indent();
+		}
 		n.getThenStmt().accept(this, arg);
+		if (!thenBlock)
+			printer.unindent();
 		if (n.getElseStmt() != null) {
-			printer.print(" else ");
+			if (thenBlock)
+				printer.print(" ");
+			else
+				printer.printLn();
+			final boolean elseIf = n.getElseStmt() instanceof IfStmt;
+			final boolean elseBlock = n.getElseStmt() instanceof BlockStmt;
+			if (elseIf || elseBlock) // put chained if and start of block statement on a same level
+				printer.print("else ");
+			else {
+				printer.printLn("else");
+				printer.indent();
+			}
 			n.getElseStmt().accept(this, arg);
+			if (!(elseIf || elseBlock))
+				printer.unindent();
 		}
 	}
 
