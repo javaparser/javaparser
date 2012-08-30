@@ -46,26 +46,26 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration {
     }
 
     public AnnotationMemberDeclaration(int modifiers, Type type, String name, Expression defaultValue) {
-        this.modifiers = modifiers;
-        this.type = type;
-        this.name = name;
-        this.defaultValue = defaultValue;
+        setModifiers(modifiers);
+        setType(type);
+        setName(name);
+        setDefaultValue(defaultValue);
     }
 
     public AnnotationMemberDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
         super(annotations, javaDoc);
-        this.modifiers = modifiers;
-        this.type = type;
-        this.name = name;
-        this.defaultValue = defaultValue;
+        setModifiers(modifiers);
+        setType(type);
+        setName(name);
+        setDefaultValue(defaultValue);
     }
 
     public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
         super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
-        this.modifiers = modifiers;
-        this.type = type;
-        this.name = name;
-        this.defaultValue = defaultValue;
+        setModifiers(modifiers);
+        setType(type);
+        setName(name);
+        setDefaultValue(defaultValue);
     }
 
     @Override
@@ -114,5 +114,6 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration {
 
     public void setType(Type type) {
         this.type = type;
+        setAsParentNodeOf(type);
     }
 }
