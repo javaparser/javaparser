@@ -263,7 +263,16 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
             teste = new DumperTestClass(1);
             x = x == 0 ? 2 : 4;
         }
-        if (true) x = 1; else x = 3;
+        if (true)
+            x = 1;
+        else
+            x = 3;
+        if (true)
+            x = 1;
+        else if (false)
+            x = 3;
+        else
+            x = 2;
         while (true) {
             xxx: while (x == 3) continue xxx;
             break;
