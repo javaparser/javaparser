@@ -110,47 +110,50 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(PackageDeclaration _n, Object _arg) {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		NameExpr name = cloneNodes(_n.getName(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new PackageDeclaration(
+		PackageDeclaration r = new PackageDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				annotations, name
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ImportDeclaration _n, Object _arg) {
 		NameExpr name = cloneNodes(_n.getName(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ImportDeclaration(
+		ImportDeclaration r = new ImportDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				name, _n.isStatic(), _n.isAsterisk()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(TypeParameter _n, Object _arg) {
 		List<ClassOrInterfaceType> typeBound = visit(_n.getTypeBound(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new TypeParameter(
+		TypeParameter r = new TypeParameter(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getName(), typeBound
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(LineComment _n, Object _arg) {
-		return new LineComment(
-				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				_n.getContent()
-		);
+		return new LineComment(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getContent());
 	}
 
 	@Override
 	public Node visit(BlockComment _n, Object _arg) {
-		return new BlockComment(
-				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				_n.getContent()
-		);
+		return new BlockComment(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getContent());
 	}
 
 	@Override
@@ -161,12 +164,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<ClassOrInterfaceType> extendsList = visit(_n.getExtends(), _arg);
 		List<ClassOrInterfaceType> implementsList = visit(_n.getImplements(), _arg);
 		List<BodyDeclaration> members = visit(_n.getMembers(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ClassOrInterfaceDeclaration(
+		ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, _n.isInterface(), _n.getName(),
-				typeParameters, extendsList, implementsList, members
+				javaDoc, _n.getModifiers(), annotations, _n.isInterface(), _n.getName(), typeParameters, extendsList, implementsList, members
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -176,21 +181,27 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<ClassOrInterfaceType> implementsList = visit(_n.getImplements(), _arg);
 		List<EnumConstantDeclaration> entries = visit(_n.getEntries(), _arg);
 		List<BodyDeclaration> members = visit(_n.getMembers(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new EnumDeclaration(
+		EnumDeclaration r = new EnumDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc, _n.getModifiers(), annotations, _n.getName(), implementsList, entries, members
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(EmptyTypeDeclaration _n, Object _arg) {
 		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new EmptyTypeDeclaration(
+		EmptyTypeDeclaration r = new EmptyTypeDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -199,11 +210,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
 		List<BodyDeclaration> classBody = visit(_n.getClassBody(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new EnumConstantDeclaration(
+		EnumConstantDeclaration r = new EnumConstantDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc, annotations, _n.getName(), args, classBody
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -211,11 +225,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		List<BodyDeclaration> members = visit(_n.getMembers(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new AnnotationDeclaration(
+		AnnotationDeclaration r = new AnnotationDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc, _n.getModifiers(), annotations, _n.getName(), members
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -224,11 +241,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		Expression defaultValue = cloneNodes(_n.getDefaultValue(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new AnnotationMemberDeclaration(
+		AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc, _n.getModifiers(), annotations, type_, _n.getName(), defaultValue
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -237,30 +257,40 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		List<VariableDeclarator> variables = visit(_n.getVariables(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new FieldDeclaration(
+		FieldDeclaration r = new FieldDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc, _n.getModifiers(), annotations, type_, variables
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(VariableDeclarator _n, Object _arg) {
 		VariableDeclaratorId id = cloneNodes(_n.getId(), _arg);
 		Expression init = cloneNodes(_n.getInit(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new VariableDeclarator(
+		VariableDeclarator r = new VariableDeclarator(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				id, init
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(VariableDeclaratorId _n, Object _arg) {
-		return new VariableDeclaratorId(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		VariableDeclaratorId r = new VariableDeclaratorId(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getName(), _n.getArrayCount()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -271,11 +301,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<Parameter> parameters = visit(_n.getParameters(), _arg);
 		List<NameExpr> throws_ = visit(_n.getThrows(), _arg);
 		BlockStmt block = cloneNodes(_n.getBlock(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ConstructorDeclaration(
+		ConstructorDeclaration r = new ConstructorDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc, _n.getModifiers(), annotations, typeParameters, _n.getName(), parameters, throws_, block
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -287,12 +320,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<Parameter> parameters = visit(_n.getParameters(), _arg);
 		List<NameExpr> throws_ = visit(_n.getThrows(), _arg);
 		BlockStmt block = cloneNodes(_n.getBody(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new MethodDeclaration(
+		MethodDeclaration r = new MethodDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, typeParameters, type_, _n.getName(),
-				parameters, _n.getArrayCount(), throws_, block
+				javaDoc, _n.getModifiers(), annotations, typeParameters, type_, _n.getName(), parameters, _n.getArrayCount(), throws_, block
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -300,107 +335,141 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		VariableDeclaratorId id = cloneNodes(_n.getId(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new Parameter(
+		Parameter r = new Parameter(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getModifiers(), annotations, type_, _n.isVarArgs(), id
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(EmptyMemberDeclaration _n, Object _arg) {
 		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new EmptyMemberDeclaration(
+		EmptyMemberDeclaration r = new EmptyMemberDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(InitializerDeclaration _n, Object _arg) {
 		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		BlockStmt block = cloneNodes(_n.getBlock(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new InitializerDeclaration(
+		InitializerDeclaration r = new InitializerDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				javaDoc, _n.isStatic(), block
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(JavadocComment _n, Object _arg) {
-		return new JavadocComment(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+		JavadocComment r = new JavadocComment(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getContent()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ClassOrInterfaceType _n, Object _arg) {
 		ClassOrInterfaceType scope = cloneNodes(_n.getScope(), _arg);
 		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ClassOrInterfaceType(
+		ClassOrInterfaceType r = new ClassOrInterfaceType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				scope, _n.getName(), typeArgs
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(PrimitiveType _n, Object _arg) {
-		return new PrimitiveType(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		PrimitiveType r = new PrimitiveType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getType()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ReferenceType _n, Object _arg) {
 		Type type_ = cloneNodes(_n.getType(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ReferenceType(
+		ReferenceType r = new ReferenceType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				type_, _n.getArrayCount()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(VoidType _n, Object _arg) {
-		return new VoidType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		VoidType r = new VoidType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(WildcardType _n, Object _arg) {
 		ReferenceType ext = cloneNodes(_n.getExtends(), _arg);
 		ReferenceType sup = cloneNodes(_n.getSuper(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new WildcardType(
+		WildcardType r = new WildcardType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				ext, sup
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ArrayAccessExpr _n, Object _arg) {
 		Expression name = cloneNodes(_n.getName(), _arg);
 		Expression index = cloneNodes(_n.getIndex(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ArrayAccessExpr(
+		ArrayAccessExpr r = new ArrayAccessExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				name, index
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ArrayCreationExpr _n, Object _arg) {
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		List<Expression> dimensions = visit(_n.getDimensions(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		ArrayCreationExpr r = new ArrayCreationExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				type_, dimensions, _n.getArrayCount()
 		);
+		r.setComment(comment);
 		if (_n.getInitializer() != null) // ArrayCreationExpr has two mutually exclusive constructors
 			r.setInitializer(cloneNodes(_n.getInitializer(), _arg));
 		return r;
@@ -409,54 +478,68 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(ArrayInitializerExpr _n, Object _arg) {
 		List<Expression> values = visit(_n.getValues(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ArrayInitializerExpr(
+		ArrayInitializerExpr r = new ArrayInitializerExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				values
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(AssignExpr _n, Object _arg) {
 		Expression target = cloneNodes(_n.getTarget(), _arg);
 		Expression value = cloneNodes(_n.getValue(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new AssignExpr(
+		AssignExpr r = new AssignExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				target, value, _n.getOperator()
-		);
+				target, value, _n.getOperator());
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(BinaryExpr _n, Object _arg) {
 		Expression left = cloneNodes(_n.getLeft(), _arg);
 		Expression right = cloneNodes(_n.getRight(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new BinaryExpr(
+		BinaryExpr r = new BinaryExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				left, right, _n.getOperator()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(CastExpr _n, Object _arg) {
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new CastExpr(
+		CastExpr r = new CastExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				type_, expr
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ClassExpr _n, Object _arg) {
 		Type type_ = cloneNodes(_n.getType(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ClassExpr(
+		ClassExpr r = new ClassExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				type_
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -464,106 +547,153 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Expression condition = cloneNodes(_n.getCondition(), _arg);
 		Expression thenExpr = cloneNodes(_n.getThenExpr(), _arg);
 		Expression elseExpr = cloneNodes(_n.getElseExpr(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ConditionalExpr(
+		ConditionalExpr r = new ConditionalExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				condition, thenExpr, elseExpr
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(EnclosedExpr _n, Object _arg) {
 		Expression inner = cloneNodes(_n.getInner(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new EnclosedExpr(
+		EnclosedExpr r = new EnclosedExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				inner
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(FieldAccessExpr _n, Object _arg) {
 		Expression scope = cloneNodes(_n.getScope(), _arg);
 		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new FieldAccessExpr(
+		FieldAccessExpr r = new FieldAccessExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				scope, typeArgs, _n.getField()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(InstanceOfExpr _n, Object _arg) {
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new InstanceOfExpr(
+		InstanceOfExpr r = new InstanceOfExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				expr, type_
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(StringLiteralExpr _n, Object _arg) {
-		return new StringLiteralExpr(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+		StringLiteralExpr r = new StringLiteralExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getValue()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(IntegerLiteralExpr _n, Object _arg) {
-		return new IntegerLiteralExpr(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		IntegerLiteralExpr r = new IntegerLiteralExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getValue()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(LongLiteralExpr _n, Object _arg) {
-		return new LongLiteralExpr(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		LongLiteralExpr r = new LongLiteralExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getValue()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(IntegerLiteralMinValueExpr _n, Object _arg) {
-		return new IntegerLiteralMinValueExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		IntegerLiteralMinValueExpr r = new IntegerLiteralMinValueExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(LongLiteralMinValueExpr _n, Object _arg) {
-		return new LongLiteralMinValueExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		LongLiteralMinValueExpr r = new LongLiteralMinValueExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(CharLiteralExpr _n, Object _arg) {
-		return new CharLiteralExpr(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		CharLiteralExpr r = new CharLiteralExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getValue()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(DoubleLiteralExpr _n, Object _arg) {
-		return new DoubleLiteralExpr(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		DoubleLiteralExpr r = new DoubleLiteralExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getValue()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(BooleanLiteralExpr _n, Object _arg) {
-		return new BooleanLiteralExpr(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		BooleanLiteralExpr r = new BooleanLiteralExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getValue()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(NullLiteralExpr _n, Object _arg) {
-		return new NullLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		NullLiteralExpr r = new NullLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -571,19 +701,26 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Expression scope = cloneNodes(_n.getScope(), _arg);
 		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new MethodCallExpr(
+		MethodCallExpr r = new MethodCallExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				scope, typeArgs, _n.getName(), args
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(NameExpr _n, Object _arg) {
-		return new NameExpr(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		NameExpr r = new NameExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getName()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -593,50 +730,66 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
 		List<BodyDeclaration> anonymousBody = visit(_n.getAnonymousClassBody(), _arg);
-		return new ObjectCreationExpr(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		ObjectCreationExpr r = new ObjectCreationExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				scope, type_, typeArgs, args, anonymousBody
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(QualifiedNameExpr _n, Object _arg) {
 		NameExpr scope = cloneNodes(_n.getQualifier(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new QualifiedNameExpr(
+		QualifiedNameExpr r = new QualifiedNameExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				scope, _n.getName()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ThisExpr _n, Object _arg) {
 		Expression classExpr = cloneNodes(_n.getClassExpr(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ThisExpr(
+		ThisExpr r = new ThisExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				classExpr
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(SuperExpr _n, Object _arg) {
 		Expression classExpr = cloneNodes(_n.getClassExpr(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new SuperExpr(
+		SuperExpr r = new SuperExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				classExpr
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(UnaryExpr _n, Object _arg) {
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new UnaryExpr(
+		UnaryExpr r = new UnaryExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				expr, _n.getOperator()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -644,53 +797,68 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		List<VariableDeclarator> vars = visit(_n.getVars(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new VariableDeclarationExpr(
+		VariableDeclarationExpr r = new VariableDeclarationExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getModifiers(), annotations, type_, vars
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(MarkerAnnotationExpr _n, Object _arg) {
 		NameExpr name = cloneNodes(_n.getName(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new MarkerAnnotationExpr(
+		MarkerAnnotationExpr r = new MarkerAnnotationExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				name
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(SingleMemberAnnotationExpr _n, Object _arg) {
 		NameExpr name = cloneNodes(_n.getName(), _arg);
 		Expression memberValue = cloneNodes(_n.getMemberValue(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new SingleMemberAnnotationExpr(
+		SingleMemberAnnotationExpr r = new SingleMemberAnnotationExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				name, memberValue
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(NormalAnnotationExpr _n, Object _arg) {
 		NameExpr name = cloneNodes(_n.getName(), _arg);
 		List<MemberValuePair> pairs = visit(_n.getPairs(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new NormalAnnotationExpr(
+		NormalAnnotationExpr r = new NormalAnnotationExpr(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				name, pairs
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(MemberValuePair _n, Object _arg) {
 		Expression value = cloneNodes(_n.getValue(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new MemberValuePair(
+		MemberValuePair r = new MemberValuePair(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getName(), value
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -698,107 +866,142 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ExplicitConstructorInvocationStmt(
+		ExplicitConstructorInvocationStmt r = new ExplicitConstructorInvocationStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				typeArgs, _n.isThis(), expr, args
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(TypeDeclarationStmt _n, Object _arg) {
 		TypeDeclaration typeDecl = cloneNodes(_n.getTypeDeclaration(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new TypeDeclarationStmt(
+		TypeDeclarationStmt r = new TypeDeclarationStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				typeDecl
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(AssertStmt _n, Object _arg) {
 		Expression check = cloneNodes(_n.getCheck(), _arg);
 		Expression message = cloneNodes(_n.getMessage(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new AssertStmt(
+		AssertStmt r = new AssertStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				check, message
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(BlockStmt _n, Object _arg) {
 		List<Statement> stmts = visit(_n.getStmts(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new BlockStmt(
+		BlockStmt r = new BlockStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				stmts
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(LabeledStmt _n, Object _arg) {
 		Statement stmt = cloneNodes(_n.getStmt(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new LabeledStmt(
+		LabeledStmt r = new LabeledStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getLabel(), stmt
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(EmptyStmt _n, Object _arg) {
-		return new EmptyStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		EmptyStmt r = new EmptyStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn());
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ExpressionStmt _n, Object _arg) {
 		Expression expr = cloneNodes(_n.getExpression(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ExpressionStmt(
+		ExpressionStmt r = new ExpressionStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				expr
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(SwitchStmt _n, Object _arg) {
 		Expression selector = cloneNodes(_n.getSelector(), _arg);
 		List<SwitchEntryStmt> entries = visit(_n.getEntries(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new SwitchStmt(
+		SwitchStmt r = new SwitchStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				selector, entries
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(SwitchEntryStmt _n, Object _arg) {
 		Expression label = cloneNodes(_n.getLabel(), _arg);
 		List<Statement> stmts = visit(_n.getStmts(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new SwitchEntryStmt(
+		SwitchEntryStmt r = new SwitchEntryStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				label, stmts
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(BreakStmt _n, Object _arg) {
-		return new BreakStmt(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		BreakStmt r = new BreakStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getId()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ReturnStmt _n, Object _arg) {
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ReturnStmt(
+		ReturnStmt r = new ReturnStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				expr
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -806,41 +1009,54 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Expression condition = cloneNodes(_n.getCondition(), _arg);
 		Statement thenStmt = cloneNodes(_n.getThenStmt(), _arg);
 		Statement elseStmt = cloneNodes(_n.getElseStmt(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new IfStmt(
+		IfStmt r = new IfStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				condition, thenStmt, elseStmt
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(WhileStmt _n, Object _arg) {
 		Expression condition = cloneNodes(_n.getCondition(), _arg);
 		Statement body = cloneNodes(_n.getBody(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new WhileStmt(
+		WhileStmt r = new WhileStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				condition, body
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ContinueStmt _n, Object _arg) {
-		return new ContinueStmt(
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		ContinueStmt r = new ContinueStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getId()
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(DoStmt _n, Object _arg) {
 		Statement body = cloneNodes(_n.getBody(), _arg);
 		Expression condition = cloneNodes(_n.getCondition(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new DoStmt(
+		DoStmt r = new DoStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				body, condition
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -848,11 +1064,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		VariableDeclarationExpr var = cloneNodes(_n.getVariable(), _arg);
 		Expression iterable = cloneNodes(_n.getIterable(), _arg);
 		Statement body = cloneNodes(_n.getBody(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ForeachStmt(
+		ForeachStmt r = new ForeachStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				var, iterable, body
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -861,29 +1080,41 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Expression compare = cloneNodes(_n.getCompare(), _arg);
 		List<Expression> update = visit(_n.getUpdate(), _arg);
 		Statement body = cloneNodes(_n.getBody(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ForStmt(
+		ForStmt r = new ForStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				init, compare, update, body
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(ThrowStmt _n, Object _arg) {
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new ThrowStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr);
+		ThrowStmt r = new ThrowStmt(
+				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
+				expr
+		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(SynchronizedStmt _n, Object _arg) {
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
 		BlockStmt block = cloneNodes(_n.getBlock(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new SynchronizedStmt(
+		SynchronizedStmt r = new SynchronizedStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				expr, block
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -891,22 +1122,28 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		BlockStmt tryBlock = cloneNodes(_n.getTryBlock(), _arg);
 		List<CatchClause> catchs = visit(_n.getCatchs(), _arg);
 		BlockStmt finallyBlock = cloneNodes(_n.getFinallyBlock(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new TryStmt(
+		TryStmt r = new TryStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				tryBlock, catchs, finallyBlock
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
 	public Node visit(CatchClause _n, Object _arg) {
 		Parameter except = cloneNodes(_n.getExcept(), _arg);
 		BlockStmt catchBlock = cloneNodes(_n.getCatchBlock(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
 
-		return new CatchClause(
+		CatchClause r = new CatchClause(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				except, catchBlock
 		);
+		r.setComment(comment);
+		return r;
 	}
 
 	public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {
