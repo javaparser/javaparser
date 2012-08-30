@@ -105,6 +105,7 @@ public final class Parameter extends Node {
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
+		setAsParentNodeOf(this.annotations);
     }
 
     public void setId(VariableDeclaratorId id) {
