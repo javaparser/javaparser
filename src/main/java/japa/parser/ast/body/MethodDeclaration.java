@@ -42,7 +42,7 @@ public final class MethodDeclaration extends BodyDeclaration {
 
 	private Type type;
 
-	private String name;
+	private NameExpr name;
 
 	private List<Parameter> parameters;
 
@@ -125,8 +125,12 @@ public final class MethodDeclaration extends BodyDeclaration {
 	}
 
 	public String getName() {
-		return name;
+		return name.getName();
 	}
+
+    public NameExpr getNameExpr() {
+        return name;
+    }
 
 	public List<Parameter> getParameters() {
 		return parameters;
@@ -158,8 +162,12 @@ public final class MethodDeclaration extends BodyDeclaration {
 	}
 
 	public void setName(final String name) {
-		this.name = name;
+		this.name = new NameExpr(name);
 	}
+
+    public void setNameExpr(final NameExpr name) {
+        this.name = name;
+    }
 
 	public void setParameters(final List<Parameter> parameters) {
 		this.parameters = parameters;

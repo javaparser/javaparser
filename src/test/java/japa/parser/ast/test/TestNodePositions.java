@@ -165,6 +165,7 @@ public class TestNodePositions {
 
 		@Override public void visit(final AnnotationDeclaration n, final Object arg) {
 			doTest(source, n);
+			doTest(source, n.getNameExpr());
 			super.visit(n, arg);
 		}
 
@@ -245,6 +246,7 @@ public class TestNodePositions {
 
 		@Override public void visit(final ClassOrInterfaceDeclaration n, final Object arg) {
 			doTest(source, n);
+			doTest(source, n.getNameExpr());
 			super.visit(n, arg);
 		}
 
@@ -310,6 +312,7 @@ public class TestNodePositions {
 
 		@Override public void visit(final EnumDeclaration n, final Object arg) {
 			doTest(source, n);
+			doTest(source, n.getNameExpr());
 			super.visit(n, arg);
 		}
 
@@ -415,6 +418,7 @@ public class TestNodePositions {
 
 		@Override public void visit(final MethodDeclaration n, final Object arg) {
 			doTest(source, n);
+			doTest(source, n.getNameExpr());
 			super.visit(n, arg);
 		}
 
