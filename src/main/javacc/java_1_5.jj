@@ -154,7 +154,7 @@ final class ASTParser {
         }
     }
 
-    private ArrayList<Token> special_tokens = null;
+    private Set<Token> special_tokens = null;
 
     // this function will return comments associated with
     // next token
@@ -169,7 +169,7 @@ final class ASTParser {
         }
 
         if (special_tokens == null) {
-            special_tokens = new ArrayList<Token>();
+            special_tokens = new HashSet<Token>();
         }
         
         if (special_tokens.contains(token)) {
