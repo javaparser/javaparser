@@ -22,6 +22,7 @@
 package japa.parser.ast.body;
 
 import japa.parser.ast.expr.AnnotationExpr;
+import japa.parser.ast.expr.NameExpr;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public abstract class TypeDeclaration extends BodyDeclaration {
 
-	private String name;
+	private NameExpr name;
 
 	private int modifiers;
 
@@ -78,7 +79,7 @@ public abstract class TypeDeclaration extends BodyDeclaration {
 	}
 
 	public final String getName() {
-		return name;
+		return name.getName();
 	}
 
 	public void setMembers(List<BodyDeclaration> members) {
@@ -91,6 +92,14 @@ public abstract class TypeDeclaration extends BodyDeclaration {
 	}
 
 	public final void setName(String name) {
-		this.name = name;
+		this.name = new NameExpr(name);
 	}
+
+  public final void setNameExpr(NameExpr nameExpr) {
+    this.name = nameExpr;
+  }
+
+  public final NameExpr getNameExpr() {
+    return name;
+  }
 }
