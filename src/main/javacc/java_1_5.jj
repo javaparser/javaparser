@@ -154,7 +154,7 @@ final class ASTParser {
         }
     }
 
-    private Set<Token> special_tokens = null;
+    private Token last_special_token = null;
 
     // this function will return comments associated with
     // next token
@@ -167,17 +167,12 @@ final class ASTParser {
         if(comments == null) {
             comments = new LinkedList<Comment>();
         }
-
-        if (special_tokens == null) {
-            special_tokens = new HashSet<Token>();
-        }
         
-        if (special_tokens.contains(token)) {
+        if (last_special_token != null && last_special_token.equals(token)) {
             // do not return the same token's comment more than once 
             return null;
-        } else {
-            special_tokens.add(token);
         }
+        last_special_token = token;
         
         // multiple comments are linked together
         // by using the setComment(Comment cmmt)
