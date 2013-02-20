@@ -44,7 +44,6 @@
 		<!-- Maven Plugins -->
 		<javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
-		<wagon-ssh.version>2.3</wagon-ssh.version>
 
 		<!-- Test Dependencies -->
 		<junit.version>4.8.1</junit.version>
@@ -52,19 +51,13 @@
 	</properties>
 
 	<scm>
-		<url>http://code.google.com/p/javaparser/source/browse/</url>
-		<connection>svn:http://javaparser.googlecode.com/svn/branches/mavenized/JavaParser</connection>
-		<developerConnection>svn:https://javaparser.googlecode.com/svn/branches/mavenized/JavaParser</developerConnection>
+		<connection>scm:git:git://github.com/matozoid/javaparser.git</connection>
+		<developerConnection>scm:git:git@github.com:matozoid/javaparser.git</developerConnection>
+		<url>https://github.com/matozoid/javaparser.git</url>
+		<tag>HEAD</tag>
 	</scm>
 
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.jvnet.wagon-svn</groupId>
-				<artifactId>wagon-svn</artifactId>
-				<version>1.9</version>
-			</extension>
-		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
