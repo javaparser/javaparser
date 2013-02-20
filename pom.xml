@@ -1,21 +1,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>japa.javaparser</groupId>
 	<artifactId>javaparser</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.9-SNAPSHOT</version>
+
 	<name>javaparser</name>
 	<url>http://code.google.com/p/javaparser/</url>
+	<inceptionYear>2007</inceptionYear>
 	<description>This package contains a Java 1.5 Parser with AST generation and visitor support. 
 		The AST records the source code structure, javadoc and comments. Soon will be 
 		possible change the AST nodes or create new ones to modify source code like refactoring.
 		This parser is based on Sreenivasa Viswanadha Java 1.5 parser.</description>
+
 	<issueManagement>
 		<system>Google Code</system>
 		<url>http://code.google.com/p/javaparser/issues/list</url>
 	</issueManagement>
-	<inceptionYear>2007</inceptionYear>
+
+
 	<developers>
 		<developer>
 			<name>Júlio Vilmar Gesser</name>
@@ -31,14 +36,27 @@
 			<organizationUrl>http://www.Soluvas.com/</organizationUrl>
 		</contributor>
 	</contributors>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.6</java.version>
+
+		<!-- Maven Plugins -->
+		<javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<wagon-ssh.version>2.3</wagon-ssh.version>
+
+		<!-- Test Dependencies -->
+		<junit.version>4.8.1</junit.version>
+
 	</properties>
+
 	<scm>
 		<url>http://code.google.com/p/javaparser/source/browse/</url>
 		<connection>svn:http://javaparser.googlecode.com/svn/branches/mavenized/JavaParser</connection>
 		<developerConnection>svn:https://javaparser.googlecode.com/svn/branches/mavenized/JavaParser</developerConnection>
 	</scm>
+
 	<distributionManagement>
 		<downloadUrl>http://code.google.com/p/javaparser/downloads/list</downloadUrl>
 		<repository>
@@ -52,6 +70,7 @@
 			<url>svn:https://javaparser.googlecode.com/svn/maven2-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+
 	<build>
 		<extensions>
 			<extension>
@@ -64,17 +83,17 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<!-- http://maven.apache.org/plugins/maven-compiler-plugin/ -->
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>javacc-maven-plugin</artifactId>
-				<version>2.6</version>
+				<version>${javacc-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>javacc</id>
@@ -87,7 +106,7 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -121,14 +140,16 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>java.net.m2</id>
@@ -138,4 +159,5 @@
 			</snapshots>
 		</repository>
 	</repositories>
+
 </project>
