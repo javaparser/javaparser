@@ -21,12 +21,6 @@
 		possible change the AST nodes or create new ones to modify source code like refactoring.
 		This parser is based on Sreenivasa Viswanadha Java 1.5 parser.</description>
 
-	<issueManagement>
-		<system>Google Code</system>
-		<url>http://code.google.com/p/javaparser/issues/list</url>
-	</issueManagement>
-
-
 	<developers>
 		<developer>
 			<name>Júlio Vilmar Gesser</name>
@@ -63,6 +57,11 @@
 		<url>https://github.com/matozoid/javaparser.git</url>
 		<tag>HEAD</tag>
 	</scm>
+
+	<issueManagement>
+		<system>GitHub Issue Tracker</system>
+		<url>https://github.com/matozoid/javaparser/issues</url>
+	</issueManagement>
 
 	<build>
 		<plugins>
