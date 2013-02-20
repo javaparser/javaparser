@@ -57,20 +57,6 @@
 		<developerConnection>svn:https://javaparser.googlecode.com/svn/branches/mavenized/JavaParser</developerConnection>
 	</scm>
 
-	<distributionManagement>
-		<downloadUrl>http://code.google.com/p/javaparser/downloads/list</downloadUrl>
-		<repository>
-			<id>javaparser-release</id>
-			<name>JavaParser release repository</name>
-			<url>svn:https://javaparser.googlecode.com/svn/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>javaparser-snapshots</id>
-			<name>JavaParser snapshots repository</name>
-			<url>svn:https://javaparser.googlecode.com/svn/maven2-snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 	<build>
 		<extensions>
 			<extension>
@@ -149,15 +135,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>java.net.m2</id>
-			<url>http://download.java.net/maven/2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 </project>
