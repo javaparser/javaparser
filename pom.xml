@@ -8,7 +8,7 @@
 		<version>7</version>
 	</parent>
 
-	<groupId>japa.javaparser</groupId>
+	<groupId>com.google.code.javaparser</groupId>
 	<artifactId>javaparser</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.9-SNAPSHOT</version>
