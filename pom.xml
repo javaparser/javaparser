@@ -57,9 +57,9 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:git://github.com/matozoid/javaparser.git</connection>
-		<developerConnection>scm:git:git@github.com:matozoid/javaparser.git</developerConnection>
-		<url>https://github.com/matozoid/javaparser.git</url>
+		<connection>scm:git:git://github.com/before/javaparser.git</connection>
+		<developerConnection>scm:git:git@github.com:before/javaparser.git</developerConnection>
+		<url>https://github.com/before/javaparser.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
