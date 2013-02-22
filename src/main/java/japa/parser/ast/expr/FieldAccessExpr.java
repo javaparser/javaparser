@@ -36,7 +36,7 @@ public final class FieldAccessExpr extends Expression {
 
 	private List<Type> typeArgs;
 
-	private String field;
+	private NameExpr field;
 
 	public FieldAccessExpr() {
 	}
@@ -63,6 +63,10 @@ public final class FieldAccessExpr extends Expression {
 	}
 
 	public String getField() {
+		return field.getName();
+	}
+
+	public NameExpr getFieldExpr() {
 		return field;
 	}
 
@@ -75,6 +79,10 @@ public final class FieldAccessExpr extends Expression {
 	}
 
 	public void setField(final String field) {
+		this.field = new NameExpr(field);
+	}
+
+	public void setFieldExpr(NameExpr field) {
 		this.field = field;
 	}
 
