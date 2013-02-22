@@ -1,21 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>japa.javaparser</groupId>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+	<groupId>com.google.code.javaparser</groupId>
 	<artifactId>javaparser</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.9-SNAPSHOT</version>
+	<version>1.0.10-SNAPSHOT</version>
+
 	<name>javaparser</name>
 	<url>http://code.google.com/p/javaparser/</url>
+	<inceptionYear>2007</inceptionYear>
 	<description>This package contains a Java 1.5 Parser with AST generation and visitor support. 
 		The AST records the source code structure, javadoc and comments. Soon will be 
 		possible change the AST nodes or create new ones to modify source code like refactoring.
 		This parser is based on Sreenivasa Viswanadha Java 1.5 parser.</description>
-	<issueManagement>
-		<system>Google Code</system>
-		<url>http://code.google.com/p/javaparser/issues/list</url>
-	</issueManagement>
-	<inceptionYear>2007</inceptionYear>
+
 	<developers>
 		<developer>
 			<name>Júlio Vilmar Gesser</name>
@@ -31,64 +35,129 @@
 			<organizationUrl>http://www.Soluvas.com/</organizationUrl>
 		</contributor>
 	</contributors>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.6</java.version>
+
+		<!-- Maven Plugins -->
+		<build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
+		<javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
+		<maven-clean-plugin.version>2.5</maven-clean-plugin.version>
+		<maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
+		<maven-install-plugin.version>2.4</maven-install-plugin.version>
+		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+		<maven-resources-plugin.version>2.6</maven-resources-plugin.version>
+		<maven-surefire-plugin.version>2.13</maven-surefire-plugin.version>
+
+		<!-- Test Dependencies -->
+		<junit.version>4.11</junit.version>
+
 	</properties>
+
 	<scm>
-		<url>http://code.google.com/p/javaparser/source/browse/</url>
-		<connection>svn:http://javaparser.googlecode.com/svn/branches/mavenized/JavaParser</connection>
-		<developerConnection>svn:https://javaparser.googlecode.com/svn/branches/mavenized/JavaParser</developerConnection>
+		<connection>scm:git:git://github.com/before/javaparser.git</connection>
+		<developerConnection>scm:git:git@github.com:before/javaparser.git</developerConnection>
+		<url>https://github.com/before/javaparser.git</url>
+		<tag>HEAD</tag>
 	</scm>
-	<distributionManagement>
-		<downloadUrl>http://code.google.com/p/javaparser/downloads/list</downloadUrl>
-		<repository>
-			<id>javaparser-release</id>
-			<name>JavaParser release repository</name>
-			<url>svn:https://javaparser.googlecode.com/svn/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>javaparser-snapshots</id>
-			<name>JavaParser snapshots repository</name>
-			<url>svn:https://javaparser.googlecode.com/svn/maven2-snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+
+	<issueManagement>
+		<system>GitHub Issue Tracker</system>
+		<url>https://github.com/matozoid/javaparser/issues</url>
+	</issueManagement>
+
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.jvnet.wagon-svn</groupId>
-				<artifactId>wagon-svn</artifactId>
-				<version>1.9</version>
-			</extension>
-		</extensions>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-javacc-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/main/javacc</source>
+								<source>target/generated-sources/javacc</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
 				<configuration>
 					<!-- http://maven.apache.org/plugins/maven-compiler-plugin/ -->
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>javacc-maven-plugin</artifactId>
-				<version>2.6</version>
 				<executions>
 					<execution>
 						<id>javacc</id>
 						<goals>
 							<goal>javacc</goal>
 						</goals>
+						<configuration>
+							<grammarEncoding>${project.build.sourceEncoding}</grammarEncoding>
+							<jdkVersion>${java.version}</jdkVersion>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${build-helper-maven-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>javacc-maven-plugin</artifactId>
+					<version>${javacc-maven-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>${maven-clean-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>${maven-install-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>${maven-jar-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
 					<version>1.0.0</version>
@@ -111,7 +180,20 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -121,21 +203,14 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>java.net.m2</id>
-			<url>http://download.java.net/maven/2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+
 </project>
