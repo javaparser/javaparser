@@ -36,7 +36,7 @@ public final class MethodCallExpr extends Expression {
 
 	private List<Type> typeArgs;
 
-	private String name;
+	private NameExpr name;
 
 	private List<Expression> args;
 
@@ -76,6 +76,10 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public String getName() {
+		return name.getName();
+	}
+
+	public NameExpr getNameExpr() {
 		return name;
 	}
 
@@ -93,6 +97,10 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public void setName(final String name) {
+		this.name = new NameExpr(name);
+	}
+
+	public void setNameExpr(NameExpr name) {
 		this.name = name;
 	}
 

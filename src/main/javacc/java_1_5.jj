@@ -1959,6 +1959,19 @@ NameExpr Name():
   }
 }
 
+NameExpr SimpleName():
+{
+    NameExpr ret;
+       Comment cmmt = getComment();
+}
+{
+  <IDENTIFIER> { ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image); }
+  { 
+      ret.setComment(cmmt); 
+      return ret; 
+  }
+}
+
 List NameList():
 {
 	List ret = new LinkedList();
@@ -2396,7 +2409,7 @@ Expression PrimaryExpressionWithoutSuperSuffix():
 Expression PrimaryPrefix():
 {
 	Expression ret;
-	String name;
+	NameExpr name;
 	List typeArgs = null;
 	List args = null;
 	boolean hasArgs = false;
@@ -2414,12 +2427,18 @@ Expression PrimaryPrefix():
 	  "super" { ret = new SuperExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, null); }
 	  "."
 	  [ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
-	  <IDENTIFIER> { name = token.image; }
+	  name = SimpleName()
 	  [ args = Arguments() {hasArgs=true;} ]
 	  	{
-	  		ret = hasArgs
-	  			? new MethodCallExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, name, args)
-	  			: new FieldAccessExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, null, name);
+			if (hasArgs) {
+	  			MethodCallExpr m = new MethodCallExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, null, args);
+				m.setNameExpr(name);
+				ret = m;
+			} else {
+	  			FieldAccessExpr f = new FieldAccessExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, null, null);
+				f.setFieldExpr(name);
+				ret = f;
+			}
 	  	}
 	|
 	  "(" {line=token.beginLine; column=token.beginColumn;} ret = Expression() ")" { ret = new EnclosedExpr(line, column, token.endLine, token.endColumn,ret); }
@@ -2429,12 +2448,16 @@ Expression PrimaryPrefix():
 	  LOOKAHEAD( ResultType() "." "class" )
 	  type = ResultType() "." "class" { ret = new ClassExpr(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type); }
 	|
-	  	<IDENTIFIER> { name = token.image; line=token.beginLine; column=token.beginColumn; }
+	  	name = SimpleName() { line=token.beginLine; column=token.beginColumn; }
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
-	  		ret = hasArgs
-	  			? new MethodCallExpr(line, column, token.endLine, token.endColumn, null, null, name, args)
-	  			: new NameExpr(line, column, token.endLine, token.endColumn, name);
+	  		if (hasArgs) {
+	  			MethodCallExpr m = new MethodCallExpr(line, column, token.endLine, token.endColumn, null, null, null, args);
+				m.setNameExpr(name);
+				ret = m;
+			} else {
+	  			ret = name;
+			}
 	  	}
   )
   { 
@@ -2467,7 +2490,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	List typeArgs = null;
 	List args = null;
 	boolean hasArgs = false;
-	String name;
+	NameExpr name;
        Comment cmmt = getComment();
 }
 {
@@ -2481,12 +2504,18 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  |
 	  	LOOKAHEAD( [ TypeArguments() ] <IDENTIFIER> )
 	  	[ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
-	  	<IDENTIFIER> { name = token.image; }
+	  	name = SimpleName()
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
-	  		ret = hasArgs
-	  			? new MethodCallExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, typeArgs, name, args)
-	  			: new FieldAccessExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, typeArgs, name);
+			if (hasArgs) { 
+	  			MethodCallExpr m = new MethodCallExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, typeArgs, null, args);
+				m.setNameExpr(name);
+				ret = m;
+			} else {
+	  			FieldAccessExpr f =  new FieldAccessExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, typeArgs, null);
+				f.setFieldExpr(name);
+				ret = f;
+			}
 	  	}
 	)
 	|
