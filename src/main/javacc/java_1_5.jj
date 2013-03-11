@@ -1688,7 +1688,7 @@ Parameter FormalParameter():
 ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
 {
 	List typeParameters = null;
-	String name;
+	NameExpr name;
 	List parameters;
 	List throws_ = null;
 	ExplicitConstructorInvocationStmt exConsInv = null;
@@ -1704,7 +1704,7 @@ ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
 {
   [ typeParameters = TypeParameters() { int[] lineCol=(int[])typeParameters.remove(0); if(line==-1){ line=lineCol[0]; column=lineCol[1];} } ]
   // Modifiers matched in the caller
-  <IDENTIFIER> { name = token.image; if(line==-1){line=token.beginLine; column=token.beginColumn;}} parameters = FormalParameters() [ "throws" throws_ = NameList() ]
+  name = SimpleName() { if(line==-1){line=token.beginLine; column=token.beginColumn;}} parameters = FormalParameters() [ "throws" throws_ = NameList() ]
   "{" { bbLine=token.beginLine; bbColumn=token.beginColumn; }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
     stmts = Statements()
@@ -1714,7 +1714,8 @@ ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
   	if (exConsInv != null) {
   		stmts = add(0, stmts, exConsInv);
   	}
-  	ConstructorDeclaration tmp = new ConstructorDeclaration(line, column, token.endLine, token.endColumn,popJavadoc(), modifier.modifiers, modifier.annotations, typeParameters, name, parameters, throws_, new BlockStmt(bbLine, bbColumn, token.endLine, token.endColumn, stmts));
+  	ConstructorDeclaration tmp = new ConstructorDeclaration(line, column, token.endLine, token.endColumn,popJavadoc(), modifier.modifiers, modifier.annotations, typeParameters, null, parameters, throws_, new BlockStmt(bbLine, bbColumn, token.endLine, token.endColumn, stmts));
+    tmp.setNameExpr(name);
         tmp.setComment(cmmt); 
         return tmp;
   }

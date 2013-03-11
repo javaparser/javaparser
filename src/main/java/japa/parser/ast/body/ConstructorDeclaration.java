@@ -21,14 +21,14 @@
  */
 package japa.parser.ast.body;
 
+import java.util.List;
+
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
-
-import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -39,7 +39,7 @@ public final class ConstructorDeclaration extends BodyDeclaration {
 
     private List<TypeParameter> typeParameters;
 
-    private String name;
+    private NameExpr name;
 
     private List<Parameter> parameters;
 
@@ -100,7 +100,11 @@ public final class ConstructorDeclaration extends BodyDeclaration {
     }
 
     public String getName() {
-        return name;
+        return name.getName();
+    }
+
+    public NameExpr getNameExpr() {
+      return name;
     }
 
     public List<Parameter> getParameters() {
@@ -125,6 +129,10 @@ public final class ConstructorDeclaration extends BodyDeclaration {
     }
 
     public void setName(String name) {
+        this.name = new NameExpr(name);
+    }
+
+    public void setNameExpr(NameExpr name) {
         this.name = name;
     }
 
