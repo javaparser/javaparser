@@ -35,6 +35,12 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
 
     short sh1, sh2 = 1;
 
+    int intWithUnderscore = 1234_5678;
+
+    long longWithUnderscore = 1234_5678L;
+
+    int binaryLiteral = 0b101101;
+
     List<String>[][] arrLS = (List<String>[][]) new List<?>[10][];
 
     ;
