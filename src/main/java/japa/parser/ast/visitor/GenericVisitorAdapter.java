@@ -1407,9 +1407,11 @@ public abstract class GenericVisitorAdapter<R, A> implements
 	@Override
 	public R visit(final SynchronizedStmt n, final A arg) {
 		{
-			R result = n.getExpr().accept(this, arg);
-			if (result != null) {
-				return result;
+			if (n.getExpr() != null) {
+			    R result = n.getExpr().accept(this, arg);
+			    if (result != null) {
+				    return result;
+			    }
 			}
 		}
 		{
