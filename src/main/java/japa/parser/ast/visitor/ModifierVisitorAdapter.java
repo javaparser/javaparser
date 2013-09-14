@@ -30,6 +30,7 @@ import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.body.AnnotationDeclaration;
 import japa.parser.ast.body.AnnotationMemberDeclaration;
+import japa.parser.ast.body.BaseParameter;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.ConstructorDeclaration;
@@ -41,6 +42,7 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
@@ -108,6 +110,7 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.type.VoidType;
 import japa.parser.ast.type.WildcardType;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -247,7 +250,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final CatchClause n, final A arg) {
-		n.setExcept((Parameter) n.getExcept().accept(this, arg));
+		n.setExcept((MultiTypeParameter) n.getExcept().accept(this, arg));
 		n.setCatchBlock((BlockStmt) n.getCatchBlock().accept(this, arg));
 		return n;
 
@@ -747,8 +750,24 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		n.setName((NameExpr) n.getName().accept(this, arg));
 		return n;
 	}
-
+	
 	@Override public Node visit(final Parameter n, final A arg) {
+		visit((BaseParameter) n, arg);
+		n.setType((Type) n.getType().accept(this, arg));
+		return n;
+	}
+	
+	public Node visit(MultiTypeParameter n, A arg) {
+    	visit((BaseParameter) n, arg);
+    	List<Type> types = new LinkedList<Type>();
+    	for (Type type : n.getTypes()) {
+    		types.add((Type) type.accept(this, arg));
+    	}
+        n.setTypes(types);
+        return n;
+    }
+
+	protected Node visit(final BaseParameter n, final A arg) {
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -756,7 +775,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(annotations);
 		}
-		n.setType((Type) n.getType().accept(this, arg));
+		
 		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
 		return n;
 	}

@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2008 Julio Vilmar Gesser.
  *
- * This file is part of Java 1.5 parser and Abstract Syntax Tree.
+ * This file is part of Java 1.7 parser and Abstract Syntax Tree.
  *
- * Java 1.5 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
+ * Java 1.7 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Java 1.5 parser and Abstract Syntax Tree is distributed in the hope that it will be useful,
+ * Java 1.7 parser and Abstract Syntax Tree is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Java 1.5 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Java 1.7 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 options {
@@ -31,20 +31,20 @@ PARSER_BEGIN(ASTParser)
 /*
  * Copyright (C) 2008 Julio Vilmar Gesser.
  * 
- * This file is part of Java 1.5 parser and Abstract Syntax Tree.
+ * This file is part of Java 1.7 parser and Abstract Syntax Tree.
  *
- * Java 1.5 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
+ * Java 1.7 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Java 1.5 parser and Abstract Syntax Tree is distributed in the hope that it will be useful,
+ * Java 1.7 parser and Abstract Syntax Tree is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Java 1.5 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Java 1.7 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
  */
 package japa.parser;
 
@@ -325,19 +325,23 @@ TOKEN :
         <DECIMAL_LITERAL> (["l","L"])
       | <HEX_LITERAL> (["l","L"])
       | <OCTAL_LITERAL> (["l","L"])
+      | <BINARY_LITERAL> (["l","L"])
   >
 |
   < INTEGER_LITERAL:
         <DECIMAL_LITERAL>
       | <HEX_LITERAL>
       | <OCTAL_LITERAL>
+      | <BINARY_LITERAL>
   >
 |
-  < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+  < #DECIMAL_LITERAL: (["0"-"9"]((["0"-"9","_"])*["0"-"9"])?) >
 |
-  < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+  < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"]((["0"-"9","a"-"f","A"-"F","_"])*["0"-"9","a"-"f","A"-"F"])?) >
 |
-  < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+  < #OCTAL_LITERAL: "0" (["0"-"7"]((["0"-"7","_"])*["0"-"7"])?) >
+|
+  < #BINARY_LITERAL: "0" ["b","B"] (["0","1"]((["0","1","_"])*["0","1"])?) >
 |
   < FLOATING_POINT_LITERAL:
         <DECIMAL_FLOATING_POINT_LITERAL>
@@ -1851,9 +1855,14 @@ List TypeArguments():
 	Type type;
 }
 {
-   "<" { ret.add(new int[]{token.beginLine, token.beginColumn}); }
-   type = TypeArgument() { ret.add(type); } ( "," type = TypeArgument() { ret.add(type); } )*
-   ">"
+   (
+     "<" { ret.add(new int[]{token.beginLine, token.beginColumn}); }
+     type = TypeArgument() { ret.add(type); } ( "," type = TypeArgument() { ret.add(type); } )*
+     ">"
+   )
+   { return ret; }
+ |
+   "<>" { ret.add(null); } /*dummy add null since it is always removed*/
    { return ret; }
 }
 
@@ -3146,11 +3155,16 @@ TryStmt TryStatement():
  * finally/catch is present.
  */
 {
+    List resources = new LinkedList();
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
 	List catchs = null;
 	Parameter except;
 	BlockStmt catchBlock;
+	Modifier exceptModifier;
+	Type exceptType;
+	List exceptTypes = new LinkedList();
+	VariableDeclaratorId exceptId;
 	int line;
 	int column;
 	int cLine;
@@ -3158,24 +3172,57 @@ TryStmt TryStatement():
        Comment cmmt = getComment();
 }
 {
-  "try" {line=token.beginLine; column=token.beginColumn;} tryBlock = Block()
+  "try" {line=token.beginLine; column=token.beginColumn;}
+  (resources = ResourceSpecification())?
+  tryBlock = Block()
   (
+        LOOKAHEAD(2)
   		(
   			"catch" {cLine=token.beginLine; cColumn=token.beginColumn;}
-  			"(" except = FormalParameter() ")" catchBlock = Block()
-  			{ catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, except, catchBlock)); }
-  		)+
+  			"(" 
+  			exceptModifier = Modifiers() exceptType = Type() { exceptTypes.add(exceptType); }
+  			( "|" exceptType = Type() { exceptTypes.add(exceptType); } )*
+  			exceptId = VariableDeclaratorId()
+  			")"
+  			 
+  			catchBlock = Block()
+  			{ catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, exceptModifier.modifiers, exceptModifier.annotations, exceptTypes, exceptId, catchBlock)); exceptTypes = new LinkedList(); }
+  		)*
   		[ "finally" finallyBlock = Block() ]
   	|
   		"finally" finallyBlock = Block()
   )
   { 
-      TryStmt tmp = new TryStmt(line, column, token.endLine, token.endColumn,tryBlock, catchs, finallyBlock); 
+      TryStmt tmp = new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock); 
       tmp.setComment(cmmt); 
       return tmp;
   }
 }
 
+
+List ResourceSpecification() :
+{
+List vars;
+}
+{
+  "("
+  vars = Resources()
+  (LOOKAHEAD(2) ";")?
+  ")"
+  { return vars; }
+}
+
+
+List Resources() :
+{
+	List vars = new LinkedList();
+	VariableDeclarationExpr var;
+}
+ {
+  /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
+  var = VariableDeclarationExpression() {vars.add(var);} (LOOKAHEAD(2) ";" var = VariableDeclarationExpression() {vars.add(var);})*
+  { return vars; }
+}
 
 
 /* We use productions to match >>>, >> and > so that we can keep the

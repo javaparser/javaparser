@@ -40,6 +40,7 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
@@ -1253,6 +1254,35 @@ public abstract class GenericVisitorAdapter<R, A> implements
 		}
 		return null;
 	}
+	
+	@Override
+	public R visit(final MultiTypeParameter n, final A arg) {
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
+			}
+		}
+		{
+			for (final Type type : n.getTypes()) {
+				R result = type.accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		{
+			R result = n.getId().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public R visit(final PrimitiveType n, final A arg) {
@@ -1377,9 +1407,11 @@ public abstract class GenericVisitorAdapter<R, A> implements
 	@Override
 	public R visit(final SynchronizedStmt n, final A arg) {
 		{
-			R result = n.getExpr().accept(this, arg);
-			if (result != null) {
-				return result;
+			if (n.getExpr() != null) {
+			    R result = n.getExpr().accept(this, arg);
+			    if (result != null) {
+				    return result;
+			    }
 			}
 		}
 		{

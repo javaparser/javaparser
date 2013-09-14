@@ -42,6 +42,7 @@ import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
@@ -963,6 +964,21 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(" ");
 		n.getId().accept(this, arg);
 	}
+	
+    public void visit(MultiTypeParameter n, Object arg) {
+        printAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        Iterator<Type> types = n.getTypes().iterator();
+        types.next().accept(this, arg);
+        while (types.hasNext()) {
+        	printer.print(" | ");
+        	types.next().accept(this, arg);
+        }
+        
+        printer.print(" ");
+        n.getId().accept(this, arg);
+    }
 
 	@Override public void visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
@@ -1299,6 +1315,26 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	@Override public void visit(final TryStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print("try ");
+		if (!n.getResources().isEmpty()) {
+			printer.print("(");
+			Iterator<VariableDeclarationExpr> resources = n.getResources().iterator();
+			boolean first = true;
+			while (resources.hasNext()) {
+				visit(resources.next(), arg);
+				if (resources.hasNext()) {
+					printer.print(";");
+					printer.printLn();
+					if (first) {
+						printer.indent();
+					}
+				}
+				first = false;
+			}
+			if (n.getResources().size() > 1) {
+				printer.unindent();
+			}
+			printer.print(") ");
+		}
 		n.getTryBlock().accept(this, arg);
 		if (n.getCatchs() != null) {
 			for (final CatchClause c : n.getCatchs()) {
