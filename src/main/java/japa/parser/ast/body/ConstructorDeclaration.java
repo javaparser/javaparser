@@ -100,7 +100,7 @@ public final class ConstructorDeclaration extends BodyDeclaration {
     }
 
     public String getName() {
-        return name.getName();
+        return name == null ? null : name.getName();
     }
 
     public NameExpr getNameExpr() {

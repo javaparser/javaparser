@@ -41,6 +41,7 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
@@ -662,6 +663,19 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			}
 		}
 		n.getType().accept(this, arg);
+		n.getId().accept(this, arg);
+	}
+	
+	@Override public void visit(final MultiTypeParameter n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		for (final Type type : n.getTypes()) {
+			type.accept(this, arg);
+		}
 		n.getId().accept(this, arg);
 	}
 

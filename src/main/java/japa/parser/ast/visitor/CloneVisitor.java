@@ -24,6 +24,7 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
@@ -340,6 +341,21 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Parameter r = new Parameter(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				_n.getModifiers(), annotations, type_, _n.isVarArgs(), id
+		);
+		r.setComment(comment);
+		return r;
+	}
+	
+	@Override
+	public Node visit(MultiTypeParameter _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
+		List<Type> types = visit(_n.getTypes(), _arg);
+		VariableDeclaratorId id = cloneNodes(_n.getId(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		MultiTypeParameter r = new MultiTypeParameter(
+				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
+				_n.getModifiers(), annotations, types, id
 		);
 		r.setComment(comment);
 		return r;
@@ -1119,6 +1135,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(TryStmt _n, Object _arg) {
+		List<VariableDeclarationExpr> resources = visit(_n.getResources(),_arg);
 		BlockStmt tryBlock = cloneNodes(_n.getTryBlock(), _arg);
 		List<CatchClause> catchs = visit(_n.getCatchs(), _arg);
 		BlockStmt finallyBlock = cloneNodes(_n.getFinallyBlock(), _arg);
@@ -1126,7 +1143,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		TryStmt r = new TryStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				tryBlock, catchs, finallyBlock
+				resources, tryBlock, catchs, finallyBlock
 		);
 		r.setComment(comment);
 		return r;
@@ -1134,13 +1151,13 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(CatchClause _n, Object _arg) {
-		Parameter except = cloneNodes(_n.getExcept(), _arg);
+		MultiTypeParameter except = cloneNodes(_n.getExcept(), _arg);
 		BlockStmt catchBlock = cloneNodes(_n.getCatchBlock(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		CatchClause r = new CatchClause(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				except, catchBlock
+				except.getModifiers(), except.getAnnotations(), except.getTypes(), except.getId(), catchBlock
 		);
 		r.setComment(comment);
 		return r;

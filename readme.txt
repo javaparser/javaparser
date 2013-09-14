@@ -1,5 +1,5 @@
 +-------------------------------------------------------------------------------+
-|  Java 1.5 parser and Abstract Syntax Tree.                                    |
+|  Java 1.7 parser and Abstract Syntax Tree.                                    |
 +-------------------------------------------------------------------------------+
 |  Copyright (C) 2007 Júlio Vilmar Gesser                                       |
 |  jgesser@gmail.com                                                            |
@@ -19,7 +19,7 @@
 |  along with this program.  If not, see <http://www.gnu.org/licenses/>.        |
 +-------------------------------------------------------------------------------+    
 
-This package contains a Java 1.5 Parser with AST generation and visitor support. 
+This package contains a Java 1.7 Parser with AST generation and visitor support. 
 The AST records the source code structure, javadoc and comments. Soon will be 
 possible change the AST nodes or create new ones to modify source code like refactoring.
 This parser is based on Sreenivasa Viswanadha Java 1.5 parser.

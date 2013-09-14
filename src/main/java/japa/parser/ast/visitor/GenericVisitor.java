@@ -39,6 +39,7 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.body.VariableDeclaratorId;
@@ -147,6 +148,8 @@ public interface GenericVisitor<R, A> {
 	public R visit(MethodDeclaration n, A arg);
 
 	public R visit(Parameter n, A arg);
+	
+	public R visit(MultiTypeParameter n, A arg);
 
 	public R visit(EmptyMemberDeclaration n, A arg);
 

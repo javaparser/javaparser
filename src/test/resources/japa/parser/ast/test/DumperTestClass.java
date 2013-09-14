@@ -35,6 +35,12 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
 
     short sh1, sh2 = 1;
 
+    int intWithUnderscore = 1234_5678;
+
+    long longWithUnderscore = 1234_5678L;
+
+    int binaryLiteral = 0b101101;
+
     List<String>[][] arrLS = (List<String>[][]) new List<?>[10][];
 
     ;
@@ -45,6 +51,10 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
         a = (+z) + y;
         byte b = (byte) +y;
     }
+
+    List<String> diamond1 = new List<>();
+
+    List<> diamond2 = new List<String>();
 
     @Deprecated()
     static class Ugly {
@@ -325,6 +335,27 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
             }
         } catch (RuntimeException e) {
             System.out.println("catch");
+        }
+        try (InputSteam in = createInputStream()) {
+            System.out.println(in);
+        } catch (IOException e) {
+            System.out.println("catch");
+        }
+        try (InputSteam in = createInputStream();
+            InputSteam in2 = createInputStream()) {
+            System.out.println(in);
+        } catch (IOException e) {
+            System.out.println("catch");
+        }
+        try (InputStream in = createInputStream()) {
+            System.out.println(in);
+        }
+        try {
+            System.out.println("whatever");
+        } catch (IOException | RuntimeException e) {
+            System.out.println(e);
+        } catch (@something @something2 final Exception | Error e) {
+            System.out.println(e);
         }
         return JavaParser.parse(file);
     }
