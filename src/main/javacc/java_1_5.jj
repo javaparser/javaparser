@@ -3161,6 +3161,10 @@ TryStmt TryStatement():
 	List catchs = null;
 	Parameter except;
 	BlockStmt catchBlock;
+	Modifier exceptModifier;
+	Type exceptType;
+	List exceptTypes = new LinkedList();
+	VariableDeclaratorId exceptId;
 	int line;
 	int column;
 	int cLine;
@@ -3175,8 +3179,14 @@ TryStmt TryStatement():
         LOOKAHEAD(2)
   		(
   			"catch" {cLine=token.beginLine; cColumn=token.beginColumn;}
-  			"(" except = FormalParameter() ")" catchBlock = Block()
-  			{ catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, except, catchBlock)); }
+  			"(" 
+  			exceptModifier = Modifiers() exceptType = Type() { exceptTypes.add(exceptType); }
+  			( "|" exceptType = Type() { exceptTypes.add(exceptType); } )*
+  			exceptId = VariableDeclaratorId()
+  			")"
+  			 
+  			catchBlock = Block()
+  			{ catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, exceptModifier.modifiers, exceptModifier.annotations, exceptTypes, exceptId, catchBlock)); exceptTypes = new LinkedList(); }
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|

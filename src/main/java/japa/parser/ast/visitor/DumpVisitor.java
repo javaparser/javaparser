@@ -42,6 +42,7 @@ import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
@@ -963,6 +964,21 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(" ");
 		n.getId().accept(this, arg);
 	}
+	
+    public void visit(MultiTypeParameter n, Object arg) {
+        printAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        Iterator<Type> types = n.getTypes().iterator();
+        types.next().accept(this, arg);
+        while (types.hasNext()) {
+        	printer.print(" | ");
+        	types.next().accept(this, arg);
+        }
+        
+        printer.print(" ");
+        n.getId().accept(this, arg);
+    }
 
 	@Override public void visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);

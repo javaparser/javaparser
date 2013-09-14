@@ -30,6 +30,7 @@ import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.body.AnnotationDeclaration;
 import japa.parser.ast.body.AnnotationMemberDeclaration;
+import japa.parser.ast.body.BaseParameter;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.EmptyMemberDeclaration;
@@ -40,6 +41,7 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.body.VariableDeclaratorId;
@@ -99,9 +101,11 @@ import japa.parser.ast.stmt.WhileStmt;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.type.PrimitiveType;
 import japa.parser.ast.type.ReferenceType;
+import japa.parser.ast.type.Type;
 import japa.parser.ast.type.VoidType;
 import japa.parser.ast.type.WildcardType;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -535,9 +539,32 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		return Boolean.TRUE;
 	}
-
+	
 	@Override public Boolean visit(final Parameter n1, final Node arg) {
 		final Parameter n2 = (Parameter) arg;
+		if (!nodeEquals(n1.getType(), n2.getType())) {
+			return Boolean.FALSE;
+		}
+		return visit((BaseParameter) n1, arg);
+	}
+	
+	@Override public Boolean visit(MultiTypeParameter n1, Node arg) {
+		MultiTypeParameter n2 = (MultiTypeParameter) arg;
+		if (n1.getTypes().size() != n2.getTypes().size()) {
+			return Boolean.FALSE;
+		}
+		Iterator<Type> n1types = n1.getTypes().iterator();
+		Iterator<Type> n2types = n2.getTypes().iterator();
+		while (n1types.hasNext() && n2types.hasNext()) {
+			if (!nodeEquals(n1types.next(), n2types.next())) {
+				return Boolean.FALSE;
+			}
+		}
+		return visit((BaseParameter) n1, arg);
+	}
+
+	protected Boolean visit(final BaseParameter n1, final Node arg) {
+		final BaseParameter n2 = (BaseParameter) arg;
 
 		if (n1.getModifiers() != n2.getModifiers()) {
 			return Boolean.FALSE;
@@ -547,17 +574,13 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return Boolean.FALSE;
 		}
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
-			return Boolean.FALSE;
-		}
-
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return Boolean.FALSE;
 		}
 
 		return Boolean.TRUE;
 	}
-
+	
 	@Override public Boolean visit(final EmptyMemberDeclaration n1, final Node arg) {
 		return Boolean.TRUE;
 	}

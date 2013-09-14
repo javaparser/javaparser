@@ -21,8 +21,14 @@
  */
 package japa.parser.ast.stmt;
 
+import java.util.List;
+
 import japa.parser.ast.Node;
+import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
+import japa.parser.ast.body.VariableDeclaratorId;
+import japa.parser.ast.expr.AnnotationExpr;
+import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
@@ -31,24 +37,29 @@ import japa.parser.ast.visitor.VoidVisitor;
  */
 public final class CatchClause extends Node {
 
-	private Parameter except;
+    private MultiTypeParameter except;
 
-	private BlockStmt catchBlock;
+    private BlockStmt catchBlock;
 
-	public CatchClause() {
-	}
+    public CatchClause() {
+    }
 
-	public CatchClause(final Parameter except, final BlockStmt catchBlock) {
-		setExcept(except);
-		setCatchBlock(catchBlock);
-	}
+    public CatchClause(final MultiTypeParameter except, final BlockStmt catchBlock) {
+        setExcept(except);
+        setCatchBlock(catchBlock);
+    }
+	
+    public CatchClause(int exceptModifier, List<AnnotationExpr> exceptAnnotations, List<Type> exceptTypes, VariableDeclaratorId exceptId, BlockStmt catchBlock) {
+        this(new MultiTypeParameter(exceptModifier, exceptAnnotations, exceptTypes, exceptId), catchBlock);
+    }
 
-	public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Parameter except, final BlockStmt catchBlock) {
-		super(beginLine, beginColumn, endLine, endColumn);
-		setExcept(except);
-		setCatchBlock(catchBlock);
-	}
+    public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+    	    final int exceptModifier, final List<AnnotationExpr> exceptAnnotations, final List<Type> exceptTypes, 
+    	    final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
+        super(beginLine, beginColumn, endLine, endColumn);
+        setExcept(new MultiTypeParameter(beginLine, beginColumn, endLine, endColumn, exceptModifier, exceptAnnotations, exceptTypes, exceptId));
+        setCatchBlock(catchBlock);
+    }
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
@@ -62,7 +73,7 @@ public final class CatchClause extends Node {
 		return catchBlock;
 	}
 
-	public Parameter getExcept() {
+	public MultiTypeParameter getExcept() {
 		return except;
 	}
 
@@ -71,7 +82,7 @@ public final class CatchClause extends Node {
 		setAsParentNodeOf(this.catchBlock);
 	}
 
-	public void setExcept(final Parameter except) {
+	public void setExcept(final MultiTypeParameter except) {
 		this.except = except;
 		setAsParentNodeOf(this.except);
 	}

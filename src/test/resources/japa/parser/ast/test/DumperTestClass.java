@@ -350,6 +350,13 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
         try (InputStream in = createInputStream()) {
             System.out.println(in);
         }
+        try {
+            System.out.println("whatever");
+        } catch (IOException | RuntimeException e) {
+            System.out.println(e);
+        } catch (@something @something2 final Exception | Error e) {
+            System.out.println(e);
+        }
         return JavaParser.parse(file);
     }
 
