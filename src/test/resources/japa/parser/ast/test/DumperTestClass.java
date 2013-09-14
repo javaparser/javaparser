@@ -52,6 +52,10 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
         byte b = (byte) +y;
     }
 
+    List<String> diamond1 = new List<>();
+
+    List<> diamond2 = new List<String>();
+
     @Deprecated()
     static class Ugly {
 

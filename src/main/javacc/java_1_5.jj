@@ -1855,9 +1855,14 @@ List TypeArguments():
 	Type type;
 }
 {
-   "<" { ret.add(new int[]{token.beginLine, token.beginColumn}); }
-   type = TypeArgument() { ret.add(type); } ( "," type = TypeArgument() { ret.add(type); } )*
-   ">"
+   (
+     "<" { ret.add(new int[]{token.beginLine, token.beginColumn}); }
+     type = TypeArgument() { ret.add(type); } ( "," type = TypeArgument() { ret.add(type); } )*
+     ">"
+   )
+   { return ret; }
+ |
+   "<>" { ret.add(null); } /*dummy add null since it is always removed*/
    { return ret; }
 }
 
