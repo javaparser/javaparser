@@ -1299,6 +1299,26 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	@Override public void visit(final TryStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print("try ");
+		if (!n.getResources().isEmpty()) {
+			printer.print("(");
+			Iterator<VariableDeclarationExpr> resources = n.getResources().iterator();
+			boolean first = true;
+			while (resources.hasNext()) {
+				visit(resources.next(), arg);
+				if (resources.hasNext()) {
+					printer.print(";");
+					printer.printLn();
+					if (first) {
+						printer.indent();
+					}
+				}
+				first = false;
+			}
+			if (n.getResources().size() > 1) {
+				printer.unindent();
+			}
+			printer.print(") ");
+		}
 		n.getTryBlock().accept(this, arg);
 		if (n.getCatchs() != null) {
 			for (final CatchClause c : n.getCatchs()) {

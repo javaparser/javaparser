@@ -1119,6 +1119,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(TryStmt _n, Object _arg) {
+		List<VariableDeclarationExpr> resources = visit(_n.getResources(),_arg);
 		BlockStmt tryBlock = cloneNodes(_n.getTryBlock(), _arg);
 		List<CatchClause> catchs = visit(_n.getCatchs(), _arg);
 		BlockStmt finallyBlock = cloneNodes(_n.getFinallyBlock(), _arg);
@@ -1126,7 +1127,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		TryStmt r = new TryStmt(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				tryBlock, catchs, finallyBlock
+				resources, tryBlock, catchs, finallyBlock
 		);
 		r.setComment(comment);
 		return r;

@@ -3155,6 +3155,7 @@ TryStmt TryStatement():
  * finally/catch is present.
  */
 {
+    List resources = new LinkedList();
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
 	List catchs = null;
@@ -3167,24 +3168,51 @@ TryStmt TryStatement():
        Comment cmmt = getComment();
 }
 {
-  "try" {line=token.beginLine; column=token.beginColumn;} tryBlock = Block()
+  "try" {line=token.beginLine; column=token.beginColumn;}
+  (resources = ResourceSpecification())?
+  tryBlock = Block()
   (
+        LOOKAHEAD(2)
   		(
   			"catch" {cLine=token.beginLine; cColumn=token.beginColumn;}
   			"(" except = FormalParameter() ")" catchBlock = Block()
   			{ catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, except, catchBlock)); }
-  		)+
+  		)*
   		[ "finally" finallyBlock = Block() ]
   	|
   		"finally" finallyBlock = Block()
   )
   { 
-      TryStmt tmp = new TryStmt(line, column, token.endLine, token.endColumn,tryBlock, catchs, finallyBlock); 
+      TryStmt tmp = new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock); 
       tmp.setComment(cmmt); 
       return tmp;
   }
 }
 
+
+List ResourceSpecification() :
+{
+List vars;
+}
+{
+  "("
+  vars = Resources()
+  (LOOKAHEAD(2) ";")?
+  ")"
+  { return vars; }
+}
+
+
+List Resources() :
+{
+	List vars = new LinkedList();
+	VariableDeclarationExpr var;
+}
+ {
+  /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
+  var = VariableDeclarationExpression() {vars.add(var);} (LOOKAHEAD(2) ";" var = VariableDeclarationExpression() {vars.add(var);})*
+  { return vars; }
+}
 
 
 /* We use productions to match >>>, >> and > so that we can keep the
