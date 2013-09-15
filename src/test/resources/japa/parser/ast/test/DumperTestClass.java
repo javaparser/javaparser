@@ -336,13 +336,13 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
         } catch (RuntimeException e) {
             System.out.println("catch");
         }
-        try (InputSteam in = createInputStream()) {
+        try (InputStream in = createInputStream()) {
             System.out.println(in);
         } catch (IOException e) {
             System.out.println("catch");
         }
-        try (InputSteam in = createInputStream();
-            InputSteam in2 = createInputStream()) {
+        try (InputStream in = createInputStream();
+            InputStream in2 = createInputStream()) {
             System.out.println(in);
         } catch (IOException e) {
             System.out.println("catch");
