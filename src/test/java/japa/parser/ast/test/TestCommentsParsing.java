@@ -24,7 +24,6 @@ public class TestCommentsParsing {
     }
 
     public void visit(final LineComment n, final Object arg) {
-        System.out.println("VISITING '"+n.getContent()+"'");
         lineComments.add(n);
     }
   }
