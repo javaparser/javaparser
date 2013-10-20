@@ -1,6 +1,8 @@
 package japa.parser.ast.test;
 
 import japa.parser.ast.LineComment;
+import japa.parser.ast.Node;
+import japa.parser.ast.TreeVisitor;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import org.junit.Test;
 
@@ -16,16 +18,15 @@ import static org.junit.Assert.assertFalse;
 
 public class TestCommentsParsing {
 
-  private static class CommentsCollector extends VoidVisitorAdapter<Object> {
-    private List<LineComment> lineComments = new LinkedList<LineComment>();
+  private static class CommentsCollector extends TreeVisitor {
+      List<LineComment> lineComments = new LinkedList<LineComment>();
 
-    public List<LineComment> getLineComments(){
-        return lineComments;
-    }
-
-    public void visit(final LineComment n, final Object arg) {
-        lineComments.add(n);
-    }
+      @Override
+      public void process(Node node) {
+          if (node instanceof  LineComment){
+              lineComments.add((LineComment)node);
+          }
+      }
   }
 
   @Test
@@ -34,8 +35,8 @@ public class TestCommentsParsing {
       String source = Helper.readStream(getClass().getResourceAsStream("ClassWithComments.java"));
       CompilationUnit cu1 = Helper.parserString(source);
       CommentsCollector cc = new CommentsCollector();
-      cu1.accept(cc,"");
-      assertEquals(4,cc.getLineComments().size());
+      cc.visitDepthFirst(cu1);
+      assertEquals(4,cc.lineComments.size());
   }
 
 }

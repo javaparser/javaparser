@@ -22,6 +22,7 @@
 package japa.parser.ast;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import japa.parser.ast.visitor.DumpVisitor;
@@ -45,6 +46,9 @@ public abstract class Node {
 	private int endColumn;
 	
 	private Node parentNode;
+
+    private List<Node> childrenNodes =  new LinkedList<Node>();
+    private List<Comment> orphanComments = new LinkedList<Comment>();
 
 	/**
 	 * This attribute can store additional information from semantic analysis.
@@ -217,8 +221,30 @@ public abstract class Node {
 		return parentNode;
 	}
 
+    public List<Node> getChildrenNodes(){
+        return childrenNodes;
+    }
+
+    public boolean contains(Node other){
+        if (getBeginLine()>other.getBeginLine()) return false;
+        if (getBeginLine()==other.getBeginLine() && getBeginColumn()>other.getBeginColumn()) return false;
+        if (getEndLine()<other.getEndLine()) return false;
+        if (getEndLine()==other.getEndLine() && getEndColumn()<other.getEndColumn()) return false;
+        return true;
+    }
+
+    public void addOrphanComment(Comment comment){
+        orphanComments.add(comment);
+        comment.setParentNode(this);
+    }
+
+    public List<Comment> getOrphanComments(){
+        return orphanComments;
+    }
+
 	public void setParentNode(Node parentNode) {
 		this.parentNode = parentNode;
+        this.parentNode.childrenNodes.add(this);
 	}
 
 	protected void setAsParentNodeOf(List<? extends Node> childNodes) {

@@ -1,7 +1,10 @@
+
 package japa.parser.ast.comments;
 
 import japa.parser.ast.BlockComment;
 import japa.parser.ast.LineComment;
+import japa.parser.ast.Comment;
+import japa.parser.ast.body.JavadocComment;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,9 +15,18 @@ import java.util.List;
 public class CommentsCollection {
     private List<LineComment> lineComments = new LinkedList<LineComment>();
     private List<BlockComment> blockComments = new LinkedList<BlockComment>();
+    private List<JavadocComment> javadocComments = new LinkedList<JavadocComment>();
 
     public List<LineComment> getLineComments(){
         return lineComments;
+    }
+
+    public List<BlockComment> getBlockComments(){
+        return blockComments;
+    }
+
+    public List<JavadocComment> getJavadocComments(){
+        return javadocComments;
     }
 
     public void addComment(LineComment lineComment){
@@ -23,5 +35,46 @@ public class CommentsCollection {
 
     public void addComment(BlockComment blockComment){
         this.blockComments.add(blockComment);
+    }
+
+    public void addComment(JavadocComment javadocComment){
+        this.javadocComments.add(javadocComment);
+    }
+
+    public boolean contains(Comment comment){
+        for (Comment c : lineComments){
+            if (c.getBeginLine()==comment.getBeginLine() && c.getBeginColumn()==comment.getBeginColumn() && c.getEndLine()==comment.getEndLine() && c.getEndColumn()==comment.getEndColumn()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Comment> getAll(){
+        List<Comment> comments = new LinkedList<Comment>();
+        comments.addAll(lineComments);
+        comments.addAll(blockComments);
+        comments.addAll(javadocComments);
+        return comments;
+    }
+
+    public CommentsCollection minus(CommentsCollection other){
+        CommentsCollection result = new CommentsCollection();
+        for (LineComment comment : lineComments){
+            if (!other.contains(comment)){
+                result.lineComments.add(comment);
+            }
+        }
+        for (BlockComment comment : blockComments){
+            if (!other.contains(comment)){
+                result.blockComments.add(comment);
+            }
+        }
+        for (JavadocComment comment : javadocComments){
+            if (!other.contains(comment)){
+                result.javadocComments.add(comment);
+            }
+        }
+        return result;
     }
 }
