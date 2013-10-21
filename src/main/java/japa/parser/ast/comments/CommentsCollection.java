@@ -42,8 +42,13 @@ public class CommentsCollection {
     }
 
     public boolean contains(Comment comment){
-        for (Comment c : lineComments){
-            if (c.getBeginLine()==comment.getBeginLine() && c.getBeginColumn()==comment.getBeginColumn() && c.getEndLine()==comment.getEndLine() && c.getEndColumn()==comment.getEndColumn()){
+        for (Comment c : getAll()){
+            // we tollerate a difference of one element in the end column:
+            // it depends how \r and \n are calculated...
+            if ( c.getBeginLine()==comment.getBeginLine() &&
+                 c.getBeginColumn()==comment.getBeginColumn() &&
+                 c.getEndLine()==comment.getEndLine() &&
+                 Math.abs(c.getEndColumn()-comment.getEndColumn())<2 ){
                 return true;
             }
         }
@@ -56,6 +61,10 @@ public class CommentsCollection {
         comments.addAll(blockComments);
         comments.addAll(javadocComments);
         return comments;
+    }
+
+    public int size(){
+        return lineComments.size()+blockComments.size()+javadocComments.size();
     }
 
     public CommentsCollection minus(CommentsCollection other){

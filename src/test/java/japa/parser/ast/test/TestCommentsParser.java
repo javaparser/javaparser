@@ -156,4 +156,12 @@ public class TestCommentsParser {
         assertEquals(34,cc.getJavadocComments().get(1).getEndColumn());
     }
 
+    @Test
+    public void testCommentsParserSize() throws Exception {
+        String source = Helper.readStream(getClass().getResourceAsStream("ClassWithVariousOrphanComments.java"));
+        CommentsParser parser = new CommentsParser();
+        CommentsCollection cc = parser.parse(source);
+        assertEquals(6,cc.size());
+    }
+
 }

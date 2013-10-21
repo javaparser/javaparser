@@ -197,7 +197,10 @@ final class ASTParser {
             } else if(tmp_t.kind == MULTI_LINE_COMMENT) {
                 cmmt = new BlockComment(tmp_t.beginLine, tmp_t.beginColumn, tmp_t.endLine, tmp_t.endColumn, tmp_t.image.substring(2, tmp_t.image.length()-2));
             }
-            cmmt.setComment(prev);
+            // a comment can not be commented
+            if (!(prev instanceof Comment)){
+                cmmt.setComment(prev);
+            }
             prev = cmmt;
             tmp_t = tmp_t.next;
         }
