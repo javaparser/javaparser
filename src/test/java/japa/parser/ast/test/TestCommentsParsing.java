@@ -32,7 +32,7 @@ public class TestCommentsParsing {
   @Test
   public
   void testCommentsAboveStatements() throws Exception {
-      String source = Helper.readStream(getClass().getResourceAsStream("ClassWithComments.java"));
+      String source = Helper.readStream(getClass().getResourceAsStream("ClassWithLineComments.java"));
       CompilationUnit cu1 = Helper.parserString(source);
       CommentsCollector cc = new CommentsCollector();
       cc.visitDepthFirst(cu1);

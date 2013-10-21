@@ -3,7 +3,7 @@ package japa.parser.ast.test;
 import org.junit.Ignore;
 
 @Ignore
-public class ClassWithComments {
+public class ClassWithLineComments {
 
 public void aMethod(){
     // first comment

@@ -3,6 +3,7 @@ package japa.parser.ast.comments;
 import japa.parser.JavaCharStream;
 import japa.parser.ast.BlockComment;
 import japa.parser.ast.LineComment;
+import japa.parser.ast.body.JavadocComment;
 
 import java.io.*;
 
@@ -72,11 +73,24 @@ public class CommentsParser {
                     }
                     break;
                 case IN_BLOCK_COMMENT:
-                    if (prevChar=='*' || c=='/'){
-                        currentBlockComment.setContent(currentContent.toString());
-                        currentBlockComment.setEndLine(currLine);
-                        currentBlockComment.setEndColumn(currCol);
-                        comments.addComment(currentBlockComment);
+                    if (prevChar=='*' && c=='/'){
+                        // delete last character
+                        String content = currentContent.deleteCharAt(currentContent.toString().length()-1).toString();
+
+                        if (content.startsWith("*")){
+                            JavadocComment javadocComment = new JavadocComment();
+                            javadocComment.setContent(content.substring(1));
+                            javadocComment.setBeginLine(currentBlockComment.getBeginLine());
+                            javadocComment.setBeginColumn(currentBlockComment.getBeginColumn());
+                            javadocComment.setEndLine(currLine);
+                            javadocComment.setEndColumn(currCol+1);
+                            comments.addComment(javadocComment);
+                        } else {
+                            currentBlockComment.setContent(content);
+                            currentBlockComment.setEndLine(currLine);
+                            currentBlockComment.setEndColumn(currCol+1);
+                            comments.addComment(currentBlockComment);
+                        }
                         state = State.CODE;
                     } else {
                         currentContent.append(c);

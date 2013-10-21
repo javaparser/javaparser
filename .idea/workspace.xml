@@ -2,28 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a1bd2d1d-c930-41af-b529-947e8f768e72" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/SourcesHelper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/TreeVisitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsCollection.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsCollection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithBlockComments.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithJavadocComments.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithComments.java" afterPath="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithLineComments.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="javaparser.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382294718980" ignored="false" />
+    <file path="/Dummy.txt" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382364927313" ignored="false" />
     <file path="/TestCommentsParsing.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382298374753" ignored="false" />
     <file path="/java_1_7.jj" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382277253029" ignored="false" />
-    <file path="/CommentsParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382280345384" ignored="false" />
+    <file path="/CommentsParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382366508957" ignored="false" />
     <file path="/CommentsCollection.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382297840025" ignored="false" />
-    <file path="/TestCommentsParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382280506268" ignored="false" />
+    <file path="/TestCommentsParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382366350214" ignored="false" />
     <file path="/Node.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382298198027" ignored="false" />
     <file path="/ChildrenVisitor.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382295428619" ignored="false" />
     <file path="/TreeVisitor.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382295427153" ignored="false" />
     <file path="/JavaParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382297963159" ignored="false" />
     <file path="/SourcesHelper.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382296630630" ignored="false" />
     <file path="/a.dummy" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382296058547" ignored="false" />
+    <file path="$PROJECT_DIR$/target/generated-sources/javacc/japa/parser/ASTParserConstants.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382364958817" ignored="false" />
+    <file path="/ClassWithBlockComments.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382365178899" ignored="false" />
+    <file path="/fragment.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382365998703" ignored="false" />
+    <file path="/ClassWithJavadocComments.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382366245510" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,10 +89,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="TestCommentsParsing.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="TestCommentsParsing.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="36" selection-start="1186" selection-end="1186" vertical-scroll-proportion="0.53023255">
+            <state line="38" column="36" selection-start="1190" selection-end="1190" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#642#655#0" expanded="true" />
               </folding>
@@ -95,10 +100,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ASTHelper.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ASTHelper.java">
+      <file leaf-file-name="Helper.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/Helper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="19" selection-start="2052" selection-end="2052" vertical-scroll-proportion="0.0">
+            <state line="36" column="12" selection-start="1254" selection-end="1254" vertical-scroll-proportion="3.04">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestAdapters.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestAdapters.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="36" column="13" selection-start="1340" selection-end="1340" vertical-scroll-proportion="-6.08">
               <folding />
             </state>
           </provider>
@@ -108,27 +122,6 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="241" column="30" selection-start="5872" selection-end="5872" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#1492#1498#0" expanded="true" />
-                <element signature="e#1559#1568#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TreeVisitor.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/TreeVisitor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="22" selection-start="48" selection-end="59" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ASTParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/target/generated-sources/javacc/japa/parser/ASTParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="245" column="30" selection-start="7773" selection-end="7773" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -137,44 +130,26 @@
       <file leaf-file-name="JavaParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="276" column="65" selection-start="9193" selection-end="9193" vertical-scroll-proportion="-19.76">
-              <folding>
-                <element signature="e#0#11208#0" expanded="true" />
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SourcesHelper.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/SourcesHelper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="13" selection-start="54" selection-end="54" vertical-scroll-proportion="0.0">
+            <state line="276" column="65" selection-start="9193" selection-end="9193" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommentsParser.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="CommentsParser.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="30" selection-start="538" selection-end="538" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="82" column="92" selection-start="3396" selection-end="3396" vertical-scroll-proportion="0.6311659">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommentsCollection.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsCollection.java">
+      <file leaf-file-name="ClassWithJavadocComments.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithJavadocComments.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="41" selection-start="1735" selection-end="1735" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#548#564#0" expanded="true" />
-                <element signature="e#1602#1611#0" expanded="true" />
-              </folding>
+            <state line="9" column="33" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -182,7 +157,27 @@
       <file leaf-file-name="TestCommentsParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="23" selection-start="1723" selection-end="1723" vertical-scroll-proportion="0.0">
+            <state line="147" column="53" selection-start="7024" selection-end="7024" vertical-scroll-proportion="-9.529411">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ClassWithLineComments.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithLineComments.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="4" selection-start="130" selection-end="130" vertical-scroll-proportion="-6.08">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ClassWithBlockComments.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithBlockComments.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="16" column="88" selection-start="407" selection-end="407" vertical-scroll-proportion="-12.16">
               <folding />
             </state>
           </provider>
@@ -208,8 +203,6 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/javacc/java_1_7.jj" />
         <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/CommentsParser.java" />
-        <option value="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java" />
-        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java" />
         <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/ChildrenVisitor.java" />
         <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/TreeVisitor.java" />
         <option value="$PROJECT_DIR$/src/main/java/japa/parser/SourcesHelper.java" />
@@ -217,14 +210,19 @@
         <option value="$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java" />
         <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java" />
         <option value="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java" />
+        <option value="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithLineComments.java" />
+        <option value="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithBlockComments.java" />
+        <option value="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithJavadocComments.java" />
+        <option value="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1431" />
+    <option name="x" value="1600" />
     <option name="y" value="24" />
-    <option name="width" value="1615" />
-    <option name="height" value="1026" />
+    <option name="width" value="1920" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -252,7 +250,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -344,10 +341,6 @@
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ignore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -364,28 +357,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="javaparser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="javaparser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="javacc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -482,21 +453,27 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="OverrideImplement.combined" value="true" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="OverrideImplement.combined" value="true" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="reference.projectsettings.compiler.javacompiler" />
     <property name="recentsLimit" value="5" />
+    <property name="options.lastSelected" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="japa.parser.ast.test" />
+    </key>
   </component>
   <component name="RunManager" selected="JUnit.TestCommentsParsing">
     <configuration default="false" name="TestCommentsParsing" type="JUnit" factoryName="JUnit" temporary="true">
@@ -535,19 +512,6 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -573,6 +537,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -649,13 +626,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1431" y="24" width="1615" height="1026" extended-state="6" />
+    <frame x="1600" y="24" width="1920" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -665,7 +642,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24984066" sideWeight="0.60088205" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.6709265" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -739,44 +716,9 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/VoidVisitorAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="118" column="17" selection-start="5027" selection-end="5027" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/VoidVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="109" column="17" selection-start="4617" selection-end="4617" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCloneEquals.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="263" selection-end="611" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/javacc/java_1_7.jj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2791" column="27" selection-start="74743" selection-end="74743" vertical-scroll-proportion="-23.12">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/target/generated-sources/javacc/japa/parser/JavaCharStream.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="635" column="0" selection-start="15567" selection-end="15567" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithComments.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="4" selection-start="126" selection-end="126" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -797,7 +739,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/target/generated-sources/javacc/japa/parser/ASTParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="245" column="30" selection-start="7773" selection-end="7773" vertical-scroll-proportion="0.0">
+        <state line="316" column="30" selection-start="9999" selection-end="9999" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -805,20 +747,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsCollection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="56" column="41" selection-start="1735" selection-end="1735" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#548#564#0" expanded="true" />
-            <element signature="e#1602#1611#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="30" selection-start="538" selection-end="538" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -832,36 +761,74 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="241" column="30" selection-start="5872" selection-end="5872" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#1492#1498#0" expanded="true" />
-            <element signature="e#1559#1568#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="23" selection-start="1723" selection-end="1723" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="276" column="65" selection-start="9193" selection-end="9193" vertical-scroll-proportion="-19.76">
-          <folding>
-            <element signature="e#0#11208#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="276" column="65" selection-start="9193" selection-end="9193" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/Helper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="12" selection-start="1254" selection-end="1254" vertical-scroll-proportion="3.04">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestAdapters.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="13" selection-start="1340" selection-end="1340" vertical-scroll-proportion="-6.08">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithLineComments.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="4" selection-start="130" selection-end="130" vertical-scroll-proportion="-6.08">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithBlockComments.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="88" selection-start="407" selection-end="407" vertical-scroll-proportion="-12.16">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithJavadocComments.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="33" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="36" selection-start="1186" selection-end="1186" vertical-scroll-proportion="0.53023255">
+        <state line="38" column="36" selection-start="1190" selection-end="1190" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#642#655#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="147" column="53" selection-start="7024" selection-end="7024" vertical-scroll-proportion="-9.529411">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="82" column="92" selection-start="3396" selection-end="3396" vertical-scroll-proportion="0.6311659">
+          <folding />
         </state>
       </provider>
     </entry>
