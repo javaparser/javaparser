@@ -5,7 +5,7 @@ package japa.parser.ast.test;
 public class ClassWithBlockComments {
 
     /* comment to a method */
-    void foo();
+    void foo(){};
 
     /* comment put randomly in class:
 
