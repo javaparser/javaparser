@@ -21,11 +21,11 @@
  */
 package japa.parser.ast.visitor;
 
-import japa.parser.ast.BlockComment;
-import japa.parser.ast.Comment;
+import japa.parser.ast.comments.BlockComment;
+import japa.parser.ast.comments.Comment;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.LineComment;
+import japa.parser.ast.comments.LineComment;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.body.AnnotationDeclaration;
@@ -39,7 +39,7 @@ import japa.parser.ast.body.EnumConstantDeclaration;
 import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
-import japa.parser.ast.body.JavadocComment;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;

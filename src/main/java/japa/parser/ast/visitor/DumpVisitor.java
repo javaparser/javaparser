@@ -21,11 +21,12 @@
  */
 package japa.parser.ast.visitor;
 
-import japa.parser.ast.BlockComment;
-import japa.parser.ast.Comment;
+import japa.parser.ast.comments.BlockComment;
+import japa.parser.ast.comments.Comment;
 import japa.parser.ast.CompilationUnit;
+import japa.parser.ast.Node;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.LineComment;
+import japa.parser.ast.comments.LineComment;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.body.AnnotationDeclaration;
@@ -39,7 +40,7 @@ import japa.parser.ast.body.EnumConstantDeclaration;
 import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
-import japa.parser.ast.body.JavadocComment;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.body.MultiTypeParameter;
@@ -292,16 +293,35 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final CompilationUnit n, final Object arg) {
+        printOrphanCommentsBetween(n.getOrphanComments(),arg,
+                after(),
+                before(n.getComment(), n.getPackage(), n.getImports(), n.getTypes()));
+
 		printJavaComment(n.getComment(), arg);
+
+        printOrphanCommentsBetween(n.getOrphanComments(),arg,
+                after(n.getComment()),
+                before(n.getPackage(),n.getImports(),n.getTypes()));
+
 		if (n.getPackage() != null) {
 			n.getPackage().accept(this, arg);
 		}
+
+        printOrphanCommentsBetween(n.getOrphanComments(),arg,
+                after(n.getComment(),n.getPackage()),
+                before(n.getImports(), n.getTypes()));
+
 		if (n.getImports() != null) {
 			for (final ImportDeclaration i : n.getImports()) {
 				i.accept(this, arg);
 			}
 			printer.printLn();
 		}
+
+        printOrphanCommentsBetween(n.getOrphanComments(),arg,
+                after(n.getComment(),n.getPackage(),n.getImports()),
+                before(n.getTypes()));
+
 		if (n.getTypes() != null) {
 			for (final Iterator<TypeDeclaration> i = n.getTypes().iterator(); i.hasNext();) {
 				i.next().accept(this, arg);
@@ -311,6 +331,10 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 				}
 			}
 		}
+
+        printOrphanCommentsBetween(n.getOrphanComments(),arg,
+                after(n.getComment(),n.getPackage(),n.getImports(),n.getTypes()),
+                before());
 	}
 
 	@Override public void visit(final PackageDeclaration n, final Object arg) {
@@ -1444,5 +1468,95 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(n.getContent());
 		printer.printLn("*/");
 	}
+
+    private Position before(Object... things){
+        Node n = firstOf(things);
+        if (n==null){
+            return Position.ABSOLUTE_START;
+        } else {
+            return Position.beginOf(n);
+        }
+    }
+
+    private Position after(Object... things){
+        Node n = lastOf(things);
+        if (n==null){
+            return Position.ABSOLUTE_START;
+        } else {
+            return Position.endOf(n);
+        }
+    }
+
+    private Node lastOf(Object... things){
+        for (int i=things.length-1;i>=0;i--){
+            Object thing = things[i];
+            if (thing != null) {
+                if (thing instanceof Node){
+                    return (Node)thing;
+                } else if (thing instanceof List){
+                    List<Node> list = (List<Node>)thing;
+                    if (list.size()>0){
+                        return list.get(list.size()-1);
+                    }
+                } else {
+                    throw new RuntimeException("Wrong thing passed");
+                }
+            }
+        }
+        return null;
+    }
+
+    private Node firstOf(Object... things){
+        for (Object thing : things){
+            if (thing != null) {
+                if (thing instanceof Node){
+                    return (Node)thing;
+                } else if (thing instanceof List){
+                    List<Node> list = (List<Node>)thing;
+                    if (list.size()>0){
+                        return list.get(0);
+                    }
+                } else {
+                    throw new RuntimeException("Wrong thing passed");
+                }
+            }
+        }
+        return null;
+    }
+
+    private Position endOf(final List<Node> nodes){
+        Node lastNode = nodes.get(nodes.size()-1);
+        if (lastNode==null){
+            return Position.ABSOLUTE_START;
+        } else {
+            return Position.endOf(lastNode);
+        }
+    }
+
+    private Position startOf(final List<Node> nodes){
+        Node firstNode = nodes.get(0);
+        if (firstNode==null){
+            return Position.ABSOLUTE_END;
+        } else {
+            return Position.beginOf(firstNode);
+        }
+    }
+
+    private void printOrphanCommentsBetween(final List<Comment> comments,final Object arg,Position start, Position end){
+        printOrphanCommentsBetween(comments,arg,start.getLine(),start.getColumn(),end.getLine(),end.getColumn());
+    }
+
+    private void printOrphanCommentsBetween(final List<Comment> comments,final Object arg,int startLine,int startColumn,int endLine,int endColumn){
+        for (Comment comment : comments){
+            if (comment.isPositionedAfter(startLine,startColumn)
+                && comment.isPositionedBefore(endLine,endColumn)){
+                printOrphanComment(comment,arg);
+            }
+        }
+    }
+
+    private void printOrphanComment(final Comment comment,final Object arg){
+        comment.accept(this,arg);
+    }
 
 }

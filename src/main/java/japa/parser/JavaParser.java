@@ -21,13 +21,13 @@
  */
 package japa.parser;
 
-import japa.parser.ast.BlockComment;
+import japa.parser.ast.comments.BlockComment;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.LineComment;
-import japa.parser.ast.Comment;
+import japa.parser.ast.comments.LineComment;
+import japa.parser.ast.comments.Comment;
 import japa.parser.ast.body.BodyDeclaration;
-import japa.parser.ast.body.JavadocComment;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.comments.CommentsCollection;
 import japa.parser.ast.comments.CommentsParser;
 import japa.parser.ast.expr.AnnotationExpr;
@@ -66,6 +66,11 @@ public final class JavaParser {
 		// hide the constructor
 	}
 
+    public static CompilationUnit parse(final InputStream in,
+                                        final String encoding) throws ParseException {
+        return parse(in,encoding,true);
+    }
+
 	/**
 	 * Parses the Java code contained in the {@link InputStream} and returns a
 	 * {@link CompilationUnit} that represents it.
@@ -79,12 +84,14 @@ public final class JavaParser {
 	 *             if the source code has parser errors
 	 */
 	public static CompilationUnit parse(final InputStream in,
-			final String encoding) throws ParseException {
+			final String encoding, boolean considerComments) throws ParseException {
         try {
             String code = SourcesHelper.streamToString(in, encoding);
             InputStream in1 = SourcesHelper.stringToStream(code);
             CompilationUnit cu = new ASTParser(in1, encoding).CompilationUnit();
-            insertOrphanComments(cu,code);
+            if (considerComments){
+                insertComments(cu,code);
+            }
             return cu;
         } catch (IOException ioe){
             throw new ParseException(ioe.getMessage());
@@ -103,8 +110,13 @@ public final class JavaParser {
 	 */
 	public static CompilationUnit parse(final InputStream in)
 			throws ParseException {
-		return parse(in, null);
+		return parse(in, null,true);
 	}
+
+    public static CompilationUnit parse(final File file, final String encoding)
+            throws ParseException, IOException {
+        return parse(file,encoding,true);
+    }
 
 	/**
 	 * Parses the Java code contained in a {@link File} and returns a
@@ -119,11 +131,11 @@ public final class JavaParser {
 	 *             if the source code has parser errors
 	 * @throws IOException
 	 */
-	public static CompilationUnit parse(final File file, final String encoding)
+	public static CompilationUnit parse(final File file, final String encoding, boolean considerComments)
 			throws ParseException, IOException {
 		final FileInputStream in = new FileInputStream(file);
 		try {
-			return parse(in, encoding);
+			return parse(in, encoding, considerComments);
 		} finally {
 			in.close();
 		}
@@ -142,16 +154,18 @@ public final class JavaParser {
 	 */
 	public static CompilationUnit parse(final File file) throws ParseException,
 			IOException {
-		return parse(file, null);
+		return parse(file, null,true);
 	}
 
-	public static CompilationUnit parse(final Reader reader)
+	public static CompilationUnit parse(final Reader reader, boolean considerComments)
 			throws ParseException {
         try {
             String code = SourcesHelper.readerToString(reader);
             Reader reader1 = SourcesHelper.stringToReader(code);
             CompilationUnit cu = new ASTParser(reader1).CompilationUnit();
-            insertOrphanComments(cu,code);
+            if (considerComments){
+                insertComments(cu,code);
+            }
             return cu;
         } catch (IOException ioe){
             throw new ParseException(ioe.getMessage());
@@ -272,24 +286,121 @@ public final class JavaParser {
 		return bd;
 	}
 
-    private static CommentsCollection calculateOrphanComments(CompilationUnit cu, String code) throws IOException {
+    /**
+     * Comments are attributed to the thing the comment and are removed from
+     * allComments.
+     */
+    private static void insertCommentsInCu(CompilationUnit cu, CommentsCollection commentsCollection){
+        if (commentsCollection.size()==0) return;
+
+        // I should sort all the direct children and the comments, if a comment is the first thing then it
+        // a comment to the CompilationUnit
+        // FIXME if there is no package it could be also a comment to the following class...
+        // so I could use some heuristics in these cases to distinguish the two cases
+
+        List<Comment> comments = commentsCollection.getAll();
+        sortByBeginPosition(comments);
+        List<Node> children = cu.getChildrenNodes();
+        sortByBeginPosition(children);
+
+        if (children.size()==0 || areInOrder(comments.get(0), children.get(0))){
+            cu.setComment(comments.get(0));
+            comments.remove(0);
+        }
+
+        insertCommentsInNode(cu,comments);
+    }
+
+    private static boolean areInOrder(Node a, Node b){
+        return
+                (a.getBeginLine()<b.getBeginLine())
+                        || (a.getBeginLine()==b.getBeginLine() && a.getBeginColumn()<b.getBeginColumn() );
+    }
+
+    private static <T extends Node> void sortByBeginPosition(List<T> nodes){
+        for (int i=0;i<nodes.size();i++){
+            for (int j=i+1;j<nodes.size();j++){
+                T nodeI = nodes.get(i);
+                T nodeJ = nodes.get(j);
+                if (!areInOrder(nodeI,nodeJ)){
+                    nodes.set(i,nodeJ);
+                    nodes.set(j,nodeI);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method try to attributes the nodes received to child of the node.
+     * It returns the node that were not attributed.
+     */
+    private static void insertCommentsInNode(Node node, List<Comment> commentsToAttribute){
+        if (commentsToAttribute.size()==0) return;
+
+        System.out.println("Looking to place "+commentsToAttribute.size()+" comments in "+node.getClass());
+
+        // the comments can:
+        // 1) Inside one of the child, then it is the child that have to associate them
+        // 2) If they are not inside a child they could be preceeding nothing, a comment or a child
+        //    if they preceed a child they are assigned to it, otherweise they remain "orphans"
+
+        List<Node> children = node.getChildrenNodes();
+        sortByBeginPosition(children);
+
+        for (Node child : children){
+            //System.out.println("Considering if some comments stay in "+child.getClass());
+            List<Comment> commentsInsideChild = new LinkedList<Comment>();
+            for (Comment c : commentsToAttribute){
+                if (child.contains(c)){
+                    commentsInsideChild.add(c);
+                }
+            }
+            commentsToAttribute.removeAll(commentsInsideChild);
+            insertCommentsInNode(child,commentsInsideChild);
+        }
+
+        //System.out.println("Comments not placed in children (node:"+node.getClass()+"): "+commentsToAttribute.size()) ;
+
+        // at this point I create an ordered list of all remaining comments and children
+        Comment previousComment = null;
+        List<Comment> attributedComments = new LinkedList<Comment>();
+        List<Node> childrenAndComments = new LinkedList<Node>();
+        childrenAndComments.addAll(children);
+        childrenAndComments.addAll(commentsToAttribute);
+        sortByBeginPosition(childrenAndComments);
+
+        System.out.println("Children and remaining comments: "+childrenAndComments.size()+". Class "+node.getClass());
+
+        for (Node thing : childrenAndComments){
+            System.out.println(" * "+thing.getClass()+" L "+thing.getBeginLine()+" C "+thing.getBeginColumn());
+            if (thing instanceof Comment){
+                previousComment = (Comment)thing;
+            } else {
+                if (previousComment!=null){
+                    thing.setComment(previousComment);
+                    attributedComments.add(previousComment);
+                    previousComment = null;
+                }
+            }
+        }
+
+        commentsToAttribute.removeAll(attributedComments);
+
+        // all the remaining are orphan nodes
+        for (Comment c : commentsToAttribute){
+            node.addOrphanComment(c);
+        }
+    }
+
+    private static void insertComments(CompilationUnit cu, String code) throws IOException {
         CommentsParser commentsParser = new CommentsParser();
         CommentsCollection allComments = commentsParser.parse(code);
-        // collect all comments which are already part of the CU
-        CommentsCollection commentsAlreadyInCU = getCommentsInCompilationUnit(cu);
-        // remove all existing comments from CC
-        CommentsCollection orphanComments = allComments.minus(commentsAlreadyInCU);
-        return orphanComments;
+
+        insertCommentsInCu(cu,allComments);
     }
 
-    private static void insertOrphanComments(CompilationUnit cu, String code) throws IOException {
-        CommentsCollection orphanComments = calculateOrphanComments(cu,code);
-        // place as orphan comments all the comments not positioned
-        placeOrphanComments(cu,orphanComments);
-    }
-
-    private static void placeOrphanComments(CompilationUnit cu, CommentsCollection orphanComments){
-        for (Comment comment : orphanComments.getAll()){
+    private static void placeOrphanComments(CompilationUnit cu, List<Comment> orphanComments){
+        for (Comment comment : orphanComments){
             placeOrphanComment(cu,comment);
         }
     }
@@ -303,34 +414,5 @@ public final class JavaParser {
         }
         node.addOrphanComment(comment);
     }
-
-    private static CommentsCollection getCommentsInCompilationUnit(CompilationUnit cu){
-        CommentsCollector commentsCollector = new CommentsCollector();
-        cu.accept(commentsCollector,"");
-        return commentsCollector.getComments();
-    }
-
-    private static class CommentsCollector extends VoidVisitorAdapter<Object> {
-        private CommentsCollection comments = new CommentsCollection();
-
-        public CommentsCollection getComments(){
-            return comments;
-        }
-
-        public void visit(final LineComment n, final Object arg) {
-            comments.addComment(n);
-        }
-
-        @Override
-        public void visit(JavadocComment n, Object arg) {
-            comments.addComment(n);
-        }
-
-        @Override
-        public void visit(BlockComment n, Object arg) {
-            comments.addComment(n);
-        }
-    }
-
 
 }

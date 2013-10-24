@@ -13,7 +13,7 @@ public class TestCloneEquals {
   @Test
   public
   void testCompilationUnitEqual() throws Exception {
-        String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
+        String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java.txt"));
         CompilationUnit cu1 = Helper.parserString(source);
         CompilationUnit cu2 = (CompilationUnit)cu1.accept(new CloneVisitor(), null);
         assertEquals(cu1, cu2);
@@ -22,7 +22,7 @@ public class TestCloneEquals {
   @Test
   public
   void testCompilationUnitNotEqual() throws Exception {
-        String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
+        String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java.txt"));
         CompilationUnit cu1 = Helper.parserString(source);
         CompilationUnit cu2 = (CompilationUnit)cu1.accept(new CloneVisitor(), null);
         cu2.getPackage().getName().setName("some.unique.package");

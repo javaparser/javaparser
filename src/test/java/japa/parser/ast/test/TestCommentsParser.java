@@ -63,6 +63,56 @@ public class TestCommentsParser {
 
     @Test
     public
+    void testVariousCommentsHasRightPosition() throws Exception {
+        String source = "package japa.parser.javacc;\n" + // line 1
+                "public class Teste {\n" +                // line 2
+                "//line comment\n" +                      // line 3
+                "int a = 0;\n" +                          // line 4
+                "//line comment\r\n" +                    // line 5
+                "int b = 0;\n" +                          // line 6
+                "//line comment\r" +                      // line 7
+                "int c = 0;\n" +                          // line 8
+                "/* multi-line\n comment\n*/" +           // line 9,10,11
+                "int d = 0;" + //                         // line 11
+                "/** multi-line\r\n javadoc\n*/" +        // line 11,12,13
+                "int e = 0;" + //                         // line 13
+                "}\n" +                                   // line 13
+                "//final comment" +                       // line 14
+                "";
+        CommentsParser parser = new CommentsParser();
+        CommentsCollection cc = parser.parse(source);
+
+        assertEquals(6,cc.getAll().size());
+
+        assertEquals(3,cc.getLineComments().get(0).getBeginLine());
+        //assertEquals(,cc.getLineComments().get(0).getBeginColumn());
+        assertEquals(3,cc.getLineComments().get(0).getEndLine());
+        //assertEquals(21,cc.getLineComments().get(0).getEndColumn());
+
+        assertEquals(5,cc.getLineComments().get(1).getBeginLine());
+        //assertEquals(14,cc.getLineComments().get(1).getBeginColumn());
+        assertEquals(5,cc.getLineComments().get(1).getEndLine());
+        //assertEquals(30,cc.getLineComments().get(1).getEndColumn());
+
+        assertEquals(7,cc.getLineComments().get(2).getBeginLine());
+        //assertEquals(5,cc.getLineComments().get(2).getBeginColumn());
+        assertEquals(7,cc.getLineComments().get(2).getEndLine());
+        //assertEquals(21,cc.getLineComments().get(2).getEndColumn());
+
+        assertEquals(9,cc.getBlockComments().get(0).getBeginLine());
+        assertEquals(11,cc.getBlockComments().get(0).getEndLine());
+
+        assertEquals(11,cc.getJavadocComments().get(0).getBeginLine());
+        assertEquals(13,cc.getJavadocComments().get(0).getEndLine());
+
+        assertEquals(14,cc.getLineComments().get(3).getBeginLine());
+        //assertEquals(5,cc.getLineComments().get(2).getBeginColumn());
+        assertEquals(14,cc.getLineComments().get(3).getEndLine());
+        //assertEquals(21,cc.getLineComments().get(2).getEndColumn());
+    }
+
+    @Test
+    public
     void testBlockCommentsAreParsed() throws Exception {
         String source = Helper.readStream(getClass().getResourceAsStream("ClassWithBlockComments.java"));
         CommentsParser parser = new CommentsParser();

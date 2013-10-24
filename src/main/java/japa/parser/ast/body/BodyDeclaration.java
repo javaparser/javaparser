@@ -31,36 +31,22 @@ import java.util.List;
  */
 public abstract class BodyDeclaration extends Node {
 
-    private JavadocComment javaDoc;
-
     private List<AnnotationExpr> annotations;
-    
 
     public BodyDeclaration() {
     }
 
-    public BodyDeclaration(List<AnnotationExpr> annotations, JavadocComment javaDoc) {
-    	setJavaDoc(javaDoc);
+    public BodyDeclaration(List<AnnotationExpr> annotations) {
     	setAnnotations(annotations);
     }
 
-    public BodyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, JavadocComment javaDoc) {
+    public BodyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
         super(beginLine, beginColumn, endLine, endColumn);
-    	setJavaDoc(javaDoc);
     	setAnnotations(annotations);
-    }
-
-    public final JavadocComment getJavaDoc() {
-        return javaDoc;
     }
 
     public final List<AnnotationExpr> getAnnotations() {
         return annotations;
-    }
-
-    public final void setJavaDoc(JavadocComment javaDoc) {
-        this.javaDoc = javaDoc;
-		setAsParentNodeOf(this.javaDoc);
     }
 
     public final void setAnnotations(List<AnnotationExpr> annotations) {

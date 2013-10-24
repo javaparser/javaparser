@@ -49,7 +49,7 @@ public class TestAdapters {
 	}
 
 	private void doTest(final VoidVisitor<?> visitor) throws ParseException {
-		CompilationUnit cu = Helper.parserClass(getClass().getResourceAsStream("DumperTestClass.java"));
+		CompilationUnit cu = Helper.parserClass(getClass().getResourceAsStream("DumperTestClass.java.txt"));
 		cu.accept(visitor, null);
 
 		cu = Helper.parserClass(getClass().getResourceAsStream("JavadocTestClass.java"));
@@ -57,7 +57,7 @@ public class TestAdapters {
 	}
 
 	private void doTest(final GenericVisitor<?, ?> visitor) throws ParseException {
-		CompilationUnit cu = Helper.parserClass(getClass().getResourceAsStream("DumperTestClass.java"));
+		CompilationUnit cu = Helper.parserClass(getClass().getResourceAsStream("DumperTestClass.java.txt"));
 		cu.accept(visitor, null);
 
 		cu = Helper.parserClass(getClass().getResourceAsStream("JavadocTestClass.java"));

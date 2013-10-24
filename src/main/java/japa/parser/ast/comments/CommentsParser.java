@@ -1,10 +1,5 @@
 package japa.parser.ast.comments;
 
-import japa.parser.JavaCharStream;
-import japa.parser.ast.BlockComment;
-import japa.parser.ast.LineComment;
-import japa.parser.ast.body.JavadocComment;
-
 import java.io.*;
 
 /**
@@ -29,6 +24,7 @@ public class CommentsParser {
     }
 
     public CommentsCollection parse(final InputStream in, final String encoding) throws IOException, UnsupportedEncodingException {
+        boolean lastWasASlashR = false;
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         CommentsCollection comments = new CommentsCollection();
         int r;
@@ -43,6 +39,14 @@ public class CommentsParser {
 
         while ((r=br.read()) != -1){
             char c = (char)r;
+            if (c=='\r'){
+                lastWasASlashR = true;
+            } else if (c=='\n'&&lastWasASlashR){
+                lastWasASlashR=false;
+                continue;
+            } else {
+                lastWasASlashR=false;
+            }
             switch (state){
                 case CODE:
                     if (prevChar=='/' && c=='/'){
@@ -62,7 +66,7 @@ public class CommentsParser {
                     }
                     break;
                 case IN_LINE_COMMENT:
-                    if (c=='\r' || c=='\n'){
+                    if (c=='\n' || c=='\r'){
                         currentLineComment.setContent(currentContent.toString());
                         currentLineComment.setEndLine(currLine);
                         currentLineComment.setEndColumn(currCol);
@@ -101,11 +105,9 @@ public class CommentsParser {
             }
             switch (c){
                 case '\n':
+                case '\r':
                     currLine+=1;
                     currCol = 1;
-                    break;
-                case '\r':
-                    // do nothing
                     break;
                 case '\t':
                     currCol+=COLUMNS_PER_TAB;
@@ -115,6 +117,14 @@ public class CommentsParser {
             }
             prevChar = c;
         }
+
+        if (state==State.IN_LINE_COMMENT){
+            currentLineComment.setContent(currentContent.toString());
+            currentLineComment.setEndLine(currLine);
+            currentLineComment.setEndColumn(currCol);
+            comments.addComment(currentLineComment);
+        }
+
         return comments;
     }
 

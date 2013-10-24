@@ -2,32 +2,85 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a1bd2d1d-c930-41af-b529-947e8f768e72" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithVariousOrphanComments.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/DocumentableNode.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/Position.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/BlockComment.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/BlockComment.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/Comment.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/Comment.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/LineComment.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/LineComment.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/JavadocComment.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/JavadocComment.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/DumperTestClass.java" afterPath="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/DumperTestClass.java.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/AnnotationDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/AnnotationDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/AnnotationMemberDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/AnnotationMemberDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/BodyDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/BodyDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/ClassOrInterfaceDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/ClassOrInterfaceDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/CloneVisitor.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/CloneVisitor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsCollection.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsCollection.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/CompilationUnit.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/CompilationUnit.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/ConstructorDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/ConstructorDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/DumpVisitor.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/DumpVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EmptyMemberDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EmptyMemberDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EmptyTypeDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EmptyTypeDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EnumConstantDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EnumConstantDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EnumDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EnumDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/EqualsVisitor.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/EqualsVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/FieldDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/FieldDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/GenericVisitor.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/GenericVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/GenericVisitorAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/GenericVisitorAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/InitializerDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/InitializerDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/MethodDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/MethodDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/ModifierVisitorAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/ModifierVisitorAdapter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestAdapters.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestAdapters.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCloneEquals.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCloneEquals.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestDumper.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestDumper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestHashCodeEquals.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestHashCodeEquals.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestNodePositions.java" afterPath="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestNodePositions.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/TypeDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/TypeDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/VoidVisitor.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/VoidVisitor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/VoidVisitorAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/VoidVisitorAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/javacc/java_1_7.jj" afterPath="$PROJECT_DIR$/src/main/javacc/java_1_7.jj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="javaparser.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382364927313" ignored="false" />
-    <file path="/TestCommentsParsing.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382372474937" ignored="false" />
+    <file path="/Dummy.txt" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382615187736" ignored="false" />
+    <file path="/TestCommentsParsing.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382628656599" ignored="false" />
     <file path="/java_1_7.jj" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382372641433" ignored="false" />
-    <file path="/CommentsParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382366508957" ignored="false" />
+    <file path="/CommentsParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382630098134" ignored="false" />
     <file path="/CommentsCollection.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382369560320" ignored="false" />
-    <file path="/TestCommentsParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382368621917" ignored="false" />
-    <file path="/Node.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382372534590" ignored="false" />
+    <file path="/TestCommentsParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382630202879" ignored="false" />
+    <file path="/Node.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382615859871" ignored="false" />
     <file path="/ChildrenVisitor.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382295428619" ignored="false" />
     <file path="/TreeVisitor.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382295427153" ignored="false" />
-    <file path="/JavaParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382370084840" ignored="false" />
+    <file path="/JavaParser.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382628986527" ignored="false" />
     <file path="/SourcesHelper.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382296630630" ignored="false" />
     <file path="/a.dummy" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382296058547" ignored="false" />
     <file path="/ClassWithBlockComments.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382365178899" ignored="false" />
     <file path="/fragment.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382365998703" ignored="false" />
     <file path="/ClassWithJavadocComments.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382366245510" ignored="false" />
     <file path="/ClassWIthVariousOrphanComments.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382369739359" ignored="false" />
+    <file path="/DumpVisitor.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382618102154" ignored="false" />
+    <file path="/Position.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382616320886" ignored="false" />
+    <file path="/TestDumper.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382618656347" ignored="false" />
+    <file path="/MethodDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621320503" ignored="false" />
+    <file path="/CompilationUnit.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382622895536" ignored="false" />
+    <file path="/AnnotationDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621127572" ignored="false" />
+    <file path="/DocumentableNode.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621405946" ignored="false" />
+    <file path="/AnnotationMemberDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621170889" ignored="false" />
+    <file path="/ClassOrInterfaceDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621192265" ignored="false" />
+    <file path="/ConstructorDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621210342" ignored="false" />
+    <file path="/EmptyMemberDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621230704" ignored="false" />
+    <file path="/EmptyTypeDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621242441" ignored="false" />
+    <file path="/EnumConstantDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621256119" ignored="false" />
+    <file path="/EnumDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621270160" ignored="false" />
+    <file path="/FieldDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621290994" ignored="false" />
+    <file path="/InitializerDeclaration.java" changelist="a1bd2d1d-c930-41af-b529-947e8f768e72" time="1382621305460" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +95,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -79,6 +131,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -91,16 +144,36 @@
       <file leaf-file-name="TestCommentsParsing.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="62" column="108" selection-start="2302" selection-end="2302" vertical-scroll-proportion="0.5516854">
+            <state line="16" column="0" selection-start="430" selection-end="2836" vertical-scroll-proportion="0.34732825">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommentsParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="47" column="37" selection-start="1504" selection-end="1504" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="java_1_7.jj" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/javacc/java_1_7.jj">
+      <file leaf-file-name="JavadocComment.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/JavadocComment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="199" column="45" selection-start="6717" selection-end="6717" vertical-scroll-proportion="-28.08">
+            <state line="29" column="44" selection-start="1116" selection-end="1116" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Comment.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/Comment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="33" column="22" selection-start="1161" selection-end="1161" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -109,28 +182,7 @@
       <file leaf-file-name="Node.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="277" column="0" selection-start="7274" selection-end="7274" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#1668#1674#0" expanded="true" />
-                <element signature="e#6998#7007#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ClassWithVariousOrphanComments.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithVariousOrphanComments.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="13" selection-start="83" selection-end="83" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CompilationUnit.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/CompilationUnit.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="141" column="16" selection-start="4558" selection-end="4573" vertical-scroll-proportion="0.0">
+            <state line="271" column="24" selection-start="7076" selection-end="7095" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -139,25 +191,20 @@
       <file leaf-file-name="JavaParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="296" column="70" selection-start="10103" selection-end="10103" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="368" column="41" selection-start="13018" selection-end="13018" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#12224#12233#0" expanded="true" />
+                <element signature="e#12853#12862#0" expanded="true" />
+                <element signature="e#12921#12927#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClassWithJavadocComments.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithJavadocComments.java">
+      <file leaf-file-name="DumperTestClass.java.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/DumperTestClass.java.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="16" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ClassWithBlockComments.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithBlockComments.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="15" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0">
+            <state line="37" column="28" selection-start="827" selection-end="827" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -166,10 +213,8 @@
       <file leaf-file-name="TestCommentsParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="163" column="0" selection-start="7843" selection-end="7843" vertical-scroll-proportion="-12.470589">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="109" column="23" selection-start="5262" selection-end="5262" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -177,7 +222,16 @@
       <file leaf-file-name="ClassWithLineComments.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithLineComments.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="4" selection-start="130" selection-end="130" vertical-scroll-proportion="0.0">
+            <state line="7" column="31" selection-start="125" selection-end="125" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DocumentableNode.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/DocumentableNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="17" selection-start="249" selection-end="249" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -201,21 +255,21 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/CommentsParser.java" />
-        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/ChildrenVisitor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/TreeVisitor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/japa/parser/SourcesHelper.java" />
-        <option value="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithLineComments.java" />
-        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java" />
-        <option value="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithBlockComments.java" />
-        <option value="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithJavadocComments.java" />
-        <option value="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWIthVariousOrphanComments.java" />
-        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsCollection.java" />
-        <option value="$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithVariousOrphanComments.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/AnnotationMemberDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/ClassOrInterfaceDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/ConstructorDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EmptyTypeDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EmptyMemberDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EnumConstantDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/EnumDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/FieldDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/InitializerDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/body/MethodDeclaration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/CloneVisitor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/CompilationUnit.java" />
         <option value="$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java" />
         <option value="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java" />
-        <option value="$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java" />
-        <option value="$PROJECT_DIR$/src/main/javacc/java_1_7.jj" />
         <option value="$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java" />
       </list>
     </option>
@@ -252,12 +306,17 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="javaparser" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -267,6 +326,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="javaparser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="javaparser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="javaparser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -359,10 +432,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="javacc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -458,23 +527,26 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="project.structure.last.edited" value="Project" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="project.structure.proportion" value="0.0" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="options.lastSelected" value="preferences.externalTools" />
     <property name="MemberChooser.sorted" value="false" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -488,6 +560,72 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="japa.parser.ast.test" />
       <option name="MAIN_CLASS_NAME" value="japa.parser.ast.test.TestCommentsParsing" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestAdapters" type="JUnit" factoryName="JUnit" temporary="true">
+      <module name="javaparser" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="japa.parser.ast.test" />
+      <option name="MAIN_CLASS_NAME" value="japa.parser.ast.test.TestAdapters" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestCloneEquals" type="JUnit" factoryName="JUnit" temporary="true">
+      <module name="javaparser" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="japa.parser.ast.test" />
+      <option name="MAIN_CLASS_NAME" value="japa.parser.ast.test.TestCloneEquals" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestCommentsParser" type="JUnit" factoryName="JUnit" temporary="true">
+      <module name="javaparser" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="japa.parser.ast.test" />
+      <option name="MAIN_CLASS_NAME" value="japa.parser.ast.test.TestCommentsParser" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -518,6 +656,19 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -543,19 +694,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -592,12 +730,18 @@
       <patterns />
       <method />
     </configuration>
-    <list size="1">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="JUnit.TestCommentsParsing" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.TestAdapters" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.TestCloneEquals" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.TestCommentsParser" />
     </list>
     <recent_temporary>
-      <list size="1">
+      <list size="4">
         <item index="0" class="java.lang.String" itemvalue="JUnit.TestCommentsParsing" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.TestCommentsParser" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.TestCloneEquals" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TestAdapters" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -637,22 +781,22 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32870865" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32870865" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.6709265" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.6093917" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3906083" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296582" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39911798" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -722,123 +866,214 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/target/generated-sources/javacc/japa/parser/ASTParser.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/body/FieldDeclaration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="316" column="30" selection-start="9999" selection-end="9999" vertical-scroll-proportion="0.0">
+        <state line="102" column="8" selection-start="3127" selection-end="3204" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/SourcesHelper.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/body/InitializerDeclaration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="13" selection-start="54" selection-end="54" vertical-scroll-proportion="0.0">
+        <state line="60" column="8" selection-start="2007" selection-end="2084" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/Helper.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/body/MethodDeclaration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="12" selection-start="1254" selection-end="1254" vertical-scroll-proportion="3.04">
+        <state line="175" column="8" selection-start="4670" selection-end="4747" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestAdapters.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/body/TypeDeclaration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="13" selection-start="1340" selection-end="1340" vertical-scroll-proportion="-6.08">
+        <state line="46" column="0" selection-start="1372" selection-end="1372" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/visitor/CloneVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="11" selection-start="2745" selection-end="2745" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsCollection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="33" selection-start="1240" selection-end="1240" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithLineComments.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="4" selection-start="130" selection-end="130" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithJavadocComments.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="16" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithBlockComments.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="15" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="296" column="70" selection-start="10103" selection-end="10103" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/CompilationUnit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="141" column="16" selection-start="4558" selection-end="4573" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="163" column="0" selection-start="7843" selection-end="7843" vertical-scroll-proportion="-12.470589">
+        <state line="365" column="0" selection-start="14060" selection-end="14060" vertical-scroll-proportion="-5.392157">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithVariousOrphanComments.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/CompilationUnit.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="13" selection-start="83" selection-end="83" vertical-scroll-proportion="0.0">
+        <state line="104" column="46" selection-start="3475" selection-end="3475" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/DocumentableNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="17" selection-start="249" selection-end="249" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="277" column="0" selection-start="7274" selection-end="7274" vertical-scroll-proportion="0.0">
+        <state line="271" column="24" selection-start="7076" selection-end="7095" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/DumperTestClass.java.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="28" selection-start="827" selection-end="827" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/Comment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="22" selection-start="1161" selection-end="1161" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/japa/parser/ast/test/ClassWithLineComments.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="31" selection-start="125" selection-end="125" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/JavadocComment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="44" selection-start="1116" selection-end="1116" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/JavaParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="368" column="41" selection-start="13018" selection-end="13018" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#1668#1674#0" expanded="true" />
-            <element signature="e#6998#7007#0" expanded="true" />
+            <element signature="e#12224#12233#0" expanded="true" />
+            <element signature="e#12853#12862#0" expanded="true" />
+            <element signature="e#12921#12927#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/javacc/java_1_7.jj">
+    <entry file="file://$PROJECT_DIR$/src/main/java/japa/parser/ast/comments/CommentsParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="199" column="45" selection-start="6717" selection-end="6717" vertical-scroll-proportion="-28.08">
+        <state line="47" column="37" selection-start="1504" selection-end="1504" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="109" column="23" selection-start="5262" selection-end="5262" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/japa/parser/ast/test/TestCommentsParsing.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="108" selection-start="2302" selection-end="2302" vertical-scroll-proportion="0.5516854">
-          <folding />
+        <state line="16" column="0" selection-start="430" selection-end="2836" vertical-scroll-proportion="0.34732825">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>javaparser</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: junit:junit:4.11</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
 

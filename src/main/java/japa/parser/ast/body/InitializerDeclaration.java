@@ -21,6 +21,8 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
@@ -28,7 +30,7 @@ import japa.parser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class InitializerDeclaration extends BodyDeclaration {
+public final class InitializerDeclaration extends BodyDeclaration implements DocumentableNode {
 
     private boolean isStatic;
 
@@ -38,18 +40,13 @@ public final class InitializerDeclaration extends BodyDeclaration {
     }
 
     public InitializerDeclaration(boolean isStatic, BlockStmt block) {
-        this.isStatic = isStatic;
-        this.block = block;
-    }
-
-    public InitializerDeclaration(JavadocComment javaDoc, boolean isStatic, BlockStmt block) {
-        super(null, javaDoc);
+        super(null);
         setStatic(isStatic);
         setBlock(block);
     }
 
-    public InitializerDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, boolean isStatic, BlockStmt block) {
-        super(beginLine, beginColumn, endLine, endColumn, null, javaDoc);
+    public InitializerDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, boolean isStatic, BlockStmt block) {
+        super(beginLine, beginColumn, endLine, endColumn, null);
         setStatic(isStatic);
         setBlock(block);
     }
@@ -57,6 +54,11 @@ public final class InitializerDeclaration extends BodyDeclaration {
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
+    }
+
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -79,5 +81,10 @@ public final class InitializerDeclaration extends BodyDeclaration {
 
     public void setStatic(boolean isStatic) {
         this.isStatic = isStatic;
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

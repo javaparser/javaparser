@@ -25,7 +25,8 @@ import japa.parser.ast.body.AnnotationDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.EmptyTypeDeclaration;
 import japa.parser.ast.body.EnumDeclaration;
-import japa.parser.ast.body.JavadocComment;
+import japa.parser.ast.comments.Comment;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
@@ -62,24 +63,20 @@ public final class CompilationUnit extends Node {
 
     private List<TypeDeclaration> types;
 
-    private List<Comment> comments;
-
     public CompilationUnit() {
     }
 
-    public CompilationUnit(PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types, List<Comment> comments) {
+    public CompilationUnit(PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
         setPackage(pakage);
         setImports(imports);
         setTypes(types);
-        setComments(comments);
     }
 
-    public CompilationUnit(int beginLine, int beginColumn, int endLine, int endColumn, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types, List<Comment> comments) {
+    public CompilationUnit(int beginLine, int beginColumn, int endLine, int endColumn, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
         super(beginLine, beginColumn, endLine, endColumn);
         setPackage(pakage);
         setImports(imports);
         setTypes(types);
-        setComments(comments);
     }
 
     @Override
@@ -101,11 +98,11 @@ public final class CompilationUnit extends Node {
      * @return list with all comments of this compilation unit or
      *         <code>null</code>
      * @see JavadocComment
-     * @see LineComment
-     * @see BlockComment
+     * @see japa.parser.ast.comments.LineComment
+     * @see japa.parser.ast.comments.BlockComment
      */
     public List<Comment> getComments() {
-        return comments;
+        return this.getAllContainedComments();
     }
 
     /**
@@ -150,8 +147,7 @@ public final class CompilationUnit extends Node {
      *            the list of comments
      */
     public void setComments(List<Comment> comments) {
-        this.comments = comments;
-		setAsParentNodeOf(this.comments);
+        throw new RuntimeException("Not implemented!");
     }
 
     /**

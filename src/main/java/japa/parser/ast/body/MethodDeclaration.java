@@ -21,7 +21,9 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
 import japa.parser.ast.TypeParameter;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.stmt.BlockStmt;
@@ -34,7 +36,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration {
+public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode{
 
 	private int modifiers;
 
@@ -68,10 +70,10 @@ public final class MethodDeclaration extends BodyDeclaration {
 		setParameters(parameters);
 	}
 
-	public MethodDeclaration(final JavadocComment javaDoc, final int modifiers, final List<AnnotationExpr> annotations,
+	public MethodDeclaration(final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
-		super(annotations, javaDoc);
+		super(annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
 		setType(type);
@@ -83,10 +85,10 @@ public final class MethodDeclaration extends BodyDeclaration {
 	}
 
 	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final JavadocComment javaDoc, final int modifiers, final List<AnnotationExpr> annotations,
+			final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
+		super(beginLine, beginColumn, endLine, endColumn, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
 		setType(type);
@@ -169,7 +171,12 @@ public final class MethodDeclaration extends BodyDeclaration {
         this.name = name;
     }
 
-	public void setParameters(final List<Parameter> parameters) {
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void setParameters(final List<Parameter> parameters) {
 		this.parameters = parameters;
 		setAsParentNodeOf(this.parameters);
 	}
@@ -188,4 +195,9 @@ public final class MethodDeclaration extends BodyDeclaration {
 		this.typeParameters = typeParameters;
 		setAsParentNodeOf(typeParameters);
 	}
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

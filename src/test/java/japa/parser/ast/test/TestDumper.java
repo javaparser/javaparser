@@ -32,7 +32,7 @@ import org.junit.Test;
 public class TestDumper {
 
 	@Test public void testDumpVisitor() throws Exception {
-		final String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
+		final String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java.txt"));
 		final CompilationUnit cu = Helper.parserString(source);
 		assertEquals(source, cu.toString());
 	}
@@ -82,12 +82,11 @@ public class TestDumper {
 				"    /** multi-line\r\n javadoc\n*/\n" + //
 				"    int e = 0;\n" + //
 				"}\n" + //
+                "//final comment" + //
 				"";
 
 		final CompilationUnit cu = Helper.parserString(source_with_comment);
+        assertEquals(6, cu.getAllContainedComments().size());
 		assertEquals(source_without_comment, cu.toString());
-		// FIXME should be 6, "final comment" is missing
-		//        assertEquals(6, cu.getComments().size());
-		assertEquals(5, cu.getComments().size());
 	}
 }

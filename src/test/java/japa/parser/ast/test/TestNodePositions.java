@@ -5,10 +5,10 @@ package japa.parser.ast.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import japa.parser.ast.BlockComment;
+import japa.parser.ast.comments.BlockComment;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.LineComment;
+import japa.parser.ast.comments.LineComment;
 import japa.parser.ast.Node;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.TypeParameter;
@@ -22,7 +22,7 @@ import japa.parser.ast.body.EnumConstantDeclaration;
 import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
-import japa.parser.ast.body.JavadocComment;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.VariableDeclarator;
@@ -95,7 +95,7 @@ import org.junit.Test;
 public class TestNodePositions {
 
 	@Test public void testNodePositions() throws Exception {
-		String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
+		String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java.txt"));
 		final CompilationUnit cu = Helper.parserString(source);
 
 		cu.accept(new TestVisitor(source), null);

@@ -23,7 +23,9 @@ package japa.parser.ast.body;
 
 import java.util.List;
 
+import japa.parser.ast.DocumentableNode;
 import japa.parser.ast.TypeParameter;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.stmt.BlockStmt;
@@ -33,7 +35,7 @@ import japa.parser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration {
+public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode {
 
     private int modifiers;
 
@@ -55,8 +57,8 @@ public final class ConstructorDeclaration extends BodyDeclaration {
         setName(name);
     }
 
-    public ConstructorDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
-        super(annotations, javaDoc);
+    public ConstructorDeclaration(int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
+        super(annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
@@ -65,8 +67,8 @@ public final class ConstructorDeclaration extends BodyDeclaration {
         setBlock(block);
     }
 
-    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
+    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
+        super(beginLine, beginColumn, endLine, endColumn, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
@@ -132,6 +134,11 @@ public final class ConstructorDeclaration extends BodyDeclaration {
         this.name = new NameExpr(name);
     }
 
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public void setNameExpr(NameExpr name) {
         this.name = name;
     }
@@ -149,5 +156,10 @@ public final class ConstructorDeclaration extends BodyDeclaration {
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
 		setAsParentNodeOf(this.typeParameters);
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

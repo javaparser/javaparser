@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import japa.parser.ast.comments.Comment;
 import japa.parser.ast.visitor.DumpVisitor;
 import japa.parser.ast.visitor.EqualsVisitor;
 import japa.parser.ast.visitor.GenericVisitor;
@@ -307,4 +308,29 @@ public abstract class Node {
 			childNode.setParentNode(this);
 		}
 	}
+
+    public static final int ABSOLUTE_BEGIN_LINE = -1;
+    public static final int ABSOLUTE_END_LINE = -2;
+
+    public boolean isPositionedAfter(int line, int column){
+        if (line==ABSOLUTE_BEGIN_LINE) return true;
+        if (getBeginLine()>line){
+            return true;
+        } else if (getBeginLine()==line){
+            return getBeginColumn()>column;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isPositionedBefore(int line, int column){
+        if (line==ABSOLUTE_END_LINE) return true;
+        if (getEndLine()<line){
+            return true;
+        } else if (getEndLine()==line){
+            return getEndColumn()<column;
+        } else {
+            return false;
+        }
+    }
 }

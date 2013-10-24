@@ -1,11 +1,6 @@
 
 package japa.parser.ast.comments;
 
-import japa.parser.ast.BlockComment;
-import japa.parser.ast.LineComment;
-import japa.parser.ast.Comment;
-import japa.parser.ast.body.JavadocComment;
-
 import java.util.LinkedList;
 import java.util.List;
 
