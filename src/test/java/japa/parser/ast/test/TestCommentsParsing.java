@@ -158,4 +158,36 @@ public class TestCommentsParsing {
       assertEquals("comment floating inside the method",methodBody.getOrphanComments().get(0).getContent());
   }
 
+    @Test public void testOrphanCommentInsideClassDecl() throws Exception {
+        final String originalSource = "class /*Comment1*/ A {\n" +
+                "   //comment2\n" +
+                "    // comment3\n" +
+                "    int a;\n" +
+                "    /**comment4\n" +
+                "     * \n" +
+                "     * */\n" +
+                "//comment5    \n" +
+                " }";
+       final CompilationUnit cu = Helper.parserString(originalSource);
+       ClassOrInterfaceDeclaration classDecl = (ClassOrInterfaceDeclaration)cu.getTypes().get(0);
+       assertNull(classDecl.getComment());
+       assertEquals("Comment1",classDecl.getOrphanComments().get(0).getContent());
+    }
+
+    @Test public void testClassDeclComment() throws Exception {
+        final String originalSource = "/*Comment1*/class A {\n" +
+                "   //comment2\n" +
+                "    // comment3\n" +
+                "    int a;\n" +
+                "    /**comment4\n" +
+                "     * \n" +
+                "     * */\n" +
+                "//comment5    \n" +
+                " }";
+        final CompilationUnit cu = Helper.parserString(originalSource);
+        ClassOrInterfaceDeclaration classDecl = (ClassOrInterfaceDeclaration)cu.getTypes().get(0);
+        assertNotNull(classDecl.getComment());
+        assertEquals("Comment1",classDecl.getComment().getContent());
+    }
+
 }

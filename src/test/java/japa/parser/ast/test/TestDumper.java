@@ -22,10 +22,12 @@
 package japa.parser.ast.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import japa.parser.ast.CompilationUnit;
 
+import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import org.junit.Test;
 
 /**
@@ -103,8 +105,9 @@ public class TestDumper {
                 "//comment5    \n" +
                 " }";
 
-        final String dumpedSource = "/*Comment1*/\n"+
-                "class A {\n" +
+        final String dumpedSource =
+                "class A {\n\n"+
+                "    /*Comment1*/\n" +
                 "    //comment2\n" +
                 "    // comment3\n" +
                 "    int a;\n" +
@@ -112,9 +115,12 @@ public class TestDumper {
                 "     * \n" +
                 "     * */\n" +
                 "    //comment5    \n" +
-                " }";
+                "}";
 
         final CompilationUnit cu = Helper.parserString(originalSource);
+        ClassOrInterfaceDeclaration classDecl = (ClassOrInterfaceDeclaration)cu.getTypes().get(0);
+        assertEquals(4,classDecl.getOrphanComments().size());
+        assertEquals("Comment1",classDecl.getOrphanComments().get(0).getContent());
         assertEquals(dumpedSource.trim(), cu.toString().trim());
     }
 }

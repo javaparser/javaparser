@@ -304,7 +304,7 @@ public final class JavaParser {
         List<Node> children = cu.getChildrenNodes();
         sortByBeginPosition(children);
 
-        if (children.size()==0 || areInOrder(comments.get(0), children.get(0))){
+        if (cu.getPackage()!=null && (children.size()==0 || areInOrder(comments.get(0), children.get(0)))){
             cu.setComment(comments.get(0));
             comments.remove(0);
         }

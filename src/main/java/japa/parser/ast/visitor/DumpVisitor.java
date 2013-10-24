@@ -1573,12 +1573,13 @@ public final class DumpVisitor implements VoidVisitor<Object> {
            if (findingComments) commentsAtEnd++;
        }
        for (int i=0;i<commentsAtEnd;i++){
-           System.out.println("COMMENT AT END "+i);
           everything.get(everything.size()-commentsAtEnd+i).accept(this,null);
        }
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node){
+        if (node instanceof Comment) return;
+
         Node parent = node.getParentNode();
         if (parent==null) return;
         List<Node> everything = new LinkedList<Node>();
@@ -1588,13 +1589,15 @@ public final class DumpVisitor implements VoidVisitor<Object> {
         for (int i=0;i<everything.size();i++){
             if (everything.get(i)==node) positionOfTheChild=i;
         }
+        if (positionOfTheChild==-1) throw new RuntimeException("My index not found!!! "+node);
         int positionOfPreviousChild = -1;
-        for (int i=positionOfTheChild-1;i>0 && positionOfPreviousChild==-1;i--){
+        for (int i=positionOfTheChild-1;i>=0 && positionOfPreviousChild==-1;i--){
             if (!(everything.get(i) instanceof Comment)) positionOfPreviousChild = i;
         }
-        if (positionOfPreviousChild==-1) positionOfPreviousChild=0;
         for (int i=positionOfPreviousChild+1;i<positionOfTheChild;i++){
-            everything.get(i).accept(this,null);
+            Node nodeToPrint = everything.get(i);
+            if (!(nodeToPrint instanceof Comment)) throw new RuntimeException("Expected comment, instead "+nodeToPrint.getClass()+". Position of previous child: "+positionOfPreviousChild+", position of child "+positionOfTheChild);
+            nodeToPrint.accept(this,null);
         }
     }
 
