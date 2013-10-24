@@ -50,14 +50,14 @@ public class TestHashCodeEquals {
 	}
 
 	@Test public void tesCompilationUnitEqual() throws Exception {
-		final String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
+		final String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java.txt"));
 		final CompilationUnit cu1 = Helper.parserString(source);
 		final CompilationUnit cu2 = Helper.parserString(source);
 		assertEqualsAndHashCode(cu1, cu2);
 	}
 
 	@Test public void tesCompilationUnitNotEqual() throws Exception {
-		final String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java"));
+		final String source = Helper.readStream(getClass().getResourceAsStream("DumperTestClass.java.txt"));
 		final CompilationUnit cu1 = Helper.parserString(source);
 		final CompilationUnit cu2 = Helper.parserString(source);
 

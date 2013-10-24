@@ -46,9 +46,9 @@ public abstract class TypeDeclaration extends BodyDeclaration {
 	}
 
 	public TypeDeclaration(List<AnnotationExpr> annotations,
-			JavadocComment javaDoc, int modifiers, String name,
+			int modifiers, String name,
 			List<BodyDeclaration> members) {
-		super(annotations, javaDoc);
+		super(annotations);
 		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);
@@ -56,9 +56,9 @@ public abstract class TypeDeclaration extends BodyDeclaration {
 
 	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
 			int endColumn, List<AnnotationExpr> annotations,
-			JavadocComment javaDoc, int modifiers, String name,
+			int modifiers, String name,
 			List<BodyDeclaration> members) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
+		super(beginLine, beginColumn, endLine, endColumn, annotations);
 		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);

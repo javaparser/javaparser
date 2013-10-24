@@ -21,18 +21,21 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration {
+public final class FieldDeclaration extends BodyDeclaration implements DocumentableNode {
 
     private int modifiers;
 
@@ -57,15 +60,15 @@ public final class FieldDeclaration extends BodyDeclaration {
     	setVariables(variables);
     }
 
-    public FieldDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
-        super(annotations, javaDoc);
+    public FieldDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+        super(annotations);
         setModifiers(modifiers);
     	setType(type);
     	setVariables(variables);
     }
 
-    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
+    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+        super(beginLine, beginColumn, endLine, endColumn, annotations);
         setModifiers(modifiers);
     	setType(type);
     	setVariables(variables);
@@ -95,6 +98,11 @@ public final class FieldDeclaration extends BodyDeclaration {
         return type;
     }
 
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public List<VariableDeclarator> getVariables() {
         return variables;
     }
@@ -111,5 +119,10 @@ public final class FieldDeclaration extends BodyDeclaration {
     public void setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
 		setAsParentNodeOf(this.variables);
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

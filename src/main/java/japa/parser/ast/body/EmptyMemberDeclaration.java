@@ -21,23 +21,27 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EmptyMemberDeclaration extends BodyDeclaration {
+public final class EmptyMemberDeclaration extends BodyDeclaration implements DocumentableNode {
 
     public EmptyMemberDeclaration() {
+        super(null);
     }
 
-    public EmptyMemberDeclaration(JavadocComment javaDoc) {
-        super(null, javaDoc);
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public EmptyMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc) {
-        super(beginLine, beginColumn, endLine, endColumn, null, javaDoc);
+    public EmptyMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
+        super(beginLine, beginColumn, endLine, endColumn, null);
     }
 
     @Override
@@ -48,5 +52,10 @@ public final class EmptyMemberDeclaration extends BodyDeclaration {
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -21,6 +21,8 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
@@ -30,7 +32,11 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationDeclaration extends TypeDeclaration {
+public final class AnnotationDeclaration extends TypeDeclaration implements DocumentableNode {
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
     public AnnotationDeclaration() {
     }
@@ -39,12 +45,12 @@ public final class AnnotationDeclaration extends TypeDeclaration {
         super(modifiers, name);
     }
 
-    public AnnotationDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
-        super(annotations, javaDoc, modifiers, name, members);
+    public AnnotationDeclaration(int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+        super(annotations, modifiers, name, members);
     }
 
-    public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc, modifiers, name, members);
+    public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+        super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
     }
 
     @Override
@@ -57,4 +63,8 @@ public final class AnnotationDeclaration extends TypeDeclaration {
         v.visit(this, arg);
     }
 
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

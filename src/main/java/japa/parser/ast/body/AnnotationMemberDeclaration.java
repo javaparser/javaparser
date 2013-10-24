@@ -21,6 +21,8 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.type.Type;
@@ -32,7 +34,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration {
+public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode {
 
     private int modifiers;
 
@@ -52,16 +54,16 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration {
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
-        super(annotations, javaDoc);
+    public AnnotationMemberDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+        super(annotations);
         setModifiers(modifiers);
         setType(type);
         setName(name);
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
+    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+        super(beginLine, beginColumn, endLine, endColumn, annotations);
         setModifiers(modifiers);
         setType(type);
         setName(name);
@@ -96,6 +98,11 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration {
         return name;
     }
 
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public Type getType() {
         return type;
     }
@@ -115,5 +122,10 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration {
     public void setType(Type type) {
         this.type = type;
         setAsParentNodeOf(type);
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

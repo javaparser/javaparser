@@ -3,11 +3,11 @@ package japa.parser.ast.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import japa.parser.ast.BlockComment;
-import japa.parser.ast.Comment;
+import japa.parser.ast.comments.BlockComment;
+import japa.parser.ast.comments.Comment;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.LineComment;
+import japa.parser.ast.comments.LineComment;
 import japa.parser.ast.Node;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.TypeParameter;
@@ -22,7 +22,7 @@ import japa.parser.ast.body.EnumConstantDeclaration;
 import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
-import japa.parser.ast.body.JavadocComment;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
@@ -99,11 +99,10 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		PackageDeclaration package_ = cloneNodes(_n.getPackage(), _arg);
 		List<ImportDeclaration> imports = visit(_n.getImports(), _arg);
 		List<TypeDeclaration> types = visit(_n.getTypes(), _arg);
-		List<Comment> comments = visit(_n.getComments(), _arg);
 
 		return new CompilationUnit(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				package_, imports, types, comments
+				package_, imports, types
 		);
 	}
 
@@ -169,7 +168,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, _n.isInterface(), _n.getName(), typeParameters, extendsList, implementsList, members
+				_n.getModifiers(), annotations, _n.isInterface(), _n.getName(), typeParameters, extendsList, implementsList, members
 		);
 		r.setComment(comment);
 		return r;
@@ -186,7 +185,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		EnumDeclaration r = new EnumDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, _n.getName(), implementsList, entries, members
+				 _n.getModifiers(), annotations, _n.getName(), implementsList, entries, members
 		);
 		r.setComment(comment);
 		return r;
@@ -198,8 +197,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		EmptyTypeDeclaration r = new EmptyTypeDeclaration(
-				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc
+				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()
 		);
 		r.setComment(comment);
 		return r;
@@ -215,7 +213,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		EnumConstantDeclaration r = new EnumConstantDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, annotations, _n.getName(), args, classBody
+				 annotations, _n.getName(), args, classBody
 		);
 		r.setComment(comment);
 		return r;
@@ -230,7 +228,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		AnnotationDeclaration r = new AnnotationDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, _n.getName(), members
+				 _n.getModifiers(), annotations, _n.getName(), members
 		);
 		r.setComment(comment);
 		return r;
@@ -246,7 +244,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, type_, _n.getName(), defaultValue
+				 _n.getModifiers(), annotations, type_, _n.getName(), defaultValue
 		);
 		r.setComment(comment);
 		return r;
@@ -262,7 +260,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		FieldDeclaration r = new FieldDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, type_, variables
+				 _n.getModifiers(), annotations, type_, variables
 		);
 		r.setComment(comment);
 		return r;
@@ -306,7 +304,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		ConstructorDeclaration r = new ConstructorDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, typeParameters, _n.getName(), parameters, throws_, block
+				 _n.getModifiers(), annotations, typeParameters, _n.getName(), parameters, throws_, block
 		);
 		r.setComment(comment);
 		return r;
@@ -325,7 +323,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		MethodDeclaration r = new MethodDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.getModifiers(), annotations, typeParameters, type_, _n.getName(), parameters, _n.getArrayCount(), throws_, block
+				 _n.getModifiers(), annotations, typeParameters, type_, _n.getName(), parameters, _n.getArrayCount(), throws_, block
 		);
 		r.setComment(comment);
 		return r;
@@ -367,8 +365,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		EmptyMemberDeclaration r = new EmptyMemberDeclaration(
-				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc
+				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()
 		);
 		r.setComment(comment);
 		return r;
@@ -382,7 +379,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		InitializerDeclaration r = new InitializerDeclaration(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				javaDoc, _n.isStatic(), block
+				 _n.isStatic(), block
 		);
 		r.setComment(comment);
 		return r;

@@ -19,50 +19,40 @@
 /*
  * Created on 23/05/2008
  */
-package japa.parser.ast;
+package japa.parser.ast.comments;
 
-import japa.parser.ast.body.JavadocComment;
+import japa.parser.ast.comments.Comment;
+import japa.parser.ast.visitor.GenericVisitor;
+import japa.parser.ast.visitor.VoidVisitor;
 
 /**
- * Abstract class for all AST nodes that represent comments.
+ * <p>
+ * AST node that represent line comments.
+ * </p>
+ * Line comments are started with "//" and finish at the end of the line ("\n").
  * 
- * @see BlockComment
- * @see LineComment
- * @see JavadocComment
  * @author Julio Vilmar Gesser
  */
-public abstract class Comment extends Node {
+public final class LineComment extends Comment {
 
-    private String content;
-
-    public Comment() {
+    public LineComment() {
     }
 
-    public Comment(String content) {
-        this.content = content;
+    public LineComment(String content) {
+        super(content);
     }
 
-    public Comment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        this.content = content;
+    public LineComment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
+        super(beginLine, beginColumn, endLine, endColumn, content);
     }
 
-    /**
-     * Return the text of the comment.
-     * 
-     * @return text of the comment
-     */
-    public final String getContent() {
-        return content;
+    @Override
+    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+        return v.visit(this, arg);
     }
 
-    /**
-     * Sets the text of the comment.
-     * 
-     * @param content
-     *            the text of the comment to set
-     */
-    public void setContent(String content) {
-        this.content = content;
+    @Override
+    public <A> void accept(VoidVisitor<A> v, A arg) {
+        v.visit(this, arg);
     }
 }

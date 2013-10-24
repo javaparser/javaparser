@@ -21,7 +21,9 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
 import japa.parser.ast.TypeParameter;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitor;
@@ -32,7 +34,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
+public final class ClassOrInterfaceDeclaration extends TypeDeclaration implements DocumentableNode {
 
 	private boolean interface_;
 
@@ -51,11 +53,11 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 		setInterface(isInterface);
 	}
 
-	public ClassOrInterfaceDeclaration(final JavadocComment javaDoc, final int modifiers,
+	public ClassOrInterfaceDeclaration(final int modifiers,
 			final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
-		super(annotations, javaDoc, modifiers, name, members);
+		super(annotations, modifiers, name, members);
 		setInterface(isInterface);
 		setTypeParameters(typeParameters);
 		setExtends(extendsList);
@@ -63,11 +65,11 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 	}
 
 	public ClassOrInterfaceDeclaration(final int beginLine, final int beginColumn, final int endLine,
-			final int endColumn, final JavadocComment javaDoc, final int modifiers,
+			final int endColumn, final int modifiers,
 			final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc, modifiers, name, members);
+		super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
 		setInterface(isInterface);
 		setTypeParameters(typeParameters);
 		setExtends(extendsList);
@@ -94,7 +96,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 		return typeParameters;
 	}
 
-	public boolean isInterface() {
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean isInterface() {
 		return interface_;
 	}
 
@@ -116,4 +123,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 		this.typeParameters = typeParameters;
 		setAsParentNodeOf(this.typeParameters);
 	}
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

@@ -22,8 +22,10 @@
 package japa.parser.ast;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
+import japa.parser.ast.comments.Comment;
 import japa.parser.ast.visitor.DumpVisitor;
 import japa.parser.ast.visitor.EqualsVisitor;
 import japa.parser.ast.visitor.GenericVisitor;
@@ -31,6 +33,10 @@ import japa.parser.ast.visitor.VoidVisitor;
 
 /**
  * Abstract class for all nodes of the AST.
+ *
+ * Each Node can have one associated comment which describe it and
+ * a number of "orphan comments" which it contains but are not specifically
+ * associated to any element.
  * 
  * @author Julio Vilmar Gesser
  */
@@ -45,6 +51,9 @@ public abstract class Node {
 	private int endColumn;
 	
 	private Node parentNode;
+
+    private List<Node> childrenNodes =  new LinkedList<Node>();
+    private List<Comment> orphanComments = new LinkedList<Comment>();
 
 	/**
 	 * This attribute can store additional information from semantic analysis.
@@ -109,7 +118,7 @@ public abstract class Node {
 	}
 
 	/**
-	 * Use this to retrieve comment associated to this node.
+	 * This is a comment associated with this node.
 	 */
 	public final Comment getComment() {
 		return comment;
@@ -164,6 +173,9 @@ public abstract class Node {
 	 * Use this to store additional information to this node.
 	 */
 	public final void setComment(final Comment comment) {
+        if (comment!=null && (this instanceof Comment)){
+            throw new RuntimeException("A comment can not be commented");
+        }
 		this.comment = comment;
 	}
 
@@ -217,8 +229,68 @@ public abstract class Node {
 		return parentNode;
 	}
 
+    public List<Node> getChildrenNodes(){
+        return childrenNodes;
+    }
+
+    public boolean contains(Node other){
+        if (getBeginLine()>other.getBeginLine()) return false;
+        if (getBeginLine()==other.getBeginLine() && getBeginColumn()>other.getBeginColumn()) return false;
+        if (getEndLine()<other.getEndLine()) return false;
+        if (getEndLine()==other.getEndLine() && getEndColumn()<other.getEndColumn()) return false;
+        return true;
+    }
+
+    public void addOrphanComment(Comment comment){
+        orphanComments.add(comment);
+        comment.setParentNode(this);
+    }
+
+    /**
+     * This is a list of Comment which are inside the node and are not associated
+     * with any meaningful AST Node.
+     *
+     * For example, comments at the end of methods (immediately before the parenthesis)
+     * or at the end of CompilationUnit are orphan comments.
+     *
+     * When more than one comments preceed a statement, the one immediately preceeding it
+     * it is associated with the statements, while the others are "orphan".
+     * @return
+     */
+    public List<Comment> getOrphanComments(){
+        return orphanComments;
+    }
+
+    /**
+     * This is the list of Comment which are contained in the Node either because
+     * they are properly associated to one of its children or because they are floating
+     * around inside the Node.
+     * @return
+     */
+    public List<Comment> getAllContainedComments(){
+        List<Comment> comments = new LinkedList<Comment>();
+        comments.addAll(getOrphanComments());
+
+        for (Node child : getChildrenNodes()){
+            if (child.getComment()!=null){
+                comments.add(child.getComment());
+            }
+            comments.addAll(child.getAllContainedComments());
+        }
+
+        return comments;
+    }
+
 	public void setParentNode(Node parentNode) {
+        // remove from old parent, if any
+        if (this.parentNode!=null){
+            this.parentNode.childrenNodes.remove(this);
+        }
 		this.parentNode = parentNode;
+        // add to new parent, if any
+        if (this.parentNode!=null){
+            this.parentNode.childrenNodes.add(this);
+        }
 	}
 
 	protected void setAsParentNodeOf(List<? extends Node> childNodes) {
@@ -236,4 +308,29 @@ public abstract class Node {
 			childNode.setParentNode(this);
 		}
 	}
+
+    public static final int ABSOLUTE_BEGIN_LINE = -1;
+    public static final int ABSOLUTE_END_LINE = -2;
+
+    public boolean isPositionedAfter(int line, int column){
+        if (line==ABSOLUTE_BEGIN_LINE) return true;
+        if (getBeginLine()>line){
+            return true;
+        } else if (getBeginLine()==line){
+            return getBeginColumn()>column;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isPositionedBefore(int line, int column){
+        if (line==ABSOLUTE_END_LINE) return true;
+        if (getEndLine()<line){
+            return true;
+        } else if (getEndLine()==line){
+            return getEndColumn()<column;
+        } else {
+            return false;
+        }
+    }
 }

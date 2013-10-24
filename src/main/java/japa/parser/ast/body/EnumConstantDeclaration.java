@@ -21,6 +21,8 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.visitor.GenericVisitor;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumConstantDeclaration extends BodyDeclaration {
+public final class EnumConstantDeclaration extends BodyDeclaration implements DocumentableNode{
 
     private String name;
 
@@ -46,15 +48,15 @@ public final class EnumConstantDeclaration extends BodyDeclaration {
         setName(name);
     }
 
-    public EnumConstantDeclaration(JavadocComment javaDoc, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
-        super(annotations, javaDoc);
+    public EnumConstantDeclaration(List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+        super(annotations);
         setName(name);
         setArgs(args);
         setClassBody(classBody);
     }
 
-    public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc);
+    public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+        super(beginLine, beginColumn, endLine, endColumn, annotations);
         setName(name);
         setArgs(args);
         setClassBody(classBody);
@@ -94,5 +96,15 @@ public final class EnumConstantDeclaration extends BodyDeclaration {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

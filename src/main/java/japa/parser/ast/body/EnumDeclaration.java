@@ -21,6 +21,8 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.DocumentableNode;
+import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitor;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration {
+public final class EnumDeclaration extends TypeDeclaration implements DocumentableNode{
 
     private List<ClassOrInterfaceType> implementsList;
 
@@ -44,14 +46,14 @@ public final class EnumDeclaration extends TypeDeclaration {
         super(modifiers, name);
     }
 
-    public EnumDeclaration(JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
-        super(annotations, javaDoc, modifiers, name, members);
+    public EnumDeclaration(int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+        super(annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);
     }
 
-    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, JavadocComment javaDoc, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, javaDoc, modifiers, name, members);
+    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+        super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);
     }
@@ -59,6 +61,11 @@ public final class EnumDeclaration extends TypeDeclaration {
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
+    }
+
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -82,5 +89,10 @@ public final class EnumDeclaration extends TypeDeclaration {
     public void setImplements(List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
