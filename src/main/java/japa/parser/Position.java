@@ -1,8 +1,8 @@
-package japa.parser.ast.visitor;
+package japa.parser;
 
 import japa.parser.ast.Node;
 
-class Position {
+public class Position {
     private int line;
     private int column;
 

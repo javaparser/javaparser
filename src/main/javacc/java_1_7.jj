@@ -52,6 +52,7 @@ import java.io.*;
 import java.util.*;
 import japa.parser.ast.*;
 import japa.parser.ast.body.*;
+import japa.parser.ast.comments.*;
 import japa.parser.ast.expr.*;
 import japa.parser.ast.stmt.*;
 import japa.parser.ast.type.*;

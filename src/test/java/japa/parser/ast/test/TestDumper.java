@@ -22,6 +22,8 @@
 package japa.parser.ast.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import japa.parser.ast.CompilationUnit;
 
 import org.junit.Test;
@@ -48,11 +50,11 @@ public class TestDumper {
 		final String source_with_comment = //
 		"package japa.parser.javacc;\n" + //
 				"public class Teste {\n" + //
-				"//line comment\n" + //
+				"//line comment \n" + //
 				"int a = 0;" + //
-				"//line comment\r\n" + //
+				"//line comment  \r\n" + //
 				"int b = 0;" + //
-				"//line comment\r" + //
+				"//line comment \r" + //
 				"int c = 0;" + //
 				"/* multi-line\n comment\n*/" + //
 				"int d = 0;" + //
@@ -61,7 +63,7 @@ public class TestDumper {
 				"}\n" + //
 				"//final comment" + //
 				"";
-		final String source_without_comment = //
+		final String source_dumped = //
 		"package japa.parser.javacc;\n" + //
 				"\n" + //
 				"public class Teste {\n" + //
@@ -79,7 +81,7 @@ public class TestDumper {
 				"    /* multi-line\n comment\n*/\n" + //
 				"    int d = 0;\n" + //
 				"\n" + //
-				"    /** multi-line\r\n javadoc\n*/\n" + //
+				"    /** multi-line\n javadoc\n*/\n" + //
 				"    int e = 0;\n" + //
 				"}\n" + //
                 "//final comment" + //
@@ -87,6 +89,32 @@ public class TestDumper {
 
 		final CompilationUnit cu = Helper.parserString(source_with_comment);
         assertEquals(6, cu.getAllContainedComments().size());
-		assertEquals(source_without_comment, cu.toString());
+		assertEquals(source_dumped.trim(), cu.toString().trim());
 	}
+
+    @Test public void testOrphanComments() throws Exception {
+        final String originalSource = "class /*Comment1*/ A {\n" +
+                "   //comment2\n" +
+                "    // comment3\n" +
+                "    int a;\n" +
+                "    /**comment4\n" +
+                "     * \n" +
+                "     * */\n" +
+                "//comment5    \n" +
+                " }";
+
+        final String dumpedSource = "/*Comment1*/\n"+
+                "class A {\n" +
+                "    //comment2\n" +
+                "    // comment3\n" +
+                "    int a;\n" +
+                "    /**comment4\n" +
+                "     * \n" +
+                "     * */\n" +
+                "    //comment5    \n" +
+                " }";
+
+        final CompilationUnit cu = Helper.parserString(originalSource);
+        assertEquals(dumpedSource.trim(), cu.toString().trim());
+    }
 }

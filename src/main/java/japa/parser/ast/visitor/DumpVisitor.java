@@ -21,6 +21,8 @@
  */
 package japa.parser.ast.visitor;
 
+import static japa.parser.PositionUtils.*;
+import japa.parser.Position;
 import japa.parser.ast.comments.BlockComment;
 import japa.parser.ast.comments.Comment;
 import japa.parser.ast.CompilationUnit;
@@ -112,6 +114,7 @@ import japa.parser.ast.type.VoidType;
 import japa.parser.ast.type.WildcardType;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -293,23 +296,11 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final CompilationUnit n, final Object arg) {
-        printOrphanCommentsBetween(n.getOrphanComments(),arg,
-                after(),
-                before(n.getComment(), n.getPackage(), n.getImports(), n.getTypes()));
-
 		printJavaComment(n.getComment(), arg);
-
-        printOrphanCommentsBetween(n.getOrphanComments(),arg,
-                after(n.getComment()),
-                before(n.getPackage(),n.getImports(),n.getTypes()));
 
 		if (n.getPackage() != null) {
 			n.getPackage().accept(this, arg);
 		}
-
-        printOrphanCommentsBetween(n.getOrphanComments(),arg,
-                after(n.getComment(),n.getPackage()),
-                before(n.getImports(), n.getTypes()));
 
 		if (n.getImports() != null) {
 			for (final ImportDeclaration i : n.getImports()) {
@@ -317,10 +308,6 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			}
 			printer.printLn();
 		}
-
-        printOrphanCommentsBetween(n.getOrphanComments(),arg,
-                after(n.getComment(),n.getPackage(),n.getImports()),
-                before(n.getTypes()));
 
 		if (n.getTypes() != null) {
 			for (final Iterator<TypeDeclaration> i = n.getTypes().iterator(); i.hasNext();) {
@@ -332,9 +319,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			}
 		}
 
-        printOrphanCommentsBetween(n.getOrphanComments(),arg,
-                after(n.getComment(),n.getPackage(),n.getImports(),n.getTypes()),
-                before());
+        printOrphanCommentsEnding(n);
 	}
 
 	@Override public void visit(final PackageDeclaration n, final Object arg) {
@@ -344,11 +329,15 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		n.getName().accept(this, arg);
 		printer.printLn(";");
 		printer.printLn();
+
+        printOrphanCommentsEnding(n);
 	}
 
 	@Override public void visit(final NameExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print(n.getName());
+
+        printOrphanCommentsEnding(n);
 	}
 
 	@Override public void visit(final QualifiedNameExpr n, final Object arg) {
@@ -356,6 +345,8 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		n.getQualifier().accept(this, arg);
 		printer.print(".");
 		printer.print(n.getName());
+
+        printOrphanCommentsEnding(n);
 	}
 
 	@Override public void visit(final ImportDeclaration n, final Object arg) {
@@ -369,6 +360,8 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			printer.print(".*");
 		}
 		printer.printLn(";");
+
+        printOrphanCommentsEnding(n);
 	}
 
 	@Override public void visit(final ClassOrInterfaceDeclaration n, final Object arg) {
@@ -414,6 +407,9 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		if (n.getMembers() != null) {
 			printMembers(n.getMembers(), arg);
 		}
+
+        printOrphanCommentsEnding(n);
+
 		printer.unindent();
 		printer.print("}");
 	}
@@ -422,10 +418,11 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printer.print(";");
+
+        printOrphanCommentsEnding(n);
 	}
 
 	@Override public void visit(final JavadocComment n, final Object arg) {
-		printJavaComment(n.getComment(), arg);
 		printer.print("/**");
 		printer.print(n.getContent());
 		printer.printLn("*/");
@@ -508,6 +505,8 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final FieldDeclaration n, final Object arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
@@ -928,6 +927,8 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final MethodDeclaration n, final Object arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
@@ -1055,6 +1056,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final BlockStmt n, final Object arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
 		printJavaComment(n.getComment(), arg);
 		printer.printLn("{");
 		if (n.getStmts() != null) {
@@ -1454,7 +1456,6 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final LineComment n, final Object arg) {
-		printJavaComment(n.getComment(), arg);
 		printer.print("//");
 		String tmp = n.getContent();
 		tmp = tmp.replace('\r', ' ');
@@ -1463,7 +1464,6 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final BlockComment n, final Object arg) {
-		printJavaComment(n.getComment(), arg);
 		printer.print("/*");
 		printer.print(n.getContent());
 		printer.printLn("*/");
@@ -1557,6 +1557,45 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
     private void printOrphanComment(final Comment comment,final Object arg){
         comment.accept(this,arg);
+    }
+
+    private void printOrphanCommentsEnding(final Node node){
+       List<Node> everything = new LinkedList<Node>();
+       everything.addAll(node.getChildrenNodes());
+       sortByBeginPosition(everything);
+       if (everything.size()==0) return;
+
+       int commentsAtEnd = 0;
+       boolean findingComments = true;
+       while (findingComments){
+           Node last = everything.get(everything.size()-1-commentsAtEnd);
+           findingComments = (last instanceof Comment);
+           if (findingComments) commentsAtEnd++;
+       }
+       for (int i=0;i<commentsAtEnd;i++){
+           System.out.println("COMMENT AT END "+i);
+          everything.get(everything.size()-commentsAtEnd+i).accept(this,null);
+       }
+    }
+
+    private void printOrphanCommentsBeforeThisChildNode(final Node node){
+        Node parent = node.getParentNode();
+        if (parent==null) return;
+        List<Node> everything = new LinkedList<Node>();
+        everything.addAll(parent.getChildrenNodes());
+        sortByBeginPosition(everything);
+        int positionOfTheChild = -1;
+        for (int i=0;i<everything.size();i++){
+            if (everything.get(i)==node) positionOfTheChild=i;
+        }
+        int positionOfPreviousChild = -1;
+        for (int i=positionOfTheChild-1;i>0 && positionOfPreviousChild==-1;i--){
+            if (!(everything.get(i) instanceof Comment)) positionOfPreviousChild = i;
+        }
+        if (positionOfPreviousChild==-1) positionOfPreviousChild=0;
+        for (int i=positionOfPreviousChild+1;i<positionOfTheChild;i++){
+            everything.get(i).accept(this,null);
+        }
     }
 
 }

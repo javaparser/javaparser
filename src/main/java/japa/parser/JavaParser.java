@@ -21,6 +21,7 @@
  */
 package japa.parser;
 
+import static japa.parser.PositionUtils.*;
 import japa.parser.ast.comments.BlockComment;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
@@ -311,24 +312,7 @@ public final class JavaParser {
         insertCommentsInNode(cu,comments);
     }
 
-    private static boolean areInOrder(Node a, Node b){
-        return
-                (a.getBeginLine()<b.getBeginLine())
-                        || (a.getBeginLine()==b.getBeginLine() && a.getBeginColumn()<b.getBeginColumn() );
-    }
 
-    private static <T extends Node> void sortByBeginPosition(List<T> nodes){
-        for (int i=0;i<nodes.size();i++){
-            for (int j=i+1;j<nodes.size();j++){
-                T nodeI = nodes.get(i);
-                T nodeJ = nodes.get(j);
-                if (!areInOrder(nodeI,nodeJ)){
-                    nodes.set(i,nodeJ);
-                    nodes.set(j,nodeI);
-                }
-            }
-        }
-    }
 
     /**
      * This method try to attributes the nodes received to child of the node.
@@ -337,7 +321,7 @@ public final class JavaParser {
     private static void insertCommentsInNode(Node node, List<Comment> commentsToAttribute){
         if (commentsToAttribute.size()==0) return;
 
-        System.out.println("Looking to place "+commentsToAttribute.size()+" comments in "+node.getClass());
+        //System.out.println("Looking to place "+commentsToAttribute.size()+" comments in "+node.getClass());
 
         // the comments can:
         // 1) Inside one of the child, then it is the child that have to associate them
@@ -369,10 +353,10 @@ public final class JavaParser {
         childrenAndComments.addAll(commentsToAttribute);
         sortByBeginPosition(childrenAndComments);
 
-        System.out.println("Children and remaining comments: "+childrenAndComments.size()+". Class "+node.getClass());
+        //System.out.println("Children and remaining comments: "+childrenAndComments.size()+". Class "+node.getClass());
 
         for (Node thing : childrenAndComments){
-            System.out.println(" * "+thing.getClass()+" L "+thing.getBeginLine()+" C "+thing.getBeginColumn());
+            //System.out.println(" * "+thing.getClass()+" L "+thing.getBeginLine()+" C "+thing.getBeginColumn());
             if (thing instanceof Comment){
                 previousComment = (Comment)thing;
             } else {

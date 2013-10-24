@@ -97,7 +97,7 @@ public class CommentsParser {
                         }
                         state = State.CODE;
                     } else {
-                        currentContent.append(c);
+                        currentContent.append(c=='\r'?'\n':c);
                     }
                     break;
                 default:
