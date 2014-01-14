@@ -243,6 +243,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return Boolean.FALSE;
 		}
 
+        if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
+      		return Boolean.FALSE;
+      	}
+
 		return Boolean.TRUE;
 	}
 
@@ -252,6 +256,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!objEquals(n1.getContent(), n2.getContent())) {
 			return Boolean.FALSE;
 		}
+
+        if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
+      			return Boolean.FALSE;
+      	}
 
 		return Boolean.TRUE;
 	}
