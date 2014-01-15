@@ -1,16 +1,16 @@
 package japa.parser.ast.test;
 
+import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.stmt.BlockStmt;
-import japa.parser.ast.Node;
 import org.junit.Test;
 
-import japa.parser.ast.CompilationUnit;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class TestCommentsParsing {
 
@@ -190,4 +190,33 @@ public class TestCommentsParsing {
         assertEquals("Comment1",classDecl.getComment().getContent());
     }
 
+    @Test
+    public void testSameCommentsInACompilationUnit() throws Exception {
+        String source = Helper.readStream(getClass().getResourceAsStream("ClassWithLineCommentsInMultipleMethods.java"));
+        CompilationUnit cu = Helper.parserString(source);
+
+        assertNull(cu.getComment());
+
+        ClassOrInterfaceDeclaration clazzDecl = (ClassOrInterfaceDeclaration) cu.getChildrenNodes().get(2);
+
+        MethodDeclaration methodDecl = (MethodDeclaration) clazzDecl.getMembers().get(0);
+        BlockStmt block = methodDecl.getBody();
+
+        assertEquals(4, block.getAllContainedComments().size());
+        assertEquals(3, block.getOrphanComments().size());
+        assertEquals(0, methodDecl.getOrphanComments().size());
+        assertEquals(4, methodDecl.getAllContainedComments().size());
+
+        MethodDeclaration methodDec2 = (MethodDeclaration) clazzDecl.getMembers().get(1);
+        block = methodDec2.getBody();
+
+        assertEquals(5, block.getAllContainedComments().size());
+        assertEquals(4, block.getOrphanComments().size());
+        assertEquals(0, methodDec2.getOrphanComments().size());
+        assertEquals(5, methodDec2.getAllContainedComments().size());
+
+        assertEquals(9, clazzDecl.getAllContainedComments().size());
+        assertEquals(9, cu.getAllContainedComments().size());
+        assertEquals(0, cu.getOrphanComments().size());
+    }
 }
