@@ -10,7 +10,7 @@
 	<groupId>com.google.code.javaparser</groupId>
 	<artifactId>javaparser</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.11-SNAPSHOT</version>
+	<version>1.0.12-SNAPSHOT</version>
 
 	<name>javaparser</name>
 	<url>http://code.google.com/p/javaparser/</url>
