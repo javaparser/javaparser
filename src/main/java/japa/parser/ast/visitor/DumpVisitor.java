@@ -21,14 +21,10 @@
  */
 package japa.parser.ast.visitor;
 
-import static japa.parser.PositionUtils.*;
-import japa.parser.Position;
-import japa.parser.ast.comments.BlockComment;
-import japa.parser.ast.comments.Comment;
+import static japa.parser.PositionUtils.sortByBeginPosition;
 import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.Node;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.comments.LineComment;
+import japa.parser.ast.Node;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.body.AnnotationDeclaration;
@@ -42,7 +38,6 @@ import japa.parser.ast.body.EnumConstantDeclaration;
 import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
-import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.body.MultiTypeParameter;
@@ -50,6 +45,10 @@ import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.body.VariableDeclaratorId;
+import japa.parser.ast.comments.BlockComment;
+import japa.parser.ast.comments.Comment;
+import japa.parser.ast.comments.JavadocComment;
+import japa.parser.ast.comments.LineComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.ArrayAccessExpr;
 import japa.parser.ast.expr.ArrayCreationExpr;
@@ -874,6 +873,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		case preDecrement:
 			printer.print("--");
 			break;
+		default:
 		}
 
 		n.getExpr().accept(this, arg);
@@ -885,6 +885,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		case posDecrement:
 			printer.print("--");
 			break;
+		default:
 		}
 	}
 
@@ -990,7 +991,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		n.getId().accept(this, arg);
 	}
 	
-    public void visit(MultiTypeParameter n, Object arg) {
+    @Override public void visit(MultiTypeParameter n, Object arg) {
         printAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
 
@@ -1468,96 +1469,6 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(n.getContent());
 		printer.printLn("*/");
 	}
-
-    private Position before(Object... things){
-        Node n = firstOf(things);
-        if (n==null){
-            return Position.ABSOLUTE_START;
-        } else {
-            return Position.beginOf(n);
-        }
-    }
-
-    private Position after(Object... things){
-        Node n = lastOf(things);
-        if (n==null){
-            return Position.ABSOLUTE_START;
-        } else {
-            return Position.endOf(n);
-        }
-    }
-
-    private Node lastOf(Object... things){
-        for (int i=things.length-1;i>=0;i--){
-            Object thing = things[i];
-            if (thing != null) {
-                if (thing instanceof Node){
-                    return (Node)thing;
-                } else if (thing instanceof List){
-                    List<Node> list = (List<Node>)thing;
-                    if (list.size()>0){
-                        return list.get(list.size()-1);
-                    }
-                } else {
-                    throw new RuntimeException("Wrong thing passed");
-                }
-            }
-        }
-        return null;
-    }
-
-    private Node firstOf(Object... things){
-        for (Object thing : things){
-            if (thing != null) {
-                if (thing instanceof Node){
-                    return (Node)thing;
-                } else if (thing instanceof List){
-                    List<Node> list = (List<Node>)thing;
-                    if (list.size()>0){
-                        return list.get(0);
-                    }
-                } else {
-                    throw new RuntimeException("Wrong thing passed");
-                }
-            }
-        }
-        return null;
-    }
-
-    private Position endOf(final List<Node> nodes){
-        Node lastNode = nodes.get(nodes.size()-1);
-        if (lastNode==null){
-            return Position.ABSOLUTE_START;
-        } else {
-            return Position.endOf(lastNode);
-        }
-    }
-
-    private Position startOf(final List<Node> nodes){
-        Node firstNode = nodes.get(0);
-        if (firstNode==null){
-            return Position.ABSOLUTE_END;
-        } else {
-            return Position.beginOf(firstNode);
-        }
-    }
-
-    private void printOrphanCommentsBetween(final List<Comment> comments,final Object arg,Position start, Position end){
-        printOrphanCommentsBetween(comments,arg,start.getLine(),start.getColumn(),end.getLine(),end.getColumn());
-    }
-
-    private void printOrphanCommentsBetween(final List<Comment> comments,final Object arg,int startLine,int startColumn,int endLine,int endColumn){
-        for (Comment comment : comments){
-            if (comment.isPositionedAfter(startLine,startColumn)
-                && comment.isPositionedBefore(endLine,endColumn)){
-                printOrphanComment(comment,arg);
-            }
-        }
-    }
-
-    private void printOrphanComment(final Comment comment,final Object arg){
-        comment.accept(this,arg);
-    }
 
     private void printOrphanCommentsEnding(final Node node){
        List<Node> everything = new LinkedList<Node>();

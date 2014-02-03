@@ -21,16 +21,15 @@
  */
 package japa.parser.ast.stmt;
 
-import java.util.List;
-
 import japa.parser.ast.Node;
 import japa.parser.ast.body.MultiTypeParameter;
-import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.VariableDeclaratorId;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser

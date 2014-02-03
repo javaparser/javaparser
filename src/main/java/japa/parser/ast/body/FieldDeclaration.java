@@ -28,7 +28,6 @@ import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 

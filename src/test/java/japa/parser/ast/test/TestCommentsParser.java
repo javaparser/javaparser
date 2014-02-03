@@ -1,14 +1,10 @@
 package japa.parser.ast.test;
 
+import static org.junit.Assert.assertEquals;
 import japa.parser.ast.comments.CommentsCollection;
 import japa.parser.ast.comments.CommentsParser;
+
 import org.junit.Test;
-
-import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.visitor.CloneVisitor;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 public class TestCommentsParser {
 

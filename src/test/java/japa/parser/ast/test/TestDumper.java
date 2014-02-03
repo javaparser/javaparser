@@ -22,12 +22,9 @@
 package japa.parser.ast.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
 import japa.parser.ast.CompilationUnit;
-
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+
 import org.junit.Test;
 
 /**

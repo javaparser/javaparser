@@ -21,22 +21,19 @@
  */
 package japa.parser;
 
-import static japa.parser.PositionUtils.*;
-import japa.parser.ast.comments.BlockComment;
+import static japa.parser.PositionUtils.areInOrder;
+import static japa.parser.PositionUtils.sortByBeginPosition;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.comments.LineComment;
-import japa.parser.ast.comments.Comment;
+import japa.parser.ast.Node;
 import japa.parser.ast.body.BodyDeclaration;
-import japa.parser.ast.comments.JavadocComment;
+import japa.parser.ast.comments.Comment;
 import japa.parser.ast.comments.CommentsCollection;
 import japa.parser.ast.comments.CommentsParser;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.stmt.BlockStmt;
-import japa.parser.ast.Node;
 import japa.parser.ast.stmt.Statement;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,10 +56,6 @@ import java.util.List;
  * @author Júlio Vilmar Gesser
  */
 public final class JavaParser {
-
-	private static ASTParser parser;
-
-
 	private JavaParser() {
 		// hide the constructor
 	}
@@ -381,22 +374,6 @@ public final class JavaParser {
         CommentsCollection allComments = commentsParser.parse(code);
 
         insertCommentsInCu(cu,allComments);
-    }
-
-    private static void placeOrphanComments(CompilationUnit cu, List<Comment> orphanComments){
-        for (Comment comment : orphanComments){
-            placeOrphanComment(cu,comment);
-        }
-    }
-
-    private static void placeOrphanComment(Node node,Comment comment){
-        for (Node child : node.getChildrenNodes()){
-            if (child.contains(comment)){
-                placeOrphanComment(child,comment);
-                return;
-            }
-        }
-        node.addOrphanComment(comment);
     }
 
 }
