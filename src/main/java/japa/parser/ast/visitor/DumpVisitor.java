@@ -1478,7 +1478,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
        int commentsAtEnd = 0;
        boolean findingComments = true;
-       while (findingComments){
+       while (findingComments&&commentsAtEnd<everything.size()){
            Node last = everything.get(everything.size()-1-commentsAtEnd);
            findingComments = (last instanceof Comment);
            if (findingComments) commentsAtEnd++;
