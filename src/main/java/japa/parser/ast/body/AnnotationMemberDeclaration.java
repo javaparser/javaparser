@@ -109,6 +109,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
 
     public void setDefaultValue(Expression defaultValue) {
         this.defaultValue = defaultValue;
+        setAsParentNodeOf(defaultValue);
     }
 
     public void setModifiers(int modifiers) {
