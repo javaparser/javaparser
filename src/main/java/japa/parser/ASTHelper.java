@@ -217,7 +217,7 @@ public final class ASTHelper {
      * @param name
      *            name of the class or interface
      * @param arrayCount
-     *            number os arrays or <code>0</code> if is not a array.
+     *            number of arrays or <code>0</code> if is not a array.
      * @return instanceof {@link ReferenceType}
      */
     public static ReferenceType createReferenceType(String name, int arrayCount) {
@@ -230,7 +230,7 @@ public final class ASTHelper {
      * @param type
      *            primitive type
      * @param arrayCount
-     *            number os arrays or <code>0</code> if is not a array.
+     *            number of arrays or <code>0</code> if is not a array.
      * @return instanceof {@link ReferenceType}
      */
     public static ReferenceType createReferenceType(PrimitiveType type, int arrayCount) {
