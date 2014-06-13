@@ -1449,6 +1449,16 @@ public abstract class GenericVisitorAdapter<R, A> implements
 
 	@Override
 	public R visit(final TryStmt n, final A arg) {
+		if (n.getResources() != null) {
+			for (final VariableDeclarationExpr v : n.getResources()) {
+				{
+					R result = v.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
+			}
+		}
 		{
 			R result = n.getTryBlock().accept(this, arg);
 			if (result != null) {
