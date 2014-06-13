@@ -759,6 +759,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final TryStmt n, final A arg) {
 		visitComment(n.getComment(), arg);
+		if (n.getResources() != null) {
+			for (final VariableDeclarationExpr v : n.getResources()) {
+				v.accept(this, arg);
+			}
+		}
 		n.getTryBlock().accept(this, arg);
 		if (n.getCatchs() != null) {
 			for (final CatchClause c : n.getCatchs()) {

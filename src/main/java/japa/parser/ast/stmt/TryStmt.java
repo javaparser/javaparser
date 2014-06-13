@@ -54,7 +54,7 @@ public final class TryStmt extends Statement {
 			final int endLine, final int endColumn, List<VariableDeclarationExpr> resources,
 			final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.resources = resources;
+		setResources(resources);
 		setTryBlock(tryBlock);
 		setCatchs(catchs);
 		setFinallyBlock(finallyBlock);
@@ -103,5 +103,6 @@ public final class TryStmt extends Statement {
 	
 	public void setResources(List<VariableDeclarationExpr> resources) {
 		this.resources = resources;
+		setAsParentNodeOf(this.resources);
 	}
 }
