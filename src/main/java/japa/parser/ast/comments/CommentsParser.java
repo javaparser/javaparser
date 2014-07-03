@@ -1,6 +1,7 @@
 package japa.parser.ast.comments;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * This parser cares exclusively about comments.
@@ -28,7 +29,9 @@ public class CommentsParser {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         CommentsCollection comments = new CommentsCollection();
         int r;
-        char prevChar = 'z';
+
+        Deque prevTwoChars = new LinkedList<Character>(Arrays.asList('z','z'));
+
         State state = State.CODE;
         LineComment currentLineComment = null;
         BlockComment currentBlockComment = null;
@@ -49,13 +52,13 @@ public class CommentsParser {
             }
             switch (state){
                 case CODE:
-                    if (prevChar=='/' && c=='/'){
+                    if (prevTwoChars.peekLast().equals('/') && c=='/'){
                         currentLineComment = new LineComment();
                         currentLineComment.setBeginLine(currLine);
                         currentLineComment.setBeginColumn(currCol-1);
                         state = State.IN_LINE_COMMENT;
                         currentContent = new StringBuffer();
-                    } else if (prevChar=='/' && c=='*'){
+                    } else if (prevTwoChars.peekLast().equals('/') && c=='*'){
                         currentBlockComment= new BlockComment();
                         currentBlockComment.setBeginLine(currLine);
                         currentBlockComment.setBeginColumn(currCol-1);
@@ -77,7 +80,8 @@ public class CommentsParser {
                     }
                     break;
                 case IN_BLOCK_COMMENT:
-                    if (prevChar=='*' && c=='/'){
+                    if (prevTwoChars.peekLast().equals('*') && c=='/' && !prevTwoChars.peekFirst().equals('/')){
+
                         // delete last character
                         String content = currentContent.deleteCharAt(currentContent.toString().length()-1).toString();
 
@@ -115,7 +119,8 @@ public class CommentsParser {
                 default:
                     currCol+=1;
             }
-            prevChar = c;
+            prevTwoChars.remove();
+            prevTwoChars.add(c);
         }
 
         if (state==State.IN_LINE_COMMENT){
