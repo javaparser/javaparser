@@ -219,4 +219,24 @@ public class TestCommentsParsing {
         assertEquals(9, cu.getAllContainedComments().size());
         assertEquals(0, cu.getOrphanComments().size());
     }
+
+    @Test
+    public void testLineCommentInsideBlockComment() throws Exception {
+        String source = Helper.readStream(getClass().getResourceAsStream("ClassWithLineCommentInsideBlockComment.java"));
+        CompilationUnit cu = Helper.parserString(source);
+
+        ClassOrInterfaceDeclaration clazzDec = (ClassOrInterfaceDeclaration) cu.getChildrenNodes().get(0);
+        MethodDeclaration fooMethod = (MethodDeclaration) clazzDec.getMembers().get(0);
+        MethodDeclaration barMethod = (MethodDeclaration) clazzDec.getMembers().get(1);
+        MethodDeclaration totallyMethod = (MethodDeclaration) clazzDec.getMembers().get(2);
+
+        assertEquals("comment to a method", fooMethod.getComment().getContent().trim());
+
+        assertEquals("// Line Comment put immediately after block comment\n" +
+                "\n" +
+                "    //// Comment debauchery\n" +
+                "\n" +
+                "    another orphan.\n" +
+                "    It spans over more lines", clazzDec.getOrphanComments().get(0).getContent().trim());
+    }
 }
