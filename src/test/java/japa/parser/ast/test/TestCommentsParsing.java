@@ -227,8 +227,6 @@ public class TestCommentsParsing {
 
         ClassOrInterfaceDeclaration clazzDec = (ClassOrInterfaceDeclaration) cu.getChildrenNodes().get(0);
         MethodDeclaration fooMethod = (MethodDeclaration) clazzDec.getMembers().get(0);
-        MethodDeclaration barMethod = (MethodDeclaration) clazzDec.getMembers().get(1);
-        MethodDeclaration totallyMethod = (MethodDeclaration) clazzDec.getMembers().get(2);
 
         assertEquals("comment to a method", fooMethod.getComment().getContent().trim());
 
