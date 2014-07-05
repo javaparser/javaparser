@@ -5,8 +5,12 @@ import java.io.*;
 public class SourcesHelper {
 
     static String streamToString(InputStream in, String encoding){
-        java.util.Scanner s = new java.util.Scanner(in).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
+        if (encoding == null) {
+            return streamToString(in);
+        } else {
+            java.util.Scanner s = new java.util.Scanner(in, encoding).useDelimiter("\\A");
+            return s.hasNext() ? s.next() : "";
+        }
     }
 
     static String streamToString(InputStream in){
