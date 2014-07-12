@@ -30,6 +30,7 @@ import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.comments.Comment;
 import japa.parser.ast.comments.CommentsCollection;
 import japa.parser.ast.comments.CommentsParser;
+import japa.parser.ast.comments.LineComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.stmt.BlockStmt;
@@ -41,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -305,7 +307,33 @@ public final class JavaParser {
         insertCommentsInNode(cu,comments);
     }
 
+    private static boolean attributeLineCommentToNodeOrChild(Node node, LineComment lineComment)
+    {
+        // The node start and end at the same line as the comment,
+        // let's give to it the comment
+        if (node.getBeginLine()==lineComment.getBeginLine() && !node.hasComment())
+        {
+            node.setComment(lineComment);
+            return true;
+        } else {
+            // try with all the children, sorted by reverse position (so the
+            // first one is the nearest to the comment
+            List<Node> children = new LinkedList<Node>();
+            children.addAll(node.getChildrenNodes());
+            PositionUtils.sortByBeginPosition(children);
+            Collections.reverse(children);
 
+            for (Node child : children)
+            {
+                if (attributeLineCommentToNodeOrChild(child, lineComment))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 
     /**
      * This method try to attributes the nodes received to child of the node.
@@ -338,9 +366,32 @@ public final class JavaParser {
 
         //System.out.println("Comments not placed in children (node:"+node.getClass()+"): "+commentsToAttribute.size()) ;
 
+        // I can attribute in line comments to elements preceeding them, if there
+        // is something contained in their line
+        List<Comment> attributedComments = new LinkedList<Comment>();
+        for (Comment comment : commentsToAttribute)
+        {
+            if (comment.isLineComment())
+            {
+                for (Node child : children)
+                {
+                    if (child.getEndLine()==comment.getBeginLine())
+                    {
+                        //System.out.println("Comment <"+comment+"> could refer to "+child);
+                        if (attributeLineCommentToNodeOrChild(child, comment.asLineComment()))
+                        {
+                            //System.out.println("  PLACED");
+                            attributedComments.add(comment);
+                        }
+                    }
+                }
+            }
+        }
+        //commentsToAttribute.removeAll(attributedComments);
+
         // at this point I create an ordered list of all remaining comments and children
         Comment previousComment = null;
-        List<Comment> attributedComments = new LinkedList<Comment>();
+        attributedComments = new LinkedList<Comment>();
         List<Node> childrenAndComments = new LinkedList<Node>();
         childrenAndComments.addAll(children);
         childrenAndComments.addAll(commentsToAttribute);
@@ -352,8 +403,12 @@ public final class JavaParser {
             //System.out.println(" * "+thing.getClass()+" L "+thing.getBeginLine()+" C "+thing.getBeginColumn());
             if (thing instanceof Comment){
                 previousComment = (Comment)thing;
+                if (!previousComment.isOrphan())
+                {
+                    previousComment = null;
+                }
             } else {
-                if (previousComment!=null){
+                if (previousComment != null && !thing.hasComment()){
                     thing.setComment(previousComment);
                     attributedComments.add(previousComment);
                     previousComment = null;
@@ -365,7 +420,9 @@ public final class JavaParser {
 
         // all the remaining are orphan nodes
         for (Comment c : commentsToAttribute){
-            node.addOrphanComment(c);
+            if (c.isOrphan()) {
+                node.addOrphanComment(c);
+            }
         }
     }
 

@@ -55,4 +55,9 @@ public final class LineComment extends Comment {
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
     }
+
+    public boolean isLineComment()
+    {
+        return true;
+    }
 }

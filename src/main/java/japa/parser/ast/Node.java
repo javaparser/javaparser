@@ -176,7 +176,14 @@ public abstract class Node {
         if (comment!=null && (this instanceof Comment)){
             throw new RuntimeException("A comment can not be commented");
         }
+        if (this.comment!=null)
+        {
+            this.comment.setCommentedNode(null);
+        }
 		this.comment = comment;
+        if (comment!=null) {
+            this.comment.setCommentedNode(this);
+        }
 	}
 
 	/**
@@ -332,5 +339,10 @@ public abstract class Node {
         } else {
             return false;
         }
+    }
+
+    public boolean hasComment()
+    {
+        return comment!=null;
     }
 }
