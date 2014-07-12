@@ -14,7 +14,8 @@ public class CommentsParser {
         IN_LINE_COMMENT,
         WAITING_FOR_BLOCK_COMMENT,
         IN_BLOCK_COMMENT,
-        WAITING_TO_LEAVE_BLOCK_COMMENT;
+        WAITING_TO_LEAVE_BLOCK_COMMENT,
+        IN_STRING;
     }
 
     private static final int COLUMNS_PER_TAB = 4;
@@ -50,20 +51,22 @@ public class CommentsParser {
             } else {
                 lastWasASlashR=false;
             }
-            switch (state){
+            switch (state) {
                 case CODE:
-                    if (prevTwoChars.peekLast().equals('/') && c=='/'){
+                    if (prevTwoChars.peekLast().equals('/') && c == '/') {
                         currentLineComment = new LineComment();
                         currentLineComment.setBeginLine(currLine);
-                        currentLineComment.setBeginColumn(currCol-1);
+                        currentLineComment.setBeginColumn(currCol - 1);
                         state = State.IN_LINE_COMMENT;
                         currentContent = new StringBuffer();
-                    } else if (prevTwoChars.peekLast().equals('/') && c=='*'){
-                        currentBlockComment= new BlockComment();
+                    } else if (prevTwoChars.peekLast().equals('/') && c == '*') {
+                        currentBlockComment = new BlockComment();
                         currentBlockComment.setBeginLine(currLine);
-                        currentBlockComment.setBeginColumn(currCol-1);
+                        currentBlockComment.setBeginColumn(currCol - 1);
                         state = State.IN_BLOCK_COMMENT;
                         currentContent = new StringBuffer();
+                    } else if (c == '"') {
+                        state = State.IN_STRING;
                     } else {
                         // nothing to do
                     }
@@ -102,6 +105,11 @@ public class CommentsParser {
                         state = State.CODE;
                     } else {
                         currentContent.append(c=='\r'?'\n':c);
+                    }
+                    break;
+                case IN_STRING:
+                    if (!prevTwoChars.peekLast().equals('\\') && c == '"') {
+                        state = State.CODE;
                     }
                     break;
                 default:
