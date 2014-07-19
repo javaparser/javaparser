@@ -23,3 +23,5 @@ This parser is based on Sreenivasa Viswanadha's Java 1.5 parser.
 The project was originally hosted at http://code.google.com/p/javaparser/ but 
 seemed dead. This repository at https://github.com/matozoid/javaparser keeps 
 the code alive.
+
+Javadoc is available at [http://matozoid.github.io/javaparser/javadoc-current/](http://matozoid.github.io/javaparser/javadoc-current/)
