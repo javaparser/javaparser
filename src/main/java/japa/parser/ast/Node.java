@@ -288,6 +288,10 @@ public abstract class Node {
         return comments;
     }
 
+    /**
+     * Assign a new parent to this node, removing it
+     * from the list of children of the previous parent, if any.
+     */
 	public void setParentNode(Node parentNode) {
         // remove from old parent, if any
         if (this.parentNode!=null){
