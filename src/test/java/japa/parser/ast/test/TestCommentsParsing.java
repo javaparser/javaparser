@@ -1,10 +1,12 @@
 package japa.parser.ast.test;
 
+import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.*;
 import japa.parser.ast.comments.Comment;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.stmt.BlockStmt;
+import japa.parser.ast.type.Type;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -369,6 +371,50 @@ public class TestCommentsParsing {
         Comment commentBeforeNotEmptyLine = cuWithoutEmptyLine.getAllContainedComments().get(0);
         assertFalse(commentBeforeNotEmptyLine.isOrphan());
         assertTrue(commentBeforeNotEmptyLine.getCommentedNode() instanceof ClassOrInterfaceDeclaration);
+    }
+
+    @Test
+    public void testIssue40CommentsAfterJavadocAreAttributedToTheMethodIfFlagIsActive() throws Exception {
+        String source = "class A{\n"+
+                        "  @GET\n" +
+                        "  @Path(\"/original\")\n" +
+                        "  /**\n" +
+                        "   * Return the original user.\n" +
+                        "   */\n" +
+                        "  public User getOriginalUser(String userName) {\n" +
+                        "      return userService.getOriginalUser(userName);\n" +
+                        "  }\n"+
+                        "}";
+        JavaParser.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(true);
+        try {
+            CompilationUnit cu = Helper.parserString(source);
+            assertEquals(1, cu.getAllContainedComments().size());
+            Comment comment = cu.getAllContainedComments().get(0);
+            assertFalse(comment.isOrphan());
+            assertTrue(comment.getCommentedNode() instanceof MethodDeclaration);
+        } finally {
+            JavaParser.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(false);
+        }
+    }
+
+    @Test
+    public void testIssue40CommentsAfterJavadocAreAttributedToTheMethodIfFlagIsNotActive() throws Exception {
+        String source = "class A{\n"+
+                "  @GET\n" +
+                "  @Path(\"/original\")\n" +
+                "  /**\n" +
+                "   * Return the original user.\n" +
+                "   */\n" +
+                "  public User getOriginalUser(String userName) {\n" +
+                "      return userService.getOriginalUser(userName);\n" +
+                "  }\n"+
+                "}";
+        JavaParser.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(false);
+        CompilationUnit cu = Helper.parserString(source);
+        assertEquals(1, cu.getAllContainedComments().size());
+        Comment comment = cu.getAllContainedComments().get(0);
+        assertFalse(comment.isOrphan());
+        assertTrue(comment.getCommentedNode() instanceof Type);
     }
 
 }

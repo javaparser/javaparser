@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  * Tests to verify the correctness of the samples on parsing
  * shown on the wiki, currently at https://github.com/matozoid/javaparser/wiki/CommentsParsing
  *
- * @author ftomassetti
+ * @author Federico Tomassetti
  * @since July 2014
  */
 public class TestWikiSamplesOnComments {

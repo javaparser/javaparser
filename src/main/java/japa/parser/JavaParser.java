@@ -26,6 +26,7 @@ import static japa.parser.PositionUtils.sortByBeginPosition;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.Node;
+import japa.parser.ast.body.AnnotableNode;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.comments.Comment;
 import japa.parser.ast.comments.CommentsCollection;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,6 +65,17 @@ public final class JavaParser {
 	}
 
     private static boolean _doNotAssignCommentsPreceedingEmptyLines = true;
+
+    private static boolean _doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
+
+    public static boolean getDoNotConsiderAnnotationsAsNodeStartForCodeAttribution()
+    {
+        return _doNotConsiderAnnotationsAsNodeStartForCodeAttribution;
+    }
+
+    public static void setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution) {
+        _doNotConsiderAnnotationsAsNodeStartForCodeAttribution = doNotConsiderAnnotationsAsNodeStartForCodeAttribution;
+    }
 
     public static boolean getDoNotAssignCommentsPreceedingEmptyLines()
     {
@@ -365,7 +378,7 @@ public final class JavaParser {
         for (Node child : children){
             List<Comment> commentsInsideChild = new LinkedList<Comment>();
             for (Comment c : commentsToAttribute){
-                if (child.contains(c)){
+                if (PositionUtils.nodeContains(child, c, _doNotConsiderAnnotationsAsNodeStartForCodeAttribution)){
                     commentsInsideChild.add(c);
                 }
             }
@@ -399,7 +412,7 @@ public final class JavaParser {
         List<Node> childrenAndComments = new LinkedList<Node>();
         childrenAndComments.addAll(children);
         childrenAndComments.addAll(commentsToAttribute);
-        sortByBeginPosition(childrenAndComments);
+        sortByBeginPosition(childrenAndComments, _doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
 
         for (Node thing : childrenAndComments){
             if (thing instanceof Comment){
