@@ -2,6 +2,7 @@ package japa.parser.ast.test;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.*;
+import japa.parser.ast.comments.Comment;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.stmt.BlockStmt;
 import org.junit.Test;
@@ -350,6 +351,24 @@ public class TestCommentsParsing {
         FieldDeclaration fieldC = (FieldDeclaration)clazzDecl.getMembers().get(2);
         assertEquals("c", fieldC.getVariables().get(0).getId().getName());
         assertFalse(fieldC.hasComment());
+    }
+
+    @Test
+    public void testFollowedByEmptyLinesAreOrphan() throws Exception {
+        String sourceWithEmptyLine = "//comment\n"
+                + "   \n"
+                +"class A {}";
+        String sourceWithoutEmptyLine = "//comment\n"
+                +"class A {}";
+
+        CompilationUnit cuWithEmptyLine = Helper.parserString(sourceWithEmptyLine);
+        Comment commentBeforeEmptyLine = cuWithEmptyLine.getAllContainedComments().get(0);
+        assertTrue(commentBeforeEmptyLine.isOrphan());
+
+        CompilationUnit cuWithoutEmptyLine = Helper.parserString(sourceWithoutEmptyLine);
+        Comment commentBeforeNotEmptyLine = cuWithoutEmptyLine.getAllContainedComments().get(0);
+        assertFalse(commentBeforeNotEmptyLine.isOrphan());
+        assertTrue(commentBeforeNotEmptyLine.getCommentedNode() instanceof ClassOrInterfaceDeclaration);
     }
 
 }

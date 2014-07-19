@@ -103,7 +103,6 @@ public abstract class Comment extends Node {
             throw new IllegalArgumentException();
         }
         this.commentedNode = commentedNode;
-        this.setParentNode(commentedNode);
     }
 
     public boolean isOrphan()

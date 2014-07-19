@@ -47,7 +47,6 @@ public class TestWikiSamplesOnComments {
         Comment onlyComment = cu.getAllContainedComments().get(0);
         assertFalse(onlyComment.isOrphan());
         assertTrue(onlyComment.getCommentedNode() instanceof ClassOrInterfaceDeclaration);
-        assertTrue(onlyComment.getParentNode() instanceof ClassOrInterfaceDeclaration);
     }
 
     @Test

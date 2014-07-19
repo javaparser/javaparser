@@ -62,6 +62,18 @@ public final class JavaParser {
 		// hide the constructor
 	}
 
+    private static boolean _doNotAssignCommentsPreceedingEmptyLines = true;
+
+    public static boolean getDoNotAssignCommentsPreceedingEmptyLines()
+    {
+        return _doNotAssignCommentsPreceedingEmptyLines;
+    }
+
+    public static void setDoNotAssignCommentsPreceedingEmptyLines(boolean doNotAssignCommentsPreceedingEmptyLines)
+    {
+        _doNotAssignCommentsPreceedingEmptyLines = doNotAssignCommentsPreceedingEmptyLines;
+    }
+
     public static CompilationUnit parse(final InputStream in,
                                         final String encoding) throws ParseException {
         return parse(in,encoding,true);
@@ -342,8 +354,6 @@ public final class JavaParser {
     private static void insertCommentsInNode(Node node, List<Comment> commentsToAttribute){
         if (commentsToAttribute.size()==0) return;
 
-        //System.out.println("Looking to place "+commentsToAttribute.size()+" comments in "+node.getClass());
-
         // the comments can:
         // 1) Inside one of the child, then it is the child that have to associate them
         // 2) If they are not inside a child they could be preceeding nothing, a comment or a child
@@ -353,7 +363,6 @@ public final class JavaParser {
         sortByBeginPosition(children);
 
         for (Node child : children){
-            //System.out.println("Considering if some comments stay in "+child.getClass());
             List<Comment> commentsInsideChild = new LinkedList<Comment>();
             for (Comment c : commentsToAttribute){
                 if (child.contains(c)){
@@ -363,8 +372,6 @@ public final class JavaParser {
             commentsToAttribute.removeAll(commentsInsideChild);
             insertCommentsInNode(child,commentsInsideChild);
         }
-
-        //System.out.println("Comments not placed in children (node:"+node.getClass()+"): "+commentsToAttribute.size()) ;
 
         // I can attribute in line comments to elements preceeding them, if there
         // is something contained in their line
@@ -377,17 +384,14 @@ public final class JavaParser {
                 {
                     if (child.getEndLine()==comment.getBeginLine())
                     {
-                        //System.out.println("Comment <"+comment+"> could refer to "+child);
                         if (attributeLineCommentToNodeOrChild(child, comment.asLineComment()))
                         {
-                            //System.out.println("  PLACED");
                             attributedComments.add(comment);
                         }
                     }
                 }
             }
         }
-        //commentsToAttribute.removeAll(attributedComments);
 
         // at this point I create an ordered list of all remaining comments and children
         Comment previousComment = null;
@@ -397,10 +401,7 @@ public final class JavaParser {
         childrenAndComments.addAll(commentsToAttribute);
         sortByBeginPosition(childrenAndComments);
 
-        //System.out.println("Children and remaining comments: "+childrenAndComments.size()+". Class "+node.getClass());
-
         for (Node thing : childrenAndComments){
-            //System.out.println(" * "+thing.getClass()+" L "+thing.getBeginLine()+" C "+thing.getBeginColumn());
             if (thing instanceof Comment){
                 previousComment = (Comment)thing;
                 if (!previousComment.isOrphan())
@@ -409,9 +410,11 @@ public final class JavaParser {
                 }
             } else {
                 if (previousComment != null && !thing.hasComment()){
-                    thing.setComment(previousComment);
-                    attributedComments.add(previousComment);
-                    previousComment = null;
+                    if (!_doNotAssignCommentsPreceedingEmptyLines || !thereAreLinesBetween(previousComment, thing)) {
+                        thing.setComment(previousComment);
+                        attributedComments.add(previousComment);
+                        previousComment = null;
+                    }
                 }
             }
         }
@@ -424,6 +427,16 @@ public final class JavaParser {
                 node.addOrphanComment(c);
             }
         }
+    }
+
+    private static boolean thereAreLinesBetween(Node a, Node b)
+    {
+        if (!PositionUtils.areInOrder(a, b))
+        {
+            return thereAreLinesBetween(b, a);
+        }
+        int endOfA = a.getEndLine();
+        return b.getBeginLine()>(a.getEndLine()+1);
     }
 
     private static void insertComments(CompilationUnit cu, String code) throws IOException {
