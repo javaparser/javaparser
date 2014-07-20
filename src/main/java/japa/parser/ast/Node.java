@@ -222,7 +222,10 @@ public abstract class Node {
 	}
 
 	@Override public boolean equals(final Object obj) {
-		return EqualsVisitor.equals(this, (Node) obj);
+        if (obj==null || !(obj instanceof Node)){
+            return false;
+        }
+        return EqualsVisitor.equals(this, (Node) obj);
 	}
 
 	public Node getParentNode() {
