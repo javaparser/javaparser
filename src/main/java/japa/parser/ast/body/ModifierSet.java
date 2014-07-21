@@ -83,6 +83,15 @@ public final class ModifierSet {
     }
 
     /**
+     * Is the element accessible from within the package?
+     * It is the level of access which is applied if no modifiers are chosen,
+     * it is sometimes called "default".
+     */
+    public static boolean hasPackageLevelAccess(int modifiers) {
+        return !isPublic(modifiers) && !isProtected(modifiers) && !isPrivate(modifiers);
+    }
+
+    /*
      * A set of accessors that indicate whether the specified modifier is in the
      * set.
      */
