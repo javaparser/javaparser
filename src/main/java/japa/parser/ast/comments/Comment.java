@@ -34,6 +34,7 @@ import japa.parser.ast.Node;
 public abstract class Comment extends Node {
 
     private String content;
+    private Node commentedNode;
 
     public Comment() {
     }
@@ -64,5 +65,48 @@ public abstract class Comment extends Node {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean isLineComment()
+    {
+        return false;
+    }
+
+    public LineComment asLineComment()
+    {
+        if (isLineComment())
+        {
+            return (LineComment) this;
+        } else {
+            throw new UnsupportedOperationException("Not a line comment");
+        }
+    }
+
+    public Node getCommentedNode()
+    {
+        return this.commentedNode;
+    }
+
+    public void setCommentedNode(Node commentedNode)
+    {
+        if (commentedNode==null)
+        {
+            this.commentedNode = commentedNode;
+            return;
+        }
+        if (commentedNode==this)
+        {
+            throw new IllegalArgumentException();
+        }
+        if (commentedNode instanceof Comment)
+        {
+            throw new IllegalArgumentException();
+        }
+        this.commentedNode = commentedNode;
+    }
+
+    public boolean isOrphan()
+    {
+        return this.commentedNode == null;
     }
 }

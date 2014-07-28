@@ -176,7 +176,14 @@ public abstract class Node {
         if (comment!=null && (this instanceof Comment)){
             throw new RuntimeException("A comment can not be commented");
         }
+        if (this.comment!=null)
+        {
+            this.comment.setCommentedNode(null);
+        }
 		this.comment = comment;
+        if (comment!=null) {
+            this.comment.setCommentedNode(this);
+        }
 	}
 
 	/**
@@ -284,6 +291,10 @@ public abstract class Node {
         return comments;
     }
 
+    /**
+     * Assign a new parent to this node, removing it
+     * from the list of children of the previous parent, if any.
+     */
 	public void setParentNode(Node parentNode) {
         // remove from old parent, if any
         if (this.parentNode!=null){
@@ -335,5 +346,10 @@ public abstract class Node {
         } else {
             return false;
         }
+    }
+
+    public boolean hasComment()
+    {
+        return comment!=null;
     }
 }

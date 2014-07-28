@@ -95,11 +95,11 @@ public abstract class TypeDeclaration extends BodyDeclaration {
 		this.name = new NameExpr(name);
 	}
 
-  public final void setNameExpr(NameExpr nameExpr) {
-    this.name = nameExpr;
-  }
+    public final void setNameExpr(NameExpr nameExpr) {
+      this.name = nameExpr;
+    }
 
-  public final NameExpr getNameExpr() {
-    return name;
-  }
+    public final NameExpr getNameExpr() {
+      return name;
+    }
 }

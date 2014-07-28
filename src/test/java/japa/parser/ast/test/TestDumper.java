@@ -45,15 +45,13 @@ public class TestDumper {
 		assertEquals(19, cu.getComments().size());
 	}
 
-	@Test public void testComments() throws Exception {
+	@Test public void testWithInlineCommentsNearFields() throws Exception {
 		final String source_with_comment = //
 		"package japa.parser.javacc;\n" + //
 				"public class Teste {\n" + //
-				"//line comment \n" + //
-				"int a = 0;" + //
-				"//line comment  \r\n" + //
-				"int b = 0;" + //
-				"//line comment \r" + //
+				"//line comment1 \n" + //
+				"int a = 0; //line comment2  \r\n" + //
+				"int b = 0; //line comment3 \r" + //
 				"int c = 0;" + //
 				"/* multi-line\n comment\n*/" + //
 				"int d = 0;" + //
@@ -67,14 +65,16 @@ public class TestDumper {
 				"\n" + //
 				"public class Teste {\n" + //
 				"\n" + //
-				"    //line comment \n" + //
-				"    int a = 0;\n" + //
+				"    //line comment1 \n" + //
+                "    //line comment2  \n" + //
+                "    int a = 0;\n" + //
 				"\n" + //
-				// FIXME not sure what all these trailing spaces are.
-				"    //line comment  \n" + //
+				// not-FIX_ME: not sure what all these trailing spaces are.
+                // They spaces are there because the dumper indent the code
+                // FIXME we should indent also the line of comments successive to the first
+				"    //line comment3 \n" + //
 				"    int b = 0;\n" + //
 				"\n" + //
-				"    //line comment \n" + //
 				"    int c = 0;\n" + //
 				"\n" + //
 				"    /* multi-line\n comment\n*/\n" + //

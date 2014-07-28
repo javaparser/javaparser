@@ -1,6 +1,7 @@
 package japa.parser.ast.comments;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -21,13 +22,13 @@ public class CommentsParser {
     private static final int COLUMNS_PER_TAB = 4;
 
     public CommentsCollection parse(final String source) throws IOException, UnsupportedEncodingException {
-        InputStream in = new ByteArrayInputStream(source.getBytes());
-        return parse(in,"UTF-8");
+        InputStream in = new ByteArrayInputStream(source.getBytes(Charset.defaultCharset()));
+        return parse(in, Charset.defaultCharset().name());
     }
 
-    public CommentsCollection parse(final InputStream in, final String encoding) throws IOException, UnsupportedEncodingException {
+    public CommentsCollection parse(final InputStream in, final String charsetName) throws IOException, UnsupportedEncodingException {
         boolean lastWasASlashR = false;
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, charsetName));
         CommentsCollection comments = new CommentsCollection();
         int r;
 

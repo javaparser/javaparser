@@ -24,12 +24,13 @@ package japa.parser.ast.body;
 import japa.parser.ast.Node;
 import japa.parser.ast.expr.AnnotationExpr;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class BodyDeclaration extends Node {
+public abstract class BodyDeclaration extends Node implements AnnotableNode {
 
     private List<AnnotationExpr> annotations;
 
@@ -46,6 +47,9 @@ public abstract class BodyDeclaration extends Node {
     }
 
     public final List<AnnotationExpr> getAnnotations() {
+        if (annotations==null){
+            annotations = new ArrayList<AnnotationExpr>();
+        }
         return annotations;
     }
 

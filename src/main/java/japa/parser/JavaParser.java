@@ -26,10 +26,12 @@ import static japa.parser.PositionUtils.sortByBeginPosition;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.Node;
+import japa.parser.ast.body.AnnotableNode;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.comments.Comment;
 import japa.parser.ast.comments.CommentsCollection;
 import japa.parser.ast.comments.CommentsParser;
+import japa.parser.ast.comments.LineComment;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.stmt.BlockStmt;
@@ -41,6 +43,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,6 +63,29 @@ public final class JavaParser {
 	private JavaParser() {
 		// hide the constructor
 	}
+
+    private static boolean _doNotAssignCommentsPreceedingEmptyLines = true;
+
+    private static boolean _doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
+
+    public static boolean getDoNotConsiderAnnotationsAsNodeStartForCodeAttribution()
+    {
+        return _doNotConsiderAnnotationsAsNodeStartForCodeAttribution;
+    }
+
+    public static void setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution) {
+        _doNotConsiderAnnotationsAsNodeStartForCodeAttribution = doNotConsiderAnnotationsAsNodeStartForCodeAttribution;
+    }
+
+    public static boolean getDoNotAssignCommentsPreceedingEmptyLines()
+    {
+        return _doNotAssignCommentsPreceedingEmptyLines;
+    }
+
+    public static void setDoNotAssignCommentsPreceedingEmptyLines(boolean doNotAssignCommentsPreceedingEmptyLines)
+    {
+        _doNotAssignCommentsPreceedingEmptyLines = doNotAssignCommentsPreceedingEmptyLines;
+    }
 
     public static CompilationUnit parse(final InputStream in,
                                         final String encoding) throws ParseException {
@@ -305,7 +332,33 @@ public final class JavaParser {
         insertCommentsInNode(cu,comments);
     }
 
+    private static boolean attributeLineCommentToNodeOrChild(Node node, LineComment lineComment)
+    {
+        // The node start and end at the same line as the comment,
+        // let's give to it the comment
+        if (node.getBeginLine()==lineComment.getBeginLine() && !node.hasComment())
+        {
+            node.setComment(lineComment);
+            return true;
+        } else {
+            // try with all the children, sorted by reverse position (so the
+            // first one is the nearest to the comment
+            List<Node> children = new LinkedList<Node>();
+            children.addAll(node.getChildrenNodes());
+            PositionUtils.sortByBeginPosition(children);
+            Collections.reverse(children);
 
+            for (Node child : children)
+            {
+                if (attributeLineCommentToNodeOrChild(child, lineComment))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 
     /**
      * This method try to attributes the nodes received to child of the node.
@@ -313,8 +366,6 @@ public final class JavaParser {
      */
     private static void insertCommentsInNode(Node node, List<Comment> commentsToAttribute){
         if (commentsToAttribute.size()==0) return;
-
-        //System.out.println("Looking to place "+commentsToAttribute.size()+" comments in "+node.getClass());
 
         // the comments can:
         // 1) Inside one of the child, then it is the child that have to associate them
@@ -325,10 +376,9 @@ public final class JavaParser {
         sortByBeginPosition(children);
 
         for (Node child : children){
-            //System.out.println("Considering if some comments stay in "+child.getClass());
             List<Comment> commentsInsideChild = new LinkedList<Comment>();
             for (Comment c : commentsToAttribute){
-                if (child.contains(c)){
+                if (PositionUtils.nodeContains(child, c, _doNotConsiderAnnotationsAsNodeStartForCodeAttribution)){
                     commentsInsideChild.add(c);
                 }
             }
@@ -336,27 +386,48 @@ public final class JavaParser {
             insertCommentsInNode(child,commentsInsideChild);
         }
 
-        //System.out.println("Comments not placed in children (node:"+node.getClass()+"): "+commentsToAttribute.size()) ;
+        // I can attribute in line comments to elements preceeding them, if there
+        // is something contained in their line
+        List<Comment> attributedComments = new LinkedList<Comment>();
+        for (Comment comment : commentsToAttribute)
+        {
+            if (comment.isLineComment())
+            {
+                for (Node child : children)
+                {
+                    if (child.getEndLine()==comment.getBeginLine())
+                    {
+                        if (attributeLineCommentToNodeOrChild(child, comment.asLineComment()))
+                        {
+                            attributedComments.add(comment);
+                        }
+                    }
+                }
+            }
+        }
 
         // at this point I create an ordered list of all remaining comments and children
         Comment previousComment = null;
-        List<Comment> attributedComments = new LinkedList<Comment>();
+        attributedComments = new LinkedList<Comment>();
         List<Node> childrenAndComments = new LinkedList<Node>();
         childrenAndComments.addAll(children);
         childrenAndComments.addAll(commentsToAttribute);
-        sortByBeginPosition(childrenAndComments);
-
-        //System.out.println("Children and remaining comments: "+childrenAndComments.size()+". Class "+node.getClass());
+        sortByBeginPosition(childrenAndComments, _doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
 
         for (Node thing : childrenAndComments){
-            //System.out.println(" * "+thing.getClass()+" L "+thing.getBeginLine()+" C "+thing.getBeginColumn());
             if (thing instanceof Comment){
                 previousComment = (Comment)thing;
-            } else {
-                if (previousComment!=null){
-                    thing.setComment(previousComment);
-                    attributedComments.add(previousComment);
+                if (!previousComment.isOrphan())
+                {
                     previousComment = null;
+                }
+            } else {
+                if (previousComment != null && !thing.hasComment()){
+                    if (!_doNotAssignCommentsPreceedingEmptyLines || !thereAreLinesBetween(previousComment, thing)) {
+                        thing.setComment(previousComment);
+                        attributedComments.add(previousComment);
+                        previousComment = null;
+                    }
                 }
             }
         }
@@ -365,8 +436,20 @@ public final class JavaParser {
 
         // all the remaining are orphan nodes
         for (Comment c : commentsToAttribute){
-            node.addOrphanComment(c);
+            if (c.isOrphan()) {
+                node.addOrphanComment(c);
+            }
         }
+    }
+
+    private static boolean thereAreLinesBetween(Node a, Node b)
+    {
+        if (!PositionUtils.areInOrder(a, b))
+        {
+            return thereAreLinesBetween(b, a);
+        }
+        int endOfA = a.getEndLine();
+        return b.getBeginLine()>(a.getEndLine()+1);
     }
 
     private static void insertComments(CompilationUnit cu, String code) throws IOException {

@@ -123,6 +123,20 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		// hide constructor
 	}
 
+    /**
+     * Check for equality that can be applied to each kind of node,
+     * to not repeat it in every method we store that here.
+     */
+    private boolean commonNodeEquality(Node n1, Node n2) {
+        if (!nodeEquals(n1.getComment(), n2.getComment())) {
+            return false;
+        }
+        if (!nodesEquals(n1.getOrphanComments(), n2.getOrphanComments())){
+            return false;
+        }
+        return true;
+    }
+
 	private <T extends Node> boolean nodesEquals(final List<T> nodes1, final List<T> nodes2) {
 		if (nodes1 == null) {
 			if (nodes2 == null) {
@@ -158,6 +172,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (n1.getClass() != n2.getClass()) {
 			return false;
 		}
+        if (!commonNodeEquality(n1, n2)){
+            return false;
+        }
 		return n1.accept(this, n2).booleanValue();
 	}
 

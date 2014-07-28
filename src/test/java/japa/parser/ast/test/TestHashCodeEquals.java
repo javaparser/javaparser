@@ -121,8 +121,10 @@ public class TestHashCodeEquals {
 			"}\n" + //
 			"";
 
-	// FIXME Not sure what this test is supposed to do. Broke after the comments patch.
-	@Ignore @Test public void testCommentsDiff() throws Exception {
+    /**
+     * Test that also comments are considered when checking for equality.
+     */
+	@Test public void testCommentsDiff() throws Exception {
 
 		final CompilationUnit cu1 = Helper.parserString(source_with_comment);
 		final CompilationUnit cu2 = Helper.parserString(source_without_comment);
