@@ -20,20 +20,20 @@ The AST records the source code structure, javadoc and comments.
 
 ## Use JavaParser in my Maven-based project
 
-'''
+```
 <dependency>
     <groupId>com.google.code.javaparser</groupId>
     <artifactId>javaparser</artifactId>
     <version>1.0.11</version>
 </dependency>
-'''
+```
 
 ## How to build
 
-'''
+```
 mvn javacc:javacc
 mvn clean install
-'''
+```
 
 If you have problems, please feel free to open an issue.
 
