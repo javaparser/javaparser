@@ -18,10 +18,33 @@ Copyright (C) 2007 J&uacute;lio Vilmar Gesser
 This package contains a Java 1.7 Parser with AST generation and visitor support. 
 The AST records the source code structure, javadoc and comments.
 
+## Use JavaParser in my Maven-based project
+
+'''
+<dependency>
+    <groupId>com.google.code.javaparser</groupId>
+    <artifactId>javaparser</artifactId>
+    <version>1.0.11</version>
+</dependency>
+'''
+
+## How to build
+
+'''
+mvn javacc:javacc
+mvn clean install
+'''
+
+If you have problems, please feel free to open an issue.
+
+## Javadoc
+
+Javadoc is available at [http://matozoid.github.io/javaparser/javadoc-current/](http://matozoid.github.io/javaparser/javadoc-current/)
+
+## History
+
 This parser is based on Sreenivasa Viswanadha's Java 1.5 parser.
 
 The project was originally hosted at http://code.google.com/p/javaparser/ but 
 seemed dead. This repository at https://github.com/matozoid/javaparser keeps 
 the code alive.
-
-Javadoc is available at [http://matozoid.github.io/javaparser/javadoc-current/](http://matozoid.github.io/javaparser/javadoc-current/)
