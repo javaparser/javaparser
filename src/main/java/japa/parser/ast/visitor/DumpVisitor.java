@@ -123,6 +123,16 @@ import java.util.List;
  */
 public final class DumpVisitor implements VoidVisitor<Object> {
 
+    private boolean printComments;
+
+    public DumpVisitor() {
+        this(true);
+    }
+
+    public DumpVisitor(boolean printComments) {
+        this.printComments = printComments;
+    }
+
 	private static class SourcePrinter {
 
 		private int level = 0;
@@ -1457,7 +1467,10 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final LineComment n, final Object arg) {
-		printer.print("//");
+		if (!this.printComments) {
+            return;
+        }
+        printer.print("//");
 		String tmp = n.getContent();
 		tmp = tmp.replace('\r', ' ');
 		tmp = tmp.replace('\n', ' ');
@@ -1465,7 +1478,10 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final BlockComment n, final Object arg) {
-		printer.print("/*");
+        if (!this.printComments) {
+            return;
+        }
+        printer.print("/*");
 		printer.print(n.getContent());
 		printer.printLn("*/");
 	}

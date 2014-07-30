@@ -21,6 +21,7 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.AccessSpecifier;
 import japa.parser.ast.DocumentableNode;
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.comments.JavadocComment;
@@ -36,7 +37,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode{
+public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration {
 
 	private int modifiers;
 
@@ -199,5 +200,74 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     @Override
     public JavadocComment getJavaDoc() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /**
+     * The declaration returned has this schema:
+     *
+     * [accessSpecifier] [static] [abstract] [final] [native]
+     * [synchronized] returnType methodName ([paramlist])
+     * [throws exceptionsList]
+     * @return
+     */
+    @Override
+    public String getDeclarationAsString() {
+        return getDeclarationAsString(true, true);
+    }
+
+    @Override
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
+        StringBuffer sb = new StringBuffer();
+        if (includingModifiers) {
+            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            sb.append(accessSpecifier.getCodeRepresenation());
+            sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
+            if (ModifierSet.isStatic(getModifiers())){
+                sb.append("static ");
+            }
+            if (ModifierSet.isAbstract(getModifiers())){
+                sb.append("abstract ");
+            }
+            if (ModifierSet.isFinal(getModifiers())){
+                sb.append("final ");
+            }
+            if (ModifierSet.isNative(getModifiers())){
+                sb.append("native ");
+            }
+            if (ModifierSet.isSynchronized(getModifiers())){
+                sb.append("synchronized ");
+            }
+        }
+        // TODO verify it does not print comments connected to the type
+        sb.append(getType().toStringWithoutComments());
+        sb.append(" ");
+        sb.append(getName());
+        sb.append("(");
+        boolean firstParam = true;
+        for (Parameter param : parameters)
+        {
+            if (firstParam) {
+                firstParam = false;
+            } else {
+                sb.append(", ");
+            }
+            sb.append(param.toStringWithoutComments());
+        }
+        sb.append(")");
+        if (includingThrows) {
+            if (!this.getThrows().isEmpty()) {
+                sb.append(" throws ");
+                boolean firstThrow = true;
+                for (NameExpr thr : getThrows()) {
+                    if (firstThrow) {
+                        firstThrow = false;
+                    } else {
+                        sb.append(", ");
+                    }
+                    sb.append(thr.toStringWithoutComments());
+                }
+            }
+        }
+        return sb.toString();
     }
 }

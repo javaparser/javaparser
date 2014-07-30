@@ -23,6 +23,7 @@ package japa.parser.ast.body;
 
 import java.util.List;
 
+import japa.parser.ast.AccessSpecifier;
 import japa.parser.ast.DocumentableNode;
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.comments.JavadocComment;
@@ -35,7 +36,7 @@ import japa.parser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode {
+public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration {
 
     private int modifiers;
 
@@ -161,5 +162,54 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     @Override
     public JavadocComment getJavaDoc() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /**
+     * The declaration returned has this schema:
+     *
+     * [accessSpecifier] className ([paramlist])
+     * [throws exceptionsList]
+     */
+    @Override
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
+        StringBuffer sb = new StringBuffer();
+        if (includingModifiers) {
+            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            sb.append(accessSpecifier.getCodeRepresenation());
+            sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
+        }
+        sb.append(getName());
+        sb.append("(");
+        boolean firstParam = true;
+        for (Parameter param : parameters)
+        {
+            if (firstParam) {
+                firstParam = false;
+            } else {
+                sb.append(", ");
+            }
+            sb.append(param.toStringWithoutComments());
+        }
+        sb.append(")");
+        if (includingThrows) {
+            if (!this.getThrows().isEmpty()) {
+                sb.append(" throws ");
+                boolean firstThrow = true;
+                for (NameExpr thr : getThrows()) {
+                    if (firstThrow) {
+                        firstThrow = false;
+                    } else {
+                        sb.append(", ");
+                    }
+                    sb.append(thr.toStringWithoutComments());
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String getDeclarationAsString() {
+        return getDeclarationAsString(true, true);
     }
 }
