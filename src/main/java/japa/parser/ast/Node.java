@@ -224,6 +224,12 @@ public abstract class Node {
 		return visitor.getSource();
 	}
 
+    public final String toStringWithoutComments() {
+        final DumpVisitor visitor = new DumpVisitor(false);
+        accept(visitor, null);
+        return visitor.getSource();
+    }
+
 	@Override public final int hashCode() {
 		return toString().hashCode();
 	}

@@ -18,6 +18,8 @@
  */
 package japa.parser.ast.body;
 
+import japa.parser.ast.AccessSpecifier;
+
 import java.lang.reflect.Modifier;
 
 /**
@@ -50,6 +52,18 @@ public final class ModifierSet {
     public static final int ABSTRACT = Modifier.ABSTRACT;
 
     public static final int STRICTFP = Modifier.STRICT;
+
+    public static AccessSpecifier getAccessSpecifier(int modifiers) {
+        if (isPublic(modifiers)){
+            return AccessSpecifier.PUBLIC;
+        } else if (isProtected(modifiers)){
+            return AccessSpecifier.PROTECTED;
+        } else if (isPrivate(modifiers)){
+            return AccessSpecifier.PRIVATE;
+        } else {
+            return AccessSpecifier.DEFAULT;
+        }
+    }
 
     /**
      * Adds the given modifier.
