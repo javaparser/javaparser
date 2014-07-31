@@ -121,7 +121,7 @@ public class TestHashCodeEquals {
 			"";
 
     /**
-     * Test that also comments are considered when checking for equality.
+     * Sample that also comments are considered when checking for equality.
      */
 	@Test public void testCommentsDiff() throws Exception {
 

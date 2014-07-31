@@ -1,7 +1,7 @@
 package japa.parser.comments;
 
 /**Javadoc associated with the class*/
-public class ClassWithVariousOrphanComments {
+public class ClassWithOrphanComments {
     //a first comment floating in the class
 
     //comment associated to the method

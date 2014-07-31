@@ -16,7 +16,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 
-public final class TestTryStmt {
+public class TestTryStmt {
 
     @Test
     public void setsItselfAsParentForResources() {
