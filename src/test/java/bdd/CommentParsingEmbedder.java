@@ -7,7 +7,6 @@ import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.embedder.EmbedderControls;
 import org.jbehave.core.failures.FailingUponPendingStep;
 import org.jbehave.core.io.LoadFromClasspath;
-import org.jbehave.core.junit.JUnitStory;
 import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
@@ -30,7 +29,7 @@ public class CommentParsingEmbedder extends Embedder {
                 // CONSOLE and TXT reporting
                 .useStoryReporterBuilder(new StoryReporterBuilder().withDefaultFormats()
                         .withFormats(Format.CONSOLE,
-                        Format.TXT));
+                        Format.HTML));
     }
 
     @Override

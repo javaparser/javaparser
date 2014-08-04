@@ -13,7 +13,7 @@ public class ClassWithLineComments {
     }
 }
 When the class is parsed by the comment parser
-Then the total number of line comments is 4
+Then the total number of comments is 4
 Then line comment 1 is " first comment"
 Then line comment 2 is " second comment"
 Then line comment 3 is " third comment"
@@ -46,7 +46,7 @@ public class ClassWithBlockComments {
 
 /* a comment lost inside a compilation unit. It is orphan, I am sure you got this one */
 When the class is parsed by the comment parser
-Then the total number of line comments is 5
+Then the total number of comments is 5
 Then block comment 1 is " comment which is not attributed to the class, it floats around as an orphan "
 Then block comment 2 is " comment to a class "
 Then block comment 3 is " comment to a method "
@@ -59,3 +59,55 @@ Then the block comments have the following positions:
 |7|5|7|30|
 |10|5|13|32|
 |17|1|17|89|
+
+
+Scenario: A Class With Javadoc Comments is processed by the Comments Parser
+
+Given the class:
+package japa.parser.comments;
+
+/** a proper javadoc comment */
+public class ClassWithJavadocComments {
+
+    void foo(){};
+
+
+}
+/** a floating javadoc comment */
+When the class is parsed by the comment parser
+Then the total number of comments is 2
+Then Javadoc comment 1 is " a proper javadoc comment "
+Then Javadoc comment 2 is " a floating javadoc comment "
+Then the Javadoc comments have the following positions:
+|beginLine|beginColumn|endLine|endColumn|
+|3|1|3|32|
+|10|1|10|34|
+
+
+
+Scenario: A Class With Orphan Comments is processed by the Comments Parser
+
+Given the class:
+package japa.parser.comments;
+
+/**Javadoc associated with the class*/
+public class ClassWithOrphanComments {
+    //a first comment floating in the class
+
+    //comment associated to the method
+    void foo(){
+        /*comment floating inside the method*/
+    }
+
+    //a second comment floating in the class
+}
+
+//Orphan comment inside the CompilationUnit
+When the class is parsed by the comment parser
+Then the total number of comments is 6
+Then line comment 1 is "a first comment floating in the class"
+Then line comment 2 is "comment associated to the method"
+Then line comment 3 is "a second comment floating in the class"
+Then block comment 1 is "comment floating inside the method"
+Then Javadoc comment 1 is "Javadoc associated with the class"
+
