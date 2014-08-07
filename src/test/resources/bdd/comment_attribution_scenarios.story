@@ -269,3 +269,43 @@ When the class is parsed by the Java parser
 Then the compilation unit has 1 contained comments
 Then comment 1 in compilation unit is not an orphan
 Then type of method 1 in class 1 is commented "* Return the original user."
+
+
+Scenario: A Class With Line Comments is processed by the Java Parser
+
+Given the class:
+/*CompilationUnitComment*/
+package japa.parser.comments;
+
+public class ClassWithMixedStyleComments {
+    // line comment
+    int a = 0;
+    // another line comment
+    int b = 0;
+    // line comment
+    int c = 0;
+    /* multi-line
+       comment
+    */
+    int d = 0;
+    /**
+     * multi-line
+     */
+    int e = 0;
+    // final comment
+}
+When the class is parsed by the Java parser
+Then the compilation is commented "CompilationUnitComment"
+Then class 1 is not commented
+Then class 1 has 6 total contained comments
+Then class 1 orphan comment 1 is " final comment"
+Then field 1 in class 1 is commented " line comment"
+Then field 1 in class 1 contains 0 comments
+Then field 2 in class 1 is commented " another line comment"
+Then field 2 in class 1 contains 0 comments
+Then field 3 in class 1 is commented " line comment"
+Then field 3 in class 1 contains 0 comments
+Then field 4 in class 1 is commented " multi-line comment"
+Then field 4 in class 1 contains 0 comments
+Then field 5 in class 1 is commented " * multi-line"
+Then field 5 in class 1 contains 0 comments

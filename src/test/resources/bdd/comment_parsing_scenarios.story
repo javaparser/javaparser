@@ -111,3 +111,43 @@ Then line comment 3 is "a second comment floating in the class"
 Then block comment 1 is "comment floating inside the method"
 Then Javadoc comment 1 is "Javadoc associated with the class"
 
+
+Scenario: A Class With Orphan Comments is processed by the Comments Parser
+
+Given the class:
+/*CompilationUnitComment*/
+package japa.parser.comments;
+
+public class ClassWithMixedStyleComments {
+    // line comment
+    int a = 0;
+    // another line comment
+    int b = 0;
+    // line comment
+    int c = 0;
+    /* multi-line
+       comment
+    */
+    int d = 0;
+    /**
+     * multi-line
+     */
+    int e = 0;
+    // final comment
+}
+When the class is parsed by the comment parser
+Then the total number of comments is 7
+Then the line comments have the following positions:
+|beginLine|beginColumn|endLine|endColumn|
+|5|5|5|20|
+|7|5|7|28|
+|9|5|9|20|
+|19|5|19|21|
+Then the block comments have the following positions:
+|beginLine|beginColumn|endLine|endColumn|
+|1|1|1|27|
+|11|5|13|7|
+Then the Javadoc comments have the following positions:
+|beginLine|beginColumn|endLine|endColumn|
+|15|5|17|8|
+

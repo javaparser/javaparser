@@ -121,11 +121,15 @@ public class CommentParsingSteps {
         assertThat(compilationUnit.getComment(), is(nullValue()));
     }
 
+    @Then("the compilation is commented \"$expectedContent\"")
+    public void thenTheCompilationIsCommentedCompilationUnitComment(String expectedContent) {
+        assertThat(compilationUnit.getComment().getContent(), is(expectedContent));
+    }
+
     @Then("the compilation unit has $expectedCount contained comments")
     public void thenTheCompilationUnitHasContainedComments(int expectedCount) {
         assertThat(compilationUnit.getComments().size(), is(expectedCount));
     }
-
 
     @Then("the compilation unit has $expectedCount orphan comments")
     public void thenTheCompilationUnitHasExpectedCountOrphanComments(int expectedCount) {
@@ -163,6 +167,7 @@ public class CommentParsingSteps {
     }
 
     @Then("class $position has $expectedCount orphan comment")
+    @Alias("class $position has $expectedCount orphan comments")
     public void thenClassHasOrphanComments(int position, int expectedCount) {
         TypeDeclaration classUnderTest = compilationUnit.getTypes().get(position - 1);
         assertThat(classUnderTest.getOrphanComments().size(), is(expectedCount));
@@ -267,7 +272,7 @@ public class CommentParsingSteps {
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         Comment commentUnderTest = fieldUnderTest.getComment();
-        assertThat(commentUnderTest.getContent(), is(expectedContent));
+        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
     }
 
     @Then("variable $variablePosition value of field $fieldPosition in class $classPosition is commented \"$expectedContent\"")

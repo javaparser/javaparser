@@ -8,10 +8,7 @@ import java.util.List;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 
-/**
- * Created by nicholas_smith on 31/07/2014.
- */
-public class TestCommentParserRunner {
+public class CommentParsingTest {
 
     @Test
     public void run() throws Throwable {

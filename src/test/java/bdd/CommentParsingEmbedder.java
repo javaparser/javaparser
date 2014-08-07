@@ -26,7 +26,7 @@ public class CommentParsingEmbedder extends Embedder {
                 .useStoryLoader(new LoadFromClasspath(this.getClass()))
                 // Fails if Steps are not implemented
                 .usePendingStepStrategy(new FailingUponPendingStep())
-                // CONSOLE and TXT reporting
+                // CONSOLE and HTML reporting
                 .useStoryReporterBuilder(new StoryReporterBuilder().withDefaultFormats()
                         .withFormats(Format.CONSOLE,
                         Format.HTML));
@@ -34,7 +34,7 @@ public class CommentParsingEmbedder extends Embedder {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        // varargs, can have more that one steps classes
+        // varargs, can have more than one steps classes
         return new InstanceStepsFactory(configuration(), new CommentParsingSteps());
     }
 
