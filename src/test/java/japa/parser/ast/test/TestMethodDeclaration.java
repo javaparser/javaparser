@@ -1,8 +1,8 @@
 package japa.parser.ast.test;
 
+import fixture.Helper;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import org.junit.Test;
 
