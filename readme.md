@@ -1,4 +1,5 @@
 # Java 1.7 parser and Abstract Syntax Tree.
+[![Build Status](https://drone.io/github.com/matozoid/javaparser/status.png)](https://drone.io/github.com/matozoid/javaparser)
 
 Copyright (C) 2007 J&uacute;lio Vilmar Gesser
 
