@@ -8,15 +8,12 @@ import java.util.List;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 
-public class CommentParsingTest {
+public class ManipulationTest {
 
     @Test
     public void run() throws Throwable {
-        // Embedder defines the configuration and candidate steps
-        Embedder embedder = new CommentParsingEmbedder();
-        List<String> storyPaths = new StoryFinder().findPaths(codeLocationFromClass(this.getClass()), "**/bdd/comment*.story", "");
+        Embedder embedder = new ManipulationEmbedder();
+        List<String> storyPaths = new StoryFinder().findPaths(codeLocationFromClass(this.getClass()), "**/bdd/manipulation*.story", "");
         embedder.runStoriesAsPaths(storyPaths);
     }
-
 }
-
