@@ -17,6 +17,7 @@ import org.jbehave.core.steps.Parameters;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import static bdd.steps.CommonSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -336,20 +337,6 @@ public class CommentParsingSteps {
     public void thenCommentInCompilationUnitCommentedNodeIsIntegerPrimitiveType(int commentPosition) {
         Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
         assertThat(commentUnderTest.getCommentedNode(), instanceOf(PrimitiveType.class));
-    }
-
-    private BodyDeclaration getMemberByTypeAndPosition(TypeDeclaration typeDeclaration, int position,
-                                                       Class<? extends BodyDeclaration> typeClass){
-        int typeCount = 0;
-        for(BodyDeclaration declaration : typeDeclaration.getMembers()){
-            if(declaration.getClass().equals(typeClass)){
-                if(typeCount == position){
-                    return declaration;
-                }
-                typeCount++;
-            }
-        }
-        throw new IllegalArgumentException("No member " + typeClass + " at position: " + position );
     }
 
     private Comment toComment(Parameters row, Comment comment) {
