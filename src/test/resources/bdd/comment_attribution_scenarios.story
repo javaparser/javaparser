@@ -309,3 +309,117 @@ Then field 4 in class 1 is commented " multi-line comment"
 Then field 4 in class 1 contains 0 comments
 Then field 5 in class 1 is commented " * multi-line"
 Then field 5 in class 1 contains 0 comments
+
+
+Scenario: A class with only an orphan comment is processed by the Java Parser
+
+Given the class:
+class A {
+    // orphan comment"
+}
+When the class is parsed by the Java parser
+Then the compilation unit has 1 contained comments
+Then comment 1 in compilation unit is an orphan
+Then comment 1 in compilation unit parent is ClassOrInterfaceDeclaration
+
+
+
+Scenario: A class with only a class comment is processed by the Java Parser
+
+Given the class:
+/* Comment of the class */
+class A {
+}
+When the class is parsed by the Java parser
+Then the compilation unit has 1 contained comments
+Then comment 1 in compilation unit is not an orphan
+Then comment 1 in compilation unit commented node is ClassOrInterfaceDeclaration
+
+
+
+Scenario: A Class With two comments at class level is processed by the Java Parser
+
+Given the class:
+/* Orphan comment */
+/* Comment of the class */
+class A {
+}
+When the class is parsed by the Java parser
+Then the compilation unit has 2 contained comments
+Then comment 1 in compilation unit is an orphan
+Then the compilation unit orphan comment 1 is "Orphan comment"
+Then comment 2 in compilation unit is not an orphan
+Then comment 2 in compilation unit commented node is ClassOrInterfaceDeclaration
+
+
+Scenario: A Class has a comment associated to a field when processed by the Java Parser
+
+Given the class:
+class A {
+    int a = 0; // comment associated to the field
+}
+When the class is parsed by the Java parser
+Then the compilation unit has 1 contained comments
+Then comment 1 in compilation unit is not an orphan
+Then comment 1 in compilation unit commented node is FieldDeclaration
+
+
+Scenario: A Class has a comment associated to a the literal when processed by the Java Parser
+
+Given the class:
+class A {
+    int a
+        = 0; // comment associated to the field
+}
+When the class is parsed by the Java parser
+Then the compilation unit has 1 contained comments
+Then comment 1 in compilation unit is not an orphan
+Then comment 1 in compilation unit commented node is IntegerLiteralExpr
+
+
+
+Scenario: A Class with two line comment within a method when processed by the Java Parser
+
+Given the class:
+class A {
+    void foo() {
+        // a comment
+        int b; // another comment
+    }
+}
+When the class is parsed by the Java parser
+Then the compilation unit has 2 contained comments
+Then comment 1 in compilation unit is an orphan
+Then comment 1 in compilation unit is "a comment"
+Then comment 2 in compilation unit is not an orphan
+Then comment 2 in compilation unit is "another comment"
+Then comment 2 in compilation unit commented node is ExpressionStmt
+
+
+Scenario: A Class with an inline comment inside a block comment is parsed by the Java Parser
+
+Given the class:
+class A {
+    /* A block comment that
+    // Contains a line comment
+    */
+    public static void main(String args[]) {
+    }
+}
+When the class is parsed by the Java parser
+Then the compilation unit has 1 contained comments
+Then comment 1 in compilation unit is "A block comment that // Contains a line comment"
+
+
+Scenario: A Class with an inline comment inbetween annotation a method declaration is parsed Java Parser
+
+Given the class:
+class A {
+    @Override
+    // Returns number of vowels in a name
+    public int countVowels(String name) {
+    }
+}
+When the class is parsed by the Java parser
+Then the compilation unit has 1 contained comments
+Then comment 1 in compilation unit commented node is PrimitiveType

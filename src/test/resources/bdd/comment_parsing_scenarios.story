@@ -150,4 +150,3 @@ Then the block comments have the following positions:
 Then the Javadoc comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
 |15|5|17|8|
-

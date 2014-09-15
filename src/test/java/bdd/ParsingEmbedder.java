@@ -1,7 +1,5 @@
 package bdd;
 
-
-import bdd.steps.CommentParsingSteps;
 import bdd.steps.ManipulationSteps;
 import bdd.steps.ParsingSteps;
 import org.jbehave.core.configuration.Configuration;
@@ -15,7 +13,7 @@ import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 
-public class ManipulationEmbedder extends Embedder {
+public class ParsingEmbedder extends Embedder {
 
     @Override
     public EmbedderControls embedderControls() {
@@ -33,6 +31,6 @@ public class ManipulationEmbedder extends Embedder {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new ManipulationSteps());
+        return new InstanceStepsFactory(configuration(), new ParsingSteps());
     }
 }
