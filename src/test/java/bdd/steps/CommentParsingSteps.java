@@ -17,7 +17,7 @@ import org.jbehave.core.steps.Parameters;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import static bdd.steps.CommonSteps.getMemberByTypeAndPosition;
+import static bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

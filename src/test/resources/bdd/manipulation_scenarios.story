@@ -56,7 +56,8 @@ public class CreateClass {
 
 Scenario: Change the name of a method to be uppercase
 
-Given a CompilationUnit with the following source:
+Given a CompilationUnit
+When the following source is parsed:
 package japa.parser.ast.manipulation;
 
 public class UpdateMethod {
@@ -71,7 +72,8 @@ Then method 1 in class 1 has the name "CHANGETOUPPERCASE"
 
 Scenario: Change the name of all methods to be uppercase using a visitor
 
-Given a CompilationUnit with the following source:
+Given a CompilationUnit
+When the following source is parsed:
 package japa.parser.ast.manipulation;
 
 public class UpdateMethod {
@@ -88,7 +90,8 @@ Then method 2 in class 1 has the name "ANOTHERMETHODTOCHANGE"
 
 Scenario: Add int arguments to a method
 
-Given a CompilationUnit with the following source:
+Given a CompilationUnit
+When the following source is parsed:
 package japa.parser.ast.manipulation;
 
 public class UpdateMethod {
@@ -105,7 +108,8 @@ Then method 2 in class 1 parameter 1 is type int called "value"
 
 Scenario: Add int arguments to all methods using a visitor
 
-Given a CompilationUnit with the following source:
+Given a CompilationUnit
+When the following source is parsed:
 package japa.parser.ast.manipulation;
 
 public class UpdateMethod {

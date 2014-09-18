@@ -1,10 +1,9 @@
 package bdd;
 
-
-import bdd.steps.CommentParsingSteps;
-import bdd.steps.ManipulationSteps;
 import bdd.steps.ParsingSteps;
 import bdd.steps.SharedSteps;
+import bdd.steps.VisitorSteps;
+import japa.parser.ast.CompilationUnit;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
@@ -19,7 +18,7 @@ import org.jbehave.core.steps.InstanceStepsFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ManipulationEmbedder extends Embedder {
+public class VisitorEmbedder extends Embedder {
 
     @Override
     public EmbedderControls embedderControls() {
@@ -38,9 +37,8 @@ public class ManipulationEmbedder extends Embedder {
     @Override
     public InjectableStepsFactory stepsFactory() {
         Map<String, Object> state = new HashMap<>();
-
         return new InstanceStepsFactory(configuration(),
                 new SharedSteps(state),
-                new ManipulationSteps(state));
+                new VisitorSteps(state));
     }
 }

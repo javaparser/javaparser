@@ -2,6 +2,8 @@ package bdd;
 
 import bdd.steps.ManipulationSteps;
 import bdd.steps.ParsingSteps;
+import bdd.steps.SharedSteps;
+import japa.parser.ast.CompilationUnit;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
@@ -12,6 +14,9 @@ import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParsingEmbedder extends Embedder {
 
@@ -25,12 +30,17 @@ public class ParsingEmbedder extends Embedder {
         return new MostUsefulConfiguration()
                 .useStoryLoader(new LoadFromClasspath(this.getClass()))
                 .usePendingStepStrategy(new FailingUponPendingStep())
-                .useStoryReporterBuilder(new StoryReporterBuilder().withDefaultFormats()
+                .useStoryReporterBuilder(new StoryReporterBuilder()
+                        .withDefaultFormats()
                         .withFormats(Format.CONSOLE, Format.HTML));
     }
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new ParsingSteps());
+        Map<String, Object> state = new HashMap<>();
+
+        return new InstanceStepsFactory(configuration(),
+                new SharedSteps(state),
+                new ParsingSteps(state));
     }
 }

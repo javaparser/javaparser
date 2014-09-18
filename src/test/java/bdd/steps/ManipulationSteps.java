@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertNotEquals;
@@ -34,7 +35,6 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class ManipulationSteps {
 
-    private CompilationUnit compilationUnit;
     private BlockStmt blockStmt;
     private Statement statement;
     private TryStmt tryStmt;
@@ -43,9 +43,10 @@ public class ManipulationSteps {
     private ChangeMethodNameToUpperCaseVisitor changeMethodNameToUpperCaseVisitor;
     private AddNewIntParameterCalledValueVisitor addNewIntParameterCalledValueVisitor;
 
-    @Given("a CompilationUnit")
-    public void givenACompilationUnit() {
-        compilationUnit = new CompilationUnit();
+    private Map<String, Object> state;
+
+    public ManipulationSteps(Map<String, Object> state){
+        this.state = state;
     }
 
     @Given("a BlockStmt")
@@ -68,11 +69,6 @@ public class ManipulationSteps {
         variableDeclarationExprList = new ArrayList<>();
         variableDeclarationExprList.add(new VariableDeclarationExpr());
         variableDeclarationExprList.add(new VariableDeclarationExpr());
-    }
-
-    @Given("a CompilationUnit with the following source:$classSrc")
-    public void givenACompilationUnitWithTheFollowingSource(String classSrc) throws ParseException {
-        compilationUnit = JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes()));
     }
 
     @Given("a ChangeNameToUpperCaseVisitor")
@@ -107,21 +103,27 @@ public class ManipulationSteps {
 
     @When("the package declaration is set to \"$packageName\"")
     public void whenThePackageDeclarationIsSetTo(String packageName) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         compilationUnit.setPackage(new PackageDeclaration(new NameExpr(packageName)));
+        state.put("cu1", compilationUnit);
     }
 
     @When("a public class called \"$className\" is added to the CompilationUnit")
     public void whenAClassCalledIsAddedToTheCompilationUnit(String className) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         TypeDeclaration type = new ClassOrInterfaceDeclaration(ModifierSet.PUBLIC, false, "CreateClass");
         compilationUnit.setTypes(Arrays.asList(type));
+        state.put("cu1", compilationUnit);
     }
 
     @When("a public static method called \"$methodName\" returning void is added to class $position in the compilation unit")
     public void whenAStaticMethodCalledReturningIsAddedToClassInTheCompilationUnit(String methodName, int position) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         TypeDeclaration type = compilationUnit.getTypes().get(position -1);
         MethodDeclaration method = new MethodDeclaration(ModifierSet.PUBLIC, new VoidType(), methodName);
         method.setModifiers(ModifierSet.addModifier(method.getModifiers(), ModifierSet.STATIC));
         ASTHelper.addMember(type, method);
+        state.put("cu1", compilationUnit);
     }
 
     @When("$typeName varargs called \"$parameterName\" are added to method $methodPosition in class $classPosition")
@@ -163,21 +165,27 @@ public class ManipulationSteps {
 
     @When("the ChangeNameToUpperCaseVisitor visits to compilation unit")
     public void whenTheVisitorVisitsToCompilationUnit() {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         changeMethodNameToUpperCaseVisitor.visit(compilationUnit, null);
+        state.put("cu1", compilationUnit);
     }
 
     @When("the AddNewIntParameterCalledValueVisitor visits to compilation unit")
     public void whenTheAddNewParameterCalledValueVisitorVisitsToCompilationUnit() {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         addNewIntParameterCalledValueVisitor.visit(compilationUnit, null);
+        state.put("cu1", compilationUnit);
     }
 
     @Then("is not equal to null")
     public void thenIsNotEqualToNull() {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         assertNotEquals(compilationUnit, null);
     }
 
     @Then("is not equal to $value")
     public void thenIsNotEqualTo(String value) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         assertNotEquals(compilationUnit, value);
     }
 
@@ -206,6 +214,7 @@ public class ManipulationSteps {
 
     @Then("the expected sources should be:$classSrc")
     public void thenTheExpectedSourcesShouldBe(String classSrc) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         assertThat(compilationUnit.toString(), is(equalToIgnoringWhiteSpace(classSrc)));
     }
 
@@ -232,6 +241,7 @@ public class ManipulationSteps {
     }
 
     private MethodDeclaration getMethodByPositionAndClassPosition(int methodPosition, int classPosition) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         TypeDeclaration type = compilationUnit.getTypes().get(classPosition -1);
         return (MethodDeclaration) type.getMembers().get(methodPosition -1);
     }
