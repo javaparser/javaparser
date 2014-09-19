@@ -1,5 +1,6 @@
 package bdd;
 
+import bdd.embedders.ManipulationEmbedder;
 import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.io.StoryFinder;
 import org.junit.Test;

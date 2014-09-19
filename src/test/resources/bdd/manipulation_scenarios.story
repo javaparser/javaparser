@@ -43,7 +43,7 @@ When a public static method called "main" returning void is added to class 1 in 
 When String varargs called "args" are added to method 1 in class 1
 When a BlockStmt is added to method 1 in class 1
 When System.out.println("Hello World!"); is added to the body of method 1 in class 1
-Then the expected sources should be:
+Then the expected source should be:
 package japa.parser.ast.manipulation;
 
 public class CreateClass {

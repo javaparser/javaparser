@@ -5,21 +5,28 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
-import japa.parser.ast.visitor.CloneVisitor;
+import org.hamcrest.CoreMatchers;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertThat;
 
 public class SharedSteps {
 
+    /* Map that maintains shares state across step classes.  If manipulating the objects in the map you must update the state */
     private Map<String, Object> state;
 
     public SharedSteps(Map<String, Object> state){
@@ -44,6 +51,14 @@ public class SharedSteps {
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
     public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException {
         state.put("cu2", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
+    }
+
+
+    @When("the \"$fileName\" is parsed")
+    public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException {
+        URL url = getClass().getResource("../samples/" + fileName);
+        CompilationUnit compilationUnit = JavaParser.parse(new File(url.getPath()));
+        state.put("cu1", compilationUnit);
     }
 
     @Then("the CompilationUnit is equal to the second CompilationUnit")
@@ -76,6 +91,13 @@ public class SharedSteps {
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
         assertThat(compilationUnit.hashCode(), not(equalTo(compilationUnit2.hashCode())));
+    }
+
+
+    @Then("the expected source should be:$classSrc")
+    public void thenTheExpectedSourcesShouldBe(String classSrc) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        assertThat(compilationUnit.toString(), CoreMatchers.is(equalToIgnoringWhiteSpace(classSrc)));
     }
 
     public static BodyDeclaration getMemberByTypeAndPosition(TypeDeclaration typeDeclaration, int position,

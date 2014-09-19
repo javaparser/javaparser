@@ -35,14 +35,15 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class ManipulationSteps {
 
+    /* Fields used to maintain step state within this step class */
     private BlockStmt blockStmt;
     private Statement statement;
     private TryStmt tryStmt;
     private List<VariableDeclarationExpr> variableDeclarationExprList;
-
     private ChangeMethodNameToUpperCaseVisitor changeMethodNameToUpperCaseVisitor;
     private AddNewIntParameterCalledValueVisitor addNewIntParameterCalledValueVisitor;
 
+    /* Map that maintains shares state across step classes.  If manipulating the objects in the map you must update the state */
     private Map<String, Object> state;
 
     public ManipulationSteps(Map<String, Object> state){
@@ -210,12 +211,6 @@ public class ManipulationSteps {
     @Then("the TryStmt has no child nodes")
     public void thenTheTryStmtHasNotChildNodes() {
         assertThat(tryStmt.getChildrenNodes().size(), is(0));
-    }
-
-    @Then("the expected sources should be:$classSrc")
-    public void thenTheExpectedSourcesShouldBe(String classSrc) {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        assertThat(compilationUnit.toString(), is(equalToIgnoringWhiteSpace(classSrc)));
     }
 
     @Then("method $methodPosition in class $classPosition has the name \"$expectedName\"")
