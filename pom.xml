@@ -1,7 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>acceptance-tests</module>
+        <module>grammar</module>
+        <module>core</module>
+    </modules>
 
-	<parent>
+    <parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
@@ -9,16 +14,16 @@
 
 	<groupId>com.google.code.javaparser</groupId>
 	<artifactId>javaparser</artifactId>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 	<version>1.0.12-SNAPSHOT</version>
 
 	<name>javaparser</name>
 	<url>http://code.google.com/p/javaparser/</url>
 	<inceptionYear>2007</inceptionYear>
-	<description>This package contains a Java 1.7 Parser with AST generation and visitor support. 
-		The AST records the source code structure, javadoc and comments. Soon will be 
-		possible change the AST nodes or create new ones to modify source code like refactoring.
-		This parser is based on Sreenivasa Viswanadha Java 1.5 parser.</description>
+	<description>This package contains a Java 1.7 Parser with AST generation and visitor support.
+        The AST records the source code structure, javadoc and comments. Soon will be
+        possible change the AST nodes or create new ones to modify source code like refactoring.
+        This japa.parser is based on Sreenivasa Viswanadha Java 1.5 japa.parser.</description>
 
 	<developers>
 		<developer>
@@ -71,25 +76,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>add-javacc-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>src/main/javacc</source>
-								<source>target/generated-sources/javacc</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -98,35 +84,9 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>javacc-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>javacc</id>
-						<goals>
-							<goal>javacc</goal>
-						</goals>
-						<configuration>
-							<grammarEncoding>${project.build.sourceEncoding}</grammarEncoding>
-							<jdkVersion>${java.version}</jdkVersion>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>${build-helper-maven-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>javacc-maven-plugin</artifactId>
-					<version>${javacc-maven-plugin.version}</version>
-				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
@@ -168,12 +128,6 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.jbehave</groupId>
-            <artifactId>jbehave-core</artifactId>
-            <version>${jbehave.version}</version>
-            <scope>test</scope>
-        </dependency>
 	</dependencies>
 
 </project>
