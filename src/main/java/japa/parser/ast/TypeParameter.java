@@ -21,6 +21,7 @@
  */
 package japa.parser.ast;
 
+import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
@@ -50,6 +51,8 @@ public final class TypeParameter extends Node {
 
 	private String name;
 
+    private List<AnnotationExpr> annotations;
+
 	private List<ClassOrInterfaceType> typeBound;
 
 	public TypeParameter() {
@@ -66,6 +69,14 @@ public final class TypeParameter extends Node {
 		setName(name);
 		setTypeBound(typeBound);
 	}
+
+    public TypeParameter(int beginLine, int beginColumn, int endLine,
+                         int endColumn, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
+        this(beginLine, beginColumn, endLine, endColumn, name, typeBound);
+        setName(name);
+        setTypeBound(typeBound);
+        this.annotations = annotations;
+    }
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
@@ -115,4 +126,11 @@ public final class TypeParameter extends Node {
 		setAsParentNodeOf(typeBound);
 	}
 
+    public List<AnnotationExpr> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(List<AnnotationExpr> annotations) {
+        this.annotations = annotations;
+    }
 }

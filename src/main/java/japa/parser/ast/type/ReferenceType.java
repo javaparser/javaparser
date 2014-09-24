@@ -21,8 +21,11 @@
  */
 package japa.parser.ast.type;
 
+import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.visitor.GenericVisitor;
 import japa.parser.ast.visitor.VoidVisitor;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -33,7 +36,9 @@ public final class ReferenceType extends Type {
 
 	private int arrayCount;
 
-	public ReferenceType() {
+    private List<List<AnnotationExpr>> arraysAnnotations;
+
+    public ReferenceType() {
 	}
 
 	public ReferenceType(final Type type) {
@@ -51,6 +56,16 @@ public final class ReferenceType extends Type {
 		setType(type);
 		setArrayCount(arrayCount);
 	}
+
+    public ReferenceType(int beginLine, int beginColumn, int endLine,
+                         int endColumn, Type type, int arrayCount,
+                         List<AnnotationExpr> annotations,
+                         List<List<AnnotationExpr>> arraysAnnotations) {
+        super(beginLine, beginColumn, endLine, endColumn, annotations);
+        setType(type);
+        setArrayCount(arrayCount);
+        this.arraysAnnotations = arraysAnnotations;
+    }
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
@@ -77,4 +92,11 @@ public final class ReferenceType extends Type {
 		setAsParentNodeOf(this.type);
 	}
 
+    public List<List<AnnotationExpr>> getArraysAnnotations() {
+        return arraysAnnotations;
+    }
+
+    public void setArraysAnnotations(List<List<AnnotationExpr>> arraysAnnotations) {
+        this.arraysAnnotations = arraysAnnotations;
+    }
 }

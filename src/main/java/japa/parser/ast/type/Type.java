@@ -22,17 +22,39 @@
 package japa.parser.ast.type;
 
 import japa.parser.ast.Node;
+import japa.parser.ast.expr.AnnotationExpr;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public abstract class Type extends Node {
 
-	public Type() {
-	}
+    private List<AnnotationExpr> annotations;
 
-	public Type(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		super(beginLine, beginColumn, endLine, endColumn);
-	}
+    public Type() {
+    }
+
+    public Type(List<AnnotationExpr> annotation){
+        this.annotations = annotation;
+    }
+
+    public Type(int beginLine, int beginColumn, int endLine, int endColumn) {
+        super(beginLine, beginColumn, endLine, endColumn);
+    }
+
+    public Type(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
+        super(beginLine, beginColumn, endLine, endColumn);
+        this.annotations = annotations;
+    }
+
+    public List<AnnotationExpr> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(List<AnnotationExpr> annotations) {
+        this.annotations = annotations;
+    }
 
 }

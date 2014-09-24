@@ -45,38 +45,7 @@ import japa.parser.ast.body.MultiTypeParameter;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.body.VariableDeclaratorId;
-import japa.parser.ast.expr.ArrayAccessExpr;
-import japa.parser.ast.expr.ArrayCreationExpr;
-import japa.parser.ast.expr.ArrayInitializerExpr;
-import japa.parser.ast.expr.AssignExpr;
-import japa.parser.ast.expr.BinaryExpr;
-import japa.parser.ast.expr.BooleanLiteralExpr;
-import japa.parser.ast.expr.CastExpr;
-import japa.parser.ast.expr.CharLiteralExpr;
-import japa.parser.ast.expr.ClassExpr;
-import japa.parser.ast.expr.ConditionalExpr;
-import japa.parser.ast.expr.DoubleLiteralExpr;
-import japa.parser.ast.expr.EnclosedExpr;
-import japa.parser.ast.expr.FieldAccessExpr;
-import japa.parser.ast.expr.InstanceOfExpr;
-import japa.parser.ast.expr.IntegerLiteralExpr;
-import japa.parser.ast.expr.IntegerLiteralMinValueExpr;
-import japa.parser.ast.expr.LongLiteralExpr;
-import japa.parser.ast.expr.LongLiteralMinValueExpr;
-import japa.parser.ast.expr.MarkerAnnotationExpr;
-import japa.parser.ast.expr.MemberValuePair;
-import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.expr.NameExpr;
-import japa.parser.ast.expr.NormalAnnotationExpr;
-import japa.parser.ast.expr.NullLiteralExpr;
-import japa.parser.ast.expr.ObjectCreationExpr;
-import japa.parser.ast.expr.QualifiedNameExpr;
-import japa.parser.ast.expr.SingleMemberAnnotationExpr;
-import japa.parser.ast.expr.StringLiteralExpr;
-import japa.parser.ast.expr.SuperExpr;
-import japa.parser.ast.expr.ThisExpr;
-import japa.parser.ast.expr.UnaryExpr;
-import japa.parser.ast.expr.VariableDeclarationExpr;
+import japa.parser.ast.expr.*;
 import japa.parser.ast.stmt.AssertStmt;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.BreakStmt;
@@ -249,7 +218,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getTypeBound(), n2.getTypeBound())) {
 			return Boolean.FALSE;
 		}
-
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
 		return Boolean.TRUE;
 	}
 
@@ -561,7 +532,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters())) {
 			return Boolean.FALSE;
 		}
-
+		if(n1.isDefault() != n2.isDefault()){
+			return Boolean.FALSE;
+		}
 		return Boolean.TRUE;
 	}
 	
@@ -648,7 +621,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
 			return Boolean.FALSE;
 		}
-
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
 		return Boolean.TRUE;
 	}
 
@@ -658,7 +633,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (n1.getType() != n2.getType()) {
 			return Boolean.FALSE;
 		}
-
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
 		return Boolean.TRUE;
 	}
 
@@ -668,15 +645,40 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (n1.getArrayCount() != n2.getArrayCount()) {
 			return Boolean.FALSE;
 		}
-
 		if (!nodeEquals(n1.getType(), n2.getType())) {
 			return Boolean.FALSE;
 		}
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
+		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
+		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
 
+		if (n1a !=null && n2a!= null) {
+			if(n1a.size() != n2a.size()){
+				return Boolean.FALSE;
+			}
+			else{
+				int i = 0;
+				for(List<AnnotationExpr> aux: n1a){
+					if(!nodesEquals(aux, n2a.get(i))){
+						return Boolean.FALSE;
+					}
+					i++;
+				}
+			}
+		}
+		else if (n1a != n2a){
+			return Boolean.FALSE;
+		}
 		return Boolean.TRUE;
 	}
 
-	@Override public Boolean visit(final VoidType n1, final Node arg) {
+	public Boolean visit(VoidType n1, Node arg) {
+		VoidType n2 = (VoidType) arg;
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
 		return Boolean.TRUE;
 	}
 
@@ -690,7 +692,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodeEquals(n1.getSuper(), n2.getSuper())) {
 			return Boolean.FALSE;
 		}
-
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
 		return Boolean.TRUE;
 	}
 
@@ -726,7 +730,26 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getDimensions(), n2.getDimensions())) {
 			return Boolean.FALSE;
 		}
+		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
+		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
 
+		if (n1a !=null && n2a!= null) {
+			if(n1a.size() != n2a.size()){
+				return Boolean.FALSE;
+			}
+			else{
+				int i = 0;
+				for(List<AnnotationExpr> aux: n1a){
+					if(!nodesEquals(aux, n2a.get(i))){
+						return Boolean.FALSE;
+					}
+					i++;
+				}
+			}
+		}
+		else if (n1a != n2a){
+			return Boolean.FALSE;
+		}
 		return Boolean.TRUE;
 	}
 
@@ -1400,4 +1423,42 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return Boolean.TRUE;
 	}
 
+    @Override
+    public Boolean visit(LambdaExpr n1, Node arg) {
+        LambdaExpr n2 = (LambdaExpr) arg;
+        if (!nodesEquals(n1.getParameters(), n2.getParameters())) {
+            return Boolean.FALSE;
+        }
+        if(n1.isParametersEnclosed() != n2.isParametersEnclosed()){
+            return Boolean.FALSE;
+        }
+        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean visit(MethodReferenceExpr n1, Node arg) {
+        MethodReferenceExpr n2 = (MethodReferenceExpr) arg;
+        if (!nodeEquals(n1.getScope(), n2.getScope())) {
+            return Boolean.FALSE;
+        }
+        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters())) {
+            return Boolean.FALSE;
+        }
+        if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean visit(TypeExpr n, Node arg) {
+        TypeExpr n2 = (TypeExpr) arg;
+        if (!nodeEquals(n.getType(), n2.getType())) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
 }

@@ -140,3 +140,33 @@ public class Issue37 {
     protected Test test;
 }
 Then field 1 in class 1 contains annotation 1 value is ""http://someURL.org/""
+
+
+Scenario: A class with a Lambda is parsed by the Java Parser
+
+Given a CompilationUnit
+When the following source is parsed:
+package bdd.samples;
+public class Lambdas {
+
+    public static void main(String[] args) {
+
+        System.out.println("=== RunnableTest ===");
+        // Anonymous Runnable
+        Runnable r1 = new Runnable(){
+
+        @Override
+        public void run(){
+                System.out.println("Hello world one!");
+            }
+        };
+
+        // Lambda Runnable
+        Runnable r2 = () -> System.out.println("Hello world two!");
+
+        // Run em!
+        r1.run();
+        r2.run();
+    }
+}
+Then lambda 1 in class 1 is called "r2"

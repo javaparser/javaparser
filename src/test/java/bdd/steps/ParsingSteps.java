@@ -1,21 +1,14 @@
 package bdd.steps;
 
-import japa.parser.JavaParser;
-import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.*;
 import japa.parser.ast.expr.AnnotationExpr;
-import japa.parser.ast.visitor.CloneVisitor;
-import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
 
-import java.io.ByteArrayInputStream;
 import java.util.Map;
 
 import static bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
@@ -68,5 +61,11 @@ public class ParsingSteps {
                 FieldDeclaration.class);
         AnnotationExpr annotationUnderTest = fieldUnderTest.getAnnotations().get(annotationPosition - 1);
         assertThat(annotationUnderTest.getChildrenNodes().get(1).toString(), is(expectedValue));
+    }
+
+    @Then("lambda $lambdaPosition in class $classPosition is called \"$expectedValue\"")
+    public void thenLambdaInClassIsCalled(int lambdaPosition, int classPosition, String expectedValue) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
     }
 }

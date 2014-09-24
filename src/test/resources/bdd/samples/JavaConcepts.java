@@ -1,10 +1,13 @@
 package bdd.samples;
 
 import japa.parser.JavaParser;
-import japa.parser.ParseException;
 
+import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import org.junit.Ignore;
+
+import java.io.*;
+import java.util.*;
 
 @Ignore
 @Deprecated

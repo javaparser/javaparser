@@ -40,6 +40,8 @@ public final class ArrayCreationExpr extends Expression {
 
     private List<Expression> dimensions;
 
+    private List<List<AnnotationExpr>> arraysAnnotations;
+
     public ArrayCreationExpr() {
     }
 
@@ -116,5 +118,14 @@ public final class ArrayCreationExpr extends Expression {
     public void setType(Type type) {
         this.type = type;
 		setAsParentNodeOf(this.type);
+    }
+
+    public List<List<AnnotationExpr>> getArraysAnnotations() {
+        return arraysAnnotations;
+    }
+
+    public void setArraysAnnotations(
+            List<List<AnnotationExpr>> arraysAnnotations) {
+        this.arraysAnnotations = arraysAnnotations;
     }
 }

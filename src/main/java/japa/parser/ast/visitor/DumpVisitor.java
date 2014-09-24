@@ -49,40 +49,7 @@ import japa.parser.ast.comments.BlockComment;
 import japa.parser.ast.comments.Comment;
 import japa.parser.ast.comments.JavadocComment;
 import japa.parser.ast.comments.LineComment;
-import japa.parser.ast.expr.AnnotationExpr;
-import japa.parser.ast.expr.ArrayAccessExpr;
-import japa.parser.ast.expr.ArrayCreationExpr;
-import japa.parser.ast.expr.ArrayInitializerExpr;
-import japa.parser.ast.expr.AssignExpr;
-import japa.parser.ast.expr.BinaryExpr;
-import japa.parser.ast.expr.BooleanLiteralExpr;
-import japa.parser.ast.expr.CastExpr;
-import japa.parser.ast.expr.CharLiteralExpr;
-import japa.parser.ast.expr.ClassExpr;
-import japa.parser.ast.expr.ConditionalExpr;
-import japa.parser.ast.expr.DoubleLiteralExpr;
-import japa.parser.ast.expr.EnclosedExpr;
-import japa.parser.ast.expr.Expression;
-import japa.parser.ast.expr.FieldAccessExpr;
-import japa.parser.ast.expr.InstanceOfExpr;
-import japa.parser.ast.expr.IntegerLiteralExpr;
-import japa.parser.ast.expr.IntegerLiteralMinValueExpr;
-import japa.parser.ast.expr.LongLiteralExpr;
-import japa.parser.ast.expr.LongLiteralMinValueExpr;
-import japa.parser.ast.expr.MarkerAnnotationExpr;
-import japa.parser.ast.expr.MemberValuePair;
-import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.expr.NameExpr;
-import japa.parser.ast.expr.NormalAnnotationExpr;
-import japa.parser.ast.expr.NullLiteralExpr;
-import japa.parser.ast.expr.ObjectCreationExpr;
-import japa.parser.ast.expr.QualifiedNameExpr;
-import japa.parser.ast.expr.SingleMemberAnnotationExpr;
-import japa.parser.ast.expr.StringLiteralExpr;
-import japa.parser.ast.expr.SuperExpr;
-import japa.parser.ast.expr.ThisExpr;
-import japa.parser.ast.expr.UnaryExpr;
-import japa.parser.ast.expr.VariableDeclarationExpr;
+import japa.parser.ast.expr.*;
 import japa.parser.ast.stmt.AssertStmt;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.BreakStmt;
@@ -439,6 +406,14 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final ClassOrInterfaceType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+
+		if (n.getAnnotations() != null) {
+			for (AnnotationExpr ae : n.getAnnotations()) {
+				ae.accept(this, arg);
+				printer.print(" ");
+			}
+		}
+
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 			printer.print(".");
@@ -449,6 +424,12 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final TypeParameter n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (AnnotationExpr ann : n.getAnnotations()) {
+				ann.accept(this, arg);
+				printer.print(" ");
+			}
+		}
 		printer.print(n.getName());
 		if (n.getTypeBound() != null) {
 			printer.print(" extends ");
@@ -464,6 +445,12 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final PrimitiveType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (AnnotationExpr ae : n.getAnnotations()) {
+				ae.accept(this, arg);
+				printer.print(" ");
+			}
+		}
 		switch (n.getType()) {
 		case Boolean:
 			printer.print("boolean");
@@ -494,14 +481,37 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final ReferenceType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (AnnotationExpr ae : n.getAnnotations()) {
+				ae.accept(this, arg);
+				printer.print(" ");
+			}
+		}
 		n.getType().accept(this, arg);
+		List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
 		for (int i = 0; i < n.getArrayCount(); i++) {
+			if (arraysAnnotations != null && i < arraysAnnotations.size()) {
+				List<AnnotationExpr> annotations = arraysAnnotations.get(i);
+				if (annotations != null) {
+					for (AnnotationExpr ae : annotations) {
+						printer.print(" ");
+						ae.accept(this, arg);
+
+					}
+				}
+			}
 			printer.print("[]");
 		}
 	}
 
 	@Override public void visit(final WildcardType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (AnnotationExpr ae : n.getAnnotations()) {
+				printer.print(" ");
+				ae.accept(this, arg);
+			}
+		}
 		printer.print("?");
 		if (n.getExtends() != null) {
 			printer.print(" extends ");
@@ -585,18 +595,51 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printer.print("new ");
 		n.getType().accept(this, arg);
-
+		List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
 		if (n.getDimensions() != null) {
+			int j = 0;
 			for (final Expression dim : n.getDimensions()) {
+
+				if (arraysAnnotations != null && j < arraysAnnotations.size()) {
+					List<AnnotationExpr> annotations = arraysAnnotations.get(j);
+					if (annotations != null) {
+						for (AnnotationExpr ae : annotations) {
+							printer.print(" ");
+							ae.accept(this, arg);
+						}
+					}
+				}
 				printer.print("[");
 				dim.accept(this, arg);
 				printer.print("]");
+				j++;
 			}
 			for (int i = 0; i < n.getArrayCount(); i++) {
+				if (arraysAnnotations != null && i < arraysAnnotations.size()) {
+
+					List<AnnotationExpr> annotations = arraysAnnotations.get(i);
+					if (annotations != null) {
+						for (AnnotationExpr ae : annotations) {
+							printer.print(" ");
+							ae.accept(this, arg);
+
+						}
+					}
+				}
 				printer.print("[]");
 			}
+
 		} else {
 			for (int i = 0; i < n.getArrayCount(); i++) {
+				if (arraysAnnotations != null && i < arraysAnnotations.size()) {
+					List<AnnotationExpr> annotations = arraysAnnotations.get(i);
+					if (annotations != null) {
+						for (AnnotationExpr ae : annotations) {
+							ae.accept(this, arg);
+							printer.print(" ");
+						}
+					}
+				}
 				printer.print("[]");
 			}
 			printer.print(" ");
@@ -743,7 +786,9 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	@Override public void visit(final EnclosedExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print("(");
+		if (n.getInner() != null) {
 		n.getInner().accept(this, arg);
+		}
 		printer.print(")");
 	}
 
@@ -849,6 +894,8 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printer.print("new ");
 
 		printTypeArgs(n.getTypeArgs(), arg);
+			printer.print(" ");
+
 		n.getType().accept(this, arg);
 
 		printArguments(n.getArgs(), arg);
@@ -944,7 +991,9 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
-
+		if (n.isDefault()) {
+			printer.print("default ");
+		}
 		printTypeParameters(n.getTypeParameters(), arg);
 		if (n.getTypeParameters() != null) {
 			printer.print(" ");
@@ -992,8 +1041,9 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
-
-		n.getType().accept(this, arg);
+		if (n.getType() != null) {
+			n.getType().accept(this, arg);
+		}
 		if (n.isVarArgs()) {
 			printer.print("...");
 		}
@@ -1486,22 +1536,76 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printer.printLn("*/");
 	}
 
-    private void printOrphanCommentsEnding(final Node node){
-       List<Node> everything = new LinkedList<Node>();
-       everything.addAll(node.getChildrenNodes());
-       sortByBeginPosition(everything);
-       if (everything.size()==0) return;
+	@Override
+	public void visit(LambdaExpr n, Object arg) {
+        printJavaComment(n.getComment(), arg);
 
-       int commentsAtEnd = 0;
-       boolean findingComments = true;
-       while (findingComments&&commentsAtEnd<everything.size()){
-           Node last = everything.get(everything.size()-1-commentsAtEnd);
-           findingComments = (last instanceof Comment);
-           if (findingComments) commentsAtEnd++;
-       }
-       for (int i=0;i<commentsAtEnd;i++){
-          everything.get(everything.size()-commentsAtEnd+i).accept(this,null);
-       }
+        List<Parameter> parameters = n.getParameters();
+		boolean printPar = false;
+		printPar = n.isParametersEnclosed();
+
+		if (printPar) {
+			printer.print("(");
+		}
+		if (parameters != null) {
+			for (Iterator<Parameter> i = parameters.iterator(); i.hasNext();) {
+				Parameter p = i.next();
+				p.accept(this, arg);
+				if (i.hasNext()) {
+					printer.print(", ");
+				}
+			}
+		}
+		if (printPar) {
+			printer.print(")");
+		}
+
+		printer.print("->");
+		Statement body = n.getBody();
+		String bodyStr = body.toString();
+		if (body instanceof ExpressionStmt) {
+			// removing ';'
+			bodyStr = bodyStr.substring(0, bodyStr.length() - 1);
+		}
+		printer.print(bodyStr);
+
+	}
+
+
+    @Override
+    public void visit(MethodReferenceExpr n, Object arg) {
+        printJavaComment(n.getComment(), arg);
+        Expression scope = n.getScope();
+        String identifier = n.getIdentifier();
+        if (scope != null) {
+            n.getScope().accept(this, arg);
+        }
+
+        printer.print("::");
+        if (n.getTypeParameters() != null) {
+            printer.print("<");
+            for (Iterator<TypeParameter> i = n.getTypeParameters().iterator(); i
+                    .hasNext();) {
+                TypeParameter p = i.next();
+                p.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+            printer.print(">");
+        }
+        if (identifier != null) {
+            printer.print(identifier);
+        }
+
+    }
+
+    @Override
+    public void visit(TypeExpr n, Object arg) {
+        printJavaComment(n.getComment(), arg);
+        if (n.getType() != null) {
+            n.getType().accept(this, arg);
+        }
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node){
@@ -1528,4 +1632,22 @@ public final class DumpVisitor implements VoidVisitor<Object> {
         }
     }
 
+
+    private void printOrphanCommentsEnding(final Node node){
+        List<Node> everything = new LinkedList<Node>();
+        everything.addAll(node.getChildrenNodes());
+        sortByBeginPosition(everything);
+        if (everything.size()==0) return;
+
+        int commentsAtEnd = 0;
+        boolean findingComments = true;
+        while (findingComments&&commentsAtEnd<everything.size()){
+            Node last = everything.get(everything.size()-1-commentsAtEnd);
+            findingComments = (last instanceof Comment);
+            if (findingComments) commentsAtEnd++;
+        }
+        for (int i=0;i<commentsAtEnd;i++){
+            everything.get(everything.size()-commentsAtEnd+i).accept(this,null);
+        }
+    }
 }

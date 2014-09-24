@@ -5,7 +5,6 @@ import japa.parser.ASTHelper;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.DocumentableNode;
 import japa.parser.ast.Node;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.body.*;
@@ -16,19 +15,16 @@ import japa.parser.ast.stmt.TryStmt;
 import japa.parser.ast.type.PrimitiveType;
 import japa.parser.ast.type.VoidType;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
-import org.hamcrest.MatcherAssert;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;

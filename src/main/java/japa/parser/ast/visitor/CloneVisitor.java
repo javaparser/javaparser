@@ -1,6 +1,7 @@
 package japa.parser.ast.visitor;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import japa.parser.ast.comments.BlockComment;
@@ -29,68 +30,9 @@ import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.body.VariableDeclaratorId;
-import japa.parser.ast.expr.AnnotationExpr;
-import japa.parser.ast.expr.ArrayAccessExpr;
-import japa.parser.ast.expr.ArrayCreationExpr;
-import japa.parser.ast.expr.ArrayInitializerExpr;
-import japa.parser.ast.expr.AssignExpr;
-import japa.parser.ast.expr.BinaryExpr;
-import japa.parser.ast.expr.BooleanLiteralExpr;
-import japa.parser.ast.expr.CastExpr;
-import japa.parser.ast.expr.CharLiteralExpr;
-import japa.parser.ast.expr.ClassExpr;
-import japa.parser.ast.expr.ConditionalExpr;
-import japa.parser.ast.expr.DoubleLiteralExpr;
-import japa.parser.ast.expr.EnclosedExpr;
-import japa.parser.ast.expr.Expression;
-import japa.parser.ast.expr.FieldAccessExpr;
-import japa.parser.ast.expr.InstanceOfExpr;
-import japa.parser.ast.expr.IntegerLiteralExpr;
-import japa.parser.ast.expr.IntegerLiteralMinValueExpr;
-import japa.parser.ast.expr.LongLiteralExpr;
-import japa.parser.ast.expr.LongLiteralMinValueExpr;
-import japa.parser.ast.expr.MarkerAnnotationExpr;
-import japa.parser.ast.expr.MemberValuePair;
-import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.expr.NameExpr;
-import japa.parser.ast.expr.NormalAnnotationExpr;
-import japa.parser.ast.expr.NullLiteralExpr;
-import japa.parser.ast.expr.ObjectCreationExpr;
-import japa.parser.ast.expr.QualifiedNameExpr;
-import japa.parser.ast.expr.SingleMemberAnnotationExpr;
-import japa.parser.ast.expr.StringLiteralExpr;
-import japa.parser.ast.expr.SuperExpr;
-import japa.parser.ast.expr.ThisExpr;
-import japa.parser.ast.expr.UnaryExpr;
-import japa.parser.ast.expr.VariableDeclarationExpr;
-import japa.parser.ast.stmt.AssertStmt;
-import japa.parser.ast.stmt.BlockStmt;
-import japa.parser.ast.stmt.BreakStmt;
-import japa.parser.ast.stmt.CatchClause;
-import japa.parser.ast.stmt.ContinueStmt;
-import japa.parser.ast.stmt.DoStmt;
-import japa.parser.ast.stmt.EmptyStmt;
-import japa.parser.ast.stmt.ExplicitConstructorInvocationStmt;
-import japa.parser.ast.stmt.ExpressionStmt;
-import japa.parser.ast.stmt.ForStmt;
-import japa.parser.ast.stmt.ForeachStmt;
-import japa.parser.ast.stmt.IfStmt;
-import japa.parser.ast.stmt.LabeledStmt;
-import japa.parser.ast.stmt.ReturnStmt;
-import japa.parser.ast.stmt.Statement;
-import japa.parser.ast.stmt.SwitchEntryStmt;
-import japa.parser.ast.stmt.SwitchStmt;
-import japa.parser.ast.stmt.SynchronizedStmt;
-import japa.parser.ast.stmt.ThrowStmt;
-import japa.parser.ast.stmt.TryStmt;
-import japa.parser.ast.stmt.TypeDeclarationStmt;
-import japa.parser.ast.stmt.WhileStmt;
-import japa.parser.ast.type.ClassOrInterfaceType;
-import japa.parser.ast.type.PrimitiveType;
-import japa.parser.ast.type.ReferenceType;
-import japa.parser.ast.type.Type;
-import japa.parser.ast.type.VoidType;
-import japa.parser.ast.type.WildcardType;
+import japa.parser.ast.expr.*;
+import japa.parser.ast.stmt.*;
+import japa.parser.ast.type.*;
 
 public class CloneVisitor implements GenericVisitor<Node, Object> {
 
@@ -135,14 +77,15 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(TypeParameter _n, Object _arg) {
-		List<ClassOrInterfaceType> typeBound = visit(_n.getTypeBound(), _arg);
-		Comment comment = cloneNodes(_n.getComment(), _arg);
+        List<ClassOrInterfaceType> typeBound = visit(_n.getTypeBound(), _arg);
 
-		TypeParameter r = new TypeParameter(
-				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				_n.getName(), typeBound
-		);
-		r.setComment(comment);
+        List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
+        TypeParameter r = new TypeParameter(_n.getBeginLine(),
+                _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
+                _n.getName(), typeBound, annotations);
+
+        Comment comment = cloneNodes(_n.getComment(), _arg);
+        r.setComment(comment);
 		return r;
 	}
 
@@ -424,14 +367,22 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(ReferenceType _n, Object _arg) {
+		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
-		Comment comment = cloneNodes(_n.getComment(), _arg);
+		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
+		List<List<AnnotationExpr>> _arraysAnnotations = null;
+		if(arraysAnnotations != null){
+			_arraysAnnotations = new LinkedList<List<AnnotationExpr>>();
+			for(List<AnnotationExpr> aux: arraysAnnotations){
+				_arraysAnnotations.add(visit(aux, _arg));
+			}
+		}
 
-		ReferenceType r = new ReferenceType(
-				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				type_, _n.getArrayCount()
-		);
-		r.setComment(comment);
+        ReferenceType r = new ReferenceType(_n.getBeginLine(),
+                _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_,
+                _n.getArrayCount(), ann, _arraysAnnotations);
+        Comment comment = cloneNodes(_n.getComment(), _arg);
+        r.setComment(comment);
 		return r;
 	}
 
@@ -476,15 +427,24 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(ArrayCreationExpr _n, Object _arg) {
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		List<Expression> dimensions = visit(_n.getDimensions(), _arg);
-		Comment comment = cloneNodes(_n.getComment(), _arg);
-
-		ArrayCreationExpr r = new ArrayCreationExpr(
-				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				type_, dimensions, _n.getArrayCount()
-		);
-		r.setComment(comment);
-		if (_n.getInitializer() != null) // ArrayCreationExpr has two mutually exclusive constructors
+		ArrayCreationExpr r = new ArrayCreationExpr(_n.getBeginLine(),
+				_n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_,
+				dimensions, _n.getArrayCount());
+		if (_n.getInitializer() != null) {// ArrayCreationExpr has two mutually
+			// exclusive constructors
 			r.setInitializer(cloneNodes(_n.getInitializer(), _arg));
+		}
+		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
+		List<List<AnnotationExpr>> _arraysAnnotations = null;
+		if(arraysAnnotations != null){
+			_arraysAnnotations = new LinkedList<List<AnnotationExpr>>();
+			for(List<AnnotationExpr> aux: arraysAnnotations){
+				_arraysAnnotations.add(visit(aux, _arg));
+			}
+		}
+		r.setArraysAnnotations(_arraysAnnotations);
+        Comment comment = cloneNodes(_n.getComment(), _arg);
+        r.setComment(comment);
 		return r;
 	}
 
@@ -1160,24 +1120,62 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		return r;
 	}
 
-	public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {
-		if (_nodes == null)
-			return null;
-		List<T> r = new ArrayList<T>(_nodes.size());
-		for (T n : _nodes) {
-			T rN = cloneNodes(n, _arg);
-			if (rN != null)
-				r.add(rN);
-		}
+	@Override
+	public Node visit(LambdaExpr _n, Object _arg) {
+
+		List<Parameter> lambdaParameters = visit(_n.getParameters(), _arg);
+
+		Statement body = cloneNodes(_n.getBody(), _arg);
+
+		LambdaExpr r = new LambdaExpr(_n.getBeginLine(), _n.getBeginColumn(),
+				_n.getEndLine(), _n.getEndColumn(), lambdaParameters, body,
+				_n.isParametersEnclosed());
+
 		return r;
 	}
 
-	protected <T extends Node> T cloneNodes(T _node, Object _arg) {
-		if (_node == null)
-			return null;
-		Node r = _node.accept(this, _arg);
-		if (r == null)
-			return null;
-		return (T) r;
+	@Override
+	public Node visit(MethodReferenceExpr _n, Object arg) {
+
+		List<TypeParameter> typeParams = visit(_n.getTypeParameters(), arg);
+		Expression scope = cloneNodes(_n.getScope(), arg);
+
+		MethodReferenceExpr r = new MethodReferenceExpr(_n.getBeginLine(),
+				_n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope,
+				typeParams, _n.getIdentifier());
+		return r;
 	}
+
+	@Override
+	public Node visit(TypeExpr n, Object arg) {
+
+		Type t = cloneNodes(n.getType(), arg);
+
+		TypeExpr r = new TypeExpr(n.getBeginLine(), n.getBeginColumn(),
+				n.getEndLine(), n.getEndColumn(), t);
+
+		return r;
+	}
+
+    public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {
+        if (_nodes == null)
+            return null;
+        List<T> r = new ArrayList<T>(_nodes.size());
+        for (T n : _nodes) {
+            T rN = cloneNodes(n, _arg);
+            if (rN != null)
+                r.add(rN);
+        }
+        return r;
+    }
+
+    protected <T extends Node> T cloneNodes(T _node, Object _arg) {
+        if (_node == null)
+            return null;
+        Node r = _node.accept(this, _arg);
+        if (r == null)
+            return null;
+        return (T) r;
+    }
+
 }

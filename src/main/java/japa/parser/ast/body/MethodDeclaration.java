@@ -55,7 +55,9 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	private BlockStmt body;
 
-	public MethodDeclaration() {
+    private boolean isDefault = false;
+
+    public MethodDeclaration() {
 	}
 
 	public MethodDeclaration(final int modifiers, final Type type, final String name) {
@@ -196,6 +198,15 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		this.typeParameters = typeParameters;
 		setAsParentNodeOf(typeParameters);
 	}
+
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
 
     @Override
     public JavadocComment getJavaDoc() {
