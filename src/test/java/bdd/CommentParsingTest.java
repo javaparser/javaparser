@@ -1,5 +1,6 @@
 package bdd;
 
+import bdd.embedders.CommentParsingEmbedder;
 import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.io.StoryFinder;
 import org.junit.Test;
@@ -14,7 +15,7 @@ public class CommentParsingTest {
     public void run() throws Throwable {
         // Embedder defines the configuration and candidate steps
         Embedder embedder = new CommentParsingEmbedder();
-        List<String> storyPaths = new StoryFinder().findPaths(codeLocationFromClass(this.getClass()), "**/bdd/*.story", "");
+        List<String> storyPaths = new StoryFinder().findPaths(codeLocationFromClass(this.getClass()), "**/bdd/comment*.story", "");
         embedder.runStoriesAsPaths(storyPaths);
     }
 

@@ -6,7 +6,10 @@ import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.*;
 import japa.parser.ast.comments.*;
 import japa.parser.ast.expr.Expression;
+import japa.parser.ast.expr.IntegerLiteralExpr;
 import japa.parser.ast.stmt.BlockStmt;
+import japa.parser.ast.stmt.ExpressionStmt;
+import japa.parser.ast.type.PrimitiveType;
 import org.jbehave.core.annotations.*;
 import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
@@ -14,6 +17,8 @@ import org.jbehave.core.steps.Parameters;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import static bdd.steps.SharedSteps.getMemberByTypeAndPosition;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
@@ -146,6 +151,18 @@ public class CommentParsingSteps {
     public void thenCommentInCompilationUnitIsNotAnOrphan(int commentPosition) {
         Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
         assertThat(commentUnderTest.isOrphan(), is(false));
+    }
+
+    @Then("comment $commentPosition in compilation unit is an orphan")
+    public void thenCommentInCompilationUnitIsAnOrphan(int commentPosition) {
+        Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
+        assertThat(commentUnderTest.isOrphan(), is(true));
+    }
+
+    @Then("comment $commentPosition in compilation unit is \"$expectedContent\"")
+    public void thenCommentInCompilationUnitIs(int position, String expectedContent) {
+        Comment commentUnderTest = compilationUnit.getAllContainedComments().get(position - 1);
+        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
     }
 
     @Then("class $position is not commented")
@@ -286,18 +303,40 @@ public class CommentParsingSteps {
         assertThat(commentUnderTest.getContent(), is(expectedContent));
     }
 
-    private BodyDeclaration getMemberByTypeAndPosition(TypeDeclaration typeDeclaration, int position,
-                                                       Class<? extends BodyDeclaration> typeClass){
-        int typeCount = 0;
-        for(BodyDeclaration declaration : typeDeclaration.getMembers()){
-            if(declaration.getClass().equals(typeClass)){
-                if(typeCount == position){
-                    return declaration;
-                }
-                typeCount++;
-            }
-        }
-        throw new IllegalArgumentException("No member " + typeClass + " at position: " + position );
+    @Then("comment $commentPosition in compilation unit parent is ClassOrInterfaceDeclaration")
+    public void thenCommentInCompilationUnitParentIsClassOrInterfaceDeclaration(int commentPosition) {
+        Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
+        assertThat(commentUnderTest.getParentNode(), instanceOf(ClassOrInterfaceDeclaration.class));
+    }
+
+    @Then("comment $commentPosition in compilation unit commented node is ClassOrInterfaceDeclaration")
+    public void thenCommentInCompilationUnitCommentedNodeIsClassOrInterfaceDeclaration(int commentPosition) {
+        Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
+        assertThat(commentUnderTest.getCommentedNode(), instanceOf(ClassOrInterfaceDeclaration.class));
+    }
+
+    @Then("comment $commentPosition in compilation unit commented node is FieldDeclaration")
+    public void thenCommentInCompilationUnitCommentedNodeIsFieldDeclaration(int commentPosition) {
+        Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
+        assertThat(commentUnderTest.getCommentedNode(), instanceOf(FieldDeclaration.class));
+    }
+
+    @Then("comment $commentPosition in compilation unit commented node is IntegerLiteralExpr")
+    public void thenCommentInCompilationUnitCommentedNodeIsIntegerLiteralExpr(int commentPosition) {
+        Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
+        assertThat(commentUnderTest.getCommentedNode(), instanceOf(IntegerLiteralExpr.class));
+    }
+
+    @Then("comment $commentPosition in compilation unit commented node is ExpressionStmt")
+    public void thenCommentInCompilationUnitCommentedNodeIsIntegerExpressionStmt(int commentPosition) {
+        Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
+        assertThat(commentUnderTest.getCommentedNode(), instanceOf(ExpressionStmt.class));
+    }
+
+    @Then("comment $commentPosition in compilation unit commented node is PrimitiveType")
+    public void thenCommentInCompilationUnitCommentedNodeIsIntegerPrimitiveType(int commentPosition) {
+        Comment commentUnderTest = compilationUnit.getAllContainedComments().get(commentPosition - 1);
+        assertThat(commentUnderTest.getCommentedNode(), instanceOf(PrimitiveType.class));
     }
 
     private Comment toComment(Parameters row, Comment comment) {

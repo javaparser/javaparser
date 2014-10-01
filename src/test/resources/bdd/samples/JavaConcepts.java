@@ -1,18 +1,14 @@
-package japa.parser.ast;
+package bdd.samples;
 
-import fixture.Helper;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.*;
-import java.io.InputStream;
+
+import japa.parser.ast.CompilationUnit;
 import org.junit.Ignore;
 
 @Ignore
 @Deprecated
-public class DumperTestClass<T extends List<int[]>, X> extends Base implements Serializable {
+public class JavaConcepts<T extends List<int[]>, X> extends Base implements Serializable {
 
     static Class clz1 = String.class;
 
@@ -109,7 +105,7 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
 
     static int[] arr4[] = {};
 
-    public static DumperTestClass t;
+    public static JavaConcepts t;
 
     static {
         arr4 = new int[][] { { 2 }, { 1 } };
@@ -167,7 +163,7 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
         return 0.0;
     }
 
-    public <T, E> DumperTestClass(int x) {
+    public <T, E> JavaConcepts(int x) {
         this.arr[0] = x;
         T val1 = null;
         E val2 = null;
@@ -188,7 +184,7 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
 
             public Y() {
                 super();
-                DumperTestClass.this.cc = 'c';
+                JavaConcepts.this.cc = 'c';
                 super.i = 1;
                 Y.super.m();
             }
@@ -203,10 +199,10 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
         }
     }
 
-    public <T> DumperTestClass(String str) {
+    public <T> JavaConcepts(String str) {
     }
 
-    private class QWE extends DumperTestClass<List<int[]>, String> {
+    private class QWE extends JavaConcepts<List<int[]>, String> {
 
         @Deprecated
         final int z = 0;
@@ -264,14 +260,14 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
         int x = 2;
         CompilationUnit cu = parse(new File("src/japa/parser/javacc/Parser.java"));
         System.out.println(cu);
-        DumperTestClass teste = new DumperTestClass(2);
-        DumperTestClass.QWE qwe = teste.new QWE(1);
+        JavaConcepts teste = new JavaConcepts(2);
+        JavaConcepts.QWE qwe = teste.new QWE(1);
         if (1 + 1 == 2) {
             teste = null;
-            teste = new DumperTestClass(1);
+            teste = new JavaConcepts(1);
         } else {
             x = 3;
-            teste = new DumperTestClass(1);
+            teste = new JavaConcepts(1);
             x = x == 0 ? 2 : 4;
         }
         if (true)
@@ -387,7 +383,7 @@ public class DumperTestClass<T extends List<int[]>, X> extends Base implements S
     }
 
     private static InputStream createInputStream() {
-        return Helper.class.getResourceAsStream("Helper.java");
+        return new ByteArrayInputStream(null);
     }
 }
 
