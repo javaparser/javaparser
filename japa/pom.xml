@@ -25,7 +25,6 @@
                         <configuration>
                             <grammarEncoding>${project.build.sourceEncoding}</grammarEncoding>
                             <jdkVersion>${java.version}</jdkVersion>
-                            <outputDirectory>${project.parent.basedir}/japa/src/main/java/</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

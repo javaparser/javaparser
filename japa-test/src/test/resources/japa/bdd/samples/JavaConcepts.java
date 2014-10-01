@@ -2,7 +2,6 @@ package japa.bdd.samples;
 
 import japa.parser.JavaParser;
 
-import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import org.junit.Ignore;
 
