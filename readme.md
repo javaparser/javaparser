@@ -1,4 +1,4 @@
-# Java 1.7 parser and Abstract Syntax Tree.
+# Java 1.7 japa.parser and Abstract Syntax Tree.
 [![Build Status](https://drone.io/github.com/matozoid/javaparser/status.png)](https://drone.io/github.com/matozoid/javaparser)
 
 Copyright (C) 2007 J&uacute;lio Vilmar Gesser
@@ -44,7 +44,7 @@ Javadoc is available at [http://matozoid.github.io/javaparser/javadoc-current/](
 
 ## History
 
-This parser is based on Sreenivasa Viswanadha's Java 1.5 parser.
+This japa.parser is based on Sreenivasa Viswanadha's Java 1.5 japa.parser.
 
 The project was originally hosted at http://code.google.com/p/javaparser/ but 
 seemed dead. This repository at https://github.com/matozoid/javaparser keeps 

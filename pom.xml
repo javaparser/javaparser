@@ -19,10 +19,10 @@
 	<name>javaparser</name>
 	<url>http://code.google.com/p/javaparser/</url>
 	<inceptionYear>2007</inceptionYear>
-	<description>This package contains a Java 1.7 Parser with AST generation and visitor support. 
-		The AST records the source code structure, javadoc and comments. Soon will be 
-		possible change the AST nodes or create new ones to modify source code like refactoring.
-		This parser is based on Sreenivasa Viswanadha Java 1.5 parser.</description>
+	<description>This package contains a Java 1.7 Parser with AST generation and visitor support.
+        The AST records the source code structure, javadoc and comments. Soon will be
+        possible change the AST nodes or create new ones to modify source code like refactoring.
+        This japa.parser is based on Sreenivasa Viswanadha Java 1.5 japa.parser.</description>
 
 	<developers>
 		<developer>
@@ -110,5 +110,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
 </project>
