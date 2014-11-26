@@ -142,7 +142,7 @@ public class Issue37 {
 Then field 1 in class 1 contains annotation 1 value is ""http://someURL.org/""
 
 
-Scenario: A class with a Lambda is parsed by the Java Parser
+Scenario: A class with a Lambdas is parsed by the Java Parser
 
 Given a CompilationUnit
 When the following source is parsed:
@@ -150,23 +150,39 @@ package bdd.samples;
 public class Lambdas {
 
     public static void main(String[] args) {
-
-        System.out.println("=== RunnableTest ===");
-        // Anonymous Runnable
-        Runnable r1 = new Runnable(){
-
-        @Override
-        public void run(){
-                System.out.println("Hello world one!");
-            }
-        };
-
         // Lambda Runnable
-        Runnable r2 = () -> System.out.println("Hello world two!");
-
-        // Run em!
-        r1.run();
-        r2.run();
+        Runnable r1 = () -> System.out.println("Hello world!");
+        Runnable r2 = () -> {};
+        Runnable r3 = () -> { System.out.println("Hello world two!"); };
     }
 }
-Then lambda 1 in class 1 is called "r2"
+Then lambda in statement 1 in method 1 in class 1 is called r1
+Then lambda in statement 2 in method 1 in class 1 is called r2
+Then lambda in statement 3 in method 1 in class 1 is called r3
+Then lambda in statement 1 in method 1 in class 1 body is "System.out.println("Hello world!");"
+Then lambda in statement 2 in method 1 in class 1 block statement is null
+Then lambda in statement 3 in method 1 in class 1 block statement is "System.out.println("Hello world two!");"
+
+
+
+Scenario: A class with a method reference is parsed by the Java Parser
+
+Given a CompilationUnit
+When the following source is parsed:
+public class Person {
+
+    String name;
+    LocalDate birthday;
+
+    public void sortByAge(Person[] people){
+        Arrays.sort(people, Person::compareByAge);
+    }
+
+    public static int compareByAge(Person a, Person b) {
+        return a.birthday.compareTo(b.birthday);
+    }
+}
+Then method reference in statement 1 in method 1 in class 1 scope is Person
+Then method reference in statement 1 in method 1 in class 1 identifier is compareByAge
+
+

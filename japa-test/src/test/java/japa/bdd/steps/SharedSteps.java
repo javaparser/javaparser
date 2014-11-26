@@ -4,6 +4,7 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.BodyDeclaration;
+import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import org.hamcrest.CoreMatchers;
 import org.jbehave.core.annotations.Given;
@@ -110,5 +111,23 @@ public class SharedSteps {
             }
         }
         throw new IllegalArgumentException("No member " + typeClass + " at position: " + position );
+    }
+
+    public static MethodDeclaration getMethodByPositionAndClassPosition(CompilationUnit compilationUnit,
+                                                                         int methodPosition, int classPosition) {
+        TypeDeclaration type = compilationUnit.getTypes().get(classPosition -1);
+
+        int memberCount = 0;
+        int methodCount = 0;
+        for(BodyDeclaration bodyDeclaration : type.getMembers()) {
+            if(bodyDeclaration instanceof MethodDeclaration){
+                if(methodCount == methodPosition -1) {
+                    return (MethodDeclaration) type.getMembers().get(memberCount);
+                }
+                methodCount++;
+            }
+            memberCount++;
+        }
+        throw new IllegalArgumentException("Method not found at position " +methodPosition+ "in class " + classPosition);
     }
 }

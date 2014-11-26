@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static japa.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -125,7 +126,8 @@ public class ManipulationSteps {
 
     @When("$typeName varargs called \"$parameterName\" are added to method $methodPosition in class $classPosition")
     public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
-        MethodDeclaration method = getMethodByPositionAndClassPosition(methodPosition, classPosition);
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter param = ASTHelper.createParameter(ASTHelper.createReferenceType(typeName, 0), parameterName);
         param.setVarArgs(true);
         ASTHelper.addParameter(method, param);
@@ -133,14 +135,16 @@ public class ManipulationSteps {
 
     @When("a BlockStmt is added to method $methodPosition in class $classPosition")
     public void whenABlockStmtIsAddedToMethodInClass(int methodPosition, int classPosition) {
-        MethodDeclaration method = getMethodByPositionAndClassPosition(methodPosition, classPosition);
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         method.setBody(new BlockStmt());
     }
 
     @When("$className.$fieldName.$methodName(\"$stringValue\"); is added to the body of method $methodPosition in class $classPosition")
     public void whenHelloWorldIsAddedToTheBodyOfMethodInClass(String className, String fieldName, String methodName, String stringValue,
                                                               int methodPosition, int classPosition) {
-        MethodDeclaration method = getMethodByPositionAndClassPosition(methodPosition, classPosition);
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         NameExpr clazz = new NameExpr(className);
         FieldAccessExpr field = new FieldAccessExpr(clazz, fieldName);
         MethodCallExpr call = new MethodCallExpr(field, methodName);
@@ -150,13 +154,15 @@ public class ManipulationSteps {
 
     @When("method $methodPosition in class $classPosition has it's name converted to uppercase")
     public void whenMethodInClassHasItsNameConvertedToUppercase(int methodPosition, int classPosition) {
-        MethodDeclaration method = getMethodByPositionAndClassPosition(methodPosition, classPosition);
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         method.setName(method.getName().toUpperCase());
     }
 
     @When("method $methodPosition in class $classPosition has an int parameter called \"$paramName\" added")
     public void whenMethodInClassHasAnIntArgumentCalledAdded(int methodPosition, int classPosition, String paramName) {
-        MethodDeclaration method = getMethodByPositionAndClassPosition(methodPosition, classPosition);
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         ASTHelper.addParameter(method, ASTHelper.createParameter(ASTHelper.INT_TYPE, paramName));
     }
 
@@ -211,30 +217,27 @@ public class ManipulationSteps {
 
     @Then("method $methodPosition in class $classPosition has the name \"$expectedName\"")
     public void thenMethodInClassHasTheName(int methodPosition, int classPosition, String expectedName) {
-        MethodDeclaration method = getMethodByPositionAndClassPosition(methodPosition, classPosition);
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         assertThat(method.getName(), is(expectedName));
     }
 
     @Then("method $methodPosition in class $classPosition has $expectedCount parameters")
     @Alias("method $methodPosition in class $classPosition has $expectedCount parameter")
     public void thenMethodInClassHasArguments(int methodPosition, int classPosition, int expectedCount) {
-        MethodDeclaration method = getMethodByPositionAndClassPosition(methodPosition, classPosition);
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
 
         assertThat(method.getParameters().size(), is(expectedCount));
     }
 
     @Then("method $methodPosition in class $classPosition parameter $parameterPosition is type int called \"$expectedName\"")
     public void thenMethodInClassParameterIsTypeIntCalled(int methodPosition, int classPosition, int parameterPosition, String expectedName) {
-        MethodDeclaration method = getMethodByPositionAndClassPosition(methodPosition, classPosition);
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameters().get(parameterPosition -1);
         assertThat((PrimitiveType)parameter.getType(), is(ASTHelper.INT_TYPE));
         assertThat(parameter.getId().getName(), is(expectedName));
-    }
-
-    private MethodDeclaration getMethodByPositionAndClassPosition(int methodPosition, int classPosition) {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        TypeDeclaration type = compilationUnit.getTypes().get(classPosition -1);
-        return (MethodDeclaration) type.getMembers().get(methodPosition -1);
     }
 
     private static class ChangeMethodNameToUpperCaseVisitor extends VoidVisitorAdapter<Void> {
