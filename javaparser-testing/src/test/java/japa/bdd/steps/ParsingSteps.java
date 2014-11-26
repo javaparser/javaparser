@@ -87,7 +87,6 @@ public class ParsingSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit,
                 methodPosition, classPosition);
-
         Statement statement =  method.getBody().getStmts().get(statementPosition-1);
         VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0)
                 .getChildrenNodes().get(1);
@@ -100,7 +99,6 @@ public class ParsingSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit,
                 methodPosition, classPosition);
-
         Statement statement =  method.getBody().getStmts().get(statementPosition-1);
         VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0)
                 .getChildrenNodes().get(1);
@@ -115,7 +113,6 @@ public class ParsingSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit,
                 methodPosition, classPosition);
-
         Statement statement =  method.getBody().getStmts().get(statementPosition-1);
         VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0)
                 .getChildrenNodes().get(1);
@@ -129,14 +126,11 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIsScope(int statementPosition, int methodPosition,
                                                                      int classPosition, String expectedName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-
         MethodDeclaration methodUnderTest = getMethodByPositionAndClassPosition(compilationUnit,
                 methodPosition, classPosition);
-
         Statement statementUnderTest =  methodUnderTest.getBody().getStmts().get(statementPosition-1);
         MethodReferenceExpr methodReferenceUnderTest =
                 (MethodReferenceExpr) statementUnderTest.getChildrenNodes().get(0).getChildrenNodes().get(2);
-
         assertThat(methodReferenceUnderTest.getScope().toString(), is(expectedName));
     }
 
@@ -144,14 +138,27 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIdentifierIsCompareByAge(int statementPosition, int methodPosition,
                                                                                       int classPosition, String expectedName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-
         MethodDeclaration methodUnderTest = getMethodByPositionAndClassPosition(compilationUnit,
                 methodPosition, classPosition);
-
         Statement statementUnderTest =  methodUnderTest.getBody().getStmts().get(statementPosition-1);
         MethodReferenceExpr methodReferenceUnderTest =
                 (MethodReferenceExpr) statementUnderTest.getChildrenNodes().get(0).getChildrenNodes().get(2);
-
         assertThat(methodReferenceUnderTest.getIdentifier(), is(expectedName));
+    }
+
+    @Then("method $methodPosition class $classPosition is a default method")
+    public void thenMethodClassIsADefaultMethod(int methodPosition, int classPosition) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration methodUnderTest = getMethodByPositionAndClassPosition(compilationUnit,
+                methodPosition, classPosition);
+        assertThat(methodUnderTest.isDefault(), is(true));
+    }
+
+    @Then("method $methodPosition class $classPosition is not a default method")
+    public void thenMethodClassIsNotADefaultMethod(int methodPosition, int classPosition) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration methodUnderTest = getMethodByPositionAndClassPosition(compilationUnit,
+                methodPosition, classPosition);
+        assertThat(methodUnderTest.isDefault(), is(false));
     }
 }

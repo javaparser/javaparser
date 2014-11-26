@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>japa-test</module>
-        <module>japa</module>
+        <module>javaparser-core</module>
+        <module>javaparser-testing</module>
     </modules>
 
     <parent>
@@ -12,11 +12,11 @@
 	</parent>
 
 	<groupId>com.google.code.javaparser</groupId>
-	<artifactId>javaparser</artifactId>
+	<artifactId>javaparser-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0.12-SNAPSHOT</version>
 
-	<name>javaparser</name>
+	<name>javaparser-parent</name>
 	<url>http://code.google.com/p/javaparser/</url>
 	<inceptionYear>2007</inceptionYear>
 	<description>This package contains a Java 1.7 Parser with AST generation and visitor support.
@@ -50,10 +50,6 @@
 		<maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
 		<maven-install-plugin.version>2.4</maven-install-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-
-		<!-- Test Dependencies -->
-		<junit.version>4.11</junit.version>
-		<jbehave.version>3.9.3</jbehave.version>
 
 	</properties>
 

@@ -186,3 +186,16 @@ Then method reference in statement 1 in method 1 in class 1 scope is Person
 Then method reference in statement 1 in method 1 in class 1 identifier is compareByAge
 
 
+Scenario: An interface with a default method is parsed by the Java Parser
+
+Given a CompilationUnit
+When the following source is parsed:
+interface MyInterface {
+    default String doSomething(){
+        return "implementation in an interface!";
+    }
+
+    String doSomethingElse();
+}
+Then method 1 class 1 is a default method
+Then method 2 class 1 is not a default method
