@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.google.code.javaparser</groupId>
-            <artifactId>japa</artifactId>
+            <artifactId>javaparser-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

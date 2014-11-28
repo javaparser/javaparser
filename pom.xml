@@ -42,7 +42,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.7</java.version>
+		<java.version>1.6</java.version>
 
 		<!-- Maven Plugins -->
 		<javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
@@ -102,6 +102,9 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
 					<version>${maven-jar-plugin.version}</version>
+                    <configuration>
+                        <finalName>javaparser-${version}</finalName>
+                    </configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
