@@ -39,16 +39,16 @@ PARSER_BEGIN(ASTParser)
  * You should have received a copy of the GNU Lesser General Public License
  * along with Java 1.8 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
  */
-package japa.parser;
+package com.github.javaparser;
 
 import java.io.*;
 import java.util.*;
-import japa.parser.ast.*;
-import japa.parser.ast.body.*;
-import japa.parser.ast.comments.*;
-import japa.parser.ast.expr.*;
-import japa.parser.ast.stmt.*;
-import japa.parser.ast.type.*;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.*;
 
 /**
  * <p>This class was generated automatically by javacc, do not edit.</p>

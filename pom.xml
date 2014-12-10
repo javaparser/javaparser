@@ -11,15 +11,15 @@
 		<version>7</version>
 	</parent>
 
-	<groupId>com.google.code.javaparser</groupId>
+	<groupId>com.github.javaparser</groupId>
 	<artifactId>javaparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.12-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 
 	<name>javaparser-parent</name>
-	<url>http://code.google.com/p/javaparser/</url>
+	<url>https://github.com/javaparser</url>
 	<inceptionYear>2007</inceptionYear>
-	<description>This package contains a Java 1.7 Parser with AST generation and visitor support.
+	<description>This package contains a Java 1.8 Parser with AST generation and visitor support.
         The AST records the source code structure, javadoc and comments. Soon will be
         possible change the AST nodes or create new ones to modify source code like refactoring.
         This japa.parser is based on Sreenivasa Viswanadha Java 1.5 japa.parser.</description>
