@@ -180,19 +180,21 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         }
         sb.append(getName());
         sb.append("(");
-        boolean firstParam = true;
-        for (Parameter param : parameters)
-        {
-            if (firstParam) {
-                firstParam = false;
-            } else {
-                sb.append(", ");
+        if (getParameters() != null && !getParameters().isEmpty()) {
+            boolean firstParam = true;
+            for (Parameter param : getParameters())
+            {
+                if (firstParam) {
+                    firstParam = false;
+                } else {
+                    sb.append(", ");
+                }
+                sb.append(param.toStringWithoutComments());
             }
-            sb.append(param.toStringWithoutComments());
         }
         sb.append(")");
         if (includingThrows) {
-            if (!this.getThrows().isEmpty()) {
+            if (getThrows() != null && !getThrows().isEmpty()) {
                 sb.append(" throws ");
                 boolean firstThrow = true;
                 for (NameExpr thr : getThrows()) {
