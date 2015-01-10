@@ -22,7 +22,7 @@
 	<description>This package contains a Java 1.8 Parser with AST generation and visitor support.
         The AST records the source code structure, javadoc and comments. Soon will be
         possible change the AST nodes or create new ones to modify source code like refactoring.
-        This japa.parser is based on Sreenivasa Viswanadha Java 1.5 japa.parser.</description>
+        This parser is based on Sreenivasa Viswanadha Java 1.5 parser.</description>
 
 	<developers>
 		<developer>
@@ -54,15 +54,15 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:git://github.com/before/javaparser.git</connection>
-		<developerConnection>scm:git:git@github.com:before/javaparser.git</developerConnection>
-		<url>https://github.com/before/javaparser.git</url>
+		<connection>scm:git:git://github.com/javaparser/javaparser.git</connection>
+		<developerConnection>scm:git:git@github.com:javaparser/javaparser.git</developerConnection>
+		<url>https://github.com/javaparser/javaparser.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub Issue Tracker</system>
-		<url>https://github.com/matozoid/javaparser/issues</url>
+		<url>https://github.com/javaparser/javaparser/issues</url>
 	</issueManagement>
 
 	<build>
