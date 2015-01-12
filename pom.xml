@@ -98,14 +98,6 @@
 					<artifactId>maven-install-plugin</artifactId>
 					<version>${maven-install-plugin.version}</version>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>${maven-jar-plugin.version}</version>
-                    <configuration>
-                        <finalName>javaparser-${version}</finalName>
-                    </configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
