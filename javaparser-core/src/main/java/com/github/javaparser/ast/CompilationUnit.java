@@ -39,20 +39,13 @@ import java.util.List;
  * compilation unit.
  * </p>
  * The CompilationUnit is constructed following the syntax:<br>
- * <code>
- * <table>
- * <tr valign=baseline>
- *   <td align=right>CompilationUnit</td>
- *   <td align=center>::=</td>
- *   <td align=left>
- *   ( {@link PackageDeclaration} )?<br> 
- *   ( {@link ImportDeclaration} )*<br>
- *   ( {@link TypeDeclaration} )*<br>
- *   </td>
- * </tr>
- * </table> 
- * </code>
- * 
+ * <pre>
+ * {@code
+ * CompilationUnit ::=  ( }{@link PackageDeclaration}{@code )?
+ *                      ( }{@link ImportDeclaration}{@code )*
+ *                      ( }{@link TypeDeclaration}{@code )*
+ * }
+ * </pre>
  * @author Julio Vilmar Gesser
  */
 public final class CompilationUnit extends Node {

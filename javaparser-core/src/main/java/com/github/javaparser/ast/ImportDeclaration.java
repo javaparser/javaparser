@@ -31,18 +31,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * {@link CompilationUnit}.
  * </p>
  * The ImportDeclaration is constructed following the syntax:<br>
- * <code>
- * <table>
- * <tr valign=baseline>
- *   <td align=right>ImportDeclaration</td>
- *   <td align=center>::=</td>
- *   <td align=left>
- *       "import" ( "static" )? {@link NameExpr} ( "." "*" )? ";"
- *   </td>
- * </tr>
- * </table> 
- * </code>
- * 
+ * <pre>
+ * {@code
+ * ImportDeclaration ::= "import" ( "static" )? }{@link NameExpr}{@code ( "." "*" )? ";"
+ * }
+ * </pre>
  * @author Julio Vilmar Gesser
  */
 public final class ImportDeclaration extends Node {

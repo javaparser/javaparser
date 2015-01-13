@@ -219,7 +219,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
      * [accessSpecifier] [static] [abstract] [final] [native]
      * [synchronized] returnType methodName ([paramlist])
      * [throws exceptionsList]
-     * @return
+     * @return method declaration as String
      */
     @Override
     public String getDeclarationAsString() {

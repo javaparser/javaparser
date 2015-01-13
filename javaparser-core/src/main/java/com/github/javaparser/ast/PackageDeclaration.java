@@ -34,18 +34,11 @@ import java.util.List;
  * optional for the {@link CompilationUnit}.
  * </p>
  * The PackageDeclaration is constructed following the syntax:<br>
- * <code>
- * <table>
- * <tr valign=baseline>
- *   <td align=right>PackageDeclaration</td>
- *   <td align=center>::=</td>
- *   <td align=left>
- *       ( {@link AnnotationExpr} )* "package" {@link NameExpr} ) ";"
- *   </td>
- * </tr>
- * </table> 
- * </code>
- * 
+ * <pre>
+ * {@code
+ * PackageDeclaration ::= ( }{@link AnnotationExpr}{@code )* "package" }{@link NameExpr}{@code ) ";"
+ * }
+ * </pre>
  * @author Julio Vilmar Gesser
  */
 public final class PackageDeclaration extends Node {

@@ -203,7 +203,6 @@ public final class JavaParser {
      * @return BlockStmt representing the Java block
      * @throws ParseException
      *             if the source code has parser errors
-     * @throws IOException
      */
     public static BlockStmt parseBlock(final String blockStatement)
             throws ParseException {
@@ -222,10 +221,8 @@ public final class JavaParser {
      * @return Statement representing the Java statement
      * @throws ParseException
      *             if the source code has parser errors
-     * @throws IOException
      */
-    public static Statement parseStatement(final String statement)
-            throws ParseException {
+    public static Statement parseStatement(final String statement) throws ParseException {
         StringReader sr = new StringReader(statement);
         Statement stmt = new ASTParser(sr).Statement();
         sr.close();
@@ -241,10 +238,8 @@ public final class JavaParser {
      * @return ImportDeclaration representing the Java import declaration
      * @throws ParseException
      *             if the source code has parser errors
-     * @throws IOException
      */
-    public static ImportDeclaration parseImport(final String importDeclaration)
-            throws ParseException {
+    public static ImportDeclaration parseImport(final String importDeclaration) throws ParseException {
         StringReader sr = new StringReader(importDeclaration);
         ImportDeclaration id = new ASTParser(sr).ImportDeclaration();
         sr.close();
@@ -260,10 +255,8 @@ public final class JavaParser {
      * @return Expression representing the Java expression
      * @throws ParseException
      *             if the source code has parser errors
-     * @throws IOException
      */
-    public static Expression parseExpression(final String expression)
-            throws ParseException {
+    public static Expression parseExpression(final String expression) throws ParseException {
         StringReader sr = new StringReader(expression);
         Expression e = new ASTParser(sr).Expression();
         sr.close();
@@ -279,10 +272,8 @@ public final class JavaParser {
      * @return AnnotationExpr representing the Java annotation
      * @throws ParseException
      *             if the source code has parser errors
-     * @throws IOException
      */
-    public static AnnotationExpr parseAnnotation(final String annotation)
-            throws ParseException {
+    public static AnnotationExpr parseAnnotation(final String annotation) throws ParseException {
         StringReader sr = new StringReader(annotation);
         AnnotationExpr ae = new ASTParser(sr).Annotation();
         sr.close();
@@ -298,10 +289,8 @@ public final class JavaParser {
      * @return BodyDeclaration representing the Java annotation
      * @throws ParseException
      *             if the source code has parser errors
-     * @throws IOException
      */
-    public static BodyDeclaration parseBodyDeclaration(final String body)
-            throws ParseException {
+    public static BodyDeclaration parseBodyDeclaration(final String body) throws ParseException {
         StringReader sr = new StringReader(body);
         BodyDeclaration bd = new ASTParser(sr).AnnotationBodyDeclaration();
         sr.close();

@@ -11,6 +11,7 @@ public interface WithDeclaration {
     /**
      * As {@link WithDeclaration#getDeclarationAsString(boolean, boolean)} including
      * both the modifiers and the throws clause.
+     * @return String representation of declaration
      */
     String getDeclarationAsString();
 
@@ -19,6 +20,7 @@ public interface WithDeclaration {
      * It should fit one string.
      * @param includingModifiers flag to include the modifiers (if present) in the string produced
      * @param includingThrows flag to include the throws clause (if present) in the string produced
+     * @return String representation of declaration based on parameter flags
      */
     String getDeclarationAsString(boolean includingModifiers, boolean includingThrows);
 }

@@ -119,6 +119,8 @@ public abstract class Node {
 
 	/**
 	 * This is a comment associated with this node.
+	 *
+	 * @return comment property
 	 */
 	public final Comment getComment() {
 		return comment;
@@ -126,6 +128,8 @@ public abstract class Node {
 
 	/**
 	 * Use this to retrieve additional information associated to this node.
+	 *
+	 * @return data property
 	 */
 	public final Object getData() {
 		return data;
@@ -171,6 +175,8 @@ public abstract class Node {
 
 	/**
 	 * Use this to store additional information to this node.
+	 *
+	 * @param comment to be set
 	 */
 	public final void setComment(final Comment comment) {
         if (comment!=null && (this instanceof Comment)){
@@ -188,6 +194,8 @@ public abstract class Node {
 
 	/**
 	 * Use this to store additional information to this node.
+	 *
+	 * @param data to be set
 	 */
 	public final void setData(final Object data) {
 		this.data = data;
@@ -271,7 +279,7 @@ public abstract class Node {
      *
      * When more than one comments preceed a statement, the one immediately preceeding it
      * it is associated with the statements, while the others are "orphan".
-     * @return
+     * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments(){
         return orphanComments;
@@ -280,8 +288,8 @@ public abstract class Node {
     /**
      * This is the list of Comment which are contained in the Node either because
      * they are properly associated to one of its children or because they are floating
-     * around inside the Node.
-     * @return
+     * around inside the Node
+     * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments(){
         List<Comment> comments = new LinkedList<Comment>();
@@ -300,6 +308,8 @@ public abstract class Node {
     /**
      * Assign a new parent to this node, removing it
      * from the list of children of the previous parent, if any.
+	 *
+	 * @param parentNode node to be set as parent
      */
 	public void setParentNode(Node parentNode) {
         // remove from old parent, if any

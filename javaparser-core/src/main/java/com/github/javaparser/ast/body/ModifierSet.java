@@ -65,9 +65,6 @@ public final class ModifierSet {
         }
     }
 
-    /**
-     * Adds the given modifier.
-     */
     public static int addModifier(int modifiers, int mod) {
         return modifiers | mod;
     }
@@ -100,15 +97,12 @@ public final class ModifierSet {
      * Is the element accessible from within the package?
      * It is the level of access which is applied if no modifiers are chosen,
      * it is sometimes called "default".
+     * @param modifiers indicator
+     * @return true if modifier denotes package level access
      */
     public static boolean hasPackageLevelAccess(int modifiers) {
         return !isPublic(modifiers) && !isProtected(modifiers) && !isPrivate(modifiers);
     }
-
-    /*
-     * A set of accessors that indicate whether the specified modifier is in the
-     * set.
-     */
 
     public static boolean isPublic(int modifiers) {
         return (modifiers & PUBLIC) != 0;
@@ -136,6 +130,9 @@ public final class ModifierSet {
 
     /**
      * Removes the given modifier.
+     * @param modifiers existing modifiers
+     * @param mod modifier to be removed
+     * @return result for removing modifier
      */
     public static int removeModifier(int modifiers, int mod) {
         return modifiers & ~mod;
