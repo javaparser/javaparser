@@ -7,13 +7,24 @@ The AST records the source code structure, javadoc and comments.
 
 ## Use JavaParser in my Maven-based project
 
-```XML
+Current 1.8 Release
+```xml
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
     <version>2.0.0</version>
 </dependency>
 ```
+
+Final 1.7 Release
+```xml
+<dependency>
+    <groupId>com.google.code.javaparser</groupId>
+    <artifactId>javaparser</artifactId>
+    <version>1.0.11</version>
+</dependency>
+```
+
 
 ## How to build
 
