@@ -30,7 +30,7 @@ In the second instance please feel free to open an [issue](https://github.com/ja
 
 ## Javadoc
 
-Javadoc is available at [http://matozoid.github.io/javaparser/javadoc-current/](http://matozoid.github.io/javaparser/javadoc-current/)
+Javadoc can be found [here](http://javaparser.github.io/javaparser/javadoc-current/)
 
 ## History
 
