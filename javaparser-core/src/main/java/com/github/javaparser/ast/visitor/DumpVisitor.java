@@ -970,7 +970,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		}
 		printer.print(")");
 
-		if (n.getThrows() != null) {
+		if (n.getThrows() != null && !n.getThrows().isEmpty()) {
 			printer.print(" throws ");
 			for (final Iterator<NameExpr> i = n.getThrows().iterator(); i.hasNext();) {
 				final NameExpr name = i.next();
@@ -1019,7 +1019,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			printer.print("[]");
 		}
 
-		if (n.getThrows() != null) {
+		if (n.getThrows() != null && !n.getThrows().isEmpty()) {
 			printer.print(" throws ");
 			for (final Iterator<NameExpr> i = n.getThrows().iterator(); i.hasNext();) {
 				final NameExpr name = i.next();
