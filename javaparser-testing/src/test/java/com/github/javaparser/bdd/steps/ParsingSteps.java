@@ -1,12 +1,14 @@
 package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import org.hamcrest.Matchers;
 import org.jbehave.core.annotations.Then;
 
 import java.util.Map;
@@ -120,6 +122,19 @@ public class ParsingSteps {
         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
         Statement lambdaStmt = blockStmt.getStmts().get(0);
         assertThat(lambdaStmt.toString(), is(expectedBody));
+    }
+
+    @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition is parent of contained body")
+    public void thenLambdaInStatementInMethodInClassIsParentOfContainedBody(int statementPosition, int methodPosition, int classPosition) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit,
+                methodPosition, classPosition);
+        Statement statement =  method.getBody().getStmts().get(statementPosition-1);
+        VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0)
+                .getChildrenNodes().get(1);
+        LambdaExpr lambdaExpr = (LambdaExpr) variableDeclarator.getInit();
+        Statement body = lambdaExpr.getBody();
+        assertThat(body.getParentNode(), is((Node) lambdaExpr));
     }
 
     @Then("method reference in statement $statementPosition in method $methodPosition in class $classPosition scope is $expectedName")
