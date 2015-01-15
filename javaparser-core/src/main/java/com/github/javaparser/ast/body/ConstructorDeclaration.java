@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
@@ -111,10 +112,16 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public List<Parameter> getParameters() {
+        if (parameters == null) {
+            parameters = new ArrayList<Parameter>();
+        }
         return parameters;
     }
 
     public List<NameExpr> getThrows() {
+        if (throws_ == null) {
+            throws_ = new ArrayList<NameExpr>();
+        }
         return throws_;
     }
 
@@ -181,7 +188,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         sb.append(getName());
         sb.append("(");
         boolean firstParam = true;
-        for (Parameter param : parameters)
+        for (Parameter param : getParameters())
         {
             if (firstParam) {
                 firstParam = false;
@@ -192,17 +199,15 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         }
         sb.append(")");
         if (includingThrows) {
-            if (!this.getThrows().isEmpty()) {
-                sb.append(" throws ");
-                boolean firstThrow = true;
-                for (NameExpr thr : getThrows()) {
-                    if (firstThrow) {
-                        firstThrow = false;
-                    } else {
-                        sb.append(", ");
-                    }
-                    sb.append(thr.toStringWithoutComments());
+            boolean firstThrow = true;
+            for (NameExpr thr : getThrows()) {
+                if (firstThrow) {
+                    firstThrow = false;
+                    sb.append(" throws ");
+                } else {
+                    sb.append(", ");
                 }
+                sb.append(thr.toStringWithoutComments());
             }
         }
         return sb.toString();
