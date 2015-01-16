@@ -32,9 +32,9 @@ public class MethodReferenceExpr extends Expression {
                                List<TypeParameter> typeParameters, String identifier) {
 
         super(beginLine, beginColumn, endLine, endColumn);
+        setIdentifier(identifier);
         setScope(scope);
         setTypeParameters(typeParameters);
-        this.identifier = identifier;
     }
 
     @Override
