@@ -65,11 +65,13 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.InstanceOfExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.LongLiteralExpr;
 import com.github.javaparser.ast.expr.LongLiteralMinValueExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
@@ -79,6 +81,7 @@ import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.SuperExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.AssertStmt;
@@ -945,6 +948,18 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		if (n.getSuper() != null) {
 			n.setSuper((ReferenceType) n.getSuper().accept(this, arg));
 		}
+		return n;
+	}
+
+	@Override public Node visit(final LambdaExpr n, final A arg) {
+		return n;
+	}
+
+	@Override public Node visit(final MethodReferenceExpr n, final A arg){
+		return n;
+	}
+
+	@Override public Node visit(final TypeExpr n, final A arg){
 		return n;
 	}
 
