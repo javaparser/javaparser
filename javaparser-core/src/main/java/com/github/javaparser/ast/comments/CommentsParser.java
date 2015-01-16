@@ -11,11 +11,8 @@ public class CommentsParser {
 
     private enum State {
         CODE,
-        WAITING_FOR_LINE_COMMENT,
         IN_LINE_COMMENT,
-        WAITING_FOR_BLOCK_COMMENT,
         IN_BLOCK_COMMENT,
-        WAITING_TO_LEAVE_BLOCK_COMMENT,
         IN_STRING;
     }
 
