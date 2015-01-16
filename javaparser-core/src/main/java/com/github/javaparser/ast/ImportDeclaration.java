@@ -50,16 +50,16 @@ public final class ImportDeclaration extends Node {
     }
 
     public ImportDeclaration(NameExpr name, boolean isStatic, boolean isAsterisk) {
+        setAsterisk(isAsterisk);
         setName(name);
-        this.static_ = isStatic;
-        this.asterisk = isAsterisk;
+        setStatic(isStatic);
     }
 
     public ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, NameExpr name, boolean isStatic, boolean isAsterisk) {
         super(beginLine, beginColumn, endLine, endColumn);
+        setAsterisk(isAsterisk);
         setName(name);
-        this.static_ = isStatic;
-        this.asterisk = isAsterisk;
+        setStatic(isStatic);
     }
 
     @Override
