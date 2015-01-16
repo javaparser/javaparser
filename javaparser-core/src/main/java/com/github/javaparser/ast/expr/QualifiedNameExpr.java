@@ -42,7 +42,7 @@ public final class QualifiedNameExpr extends NameExpr {
 	public QualifiedNameExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final NameExpr scope, final String name) {
 		super(beginLine, beginColumn, endLine, endColumn, name);
-		this.qualifier = scope;
+		setQualifier(scope);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

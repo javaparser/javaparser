@@ -50,14 +50,14 @@ public final class ImportDeclaration extends Node {
     }
 
     public ImportDeclaration(NameExpr name, boolean isStatic, boolean isAsterisk) {
-        this.name = name;
+        setName(name);
         this.static_ = isStatic;
         this.asterisk = isAsterisk;
     }
 
     public ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, NameExpr name, boolean isStatic, boolean isAsterisk) {
         super(beginLine, beginColumn, endLine, endColumn);
-        this.name = name;
+        setName(name);
         this.static_ = isStatic;
         this.asterisk = isAsterisk;
     }
@@ -119,6 +119,7 @@ public final class ImportDeclaration extends Node {
      */
     public void setName(NameExpr name) {
         this.name = name;
+        setAsParentNodeOf(this.name);
     }
 
     /**

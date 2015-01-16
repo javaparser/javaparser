@@ -32,8 +32,8 @@ public class MethodReferenceExpr extends Expression {
                                List<TypeParameter> typeParameters, String identifier) {
 
         super(beginLine, beginColumn, endLine, endColumn);
-        this.scope = scope;
-        this.typeParameters = typeParameters;
+        setScope(scope);
+        setTypeParameters(typeParameters);
         this.identifier = identifier;
     }
 
@@ -54,6 +54,7 @@ public class MethodReferenceExpr extends Expression {
 
     public void setScope(Expression scope) {
         this.scope = scope;
+        setAsParentNodeOf(this.scope);
     }
 
     public List<TypeParameter> getTypeParameters() {
@@ -62,6 +63,7 @@ public class MethodReferenceExpr extends Expression {
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
+        setAsParentNodeOf(this.typeParameters);
     }
 
     public String getIdentifier() {
