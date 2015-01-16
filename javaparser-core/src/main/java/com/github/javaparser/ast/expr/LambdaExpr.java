@@ -29,8 +29,8 @@ public class LambdaExpr extends Expression {
                       boolean parametersEnclosed) {
 
 		super(beginLine, beginColumn, endLine, endColumn);
-		this.parameters = parameters;
-		this.body = body;
+		setParameters(parameters);
+		setBody(body);
 
 		if (this.parameters != null && this.parameters.size() == 1
 				&& this.parameters.get(0).getType() == null) {
@@ -45,6 +45,7 @@ public class LambdaExpr extends Expression {
 	}
 
 	public void setParameters(List<Parameter> parameters) {
+		setAsParentNodeOf(parameters);
 		this.parameters = parameters;
 	}
 
@@ -53,6 +54,7 @@ public class LambdaExpr extends Expression {
 	}
 
 	public void setBody(Statement body) {
+		setAsParentNodeOf(body);
 		this.body = body;
 	}
 

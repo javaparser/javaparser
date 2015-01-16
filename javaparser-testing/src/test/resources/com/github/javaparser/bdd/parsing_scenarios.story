@@ -162,6 +162,8 @@ Then lambda in statement 3 in method 1 in class 1 is called r3
 Then lambda in statement 1 in method 1 in class 1 body is "System.out.println("Hello world!");"
 Then lambda in statement 2 in method 1 in class 1 block statement is null
 Then lambda in statement 3 in method 1 in class 1 block statement is "System.out.println("Hello world two!");"
+Then lambda in statement 1 in method 1 in class 1 is parent of contained body
+Then lambda in statement 3 in method 1 in class 1 is parent of contained body
 
 
 
