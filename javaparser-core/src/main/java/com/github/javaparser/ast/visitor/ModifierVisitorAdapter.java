@@ -951,17 +951,17 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		return n;
 	}
 
-    @Override public Node visit(final LambdaExpr n, final A arg) {
-        return n;
-    }
+	@Override public Node visit(final LambdaExpr n, final A arg) {
+		return n;
+	}
 
-    @Override public Node visit(final MethodReferenceExpr n, final A arg){
-        return n;
-    }
+	@Override public Node visit(final MethodReferenceExpr n, final A arg){
+		return n;
+	}
 
-    @Override public Node visit(final TypeExpr n, final A arg){
-        return n;
-    }
+	@Override public Node visit(final TypeExpr n, final A arg){
+		return n;
+	}
 
 	@Override public Node visit(final BlockComment n, final A arg) {
 		return n;
