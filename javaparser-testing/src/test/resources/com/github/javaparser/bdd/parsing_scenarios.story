@@ -178,7 +178,6 @@ Then lambda in statement 3 in method 1 in class 1 block statement is "System.out
 Then lambda in statement 1 in method 1 in class 1 is parent of contained body
 Then lambda in statement 3 in method 1 in class 1 is parent of contained body
 Then all nodes refer to their parent
-
 Then lambda in method call in statement 4 in method 1 in class 1 body is ""foo";"
 
 
