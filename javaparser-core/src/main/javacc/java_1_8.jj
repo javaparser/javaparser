@@ -22,13 +22,13 @@ options {
   JAVA_UNICODE_ESCAPE=true;
   //COMMON_TOKEN_ACTION=true; // Will not use CommonTokenAction to handle JavaDoc and comments
   //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
-  JDK_VERSION = "1.5";
+  JDK_VERSION = "1.6";
   TOKEN_FACTORY = "ASTParser.GTToken";
 }
 
 PARSER_BEGIN(ASTParser)
 /*
- * 
+ *
  * This file is part of Java 1.8 parser and Abstract Syntax Tree.
  *
  * Java 1.8 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
@@ -1971,14 +1971,10 @@ Expression Expression():
    ret = new MethodReferenceExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, token.image);
  }
    )
-
   ]
 
   { return ret; }
 }
-
-
-
 
 AssignExpr.Operator AssignmentOperator():
 {
@@ -2817,8 +2813,7 @@ ExpressionStmt StatementExpression():
 	     }
 	   }
 	  ]
-
-	)
+  )
   ";"
   { return new ExpressionStmt(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr); }
 }
@@ -3073,10 +3068,7 @@ TryStmt TryStatement():
   	|
   		"finally" finallyBlock = Block()
   )
-  { 
-      TryStmt tmp = new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock);
-      return tmp;
-  }
+  { return new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock); }
 }
 
 

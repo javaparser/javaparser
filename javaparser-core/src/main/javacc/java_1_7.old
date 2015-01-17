@@ -1,20 +1,19 @@
 /*
- * Copyright (C) 2008 Julio Vilmar Gesser.
  *
- * This file is part of Java 1.7 parser and Abstract Syntax Tree.
+ * This file is part of Java 1.8 parser and Abstract Syntax Tree.
  *
- * Java 1.7 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
+ * Java 1.8 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Java 1.7 parser and Abstract Syntax Tree is distributed in the hope that it will be useful,
+ * Java 1.8 parser and Abstract Syntax Tree is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Java 1.7 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Java 1.8 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 options {
@@ -23,43 +22,36 @@ options {
   JAVA_UNICODE_ESCAPE=true;
   //COMMON_TOKEN_ACTION=true; // Will not use CommonTokenAction to handle JavaDoc and comments
   //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
-  JDK_VERSION = "1.5";
+  JDK_VERSION = "1.6";
   TOKEN_FACTORY = "ASTParser.GTToken";
 }
 
 PARSER_BEGIN(ASTParser)
 /*
- * Copyright (C) 2008 Julio Vilmar Gesser.
- * 
- * This file is part of Java 1.7 parser and Abstract Syntax Tree.
  *
- * Java 1.7 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
+ * This file is part of Java 1.8 parser and Abstract Syntax Tree.
+ *
+ * Java 1.8 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Java 1.7 parser and Abstract Syntax Tree is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Java 1.7 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Java 1.8 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
  */
-package japa.parser;
+package com.github.javaparser;
 
 import java.io.*;
 import java.util.*;
-import japa.parser.ast.*;
-import japa.parser.ast.body.*;
-import japa.parser.ast.comments.*;
-import japa.parser.ast.expr.*;
-import japa.parser.ast.stmt.*;
-import japa.parser.ast.type.*;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.*;
 
 /**
  * <p>This class was generated automatically by javacc, do not edit.</p>
- * @author Julio Vilmar Gesser
  */
 final class ASTParser {
 
@@ -136,7 +128,6 @@ final class ASTParser {
     private Token last_special_token = null;
 
 }
-
 
 PARSER_END(ASTParser)
 
@@ -1124,18 +1115,13 @@ CompilationUnit CompilationUnit():
 	TypeDeclaration tn = null;
 	int line = -1;
 	int column = 0;
-       
 }
 {
   [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() {line = pakage.getBeginLine(); column = pakage.getBeginColumn();} ]
   ( in = ImportDeclaration() { if(line==-1){line = in.getBeginLine(); column = in.getBeginColumn();} imports = add(imports, in); } )*
   ( tn = TypeDeclaration() { if(line==-1){line = tn.getBeginLine(); column = tn.getBeginColumn();} types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
-  { 
-      CompilationUnit tmp = new CompilationUnit(line == -1 ? 0 : line, column, token.endLine, token.endColumn,pakage, imports, types); 
-       
-      return tmp;
-  }
+  { return new CompilationUnit(line == -1 ? 0 : line, column, token.endLine, token.endColumn,pakage, imports, types); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -1145,15 +1131,11 @@ PackageDeclaration PackageDeclaration():
 	NameExpr name;
 	int line;
 	int column;
-       
 }
 {
 ( ann = Annotation() { annotations = add(annotations, ann); } )*
   "package" {line=token.beginLine; column=token.beginColumn;}  name = Name() ";"
-  {  PackageDeclaration tmp = new PackageDeclaration(line, column, token.endLine, token.endColumn,annotations, name);
-      
-     return tmp;
-  }
+  { return new PackageDeclaration(line, column, token.endLine, token.endColumn,annotations, name); }
 }
 
 ImportDeclaration ImportDeclaration():
@@ -1163,14 +1145,10 @@ ImportDeclaration ImportDeclaration():
 	boolean isAsterisk = false;
 	int line;
 	int column;
-       
 }
 {
   "import" {line=token.beginLine; column=token.beginColumn;} [ "static" { isStatic = true; } ] name = Name() [ "." "*" { isAsterisk = true; } ] ";"
-  { ImportDeclaration tmp = new ImportDeclaration(line, column, token.endLine, token.endColumn,name, isStatic, isAsterisk); 
-     
-    return tmp;
-  }
+  { return new ImportDeclaration(line, column, token.endLine, token.endColumn,name, isStatic, isAsterisk); }
 }
 
 /*
@@ -1218,8 +1196,7 @@ Modifier Modifiers():
  )*
 
  {
-    Modifier tmp = new Modifier(beginLine, beginColumn, modifiers, annotations);
-    return tmp;
+    return new Modifier(beginLine, beginColumn, modifiers, annotations);
  }
 }
 
@@ -1230,7 +1207,6 @@ TypeDeclaration TypeDeclaration():
 {
    Modifier modifier;
    TypeDeclaration ret;
-   
 }
 {
   {  }
@@ -1246,10 +1222,7 @@ TypeDeclaration TypeDeclaration():
        ret = AnnotationTypeDeclaration(modifier)
     )
   )
-      { 
-           
-          return ret; 
-      }
+  { return ret; }
 }
 
 
@@ -1263,7 +1236,6 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(Modifier modifier):
    List members;
    int line = modifier.beginLine;
    int column = modifier.beginColumn;
-   
 }
 {
   ( "class" | "interface" { isInterface = true; } ) { if (line == -1) {line=token.beginLine; column=token.beginColumn;} }
@@ -1275,7 +1247,6 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(Modifier modifier):
 
   { ClassOrInterfaceDeclaration tmp = new ClassOrInterfaceDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, isInterface, null, typePar, extList, impList, members);
     tmp.setNameExpr(name);
-    
     return tmp;
   }
 }
@@ -1285,6 +1256,8 @@ List ExtendsList(boolean isInterface):
    boolean extendsMoreThanOne = false;
    List ret = new LinkedList();
    ClassOrInterfaceType cit;
+    AnnotationExpr ann;
+   List annotations = null;
 }
 {
    "extends" cit = ClassOrInterfaceType() { ret.add(cit); }
@@ -1321,7 +1294,6 @@ EnumDeclaration EnumDeclaration(Modifier modifier):
 	List members = null;
 	int line = modifier.beginLine;
 	int column = modifier.beginColumn;
-       
 }
 {
   "enum" { if (line == -1) {line=token.beginLine; column=token.beginColumn;} }
@@ -1338,10 +1310,9 @@ EnumDeclaration EnumDeclaration(Modifier modifier):
  	]
   "}"
 
-  { 
+  {
       EnumDeclaration tmp = new EnumDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, null, impList, entries, members);
       tmp.setNameExpr(name);
-      
       return tmp;
   }
 }
@@ -1389,15 +1360,10 @@ TypeParameter TypeParameter():
 	List typeBound = null;
 	int line;
 	int column;
-       
 }
 {
    <IDENTIFIER> { name = token.image; line=token.beginLine; column=token.beginColumn;} [ typeBound = TypeBound() ]
-   { 
-       TypeParameter tmp = new TypeParameter(line, column, token.endLine, token.endColumn,name, typeBound); 
-        
-       return tmp;
-   }
+   { return new TypeParameter(line, column, token.endLine, token.endColumn,name, typeBound); }
 }
 
 List TypeBound():
@@ -1426,7 +1392,6 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
    boolean isNestedInterface = false;
    Modifier modifier;
    BodyDeclaration ret;
-   
 }
 {
   {  }
@@ -1458,10 +1423,7 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	|
 	  ";" { ret = new EmptyMemberDeclaration(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
   )
-  {   
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 FieldDeclaration FieldDeclaration(Modifier modifier):
@@ -1469,7 +1431,6 @@ FieldDeclaration FieldDeclaration(Modifier modifier):
 	Type type;
 	List variables = new LinkedList();
 	VariableDeclarator val;
-       
 }
 {
   // Modifiers are already matched in the caller
@@ -1478,12 +1439,10 @@ FieldDeclaration FieldDeclaration(Modifier modifier):
   ( "," val = VariableDeclarator() { variables.add(val); } )* ";"
 
   { 
-      int line = modifier.beginLine;
-      int column = modifier.beginColumn;
-      if (line == -1) { line=type.getBeginLine(); column=type.getBeginColumn(); }
-      FieldDeclaration tmp = new FieldDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, variables); 
-       
-      return tmp;
+  	int line = modifier.beginLine;
+  	int column = modifier.beginColumn;
+  	if (line == -1) { line=type.getBeginLine(); column=type.getBeginColumn(); }
+  	return new FieldDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, variables);
   }
 }
 
@@ -1491,15 +1450,10 @@ VariableDeclarator VariableDeclarator():
 {
 	VariableDeclaratorId id;
 	Expression init = null;
-       
 }
 {
   id = VariableDeclaratorId() [ "=" init = VariableInitializer() ]
-  { 
-      VariableDeclarator tmp = new  VariableDeclarator(id.getBeginLine(), id.getBeginColumn(), token.endLine, token.endColumn, id, init); 
-       
-      return tmp;
-  }
+  { return new  VariableDeclarator(id.getBeginLine(), id.getBeginColumn(), token.endLine, token.endColumn, id, init); }
 }
 
 VariableDeclaratorId VariableDeclaratorId():
@@ -1508,21 +1462,15 @@ VariableDeclaratorId VariableDeclaratorId():
 	int arrayCount = 0;
 	int line;
 	int column;
-       
 }
 {
   <IDENTIFIER> { name = token.image; line=token.beginLine; column=token.beginColumn;}  ( "[" "]" { arrayCount++; } )*
-  { 
-      VariableDeclaratorId tmp = new VariableDeclaratorId(line, column, token.endLine, token.endColumn,name, arrayCount); 
-       
-      return tmp;
-  }
+  { return new VariableDeclaratorId(line, column, token.endLine, token.endColumn,name, arrayCount); }
 }
 
 Expression VariableInitializer():
 {
 	Expression ret;
-       
 }
 {
   (
@@ -1530,10 +1478,7 @@ Expression VariableInitializer():
 	|
 	  ret = Expression()
   )
-  { 
-       
-      return ret;
-  }
+  { return ret;}
 }
 
 ArrayInitializerExpr ArrayInitializer():
@@ -1542,15 +1487,10 @@ ArrayInitializerExpr ArrayInitializer():
 	Expression val;
 	int line;
 	int column;
-       
 }
 {
   "{" {line=token.beginLine; column=token.beginColumn;} [ val = VariableInitializer() { values = add(values, val); } ( LOOKAHEAD(2) "," val = VariableInitializer() { values = add(values, val); } )* ] [ "," ] "}"
-  { 
-      ArrayInitializerExpr tmp = new ArrayInitializerExpr(line, column, token.endLine, token.endColumn,values); 
-       
-      return tmp;
-  }
+  { return new ArrayInitializerExpr(line, column, token.endLine, token.endColumn,values); }
 }
 
 MethodDeclaration MethodDeclaration(Modifier modifier):
@@ -1564,7 +1504,6 @@ MethodDeclaration MethodDeclaration(Modifier modifier):
 	BlockStmt block = null;
 	int line = modifier.beginLine;
 	int column = modifier.beginColumn;
-       
 }
 {
   // Modifiers already matched in the caller!
@@ -1577,7 +1516,6 @@ MethodDeclaration MethodDeclaration(Modifier modifier):
   { 
       MethodDeclaration tmp = new MethodDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, typeParameters, type, null, parameters, arrayCount, throws_, block);
       tmp.setNameExpr(name);
-      
       return tmp;
   }
 }
@@ -1599,7 +1537,6 @@ Parameter FormalParameter():
 	Type type;
 	boolean isVarArg = false;
 	VariableDeclaratorId id;
-       
 }
 {
   modifier = Modifiers() type = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
@@ -1608,9 +1545,7 @@ Parameter FormalParameter():
     int line = modifier.beginLine;
     int column = modifier.beginColumn;
     if(line==-1){ line=type.getBeginLine(); column=type.getBeginColumn(); }
-    Parameter tmp = new Parameter(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, isVarArg, id);
-     
-    return tmp;
+    return new Parameter(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, isVarArg, id);
   }
 }
 
@@ -1628,7 +1563,6 @@ ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
 	int bbColumn = 0;
 	int beLine = 0;
 	int beColumn = 0;
-       
 }
 {
   [ typeParameters = TypeParameters() { int[] lineCol=(int[])typeParameters.remove(0); if(line==-1){ line=lineCol[0]; column=lineCol[1];} } ]
@@ -1645,8 +1579,7 @@ ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
   	}
   	ConstructorDeclaration tmp = new ConstructorDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, typeParameters, null, parameters, throws_, new BlockStmt(bbLine, bbColumn, token.endLine, token.endColumn, stmts));
     tmp.setNameExpr(name);
-         
-        return tmp;
+    return tmp;
   }
 }
 
@@ -1658,13 +1591,12 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	List typeArgs = null;
 	int line = -1;
 	int column = 0;
-       
 }
 {
   (
-	  LOOKAHEAD([ TypeArguments() ] "this" "(")
+	  LOOKAHEAD([ TypeArguments() ] <THIS> "(")
 	  [ typeArgs = TypeArguments() { int[] lineCol=(int[])typeArgs.remove(0); line=lineCol[0]; column=lineCol[1]; } ]
-	  "this" { if (line == -1) {line=token.beginLine; column=token.beginColumn;} isThis = true; }
+	  <THIS> { if (line == -1) {line=token.beginLine; column=token.beginColumn;} isThis = true; }
 	  args = Arguments() ";"
 	|
 	  [
@@ -1673,14 +1605,10 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	  	{ line=expr.getBeginLine(); column=expr.getBeginColumn(); }
 	  ]
 	  [ typeArgs = TypeArguments() {int[] lineCol=(int[])typeArgs.remove(0); if (line == -1) {line=lineCol[0]; column=lineCol[1];}} ]
-	  "super" {if (line == -1) {line=token.beginLine; column=token.beginColumn;}}
+	  <SUPER> {if (line == -1) {line=token.beginLine; column=token.beginColumn;}}
 	  args = Arguments() ";"
   )
-  { 
-      ExplicitConstructorInvocationStmt tmp = new ExplicitConstructorInvocationStmt(line, column, token.endLine, token.endColumn,typeArgs, isThis, expr, args); 
-       
-      return tmp;
-  }
+  { return new ExplicitConstructorInvocationStmt(line, column, token.endLine, token.endColumn,typeArgs, isThis, expr, args); }
 }
 
 List Statements():
@@ -1699,15 +1627,10 @@ InitializerDeclaration InitializerDeclaration():
 	int line = -1;
 	int column = 0;
 	boolean isStatic = false;
-       
 }
 {
   [ "static" { isStatic = true; line=token.beginLine; column=token.beginColumn;} ] block = Block() {if(line==-1){line=block.getBeginLine(); column=block.getBeginColumn();}}
-  { 
-      InitializerDeclaration tmp = new InitializerDeclaration(line, column, token.endLine, token.endColumn, isStatic, block); 
-       
-      return tmp;
-  }
+  { return new InitializerDeclaration(line, column, token.endLine, token.endColumn, isStatic, block); }
 }
 
 
@@ -1718,7 +1641,6 @@ InitializerDeclaration InitializerDeclaration():
 Type Type():
 {
 	Type ret;
-       
 }
 {
  (
@@ -1726,17 +1648,13 @@ Type Type():
  |
    ret = PrimitiveType()
  )
- { 
-      
-     return ret; 
- }
+ { return ret; }
 }
 
 ReferenceType ReferenceType():
 {
 	Type type;
 	int arrayCount = 0;
-       
 }
 {
   (
@@ -1744,11 +1662,7 @@ ReferenceType ReferenceType():
   |
    type = ClassOrInterfaceType() ( LOOKAHEAD(2) "[" "]" { arrayCount++; } )*
   )
-  { 
-      ReferenceType tmp = new ReferenceType(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type, arrayCount); 
-       
-      return tmp;
-  }
+  { return new ReferenceType(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type, arrayCount); }
 }
 
 ClassOrInterfaceType ClassOrInterfaceType():
@@ -1758,7 +1672,6 @@ ClassOrInterfaceType ClassOrInterfaceType():
 	List typeArgs = null;
 	int line;
 	int column;
-       
 }
 {
   <IDENTIFIER> {line=token.beginLine; column=token.beginColumn;} { name = token.image; }
@@ -1768,10 +1681,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 	  LOOKAHEAD(2) "." <IDENTIFIER> { name = token.image; }
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() {typeArgs.remove(0);} ] { ret = new ClassOrInterfaceType(line, column, token.endLine, token.endColumn,ret, name, typeArgs); }
   )*
-      {
-           
-          return ret; 
-      }
+  { return ret; }
 }
 
 List TypeArguments():
@@ -1794,7 +1704,6 @@ List TypeArguments():
 Type TypeArgument():
 {
 	Type ret;
-       
 }
 {
  (
@@ -1802,10 +1711,7 @@ Type TypeArgument():
  |
    ret = Wildcard()
  )
- { 
-      
-     return ret; 
- }
+ { ret.setAnnotations(annotations); return ret; }
 }
 
 WildcardType Wildcard():
@@ -1814,7 +1720,6 @@ WildcardType Wildcard():
 	ReferenceType sup = null;
 	int line;
 	int column;
-       
 }
 {
    "?" {line=token.beginLine; column=token.beginColumn;}
@@ -1824,16 +1729,13 @@ WildcardType Wildcard():
 		"super" sup = ReferenceType()
    ]
    { 
-       WildcardType tmp = new WildcardType(line, column, token.endLine, token.endColumn,ext, sup); 
-        
-       return tmp;
+     return new WildcardType(line, column, token.endLine, token.endColumn,ext, sup);
    }
 }
 
 PrimitiveType PrimitiveType():
 {
 	PrimitiveType ret;
-       
 }
 {
 (
@@ -1853,16 +1755,12 @@ PrimitiveType PrimitiveType():
 |
   "double" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Double); }
 )
-{ 
-     
-    return ret; 
-}
+{ return ret; }
 }
 
 Type ResultType():
 {
 	Type ret;
-       
 }
 {
   (
@@ -1870,10 +1768,7 @@ Type ResultType():
 	|
 	  ret = Type()
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 NameExpr Name():
@@ -1883,27 +1778,21 @@ NameExpr Name():
  */
 {
 	NameExpr ret;
-       
 }
 {
   <IDENTIFIER> { ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image); }
   ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, token.image); } )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 NameExpr SimpleName():
 {
     NameExpr ret;
-       
 }
 {
   <IDENTIFIER> { ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image); }
-  { 
-       
-      return ret; 
+  {
+      return ret;
   }
 }
 
@@ -1937,18 +1826,15 @@ Expression Expression():
 	Expression ret;
 	AssignExpr.Operator op;
 	Expression value;
-       
 }
 {
   ret = ConditionalExpression()
   [
-    LOOKAHEAD(2)
+       LOOKAHEAD(2)
     op = AssignmentOperator() value = Expression() { ret = new AssignExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, value, op); }
   ]
-  { 
-       
-      return ret; 
-  }
+
+  { return ret; }
 }
 
 AssignExpr.Operator AssignmentOperator():
@@ -1978,85 +1864,61 @@ Expression ConditionalExpression():
 	Expression ret;
 	Expression left;
 	Expression right;
-       
 }
 {
   ret = ConditionalOrExpression()
   [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, left, right); } ]
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression ConditionalOrExpression():
 {
 	Expression ret;
 	Expression right;
-       
 }
 {
   ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.or); } )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression ConditionalAndExpression():
 {
 	Expression ret;
 	Expression right;
-       
 }
 {
   ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.and); } )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression InclusiveOrExpression():
 {
 	Expression ret;
 	Expression right;
-       
 }
 {
   ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.binOr); } )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression ExclusiveOrExpression():
 {
 	Expression ret;
 	Expression right;
-       
 }
 {
   ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.xor); } )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression AndExpression():
 {
 	Expression ret;
 	Expression right;
-       
 }
 {
   ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.binAnd); } )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression EqualityExpression():
@@ -2064,7 +1926,6 @@ Expression EqualityExpression():
 	Expression ret;
 	Expression right;
 	BinaryExpr.Operator op;
-       
 }
 {
   ret = InstanceOfExpression()
@@ -2073,24 +1934,17 @@ Expression EqualityExpression():
       "!=" { op = BinaryExpr.Operator.notEquals; }
     ) right = InstanceOfExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
   )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression InstanceOfExpression():
 {
 	Expression ret;
 	Type type;
-       
 }
 {
   ret = RelationalExpression() [ "instanceof" type = Type() { ret = new InstanceOfExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, type); } ]
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression RelationalExpression():
@@ -2098,7 +1952,6 @@ Expression RelationalExpression():
 	Expression ret;
 	Expression right;
 	BinaryExpr.Operator op;
-       
 }
 {
   ret = ShiftExpression()
@@ -2109,10 +1962,7 @@ Expression RelationalExpression():
   	  ">=" { op = BinaryExpr.Operator.greaterEquals; }
   	) right = ShiftExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
   )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression ShiftExpression():
@@ -2120,7 +1970,6 @@ Expression ShiftExpression():
 	Expression ret;
 	Expression right;
 	BinaryExpr.Operator op;
-       
 }
 {
   ret = AdditiveExpression()
@@ -2130,10 +1979,7 @@ Expression ShiftExpression():
   	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.rUnsignedShift; }
   	) right = AdditiveExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
   )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression AdditiveExpression():
@@ -2141,7 +1987,6 @@ Expression AdditiveExpression():
 	Expression ret;
 	Expression right;
 	BinaryExpr.Operator op;
-       
 }
 {
   ret = MultiplicativeExpression()
@@ -2150,10 +1995,7 @@ Expression AdditiveExpression():
   	  "-" { op = BinaryExpr.Operator.minus; }
   	) right = MultiplicativeExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
   )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression MultiplicativeExpression():
@@ -2161,7 +2003,6 @@ Expression MultiplicativeExpression():
 	Expression ret;
 	Expression right;
 	BinaryExpr.Operator op;
-       
 }
 {
   ret = UnaryExpression()
@@ -2171,10 +2012,7 @@ Expression MultiplicativeExpression():
   	  "%" { op = BinaryExpr.Operator.remainder; }
   	) right = UnaryExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
   )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression UnaryExpression():
@@ -2183,7 +2021,6 @@ Expression UnaryExpression():
 	UnaryExpr.Operator op;
 	int line = 0;
 	int column = 0;
-       
 }
 {
   (
@@ -2210,10 +2047,7 @@ Expression UnaryExpression():
 	|
 	  ret = UnaryExpressionNotPlusMinus()
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression PreIncrementExpression():
@@ -2221,14 +2055,10 @@ Expression PreIncrementExpression():
 	Expression ret;
 	int line;
 	int column;
-       
 }
 {
   "++" {line=token.beginLine; column=token.beginColumn;} ret = UnaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, UnaryExpr.Operator.preIncrement); }
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression PreDecrementExpression():
@@ -2236,14 +2066,10 @@ Expression PreDecrementExpression():
 	Expression ret;
 	int line;
 	int column;
-       
 }
 {
   "--" {line=token.beginLine; column=token.beginColumn;} ret = UnaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, UnaryExpr.Operator.preDecrement); }
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression UnaryExpressionNotPlusMinus():
@@ -2252,7 +2078,6 @@ Expression UnaryExpressionNotPlusMinus():
 	UnaryExpr.Operator op;
 	int line = 0;
 	int column = 0;
-       
 }
 {
   (
@@ -2265,17 +2090,13 @@ Expression UnaryExpressionNotPlusMinus():
 	|
       ret = PostfixExpression()
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression PostfixExpression():
 {
 	Expression ret;
 	UnaryExpr.Operator op;
-       
 }
 {
   ret = PrimaryExpression()
@@ -2285,10 +2106,7 @@ Expression PostfixExpression():
       "--" { op = UnaryExpr.Operator.posDecrement; }
     ) { ret = new UnaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, op); }
   ]
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression CastExpression():
@@ -2297,53 +2115,41 @@ Expression CastExpression():
 	Type type;
 	int line;
 	int column;
-       
 }
 {
-  "(" {line=token.beginLine; column=token.beginColumn;} 
+  "(" {line=token.beginLine; column=token.beginColumn;}
   (
   	  LOOKAHEAD(2)
   	  type = PrimitiveType() ")" ret = UnaryExpression() { ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
   	|
   	  type = ReferenceType() ")" ret = UnaryExpressionNotPlusMinus() { ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression PrimaryExpression():
 {
 	Expression ret;
 	Expression inner;
-       
 }
 {
   ret = PrimaryPrefix() ( LOOKAHEAD(2) ret = PrimarySuffix(ret) )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression PrimaryExpressionWithoutSuperSuffix():
 {
 	Expression ret;
 	Expression inner;
-       
 }
 {
   ret = PrimaryPrefix() ( LOOKAHEAD( PrimarySuffixWithoutSuper(null) ) ret = PrimarySuffixWithoutSuper(ret) )*
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression PrimaryPrefix():
 {
-	Expression ret;
+	Expression ret = null;
 	NameExpr name;
 	List typeArgs = null;
 	List args = null;
@@ -2360,7 +2166,7 @@ Expression PrimaryPrefix():
 	  "this" { ret = new ThisExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, null); }
 	|
 	  "super" { ret = new SuperExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, null); }
-	  "."
+	     "."
 	  [ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
 	  name = SimpleName()
 	  [ args = Arguments() {hasArgs=true;} ]
@@ -2375,13 +2181,13 @@ Expression PrimaryPrefix():
 				ret = f;
 			}
 	  	}
-	|
+	 |
 	  "(" {line=token.beginLine; column=token.beginColumn;} ret = Expression() ")" { ret = new EnclosedExpr(line, column, token.endLine, token.endColumn,ret); }
 	|
 	  ret = AllocationExpression(null)
 	|
 	  LOOKAHEAD( ResultType() "." "class" )
-	  type = ResultType() "." "class" { ret = new ClassExpr(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type); }
+	  type = ResultType()  "." "class" { ret = new ClassExpr(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type); }
 	|
 	  	name = SimpleName() { line=token.beginLine; column=token.beginColumn; }
 	  	[ args = Arguments() {hasArgs=true;} ]
@@ -2395,16 +2201,12 @@ Expression PrimaryPrefix():
 			}
 	  	}
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression PrimarySuffix(Expression scope):
 {
 	Expression ret;
-       
 }
 {
   (
@@ -2413,10 +2215,7 @@ Expression PrimarySuffix(Expression scope):
 	|
   	"." "super" { ret = new SuperExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope); }
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression PrimarySuffixWithoutSuper(Expression scope):
@@ -2426,13 +2225,11 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	List args = null;
 	boolean hasArgs = false;
 	NameExpr name;
-       
 }
 {
   (
   	"."
   	(
-  	// TODO: est? deixando passar "this.this", verificar na JLS se ? poss?vel
 		"this" { ret = new ThisExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope); }
 	  |
 	  	ret = AllocationExpression(scope)
@@ -2442,7 +2239,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  	name = SimpleName()
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
-			if (hasArgs) { 
+			if (hasArgs) {
 	  			MethodCallExpr m = new MethodCallExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, typeArgs, null, args);
 				m.setNameExpr(name);
 				ret = m;
@@ -2456,16 +2253,12 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	|
 	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, ret); }
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression Literal():
 {
 	Expression ret;
-       
 }
 {
   (
@@ -2493,16 +2286,12 @@ Expression Literal():
 	|
 	  ret = NullLiteral()
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression BooleanLiteral():
 {
 	Expression ret;
-       
 }
 {
   (
@@ -2510,23 +2299,14 @@ Expression BooleanLiteral():
 	|
 	  "false" { ret = new BooleanLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, false); }
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression NullLiteral():
-{
-   
-}
+{}
 {
   "null"
-  { 
-      NullLiteralExpr tmp = new NullLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn); 
-       
-      return tmp;
-  }
+  { return new NullLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
 }
 
 List Arguments():
@@ -2558,7 +2338,6 @@ Expression AllocationExpression(Expression scope):
 	List args;
 	int line;
 	int column;
-       
 }
 {
   "new" { if(scope==null) {line=token.beginLine; column=token.beginColumn;} else {line=scope.getBeginLine(); column=scope.getBeginColumn();} }
@@ -2589,10 +2368,7 @@ Expression AllocationExpression(Expression scope):
       args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
       { ret = new ObjectCreationExpr(line, column, token.endLine, token.endColumn, scope, (ClassOrInterfaceType) type, typeArgs, args, anonymousBody); }
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 /*
@@ -2624,7 +2400,6 @@ Object[] ArrayDimsAndInits():
 Statement Statement():
 {
 	Statement ret;
-       
 }
 {
   (
@@ -2661,10 +2436,7 @@ Statement Statement():
 	|
 	  ret = TryStatement()
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 AssertStmt AssertStatement():
@@ -2673,15 +2445,10 @@ AssertStmt AssertStatement():
 	Expression msg = null;
 	int line;
 	int column;
-       
 }
 {
   "assert" {line=token.beginLine; column=token.beginColumn;} check = Expression() [ ":" msg = Expression() ] ";"
-  { 
-      AssertStmt tmp = new AssertStmt(line, column, token.endLine, token.endColumn,check, msg);  
-       
-      return tmp;
-  }
+  { return new AssertStmt(line, column, token.endLine, token.endColumn,check, msg);  }
 }
 
 LabeledStmt LabeledStatement():
@@ -2690,15 +2457,10 @@ LabeledStmt LabeledStatement():
 	Statement stmt;
 	int line;
 	int column;
-       
 }
 {
   <IDENTIFIER> {line=token.beginLine; column=token.beginColumn;} { label = token.image; } ":" stmt = Statement()
-  { 
-      LabeledStmt tmp =  new LabeledStmt(line, column, token.endLine, token.endColumn,label, stmt); 
-       
-      return tmp;
-}
+  { return new LabeledStmt(line, column, token.endLine, token.endColumn,label, stmt); }
 }
 
 BlockStmt Block():
@@ -2706,17 +2468,12 @@ BlockStmt Block():
 	List stmts;
 	int beginLine;
 	int beginColumn;
-       
 }
 {
   "{" {beginLine=token.beginLine; beginColumn=token.beginColumn;}
   	stmts = Statements()
   "}"
-  { 
-      BlockStmt tmp = new BlockStmt(beginLine, beginColumn, token.endLine, token.endColumn, stmts);
-       
-      return tmp; 
-  }
+  { return new BlockStmt(beginLine, beginColumn, token.endLine, token.endColumn, stmts); }
 }
 
 /*
@@ -2728,7 +2485,6 @@ Statement BlockStatement():
 	Expression expr;
 	ClassOrInterfaceDeclaration typeDecl;
 	Modifier modifier;
-       
 }
 {
   (
@@ -2743,10 +2499,7 @@ Statement BlockStatement():
     |
 	  ret = Statement()
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 VariableDeclarationExpr VariableDeclarationExpression():
@@ -2755,7 +2508,6 @@ VariableDeclarationExpr VariableDeclarationExpression():
 	Type type;
 	List vars = new LinkedList();
 	VariableDeclarator var;
-       
 }
 {
   modifier = Modifiers() type = Type() var = VariableDeclarator() { vars.add(var); } ( "," var = VariableDeclarator() { vars.add(var); } )*
@@ -2763,23 +2515,15 @@ VariableDeclarationExpr VariableDeclarationExpression():
     int line = modifier.beginLine;
     int column = modifier.beginColumn;
     if(line==-1) {line=type.getBeginLine(); column=type.getBeginColumn(); }
-    VariableDeclarationExpr tmp = new VariableDeclarationExpr(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, vars);
-     
-    return tmp; 
+    return new VariableDeclarationExpr(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, vars);
   }
 }
 
 EmptyStmt EmptyStatement():
-{
-   
-}
+{}
 {
   ";"
-  { 
-      EmptyStmt tmp = new EmptyStmt(token.beginLine, token.beginColumn, token.endLine, token.endColumn); 
-       
-      return tmp;
-  }
+  { return new EmptyStmt(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
 }
 
 ExpressionStmt StatementExpression():
@@ -2792,7 +2536,6 @@ ExpressionStmt StatementExpression():
 	Expression expr;
 	AssignExpr.Operator op;
 	Expression value;
-       
 }
 {
   (
@@ -2810,11 +2553,7 @@ ExpressionStmt StatementExpression():
 	  ]
   )
   ";"
-  { 
-      ExpressionStmt tmp = new ExpressionStmt(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr); 
-       
-      return tmp;
-  }
+  { return new ExpressionStmt(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr); }
 }
 
 SwitchStmt SwitchStatement():
@@ -2824,18 +2563,13 @@ SwitchStmt SwitchStatement():
 	List entries = null;
 	int line;
 	int column;
-       
 }
 {
   "switch" {line=token.beginLine; column=token.beginColumn;} "(" selector = Expression() ")" "{"
     ( entry = SwitchEntry() { entries = add(entries, entry); } )*
   "}"
 
-  { 
-      SwitchStmt tmp = new SwitchStmt(line, column, token.endLine, token.endColumn,selector, entries);
-       
-      return tmp;
-  }
+  { return new SwitchStmt(line, column, token.endLine, token.endColumn,selector, entries); }
 }
 
 SwitchEntryStmt SwitchEntry():
@@ -2844,7 +2578,6 @@ SwitchEntryStmt SwitchEntry():
 	List stmts;
 	int line;
 	int column;
-       
 }
 {
   (
@@ -2854,11 +2587,7 @@ SwitchEntryStmt SwitchEntry():
   )
   ":" stmts = Statements()
 
-  { 
-      SwitchEntryStmt tmp = new SwitchEntryStmt(line, column, token.endLine, token.endColumn,label, stmts); 
-       
-      return tmp;
-  }
+  { return new SwitchEntryStmt(line, column, token.endLine, token.endColumn,label, stmts); }
 }
 
 IfStmt IfStatement():
@@ -2873,9 +2602,8 @@ IfStmt IfStatement():
 	Statement elseStmt = null;
 	int line;
 	int column;
-       
-       Comment thenCmmt = null;
-       Comment elseCmmt = null;
+    Comment thenCmmt = null;
+    Comment elseCmmt = null;
 }
 {
   "if" {line=token.beginLine; column=token.beginColumn;} "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
@@ -2895,15 +2623,10 @@ WhileStmt WhileStatement():
 	Statement body;
 	int line;
 	int column;
-       
 }
 {
   "while" {line=token.beginLine; column=token.beginColumn;} "(" condition = Expression() ")" body = Statement()
-  { 
-      WhileStmt tmp = new WhileStmt(line, column, token.endLine, token.endColumn,condition, body);
-       
-      return tmp;
-  }
+  { return new WhileStmt(line, column, token.endLine, token.endColumn,condition, body); }
 }
 
 DoStmt DoStatement():
@@ -2912,15 +2635,10 @@ DoStmt DoStatement():
 	Statement body;
 	int line;
 	int column;
-       
 }
 {
   "do" {line=token.beginLine; column=token.beginColumn;} body = Statement() "while" "(" condition = Expression() ")" ";"
-  { 
-      DoStmt tmp = new DoStmt(line, column, token.endLine, token.endColumn,body, condition); 
-       
-      return tmp;
-  }
+  { return new DoStmt(line, column, token.endLine, token.endColumn,body, condition); }
 }
 
 Statement ForStatement():
@@ -2933,7 +2651,6 @@ Statement ForStatement():
 	Statement body;
 	int line;
 	int column;
-       
 }
 {
   "for" {line=token.beginLine; column=token.beginColumn;} "("
@@ -2951,9 +2668,7 @@ Statement ForStatement():
   	if (varExpr != null) {
   		return new ForeachStmt(line, column, token.endLine, token.endColumn,varExpr, expr, body);
   	}
-	ForStmt tmp = new ForStmt(line, column, token.endLine, token.endColumn,init, expr, update, body);
-        
-       return tmp;
+	return new ForStmt(line, column, token.endLine, token.endColumn,init, expr, update, body);
   }
 }
 
@@ -2998,15 +2713,10 @@ BreakStmt BreakStatement():
 	String id = null;
 	int line;
 	int column;
-       
 }
 {
   "break" {line=token.beginLine; column=token.beginColumn;} [ <IDENTIFIER> { id = token.image; } ] ";"
-  { 
-       BreakStmt tmp = new BreakStmt(line, column, token.endLine, token.endColumn,id); 
-        
-       return tmp;
-  }
+  { return new BreakStmt(line, column, token.endLine, token.endColumn,id); }
 }
 
 ContinueStmt ContinueStatement():
@@ -3014,15 +2724,10 @@ ContinueStmt ContinueStatement():
 	String id = null;
 	int line;
 	int column;
-       
 }
 {
   "continue" {line=token.beginLine; column=token.beginColumn;} [ <IDENTIFIER> { id = token.image; } ] ";"
-  { 
-      ContinueStmt tmp = new ContinueStmt(line, column, token.endLine, token.endColumn,id);
-       
-      return tmp; 
-  }
+  { return new ContinueStmt(line, column, token.endLine, token.endColumn,id); }
 }
 
 ReturnStmt ReturnStatement():
@@ -3030,15 +2735,10 @@ ReturnStmt ReturnStatement():
 	Expression expr = null;
 	int line;
 	int column;
-       
 }
 {
   "return" {line=token.beginLine; column=token.beginColumn;} [ expr = Expression() ] ";"
-  { 
-      ReturnStmt tmp = new ReturnStmt(line, column, token.endLine, token.endColumn,expr);
-       
-      return tmp;  
-  }
+  { return new ReturnStmt(line, column, token.endLine, token.endColumn,expr); }
 }
 
 ThrowStmt ThrowStatement():
@@ -3046,15 +2746,10 @@ ThrowStmt ThrowStatement():
 	Expression expr;
 	int line;
 	int column;
-       
 }
 {
   "throw" {line=token.beginLine; column=token.beginColumn;} expr = Expression() ";"
-  { 
-      ThrowStmt tmp = new ThrowStmt(line, column, token.endLine, token.endColumn,expr); 
-       
-      return tmp;
-  }
+  { return new ThrowStmt(line, column, token.endLine, token.endColumn,expr); }
 }
 
 SynchronizedStmt SynchronizedStatement():
@@ -3063,15 +2758,10 @@ SynchronizedStmt SynchronizedStatement():
 	BlockStmt block;
 	int line;
 	int column;
-       
 }
 {
   "synchronized" {line=token.beginLine; column=token.beginColumn;} "(" expr = Expression() ")" block = Block()
-  { 
-      SynchronizedStmt tmp = new SynchronizedStmt(line, column, token.endLine, token.endColumn,expr, block); 
-       
-      return tmp;
-  }
+  { return new SynchronizedStmt(line, column, token.endLine, token.endColumn,expr, block); }
 }
 
 TryStmt TryStatement():
@@ -3080,7 +2770,7 @@ TryStmt TryStatement():
  * finally/catch is present.
  */
 {
-    List resources = new LinkedList();
+	List resources = new LinkedList();
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
 	List catchs = null;
@@ -3094,7 +2784,6 @@ TryStmt TryStatement():
 	int column;
 	int cLine;
 	int cColumn;
-       
 }
 {
   "try" {line=token.beginLine; column=token.beginColumn;}
@@ -3117,11 +2806,7 @@ TryStmt TryStatement():
   	|
   		"finally" finallyBlock = Block()
   )
-  { 
-      TryStmt tmp = new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock); 
-       
-      return tmp;
-  }
+  { return new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock); }
 }
 
 
@@ -3177,7 +2862,6 @@ void RSIGNEDSHIFT():
 AnnotationExpr Annotation():
 {
 	AnnotationExpr ret;
-       
 }
 {
   (
@@ -3189,10 +2873,7 @@ AnnotationExpr Annotation():
 	 |
 	   ret = MarkerAnnotation()
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 NormalAnnotationExpr NormalAnnotation():
@@ -3201,15 +2882,10 @@ NormalAnnotationExpr NormalAnnotation():
 	List pairs = null;
 	int line;
 	int column;
-       
 }
 {
    "@" {line=token.beginLine; column=token.beginColumn;} name = Name() "(" [ pairs = MemberValuePairs() ] ")"
-   { 
-       NormalAnnotationExpr tmp = new NormalAnnotationExpr(line, column, token.endLine, token.endColumn,name, pairs); 
-        
-       return tmp;
-   }
+   { return new NormalAnnotationExpr(line, column, token.endLine, token.endColumn,name, pairs); }
 }
 
 MarkerAnnotationExpr MarkerAnnotation():
@@ -3217,15 +2893,10 @@ MarkerAnnotationExpr MarkerAnnotation():
 	NameExpr name;
 	int line;
 	int column;
-       
 }
 {
   "@" {line=token.beginLine; column=token.beginColumn;} name = Name()
-  { 
-     MarkerAnnotationExpr tmp = new MarkerAnnotationExpr(line, column, token.endLine, token.endColumn,name);
-      
-     return tmp;
-  }
+  { return new MarkerAnnotationExpr(line, column, token.endLine, token.endColumn,name); }
 }
 
 SingleMemberAnnotationExpr SingleMemberAnnotation():
@@ -3234,15 +2905,10 @@ SingleMemberAnnotationExpr SingleMemberAnnotation():
 	Expression memberVal;
 	int line;
 	int column;
-       
 }
 {
   "@" {line=token.beginLine; column=token.beginColumn;} name = Name() "(" memberVal = MemberValue() ")"
-  { 
-     SingleMemberAnnotationExpr tmp = new SingleMemberAnnotationExpr(line, column, token.endLine, token.endColumn,name, memberVal); 
-      
-     return tmp;
-  }
+  { return new SingleMemberAnnotationExpr(line, column, token.endLine, token.endColumn,name, memberVal); }
 }
 
 List MemberValuePairs():
@@ -3261,21 +2927,15 @@ MemberValuePair MemberValuePair():
 	Expression value;
 	int line;
 	int column;
-       
 }
 {
     <IDENTIFIER> { name = token.image; line=token.beginLine; column=token.beginColumn;} "=" value = MemberValue()
-    { 
-        MemberValuePair tmp = new MemberValuePair(line, column, token.endLine, token.endColumn,name, value);
-         
-        return tmp; 
-    }
+    { return new MemberValuePair(line, column, token.endLine, token.endColumn,name, value); }
 }
 
 Expression MemberValue():
 {
 	Expression ret;
-       
 }
 {
   (
@@ -3285,10 +2945,7 @@ Expression MemberValue():
 	 |
 	   ret = ConditionalExpression()
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 Expression  MemberValueArrayInitializer():
@@ -3297,17 +2954,12 @@ Expression  MemberValueArrayInitializer():
 	Expression member;
 	int line;
 	int column;
-       
 }
 {
   "{" {line=token.beginLine; column=token.beginColumn;}
   (	member = MemberValue() { ret.add(member); } ( LOOKAHEAD(2) "," member = MemberValue() { ret.add(member); } )*  )? [ "," ]
   "}"
-  { 
-      ArrayInitializerExpr tmp = new ArrayInitializerExpr(line, column, token.endLine, token.endColumn,ret);
-       
-      return tmp; 
-  }
+  { return new ArrayInitializerExpr(line, column, token.endLine, token.endColumn,ret); }
 }
 
 
@@ -3319,7 +2971,6 @@ AnnotationDeclaration AnnotationTypeDeclaration(Modifier modifier):
 	List members;
 	int line = modifier.beginLine;
 	int column = modifier.beginColumn;
-       
 }
 {
   "@" { if (line == -1) {line=token.beginLine; column=token.beginColumn;} }
@@ -3328,7 +2979,6 @@ AnnotationDeclaration AnnotationTypeDeclaration(Modifier modifier):
   { 
       AnnotationDeclaration tmp = new AnnotationDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, null, members);
       tmp.setNameExpr(name);
-      
       return tmp;
   }
 }
@@ -3348,7 +2998,6 @@ BodyDeclaration AnnotationBodyDeclaration():
 {
    Modifier modifier;
    BodyDeclaration ret;
-   
 }
 {
   {  }
@@ -3369,10 +3018,7 @@ BodyDeclaration AnnotationBodyDeclaration():
 	   ret = FieldDeclaration(modifier)
     )
   )
-  { 
-       
-      return ret; 
-  }
+  { return ret; }
 }
 
 AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(Modifier modifier):
@@ -3380,7 +3026,6 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(Modifier modifier):
 	Type type;
 	String name;
 	Expression defaultVal = null;
-       
 }
 {
   type = Type() <IDENTIFIER> { name = token.image; } "(" ")" [ defaultVal = DefaultValue() ] ";"
@@ -3389,21 +3034,15 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(Modifier modifier):
     int line = modifier.beginLine;
     int column = modifier.beginColumn;
     { if (line == -1) {line=type.getBeginLine(); column=type.getBeginColumn();} }
-    AnnotationMemberDeclaration tmp = new AnnotationMemberDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, name, defaultVal); 
-     
-    return tmp; 
+    return new AnnotationMemberDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, name, defaultVal);
   }
 }
 
 Expression DefaultValue():
 {
 	Expression ret;
-       
 }
 {
   "default" ret = MemberValue()
-  { 
-      
-      return ret; 
-  }
+  { return ret; }
 }
