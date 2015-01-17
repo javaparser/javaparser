@@ -1791,9 +1791,7 @@ NameExpr SimpleName():
 }
 {
   <IDENTIFIER> { ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image); }
-  {
-      return ret;
-  }
+  { return ret; }
 }
 
 List NameList():
