@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>JavaParser by javaparser</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>JavaParser</h1>
+        <h2>Java Parser and Abstract Syntax Tree for Java</h2>
+        <a href="https://github.com/javaparser/javaparser" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="java-parser-and-abstract-syntax-tree" class="anchor" href="#java-parser-and-abstract-syntax-tree" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java Parser and Abstract Syntax Tree.</h1>
+
+<p>This package contains a Java 1.8 Parser with AST generation and visitor support.</p>
+
+<p>The AST records the source code structure, javadoc and comments. It is also possible to change the AST nodes or create new ones to modify the source code.</p>
+
+<p><a href="https://drone.io/github.com/javaparser/javaparser/latest"><img src="https://drone.io/github.com/javaparser/javaparser/status.png" alt="Build Status"></a></p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>  Light weight</li>
+<li>  Performant</li>
+<li>  Easy to use</li>
+<li>  Modifiable AST</li>
+<li>  Create AST from scratch</li>
+<li>  Support of comments</li>
+</ul>
+
+<h2>
+<a id="dependency-management" class="anchor" href="#dependency-management" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependency Management</h2>
+
+<p>The project binaries are available in Maven Central.  Just add the following to your maven configuration or taylor to your own dependency management system.</p>
+
+<p>Current 1.8 Release</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.github.javaparser&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;javaparser-core&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p>Final 1.7 Release</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.google.code.javaparser&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;javaparser&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;1.0.11&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<h2>
+<a id="how-to-compile-sources" class="anchor" href="#how-to-compile-sources" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To Compile Sources</h2>
+
+<p>If you have checkout the project from GitHub you can build the project with maven using:</p>
+
+<pre><code>mvn clean install
+</code></pre>
+
+<p>If you checkout the sources and want to view the project in an IDE, it is best to generate the additional source files; otherwise you will get many compilation complaints in the IDE</p>
+
+<pre><code>mvn javacc:javacc
+</code></pre>
+
+<h2>
+<a id="manual" class="anchor" href="#manual" aria-hidden="true"><span class="octicon octicon-link"></span></a>Manual</h2>
+
+<p>Examples of how to use the library can be found on the <a href="https://github.com/javaparser/javaparser/wiki/Manual">Manual</a> page of the wiki</p>
+
+<h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<p>In the first instance try the <a href="https://github.com/javaparser/javaparser/wiki">wiki</a></p>
+
+<p>In the second instance please feel free to open an <a href="https://github.com/javaparser/javaparser/issues">issue</a>.</p>
+
+<h2>
+<a id="javadoc" class="anchor" href="#javadoc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Javadoc</h2>
+
+<p>The libraries javadoc can be found <a href="http://javaparser.github.io/javaparser/javadoc-current/">here</a></p>
+
+<h2>
+<a id="history" class="anchor" href="#history" aria-hidden="true"><span class="octicon octicon-link"></span></a>History</h2>
+
+<p>This parser is based on Sreenivasa Viswanadha's Java 1.5 parser.</p>
+
+<p>The project was originally hosted at <a href="http://code.google.com/p/javaparser/">Google Code</a>, however support there dwindled.</p>
+
+<p>This repository aims to provide support for issues and add the new Java language features.</p>
+
+<h2>
+<a id="licence" class="anchor" href="#licence" aria-hidden="true"><span class="octicon octicon-link"></span></a>Licence</h2>
+
+<p>Offered under the GNU GENERAL PUBLIC LICENSE that can be found <a href="https://github.com/javaparser/javaparser/blob/master/COPYING">here</a></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/javaparser/javaparser/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/javaparser/javaparser/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/javaparser/javaparser"></a> is maintained by <a href="https://github.com/javaparser">javaparser</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-41747754-5");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
