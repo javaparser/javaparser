@@ -45,7 +45,7 @@ If you have checkout the project from GitHub you can build the project with mave
 mvn clean install
 ```
 
-If you checkout the sources and want to view the project in an IDE, it is best to at minimum to generate the additional source files.  Otherwise you will get many complaints in the IDE
+If you checkout the sources and want to view the project in an IDE, it is best to generate the additional source files; otherwise you will get many compilation complaints in the IDE
 
 ```
 mvn javacc:javacc
