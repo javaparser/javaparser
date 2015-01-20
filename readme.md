@@ -1,11 +1,23 @@
-# Java Parser and Abstract Syntax Tree for Java 8.
+# Java Parser and Abstract Syntax Tree.
 
 This package contains a Java 1.8 Parser with AST generation and visitor support.
-The AST records the source code structure, javadoc and comments.
+
+The AST records the source code structure, javadoc and comments. It is also possible to change the AST nodes or create new ones to modify the source code.
 
 [![Build Status](https://drone.io/github.com/javaparser/javaparser/status.png)](https://drone.io/github.com/javaparser/javaparser/latest)
 
-## Use JavaParser in my Maven-based project
+## Features
+
+*   Light weight
+*   Performant
+*   Easy to use
+*   Modifiable AST
+*   Create AST from scratch
+*   Support of comments
+
+## Dependency Management
+
+The project binaries are available in Maven Central.  Just add the following to your maven configuration or taylor to your own dependency management system.
 
 Current 1.8 Release
 ```xml
@@ -25,23 +37,33 @@ Final 1.7 Release
 </dependency>
 ```
 
+## How To Compile Sources
 
-## How to build
+If you have checkout the project from GitHub you can build the project with maven using:
 
 ```
-mvn javacc:javacc
 mvn clean install
 ```
 
+If you checkout the sources and want to view the project in an IDE, it is best to at minimum to generate the additional source files.  Otherwise you will get many complaints in the IDE
+
+```
+mvn javacc:javacc
+```
+
+## Manual
+
+Examples of how to use the library can be found on the [Manual](https://github.com/javaparser/javaparser/wiki/Manual) page of the wiki
+
 ## Troubleshooting
 
-In the first instance try colsulting the [Wiki](https://github.com/javaparser/javaparser/wiki)
+In the first instance try the [wiki](https://github.com/javaparser/javaparser/wiki)
 
 In the second instance please feel free to open an [issue](https://github.com/javaparser/javaparser/issues).
 
 ## Javadoc
 
-Javadoc can be found [here](http://javaparser.github.io/javaparser/javadoc-current/)
+The libraries javadoc can be found [here](http://javaparser.github.io/javaparser/javadoc-current/)
 
 ## History
 
