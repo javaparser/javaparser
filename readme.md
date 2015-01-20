@@ -1,4 +1,4 @@
-# Java Parser and Abstract Syntax Tree.
+## Java Parser and Abstract Syntax Tree
 
 This package contains a Java 1.8 Parser with AST generation and visitor support.
 
