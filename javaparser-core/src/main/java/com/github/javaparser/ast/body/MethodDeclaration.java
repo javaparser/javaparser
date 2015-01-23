@@ -278,6 +278,9 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
                 sb.append(param.toStringWithoutComments());
             } else {
                 sb.append(param.getType().toStringWithoutComments());
+                if (param.isVarArgs()) {
+                	sb.append("...");
+                }
             }
         }
         sb.append(")");
