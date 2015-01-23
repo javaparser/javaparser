@@ -33,6 +33,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.type.Type;
 
 /**
  * @author Julio Vilmar Gesser
@@ -174,11 +175,11 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     /**
      * The declaration returned has this schema:
      *
-     * [accessSpecifier] className ([paramlist])
+     * [accessSpecifier] className ([paramType [paramName]])
      * [throws exceptionsList]
      */
     @Override
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
@@ -195,7 +196,11 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
             } else {
                 sb.append(", ");
             }
-            sb.append(param.toStringWithoutComments());
+            if (includingParameterName) {
+                sb.append(param.toStringWithoutComments());
+            } else {
+                sb.append(param.getType().toStringWithoutComments());
+            }
         }
         sb.append(")");
         if (includingThrows) {
@@ -214,7 +219,12 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     @Override
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
+        return getDeclarationAsString(includingModifiers, includingThrows, true);
+    }
+
+    @Override
     public String getDeclarationAsString() {
-        return getDeclarationAsString(true, true);
+        return getDeclarationAsString(true, true, true);
     }
 }
