@@ -33,10 +33,6 @@ import java.util.List;
  * @author Julio Vilmar Gesser
  */
 public final class AnnotationDeclaration extends TypeDeclaration implements DocumentableNode {
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     public AnnotationDeclaration() {
     }
@@ -64,7 +60,14 @@ public final class AnnotationDeclaration extends TypeDeclaration implements Docu
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public void setJavaDoc(JavadocComment javadocComment) {
+        this.javadocComment = javadocComment;
     }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return javadocComment;
+    }
+
+    private JavadocComment javadocComment;
 }

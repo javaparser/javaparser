@@ -100,11 +100,13 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
 
     @Override
     public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        this.javadocComment = javadocComment;
     }
 
     @Override
     public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return javadocComment;
     }
+
+    private JavadocComment javadocComment;
 }

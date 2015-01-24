@@ -96,11 +96,6 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 		return typeParameters;
 	}
 
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     public boolean isInterface() {
 		return interface_;
 	}
@@ -125,7 +120,14 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 	}
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public void setJavaDoc(JavadocComment javadocComment) {
+        this.javadocComment = javadocComment;
     }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return javadocComment;
+    }
+
+    private JavadocComment javadocComment;
 }
