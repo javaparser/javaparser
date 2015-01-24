@@ -7,6 +7,10 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
+import java.lang.Override;
+import java.lang.RuntimeException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,24 +20,13 @@ public class PositionUtils {
         sortByBeginPosition(nodes, false);
     }
 
-    
-    public static <T extends Node> void sortByBeginPosition(List<T> nodes, boolean ignoringAnnotations){
-        T[] arrayNodes=(T[])new Node[0];
-        arrayNodes = (T[])nodes.toArray(arrayNodes);
-        for (int i=0;i<arrayNodes.length;i++){
-            for (int j=i+1;j<arrayNodes.length;j++){
-                T nodeI = arrayNodes[i];
-                T nodeJ = arrayNodes[j];
-                if (!areInOrder(nodeI, nodeJ, ignoringAnnotations)){
-                    arrayNodes[i]=nodeJ;
-                    arrayNodes[j]=nodeI;
-                }
+    public static <T extends Node> void sortByBeginPosition(List<T> nodes, final boolean ignoringAnnotations){
+        Collections.sort(nodes, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return PositionUtils.compare(o1, o2, ignoringAnnotations);
             }
-        }
-        for (int i=0;i<arrayNodes.length;i++){
-            nodes.set(i,arrayNodes[i]);
-        }
-
+        });
     }
 
     public static boolean areInOrder(Node a, Node b){
@@ -41,16 +34,35 @@ public class PositionUtils {
     }
 
     public static boolean areInOrder(Node a, Node b, boolean ignoringAnnotations){
+        return compare(a, b, ignoringAnnotations) <= 0;
+    }
+
+    private static int signOf(int value) {
+        if (value < 0) {
+            return -1;
+        } else if (value == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    private static int compare(Node a, Node b, boolean ignoringAnnotations) {
         if (ignoringAnnotations) {
-            return
-                    (beginLineWithoutConsideringAnnotation(a)<beginLineWithoutConsideringAnnotation(b))
-                            || (beginLineWithoutConsideringAnnotation(a)==beginLineWithoutConsideringAnnotation(b)
-                                && beginColumnWithoutConsideringAnnotation(a)<beginColumnWithoutConsideringAnnotation(b) );
+            int signLine = signOf(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b));
+            if (signLine == 0) {
+                return signOf(beginColumnWithoutConsideringAnnotation(a) - beginColumnWithoutConsideringAnnotation(b));
+            } else {
+                return signLine;
+            }
         }
 
-        return
-                (a.getBeginLine()<b.getBeginLine())
-                        || (a.getBeginLine()==b.getBeginLine() && a.getBeginColumn()<b.getBeginColumn() );
+        int signLine = signOf( a.getBeginLine() - b.getBeginLine() );
+        if (signLine == 0) {
+            return signOf(a.getBeginColumn() - b.getBeginColumn());
+        } else {
+            return signLine;
+        }
     }
 
     public static AnnotationExpr getLastAnnotation(Node node) {
