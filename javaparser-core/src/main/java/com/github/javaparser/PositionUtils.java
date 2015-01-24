@@ -18,20 +18,20 @@ public class PositionUtils {
 
     
     public static <T extends Node> void sortByBeginPosition(List<T> nodes, boolean ignoringAnnotations){
-        T[] arrayNodos=(T[])new Node[0];
-        arrayNodos = (T[])nodes.toArray(arrayNodos);
-        for (int i=0;i<arrayNodos.length;i++){
-            for (int j=i+1;j<arrayNodos.length;j++){
-                T nodeI = arrayNodos[i];
-                T nodeJ = arrayNodos[j];
+        T[] arrayNodes=(T[])new Node[0];
+        arrayNodes = (T[])nodes.toArray(arrayNodes);
+        for (int i=0;i<arrayNodes.length;i++){
+            for (int j=i+1;j<arrayNodes.length;j++){
+                T nodeI = arrayNodes[i];
+                T nodeJ = arrayNodes[j];
                 if (!areInOrder(nodeI, nodeJ, ignoringAnnotations)){
-                    arrayNodos[i]=nodeJ;
-                    arrayNodos[j]=nodeI;
+                    arrayNodes[i]=nodeJ;
+                    arrayNodes[j]=nodeI;
                 }
             }
         }
-        for (int i=0;i<arrayNodos.length;i++){
-            nodes.set(i,arrayNodos[i]);
+        for (int i=0;i<arrayNodes.length;i++){
+            nodes.set(i,arrayNodes[i]);
         }
 
     }
