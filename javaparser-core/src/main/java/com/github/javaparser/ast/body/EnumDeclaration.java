@@ -63,10 +63,6 @@ public final class EnumDeclaration extends TypeDeclaration implements Documentab
         return v.visit(this, arg);
     }
 
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
@@ -92,7 +88,14 @@ public final class EnumDeclaration extends TypeDeclaration implements Documentab
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public void setJavaDoc(JavadocComment javadocComment) {
+        this.javadocComment = javadocComment;
     }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return javadocComment;
+    }
+
+    private JavadocComment javadocComment;
 }

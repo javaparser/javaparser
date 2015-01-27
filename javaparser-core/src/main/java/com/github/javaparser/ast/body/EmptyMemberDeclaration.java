@@ -35,11 +35,6 @@ public final class EmptyMemberDeclaration extends BodyDeclaration implements Doc
         super(null);
     }
 
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     public EmptyMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
         super(beginLine, beginColumn, endLine, endColumn, null);
     }
@@ -55,7 +50,14 @@ public final class EmptyMemberDeclaration extends BodyDeclaration implements Doc
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public void setJavaDoc(JavadocComment javadocComment) {
+        this.javadocComment = javadocComment;
     }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return javadocComment;
+    }
+
+    private JavadocComment javadocComment;
 }
