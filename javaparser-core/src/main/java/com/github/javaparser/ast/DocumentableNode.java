@@ -3,11 +3,7 @@ package com.github.javaparser.ast;
 import com.github.javaparser.ast.comments.JavadocComment;
 
 /**
- * Created with IntelliJ IDEA.
- * User: federico
- * Date: 10/24/13
- * Time: 3:24 PM
- * To change this template use File | Settings | File Templates.
+ * Node which can be documented through a Javadoc comment.
  */
 public interface DocumentableNode {
 

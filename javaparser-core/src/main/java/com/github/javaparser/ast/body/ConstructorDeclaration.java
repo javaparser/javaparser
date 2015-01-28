@@ -143,11 +143,6 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         this.name = new NameExpr(name);
     }
 
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     public void setNameExpr(NameExpr name) {
         this.name = name;
     }
@@ -165,11 +160,6 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
 		setAsParentNodeOf(this.typeParameters);
-    }
-
-    @Override
-    public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
@@ -227,4 +217,16 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     public String getDeclarationAsString() {
         return getDeclarationAsString(true, true, true);
     }
+
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        this.javadocComment = javadocComment;
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return javadocComment;
+    }
+
+    private JavadocComment javadocComment;
 }

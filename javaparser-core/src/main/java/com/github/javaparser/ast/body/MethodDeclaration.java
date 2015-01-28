@@ -181,11 +181,6 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         this.name = name;
     }
 
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     public void setParameters(final List<Parameter> parameters) {
 		this.parameters = parameters;
 		setAsParentNodeOf(this.parameters);
@@ -215,10 +210,6 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         this.isDefault = isDefault;
     }
 
-    @Override
-    public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     @Override
     public String getDeclarationAsString() {
@@ -229,7 +220,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
         return getDeclarationAsString(includingModifiers, includingThrows, true);
     }
-
+    
     /**
      * The declaration returned has this schema:
      *
@@ -298,4 +289,16 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         }
         return sb.toString();
     }
+
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        this.javadocComment = javadocComment;
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return javadocComment;
+    }
+
+    private JavadocComment javadocComment;
 }
