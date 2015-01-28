@@ -37,7 +37,11 @@ public class PositionUtils {
         return compare(a, b, ignoringAnnotations) <= 0;
     }
 
-    private static int signOf(int value) {
+    /**
+     * Signum function
+     * See http://en.wikipedia.org/wiki/Sign_function
+     */
+    private static int signum(int value) {
         if (value < 0) {
             return -1;
         } else if (value == 0) {
@@ -49,17 +53,17 @@ public class PositionUtils {
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
         if (ignoringAnnotations) {
-            int signLine = signOf(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b));
+            int signLine = signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b));
             if (signLine == 0) {
-                return signOf(beginColumnWithoutConsideringAnnotation(a) - beginColumnWithoutConsideringAnnotation(b));
+                return signum(beginColumnWithoutConsideringAnnotation(a) - beginColumnWithoutConsideringAnnotation(b));
             } else {
                 return signLine;
             }
         }
 
-        int signLine = signOf( a.getBeginLine() - b.getBeginLine() );
+        int signLine = signum( a.getBeginLine() - b.getBeginLine() );
         if (signLine == 0) {
-            return signOf(a.getBeginColumn() - b.getBeginColumn());
+            return signum(a.getBeginColumn() - b.getBeginColumn());
         } else {
             return signLine;
         }
