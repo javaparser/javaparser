@@ -210,21 +210,27 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         this.isDefault = isDefault;
     }
 
-    /**
-     * The declaration returned has this schema:
-     *
-     * [accessSpecifier] [static] [abstract] [final] [native]
-     * [synchronized] returnType methodName ([paramlist])
-     * [throws exceptionsList]
-     * @return method declaration as String
-     */
+
     @Override
     public String getDeclarationAsString() {
-        return getDeclarationAsString(true, true);
+        return getDeclarationAsString(true, true, true);
     }
 
     @Override
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
+        return getDeclarationAsString(includingModifiers, includingThrows, true);
+    }
+    
+    /**
+     * The declaration returned has this schema:
+     *
+     * [accessSpecifier] [static] [abstract] [final] [native]
+     * [synchronized] returnType methodName ([paramType [paramName]])
+     * [throws exceptionsList]
+     * @return method declaration as String
+     */
+    @Override
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
@@ -252,14 +258,21 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         sb.append(getName());
         sb.append("(");
         boolean firstParam = true;
-        for (Parameter param : parameters)
+        for (Parameter param : getParameters())
         {
             if (firstParam) {
                 firstParam = false;
             } else {
                 sb.append(", ");
             }
-            sb.append(param.toStringWithoutComments());
+            if (includingParameterName) {
+                sb.append(param.toStringWithoutComments());
+            } else {
+                sb.append(param.getType().toStringWithoutComments());
+                if (param.isVarArgs()) {
+                	sb.append("...");
+                }
+            }
         }
         sb.append(")");
         if (includingThrows) {
