@@ -42,13 +42,7 @@ public class PositionUtils {
      * See http://en.wikipedia.org/wiki/Sign_function
      */
     private static int signum(int value) {
-        if (value < 0) {
-            return -1;
-        } else if (value == 0) {
-            return 0;
-        } else {
-            return 1;
-        }
+        return Integer.valueOf(value).compareTo(0);
     }
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
