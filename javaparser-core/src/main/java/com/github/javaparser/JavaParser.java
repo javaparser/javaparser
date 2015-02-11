@@ -109,7 +109,7 @@ public final class JavaParser {
                                         final String encoding, boolean considerComments) throws ParseException {
         try {
             String code = SourcesHelper.streamToString(in, encoding);
-            InputStream in1 = SourcesHelper.stringToStream(code);
+            InputStream in1 = SourcesHelper.stringToStream(code, encoding);
             CompilationUnit cu = new ASTParser(in1, encoding).CompilationUnit();
             if (considerComments){
                 insertComments(cu,code);
