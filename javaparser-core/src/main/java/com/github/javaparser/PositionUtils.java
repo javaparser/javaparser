@@ -8,11 +8,12 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
 import java.lang.Override;
-import java.lang.RuntimeException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
+import static java.lang.Integer.signum;
 
 public class PositionUtils {
 
@@ -35,14 +36,6 @@ public class PositionUtils {
 
     public static boolean areInOrder(Node a, Node b, boolean ignoringAnnotations){
         return compare(a, b, ignoringAnnotations) <= 0;
-    }
-
-    /**
-     * Signum function
-     * See http://en.wikipedia.org/wiki/Sign_function
-     */
-    private static int signum(int value) {
-        return Integer.valueOf(value).compareTo(0);
     }
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
@@ -71,8 +64,7 @@ public class PositionUtils {
                 return null;
             }
             sortByBeginPosition(annotations);
-            AnnotationExpr lastAnnotation = annotations.get(annotations.size()-1);
-            return lastAnnotation;
+            return annotations.get(annotations.size()-1);
         } else {
             return null;
         }
