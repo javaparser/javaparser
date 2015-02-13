@@ -19,16 +19,8 @@ public class SourcesHelper {
     }
 
     static InputStream stringToStream(String s, String encoding) throws UnsupportedEncodingException {
-    	if (encoding == null) {
-            return stringToStream(s);
-        } else {
-            return new ByteArrayInputStream(s.getBytes(encoding));
-        }
-    }
-
-    static InputStream stringToStream(String s) {
-        InputStream in = new ByteArrayInputStream(s.getBytes());
-        return in;
+        byte[] rawData = encoding != null ? s.getBytes(encoding) : s.getBytes();
+        return new ByteArrayInputStream(rawData);
     }
 
     static String readerToString(Reader reader) throws IOException {
