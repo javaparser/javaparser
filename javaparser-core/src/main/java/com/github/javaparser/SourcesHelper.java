@@ -22,8 +22,7 @@ public class SourcesHelper {
     	if (encoding == null) {
             return stringToStream(s);
         } else {
-            InputStream in = new ByteArrayInputStream(s.getBytes(encoding));
-            return in;
+            return new ByteArrayInputStream(s.getBytes(encoding));
         }
     }
 
