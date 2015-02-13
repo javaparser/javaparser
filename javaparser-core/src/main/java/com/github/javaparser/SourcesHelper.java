@@ -25,7 +25,7 @@ public class SourcesHelper {
 
     static String readerToString(Reader reader) throws IOException {
         char[] arr = new char[8*1024]; // 8K at a time
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int numChars;
 
         while ((numChars = reader.read(arr, 0, arr.length)) > 0) {
