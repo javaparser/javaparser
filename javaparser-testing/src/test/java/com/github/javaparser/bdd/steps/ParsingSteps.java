@@ -49,7 +49,7 @@ public class ParsingSteps {
     @Then("method $methodPosition in class $classPosition declaration as a String short form is \"$expectedString\"")
     public void thenMethodInClassDeclarationAsAStringShortFormIs(int methodPosition, int classPosition, String expectedString) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        ClassOrInterfaceDeclaration clazz = (ClassOrInterfaceDeclaration)compilationUnit.getTypes().get(classPosition -1);
+        ClassOrInterfaceDeclaration clazz = (ClassOrInterfaceDeclaration)compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration method = (MethodDeclaration)clazz.getMembers().get(methodPosition -1);
         assertThat(method.getDeclarationAsString(false, false), is(expectedString));
     }
@@ -176,8 +176,8 @@ public class ParsingSteps {
 
     private void assertAllNodesOfTheCompilationUnitHaveTheirParentSet(String stateKey) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get(stateKey);
-        ParentVerifier parentVerifier = new ParentVerifier();
-        parentVerifier.visit(compilationUnit, null);
+        ExistenceOfParentNodeVerifier parentVerifier = new ExistenceOfParentNodeVerifier();
+        parentVerifier.verify(compilationUnit);
     }
 
 }
