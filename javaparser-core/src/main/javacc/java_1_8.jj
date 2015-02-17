@@ -111,7 +111,7 @@ final class ASTParser {
         throw e;
     }
 
-    private Expression generateLambda(Expression ret, Statement lambdaBody) {
+    private Expression generateLambda(Expression ret, Statement lambdaBody) throws ParseException {
 	    if (ret instanceof EnclosedExpr) {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
@@ -130,7 +130,7 @@ final class ASTParser {
 	        ret.setEndLine(lambdaBody.getEndLine());
 	        ret.setEndColumn(lambdaBody.getEndColumn());
 	    } else {
-	        ret = null;
+	        throw new ParseException("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
 	    }
 	    return ret;
     }
