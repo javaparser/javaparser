@@ -8,7 +8,6 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import org.hamcrest.Matchers;
 import org.jbehave.core.annotations.Then;
 
 import java.util.Map;
@@ -16,7 +15,6 @@ import java.util.Map;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -86,25 +84,13 @@ public class ParsingSteps {
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition body is \"$expectedBody\"")
     public void thenLambdaInStatementInMethodInClassBody(int statementPosition, int methodPosition, int classPosition,
                                                          String expectedBody) {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit,
-                methodPosition, classPosition);
-        Statement statement =  method.getBody().getStmts().get(statementPosition-1);
-        VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0)
-                .getChildrenNodes().get(1);
-        LambdaExpr lambdaExpr = (LambdaExpr) variableDeclarator.getInit();
+        LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         assertThat(lambdaExpr.getBody().toString(), is(expectedBody));
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition block statement is null")
     public void thenLambdaInStatementInMethodInClassBlockStatementIsNull(int statementPosition, int methodPosition, int classPosition) {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit,
-                methodPosition, classPosition);
-        Statement statement =  method.getBody().getStmts().get(statementPosition-1);
-        VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0)
-                .getChildrenNodes().get(1);
-        LambdaExpr lambdaExpr = (LambdaExpr) variableDeclarator.getInit();
+        LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
         assertThat(blockStmt.getStmts(), is(nullValue()));
     }
@@ -112,13 +98,7 @@ public class ParsingSteps {
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition block statement is \"$expectedBody\"")
     public void thenLambdaInStatementInMethodInClassBlockStatement(int statementPosition, int methodPosition, int classPosition,
                                                                    String expectedBody) {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit,
-                methodPosition, classPosition);
-        Statement statement =  method.getBody().getStmts().get(statementPosition-1);
-        VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0)
-                .getChildrenNodes().get(1);
-        LambdaExpr lambdaExpr = (LambdaExpr) variableDeclarator.getInit();
+        LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
         Statement lambdaStmt = blockStmt.getStmts().get(0);
         assertThat(lambdaStmt.toString(), is(expectedBody));
@@ -126,15 +106,16 @@ public class ParsingSteps {
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition is parent of contained body")
     public void thenLambdaInStatementInMethodInClassIsParentOfContainedBody(int statementPosition, int methodPosition, int classPosition) {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit,
-                methodPosition, classPosition);
-        Statement statement =  method.getBody().getStmts().get(statementPosition-1);
-        VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0)
-                .getChildrenNodes().get(1);
-        LambdaExpr lambdaExpr = (LambdaExpr) variableDeclarator.getInit();
+        LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         Statement body = lambdaExpr.getBody();
         assertThat(body.getParentNode(), is((Node) lambdaExpr));
+    }
+
+    @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition is parent of contained parameter")
+    public void thenLambdaInStatementInMethodInClassIsParentOfContainedParameter(int statementPosition, int methodPosition, int classPosition) {
+        LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
+        Parameter parameter = lambdaExpr.getParameters().get(0);
+        assertThat(parameter.getParentNode(), is((Node) lambdaExpr));
     }
 
     @Then("method reference in statement $statementPosition in method $methodPosition in class $classPosition scope is $expectedName")
@@ -143,7 +124,7 @@ public class ParsingSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration methodUnderTest = getMethodByPositionAndClassPosition(compilationUnit,
                 methodPosition, classPosition);
-        Statement statementUnderTest =  methodUnderTest.getBody().getStmts().get(statementPosition-1);
+        Statement statementUnderTest =  methodUnderTest.getBody().getStmts().get(statementPosition - 1);
         MethodReferenceExpr methodReferenceUnderTest =
                 (MethodReferenceExpr) statementUnderTest.getChildrenNodes().get(0).getChildrenNodes().get(2);
         assertThat(methodReferenceUnderTest.getScope().toString(), is(expectedName));
@@ -176,4 +157,13 @@ public class ParsingSteps {
                 methodPosition, classPosition);
         assertThat(methodUnderTest.isDefault(), is(false));
     }
+
+    private LambdaExpr getLambdaExprInStatementInMethodInClass(int statementPosition, int methodPosition, int classPosition) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
+        Statement statement =  method.getBody().getStmts().get(statementPosition - 1);
+        VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0).getChildrenNodes().get(1);
+        return (LambdaExpr) variableDeclarator.getInit();
+    }
+
 }

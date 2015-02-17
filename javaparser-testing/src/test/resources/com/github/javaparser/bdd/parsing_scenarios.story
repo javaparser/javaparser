@@ -166,6 +166,26 @@ Then lambda in statement 1 in method 1 in class 1 is parent of contained body
 Then lambda in statement 3 in method 1 in class 1 is parent of contained body
 
 
+Scenario: A class with parameterized Lambdas is parsed by the Java Parser
+
+Given a CompilationUnit
+When the following source is parsed:
+package com.github.javapasrser.bdd.parsing;
+import java.util.function.Function;
+public class ParameterizedLambdas {
+    public static void main(String[] args) {
+        Function<Integer,String> f1 = (Integer i) -> String.valueOf(i);
+        Function<Integer,String> f2 = (i) -> String.valueOf(i);
+        Function<Integer,String> f3 = i -> String.valueOf(i);
+    }
+}
+Then lambda in statement 1 in method 1 in class 1 is parent of contained parameter
+Then lambda in statement 2 in method 1 in class 1 is parent of contained parameter
+Then lambda in statement 3 in method 1 in class 1 is parent of contained parameter
+Then lambda in statement 1 in method 1 in class 1 is parent of contained body
+Then lambda in statement 2 in method 1 in class 1 is parent of contained body
+Then lambda in statement 3 in method 1 in class 1 is parent of contained body
+
 
 Scenario: A class with a method reference is parsed by the Java Parser
 
