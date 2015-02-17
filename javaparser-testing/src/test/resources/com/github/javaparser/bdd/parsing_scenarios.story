@@ -147,6 +147,7 @@ Scenario: A class with a Lambdas is parsed by the Java Parser
 Given a CompilationUnit
 When the following source is parsed:
 package bdd.samples;
+import java.util.stream.Stream;
 public class Lambdas {
 
     public static void main(String[] args) {
@@ -154,6 +155,8 @@ public class Lambdas {
         Runnable r1 = () -> System.out.println("Hello world!");
         Runnable r2 = () -> {};
         Runnable r3 = () -> { System.out.println("Hello world two!"); };
+
+        Stream<CharSequence> stream = Stream.generate((Supplier<CharSequence>) () -> "foo");
     }
 }
 Then lambda in statement 1 in method 1 in class 1 is called r1
@@ -164,6 +167,8 @@ Then lambda in statement 2 in method 1 in class 1 block statement is null
 Then lambda in statement 3 in method 1 in class 1 block statement is "System.out.println("Hello world two!");"
 Then lambda in statement 1 in method 1 in class 1 is parent of contained body
 Then lambda in statement 3 in method 1 in class 1 is parent of contained body
+
+Then lambda in method call in statement 4 in method 1 in class 1 body is ""foo";"
 
 
 Scenario: A class with parameterized Lambdas is parsed by the Java Parser
