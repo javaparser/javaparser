@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -83,7 +84,7 @@ public abstract class BaseParameter extends Node {
      */
     public void setAnnotations(List<AnnotationExpr> annotations) {
         if (null == annotations) {
-            annotations = Collections.emptyList();
+            annotations = new ArrayList<AnnotationExpr>();
         }
         this.annotations = annotations;
         setAsParentNodeOf(this.annotations);
