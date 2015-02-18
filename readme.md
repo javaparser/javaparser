@@ -4,6 +4,8 @@ This package contains a Java 1.8 Parser with AST generation and visitor support.
 
 The AST records the source code structure, javadoc and comments. It is also possible to change the AST nodes or create new ones to modify the source code.
 
+[![Join the chat at https://gitter.im/javaparser/javaparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/javaparser/javaparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://drone.io/github.com/javaparser/javaparser/status.png)](https://drone.io/github.com/javaparser/javaparser/latest)
 
 ## Features
