@@ -24,6 +24,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public final class BlockStmt extends Statement {
 
-	private List<Statement> stmts;
+	private List<Statement> stmts = Collections.emptyList();
 
 	public BlockStmt() {
 	}

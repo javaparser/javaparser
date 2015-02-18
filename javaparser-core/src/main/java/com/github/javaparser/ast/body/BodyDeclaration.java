@@ -25,6 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ import java.util.List;
  */
 public abstract class BodyDeclaration extends Node implements AnnotableNode {
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotations = Collections.emptyList();
 
     public BodyDeclaration() {
     }
@@ -53,7 +54,15 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
         return annotations;
     }
 
+    /**
+     *
+     * @param annotations a null value is currently treated as an empty list. This behavior could change
+     *                    in the future, so please avoid passing null
+     */
     public final void setAnnotations(List<AnnotationExpr> annotations) {
+        if (annotations == null) {
+            annotations = Collections.emptyList();
+        }
         this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
     }

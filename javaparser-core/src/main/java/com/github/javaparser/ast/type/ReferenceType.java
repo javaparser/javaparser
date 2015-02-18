@@ -25,6 +25,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public final class ReferenceType extends Type {
 
 	private int arrayCount;
 
-    private List<List<AnnotationExpr>> arraysAnnotations;
+    private List<List<AnnotationExpr>> arraysAnnotations = Collections.emptyList();
 
     public ReferenceType() {
 	}

@@ -28,6 +28,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,9 +36,9 @@ import java.util.List;
  */
 public final class EnumDeclaration extends TypeDeclaration implements DocumentableNode {
 
-    private List<ClassOrInterfaceType> implementsList;
+    private List<ClassOrInterfaceType> implementsList = Collections.emptyList();
 
-    private List<EnumConstantDeclaration> entries;
+    private List<EnumConstantDeclaration> entries = Collections.emptyList();
 
     public EnumDeclaration() {
     }

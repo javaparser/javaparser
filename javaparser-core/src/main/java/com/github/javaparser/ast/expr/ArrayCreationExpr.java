@@ -25,6 +25,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,9 +39,9 @@ public final class ArrayCreationExpr extends Expression {
 
     private ArrayInitializerExpr initializer;
 
-    private List<Expression> dimensions;
+    private List<Expression> dimensions = Collections.emptyList();
 
-    private List<List<AnnotationExpr>> arraysAnnotations;
+    private List<List<AnnotationExpr>> arraysAnnotations = Collections.emptyList();
 
     public ArrayCreationExpr() {
     }

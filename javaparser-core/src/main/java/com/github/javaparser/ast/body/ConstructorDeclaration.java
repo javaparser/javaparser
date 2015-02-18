@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.body;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -43,13 +44,13 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     private int modifiers;
 
-    private List<TypeParameter> typeParameters;
+    private List<TypeParameter> typeParameters = Collections.emptyList();
 
     private NameExpr name;
 
-    private List<Parameter> parameters;
+    private List<Parameter> parameters = Collections.emptyList();
 
-    private List<NameExpr> throws_;
+    private List<NameExpr> throws_ = Collections.emptyList();
 
     private BlockStmt block;
 

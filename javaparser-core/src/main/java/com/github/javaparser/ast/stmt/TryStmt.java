@@ -25,6 +25,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,11 +33,11 @@ import java.util.List;
  */
 public final class TryStmt extends Statement {
 	
-	private List<VariableDeclarationExpr> resources;
+	private List<VariableDeclarationExpr> resources = Collections.emptyList();
 
 	private BlockStmt tryBlock;
 
-	private List<CatchClause> catchs;
+	private List<CatchClause> catchs = Collections.emptyList();
 
 	private BlockStmt finallyBlock;
 

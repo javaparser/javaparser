@@ -25,6 +25,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,11 +33,11 @@ import java.util.List;
  */
 public final class ForStmt extends Statement {
 
-	private List<Expression> init;
+	private List<Expression> init = Collections.emptyList();
 
 	private Expression compare;
 
-	private List<Expression> update;
+	private List<Expression> update = Collections.emptyList();
 
 	private Statement body;
 

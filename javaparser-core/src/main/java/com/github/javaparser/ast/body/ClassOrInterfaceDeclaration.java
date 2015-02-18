@@ -29,6 +29,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,12 +39,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 
 	private boolean interface_;
 
-	private List<TypeParameter> typeParameters;
+	private List<TypeParameter> typeParameters = Collections.emptyList();
 
 	// Can contain more than one item if this is an interface
-	private List<ClassOrInterfaceType> extendsList;
+	private List<ClassOrInterfaceType> extendsList = Collections.emptyList();
 
-	private List<ClassOrInterfaceType> implementsList;
+	private List<ClassOrInterfaceType> implementsList = Collections.emptyList();
 
 	public ClassOrInterfaceDeclaration() {
 	}
@@ -100,12 +101,30 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 		return interface_;
 	}
 
+    /**
+     * 
+     * @param extendsList a null value is currently treated as an empty list. This behavior could change
+     *                    in the future, so please avoid passing null
+     */
 	public void setExtends(final List<ClassOrInterfaceType> extendsList) {
+        if (extendsList == null) {
+            setExtends(Collections.<ClassOrInterfaceType>emptyList());
+            return;
+        }
 		this.extendsList = extendsList;
 		setAsParentNodeOf(this.extendsList);
 	}
 
+    /**
+     * 
+     * @param implementsList a null value is currently treated as an empty list. This behavior could change
+     *                       in the future, so please avoid passing null
+     */
 	public void setImplements(final List<ClassOrInterfaceType> implementsList) {
+        if (implementsList == null) {
+            setImplements(Collections.<ClassOrInterfaceType>emptyList());
+            return;
+        }
 		this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
 	}
@@ -114,7 +133,16 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 		this.interface_ = interface_;
 	}
 
+    /**
+     *
+     * @param typeParameters a null value is currently treated as an empty list. This behavior could change
+     *                       in the future, so please avoid passing null
+     */
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
+        if (typeParameters == null) {
+            setTypeParameters(Collections.<TypeParameter>emptyList());
+            return;
+        }
 		this.typeParameters = typeParameters;
 		setAsParentNodeOf(this.typeParameters);
 	}

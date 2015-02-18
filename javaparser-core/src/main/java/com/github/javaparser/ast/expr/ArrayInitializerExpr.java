@@ -24,6 +24,7 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public final class ArrayInitializerExpr extends Expression {
 
-    private List<Expression> values;
+    private List<Expression> values = Collections.emptyList();
 
     public ArrayInitializerExpr() {
     }

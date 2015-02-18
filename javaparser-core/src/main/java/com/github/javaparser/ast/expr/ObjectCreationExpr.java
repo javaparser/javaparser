@@ -27,6 +27,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,11 +39,11 @@ public final class ObjectCreationExpr extends Expression {
 
 	private ClassOrInterfaceType type;
 
-	private List<Type> typeArgs;
+	private List<Type> typeArgs = Collections.emptyList();
 
-	private List<Expression> args;
+	private List<Expression> args = Collections.emptyList();
 
-	private List<BodyDeclaration> anonymousClassBody;
+	private List<BodyDeclaration> anonymousClassBody = Collections.emptyList();
 
 	public ObjectCreationExpr() {
 	}

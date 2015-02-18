@@ -25,6 +25,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public final class FieldAccessExpr extends Expression {
 
 	private Expression scope;
 
-	private List<Type> typeArgs;
+	private List<Type> typeArgs = Collections.emptyList();
 
 	private NameExpr field;
 

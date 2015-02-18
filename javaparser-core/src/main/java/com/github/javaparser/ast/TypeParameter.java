@@ -26,6 +26,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,9 +45,9 @@ public final class TypeParameter extends Node implements NamedNode {
 
 	private String name;
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotations = Collections.emptyList();
 
-	private List<ClassOrInterfaceType> typeBound;
+	private List<ClassOrInterfaceType> typeBound = Collections.emptyList();
 
 	public TypeParameter() {
 	}

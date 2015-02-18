@@ -33,6 +33,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -43,17 +44,17 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	private int modifiers;
 
-	private List<TypeParameter> typeParameters;
+	private List<TypeParameter> typeParameters = Collections.emptyList();
 
 	private Type type;
 
 	private NameExpr name;
 
-	private List<Parameter> parameters;
+	private List<Parameter> parameters = Collections.emptyList();
 
 	private int arrayCount;
 
-	private List<NameExpr> throws_;
+	private List<NameExpr> throws_ = Collections.emptyList();
 
 	private BlockStmt body;
 

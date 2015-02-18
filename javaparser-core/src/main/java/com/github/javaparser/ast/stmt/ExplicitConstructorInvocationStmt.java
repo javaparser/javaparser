@@ -26,6 +26,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,13 +34,13 @@ import java.util.List;
  */
 public final class ExplicitConstructorInvocationStmt extends Statement {
 
-	private List<Type> typeArgs;
+	private List<Type> typeArgs = Collections.emptyList();
 
 	private boolean isThis;
 
 	private Expression expr;
 
-	private List<Expression> args;
+	private List<Expression> args = Collections.emptyList();
 
 	public ExplicitConstructorInvocationStmt() {
 	}

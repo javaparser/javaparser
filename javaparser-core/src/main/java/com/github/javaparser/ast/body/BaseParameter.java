@@ -77,9 +77,13 @@ public abstract class BaseParameter extends Node {
         return modifiers;
     }
 
+    /**
+     * @param annotations a null value is currently treated as an empty list. This behavior could change
+     *                    in the future, so please avoid passing null
+     */
     public void setAnnotations(List<AnnotationExpr> annotations) {
         if (null == annotations) {
-            throw new NullPointerException();
+            annotations = Collections.emptyList();
         }
         this.annotations = annotations;
         setAsParentNodeOf(this.annotations);

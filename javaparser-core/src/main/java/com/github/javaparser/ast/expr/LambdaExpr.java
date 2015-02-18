@@ -27,6 +27,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class LambdaExpr extends Expression {
 
-	private List<Parameter> parameters;
+	private List<Parameter> parameters = Collections.emptyList();
 
 	private boolean parametersEnclosed;
 

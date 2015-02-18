@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,9 +39,9 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
 
     private String name;
 
-    private List<Expression> args;
+    private List<Expression> args = Collections.emptyList();
 
-    private List<BodyDeclaration> classBody;
+    private List<BodyDeclaration> classBody = Collections.emptyList();
 
     public EnumConstantDeclaration() {
     }

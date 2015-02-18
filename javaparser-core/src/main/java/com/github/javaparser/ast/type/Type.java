@@ -24,6 +24,7 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public abstract class Type extends Node {
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotations = Collections.emptyList();
 
     public Type() {
     }

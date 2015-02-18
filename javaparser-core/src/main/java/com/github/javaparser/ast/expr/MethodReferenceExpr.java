@@ -25,6 +25,7 @@ import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class MethodReferenceExpr extends Expression {
 
     private Expression scope;
 
-    private List<TypeParameter> typeParameters;
+    private List<TypeParameter> typeParameters = Collections.emptyList();
 
     private String identifier;
 

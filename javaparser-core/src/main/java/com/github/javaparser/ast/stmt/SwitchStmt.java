@@ -25,6 +25,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public final class SwitchStmt extends Statement {
 
 	private Expression selector;
 
-	private List<SwitchEntryStmt> entries;
+	private List<SwitchEntryStmt> entries = Collections.emptyList();
 
 	public SwitchStmt() {
 	}

@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
 
     private Type type;
 
-    private List<VariableDeclarator> variables;
+    private List<VariableDeclarator> variables = Collections.emptyList();
 
     public FieldDeclaration() {
     }

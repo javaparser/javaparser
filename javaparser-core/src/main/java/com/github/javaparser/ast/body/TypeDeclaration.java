@@ -25,6 +25,7 @@ import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 
 	private int modifiers;
 
-	private List<BodyDeclaration> members;
+	private List<BodyDeclaration> members = Collections.emptyList();
 
 	public TypeDeclaration() {
 	}

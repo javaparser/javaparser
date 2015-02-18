@@ -31,6 +31,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,9 +53,9 @@ public final class CompilationUnit extends Node {
 
     private PackageDeclaration pakage;
 
-    private List<ImportDeclaration> imports;
+    private List<ImportDeclaration> imports = Collections.emptyList();
 
-    private List<TypeDeclaration> types;
+    private List<TypeDeclaration> types = Collections.emptyList();
 
     public CompilationUnit() {
     }
