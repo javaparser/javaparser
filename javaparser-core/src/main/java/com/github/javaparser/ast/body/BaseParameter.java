@@ -24,12 +24,13 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class BaseParameter extends Node {
     private int modifiers;
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotations = Collections.emptyList();
     
     private VariableDeclaratorId id;
     
@@ -77,6 +78,9 @@ public abstract class BaseParameter extends Node {
     }
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
+        if (null == annotations) {
+            throw new NullPointerException();
+        }
         this.annotations = annotations;
         setAsParentNodeOf(this.annotations);
     }
