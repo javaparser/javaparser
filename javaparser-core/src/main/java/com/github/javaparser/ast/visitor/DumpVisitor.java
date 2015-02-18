@@ -22,11 +22,8 @@
 package com.github.javaparser.ast.visitor;
 
 import static com.github.javaparser.PositionUtils.sortByBeginPosition;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
+
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -152,38 +149,38 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		return printer.getSource();
 	}
 
-	private void printModifiers(final int modifiers) {
-		if (ModifierSet.isPrivate(modifiers)) {
+	private void printModifiers(NodeWithModifiers node) {
+		if (ModifierSet.isPrivate(node)) {
 			printer.print("private ");
 		}
-		if (ModifierSet.isProtected(modifiers)) {
+		if (ModifierSet.isProtected(node)) {
 			printer.print("protected ");
 		}
-		if (ModifierSet.isPublic(modifiers)) {
+		if (ModifierSet.isPublic(node)) {
 			printer.print("public ");
 		}
-		if (ModifierSet.isAbstract(modifiers)) {
+		if (ModifierSet.isAbstract(node)) {
 			printer.print("abstract ");
 		}
-		if (ModifierSet.isStatic(modifiers)) {
+		if (ModifierSet.isStatic(node)) {
 			printer.print("static ");
 		}
-		if (ModifierSet.isFinal(modifiers)) {
+		if (ModifierSet.isFinal(node)) {
 			printer.print("final ");
 		}
-		if (ModifierSet.isNative(modifiers)) {
+		if (ModifierSet.isNative(node)) {
 			printer.print("native ");
 		}
-		if (ModifierSet.isStrictfp(modifiers)) {
+		if (ModifierSet.isStrictfp(node)) {
 			printer.print("strictfp ");
 		}
-		if (ModifierSet.isSynchronized(modifiers)) {
+		if (ModifierSet.isSynchronized(node)) {
 			printer.print("synchronized ");
 		}
-		if (ModifierSet.isTransient(modifiers)) {
+		if (ModifierSet.isTransient(node)) {
 			printer.print("transient ");
 		}
-		if (ModifierSet.isVolatile(modifiers)) {
+		if (ModifierSet.isVolatile(node)) {
 			printer.print("volatile ");
 		}
 	}
@@ -341,7 +338,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 
 		if (n.isInterface()) {
 			printer.print("interface ");
@@ -530,7 +527,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 		n.getType().accept(this, arg);
 
 		printer.print(" ");
@@ -953,7 +950,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 
 		printTypeParameters(n.getTypeParameters(), arg);
 		if (n.getTypeParameters() != null) {
@@ -993,7 +990,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 		if (n.isDefault()) {
 			printer.print("default ");
 		}
@@ -1043,7 +1040,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	@Override public void visit(final Parameter n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 		if (n.getType() != null) {
 			n.getType().accept(this, arg);
 		}
@@ -1056,7 +1053,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	
     @Override public void visit(MultiTypeParameter n, Object arg) {
         printAnnotations(n.getAnnotations(), arg);
-        printModifiers(n.getModifiers());
+        printModifiers(n);
 
         Iterator<Type> types = n.getTypes().iterator();
         types.next().accept(this, arg);
@@ -1089,7 +1086,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	@Override public void visit(final VariableDeclarationExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 
 		n.getType().accept(this, arg);
 		printer.print(" ");
@@ -1215,7 +1212,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 
 		printer.print("enum ");
 		printer.print(n.getName());
@@ -1452,7 +1449,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 
 		printer.print("@interface ");
 		printer.print(n.getName());
@@ -1469,7 +1466,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
-		printModifiers(n.getModifiers());
+		printModifiers(n);
 
 		n.getType().accept(this, arg);
 		printer.print(" ");

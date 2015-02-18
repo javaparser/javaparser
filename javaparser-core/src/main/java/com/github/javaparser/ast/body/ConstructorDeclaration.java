@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -34,12 +35,11 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.type.Type;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode {
+public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, NodeWithModifiers {
 
     private int modifiers;
 
@@ -173,7 +173,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(this);
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
         }

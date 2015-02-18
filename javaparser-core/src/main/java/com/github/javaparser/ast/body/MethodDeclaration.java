@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode {
+public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, NodeWithModifiers {
 
 	private int modifiers;
 
@@ -234,22 +235,22 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(this);
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
-            if (ModifierSet.isStatic(getModifiers())){
+            if (ModifierSet.isStatic(this)){
                 sb.append("static ");
             }
-            if (ModifierSet.isAbstract(getModifiers())){
+            if (ModifierSet.isAbstract(this)){
                 sb.append("abstract ");
             }
-            if (ModifierSet.isFinal(getModifiers())){
+            if (ModifierSet.isFinal(this)){
                 sb.append("final ");
             }
-            if (ModifierSet.isNative(getModifiers())){
+            if (ModifierSet.isNative(this)){
                 sb.append("native ");
             }
-            if (ModifierSet.isSynchronized(getModifiers())){
+            if (ModifierSet.isSynchronized(this)){
                 sb.append("synchronized ");
             }
         }

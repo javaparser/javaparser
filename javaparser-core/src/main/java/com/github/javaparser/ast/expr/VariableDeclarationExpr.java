@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
@@ -32,7 +33,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarationExpr extends Expression {
+public final class VariableDeclarationExpr extends Expression implements NodeWithModifiers {
 
 	private int modifiers;
 

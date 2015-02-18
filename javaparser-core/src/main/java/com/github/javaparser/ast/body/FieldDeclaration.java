@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.DocumentableNode;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
@@ -34,7 +35,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration implements DocumentableNode {
+public final class FieldDeclaration extends BodyDeclaration implements DocumentableNode, NodeWithModifiers {
 
     private int modifiers;
 

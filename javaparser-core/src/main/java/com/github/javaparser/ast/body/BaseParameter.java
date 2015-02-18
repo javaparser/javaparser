@@ -22,11 +22,12 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
 import java.util.List;
 
-public abstract class BaseParameter extends Node {
+public abstract class BaseParameter extends Node implements NodeWithModifiers {
     private int modifiers;
 
     private List<AnnotationExpr> annotations;

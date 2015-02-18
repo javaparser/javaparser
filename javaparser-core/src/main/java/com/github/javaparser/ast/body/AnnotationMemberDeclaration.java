@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -35,7 +36,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode {
+public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode, NodeWithModifiers {
 
     private int modifiers;
 

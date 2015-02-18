@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class TypeDeclaration extends BodyDeclaration implements NamedNode {
+public abstract class TypeDeclaration extends BodyDeclaration implements NamedNode, NodeWithModifiers {
 
 	private NameExpr name;
 
