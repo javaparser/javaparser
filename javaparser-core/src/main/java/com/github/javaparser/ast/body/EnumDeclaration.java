@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration implements DocumentableNode{
+public final class EnumDeclaration extends TypeDeclaration implements DocumentableNode {
 
     private List<ClassOrInterfaceType> implementsList;
 

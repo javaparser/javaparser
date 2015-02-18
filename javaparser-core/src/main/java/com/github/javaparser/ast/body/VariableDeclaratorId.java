@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -28,7 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclaratorId extends Node {
+public final class VariableDeclaratorId extends Node implements NamedNode {
 
     private String name;
 
