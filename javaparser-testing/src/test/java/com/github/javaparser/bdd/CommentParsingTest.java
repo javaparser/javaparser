@@ -1,23 +1,21 @@
 package com.github.javaparser.bdd;
 
-import com.github.javaparser.bdd.embedders.CommentParsingEmbedder;
-import org.jbehave.core.embedder.Embedder;
-import org.jbehave.core.io.StoryFinder;
-import org.junit.Test;
+import com.github.javaparser.bdd.steps.CommentParsingSteps;
+import de.codecentric.jbehave.junit.monitoring.JUnitReportingRunner;
+import org.jbehave.core.steps.InjectableStepsFactory;
+import org.jbehave.core.steps.InstanceStepsFactory;
+import org.junit.runner.RunWith;
 
-import java.util.List;
+@RunWith(JUnitReportingRunner.class)
+public class CommentParsingTest extends BasicJBehaveTest {
 
-import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
-
-public class CommentParsingTest {
-
-    @Test
-    public void run() throws Throwable {
-        // Embedder defines the configuration and candidate steps
-        Embedder embedder = new CommentParsingEmbedder();
-        List<String> storyPaths = new StoryFinder().findPaths(codeLocationFromClass(this.getClass()), "**/bdd/comment*.story", "");
-        embedder.runStoriesAsPaths(storyPaths);
+    @Override
+    public InjectableStepsFactory stepsFactory() {
+        return new InstanceStepsFactory(configuration(), new CommentParsingSteps());
     }
 
+    public CommentParsingTest() {
+        super("**/bdd/comment*.story");
+    }
 }
 
