@@ -55,6 +55,9 @@ public abstract class Type extends Node {
     }
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
+        if (annotations == null) {
+            annotations = Collections.emptyList();
+        }
         this.annotations = annotations;
     }
 

@@ -100,6 +100,9 @@ public final class PackageDeclaration extends Node {
      *            the annotations to set
      */
     public void setAnnotations(List<AnnotationExpr> annotations) {
+        if (annotations == null) {
+            annotations = Collections.emptyList();
+        }
         this.annotations = annotations;
         setAsParentNodeOf(this.annotations);
     }

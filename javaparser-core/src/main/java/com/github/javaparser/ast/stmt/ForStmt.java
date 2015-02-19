@@ -100,12 +100,20 @@ public final class ForStmt extends Statement {
 	}
 
 	public void setInit(final List<Expression> init) {
-		this.init = init;
+		if (init == null) {
+			this.init = Collections.emptyList();
+		} else {
+			this.init = init;
+		}
 		setAsParentNodeOf(this.init);
 	}
 
 	public void setUpdate(final List<Expression> update) {
-		this.update = update;
+		if (update == null) {
+			this.update = Collections.emptyList();
+		} else {
+			this.update = update;
+		}
 		setAsParentNodeOf(this.update);
 	}
 }

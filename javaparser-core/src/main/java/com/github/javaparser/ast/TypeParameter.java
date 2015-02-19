@@ -116,7 +116,11 @@ public final class TypeParameter extends Node implements NamedNode {
 	 *            the typeBound to set
 	 */
 	public void setTypeBound(final List<ClassOrInterfaceType> typeBound) {
-		this.typeBound = typeBound;
+		if (typeBound == null) {
+			this.typeBound = Collections.emptyList();
+		} else {
+			this.typeBound = typeBound;
+		}
 		setAsParentNodeOf(typeBound);
 	}
 
@@ -125,6 +129,9 @@ public final class TypeParameter extends Node implements NamedNode {
     }
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
+		if (annotations == null) {
+			annotations = Collections.emptyList();
+		}
         this.annotations = annotations;
     }
 }

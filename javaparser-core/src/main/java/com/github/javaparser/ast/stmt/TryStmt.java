@@ -88,7 +88,11 @@ public final class TryStmt extends Statement {
 	}
 
 	public void setCatchs(final List<CatchClause> catchs) {
-		this.catchs = catchs;
+		if (catchs == null) {
+			this.catchs = Collections.emptyList();
+		} else {
+			this.catchs = catchs;
+		}
 		setAsParentNodeOf(this.catchs);
 	}
 
@@ -103,7 +107,11 @@ public final class TryStmt extends Statement {
 	}
 	
 	public void setResources(List<VariableDeclarationExpr> resources) {
-		this.resources = resources;
+		if (resources == null) {
+			this.resources = Collections.emptyList();
+		} else {
+			this.resources = resources;
+		}
 		setAsParentNodeOf(this.resources);
 	}
 }

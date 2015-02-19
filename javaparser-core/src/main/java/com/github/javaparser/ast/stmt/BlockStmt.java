@@ -62,7 +62,11 @@ public final class BlockStmt extends Statement {
 	}
 
 	public void setStmts(final List<Statement> stmts) {
-		this.stmts = stmts;
+		if (stmts == null) {
+			this.stmts = Collections.emptyList();
+		} else {
+			this.stmts = stmts;
+		}
 		setAsParentNodeOf(this.stmts);
 	}
 }

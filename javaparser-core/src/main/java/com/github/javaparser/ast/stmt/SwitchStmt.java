@@ -73,7 +73,11 @@ public final class SwitchStmt extends Statement {
 	}
 
 	public void setEntries(final List<SwitchEntryStmt> entries) {
-		this.entries = entries;
+		if (entries == null) {
+			this.entries = Collections.emptyList();
+		} else {
+			this.entries = entries;
+		}
 		setAsParentNodeOf(this.entries);
 	}
 

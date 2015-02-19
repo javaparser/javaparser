@@ -152,6 +152,9 @@ public final class CompilationUnit extends Node {
      *            the list of imports
      */
     public void setImports(List<ImportDeclaration> imports) {
+        if (imports == null) {
+            imports = Collections.emptyList();
+        }
         this.imports = imports;
 		setAsParentNodeOf(this.imports);
     }
@@ -175,6 +178,9 @@ public final class CompilationUnit extends Node {
      *            the lis of types
      */
     public void setTypes(List<TypeDeclaration> types) {
+        if (types == null) {
+            types = Collections.emptyList();
+        }
         this.types = types;
 		setAsParentNodeOf(this.types);
     }

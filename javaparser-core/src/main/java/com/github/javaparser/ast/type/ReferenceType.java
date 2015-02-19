@@ -121,6 +121,10 @@ public final class ReferenceType extends Type {
 	 * For a description of the arrayAnnotations field refer to {@link #getArraysAnnotations()}
 	 */
     public void setArraysAnnotations(List<List<AnnotationExpr>> arraysAnnotations) {
-        this.arraysAnnotations = arraysAnnotations;
+		if (arraysAnnotations == null) {
+			this.arraysAnnotations = Collections.emptyList();
+		} else {
+			this.arraysAnnotations = arraysAnnotations;
+		}
     }
 }

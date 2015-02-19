@@ -90,7 +90,11 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public void setArgs(final List<Expression> args) {
-		this.args = args;
+		if (args == null) {
+			this.args = Collections.emptyList();
+		} else {
+			this.args = args;
+		}
 		setAsParentNodeOf(this.args);
 	}
 
@@ -104,7 +108,11 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = typeArgs;
+		if (typeArgs == null) {
+			this.typeArgs = Collections.emptyList();
+		} else {
+			this.typeArgs = typeArgs;
+		}
 		setAsParentNodeOf(this.typeArgs);
 	}
 }
