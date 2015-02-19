@@ -79,11 +79,17 @@ public final class EnumDeclaration extends TypeDeclaration implements Documentab
     }
 
     public void setEntries(List<EnumConstantDeclaration> entries) {
+        if (entries == null) {
+            entries = Collections.emptyList();
+        }
         this.entries = entries;
 		setAsParentNodeOf(this.entries);
     }
 
     public void setImplements(List<ClassOrInterfaceType> implementsList) {
+        if (implementsList == null) {
+            implementsList = Collections.emptyList();
+        }
         this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
     }

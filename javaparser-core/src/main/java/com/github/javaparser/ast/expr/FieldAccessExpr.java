@@ -93,7 +93,11 @@ public final class FieldAccessExpr extends Expression {
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = typeArgs;
+		if (typeArgs == null) {
+			this.typeArgs = Collections.emptyList();
+		} else {
+			this.typeArgs = typeArgs;
+		}
 		setAsParentNodeOf(this.typeArgs);
 	}
 }

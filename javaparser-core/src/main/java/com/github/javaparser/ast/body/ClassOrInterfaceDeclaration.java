@@ -29,6 +29,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -122,7 +123,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
      */
 	public void setImplements(final List<ClassOrInterfaceType> implementsList) {
         if (implementsList == null) {
-            setImplements(Collections.<ClassOrInterfaceType>emptyList());
+            setImplements(new ArrayList<ClassOrInterfaceType>());
             return;
         }
 		this.implementsList = implementsList;

@@ -61,6 +61,9 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     public void setValues(List<Expression> values) {
+        if (values == null) {
+            values = Collections.emptyList();
+        }
         this.values = values;
 		setAsParentNodeOf(this.values);
     }

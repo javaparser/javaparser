@@ -87,11 +87,17 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
     }
 
     public void setArgs(List<Expression> args) {
+        if (args == null) {
+            args = Collections.emptyList();
+        }
         this.args = args;
 		setAsParentNodeOf(this.args);
     }
 
     public void setClassBody(List<BodyDeclaration> classBody) {
+        if (classBody == null) {
+            classBody = Collections.emptyList();
+        }
         this.classBody = classBody;
 		setAsParentNodeOf(this.classBody);
     }

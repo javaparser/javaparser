@@ -94,12 +94,20 @@ public final class ObjectCreationExpr extends Expression {
 	}
 
 	public void setAnonymousClassBody(final List<BodyDeclaration> anonymousClassBody) {
-		this.anonymousClassBody = anonymousClassBody;
+		if (anonymousClassBody == null) {
+			this.anonymousClassBody = Collections.emptyList();
+		} else {
+			this.anonymousClassBody = anonymousClassBody;
+		}
 		setAsParentNodeOf(this.anonymousClassBody);
 	}
 
 	public void setArgs(final List<Expression> args) {
-		this.args = args;
+		if (args == null) {
+			this.args = Collections.emptyList();
+		} else {
+			this.args = args;
+		}
 		setAsParentNodeOf(this.args);
 	}
 

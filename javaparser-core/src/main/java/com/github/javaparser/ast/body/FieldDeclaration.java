@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -112,6 +113,9 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     }
 
     public void setVariables(List<VariableDeclarator> variables) {
+        if (variables == null) {
+            variables = Collections.emptyList();
+        }
         this.variables = variables;
 		setAsParentNodeOf(this.variables);
     }

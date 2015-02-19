@@ -84,6 +84,9 @@ public class MethodReferenceExpr extends Expression {
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
+        if (typeParameters == null) {
+            typeParameters = Collections.emptyList();
+        }
         this.typeParameters = typeParameters;
         setAsParentNodeOf(this.typeParameters);
     }

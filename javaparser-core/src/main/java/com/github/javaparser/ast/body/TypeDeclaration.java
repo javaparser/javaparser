@@ -85,6 +85,9 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	public void setMembers(List<BodyDeclaration> members) {
+		if (members == null) {
+			members = Collections.emptyList();
+		}
 		this.members = members;
 		setAsParentNodeOf(this.members);
 	}

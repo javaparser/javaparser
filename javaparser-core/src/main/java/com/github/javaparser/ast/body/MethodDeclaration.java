@@ -141,16 +141,10 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     }
 
 	public List<Parameter> getParameters() {
-        if (parameters == null) {
-            parameters = new ArrayList<Parameter>();
-        }
 		return parameters;
 	}
 
 	public List<NameExpr> getThrows() {
-        if (throws_ == null) {
-            throws_ = new ArrayList<NameExpr>();
-        }
 		return throws_;
 	}
 
@@ -184,12 +178,20 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     }
 
     public void setParameters(final List<Parameter> parameters) {
-		this.parameters = parameters;
+		if (parameters == null) {
+			this.parameters = Collections.emptyList();
+		} else {
+			this.parameters = parameters;
+		}
 		setAsParentNodeOf(this.parameters);
 	}
 
 	public void setThrows(final List<NameExpr> throws_) {
-		this.throws_ = throws_;
+		if (throws_ == null) {
+			this.throws_ = Collections.emptyList();
+		} else {
+			this.throws_ = throws_;
+		}
 		setAsParentNodeOf(this.throws_);
 	}
 
@@ -199,7 +201,11 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	}
 
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
-		this.typeParameters = typeParameters;
+		if (typeParameters == null) {
+			this.typeParameters = Collections.emptyList();
+		} else {
+			this.typeParameters = typeParameters;
+		}
 		setAsParentNodeOf(typeParameters);
 	}
 

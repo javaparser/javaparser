@@ -59,6 +59,9 @@ public class MultiTypeParameter extends BaseParameter {
     }
 
     public void setTypes(List<Type> types) {
+        if (types == null) {
+            types = Collections.emptyList();
+        }
         this.types = types;
     }
 }

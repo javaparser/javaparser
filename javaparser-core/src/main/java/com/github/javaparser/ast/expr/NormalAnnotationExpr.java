@@ -62,7 +62,11 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 	}
 
 	public void setPairs(final List<MemberValuePair> pairs) {
-		this.pairs = pairs;
+		if (pairs == null) {
+			this.pairs = Collections.emptyList();
+		} else {
+			this.pairs = pairs;
+		}
 		setAsParentNodeOf(this.pairs);
 	}
 }

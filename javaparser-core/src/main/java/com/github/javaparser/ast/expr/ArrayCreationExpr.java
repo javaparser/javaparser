@@ -107,6 +107,9 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public void setDimensions(List<Expression> dimensions) {
+        if (dimensions == null) {
+            dimensions = Collections.emptyList();
+        }
         this.dimensions = dimensions;
 		setAsParentNodeOf(this.dimensions);
     }
@@ -127,6 +130,9 @@ public final class ArrayCreationExpr extends Expression {
 
     public void setArraysAnnotations(
             List<List<AnnotationExpr>> arraysAnnotations) {
+        if (arraysAnnotations == null) {
+            arraysAnnotations = Collections.emptyList();
+        }
         this.arraysAnnotations = arraysAnnotations;
     }
 }

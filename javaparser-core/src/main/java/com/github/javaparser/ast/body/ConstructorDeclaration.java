@@ -118,16 +118,10 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public List<Parameter> getParameters() {
-        if (parameters == null) {
-            parameters = new ArrayList<Parameter>();
-        }
         return parameters;
     }
 
     public List<NameExpr> getThrows() {
-        if (throws_ == null) {
-            throws_ = new ArrayList<NameExpr>();
-        }
         return throws_;
     }
 
@@ -153,16 +147,25 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public void setParameters(List<Parameter> parameters) {
+        if (parameters == null) {
+            parameters = Collections.emptyList();
+        }
         this.parameters = parameters;
         setAsParentNodeOf(this.parameters);
     }
 
     public void setThrows(List<NameExpr> throws_) {
+        if (throws_ == null) {
+            throws_ = Collections.emptyList();
+        }
         this.throws_ = throws_;
         setAsParentNodeOf(this.throws_);
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
+        if (typeParameters == null) {
+            typeParameters = Collections.emptyList();
+        }
         this.typeParameters = typeParameters;
         setAsParentNodeOf(this.typeParameters);
     }

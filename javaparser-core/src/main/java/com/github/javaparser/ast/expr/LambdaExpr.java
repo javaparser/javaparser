@@ -27,6 +27,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,6 +62,10 @@ public class LambdaExpr extends Expression {
 	}
 
 	public void setParameters(List<Parameter> parameters) {
+		if (parameters == null) {
+			parameters = new ArrayList<Parameter>();
+		}
+		setAsParentNodeOf(parameters);
 		this.parameters = parameters;
 		setAsParentNodeOf(this.parameters);
 	}

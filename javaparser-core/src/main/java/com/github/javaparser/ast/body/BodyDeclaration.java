@@ -48,9 +48,6 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
     }
 
     public final List<AnnotationExpr> getAnnotations() {
-        if (annotations==null){
-            annotations = new ArrayList<AnnotationExpr>();
-        }
         return annotations;
     }
 
