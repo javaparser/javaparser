@@ -11,6 +11,10 @@
     <artifactId>javaparser-core</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <java.version>1.6</java.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -66,11 +70,11 @@
                             <rules>
                                 <requireJavaVersion>
                                     <!-- Make sure a compiler of this version is used -->
-                                    <version>${java.version}</version>
+                                    <version>1.6</version>
                                 </requireJavaVersion>
                                 <enforceBytecodeVersion>
                                     <!-- Make sure the dependencies are compiled for our Java version -->
-                                    <maxJdkVersion>${java.version}</maxJdkVersion>
+                                    <maxJdkVersion>1.6</maxJdkVersion>
                                 </enforceBytecodeVersion>
                             </rules>
                         </configuration>
