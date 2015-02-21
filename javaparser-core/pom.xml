@@ -70,11 +70,11 @@
                             <rules>
                                 <requireJavaVersion>
                                     <!-- Make sure a compiler of this version is used -->
-                                    <version>1.6</version>
+                                    <version>${java.version}</version>
                                 </requireJavaVersion>
                                 <enforceBytecodeVersion>
                                     <!-- Make sure the dependencies are compiled for our Java version -->
-                                    <maxJdkVersion>1.6</maxJdkVersion>
+                                    <maxJdkVersion>${java.version}</maxJdkVersion>
                                 </enforceBytecodeVersion>
                             </rules>
                         </configuration>
