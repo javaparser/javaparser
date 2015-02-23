@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -61,10 +63,7 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     public void setValues(List<Expression> values) {
-        if (values == null) {
-            values = Collections.emptyList();
-        }
-        this.values = values;
+        this.values = ensureNotNull(values);
 		setAsParentNodeOf(this.values);
     }
 }

@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
 /**
  * <p>
  * This class represents the declaration of a generics argument.
@@ -116,11 +118,7 @@ public final class TypeParameter extends Node implements NamedNode {
 	 *            the typeBound to set
 	 */
 	public void setTypeBound(final List<ClassOrInterfaceType> typeBound) {
-		if (typeBound == null) {
-			this.typeBound = Collections.emptyList();
-		} else {
-			this.typeBound = typeBound;
-		}
+		this.typeBound = ensureNotNull(typeBound);
 		setAsParentNodeOf(typeBound);
 	}
 
@@ -129,9 +127,6 @@ public final class TypeParameter extends Node implements NamedNode {
     }
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
-		if (annotations == null) {
-			annotations = Collections.emptyList();
-		}
-        this.annotations = annotations;
+        this.annotations = ensureNotNull(annotations);
     }
 }
