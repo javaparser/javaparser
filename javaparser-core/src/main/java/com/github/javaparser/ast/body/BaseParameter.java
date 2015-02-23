@@ -62,6 +62,9 @@ public abstract class BaseParameter extends Node {
         setId(id);
 	}
 
+    /**
+     * @return the list returned could be immutable (in that case it will be empty)
+     */
     public List<AnnotationExpr> getAnnotations() {
         return annotations;
     }
