@@ -1,20 +1,30 @@
 package com.github.javaparser.bdd;
 
-import com.github.javaparser.bdd.embedders.VisitorEmbedder;
-import org.jbehave.core.embedder.Embedder;
-import org.jbehave.core.io.StoryFinder;
-import org.junit.Test;
+import com.github.javaparser.bdd.steps.SharedSteps;
+import com.github.javaparser.bdd.steps.VisitorSteps;
+import de.codecentric.jbehave.junit.monitoring.JUnitReportingRunner;
+import org.jbehave.core.steps.InjectableStepsFactory;
+import org.jbehave.core.steps.InstanceStepsFactory;
+import org.junit.runner.RunWith;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
+@RunWith(JUnitReportingRunner.class)
+public class VisitorTest extends BasicJBehaveTest {
 
-public class VisitorTest {
+    @Override
+    public InjectableStepsFactory stepsFactory() {
+        Map<String, Object> state = new HashMap<String, Object>();
+        return new InstanceStepsFactory(configuration(),
+                new SharedSteps(state),
+                new VisitorSteps(state));
+    }
 
-    @Test
-    public void run() throws Throwable {
-        Embedder embedder = new VisitorEmbedder();
-        List<String> storyPaths = new StoryFinder().findPaths(codeLocationFromClass(this.getClass()), "**/bdd/visitor*.story", "");
-        embedder.runStoriesAsPaths(storyPaths);
+    public VisitorTest() {
+        super("**/bdd/visitor*.story");
     }
 }
+
+
+
