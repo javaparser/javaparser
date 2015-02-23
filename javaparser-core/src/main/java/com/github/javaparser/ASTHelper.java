@@ -248,7 +248,7 @@ public final class ASTHelper {
      */
     public static void addStmt(BlockStmt block, Statement stmt) {
         List<Statement> stmts = block.getStmts();
-        if (isNullOrEmpty(stmts) {
+        if (isNullOrEmpty(stmts)) {
             stmts = new ArrayList<Statement>();
             block.setStmts(stmts);
         }
