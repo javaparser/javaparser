@@ -1,0 +1,13 @@
+language: java
+install: mvn install -DskipTests=true
+script: mvn test
+jdk:
+  - openjdk6
+notifications:
+  webhooks:
+    urls:
+      - "https://webhooks.gitter.im/e/ec3127975d8a2b8f11d0"
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+
+# http://lint.travis-ci.org/ validator
