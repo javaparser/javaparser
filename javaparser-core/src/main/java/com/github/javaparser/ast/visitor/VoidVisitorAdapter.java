@@ -73,6 +73,8 @@ import com.github.javaparser.ast.type.*;
 
 import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
 
+import static com.github.javaparser.ASTHelper.isNullOrEmpty;
+
 /**
  * @author Julio Vilmar Gesser
  */
