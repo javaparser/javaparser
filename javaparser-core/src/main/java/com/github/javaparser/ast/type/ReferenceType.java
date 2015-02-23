@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -121,10 +123,6 @@ public final class ReferenceType extends Type {
 	 * For a description of the arrayAnnotations field refer to {@link #getArraysAnnotations()}
 	 */
     public void setArraysAnnotations(List<List<AnnotationExpr>> arraysAnnotations) {
-		if (arraysAnnotations == null) {
-			this.arraysAnnotations = Collections.emptyList();
-		} else {
-			this.arraysAnnotations = arraysAnnotations;
-		}
+		this.arraysAnnotations = ensureNotNull(arraysAnnotations);
     }
 }

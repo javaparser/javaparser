@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -100,20 +102,12 @@ public final class ForStmt extends Statement {
 	}
 
 	public void setInit(final List<Expression> init) {
-		if (init == null) {
-			this.init = Collections.emptyList();
-		} else {
-			this.init = init;
-		}
+		this.init = ensureNotNull(init);
 		setAsParentNodeOf(this.init);
 	}
 
 	public void setUpdate(final List<Expression> update) {
-		if (update == null) {
-			this.update = Collections.emptyList();
-		} else {
-			this.update = update;
-		}
+		this.update = ensureNotNull(update);
 		setAsParentNodeOf(this.update);
 	}
 }

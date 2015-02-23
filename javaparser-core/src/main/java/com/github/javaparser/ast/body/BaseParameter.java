@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 public abstract class BaseParameter extends Node {
     private int modifiers;
 
@@ -83,10 +85,7 @@ public abstract class BaseParameter extends Node {
      *                    in the future, so please avoid passing null
      */
     public void setAnnotations(List<AnnotationExpr> annotations) {
-        if (null == annotations) {
-            annotations = new ArrayList<AnnotationExpr>();
-        }
-        this.annotations = annotations;
+        this.annotations = ensureNotNull(annotations);
         setAsParentNodeOf(this.annotations);
     }
 

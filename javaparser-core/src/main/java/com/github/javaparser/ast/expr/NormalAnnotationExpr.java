@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -62,11 +64,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 	}
 
 	public void setPairs(final List<MemberValuePair> pairs) {
-		if (pairs == null) {
-			this.pairs = Collections.emptyList();
-		} else {
-			this.pairs = pairs;
-		}
+		this.pairs = ensureNotNull(pairs);
 		setAsParentNodeOf(this.pairs);
 	}
 }

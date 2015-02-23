@@ -30,7 +30,6 @@ import java.util.List;
  * @since 2.0.1
  */
 public class Utils {
-
     public static <T> List<T> ensureNotNull(List<T> list) {
         return list == null ? Collections.<T>emptyList() : list;
     }

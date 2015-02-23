@@ -37,6 +37,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -178,20 +180,12 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     }
 
     public void setParameters(final List<Parameter> parameters) {
-		if (parameters == null) {
-			this.parameters = Collections.emptyList();
-		} else {
-			this.parameters = parameters;
-		}
+		this.parameters = ensureNotNull(parameters);
 		setAsParentNodeOf(this.parameters);
 	}
 
 	public void setThrows(final List<NameExpr> throws_) {
-		if (throws_ == null) {
-			this.throws_ = Collections.emptyList();
-		} else {
-			this.throws_ = throws_;
-		}
+		this.throws_ = ensureNotNull(throws_);
 		setAsParentNodeOf(this.throws_);
 	}
 
@@ -201,11 +195,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	}
 
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
-		if (typeParameters == null) {
-			this.typeParameters = Collections.emptyList();
-		} else {
-			this.typeParameters = typeParameters;
-		}
+		this.typeParameters = ensureNotNull(typeParameters);
 		setAsParentNodeOf(typeParameters);
 	}
 

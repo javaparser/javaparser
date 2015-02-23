@@ -27,6 +27,8 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -55,10 +57,7 @@ public abstract class Type extends Node {
     }
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
-        if (annotations == null) {
-            annotations = Collections.emptyList();
-        }
-        this.annotations = annotations;
+        this.annotations = ensureNotNull(annotations);
     }
 
 }

@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * Lambda expressions. 
  * @author Raquel Pau
@@ -62,11 +64,7 @@ public class LambdaExpr extends Expression {
 	}
 
 	public void setParameters(List<Parameter> parameters) {
-		if (parameters == null) {
-			parameters = new ArrayList<Parameter>();
-		}
-		setAsParentNodeOf(parameters);
-		this.parameters = parameters;
+		this.parameters = ensureNotNull(parameters);
 		setAsParentNodeOf(this.parameters);
 	}
 

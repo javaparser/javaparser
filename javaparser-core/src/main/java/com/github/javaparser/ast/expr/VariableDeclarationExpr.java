@@ -30,6 +30,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -98,11 +100,7 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public void setAnnotations(final List<AnnotationExpr> annotations) {
-		if (annotations == null) {
-			this.annotations = Collections.emptyList();	
-		} else {
-			this.annotations = annotations;
-		}
+		this.annotations = ensureNotNull(annotations);
 		setAsParentNodeOf(this.annotations);
 	}
 
@@ -116,11 +114,7 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public void setVars(final List<VariableDeclarator> vars) {
-		if (vars == null) {
-			this.vars = Collections.emptyList();
-		} else {
-			this.vars = vars;
-		}
+		this.vars = ensureNotNull(vars);
 		setAsParentNodeOf(this.vars);
 	}
 }

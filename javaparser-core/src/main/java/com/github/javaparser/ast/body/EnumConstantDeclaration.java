@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -87,18 +89,12 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
     }
 
     public void setArgs(List<Expression> args) {
-        if (args == null) {
-            args = Collections.emptyList();
-        }
-        this.args = args;
+        this.args = ensureNotNull(args);
 		setAsParentNodeOf(this.args);
     }
 
     public void setClassBody(List<BodyDeclaration> classBody) {
-        if (classBody == null) {
-            classBody = Collections.emptyList();
-        }
-        this.classBody = classBody;
+        this.classBody = ensureNotNull(classBody);
 		setAsParentNodeOf(this.classBody);
     }
 

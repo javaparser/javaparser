@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -102,9 +104,9 @@ public final class ClassOrInterfaceType extends Type {
 		setAsParentNodeOf(this.scope);
 	}
 
-    public void setTypeArgs(final List<Type> typeArgs) {
-        this.typeArgs = typeArgs;
-        setAsParentNodeOf(this.typeArgs);
-    }
+	public void setTypeArgs(final List<Type> typeArgs) {
+		this.typeArgs = ensureNotNull(typeArgs);
+		setAsParentNodeOf(this.typeArgs);
+	}
 
 }

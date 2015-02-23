@@ -34,6 +34,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * <p>
  * This class represents the entire compilation unit. Each java file denotes a
@@ -152,10 +154,7 @@ public final class CompilationUnit extends Node {
      *            the list of imports
      */
     public void setImports(List<ImportDeclaration> imports) {
-        if (imports == null) {
-            imports = Collections.emptyList();
-        }
-        this.imports = imports;
+        this.imports = ensureNotNull(imports);
 		setAsParentNodeOf(this.imports);
     }
 
@@ -178,10 +177,7 @@ public final class CompilationUnit extends Node {
      *            the lis of types
      */
     public void setTypes(List<TypeDeclaration> types) {
-        if (types == null) {
-            types = Collections.emptyList();
-        }
-        this.types = types;
+        this.types = ensureNotNull(types);
 		setAsParentNodeOf(this.types);
     }
 }

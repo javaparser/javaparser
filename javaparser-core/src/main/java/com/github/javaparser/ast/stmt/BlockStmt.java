@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -62,11 +64,7 @@ public final class BlockStmt extends Statement {
 	}
 
 	public void setStmts(final List<Statement> stmts) {
-		if (stmts == null) {
-			this.stmts = Collections.emptyList();
-		} else {
-			this.stmts = stmts;
-		}
+		this.stmts = ensureNotNull(stmts);
 		setAsParentNodeOf(this.stmts);
 	}
 }

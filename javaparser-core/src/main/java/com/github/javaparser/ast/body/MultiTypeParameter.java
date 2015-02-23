@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 public class MultiTypeParameter extends BaseParameter {
     private List<Type> types = Collections.emptyList();
 	
@@ -59,9 +61,6 @@ public class MultiTypeParameter extends BaseParameter {
     }
 
     public void setTypes(List<Type> types) {
-        if (types == null) {
-            types = Collections.emptyList();
-        }
-        this.types = types;
+        this.types = ensureNotNull(types);
     }
 }

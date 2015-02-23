@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -79,18 +81,12 @@ public final class EnumDeclaration extends TypeDeclaration implements Documentab
     }
 
     public void setEntries(List<EnumConstantDeclaration> entries) {
-        if (entries == null) {
-            entries = Collections.emptyList();
-        }
-        this.entries = entries;
+        this.entries = ensureNotNull(entries);
 		setAsParentNodeOf(this.entries);
     }
 
     public void setImplements(List<ClassOrInterfaceType> implementsList) {
-        if (implementsList == null) {
-            implementsList = Collections.emptyList();
-        }
-        this.implementsList = implementsList;
+        this.implementsList = ensureNotNull(implementsList);
 		setAsParentNodeOf(this.implementsList);
     }
 

@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -73,11 +75,7 @@ public final class SwitchStmt extends Statement {
 	}
 
 	public void setEntries(final List<SwitchEntryStmt> entries) {
-		if (entries == null) {
-			this.entries = Collections.emptyList();
-		} else {
-			this.entries = entries;
-		}
+		this.entries = ensureNotNull(entries);
 		setAsParentNodeOf(this.entries);
 	}
 

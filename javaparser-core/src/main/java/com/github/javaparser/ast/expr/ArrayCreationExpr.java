@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -107,10 +109,7 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public void setDimensions(List<Expression> dimensions) {
-        if (dimensions == null) {
-            dimensions = Collections.emptyList();
-        }
-        this.dimensions = dimensions;
+        this.dimensions = ensureNotNull(dimensions);
 		setAsParentNodeOf(this.dimensions);
     }
 
@@ -130,9 +129,6 @@ public final class ArrayCreationExpr extends Expression {
 
     public void setArraysAnnotations(
             List<List<AnnotationExpr>> arraysAnnotations) {
-        if (arraysAnnotations == null) {
-            arraysAnnotations = Collections.emptyList();
-        }
-        this.arraysAnnotations = arraysAnnotations;
+        this.arraysAnnotations = ensureNotNull(arraysAnnotations);
     }
 }

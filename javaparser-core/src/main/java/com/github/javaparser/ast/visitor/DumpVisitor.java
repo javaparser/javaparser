@@ -79,7 +79,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
-import static com.github.javaparser.ASTHelper.isNullOrEmpty;
 
 /**
  * Dumps the AST to formatted Java source code.

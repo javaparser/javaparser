@@ -28,6 +28,8 @@ import com.github.javaparser.ast.expr.NameExpr;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -85,10 +87,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	public void setMembers(List<BodyDeclaration> members) {
-		if (members == null) {
-			members = Collections.emptyList();
-		}
-		this.members = members;
+		this.members = ensureNotNull(members);
 		setAsParentNodeOf(this.members);
 	}
 

@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -108,11 +110,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
      *                    in the future, so please avoid passing null
      */
 	public void setExtends(final List<ClassOrInterfaceType> extendsList) {
-        if (extendsList == null) {
-            setExtends(Collections.<ClassOrInterfaceType>emptyList());
-            return;
-        }
-		this.extendsList = extendsList;
+		this.extendsList = ensureNotNull(extendsList);
 		setAsParentNodeOf(this.extendsList);
 	}
 
@@ -122,11 +120,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
      *                       in the future, so please avoid passing null
      */
 	public void setImplements(final List<ClassOrInterfaceType> implementsList) {
-        if (implementsList == null) {
-            setImplements(new ArrayList<ClassOrInterfaceType>());
-            return;
-        }
-		this.implementsList = implementsList;
+		this.implementsList = ensureNotNull(implementsList);
 		setAsParentNodeOf(this.implementsList);
 	}
 
@@ -140,11 +134,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
      *                       in the future, so please avoid passing null
      */
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
-        if (typeParameters == null) {
-            setTypeParameters(Collections.<TypeParameter>emptyList());
-            return;
-        }
-		this.typeParameters = typeParameters;
+		this.typeParameters = ensureNotNull(typeParameters);
 		setAsParentNodeOf(this.typeParameters);
 	}
 

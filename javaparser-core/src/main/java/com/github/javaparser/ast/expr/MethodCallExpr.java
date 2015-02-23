@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -93,11 +95,7 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public void setArgs(final List<Expression> args) {
-		if (args == null) {
-			this.args = Collections.emptyList();
-		} else {
-			this.args = args;
-		}
+		this.args = ensureNotNull(args);
 		setAsParentNodeOf(this.args);
 	}
 
@@ -115,11 +113,7 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
-		if (typeArgs == null) {
-			this.typeArgs = Collections.emptyList();
-		} else {
-			this.typeArgs = typeArgs;
-		}
+		this.typeArgs = ensureNotNull(typeArgs);
 		setAsParentNodeOf(this.typeArgs);
 	}
 }

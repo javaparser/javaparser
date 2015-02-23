@@ -46,8 +46,9 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
+import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * This class helps to construct new nodes.
@@ -282,10 +283,6 @@ public final class ASTHelper {
             type.setMembers(members);
         }
         members.add(decl);
-    }
-    
-    public static <E> boolean isNullOrEmpty(Collection<E> collection) {
-        return collection == null || collection.isEmpty();
     }
 
     public static <N extends Node> List<N> getNodesByType(Node container, Class<N> clazz) {

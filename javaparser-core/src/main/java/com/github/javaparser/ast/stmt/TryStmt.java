@@ -28,6 +28,8 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -88,11 +90,7 @@ public final class TryStmt extends Statement {
 	}
 
 	public void setCatchs(final List<CatchClause> catchs) {
-		if (catchs == null) {
-			this.catchs = Collections.emptyList();
-		} else {
-			this.catchs = catchs;
-		}
+		this.catchs = ensureNotNull(catchs);
 		setAsParentNodeOf(this.catchs);
 	}
 
@@ -107,11 +105,7 @@ public final class TryStmt extends Statement {
 	}
 	
 	public void setResources(List<VariableDeclarationExpr> resources) {
-		if (resources == null) {
-			this.resources = Collections.emptyList();
-		} else {
-			this.resources = resources;
-		}
+		this.resources = ensureNotNull(resources);
 		setAsParentNodeOf(this.resources);
 	}
 }

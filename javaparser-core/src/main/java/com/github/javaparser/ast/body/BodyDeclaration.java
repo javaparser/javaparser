@@ -27,6 +27,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -57,10 +58,7 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
      *                    in the future, so please avoid passing null
      */
     public final void setAnnotations(List<AnnotationExpr> annotations) {
-        if (annotations == null) {
-            annotations = Collections.emptyList();
-        }
-        this.annotations = annotations;
+        this.annotations = ensureNotNull(annotations);
 		setAsParentNodeOf(this.annotations);
     }
 }
