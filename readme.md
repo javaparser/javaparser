@@ -6,7 +6,7 @@ The AST records the source code structure, javadoc and comments. It is also poss
 
 [![Join the chat at https://gitter.im/javaparser/javaparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/javaparser/javaparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://drone.io/github.com/javaparser/javaparser/status.png)](https://drone.io/github.com/javaparser/javaparser/latest)
+[![Build Status](https://travis-ci.org/javaparser/javaparser.svg?branch=master)](https://travis-ci.org/javaparser/javaparser)
 
 ## Features
 
