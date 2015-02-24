@@ -185,7 +185,7 @@ public final class ModifierSet {
         Modifiers modifiersAsSet = new Modifiers();
         for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
             if (hasModifier(modifiersAsInt, ENUM_TO_INT.get(modifier))){
-                modifiersAsSet.set(modifier);
+                modifiersAsSet = modifiersAsSet.set(modifier);
             }
         }
         return modifiersAsSet;
