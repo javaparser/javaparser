@@ -22,13 +22,12 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.Modifiers;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
-import javax.lang.model.element.Modifier;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Julio Vilmar Gesser
@@ -37,7 +36,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 
 	private NameExpr name;
 
-	private ModifiersSet modifiers = new ModifiersSet();
+	private Modifiers modifiers = new Modifiers();
 
 	private List<BodyDeclaration> members;
 
@@ -75,24 +74,24 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see ModifierUtils
+	 * @see ModifierSet
 	 * @return modifiers
 	 * @deprecated please use getModifiersSet instead
 	 */
 	@Override
 	@Deprecated
 	public int getModifiers() {
-		return ModifierUtils.toInt(modifiers);
+		return ModifierSet.toInt(modifiers);
 	}
 
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see ModifierUtils
+	 * @see ModifierSet
 	 * @return modifiers
 	 */
 	@Override
-	public ModifiersSet getModifiersSet() {
+	public Modifiers getModifiersSet() {
 		return modifiers;
 	}
 
@@ -105,12 +104,12 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		setAsParentNodeOf(this.members);
 	}
 
-	public final void setModifiers(ModifiersSet modifiers) {
+	public final void setModifiers(Modifiers modifiers) {
 		this.modifiers = modifiers;
 	}
 
 	public final void setModifiers(int modifiers) {
-		this.modifiers = ModifierUtils.toSet(modifiers);
+		this.modifiers = ModifierSet.toSet(modifiers);
 	}
 
 	public final void setName(String name) {

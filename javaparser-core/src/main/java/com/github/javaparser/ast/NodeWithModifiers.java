@@ -1,10 +1,5 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.ModifiersSet;
-
-import javax.lang.model.element.Modifier;
-import java.util.Set;
-
 /**
  * A Node with Modifiers.
  * 
@@ -12,5 +7,5 @@ import java.util.Set;
  */
 public interface NodeWithModifiers {
     int getModifiers();
-    ModifiersSet getModifiersSet();
+    Modifiers getModifiersSet();
 }

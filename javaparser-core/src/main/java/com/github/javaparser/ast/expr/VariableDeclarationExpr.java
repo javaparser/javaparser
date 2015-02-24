@@ -22,23 +22,21 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.NodeWithModifiers;
-import com.github.javaparser.ast.body.ModifierUtils;
-import com.github.javaparser.ast.body.ModifiersSet;
+import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.Modifiers;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import javax.lang.model.element.Modifier;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarationExpr extends Expression implements NodeWithModifiers {
 
-	private ModifiersSet modifiers = new ModifiersSet();
+	private Modifiers modifiers = new Modifiers();
 
 	private List<AnnotationExpr> annotations;
 
@@ -85,24 +83,24 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see com.github.javaparser.ast.body.ModifierUtils
+	 * @see com.github.javaparser.ast.body.ModifierSet
 	 * @return modifiers
 	 * @deprecated please use getModifiersSet instead
 	 */
 	@Override
 	@Deprecated
 	public int getModifiers() {
-		return ModifierUtils.toInt(modifiers);
+		return ModifierSet.toInt(modifiers);
 	}
 
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see com.github.javaparser.ast.body.ModifierUtils
+	 * @see com.github.javaparser.ast.body.ModifierSet
 	 * @return modifiers
 	 */
 	@Override
-	public ModifiersSet getModifiersSet() {
+	public Modifiers getModifiersSet() {
 		return modifiers;
 	}
 
@@ -119,12 +117,12 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
 		setAsParentNodeOf(this.annotations);
 	}
 
-	public final void setModifiers(ModifiersSet modifiers) {
+	public final void setModifiers(Modifiers modifiers) {
 		this.modifiers = modifiers;
 	}
 
 	public final void setModifiers(int modifiers) {
-		this.modifiers = ModifierUtils.toSet(modifiers);
+		this.modifiers = ModifierSet.toSet(modifiers);
 	}
 
 	public void setType(final Type type) {

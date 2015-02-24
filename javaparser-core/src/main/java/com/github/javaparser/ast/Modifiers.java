@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.body;
+package com.github.javaparser.ast;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.NodeWithModifiers;
@@ -11,9 +11,17 @@ import java.util.Set;
  * @author Federico Tomassetti
  * @since 2.0.1
  */
-public class ModifiersSet {
+public class Modifiers {
 
-    private Set<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private Set<Modifier> modifiers;
+    
+    public Modifiers(){
+        this(EnumSet.noneOf(Modifier.class));
+    }
+    
+    private Modifiers(Set<Modifier> modifiers) {
+        this.modifiers = modifiers;
+    }
 
     public boolean hasModifier(javax.lang.model.element.Modifier modifier) {
         return modifiers.contains(modifier);
@@ -83,8 +91,30 @@ public class ModifiersSet {
         return modifiers.contains(modifier);
     }
 
-    public void set(Modifier modifier) {
-        modifiers.add(modifier);
+    /**
+     * Return a copy of this instance, with the given modifier set.
+     * If the modifier is already set this is returned.
+     */
+    public Modifiers set(Modifier modifier) {
+        if (modifiers.contains(modifier)) {
+            return this;
+        }
+        Set<Modifier> newModifiers = EnumSet.copyOf(modifiers);
+        newModifiers.add(modifier);
+        return new Modifiers(newModifiers);
+    }
+
+    /**
+     * Return a copy of this instance, with the given modifier unset.
+     * If the modifier is already not set this is returned.
+     */
+    public Modifiers unset(Modifier modifier) {
+        if (!modifiers.contains(modifier)) {
+            return this;
+        }
+        Set<Modifier> newModifiers = EnumSet.copyOf(modifiers);
+        newModifiers.remove(modifier);
+        return new Modifiers(newModifiers);
     }
 
     public AccessSpecifier getAccessSpecifier() {

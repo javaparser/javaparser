@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.Modifiers;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -31,17 +32,14 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import javax.lang.model.element.Modifier;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode, NodeWithModifiers {
 
-    private ModifiersSet modifiers = new ModifiersSet();
+    private Modifiers modifiers = new Modifiers();
 
     private Type type;
 
@@ -92,24 +90,24 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
     /**
      * Return the modifiers of this member declaration.
      *
-     * @see ModifierUtils
+     * @see ModifierSet
      * @return modifiers
      * @deprecated please use getModifiersSet instead
      */
     @Override
     @Deprecated
     public int getModifiers() {
-        return ModifierUtils.toInt(modifiers);
+        return ModifierSet.toInt(modifiers);
     }
 
     /**
      * Return the modifiers of this member declaration.
      *
-     * @see ModifierUtils
+     * @see ModifierSet
      * @return modifiers
      */
     @Override
-    public ModifiersSet getModifiersSet() {
+    public Modifiers getModifiersSet() {
         return modifiers;
     }
 
@@ -126,12 +124,12 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
         setAsParentNodeOf(defaultValue);
     }
 
-    public final void setModifiers(ModifiersSet modifiers) {
+    public final void setModifiers(Modifiers modifiers) {
         this.modifiers = modifiers;
     }
 
     public final void setModifiers(int modifiers) {
-        this.modifiers = ModifierUtils.toSet(modifiers);
+        this.modifiers = ModifierSet.toSet(modifiers);
     }
 
 

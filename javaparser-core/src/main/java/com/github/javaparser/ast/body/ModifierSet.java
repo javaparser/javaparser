@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifiers;
 import com.github.javaparser.ast.NodeWithModifiers;
 
 import java.lang.reflect.Modifier;
@@ -32,7 +33,7 @@ import java.util.*;
  * The modifier constants declared here holds equivalent values to
  * {@link Modifier} constants.
  */
-public final class ModifierUtils {
+public final class ModifierSet {
 
     /* Definitions of the bits in the modifiers field.  */
     
@@ -177,11 +178,11 @@ public final class ModifierUtils {
         return modifiers & ~mod;
     }
 
-    private ModifierUtils() {
+    private ModifierSet() {
     }
 
-    public static ModifiersSet toSet(int modifiersAsInt) {
-        ModifiersSet modifiersAsSet = new ModifiersSet();
+    public static Modifiers toSet(int modifiersAsInt) {
+        Modifiers modifiersAsSet = new Modifiers();
         for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
             if (hasModifier(modifiersAsInt, ENUM_TO_INT.get(modifier))){
                 modifiersAsSet.set(modifier);
@@ -190,7 +191,7 @@ public final class ModifierUtils {
         return modifiersAsSet;
     }
 
-    public static int toInt(ModifiersSet modifiersAsSet) {
+    public static int toInt(Modifiers modifiersAsSet) {
         int modifiersAsInt = 0;
         for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
             if (modifiersAsSet.has(modifier)){
