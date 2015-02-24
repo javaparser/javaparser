@@ -32,7 +32,7 @@ import java.util.*;
  * The modifier constants declared here holds equivalent values to
  * {@link Modifier} constants.
  */
-public final class ModifierSet {
+public final class ModifierUtils {
 
     /* Definitions of the bits in the modifiers field.  */
     
@@ -86,80 +86,42 @@ public final class ModifierSet {
         }
     }
 
-    public static AccessSpecifier getAccessSpecifier(NodeWithModifiers node) {
-        if (isPublic(node)){
-            return AccessSpecifier.PUBLIC;
-        } else if (isProtected(node)){
-            return AccessSpecifier.PROTECTED;
-        } else if (isPrivate(node)){
-            return AccessSpecifier.PRIVATE;
-        } else {
-            return AccessSpecifier.DEFAULT;
-        }
+    public static AccessSpecifier getAccessSpecifier(NodeWithModifiers modifiers) {
+        return modifiers.getModifiersSet().getAccessSpecifier();
     }
 
     public static int addModifier(int modifiers, int mod) {
         return modifiers | mod;
     }
 
-    /** @deprecated use {@link #hasModifier(NodeWithModifiers, javax.lang.model.element.Modifier)} (...)} instead */
     @Deprecated
     public static boolean hasModifier(int modifiers, int modifier) {
         return (modifiers & modifier) != 0;
     }
 
-    public static boolean hasModifier(NodeWithModifiers node, javax.lang.model.element.Modifier modifier) {
-        return node.getModifiersSet().contains(modifier);
-    }
-
-    /** @deprecated use {@link #isAbstract(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isAbstract(int modifiers) {
         return (modifiers & ABSTRACT) != 0;
     }
 
-    public static boolean isAbstract(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.ABSTRACT);
-    }
-
-    /** @deprecated use {@link #isFinal(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isFinal(int modifiers) {
         return (modifiers & FINAL) != 0;
     }
 
-    public static boolean isFinal(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.FINAL);
-    }
-
-    /** @deprecated use {@link #isNative(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isNative(int modifiers) {
         return (modifiers & NATIVE) != 0;
     }
 
-    public static boolean isNative(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.NATIVE);
-    }
-
-    /** @deprecated use {@link #isPrivate(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isPrivate(int modifiers) {
         return (modifiers & PRIVATE) != 0;
     }
 
-    public static boolean isPrivate(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.PRIVATE);
-    }
-
-    /** @deprecated use {@link #isProtected(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isProtected(int modifiers) {
         return (modifiers & PROTECTED) != 0;
-    }
-
-    public static boolean isProtected(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.PROTECTED);
     }
 
     /**
@@ -168,81 +130,41 @@ public final class ModifierSet {
      * it is sometimes called "default".
      * @param modifiers indicator
      * @return true if modifier denotes package level access
-     * @deprecated use {@link #hasPackageLevelAccess(NodeWithModifiers)} (...)} instead
      */
     @Deprecated
     public static boolean hasPackageLevelAccess(int modifiers) {
         return !isPublic(modifiers) && !isProtected(modifiers) && !isPrivate(modifiers);
     }
 
-    /**
-     * Is the element accessible from within the package?
-     * It is the level of access which is applied if no modifiers are chosen,
-     * it is sometimes called "default".
-     * @return true if modifier denotes package level access
-     */
-    public static boolean hasPackageLevelAccess(NodeWithModifiers node) {
-        return !isPublic(node) && !isProtected(node) && !isPrivate(node);
-    }
-
-    /** @deprecated use {@link #isPublic(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isPublic(int modifiers) {
         return (modifiers & PUBLIC) != 0;
     }
 
-    public static boolean isPublic(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.PUBLIC);
-    }
-
-    /** @deprecated use {@link #isStatic(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isStatic(int modifiers) {
         return (modifiers & STATIC) != 0;
     }
 
-    public static boolean isStatic(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.STATIC);
-    }
-
-    /** @deprecated use {@link #isStrictfp(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isStrictfp(int modifiers) {
         return (modifiers & STRICTFP) != 0;
     }
 
-    public static boolean isStrictfp(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.STRICTFP);
-    }
-
-    /** @deprecated use {@link #isSynchronized(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isSynchronized(int modifiers) {
         return (modifiers & SYNCHRONIZED) != 0;
     }
 
-    public static boolean isSynchronized(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.SYNCHRONIZED);
-    }
-
-    /** @deprecated use {@link #isTransient(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isTransient(int modifiers) {
         return (modifiers & TRANSIENT) != 0;
     }
 
-    public static boolean isTransient(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.TRANSIENT);
-    }
 
-    /** @deprecated use {@link #isVolatile(NodeWithModifiers)} (...)} instead */
     @Deprecated
     public static boolean isVolatile(int modifiers) {
         return (modifiers & VOLATILE) != 0;
-    }
-
-    public static boolean isVolatile(NodeWithModifiers node) {
-        return hasModifier(node, javax.lang.model.element.Modifier.VOLATILE);
     }
 
     /**
@@ -255,23 +177,23 @@ public final class ModifierSet {
         return modifiers & ~mod;
     }
 
-    private ModifierSet() {
+    private ModifierUtils() {
     }
 
-    public static Set<javax.lang.model.element.Modifier> toSet(int modifiersAsInt) {
-        Set<javax.lang.model.element.Modifier> modifiersAsSet = EnumSet.noneOf(javax.lang.model.element.Modifier.class);
+    public static ModifiersSet toSet(int modifiersAsInt) {
+        ModifiersSet modifiersAsSet = new ModifiersSet();
         for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
             if (hasModifier(modifiersAsInt, ENUM_TO_INT.get(modifier))){
-                modifiersAsSet.add(modifier);
+                modifiersAsSet.set(modifier);
             }
         }
         return modifiersAsSet;
     }
 
-    public static int toInt(Set<javax.lang.model.element.Modifier> modifiersAsSet) {
+    public static int toInt(ModifiersSet modifiersAsSet) {
         int modifiersAsInt = 0;
         for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
-            if (modifiersAsSet.contains(modifier)){
+            if (modifiersAsSet.has(modifier)){
                 modifiersAsInt |= ENUM_TO_INT.get(modifier);
             }
         }

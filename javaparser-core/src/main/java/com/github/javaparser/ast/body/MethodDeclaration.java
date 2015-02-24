@@ -45,7 +45,7 @@ import java.util.Set;
  */
 public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, NodeWithModifiers {
 
-	private Set<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+	private ModifiersSet modifiers = new ModifiersSet();
 
 	private List<TypeParameter> typeParameters;
 
@@ -128,24 +128,24 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	/**
 	 * Return the modifiers of this member declaration.
 	 * 
-	 * @see ModifierSet
+	 * @see ModifierUtils
 	 * @return modifiers
 	 * @deprecated please use getModifiersSet instead
 	 */
 	@Override
 	@Deprecated
 	public int getModifiers() {
-		return ModifierSet.toInt(modifiers);
+		return ModifierUtils.toInt(modifiers);
 	}
 
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see ModifierSet
+	 * @see ModifierUtils
 	 * @return modifiers
 	 */
 	@Override
-	public Set<Modifier> getModifiersSet() {
+	public ModifiersSet getModifiersSet() {
 		return modifiers;
 	}
 
@@ -188,12 +188,12 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(this.body);
 	}
 
-	public final void setModifiers(Set<Modifier> modifiers) {
+	public final void setModifiers(ModifiersSet modifiers) {
 		this.modifiers = modifiers;
 	}
 
 	public final void setModifiers(int modifiers) {
-		this.modifiers = ModifierSet.toSet(modifiers);
+		this.modifiers = ModifierUtils.toSet(modifiers);
 	}
 
 
@@ -257,22 +257,22 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(this);
+            AccessSpecifier accessSpecifier = ModifierUtils.getAccessSpecifier(this);
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
-            if (ModifierSet.isStatic(this)){
+            if (this.getModifiersSet().isStatic()){
                 sb.append("static ");
             }
-            if (ModifierSet.isAbstract(this)){
+            if (this.getModifiersSet().isAbstract()){
                 sb.append("abstract ");
             }
-            if (ModifierSet.isFinal(this)){
+            if (this.getModifiersSet().isFinal()){
                 sb.append("final ");
             }
-            if (ModifierSet.isNative(this)){
+            if (this.getModifiersSet().isNative()){
                 sb.append("native ");
             }
-            if (ModifierSet.isSynchronized(this)){
+            if (this.getModifiersSet().isSynchronized()){
                 sb.append("synchronized ");
             }
         }

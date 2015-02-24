@@ -24,24 +24,8 @@ package com.github.javaparser.ast.visitor;
 import static com.github.javaparser.PositionUtils.sortByBeginPosition;
 
 import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.ModifierSet;
-import com.github.javaparser.ast.body.MultiTypeParameter;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.ModifierUtils;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -150,37 +134,37 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	private void printModifiers(NodeWithModifiers node) {
-		if (ModifierSet.isPrivate(node)) {
+		if (node.getModifiersSet().isPrivate()) {
 			printer.print("private ");
 		}
-		if (ModifierSet.isProtected(node)) {
+		if (node.getModifiersSet().isProtected()) {
 			printer.print("protected ");
 		}
-		if (ModifierSet.isPublic(node)) {
+		if (node.getModifiersSet().isPublic()) {
 			printer.print("public ");
 		}
-		if (ModifierSet.isAbstract(node)) {
+		if (node.getModifiersSet().isAbstract()) {
 			printer.print("abstract ");
 		}
-		if (ModifierSet.isStatic(node)) {
+		if (node.getModifiersSet().isStatic()) {
 			printer.print("static ");
 		}
-		if (ModifierSet.isFinal(node)) {
+		if (node.getModifiersSet().isFinal()) {
 			printer.print("final ");
 		}
-		if (ModifierSet.isNative(node)) {
+		if (node.getModifiersSet().isNative()) {
 			printer.print("native ");
 		}
-		if (ModifierSet.isStrictfp(node)) {
+		if (node.getModifiersSet().isStrictfp()) {
 			printer.print("strictfp ");
 		}
-		if (ModifierSet.isSynchronized(node)) {
+		if (node.getModifiersSet().isSynchronized()) {
 			printer.print("synchronized ");
 		}
-		if (ModifierSet.isTransient(node)) {
+		if (node.getModifiersSet().isTransient()) {
 			printer.print("transient ");
 		}
-		if (ModifierSet.isVolatile(node)) {
+		if (node.getModifiersSet().isVolatile()) {
 			printer.print("volatile ");
 		}
 	}

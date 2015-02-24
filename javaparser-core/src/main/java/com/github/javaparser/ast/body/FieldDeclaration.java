@@ -40,7 +40,7 @@ import java.util.Set;
  */
 public final class FieldDeclaration extends BodyDeclaration implements DocumentableNode, NodeWithModifiers {
 
-    private Set<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private ModifiersSet modifiers = new ModifiersSet();
 
     private Type type;
 
@@ -90,24 +90,24 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     /**
      * Return the modifiers of this member declaration.
      *
-     * @see ModifierSet
+     * @see ModifierUtils
      * @return modifiers
      * @deprecated please use getModifiersSet instead
      */
     @Override
     @Deprecated
     public int getModifiers() {
-        return ModifierSet.toInt(modifiers);
+        return ModifierUtils.toInt(modifiers);
     }
 
     /**
      * Return the modifiers of this member declaration.
      *
-     * @see ModifierSet
+     * @see ModifierUtils
      * @return modifiers
      */
     @Override
-    public Set<Modifier> getModifiersSet() {
+    public ModifiersSet getModifiersSet() {
         return modifiers;
     }
 
@@ -119,12 +119,12 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
         return variables;
     }
 
-    public final void setModifiers(Set<Modifier> modifiers) {
+    public final void setModifiers(ModifiersSet modifiers) {
         this.modifiers = modifiers;
     }
 
     public final void setModifiers(int modifiers) {
-        this.modifiers = ModifierSet.toSet(modifiers);
+        this.modifiers = ModifierUtils.toSet(modifiers);
     }
 
     public void setType(Type type) {

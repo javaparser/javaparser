@@ -37,7 +37,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 
 	private NameExpr name;
 
-	private Set<Modifier> modifiers;
+	private ModifiersSet modifiers = new ModifiersSet();
 
 	private List<BodyDeclaration> members;
 
@@ -75,24 +75,24 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see ModifierSet
+	 * @see ModifierUtils
 	 * @return modifiers
 	 * @deprecated please use getModifiersSet instead
 	 */
 	@Override
 	@Deprecated
 	public int getModifiers() {
-		return ModifierSet.toInt(modifiers);
+		return ModifierUtils.toInt(modifiers);
 	}
 
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see ModifierSet
+	 * @see ModifierUtils
 	 * @return modifiers
 	 */
 	@Override
-	public Set<Modifier> getModifiersSet() {
+	public ModifiersSet getModifiersSet() {
 		return modifiers;
 	}
 
@@ -105,12 +105,12 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		setAsParentNodeOf(this.members);
 	}
 
-	public final void setModifiers(Set<Modifier> modifiers) {
+	public final void setModifiers(ModifiersSet modifiers) {
 		this.modifiers = modifiers;
 	}
 
 	public final void setModifiers(int modifiers) {
-		this.modifiers = ModifierSet.toSet(modifiers);
+		this.modifiers = ModifierUtils.toSet(modifiers);
 	}
 
 	public final void setName(String name) {

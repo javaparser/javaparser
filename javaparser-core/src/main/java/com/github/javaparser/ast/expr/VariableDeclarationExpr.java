@@ -22,7 +22,8 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.NodeWithModifiers;
-import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.body.ModifierUtils;
+import com.github.javaparser.ast.body.ModifiersSet;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,7 +38,7 @@ import java.util.Set;
  */
 public final class VariableDeclarationExpr extends Expression implements NodeWithModifiers {
 
-	private Set<Modifier> modifiers;
+	private ModifiersSet modifiers = new ModifiersSet();
 
 	private List<AnnotationExpr> annotations;
 
@@ -84,24 +85,24 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see ModifierSet
+	 * @see com.github.javaparser.ast.body.ModifierUtils
 	 * @return modifiers
 	 * @deprecated please use getModifiersSet instead
 	 */
 	@Override
 	@Deprecated
 	public int getModifiers() {
-		return ModifierSet.toInt(modifiers);
+		return ModifierUtils.toInt(modifiers);
 	}
 
 	/**
 	 * Return the modifiers of this member declaration.
 	 *
-	 * @see ModifierSet
+	 * @see com.github.javaparser.ast.body.ModifierUtils
 	 * @return modifiers
 	 */
 	@Override
-	public Set<Modifier> getModifiersSet() {
+	public ModifiersSet getModifiersSet() {
 		return modifiers;
 	}
 
@@ -118,12 +119,12 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
 		setAsParentNodeOf(this.annotations);
 	}
 
-	public final void setModifiers(Set<Modifier> modifiers) {
+	public final void setModifiers(ModifiersSet modifiers) {
 		this.modifiers = modifiers;
 	}
 
 	public final void setModifiers(int modifiers) {
-		this.modifiers = ModifierSet.toSet(modifiers);
+		this.modifiers = ModifierUtils.toSet(modifiers);
 	}
 
 	public void setType(final Type type) {

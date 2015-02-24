@@ -130,7 +130,7 @@ public class ManipulationSteps {
     @When("a public class called \"$className\" is added to the CompilationUnit")
     public void whenAClassCalledIsAddedToTheCompilationUnit(String className) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        TypeDeclaration type = new ClassOrInterfaceDeclaration(ModifierSet.PUBLIC, false, "CreateClass");
+        TypeDeclaration type = new ClassOrInterfaceDeclaration(ModifierUtils.PUBLIC, false, "CreateClass");
         compilationUnit.setTypes(Arrays.asList(type));
         state.put("cu1", compilationUnit);
     }
@@ -139,8 +139,8 @@ public class ManipulationSteps {
     public void whenAStaticMethodCalledReturningIsAddedToClassInTheCompilationUnit(String methodName, int position) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         TypeDeclaration type = compilationUnit.getTypes().get(position -1);
-        MethodDeclaration method = new MethodDeclaration(ModifierSet.PUBLIC, new VoidType(), methodName);
-        method.setModifiers(ModifierSet.addModifier(method.getModifiers(), ModifierSet.STATIC));
+        MethodDeclaration method = new MethodDeclaration(ModifierUtils.PUBLIC, new VoidType(), methodName);
+        method.setModifiers(ModifierUtils.addModifier(method.getModifiers(), ModifierUtils.STATIC));
         ASTHelper.addMember(type, method);
         state.put("cu1", compilationUnit);
     }
