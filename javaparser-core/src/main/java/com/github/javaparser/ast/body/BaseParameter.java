@@ -25,10 +25,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
+import javax.lang.model.element.Modifier;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class BaseParameter extends Node implements NodeWithModifiers {
-    private int modifiers;
+    private Set<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<AnnotationExpr> annotations;
     
@@ -68,12 +71,26 @@ public abstract class BaseParameter extends Node implements NodeWithModifiers {
     }
 
     /**
-     * Return the modifiers of this parameter declaration.
-     * 
+     * Return the modifiers of this member declaration.
+     *
+     * @see ModifierSet
+     * @return modifiers
+     * @deprecated please use getModifiersSet instead
+     */
+    @Override
+    @Deprecated
+    public int getModifiers() {
+        return ModifierSet.toInt(modifiers);
+    }
+
+    /**
+     * Return the modifiers of this member declaration.
+     *
      * @see ModifierSet
      * @return modifiers
      */
-    public int getModifiers() {
+    @Override
+    public Set<Modifier> getModifiersSet() {
         return modifiers;
     }
 
@@ -87,7 +104,12 @@ public abstract class BaseParameter extends Node implements NodeWithModifiers {
         setAsParentNodeOf(this.id);
     }
 
-    public void setModifiers(int modifiers) {
+    public final void setModifiers(Set<Modifier> modifiers) {
         this.modifiers = modifiers;
     }
+
+    public final void setModifiers(int modifiers) {
+        this.modifiers = ModifierSet.toSet(modifiers);
+    }
+
 }

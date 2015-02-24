@@ -21,8 +21,10 @@
  
 package com.github.javaparser.ast.body;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
@@ -36,12 +38,14 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import javax.lang.model.element.Modifier;
+
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, NodeWithModifiers {
 
-    private int modifiers;
+    private Set<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<TypeParameter> typeParameters;
 
@@ -97,11 +101,25 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     /**
      * Return the modifiers of this member declaration.
-     * 
+     *
+     * @see ModifierSet
+     * @return modifiers
+     * @deprecated please use getModifiersSet instead
+     */
+    @Override
+    @Deprecated
+    public int getModifiers() {
+        return ModifierSet.toInt(modifiers);
+    }
+
+    /**
+     * Return the modifiers of this member declaration.
+     *
      * @see ModifierSet
      * @return modifiers
      */
-    public int getModifiers() {
+    @Override
+    public Set<Modifier> getModifiersSet() {
         return modifiers;
     }
 
@@ -136,9 +154,14 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 		setAsParentNodeOf(this.block);
     }
 
-    public void setModifiers(int modifiers) {
+    public final void setModifiers(Set<Modifier> modifiers) {
         this.modifiers = modifiers;
     }
+
+    public final void setModifiers(int modifiers) {
+        this.modifiers = ModifierSet.toSet(modifiers);
+    }
+
 
     public void setName(String name) {
         this.name = new NameExpr(name);

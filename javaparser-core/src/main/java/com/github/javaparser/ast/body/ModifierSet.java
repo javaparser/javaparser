@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.NodeWithModifiers;
 
 import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Class to hold modifiers.<br>
@@ -34,6 +35,21 @@ import java.lang.reflect.Modifier;
 public final class ModifierSet {
 
     /* Definitions of the bits in the modifiers field.  */
+    
+    private static Map<javax.lang.model.element.Modifier, Integer> ENUM_TO_INT = new HashMap<javax.lang.model.element.Modifier, Integer>();
+    
+    static {
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.ABSTRACT, Modifier.ABSTRACT);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.FINAL, Modifier.FINAL);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.NATIVE, Modifier.NATIVE);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.PRIVATE, Modifier.PRIVATE);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.PROTECTED, Modifier.PROTECTED);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.PUBLIC, Modifier.PUBLIC);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.STATIC, Modifier.STATIC);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.STRICTFP, Modifier.STRICT);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.SYNCHRONIZED, Modifier.SYNCHRONIZED);
+        ENUM_TO_INT.put(javax.lang.model.element.Modifier.TRANSIENT, Modifier.TRANSIENT);
+    }
 
     public static final int PUBLIC = Modifier.PUBLIC;
 
@@ -86,14 +102,14 @@ public final class ModifierSet {
         return modifiers | mod;
     }
 
-    /** @deprecated use {@link #hasModifier(NodeWithModifiers, int)} (...)} instead */
+    /** @deprecated use {@link #hasModifier(NodeWithModifiers, javax.lang.model.element.Modifier)} (...)} instead */
     @Deprecated
     public static boolean hasModifier(int modifiers, int modifier) {
         return (modifiers & modifier) != 0;
     }
 
-    public static boolean hasModifier(NodeWithModifiers node, int modifier) {
-        return (node.getModifiers() & modifier) != 0;
+    public static boolean hasModifier(NodeWithModifiers node, javax.lang.model.element.Modifier modifier) {
+        return node.getModifiersSet().contains(modifier);
     }
 
     /** @deprecated use {@link #isAbstract(NodeWithModifiers)} (...)} instead */
@@ -103,7 +119,7 @@ public final class ModifierSet {
     }
 
     public static boolean isAbstract(NodeWithModifiers node) {
-        return (node.getModifiers() & ABSTRACT) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.ABSTRACT);
     }
 
     /** @deprecated use {@link #isFinal(NodeWithModifiers)} (...)} instead */
@@ -113,7 +129,7 @@ public final class ModifierSet {
     }
 
     public static boolean isFinal(NodeWithModifiers node) {
-        return (node.getModifiers() & FINAL) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.FINAL);
     }
 
     /** @deprecated use {@link #isNative(NodeWithModifiers)} (...)} instead */
@@ -123,7 +139,7 @@ public final class ModifierSet {
     }
 
     public static boolean isNative(NodeWithModifiers node) {
-        return (node.getModifiers() & NATIVE) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.NATIVE);
     }
 
     /** @deprecated use {@link #isPrivate(NodeWithModifiers)} (...)} instead */
@@ -133,7 +149,7 @@ public final class ModifierSet {
     }
 
     public static boolean isPrivate(NodeWithModifiers node) {
-        return (node.getModifiers() & PRIVATE) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.PRIVATE);
     }
 
     /** @deprecated use {@link #isProtected(NodeWithModifiers)} (...)} instead */
@@ -143,7 +159,7 @@ public final class ModifierSet {
     }
 
     public static boolean isProtected(NodeWithModifiers node) {
-        return (node.getModifiers() & PROTECTED) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.PROTECTED);
     }
 
     /**
@@ -176,7 +192,7 @@ public final class ModifierSet {
     }
 
     public static boolean isPublic(NodeWithModifiers node) {
-        return (node.getModifiers() & PUBLIC) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.PUBLIC);
     }
 
     /** @deprecated use {@link #isStatic(NodeWithModifiers)} (...)} instead */
@@ -186,7 +202,7 @@ public final class ModifierSet {
     }
 
     public static boolean isStatic(NodeWithModifiers node) {
-        return (node.getModifiers() & STATIC) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.STATIC);
     }
 
     /** @deprecated use {@link #isStrictfp(NodeWithModifiers)} (...)} instead */
@@ -196,7 +212,7 @@ public final class ModifierSet {
     }
 
     public static boolean isStrictfp(NodeWithModifiers node) {
-        return (node.getModifiers() & STRICTFP) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.STRICTFP);
     }
 
     /** @deprecated use {@link #isSynchronized(NodeWithModifiers)} (...)} instead */
@@ -206,7 +222,7 @@ public final class ModifierSet {
     }
 
     public static boolean isSynchronized(NodeWithModifiers node) {
-        return (node.getModifiers() & SYNCHRONIZED) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.SYNCHRONIZED);
     }
 
     /** @deprecated use {@link #isTransient(NodeWithModifiers)} (...)} instead */
@@ -216,7 +232,7 @@ public final class ModifierSet {
     }
 
     public static boolean isTransient(NodeWithModifiers node) {
-        return (node.getModifiers() & TRANSIENT) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.TRANSIENT);
     }
 
     /** @deprecated use {@link #isVolatile(NodeWithModifiers)} (...)} instead */
@@ -226,7 +242,7 @@ public final class ModifierSet {
     }
 
     public static boolean isVolatile(NodeWithModifiers node) {
-        return (node.getModifiers() & VOLATILE) != 0;
+        return hasModifier(node, javax.lang.model.element.Modifier.VOLATILE);
     }
 
     /**
@@ -240,5 +256,25 @@ public final class ModifierSet {
     }
 
     private ModifierSet() {
+    }
+
+    public static Set<javax.lang.model.element.Modifier> toSet(int modifiersAsInt) {
+        Set<javax.lang.model.element.Modifier> modifiersAsSet = EnumSet.noneOf(javax.lang.model.element.Modifier.class);
+        for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
+            if (hasModifier(modifiersAsInt, ENUM_TO_INT.get(modifier))){
+                modifiersAsSet.add(modifier);
+            }
+        }
+        return modifiersAsSet;
+    }
+
+    public static int toInt(Set<javax.lang.model.element.Modifier> modifiersAsSet) {
+        int modifiersAsInt = 0;
+        for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
+            if (modifiersAsSet.contains(modifier)){
+                modifiersAsInt |= ENUM_TO_INT.get(modifier);
+            }
+        }
+        return modifiersAsInt;
     }
 }

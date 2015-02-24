@@ -26,7 +26,9 @@ import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
+import javax.lang.model.element.Modifier;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Julio Vilmar Gesser
@@ -35,7 +37,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 
 	private NameExpr name;
 
-	private int modifiers;
+	private Set<Modifier> modifiers;
 
 	private List<BodyDeclaration> members;
 
@@ -71,12 +73,26 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	/**
-	 * Return the modifiers of this type declaration.
-	 * 
+	 * Return the modifiers of this member declaration.
+	 *
+	 * @see ModifierSet
+	 * @return modifiers
+	 * @deprecated please use getModifiersSet instead
+	 */
+	@Override
+	@Deprecated
+	public int getModifiers() {
+		return ModifierSet.toInt(modifiers);
+	}
+
+	/**
+	 * Return the modifiers of this member declaration.
+	 *
 	 * @see ModifierSet
 	 * @return modifiers
 	 */
-	public final int getModifiers() {
+	@Override
+	public Set<Modifier> getModifiersSet() {
 		return modifiers;
 	}
 
@@ -89,8 +105,12 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		setAsParentNodeOf(this.members);
 	}
 
-	public final void setModifiers(int modifiers) {
+	public final void setModifiers(Set<Modifier> modifiers) {
 		this.modifiers = modifiers;
+	}
+
+	public final void setModifiers(int modifiers) {
+		this.modifiers = ModifierSet.toSet(modifiers);
 	}
 
 	public final void setName(String name) {
