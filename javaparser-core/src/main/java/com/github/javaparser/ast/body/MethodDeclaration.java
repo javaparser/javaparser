@@ -56,8 +56,6 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	private BlockStmt body;
 
-    private boolean isDefault = false;
-
     public MethodDeclaration() {
 	}
 
@@ -201,15 +199,21 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(typeParameters);
 	}
 
+	/**
+	 * @deprecated Use modifiers
+	 */
+	@Deprecated
+	public boolean isDefault() {
+		return ModifierSet.isDefault(modifiers);
+	}
 
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setDefault(boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
+	/**
+	 * @deprecated Use modifiers
+	 */
+	@Deprecated
+	public void setDefault(boolean isDefault) {
+		modifiers = ModifierSet.addModifier(modifiers, ModifierSet.DEFAULT);
+	}
 
     @Override
     public String getDeclarationAsString() {

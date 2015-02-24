@@ -1216,6 +1216,8 @@ Modifier Modifiers():
   |
    "strictfp" { modifiers = addModifier(modifiers, ModifierSet.STRICTFP, token);  if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
+   "default" { modifiers = addModifier(modifiers, ModifierSet.DEFAULT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+  |
    ann = Annotation() { annotations = add(annotations, ann); if(beginLine==-1) {beginLine=ann.getBeginLine(); beginColumn=ann.getBeginColumn();} }
   )
  )*
@@ -1420,7 +1422,6 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 {
    boolean isNestedInterface = false;
    Modifier modifier;
-   Modifier modifier2 = null;
    int aux = 0;
    BodyDeclaration ret;
    boolean isDefault = false;
@@ -1435,14 +1436,14 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	        throwParseException(token, "An interface cannot have initializers");
 	  }
 	|
-	  modifier = Modifiers() [ "default" modifier2= Modifiers()
+	  modifier = Modifiers()
 	  {
-	    if(!isInterface)
+	    // TODO Fire error later and do not stop parsing
+	    if(!isInterface && ModifierSet.isDefault(modifier.modifiers()))
 	    {
 	      throwParseException(token, "An interface cannot have default members");
 	    }
-	    isDefault = true;
-	  }]
+	  }
 
 				// Just get all the modifiers out of the way. If you want to do
 	              // more checks, pass the modifiers down to the member
@@ -1461,16 +1462,10 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	    |
 	      ret = MethodDeclaration(modifier)
 	      {
-	        if(isDefault && ret!= null && ((MethodDeclaration)ret).getBody() == null)
+	        if(isDefault && ret != null && ((MethodDeclaration)ret).getBody() == null)
 	        {
 	          throwParseException(token, "\"default\" methods must have a body");
 	        }
-	        ((MethodDeclaration)ret).setDefault(isDefault);
-	        if(modifier2!= null)
-	        {
-	          aux = modifier2.modifiers;
-	        }
-	        ((MethodDeclaration)ret).setModifiers(addModifier(modifier.modifiers, aux, token));
 	      }
 	  )
 	  {
