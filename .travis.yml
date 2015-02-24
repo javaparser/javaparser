@@ -2,7 +2,7 @@ language: java
 install: mvn install -DskipTests=true
 script: mvn test
 jdk:
-  - openjdk6
+  - oraclejdk8
 notifications:
   webhooks:
     urls:

@@ -64,7 +64,7 @@ public class ManipulationSteps {
 
     @Given("a List of VariableDeclarations")
     public void givenAListOfVariableDeclarations() {
-        variableDeclarationExprList = new ArrayList<VariableDeclarationExpr>();
+        variableDeclarationExprList = new ArrayList<>();
         variableDeclarationExprList.add(new VariableDeclarationExpr());
         variableDeclarationExprList.add(new VariableDeclarationExpr());
     }
