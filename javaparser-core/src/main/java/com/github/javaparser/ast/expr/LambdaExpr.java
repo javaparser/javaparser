@@ -45,8 +45,8 @@ public class LambdaExpr extends Expression {
 	}
 
 	public void setParameters(List<Parameter> parameters) {
-		setAsParentNodeOf(parameters);
 		this.parameters = parameters;
+		setAsParentNodeOf(this.parameters);
 	}
 
 	public Statement getBody() {
@@ -54,8 +54,8 @@ public class LambdaExpr extends Expression {
 	}
 
 	public void setBody(Statement body) {
-		setAsParentNodeOf(body);
 		this.body = body;
+		setAsParentNodeOf(this.body);
 	}
 
 	@Override

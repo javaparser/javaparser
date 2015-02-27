@@ -1,13 +1,9 @@
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.*;
 import org.jbehave.core.annotations.Then;
 
 import java.util.Map;
@@ -53,7 +49,7 @@ public class ParsingSteps {
     @Then("method $methodPosition in class $classPosition declaration as a String short form is \"$expectedString\"")
     public void thenMethodInClassDeclarationAsAStringShortFormIs(int methodPosition, int classPosition, String expectedString) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        ClassOrInterfaceDeclaration clazz = (ClassOrInterfaceDeclaration)compilationUnit.getTypes().get(classPosition -1);
+        ClassOrInterfaceDeclaration clazz = (ClassOrInterfaceDeclaration)compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration method = (MethodDeclaration)clazz.getMembers().get(methodPosition -1);
         assertThat(method.getDeclarationAsString(false, false), is(expectedString));
     }
@@ -166,6 +162,22 @@ public class ParsingSteps {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0).getChildrenNodes().get(1);
         return (LambdaExpr) variableDeclarator.getInit();
+    }
+
+    @Then("all nodes refer to their parent")
+    public void allNodesReferToTheirParent() {
+        assertAllNodesOfTheCompilationUnitHaveTheirParentSet("cu1");
+    }
+
+    @Then("all nodes of the second compilation unit refer to their parent")
+    public void thenAllNodesOfTheSecondCompilationUnitReferToTheirParent() {
+        assertAllNodesOfTheCompilationUnitHaveTheirParentSet("cu2");
+    }
+
+    private void assertAllNodesOfTheCompilationUnitHaveTheirParentSet(String stateKey) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get(stateKey);
+        ExistenceOfParentNodeVerifier parentVerifier = new ExistenceOfParentNodeVerifier();
+        parentVerifier.verify(compilationUnit);
     }
 
 }

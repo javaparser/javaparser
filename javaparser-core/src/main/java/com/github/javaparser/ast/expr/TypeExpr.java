@@ -15,8 +15,9 @@ public class TypeExpr extends Expression{
 
     public TypeExpr(){}
 
-    public TypeExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type){
-        this.type = type;
+    public TypeExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type) {
+        super(beginLine, beginColumn, endLine, endColumn);
+        setType(type);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class TypeExpr extends Expression{
 
     public void setType(Type type) {
         this.type = type;
+        setAsParentNodeOf(this.type);
     }
 
 
