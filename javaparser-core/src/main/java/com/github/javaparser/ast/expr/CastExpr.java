@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -48,7 +49,13 @@ public final class CastExpr extends Expression {
     	setExpr(expr);
     }
 
-    @Override
+	public CastExpr(Position begin, Position end, Type type, Expression expr) {
+		super(begin, end);
+		setType(type);
+		setExpr(expr);
+	}
+
+	@Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
     }

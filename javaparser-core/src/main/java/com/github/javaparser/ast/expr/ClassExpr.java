@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -43,6 +44,11 @@ public final class ClassExpr extends Expression {
         super(beginLine, beginColumn, endLine, endColumn);
         setType(type);
     }
+
+	public ClassExpr(Position begin, Position end, Type type) {
+		super(begin, end);
+		setType(type);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

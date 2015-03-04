@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EmptyTypeDeclaration;
@@ -71,6 +72,13 @@ public final class CompilationUnit extends Node {
         setImports(imports);
         setTypes(types);
     }
+
+	public CompilationUnit(Position begin, Position end, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
+		super(begin, end);
+		setPackage(pakage);
+		setImports(imports);
+		setTypes(types);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

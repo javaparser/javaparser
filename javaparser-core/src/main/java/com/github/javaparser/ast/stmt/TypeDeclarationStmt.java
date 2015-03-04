@@ -21,6 +21,8 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -42,6 +44,11 @@ public final class TypeDeclarationStmt extends Statement {
 	public TypeDeclarationStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final TypeDeclaration typeDecl) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setTypeDeclaration(typeDecl);
+	}
+
+	public TypeDeclarationStmt(Position begin, Position end, final TypeDeclaration typeDecl) {
+		super(begin, end);
 		setTypeDeclaration(typeDecl);
 	}
 

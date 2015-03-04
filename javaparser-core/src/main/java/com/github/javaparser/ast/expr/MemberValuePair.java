@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -45,6 +46,12 @@ public final class MemberValuePair extends Node {
 	public MemberValuePair(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final String name, final Expression value) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setName(name);
+		setValue(value);
+	}
+
+	public MemberValuePair(Position begin, Position end, final String name, final Expression value) {
+		super(begin, end);
 		setName(name);
 		setValue(value);
 	}

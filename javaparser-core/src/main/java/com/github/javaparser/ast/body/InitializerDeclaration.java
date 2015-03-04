@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -50,6 +51,12 @@ public final class InitializerDeclaration extends BodyDeclaration implements Doc
         setStatic(isStatic);
         setBlock(block);
     }
+
+	public InitializerDeclaration(Position begin, Position end, boolean isStatic, BlockStmt block) {
+		super(begin, end, null);
+		setStatic(isStatic);
+		setBlock(block);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -20,6 +21,13 @@ public class MultiTypeParameter extends BaseParameter {
     public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, List<Type> types, VariableDeclaratorId id) {
         super(beginLine, beginColumn, endLine, endColumn, modifiers, annotations, id);
         this.types = types;
+	}
+
+	public MultiTypeParameter(Position begin, Position end,
+			final int modifiers, final List<AnnotationExpr> annotations,
+			final List<Type> types, final VariableDeclaratorId id) {
+		super(begin, end, modifiers, annotations, id);
+		this.types = types;
 	}
 
     @Override

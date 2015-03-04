@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -43,6 +44,10 @@ public class IntegerLiteralExpr extends StringLiteralExpr {
 	public IntegerLiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final String value) {
 		super(beginLine, beginColumn, endLine, endColumn, value);
+	}
+
+	public IntegerLiteralExpr(Position begin, Position end, String value) {
+		super(begin, end, value);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

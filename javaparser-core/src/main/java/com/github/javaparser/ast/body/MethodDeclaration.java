@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
@@ -91,6 +92,20 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations);
+		setModifiers(modifiers);
+		setTypeParameters(typeParameters);
+		setType(type);
+		setName(name);
+		setParameters(parameters);
+		setArrayCount(arrayCount);
+		setThrows(throws_);
+		setBody(block);
+	}
+
+	public MethodDeclaration(Position begin, Position end, final int modifiers, final List<AnnotationExpr> annotations,
+			final List<TypeParameter> typeParameters, final Type type, final String name,
+			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
+		super(begin, end, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
 		setType(type);

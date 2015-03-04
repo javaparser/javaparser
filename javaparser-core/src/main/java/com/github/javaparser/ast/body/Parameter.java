@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -49,11 +50,19 @@ public final class Parameter extends BaseParameter {
         setType(type);
     }
 
-    public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
-        super(beginLine, beginColumn, endLine, endColumn, modifiers, annotations, id);
-        setType(type);
-        setVarArgs(isVarArgs);
-    }
+	public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
+		super(beginLine, beginColumn, endLine, endColumn, modifiers, annotations, id);
+		setType(type);
+		setVarArgs(isVarArgs);
+	}
+
+	public Parameter(Position begin, Position end,
+			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
+			final boolean isVarArgs, final VariableDeclaratorId id) {
+		super(begin, end, modifiers, annotations, id);
+		setType(type);
+		setVarArgs(isVarArgs);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

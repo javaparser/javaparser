@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
@@ -35,6 +36,14 @@ public abstract class BaseParameter extends Node {
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);
+	}
+
+	public BaseParameter(Position begin, Position end,
+			final int modifiers, final List<AnnotationExpr> annotations, final VariableDeclaratorId id) {
+		super(begin, end);
+		setModifiers(modifiers);
+		setAnnotations(annotations);
+		setId(id);
 	}
 
     public List<AnnotationExpr> getAnnotations() {

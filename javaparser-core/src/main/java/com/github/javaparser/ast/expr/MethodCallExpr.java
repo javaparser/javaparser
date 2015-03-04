@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -57,6 +58,15 @@ public final class MethodCallExpr extends Expression {
 	public MethodCallExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression scope, final List<Type> typeArgs, final String name, final List<Expression> args) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setScope(scope);
+		setTypeArgs(typeArgs);
+		setName(name);
+		setArgs(args);
+	}
+
+	public MethodCallExpr(Position begin, Position end,
+			final Expression scope, final List<Type> typeArgs, final String name, final List<Expression> args) {
+		super(begin, end);
 		setScope(scope);
 		setTypeArgs(typeArgs);
 		setName(name);

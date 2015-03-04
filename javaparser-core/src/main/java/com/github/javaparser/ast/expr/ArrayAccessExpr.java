@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -46,6 +47,12 @@ public final class ArrayAccessExpr extends Expression {
         setName(name);
         setIndex(index);
     }
+
+	public ArrayAccessExpr(Position begin, Position end, Expression name, Expression index) {
+		super(begin, end);
+		setName(name);
+		setIndex(index);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

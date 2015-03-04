@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -57,6 +58,17 @@ public final class ObjectCreationExpr extends Expression {
 			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
 			final List<Expression> args, final List<BodyDeclaration> anonymousBody) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setScope(scope);
+		setType(type);
+		setTypeArgs(typeArgs);
+		setArgs(args);
+		setAnonymousClassBody(anonymousBody);
+	}
+
+	public ObjectCreationExpr(Position begin, Position end,
+			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
+			final List<Expression> args, final List<BodyDeclaration> anonymousBody) {
+		super(begin, end);
 		setScope(scope);
 		setType(type);
 		setTypeArgs(typeArgs);

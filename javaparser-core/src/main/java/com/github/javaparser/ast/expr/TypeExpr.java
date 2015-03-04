@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -9,18 +10,24 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Raquel Pau
  *
  */
-public class TypeExpr extends Expression{
+public class TypeExpr extends Expression {
 
     private Type type;
 
-    public TypeExpr(){}
-
-    public TypeExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        setType(type);
+    public TypeExpr() {
     }
 
-    @Override
+    public TypeExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type) {
+	    super(beginLine, beginColumn, endLine, endColumn);
+	    setType(type);
+    }
+
+	public TypeExpr(Position begin, Position end, Type type) {
+		super(begin, end);
+		setType(type);
+	}
+
+	@Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
     }
@@ -38,7 +45,4 @@ public class TypeExpr extends Expression{
         this.type = type;
         setAsParentNodeOf(this.type);
     }
-
-
-
 }

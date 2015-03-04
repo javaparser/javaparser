@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -52,6 +53,12 @@ public final class VariableDeclarator extends Node {
         setId(id);
         setInit(init);
     }
+
+	public VariableDeclarator(Position begin, Position end, VariableDeclaratorId id, Expression init) {
+		super(begin, end);
+		setId(id);
+		setInit(init);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

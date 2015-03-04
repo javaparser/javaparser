@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -42,6 +43,11 @@ public final class ExpressionStmt extends Statement {
 	public ExpressionStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression expr) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setExpression(expr);
+	}
+
+	public ExpressionStmt(Position begin, Position end, final Expression expr) {
+		super(begin, end);
 		setExpression(expr);
 	}
 

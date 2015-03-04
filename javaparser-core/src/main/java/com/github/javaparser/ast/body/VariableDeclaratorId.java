@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -46,6 +47,12 @@ public final class VariableDeclaratorId extends Node {
         setName(name);
         setArrayCount(arrayCount);
     }
+
+	public VariableDeclaratorId(Position begin, Position end, String name, int arrayCount) {
+		super(begin, end);
+		setName(name);
+		setArrayCount(arrayCount);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

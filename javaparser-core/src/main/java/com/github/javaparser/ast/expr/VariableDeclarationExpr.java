@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
@@ -60,6 +61,16 @@ public final class VariableDeclarationExpr extends Expression {
 			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
 			final List<VariableDeclarator> vars) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setModifiers(modifiers);
+		setAnnotations(annotations);
+		setType(type);
+		setVars(vars);
+	}
+
+	public VariableDeclarationExpr(Position begin, Position end,
+			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
+			final List<VariableDeclarator> vars) {
+		super(begin, end);
 		setModifiers(modifiers);
 		setAnnotations(annotations);
 		setType(type);

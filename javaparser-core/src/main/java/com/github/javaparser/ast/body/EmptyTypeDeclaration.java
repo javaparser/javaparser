@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -38,6 +39,10 @@ public final class EmptyTypeDeclaration extends TypeDeclaration implements Docum
     public EmptyTypeDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
         super(beginLine, beginColumn, endLine, endColumn, null, 0, null, null);
     }
+
+	public EmptyTypeDeclaration(Position begin, Position end) {
+		super(begin, end, null, 0, null, null);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

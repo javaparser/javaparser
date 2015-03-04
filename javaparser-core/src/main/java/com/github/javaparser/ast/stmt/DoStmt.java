@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -45,6 +46,12 @@ public final class DoStmt extends Statement {
 	public DoStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Statement body, final Expression condition) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setBody(body);
+		setCondition(condition);
+	}
+
+	public DoStmt(Position begin, Position end, final Statement body, final Expression condition) {
+		super(begin, end);
 		setBody(body);
 		setCondition(condition);
 	}

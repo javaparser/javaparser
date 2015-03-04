@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -42,6 +43,11 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         super(beginLine, beginColumn, endLine, endColumn);
         setValue(value);
     }
+
+	public BooleanLiteralExpr(Position begin, Position end, boolean value) {
+		super(begin, end);
+		setValue(value);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -42,6 +43,12 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 	public SingleMemberAnnotationExpr(final int beginLine, final int beginColumn, final int endLine,
 			final int endColumn, final NameExpr name, final Expression memberValue) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setName(name);
+		setMemberValue(memberValue);
+	}
+
+	public SingleMemberAnnotationExpr(Position begin, Position end, final NameExpr name, final Expression memberValue) {
+		super(begin, end);
 		setName(name);
 		setMemberValue(memberValue);
 	}

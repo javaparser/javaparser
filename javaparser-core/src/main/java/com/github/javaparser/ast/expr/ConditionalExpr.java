@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -50,6 +51,13 @@ public final class ConditionalExpr extends Expression {
         setThenExpr(thenExpr);
         setElseExpr(elseExpr);
     }
+
+	public ConditionalExpr(Position begin, Position end, Expression condition, Expression thenExpr, Expression elseExpr) {
+		super(begin, end);
+		setCondition(condition);
+		setThenExpr(thenExpr);
+		setElseExpr(elseExpr);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

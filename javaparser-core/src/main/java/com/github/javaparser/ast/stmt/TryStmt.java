@@ -21,6 +21,7 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -54,6 +55,16 @@ public final class TryStmt extends Statement {
 			final int endLine, final int endColumn, List<VariableDeclarationExpr> resources,
 			final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setResources(resources);
+		setTryBlock(tryBlock);
+		setCatchs(catchs);
+		setFinallyBlock(finallyBlock);
+	}
+
+	public TryStmt(Position begin, Position end,
+			final List<VariableDeclarationExpr> resources, final BlockStmt tryBlock,
+			final List<CatchClause> catchs, final BlockStmt finallyBlock) {
+		super(begin, end);
 		setResources(resources);
 		setTryBlock(tryBlock);
 		setCatchs(catchs);
