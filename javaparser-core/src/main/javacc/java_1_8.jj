@@ -23,6 +23,8 @@ options {
   //COMMON_TOKEN_ACTION=true; // Will not use CommonTokenAction to handle JavaDoc and comments
   SUPPORT_CLASS_VISIBILITY_PUBLIC = false;
   JDK_VERSION = "1.6";
+  COMMON_TOKEN_ACTION = true;
+  TOKEN_MANAGER_USES_PARSER = true;
   TOKEN_EXTENDS = "com.github.javaparser.parser.TokenBase";
 }
 
@@ -104,22 +106,30 @@ final class ASTParser extends Parser {
 
 PARSER_END(ASTParser)
 
+TOKEN_MGR_DECLS:{
+
+	void CommonTokenAction(Token token) {
+		parser.postProcessToken(token);
+	}
+}
+
 /* WHITE SPACE */
 
-SKIP :
+SPECIAL_TOKEN :
 {
-  " "
-| "\t"
-| "\n"
-| "\r"
-| "\f"
+  <WHITESPACE: (" " | "\t")+ >
+}
+
+SPECIAL_TOKEN :
+{
+  <NEWLINE: ("\n" | "\r" | "\f") >
 }
 
 /* COMMENTS */
 
 SPECIAL_TOKEN :
 {
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* >
 }
 
 MORE :
