@@ -5,8 +5,17 @@ package com.github.javaparser.ast.lexical;
  */
 public abstract class Run {
 
-	private Lexeme first;
-	private Lexeme last;
+	private Lexeme first, last;
+
+    public Run() {
+        this.first = null;
+        this.last = null;
+    }
+
+    public Run(Lexeme first, Lexeme last) {
+        this.first = first;
+        this.last = last;
+    }
 
 //	public abstract Run enclosing();
 

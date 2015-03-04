@@ -24,7 +24,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.lexical.Lexeme;
+import com.github.javaparser.ast.lexical.Run;
 import com.github.javaparser.ast.visitor.DumpVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -39,16 +42,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * 
  * @author Julio Vilmar Gesser
  */
-public abstract class Node {
+public abstract class Node extends Run {
 
-	private int beginLine;
-
-	private int beginColumn;
-
-	private int endLine;
-
-	private int endColumn;
-	
 	private Node parentNode;
 
     private List<Node> childrenNodes =  new LinkedList<Node>();
@@ -64,11 +59,8 @@ public abstract class Node {
 	public Node() {
 	}
 
-	public Node(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		this.beginLine = beginLine;
-		this.beginColumn = beginColumn;
-		this.endLine = endLine;
-		this.endColumn = endColumn;
+	public Node(Lexeme first, Lexeme last) {
+        super(first, last);
 	}
 
 	/**
@@ -99,21 +91,47 @@ public abstract class Node {
 	public abstract <A> void accept(VoidVisitor<A> v, A arg);
 
 	/**
+	 * Returns the begin position of this node.
+	 *
+	 * @return the begin position, or <code>null</code> if the position has not been set
+	 */
+	public Position getBegin() {
+        Lexeme first = first();
+        return first == null ? null : first.begin();
+	}
+
+	/**
+	 * Returns the end position of this node.
+	 *
+	 * @return the end position, or <code>null</code> if the position has not been set
+	 */
+	public Position getEnd() {
+        Lexeme last = last();
+        return last == null ? null : last.end();
+	}
+
+	/**
 	 * Return the begin column of this node.
 	 * 
 	 * @return the begin column of this node
+	 * @deprecated Use getBegin().column
 	 */
+	@Deprecated()
 	public final int getBeginColumn() {
-		return beginColumn;
+        Position begin = getBegin();
+        return begin == null ? -1 : begin.column;
 	}
 
 	/**
 	 * Return the begin line of this node.
 	 * 
 	 * @return the begin line of this node
+	 * @deprecated Use getBegin().line
 	 */
+	@Deprecated()
 	public final int getBeginLine() {
-		return beginLine;
+        Position begin = getBegin();
+        return begin == null ? -1 : begin.line;
 	}
 
 	/**
@@ -138,38 +156,24 @@ public abstract class Node {
 	 * Return the end column of this node.
 	 * 
 	 * @return the end column of this node
+	 * @deprecated Use getEnd().column
 	 */
+	@Deprecated()
 	public final int getEndColumn() {
-		return endColumn;
+        Position end = getEnd();
+        return end == null ? -1 : end.column;
 	}
 
 	/**
 	 * Return the end line of this node.
 	 * 
 	 * @return the end line of this node
+	 * @deprecated Use getEnd().line
 	 */
+	@Deprecated()
 	public final int getEndLine() {
-		return endLine;
-	}
-
-	/**
-	 * Sets the begin column of this node.
-	 * 
-	 * @param beginColumn
-	 *            the begin column of this node
-	 */
-	public final void setBeginColumn(final int beginColumn) {
-		this.beginColumn = beginColumn;
-	}
-
-	/**
-	 * Sets the begin line of this node.
-	 * 
-	 * @param beginLine
-	 *            the begin line of this node
-	 */
-	public final void setBeginLine(final int beginLine) {
-		this.beginLine = beginLine;
+        Position end = getEnd();
+        return end == null ? -1 : end.line;
 	}
 
 	/**
@@ -198,26 +202,6 @@ public abstract class Node {
 	 */
 	public final void setData(final Object data) {
 		this.data = data;
-	}
-
-	/**
-	 * Sets the end column of this node.
-	 * 
-	 * @param endColumn
-	 *            the end column of this node
-	 */
-	public final void setEndColumn(final int endColumn) {
-		this.endColumn = endColumn;
-	}
-
-	/**
-	 * Sets the end line of this node.
-	 * 
-	 * @param endLine
-	 *            the end line of this node
-	 */
-	public final void setEndLine(final int endLine) {
-		this.endLine = endLine;
 	}
 
 	/**
