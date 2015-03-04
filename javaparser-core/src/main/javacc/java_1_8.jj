@@ -21,7 +21,7 @@ options {
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
   //COMMON_TOKEN_ACTION=true; // Will not use CommonTokenAction to handle JavaDoc and comments
-  //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
+  SUPPORT_CLASS_VISIBILITY_PUBLIC = false;
   JDK_VERSION = "1.6";
   TOKEN_FACTORY = "ASTParser.GTToken";
 }
@@ -39,7 +39,7 @@ PARSER_BEGIN(ASTParser)
  * You should have received a copy of the GNU Lesser General Public License
  * along with Java 1.8 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.javaparser;
+package com.github.javaparser.parser;
 
 import java.io.*;
 import java.util.*;
@@ -53,51 +53,17 @@ import com.github.javaparser.ast.type.*;
 /**
  * <p>This class was generated automatically by javacc, do not edit.</p>
  */
-final class ASTParser {
+final class ASTParser extends Parser {
 
-    void reset(InputStream in, String encoding) {
+    public void reset(InputStream in, String encoding) {
         ReInit(in, encoding);
     }
 
-    private List add(List list, Object obj) {
-    	if (list == null) {
-    		list = new LinkedList();
-    	}
-    	list.add(obj);
-    	return list;
+    public void reset(Reader in) {
+        ReInit(in);
     }
 
-    private List add(int pos, List list, Object obj) {
-    	if (list == null) {
-    		list = new LinkedList();
-    	}
-    	list.add(pos, obj);
-    	return list;
-    }
-
-	private class Modifier {
-
-		final int modifiers;
-		final List annotations;
-		final int beginLine;
-		final int beginColumn;
-
-		public Modifier(int beginLine, int beginColumn, int modifiers, List annotations) {
-			this.beginLine = beginLine;
-			this.beginColumn = beginColumn;
-			this.modifiers = modifiers;
-			this.annotations = annotations;
-		}
-	}
-
-    public int addModifier(int modifiers, int mod, Token token) throws ParseException {
-        if ((ModifierSet.hasModifier(modifiers, mod))) {
-            throwParseException(token, "Duplicated modifier");
-        }
-        return ModifierSet.addModifier(modifiers, mod);
-    }
-
-    private void throwParseException(Token token, String message) throws ParseException {
+    protected void throwParseException(Token token, String message) throws ParseException {
         StringBuilder buf = new StringBuilder();
         buf.append(message);
         buf.append(": \"");
@@ -134,23 +100,6 @@ final class ASTParser {
 	    }
 	    return ret;
     }
-    
-    static final class GTToken extends Token {
-
-        int realKind = ASTParserConstants.GT;
-
-        GTToken(int kind, String image) {
-            this.kind = kind;
-            this.image = image;
-        }
-
-        public static Token newToken(int kind, String image) {
-            return new GTToken(kind, image);
-        }
-    }
-
-    private Token last_special_token = null;
-
 }
 
 PARSER_END(ASTParser)
