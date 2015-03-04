@@ -22,7 +22,7 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
 
-public class Position {
+public class Position implements Comparable<Position> {
     private int line;
     private int column;
 
@@ -48,5 +48,10 @@ public class Position {
 
     public int getColumn(){
         return this.column;
+    }
+
+    @Override
+    public int compareTo(Position o) {
+        return this.line != o.line ? this.line - o.line : this.column - o.column;
     }
 }
