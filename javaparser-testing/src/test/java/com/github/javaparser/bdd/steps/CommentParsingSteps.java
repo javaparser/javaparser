@@ -59,7 +59,7 @@ public class CommentParsingSteps {
 
     @When("the class is parsed by the comment parser")
     public void whenTheClassIsParsedByTheCommentParser() throws IOException {
-        commentsCollection = new CommentsParser().parse(sourceUnderTest);
+        commentsCollection = null;//new CommentsParser().parse(sourceUnderTest);
     }
 
     @When("the do not consider annotations as node start for code attribution is $value on the Java parser")
@@ -68,7 +68,7 @@ public class CommentParsingSteps {
     }
 
     @When("the class is parsed by the Java parser")
-    public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheClassIsParsedByTheJavaParser() throws ParseException, IOException {
         compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
     }
 
@@ -369,10 +369,10 @@ public class CommentParsingSteps {
     }
 
     private Comment toComment(Parameters row, Comment comment) {
-        comment.setBeginLine(Integer.parseInt(row.values().get("beginLine")));
-        comment.setBeginColumn(Integer.parseInt(row.values().get("beginColumn")));
-        comment.setEndLine(Integer.parseInt(row.values().get("endLine")));
-        comment.setEndColumn(Integer.parseInt(row.values().get("endColumn")));
+//        comment.setBeginLine(Integer.parseInt(row.values().get("beginLine")));
+//        comment.setBeginColumn(Integer.parseInt(row.values().get("beginColumn")));
+//        comment.setEndLine(Integer.parseInt(row.values().get("endLine")));
+//        comment.setEndColumn(Integer.parseInt(row.values().get("endColumn")));
         return comment;
     }
 }

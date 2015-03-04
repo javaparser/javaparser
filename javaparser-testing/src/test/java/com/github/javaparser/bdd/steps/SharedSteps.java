@@ -63,12 +63,12 @@ public class SharedSteps {
     }
 
     @When("the following source is parsed:$classSrc")
-    public void whenTheFollowingSourceIsParsed(String classSrc) throws ParseException {
+    public void whenTheFollowingSourceIsParsed(String classSrc) throws ParseException, IOException {
         state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
     }
 
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
-    public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException {
+    public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException, IOException {
         state.put("cu2", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
     }
 
