@@ -85,18 +85,4 @@ public abstract class Parser {
     }
 
     protected abstract void throwParseException(Token token, String message) throws ParseException;
-
-    static final class GTToken extends Token {
-
-        int realKind = ASTParserConstants.GT;
-
-        GTToken(int kind, String image) {
-            this.kind = kind;
-            this.image = image;
-        }
-
-        public static Token newToken(int kind, String image) {
-            return new GTToken(kind, image);
-        }
-    }
 }

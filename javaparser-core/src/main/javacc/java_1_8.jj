@@ -23,7 +23,7 @@ options {
   //COMMON_TOKEN_ACTION=true; // Will not use CommonTokenAction to handle JavaDoc and comments
   SUPPORT_CLASS_VISIBILITY_PUBLIC = false;
   JDK_VERSION = "1.6";
-  TOKEN_FACTORY = "ASTParser.GTToken";
+  TOKEN_EXTENDS = "com.github.javaparser.parser.TokenBase";
 }
 
 PARSER_BEGIN(ASTParser)
@@ -1060,13 +1060,13 @@ TOKEN :
   < RUNSIGNEDSHIFT: ">>>" >
   {
      matchedToken.kind = GT;
-     ((ASTParser.GTToken)matchedToken).realKind = RUNSIGNEDSHIFT;
+     matchedToken.realKind = RUNSIGNEDSHIFT;
      input_stream.backup(2);
   }
 | < RSIGNEDSHIFT: ">>" >
   {
      matchedToken.kind = GT;
-     ((ASTParser.GTToken)matchedToken).realKind = RSIGNEDSHIFT;
+     matchedToken.realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
   }
 | < GT: ">" >
@@ -3016,7 +3016,7 @@ void RUNSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((GTToken)getToken(1)).realKind == RUNSIGNEDSHIFT} )
+                getToken(1).realKind == RUNSIGNEDSHIFT} )
    ">" ">" ">"
   )
 }
@@ -3025,7 +3025,7 @@ void RSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((GTToken)getToken(1)).realKind == RSIGNEDSHIFT} )
+                getToken(1).realKind == RSIGNEDSHIFT} )
   ">" ">"
   )
 }
