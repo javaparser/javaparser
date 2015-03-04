@@ -20,9 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
-import java.util.List;
-import java.util.ArrayList;
-
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
@@ -32,7 +30,9 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.type.Type;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -69,8 +69,8 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         setBlock(block);
     }
 
-    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+    public ConstructorDeclaration(Lexeme first, Lexeme last, int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
+        super(first, last, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);

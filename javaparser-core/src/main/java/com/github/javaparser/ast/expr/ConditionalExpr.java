@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -43,8 +44,8 @@ public final class ConditionalExpr extends Expression {
         setElseExpr(elseExpr);
     }
 
-    public ConditionalExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression condition, Expression thenExpr, Expression elseExpr) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public ConditionalExpr(Lexeme first, Lexeme last, Expression condition, Expression thenExpr, Expression elseExpr) {
+        super(first, last);
         setCondition(condition);
         setThenExpr(thenExpr);
         setElseExpr(elseExpr);

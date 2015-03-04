@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -63,12 +64,11 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 		setImplements(implementsList);
 	}
 
-	public ClassOrInterfaceDeclaration(final int beginLine, final int beginColumn, final int endLine,
-			final int endColumn, final int modifiers,
+	public ClassOrInterfaceDeclaration(Lexeme first, Lexeme last, final int modifiers,
 			final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
+		super(first, last, annotations, modifiers, name, members);
 		setInterface(isInterface);
 		setTypeParameters(typeParameters);
 		setExtends(extendsList);

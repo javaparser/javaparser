@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -38,8 +39,8 @@ public final class ClassExpr extends Expression {
        setType(type);
     }
 
-    public ClassExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public ClassExpr(Lexeme first, Lexeme last, Type type) {
+        super(first, last);
         setType(type);
     }
 

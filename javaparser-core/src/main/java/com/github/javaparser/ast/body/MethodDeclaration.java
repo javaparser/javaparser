@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
@@ -31,8 +32,8 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -85,11 +86,11 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setBody(block);
 	}
 
-	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public MethodDeclaration(Lexeme first, Lexeme last,
 			final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations);
+		super(first, last, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
 		setType(type);

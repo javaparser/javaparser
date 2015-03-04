@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -41,9 +42,9 @@ public final class DoStmt extends Statement {
 		setCondition(condition);
 	}
 
-	public DoStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public DoStmt(Lexeme first, Lexeme last,
 			final Statement body, final Expression condition) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setBody(body);
 		setCondition(condition);
 	}

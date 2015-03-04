@@ -20,9 +20,10 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
 import java.util.List;
 
@@ -49,10 +50,9 @@ public final class TryStmt extends Statement {
 		setFinallyBlock(finallyBlock);
 	}
 
-	public TryStmt(final int beginLine, final int beginColumn,
-			final int endLine, final int endColumn, List<VariableDeclarationExpr> resources,
+	public TryStmt(Lexeme first, Lexeme last, List<VariableDeclarationExpr> resources,
 			final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setResources(resources);
 		setTryBlock(tryBlock);
 		setCatchs(catchs);

@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -58,8 +59,8 @@ public final class AssignExpr extends Expression {
         setOperator(op);
     }
 
-    public AssignExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression target, Expression value, Operator op) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public AssignExpr(Lexeme first, Lexeme last, Expression target, Expression value, Operator op) {
+        super(first, last);
         setTarget(target);
         setValue(value);
         setOperator(op);

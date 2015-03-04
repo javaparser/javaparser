@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -58,8 +59,8 @@ public final class PackageDeclaration extends Node {
         setName(name);
     }
 
-    public PackageDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, NameExpr name) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public PackageDeclaration(Lexeme first, Lexeme last, List<AnnotationExpr> annotations, NameExpr name) {
+        super(first, last);
         setAnnotations(annotations);
         setName(name);
     }

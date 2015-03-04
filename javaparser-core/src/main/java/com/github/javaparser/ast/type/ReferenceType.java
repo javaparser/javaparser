@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -49,18 +50,17 @@ public final class ReferenceType extends Type {
 		setArrayCount(arrayCount);
 	}
 
-	public ReferenceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public ReferenceType(Lexeme first, Lexeme last,
 			final Type type, final int arrayCount) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setType(type);
 		setArrayCount(arrayCount);
 	}
 
-    public ReferenceType(int beginLine, int beginColumn, int endLine,
-                         int endColumn, Type type, int arrayCount,
+    public ReferenceType(Lexeme first, Lexeme last, Type type, int arrayCount,
                          List<AnnotationExpr> annotations,
                          List<List<AnnotationExpr>> arraysAnnotations) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+        super(first, last, annotations);
         setType(type);
         setArrayCount(arrayCount);
         this.arraysAnnotations = arraysAnnotations;

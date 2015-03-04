@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -37,9 +38,9 @@ public class StringLiteralExpr extends LiteralExpr {
 		this.value = value;
 	}
 
-	public StringLiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public StringLiteralExpr(Lexeme first, Lexeme last,
 			final String value) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		this.value = value;
 	}
 

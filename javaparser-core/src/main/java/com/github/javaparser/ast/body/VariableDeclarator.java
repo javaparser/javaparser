@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -46,8 +47,8 @@ public final class VariableDeclarator extends Node {
     	setInit(init);
     }
 
-    public VariableDeclarator(int beginLine, int beginColumn, int endLine, int endColumn, VariableDeclaratorId id, Expression init) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public VariableDeclarator(Lexeme first, Lexeme last, VariableDeclaratorId id, Expression init) {
+        super(first, last);
         setId(id);
         setInit(init);
     }

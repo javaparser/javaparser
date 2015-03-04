@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -44,14 +45,17 @@ public class LambdaExpr extends Expression {
 	public LambdaExpr() {
 	}
 
-	public LambdaExpr(int beginLine, int beginColumn, int endLine,
-                      int endColumn, List<Parameter> parameters, Statement body,
+	public LambdaExpr(Lexeme first, Lexeme last, List<Parameter> parameters, Statement body,
                       boolean parametersEnclosed) {
 
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setParameters(parameters);
 		setBody(body);
 
+		decideSetParametersEnclosed(parametersEnclosed);
+	}
+
+	private void decideSetParametersEnclosed(boolean parametersEnclosed) {
 		if (this.parameters != null && this.parameters.size() == 1
 				&& this.parameters.get(0).getType() == null) {
 			this.parametersEnclosed = parametersEnclosed;

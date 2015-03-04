@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -35,9 +36,9 @@ public final class DoubleLiteralExpr extends StringLiteralExpr {
 		super(value);
 	}
 
-	public DoubleLiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public DoubleLiteralExpr(Lexeme first, Lexeme last,
 			final String value) {
-		super(beginLine, beginColumn, endLine, endColumn, value);
+		super(first, last, value);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

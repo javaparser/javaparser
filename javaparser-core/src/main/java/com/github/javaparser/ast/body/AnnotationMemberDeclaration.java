@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -61,8 +62,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+    public AnnotationMemberDeclaration(Lexeme first, Lexeme last, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+        super(first, last, annotations);
         setModifiers(modifiers);
         setType(type);
         setName(name);

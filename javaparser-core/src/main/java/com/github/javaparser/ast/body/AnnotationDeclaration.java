@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -44,8 +45,8 @@ public final class AnnotationDeclaration extends TypeDeclaration implements Docu
         super(annotations, modifiers, name, members);
     }
 
-    public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
+    public AnnotationDeclaration(Lexeme first, Lexeme last, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+        super(first, last, annotations, modifiers, name, members);
     }
 
     @Override

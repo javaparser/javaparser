@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.comments;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -35,8 +36,8 @@ public final class JavadocComment extends Comment {
         super(content);
     }
 
-    public JavadocComment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        super(beginLine, beginColumn, endLine, endColumn, content);
+    public JavadocComment(Lexeme first, Lexeme last, String content) {
+        super(first, last, content);
     }
 
     @Override

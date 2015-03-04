@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.comments;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -41,8 +42,8 @@ public final class BlockComment extends Comment {
         super(content);
     }
 
-    public BlockComment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        super(beginLine, beginColumn, endLine, endColumn, content);
+    public BlockComment(Lexeme first, Lexeme last, String content) {
+        super(first, last, content);
     }
 
     @Override

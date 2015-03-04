@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -51,9 +52,9 @@ public final class UnaryExpr extends Expression {
 		setOperator(op);
 	}
 
-	public UnaryExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public UnaryExpr(Lexeme first, Lexeme last,
 			final Expression expr, final Operator op) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setExpr(expr);
 		setOperator(op);
 	}

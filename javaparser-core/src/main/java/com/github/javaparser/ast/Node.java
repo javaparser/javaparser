@@ -20,10 +20,6 @@
 
 package com.github.javaparser.ast;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.lexical.Lexeme;
@@ -32,6 +28,10 @@ import com.github.javaparser.ast.visitor.DumpVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Abstract class for all nodes of the AST.

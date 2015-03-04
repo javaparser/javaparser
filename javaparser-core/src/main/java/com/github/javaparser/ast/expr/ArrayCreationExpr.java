@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -51,8 +52,8 @@ public final class ArrayCreationExpr extends Expression {
         setDimensions(null);
     }
 
-    public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, int arrayCount, ArrayInitializerExpr initializer) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public ArrayCreationExpr(Lexeme first, Lexeme last, Type type, int arrayCount, ArrayInitializerExpr initializer) {
+        super(first, last);
         setType(type);
         setArrayCount(arrayCount);
         setInitializer(initializer);
@@ -66,15 +67,15 @@ public final class ArrayCreationExpr extends Expression {
         setInitializer(null);
     }
 
-    public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, List<Expression> dimensions, int arrayCount) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public ArrayCreationExpr(Lexeme first, Lexeme last, Type type, List<Expression> dimensions, int arrayCount) {
+        super(first, last);
         setType(type);
         setArrayCount(arrayCount);
         setDimensions(dimensions);
         setInitializer(null);
     }
 
-    @Override
+	@Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
     }

@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -47,11 +48,10 @@ public class MethodReferenceExpr extends Expression {
     public MethodReferenceExpr() {
     }
 
-    public MethodReferenceExpr(int beginLine, int beginColumn, int endLine,
-                               int endColumn, Expression scope,
+    public MethodReferenceExpr(Lexeme first, Lexeme last, Expression scope,
                                List<TypeParameter> typeParameters, String identifier) {
 
-        super(beginLine, beginColumn, endLine, endColumn);
+        super(first, last);
         setIdentifier(identifier);
         setScope(scope);
         setTypeParameters(typeParameters);

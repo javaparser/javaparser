@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -41,9 +42,9 @@ public final class MemberValuePair extends Node {
 		setValue(value);
 	}
 
-	public MemberValuePair(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public MemberValuePair(Lexeme first, Lexeme last,
 			final String name, final Expression value) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setName(name);
 		setValue(value);
 	}

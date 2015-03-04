@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -54,8 +55,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
         setClassBody(classBody);
     }
 
-    public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+    public EnumConstantDeclaration(Lexeme first, Lexeme last, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+        super(first, last, annotations);
         setName(name);
         setArgs(args);
         setClassBody(classBody);

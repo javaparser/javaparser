@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -50,11 +51,10 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 		setArgs(args);
 	}
 
-	public ExplicitConstructorInvocationStmt(final int beginLine,
-			final int beginColumn, final int endLine, final int endColumn,
+	public ExplicitConstructorInvocationStmt(Lexeme first, Lexeme last,
 			final List<Type> typeArgs, final boolean isThis,
 			final Expression expr, final List<Expression> args) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setTypeArgs(typeArgs);
 		setThis(isThis);
 		setExpr(expr);

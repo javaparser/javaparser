@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -55,19 +56,19 @@ public final class TypeParameter extends Node {
 		setTypeBound(typeBound);
 	}
 
-	public TypeParameter(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public TypeParameter(Lexeme first, Lexeme last,
 			final String name, final List<ClassOrInterfaceType> typeBound) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setName(name);
 		setTypeBound(typeBound);
 	}
 
-    public TypeParameter(int beginLine, int beginColumn, int endLine,
-                         int endColumn, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
-        this(beginLine, beginColumn, endLine, endColumn, name, typeBound);
+    public TypeParameter(Lexeme first, Lexeme last,
+                         String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
+        this(first, last, name, typeBound);
         setName(name);
         setTypeBound(typeBound);
-        this.annotations = annotations;
+	    setAnnotations(annotations);
     }
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -124,5 +125,6 @@ public final class TypeParameter extends Node {
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
+	    setAsParentNodeOf(annotations);
     }
 }

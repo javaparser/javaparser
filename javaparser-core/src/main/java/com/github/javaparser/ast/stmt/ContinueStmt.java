@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -37,9 +38,9 @@ public final class ContinueStmt extends Statement {
 		this.id = id;
 	}
 
-	public ContinueStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public ContinueStmt(Lexeme first, Lexeme last,
 			final String id) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		this.id = id;
 	}
 

@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -46,11 +47,10 @@ public final class ForeachStmt extends Statement {
 		setBody(body);
 	}
 
-	public ForeachStmt(final int beginLine, final int beginColumn,
-			final int endLine, final int endColumn,
+	public ForeachStmt(Lexeme first, Lexeme last,
 			final VariableDeclarationExpr var, final Expression iterable,
 			final Statement body) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setVariable(var);
 		setIterable(iterable);
 		setBody(body);

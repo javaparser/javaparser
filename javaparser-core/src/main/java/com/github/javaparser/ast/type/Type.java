@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
@@ -39,12 +40,12 @@ public abstract class Type extends Node {
         this.annotations = annotation;
     }
 
-    public Type(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public Type(Lexeme first, Lexeme last) {
+        super(first, last);
     }
 
-    public Type(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public Type(Lexeme first, Lexeme last, List<AnnotationExpr> annotations) {
+        super(first, last);
         this.annotations = annotations;
     }
 

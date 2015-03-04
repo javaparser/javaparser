@@ -20,13 +20,10 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.lexical.Lexeme;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -64,8 +61,8 @@ public final class CompilationUnit extends Node {
         setTypes(types);
     }
 
-    public CompilationUnit(int beginLine, int beginColumn, int endLine, int endColumn, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public CompilationUnit(Lexeme first, Lexeme last, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
+        super(first, last);
         setPackage(pakage);
         setImports(imports);
         setTypes(types);

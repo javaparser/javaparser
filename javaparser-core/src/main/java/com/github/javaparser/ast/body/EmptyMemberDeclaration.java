@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -34,8 +35,8 @@ public final class EmptyMemberDeclaration extends BodyDeclaration implements Doc
         super(null);
     }
 
-    public EmptyMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn, null);
+    public EmptyMemberDeclaration(Lexeme first, Lexeme last) {
+        super(first, last, null);
     }
 
     @Override

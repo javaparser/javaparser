@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -44,8 +45,8 @@ public final class InitializerDeclaration extends BodyDeclaration implements Doc
         setBlock(block);
     }
 
-    public InitializerDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, boolean isStatic, BlockStmt block) {
-        super(beginLine, beginColumn, endLine, endColumn, null);
+    public InitializerDeclaration(Lexeme first, Lexeme last, boolean isStatic, BlockStmt block) {
+        super(first, last, null);
         setStatic(isStatic);
         setBlock(block);
     }

@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
@@ -51,11 +52,17 @@ public final class CatchClause extends Node {
         this(new MultiTypeParameter(exceptModifier, exceptAnnotations, exceptTypes, exceptId), catchBlock);
     }
 
-    public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-    	    final int exceptModifier, final List<AnnotationExpr> exceptAnnotations, final List<Type> exceptTypes, 
-    	    final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        setExcept(new MultiTypeParameter(beginLine, beginColumn, endLine, endColumn, exceptModifier, exceptAnnotations, exceptTypes, exceptId));
+    public CatchClause(Lexeme first, Lexeme last,
+                       final MultiTypeParameter exceptParameter, final BlockStmt catchBlock) {
+        super(first, last);
+        setExcept(exceptParameter);
+        setCatchBlock(catchBlock);
+    }
+
+    public CatchClause(Lexeme first, Lexeme last,
+                       int exceptModifier, List<AnnotationExpr> exceptAnnotations, List<Type> exceptTypes, VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
+        super(first, last);
+        setExcept(new MultiTypeParameter(exceptModifier, exceptAnnotations, exceptTypes, exceptId));
         setCatchBlock(catchBlock);
     }
 

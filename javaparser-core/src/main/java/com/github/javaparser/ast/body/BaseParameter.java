@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
@@ -50,8 +51,8 @@ public abstract class BaseParameter extends Node {
         setId(id);
 	}
 
-	public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
-	    super(beginLine, beginColumn, endLine, endColumn);
+	public BaseParameter(Lexeme first, Lexeme last, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+	    super(first, last);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);

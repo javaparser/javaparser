@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -54,14 +55,14 @@ public final class ImportDeclaration extends Node {
         setStatic(isStatic);
     }
 
-    public ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, NameExpr name, boolean isStatic, boolean isAsterisk) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public ImportDeclaration(Lexeme first, Lexeme last, NameExpr name, boolean isStatic, boolean isAsterisk) {
+        super(first, last);
         setAsterisk(isAsterisk);
         setName(name);
         setStatic(isStatic);
     }
 
-    @Override
+	@Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
     }

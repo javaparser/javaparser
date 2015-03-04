@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.lexical.Lexeme;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -42,8 +43,8 @@ public abstract class Comment extends Node {
         this.content = content;
     }
 
-    public Comment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public Comment(Lexeme first, Lexeme last, String content) {
+        super(first, last);
         this.content = content;
     }
 

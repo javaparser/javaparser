@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -40,9 +41,9 @@ public final class LabeledStmt extends Statement {
 		setStmt(stmt);
 	}
 
-	public LabeledStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public LabeledStmt(Lexeme first, Lexeme last,
 			final String label, final Statement stmt) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setLabel(label);
 		setStmt(stmt);
 	}

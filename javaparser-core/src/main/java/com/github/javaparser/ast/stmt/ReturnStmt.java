@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -38,9 +39,9 @@ public final class ReturnStmt extends Statement {
 		setExpr(expr);
 	}
 
-	public ReturnStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public ReturnStmt(Lexeme first, Lexeme last,
 			final Expression expr) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setExpr(expr);
 	}
 
