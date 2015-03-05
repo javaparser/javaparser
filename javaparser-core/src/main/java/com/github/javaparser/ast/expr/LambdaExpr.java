@@ -51,13 +51,7 @@ public class LambdaExpr extends Expression {
 		super(beginLine, beginColumn, endLine, endColumn);
 		setParameters(parameters);
 		setBody(body);
-
-		if (this.parameters != null && this.parameters.size() == 1
-				&& this.parameters.get(0).getType() == null) {
-			this.parametersEnclosed = parametersEnclosed;
-		} else {
-			this.parametersEnclosed = true;
-		}
+        setParametersEnclosed(parametersEnclosed);
 	}
 
 	public List<Parameter> getParameters() {
