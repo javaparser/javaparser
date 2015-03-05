@@ -116,14 +116,14 @@ final class ASTParser {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
 	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getBeginLine(), inner.getBeginColumn(), inner.getEndLine(), inner.getEndColumn(), ((NameExpr)inner).getName(), 0);
-	       	    List params = add(null, new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, null, false, id));
+	       	    List params = add(null, new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, new UnknownType(), false, id));
 	            ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), lambdaBody.getEndLine(), lambdaBody.getEndColumn(), params, lambdaBody, true);
 	        } else {
 	            ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), lambdaBody.getEndLine(), lambdaBody.getEndColumn(), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
 		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), ((NameExpr)ret).getName(), 0);
-	        List params = add(null, new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, null, false, id));
+	        List params = add(null, new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, new UnknownType(), false, id));
 	        ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
@@ -1613,9 +1613,9 @@ List InferredLambdaParameters():
 }
 {
    ","
-  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(id.getBeginLine(), id.getBeginColumn(), id.getEndLine(), id.getEndColumn(), 0, null, null, false, id));}
+  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(id.getBeginLine(), id.getBeginColumn(), id.getEndLine(), id.getEndColumn(), 0, null, new UnknownType(), false, id));}
   (
-    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(id.getBeginLine(), id.getBeginColumn(), id.getEndLine(), id.getEndColumn(), 0, null, null, false, id)); }
+    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(id.getBeginLine(), id.getBeginColumn(), id.getEndLine(), id.getEndColumn(), 0, null, new UnknownType(), false, id)); }
   )*
   { return ret;  }
 }
@@ -2350,7 +2350,7 @@ Expression PrimaryPrefix():
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
 	  		  		    id = new VariableDeclaratorId(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), ((NameExpr)ret).getName(), 0);
-	  		  		    p = new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, null, false, id);
+	  		  		    p = new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, new UnknownType(), false, id);
 	  		  		  }
 
 	  		  		}
