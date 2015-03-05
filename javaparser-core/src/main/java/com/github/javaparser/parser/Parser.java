@@ -21,12 +21,18 @@ import java.util.List;
  */
 public abstract class Parser {
 
-    public static Parser newInstance(InputStream in, String encoding) {
-        return new ASTParser(in, encoding);
+    boolean preserveLexemes;
+
+    public static Parser newInstance(InputStream in, String encoding, boolean preserveLexemes) {
+        ASTParser parser = new ASTParser(in, encoding);
+        parser.preserveLexemes = preserveLexemes;
+        return parser;
     }
 
-    public static Parser newInstance(Reader in) {
-        return new ASTParser(in);
+    public static Parser newInstance(Reader in, boolean preserveLexemes) {
+        ASTParser parser = new ASTParser(in);
+        parser.preserveLexemes = preserveLexemes;
+        return parser;
     }
 
     public abstract void reset(InputStream in, String encoding);
@@ -113,14 +119,13 @@ public abstract class Parser {
     protected abstract void throwParseException(Token token, String message) throws ParseException;
 
     void postProcessToken(Token token) {
-        lastLexeme = buildLexemeChain(token, null);
-        if (firstLexeme == null) firstLexeme = lastLexeme;
+        if (!preserveLexemes) return;
+        lastLexeme = buildLexemeChain(token);
     }
 
-    private Lexeme firstLexeme;
     private Lexeme lastLexeme;
 
-    private Lexeme buildLexemeChain(Token token, Lexeme next) {
+    private Lexeme buildLexemeChain(Token token) {
         Lexeme current = TokenLexemeConversion.instantiate(token.kind, token.image);
         token.lexeme = current;
 
@@ -129,7 +134,7 @@ public abstract class Parser {
 
         Lexeme previous;
         if (token.specialToken != null) {
-            previous = buildLexemeChain(token.specialToken, current);
+            previous = buildLexemeChain(token.specialToken);
         } else {
             previous = lastLexeme;
         }
@@ -143,10 +148,12 @@ public abstract class Parser {
     protected abstract Token getToken(int index);
 
     protected Lexeme next() {
+        if (!preserveLexemes) return null;
         return getToken(1).lexeme;
     }
 
     protected Lexeme previous() {
+        if (!preserveLexemes) return null;
         return getToken(0).lexeme;
     }
 }
