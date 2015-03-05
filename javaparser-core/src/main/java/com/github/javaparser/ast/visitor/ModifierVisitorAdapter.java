@@ -105,12 +105,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -898,6 +893,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 
 	@Override public Node visit(final UnaryExpr n, final A arg) {
 		n.setExpr((Expression) n.getExpr().accept(this, arg));
+		return n;
+	}
+
+	@Override public Node visit(final UnknownType n, final A arg) {
 		return n;
 	}
 

@@ -430,6 +430,15 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	}
 
 	@Override
+	public Node visit(UnknownType _n, Object _arg) {
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		UnknownType r = new UnknownType();
+		r.setComment(comment);
+		return r;
+	}
+
+	@Override
 	public Node visit(ArrayAccessExpr _n, Object _arg) {
 		Expression name = cloneNodes(_n.getName(), _arg);
 		Expression index = cloneNodes(_n.getIndex(), _arg);
