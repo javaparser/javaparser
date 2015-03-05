@@ -200,6 +200,23 @@ Then lambda in statement 3 in method 1 in class 1 is parent of contained paramet
 Then lambda in statement 1 in method 1 in class 1 is parent of contained body
 Then lambda in statement 2 in method 1 in class 1 is parent of contained body
 Then lambda in statement 3 in method 1 in class 1 is parent of contained body
+Then lambda in statement 1 in method 1 in class 1 has parameters with non-null type
+Then lambda in statement 2 in method 1 in class 1 has parameters with non-null type
+Then lambda in statement 3 in method 1 in class 1 has parameters with non-null type
+
+
+Scenario: A class with multi-parameters Lambdas is parsed by the Java Parser
+
+Given a CompilationUnit
+When the following source is parsed:
+package com.github.javapasrser.bdd.parsing;
+import java.util.function.Function;
+public class MultiParameterizedLambdas {
+    public static void main(String[] args) {
+        BiFunction<Integer, Integer, String> f = (a, b) -> String.valueOf(a) + String.valueOf(b);
+    }
+}
+Then lambda in statement 1 in method 1 in class 1 has parameters with non-null type
 
 
 Scenario: A class with a method reference is parsed by the Java Parser
