@@ -22,9 +22,6 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -52,12 +49,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
      * to not repeat it in every method we store that here.
      */
     private boolean commonNodeEquality(Node n1, Node n2) {
-        if (!nodeEquals(n1.getComment(), n2.getComment())) {
-            return false;
-        }
-        if (!nodesEquals(n1.getOrphanComments(), n2.getOrphanComments())){
-            return false;
-        }
         return true;
     }
 
@@ -132,10 +123,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return Boolean.FALSE;
 		}
 
-		if (!nodesEquals(n1.getComments(), n2.getComments())) {
-			return Boolean.FALSE;
-		}
-
 		return Boolean.TRUE;
 	}
 
@@ -176,34 +163,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return Boolean.FALSE;
 		}
-		return Boolean.TRUE;
-	}
-
-	@Override public Boolean visit(final LineComment n1, final Node arg) {
-		final LineComment n2 = (LineComment) arg;
-
-		if (!objEquals(n1.getContent(), n2.getContent())) {
-			return Boolean.FALSE;
-		}
-
-        if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
-      		return Boolean.FALSE;
-      	}
-
-		return Boolean.TRUE;
-	}
-
-	@Override public Boolean visit(final BlockComment n1, final Node arg) {
-		final BlockComment n2 = (BlockComment) arg;
-
-		if (!objEquals(n1.getContent(), n2.getContent())) {
-			return Boolean.FALSE;
-		}
-
-        if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
-      			return Boolean.FALSE;
-      	}
-
 		return Boolean.TRUE;
 	}
 
@@ -546,16 +505,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
-			return Boolean.FALSE;
-		}
-
-		return Boolean.TRUE;
-	}
-
-	@Override public Boolean visit(final JavadocComment n1, final Node arg) {
-		final JavadocComment n2 = (JavadocComment) arg;
-
-		if (!objEquals(n1.getContent(), n2.getContent())) {
 			return Boolean.FALSE;
 		}
 

@@ -25,10 +25,6 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -39,10 +35,6 @@ import com.github.javaparser.ast.type.*;
 public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final AnnotationDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -56,10 +48,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final AnnotationMemberDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -72,13 +60,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ArrayAccessExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getName().accept(this, arg);
 		n.getIndex().accept(this, arg);
 	}
 
 	@Override public void visit(final ArrayCreationExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getType().accept(this, arg);
 		if (n.getDimensions() != null) {
 			for (final Expression dim : n.getDimensions()) {
@@ -90,7 +76,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ArrayInitializerExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getValues() != null) {
 			for (final Expression expr : n.getValues()) {
 				expr.accept(this, arg);
@@ -99,7 +84,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final AssertStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getCheck().accept(this, arg);
 		if (n.getMessage() != null) {
 			n.getMessage().accept(this, arg);
@@ -107,23 +91,16 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final AssignExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getTarget().accept(this, arg);
 		n.getValue().accept(this, arg);
 	}
 
 	@Override public void visit(final BinaryExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getLeft().accept(this, arg);
 		n.getRight().accept(this, arg);
 	}
 
-	@Override public void visit(final BlockComment n, final A arg) {
-		visitComment(n.getComment(), arg);
-	}
-
 	@Override public void visit(final BlockStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getStmts() != null) {
 			for (final Statement s : n.getStmts()) {
 				s.accept(this, arg);
@@ -132,39 +109,29 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final BooleanLiteralExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final BreakStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final CastExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getType().accept(this, arg);
 		n.getExpr().accept(this, arg);
 	}
 
 	@Override public void visit(final CatchClause n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getExcept().accept(this, arg);
 		n.getCatchBlock().accept(this, arg);
 	}
 
 	@Override public void visit(final CharLiteralExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final ClassExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getType().accept(this, arg);
 	}
 
 	@Override public void visit(final ClassOrInterfaceDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -194,7 +161,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ClassOrInterfaceType n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
@@ -206,7 +172,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final CompilationUnit n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getPackage() != null) {
 			n.getPackage().accept(this, arg);
 		}
@@ -223,17 +188,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ConditionalExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getCondition().accept(this, arg);
 		n.getThenExpr().accept(this, arg);
 		n.getElseExpr().accept(this, arg);
 	}
 
 	@Override public void visit(final ConstructorDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -258,47 +218,30 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ContinueStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final DoStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getBody().accept(this, arg);
 		n.getCondition().accept(this, arg);
 	}
 
 	@Override public void visit(final DoubleLiteralExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final EmptyMemberDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 	}
 
 	@Override public void visit(final EmptyStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final EmptyTypeDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 	}
 
 	@Override public void visit(final EnclosedExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getInner().accept(this, arg);
 	}
 
 	@Override public void visit(final EnumConstantDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -317,10 +260,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final EnumDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -344,7 +283,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ExplicitConstructorInvocationStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (!n.isThis()) {
 			if (n.getExpr() != null) {
 				n.getExpr().accept(this, arg);
@@ -363,20 +301,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ExpressionStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getExpression().accept(this, arg);
 	}
 
 	@Override public void visit(final FieldAccessExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getScope().accept(this, arg);
 	}
 
 	@Override public void visit(final FieldDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -389,14 +321,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ForeachStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getVariable().accept(this, arg);
 		n.getIterable().accept(this, arg);
 		n.getBody().accept(this, arg);
 	}
 
 	@Override public void visit(final ForStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getInit() != null) {
 			for (final Expression e : n.getInit()) {
 				e.accept(this, arg);
@@ -414,7 +344,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final IfStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getCondition().accept(this, arg);
 		n.getThenStmt().accept(this, arg);
 		if (n.getElseStmt() != null) {
@@ -423,65 +352,43 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ImportDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getName().accept(this, arg);
 	}
 
 	@Override public void visit(final InitializerDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		n.getBlock().accept(this, arg);
 	}
 
 	@Override public void visit(final InstanceOfExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getExpr().accept(this, arg);
 		n.getType().accept(this, arg);
 	}
 
 	@Override public void visit(final IntegerLiteralExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final IntegerLiteralMinValueExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
-	}
-
-	@Override public void visit(final JavadocComment n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final LabeledStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getStmt().accept(this, arg);
 	}
 
-	@Override public void visit(final LineComment n, final A arg) {
-		visitComment(n.getComment(), arg);
-	}
-
 	@Override public void visit(final LongLiteralExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final LongLiteralMinValueExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final MarkerAnnotationExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getName().accept(this, arg);
 	}
 
 	@Override public void visit(final MemberValuePair n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getValue().accept(this, arg);
 	}
 
 	@Override public void visit(final MethodCallExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
@@ -498,10 +405,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final MethodDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		if (n.getJavaDoc() != null) {
-			n.getJavaDoc().accept(this, arg);
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -529,11 +432,9 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final NameExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final NormalAnnotationExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getName().accept(this, arg);
 		if (n.getPairs() != null) {
 			for (final MemberValuePair m : n.getPairs()) {
@@ -543,11 +444,9 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final NullLiteralExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final ObjectCreationExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
@@ -570,7 +469,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final PackageDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -580,7 +478,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final Parameter n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -591,7 +488,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 	
 	@Override public void visit(final MultiTypeParameter n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -604,45 +500,37 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final PrimitiveType n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final QualifiedNameExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getQualifier().accept(this, arg);
 	}
 
 	@Override public void visit(final ReferenceType n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getType().accept(this, arg);
 	}
 
 	@Override public void visit(final ReturnStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getExpr() != null) {
 			n.getExpr().accept(this, arg);
 		}
 	}
 
 	@Override public void visit(final SingleMemberAnnotationExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getName().accept(this, arg);
 		n.getMemberValue().accept(this, arg);
 	}
 
 	@Override public void visit(final StringLiteralExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final SuperExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getClassExpr() != null) {
 			n.getClassExpr().accept(this, arg);
 		}
 	}
 
 	@Override public void visit(final SwitchEntryStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getLabel() != null) {
 			n.getLabel().accept(this, arg);
 		}
@@ -654,7 +542,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final SwitchStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getSelector().accept(this, arg);
 		if (n.getEntries() != null) {
 			for (final SwitchEntryStmt e : n.getEntries()) {
@@ -664,25 +551,21 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final SynchronizedStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getExpr().accept(this, arg);
 		n.getBlock().accept(this, arg);
 	}
 
 	@Override public void visit(final ThisExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getClassExpr() != null) {
 			n.getClassExpr().accept(this, arg);
 		}
 	}
 
 	@Override public void visit(final ThrowStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getExpr().accept(this, arg);
 	}
 
 	@Override public void visit(final TryStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getResources() != null) {
 			for (final VariableDeclarationExpr v : n.getResources()) {
 				v.accept(this, arg);
@@ -700,12 +583,10 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final TypeDeclarationStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getTypeDeclaration().accept(this, arg);
 	}
 
 	@Override public void visit(final TypeParameter n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getTypeBound() != null) {
 			for (final ClassOrInterfaceType c : n.getTypeBound()) {
 				c.accept(this, arg);
@@ -714,12 +595,10 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final UnaryExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getExpr().accept(this, arg);
 	}
 
 	@Override public void visit(final VariableDeclarationExpr n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				a.accept(this, arg);
@@ -732,7 +611,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final VariableDeclarator n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getId().accept(this, arg);
 		if (n.getInit() != null) {
 			n.getInit().accept(this, arg);
@@ -740,21 +618,17 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final VariableDeclaratorId n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final VoidType n, final A arg) {
-		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final WhileStmt n, final A arg) {
-		visitComment(n.getComment(), arg);
 		n.getCondition().accept(this, arg);
 		n.getBody().accept(this, arg);
 	}
 
 	@Override public void visit(final WildcardType n, final A arg) {
-		visitComment(n.getComment(), arg);
 		if (n.getExtends() != null) {
 			n.getExtends().accept(this, arg);
 		}
@@ -793,10 +667,4 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
             n.getType().accept(this, arg);
         }
     }
-
-    private void visitComment(final Comment n, final A arg) {
-		if (n != null) {
-			n.accept(this, arg);
-		}
-	}
 }

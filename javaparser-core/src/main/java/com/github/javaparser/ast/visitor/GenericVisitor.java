@@ -25,9 +25,6 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -48,10 +45,6 @@ public interface GenericVisitor<R, A> {
 	public R visit(ImportDeclaration n, A arg);
 
 	public R visit(TypeParameter n, A arg);
-
-	public R visit(LineComment n, A arg);
-
-	public R visit(BlockComment n, A arg);
 
 	//- Body ----------------------------------------------
 
@@ -84,8 +77,6 @@ public interface GenericVisitor<R, A> {
 	public R visit(EmptyMemberDeclaration n, A arg);
 
 	public R visit(InitializerDeclaration n, A arg);
-
-	public R visit(JavadocComment n, A arg);
 
 	//- Type ----------------------------------------------
 

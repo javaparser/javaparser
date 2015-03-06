@@ -48,7 +48,6 @@ import java.util.*;
 import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -2754,19 +2753,12 @@ IfStmt IfStatement():
 	Expression condition;
 	Statement thenStmt;
 	Statement elseStmt = null;
-    Comment thenCmmt = null;
-    Comment elseCmmt = null;
 }
 {
   { begin = next(); }
   "if" "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
   { 
-      IfStmt tmp = new IfStmt(begin, previous(), condition, thenStmt, elseStmt);
-      
-      thenStmt.setComment(thenCmmt);
-      if (elseStmt != null)
-          elseStmt.setComment(elseCmmt);
-      return tmp;
+      return new IfStmt(begin, previous(), condition, thenStmt, elseStmt);
   }
 }
 

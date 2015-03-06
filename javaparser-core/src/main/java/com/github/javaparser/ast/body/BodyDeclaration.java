@@ -20,6 +20,8 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
 import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;

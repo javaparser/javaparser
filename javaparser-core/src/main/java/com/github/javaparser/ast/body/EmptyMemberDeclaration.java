@@ -20,9 +20,10 @@
 
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -50,14 +51,17 @@ public final class EmptyMemberDeclaration extends BodyDeclaration implements Doc
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
+    public void setJavaDoc(Comment javadoc) {
+        CommentAttributes comments = getCommentAttributes();
+        if (comments == null) {
+            comments = new CommentAttributes();
+            setCommentAttributes(comments);
+        }
+        comments.setJavadocComment(javadoc);
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return javadocComment;
+    public Comment getJavaDoc() {
+        return getCommentAttributes().getJavadocComment();
     }
-
-    private JavadocComment javadocComment;
 }

@@ -25,9 +25,6 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -39,14 +36,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final AnnotationDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				{
@@ -72,14 +61,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final AnnotationMemberDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				{
@@ -299,14 +280,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final ClassOrInterfaceDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				{
@@ -442,14 +415,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final ConstructorDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				{
@@ -528,14 +493,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final EmptyMemberDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		return null;
 	}
 
@@ -546,14 +503,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final EmptyTypeDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		return null;
 	}
 
@@ -570,14 +519,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final EnumConstantDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				{
@@ -613,14 +554,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final EnumDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				{
@@ -723,14 +656,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final FieldDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				{
@@ -858,14 +783,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final InitializerDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		{
 			R result = n.getBlock().accept(this, arg);
 			if (result != null) {
@@ -899,11 +816,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final IntegerLiteralMinValueExpr n, final A arg) {
-		return null;
-	}
-
-	@Override
-	public R visit(final JavadocComment n, final A arg) {
 		return null;
 	}
 
@@ -985,14 +897,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final MethodDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			{
-				R result = n.getJavaDoc().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
 		if (n.getAnnotations() != null) {
 			for (final AnnotationExpr a : n.getAnnotations()) {
 				{
@@ -1556,15 +1460,4 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(TypeExpr n, A arg){
         return null;
     }
-
-	@Override
-	public R visit(final BlockComment n, final A arg) {
-		return null;
-	}
-
-	@Override
-	public R visit(final LineComment n, final A arg) {
-		return null;
-	}
-
 }

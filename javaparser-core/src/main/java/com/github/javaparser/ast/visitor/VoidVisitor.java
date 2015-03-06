@@ -25,9 +25,6 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -48,10 +45,6 @@ public interface VoidVisitor<A> {
 	void visit(ImportDeclaration n, A arg);
 
 	void visit(TypeParameter n, A arg);
-
-	void visit(LineComment n, A arg);
-
-	void visit(BlockComment n, A arg);
 
 	//- Body ----------------------------------------------
 
@@ -84,8 +77,6 @@ public interface VoidVisitor<A> {
 	void visit(EmptyMemberDeclaration n, A arg);
 
 	void visit(InitializerDeclaration n, A arg);
-
-	void visit(JavadocComment n, A arg);
 
 	//- Type ----------------------------------------------
 

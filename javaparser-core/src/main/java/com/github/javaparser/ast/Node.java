@@ -21,7 +21,7 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.Position;
-import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.lexical.Comment;
 import com.github.javaparser.ast.lexical.CommentAttributes;
 import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.lexical.Run;
@@ -51,14 +51,11 @@ public abstract class Node extends Run {
     private CommentAttributes comments;
 
     private List<Node> childrenNodes =  new LinkedList<Node>();
-    private List<Comment> orphanComments = new LinkedList<Comment>();
 
 	/**
 	 * This attribute can store additional information from semantic analysis.
 	 */
 	private Object data;
-
-	private Comment comment;
 
 	public Node() {
 	}
@@ -139,15 +136,6 @@ public abstract class Node extends Run {
 	}
 
 	/**
-	 * This is a comment associated with this node.
-	 *
-	 * @return comment property
-	 */
-	public final Comment getComment() {
-		return comment;
-	}
-
-	/**
 	 * Use this to retrieve additional information associated to this node.
 	 *
 	 * @return data property
@@ -187,25 +175,6 @@ public abstract class Node extends Run {
     public CommentAttributes getCommentAttributes() {
         return comments;
     }
-
-	/**
-	 * Use this to store additional information to this node.
-	 *
-	 * @param comment to be set
-	 */
-	public final void setComment(final Comment comment) {
-        if (comment!=null && (this instanceof Comment)){
-            throw new RuntimeException("A comment can not be commented");
-        }
-        if (this.comment!=null)
-        {
-            this.comment.setCommentedNode(null);
-        }
-		this.comment = comment;
-        if (comment!=null) {
-            this.comment.setCommentedNode(this);
-        }
-	}
 
 	/**
 	 * Use this to store additional information to this node.
@@ -258,11 +227,6 @@ public abstract class Node extends Run {
         return true;
     }
 
-    public void addOrphanComment(Comment comment){
-        orphanComments.add(comment);
-        comment.setParentNode(this);
-    }
-
     /**
      * This is a list of Comment which are inside the node and are not associated
      * with any meaningful AST Node.
@@ -275,7 +239,7 @@ public abstract class Node extends Run {
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments(){
-        return orphanComments;
+        throw new IllegalStateException("TODO");
     }
 
     /**
@@ -285,17 +249,7 @@ public abstract class Node extends Run {
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments(){
-        List<Comment> comments = new LinkedList<Comment>();
-        comments.addAll(getOrphanComments());
-
-        for (Node child : getChildrenNodes()){
-            if (child.getComment()!=null){
-                comments.add(child.getComment());
-            }
-            comments.addAll(child.getAllContainedComments());
-        }
-
-        return comments;
+        throw new IllegalStateException("TODO");
     }
 
     /**
@@ -355,11 +309,6 @@ public abstract class Node extends Run {
         } else {
             return false;
         }
-    }
-
-    public boolean hasComment()
-    {
-        return comment!=null;
     }
 
     public static final Comparator<Node> BEGIN_POSITION_COMPARATOR = new Comparator<Node>() {
