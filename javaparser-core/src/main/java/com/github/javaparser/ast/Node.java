@@ -22,6 +22,7 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
 import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.lexical.Run;
 import com.github.javaparser.ast.visitor.DumpVisitor;
@@ -29,6 +30,7 @@ import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,6 +47,7 @@ import java.util.List;
 public abstract class Node extends Run {
 
 	private Node parentNode;
+    private CommentAttributes comments;
 
     private List<Node> childrenNodes =  new LinkedList<Node>();
     private List<Comment> orphanComments = new LinkedList<Comment>();
@@ -175,6 +178,14 @@ public abstract class Node extends Run {
         Position end = getEnd();
         return end == null ? -1 : end.line;
 	}
+
+    public void setCommentAttributes(CommentAttributes comments) {
+        this.comments = comments;
+    }
+
+    public CommentAttributes getCommentAttributes() {
+        return comments;
+    }
 
 	/**
 	 * Use this to store additional information to this node.
@@ -351,4 +362,11 @@ public abstract class Node extends Run {
     {
         return comment!=null;
     }
+
+    public static final Comparator<Node> BEGIN_POSITION_COMPARATOR = new Comparator<Node>() {
+        @Override
+        public int compare(Node o1, Node o2) {
+            return o1.getBegin().compareTo(o2.getBegin());
+        }
+    };
 }
