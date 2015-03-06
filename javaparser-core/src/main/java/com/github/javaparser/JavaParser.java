@@ -25,6 +25,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.lexical.CommentAttribution;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.parser.Parser;
@@ -94,7 +95,9 @@ public final class JavaParser {
                                         boolean preserveLexemes)
             throws ParseException, IOException {
         try {
-            return Parser.newInstance(in, encoding, attributeComments, preserveLexemes).CompilationUnit();
+            CompilationUnit compilationUnit = Parser.newInstance(in, encoding, attributeComments || preserveLexemes).CompilationUnit();
+            if (attributeComments) CommentAttribution.attributeComments(compilationUnit, !preserveLexemes);
+            return compilationUnit;
         } catch (com.github.javaparser.parser.ParseException e) {
             throw convertParseException(e);
         } finally {
@@ -177,7 +180,9 @@ public final class JavaParser {
                                         boolean preserveLexemes)
             throws ParseException, IOException {
         try {
-            return Parser.newInstance(reader, attributeComments, preserveLexemes).CompilationUnit();
+            CompilationUnit compilationUnit = Parser.newInstance(reader, attributeComments || preserveLexemes).CompilationUnit();
+            if (attributeComments) CommentAttribution.attributeComments(compilationUnit, !preserveLexemes);
+            return compilationUnit;
         } catch (com.github.javaparser.parser.ParseException e) {
             throw convertParseException(e);
         } finally {
@@ -198,7 +203,9 @@ public final class JavaParser {
     public static BlockStmt parseBlock(final String blockStatement) throws ParseException {
         StringReader sr = new StringReader(blockStatement);
         try {
-            return Parser.newInstance(sr, true, true).Block();
+            BlockStmt node = Parser.newInstance(sr, true).Block();
+            CommentAttribution.attributeComments(node, false);
+            return node;
         } catch (com.github.javaparser.parser.ParseException e) {
             throw convertParseException(e);
         } finally {
@@ -219,7 +226,9 @@ public final class JavaParser {
     public static Statement parseStatement(final String statement) throws ParseException {
         StringReader sr = new StringReader(statement);
         try {
-            return Parser.newInstance(sr, true, true).Statement();
+            Statement node = Parser.newInstance(sr, true).Statement();
+            CommentAttribution.attributeComments(node, false);
+            return node;
         } catch (com.github.javaparser.parser.ParseException e) {
             throw convertParseException(e);
         } finally {
@@ -240,7 +249,9 @@ public final class JavaParser {
     public static ImportDeclaration parseImport(final String importDeclaration) throws ParseException {
         StringReader sr = new StringReader(importDeclaration);
         try {
-            return Parser.newInstance(sr, true, true).ImportDeclaration();
+            ImportDeclaration node = Parser.newInstance(sr, true).ImportDeclaration();
+            CommentAttribution.attributeComments(node, false);
+            return node;
         } catch (com.github.javaparser.parser.ParseException e) {
             throw convertParseException(e);
         } finally {
@@ -261,7 +272,9 @@ public final class JavaParser {
     public static Expression parseExpression(final String expression) throws ParseException {
         StringReader sr = new StringReader(expression);
         try {
-            return Parser.newInstance(sr, true, true).Expression();
+            Expression node = Parser.newInstance(sr, true).Expression();
+            CommentAttribution.attributeComments(node, false);
+            return node;
         } catch (com.github.javaparser.parser.ParseException e) {
             throw convertParseException(e);
         } finally {
@@ -282,7 +295,9 @@ public final class JavaParser {
     public static AnnotationExpr parseAnnotation(final String annotation) throws ParseException {
         StringReader sr = new StringReader(annotation);
         try {
-            return Parser.newInstance(sr, true, true).Annotation();
+            AnnotationExpr node = Parser.newInstance(sr, true).Annotation();
+            CommentAttribution.attributeComments(node, false);
+            return node;
         } catch (com.github.javaparser.parser.ParseException e) {
             throw convertParseException(e);
         } finally {
@@ -303,7 +318,9 @@ public final class JavaParser {
     public static BodyDeclaration parseBodyDeclaration(final String body) throws ParseException {
         StringReader sr = new StringReader(body);
         try {
-            return Parser.newInstance(sr, true, true).AnnotationBodyDeclaration();
+            BodyDeclaration node = Parser.newInstance(sr, true).AnnotationBodyDeclaration();
+            CommentAttribution.attributeComments(node, false);
+            return node;
         } catch (com.github.javaparser.parser.ParseException e) {
             throw convertParseException(e);
         } finally {
