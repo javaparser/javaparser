@@ -22,9 +22,6 @@ package com.github.javaparser.bdd.visitors;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -77,11 +74,6 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final BinaryExpr n, final Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override public void visit(final BlockComment n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
@@ -253,17 +245,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
-    @Override public void visit(final JavadocComment n, final Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
     @Override public void visit(final LabeledStmt n, final Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override public void visit(final LineComment n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
