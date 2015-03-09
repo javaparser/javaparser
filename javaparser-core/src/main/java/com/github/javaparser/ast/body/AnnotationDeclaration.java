@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -47,6 +48,11 @@ public final class AnnotationDeclaration extends TypeDeclaration implements Docu
     public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
         super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
     }
+
+	public AnnotationDeclaration(Position begin, Position end,
+			int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+		super(begin, end, annotations, modifiers, name, members);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

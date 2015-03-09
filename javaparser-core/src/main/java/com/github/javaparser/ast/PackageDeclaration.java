@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -63,6 +64,12 @@ public final class PackageDeclaration extends Node {
         setAnnotations(annotations);
         setName(name);
     }
+
+	public PackageDeclaration(Position begin, Position end, List<AnnotationExpr> annotations, NameExpr name) {
+		super(begin, end);
+		setAnnotations(annotations);
+		setName(name);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

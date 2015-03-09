@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.visitor.DumpVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
@@ -41,13 +42,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public abstract class Node {
 
-	private int beginLine;
+	private Position begin;
 
-	private int beginColumn;
-
-	private int endLine;
-
-	private int endColumn;
+	private Position end;
 	
 	private Node parentNode;
 
@@ -64,11 +61,13 @@ public abstract class Node {
 	public Node() {
 	}
 
+	public Node(Position begin, Position end) {
+		this.begin = begin;
+		this.end = end;
+	}
+
 	public Node(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		this.beginLine = beginLine;
-		this.beginColumn = beginColumn;
-		this.endLine = endLine;
-		this.endColumn = endColumn;
+		this(new Position(beginLine, beginColumn), new Position(endLine, endColumn));
 	}
 
 	/**
@@ -99,21 +98,63 @@ public abstract class Node {
 	public abstract <A> void accept(VoidVisitor<A> v, A arg);
 
 	/**
+	 * Returns the begin position of this node.
+	 *
+	 * @return the begin position, or <code>null</code> if the position has not been set
+	 */
+	public Position getBegin() {
+		return begin;
+	}
+
+	/**
+	 * Sets the begin position of this node.
+	 *
+	 * @param begin
+	 *              the end position
+	 */
+	public void setBegin(Position begin) {
+		this.begin = begin;
+	}
+
+	/**
+	 * Returns the end position of this node.
+	 *
+	 * @return the end position, or <code>null</code> if the position has not been set
+	 */
+	public Position getEnd() {
+		return end;
+	}
+
+	/**
+	 * Sets the end position of this node.
+	 *
+	 * @param end
+	 *            the end position
+	 */
+	public void setEnd(Position end) {
+		this.end = end;
+	}
+
+	/**
 	 * Return the begin column of this node.
 	 * 
 	 * @return the begin column of this node
+	 * @deprecated Use getBegin().column
 	 */
+	@Deprecated()
 	public final int getBeginColumn() {
-		return beginColumn;
+		return begin == null ? 0 : begin.column;
 	}
 
 	/**
 	 * Return the begin line of this node.
 	 * 
 	 * @return the begin line of this node
+	 * @deprecated Use getBegin().line
 	 */
+	@Deprecated()
 	public final int getBeginLine() {
-		return beginLine;
+		return begin == null ? 0 : begin.line;
 	}
 
 	/**
@@ -138,18 +179,22 @@ public abstract class Node {
 	 * Return the end column of this node.
 	 * 
 	 * @return the end column of this node
+	 * @deprecated Use getEnd().column
 	 */
+	@Deprecated()
 	public final int getEndColumn() {
-		return endColumn;
+		return end == null ? 0 : end.column;
 	}
 
 	/**
 	 * Return the end line of this node.
 	 * 
 	 * @return the end line of this node
+	 * @deprecated Use getEnd().line
 	 */
+	@Deprecated()
 	public final int getEndLine() {
-		return endLine;
+		return end == null ? 0 : end.line;
 	}
 
 	/**
@@ -157,9 +202,11 @@ public abstract class Node {
 	 * 
 	 * @param beginColumn
 	 *            the begin column of this node
+	 * @deprecated Use setBegin()
 	 */
+	@Deprecated()
 	public final void setBeginColumn(final int beginColumn) {
-		this.beginColumn = beginColumn;
+		begin = new Position(begin == null ? 0 : begin.line, beginColumn);
 	}
 
 	/**
@@ -167,9 +214,11 @@ public abstract class Node {
 	 * 
 	 * @param beginLine
 	 *            the begin line of this node
+	 * @deprecated Use setBegin()
 	 */
+	@Deprecated()
 	public final void setBeginLine(final int beginLine) {
-		this.beginLine = beginLine;
+		begin = new Position(beginLine, begin == null ? 0 : begin.column);
 	}
 
 	/**
@@ -205,9 +254,11 @@ public abstract class Node {
 	 * 
 	 * @param endColumn
 	 *            the end column of this node
+	 * @deprecated Use setEnd()
 	 */
+	@Deprecated()
 	public final void setEndColumn(final int endColumn) {
-		this.endColumn = endColumn;
+		end = new Position(end == null ? 0 : end.line, endColumn);
 	}
 
 	/**
@@ -215,9 +266,11 @@ public abstract class Node {
 	 * 
 	 * @param endLine
 	 *            the end line of this node
+	 * @deprecated Use setEnd()
 	 */
+	@Deprecated()
 	public final void setEndLine(final int endLine) {
-		this.endLine = endLine;
+		end = new Position(endLine, end == null ? 0 : end.column);
 	}
 
 	/**

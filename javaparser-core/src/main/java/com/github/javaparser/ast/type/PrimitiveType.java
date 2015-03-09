@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -44,6 +45,11 @@ public final class PrimitiveType extends Type {
 	public PrimitiveType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Primitive type) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		this.type = type;
+	}
+
+	public PrimitiveType(Position begin, Position end, final Primitive type) {
+		super(begin, end);
 		this.type = type;
 	}
 

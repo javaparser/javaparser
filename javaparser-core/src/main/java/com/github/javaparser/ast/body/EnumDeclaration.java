@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -56,6 +57,15 @@ public final class EnumDeclaration extends TypeDeclaration implements Documentab
         setImplements(implementsList);
         setEntries(entries);
     }
+
+	public EnumDeclaration(Position begin, Position end,
+			int modifiers, List<AnnotationExpr> annotations, String name,
+			List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+			List<BodyDeclaration> members) {
+		super(begin, end, annotations, modifiers, name, members);
+		setImplements(implementsList);
+		setEntries(entries);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

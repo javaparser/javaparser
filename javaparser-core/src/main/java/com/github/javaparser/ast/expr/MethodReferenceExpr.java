@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -56,6 +57,15 @@ public class MethodReferenceExpr extends Expression {
         setScope(scope);
         setTypeParameters(typeParameters);
     }
+
+	public MethodReferenceExpr(Position begin, Position end, Expression scope,
+	                           List<TypeParameter> typeParameters, String identifier) {
+
+		super(begin, end);
+		setIdentifier(identifier);
+		setScope(scope);
+		setTypeParameters(typeParameters);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

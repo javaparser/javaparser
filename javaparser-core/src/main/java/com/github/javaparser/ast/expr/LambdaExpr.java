@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -52,6 +53,19 @@ public class LambdaExpr extends Expression {
 		setParameters(parameters);
 		setBody(body);
 
+		decideSetParametersEnclosed(parametersEnclosed);
+	}
+
+	public LambdaExpr(Position begin, Position end,
+			List<Parameter> parameters, Statement body, boolean parametersEnclosed) {
+		super(begin, end);
+		setParameters(parameters);
+		setBody(body);
+
+		decideSetParametersEnclosed(parametersEnclosed);
+	}
+
+	private void decideSetParametersEnclosed(boolean parametersEnclosed) {
 		if (this.parameters != null && this.parameters.size() == 1
 				&& this.parameters.get(0).getType() == null) {
 			this.parametersEnclosed = parametersEnclosed;

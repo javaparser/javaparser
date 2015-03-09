@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -68,6 +69,15 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
         setName(name);
         setDefaultValue(defaultValue);
     }
+
+	public AnnotationMemberDeclaration(Position begin, Position end,
+			int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+		super(begin, end, annotations);
+		setModifiers(modifiers);
+		setType(type);
+		setName(name);
+		setDefaultValue(defaultValue);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

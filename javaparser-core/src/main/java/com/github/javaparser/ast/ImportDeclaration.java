@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -61,7 +62,14 @@ public final class ImportDeclaration extends Node {
         setStatic(isStatic);
     }
 
-    @Override
+	public ImportDeclaration(Position begin, Position end, NameExpr name, boolean isStatic, boolean isAsterisk) {
+		super(begin, end);
+		setAsterisk(isAsterisk);
+		setName(name);
+		setStatic(isStatic);
+	}
+
+	@Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
     }

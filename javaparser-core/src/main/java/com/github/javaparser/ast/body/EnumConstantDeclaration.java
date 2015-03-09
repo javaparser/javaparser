@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -60,6 +61,14 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
         setArgs(args);
         setClassBody(classBody);
     }
+
+	public EnumConstantDeclaration(Position begin, Position end,
+			List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+		super(begin, end, annotations);
+		setName(name);
+		setArgs(args);
+		setClassBody(classBody);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -43,6 +44,12 @@ public final class LabeledStmt extends Statement {
 	public LabeledStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final String label, final Statement stmt) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setLabel(label);
+		setStmt(stmt);
+	}
+
+	public LabeledStmt(Position begin, Position end, final String label, final Statement stmt) {
+		super(begin, end);
 		setLabel(label);
 		setStmt(stmt);
 	}

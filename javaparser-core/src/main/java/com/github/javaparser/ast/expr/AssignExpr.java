@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -64,6 +65,13 @@ public final class AssignExpr extends Expression {
         setValue(value);
         setOperator(op);
     }
+
+	public AssignExpr(Position begin, Position end, Expression target, Expression value, Operator op) {
+		super(begin, end);
+		setTarget(target);
+		setValue(value);
+		setOperator(op);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

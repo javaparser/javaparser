@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -41,6 +42,11 @@ public final class QualifiedNameExpr extends NameExpr {
 	public QualifiedNameExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final NameExpr scope, final String name) {
 		super(beginLine, beginColumn, endLine, endColumn, name);
+		setQualifier(scope);
+	}
+
+	public QualifiedNameExpr(Position begin, Position end, final NameExpr scope, final String name) {
+		super(begin, end, name);
 		setQualifier(scope);
 	}
 

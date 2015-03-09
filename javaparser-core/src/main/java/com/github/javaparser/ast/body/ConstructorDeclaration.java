@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
@@ -78,6 +79,18 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         setThrows(throws_);
         setBlock(block);
     }
+
+	public ConstructorDeclaration(Position begin, Position end,
+			int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters,
+			String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
+		super(begin, end, annotations);
+		setModifiers(modifiers);
+		setTypeParameters(typeParameters);
+		setName(name);
+		setParameters(parameters);
+		setThrows(throws_);
+		setBlock(block);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

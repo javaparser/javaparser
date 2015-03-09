@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -44,6 +45,12 @@ public final class WhileStmt extends Statement {
 	public WhileStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression condition, final Statement body) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setCondition(condition);
+		setBody(body);
+	}
+
+	public WhileStmt(Position begin, Position end, final Expression condition, final Statement body) {
+		super(begin, end);
 		setCondition(condition);
 		setBody(body);
 	}

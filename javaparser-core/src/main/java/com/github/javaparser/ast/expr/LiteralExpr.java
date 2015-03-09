@@ -20,6 +20,8 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -30,5 +32,9 @@ public abstract class LiteralExpr extends Expression {
 
 	public LiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
 		super(beginLine, beginColumn, endLine, endColumn);
+	}
+
+	public LiteralExpr(Position begin, Position end) {
+		super(begin, end);
 	}
 }

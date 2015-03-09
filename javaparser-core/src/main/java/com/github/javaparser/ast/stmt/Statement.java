@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 
 /**
@@ -32,6 +33,10 @@ public abstract class Statement extends Node {
 
 	public Statement(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
 		super(beginLine, beginColumn, endLine, endColumn);
+	}
+
+	public Statement(Position begin, Position end) {
+		super(begin, end);
 	}
 
 }

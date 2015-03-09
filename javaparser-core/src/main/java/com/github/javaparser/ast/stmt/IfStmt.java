@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -47,6 +48,14 @@ public final class IfStmt extends Statement {
 	public IfStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression condition, final Statement thenStmt, final Statement elseStmt) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setCondition(condition);
+		setThenStmt(thenStmt);
+		setElseStmt(elseStmt);
+	}
+
+	public IfStmt(Position begin, Position end,
+			final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+		super(begin, end);
 		setCondition(condition);
 		setThenStmt(thenStmt);
 		setElseStmt(elseStmt);

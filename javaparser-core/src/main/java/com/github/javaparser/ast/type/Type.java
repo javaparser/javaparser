@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
@@ -47,6 +48,15 @@ public abstract class Type extends Node {
         super(beginLine, beginColumn, endLine, endColumn);
         this.annotations = annotations;
     }
+
+	public Type(Position begin, Position end) {
+		super(begin, end);
+	}
+
+	public Type(Position begin, Position end, List<AnnotationExpr> annotations) {
+		super(begin, end);
+		this.annotations = annotations;
+	}
 
     public List<AnnotationExpr> getAnnotations() {
         return annotations;

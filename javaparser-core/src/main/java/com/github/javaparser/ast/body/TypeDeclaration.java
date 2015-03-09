@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
@@ -58,6 +59,14 @@ public abstract class TypeDeclaration extends BodyDeclaration {
 			int modifiers, String name,
 			List<BodyDeclaration> members) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations);
+		setName(name);
+		setModifiers(modifiers);
+		setMembers(members);
+	}
+
+	public TypeDeclaration(Position begin, Position end,
+			List<AnnotationExpr> annotations, int modifiers, String name, List<BodyDeclaration> members) {
+		super(begin, end, annotations);
 		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);

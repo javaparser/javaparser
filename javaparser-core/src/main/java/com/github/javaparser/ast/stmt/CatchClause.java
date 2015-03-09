@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
@@ -58,6 +59,14 @@ public final class CatchClause extends Node {
         setExcept(new MultiTypeParameter(beginLine, beginColumn, endLine, endColumn, exceptModifier, exceptAnnotations, exceptTypes, exceptId));
         setCatchBlock(catchBlock);
     }
+
+	public CatchClause(Position begin, Position end,
+			final int exceptModifier, final List<AnnotationExpr> exceptAnnotations, final List<Type> exceptTypes,
+			final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
+		super(begin, end);
+		setExcept(new MultiTypeParameter(begin, end, exceptModifier, exceptAnnotations, exceptTypes, exceptId));
+		setCatchBlock(catchBlock);
+	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);

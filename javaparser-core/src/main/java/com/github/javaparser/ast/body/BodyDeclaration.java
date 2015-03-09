@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
@@ -44,6 +45,11 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
         super(beginLine, beginColumn, endLine, endColumn);
     	setAnnotations(annotations);
     }
+
+	public BodyDeclaration(Position begin, Position end, List<AnnotationExpr> annotations) {
+		super(begin, end);
+		setAnnotations(annotations);
+	}
 
     public final List<AnnotationExpr> getAnnotations() {
         if (annotations==null){

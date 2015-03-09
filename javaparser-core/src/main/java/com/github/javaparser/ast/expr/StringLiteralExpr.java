@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -41,6 +42,11 @@ public class StringLiteralExpr extends LiteralExpr {
 			final String value) {
 		super(beginLine, beginColumn, endLine, endColumn);
 		this.value = value;
+	}
+
+	public StringLiteralExpr(Position begin, Position end, String value) {
+		super(begin, end);
+		setValue(value);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

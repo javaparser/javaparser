@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -40,6 +41,11 @@ public class NameExpr extends Expression {
 	public NameExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final String name) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		this.name = name;
+	}
+
+	public NameExpr(Position begin, Position end, String name) {
+		super(begin, end);
 		this.name = name;
 	}
 

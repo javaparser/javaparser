@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -65,6 +66,15 @@ public final class ReferenceType extends Type {
         setArrayCount(arrayCount);
         this.arraysAnnotations = arraysAnnotations;
     }
+
+	public ReferenceType(Position begin, Position end,
+			Type type, int arrayCount,
+			List<AnnotationExpr> annotations, List<List<AnnotationExpr>> arraysAnnotations) {
+		super(begin, end, annotations);
+		setType(type);
+		setArrayCount(arrayCount);
+		this.arraysAnnotations = arraysAnnotations;
+	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);

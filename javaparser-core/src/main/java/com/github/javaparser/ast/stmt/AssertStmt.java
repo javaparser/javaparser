@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -52,6 +53,12 @@ public final class AssertStmt extends Statement {
 		setCheck(check);
 		setMessage(msg);
 		
+	}
+
+	public AssertStmt(Position begin, Position end, final Expression check, final Expression msg) {
+		super(begin, end);
+		setCheck(check);
+		setMessage(msg);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

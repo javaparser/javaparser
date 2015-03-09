@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
@@ -54,8 +55,6 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	private List<NameExpr> throws_;
 
 	private BlockStmt body;
-
-    private boolean isDefault = false;
 
     public MethodDeclaration() {
 	}
@@ -92,6 +91,20 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations);
+		setModifiers(modifiers);
+		setTypeParameters(typeParameters);
+		setType(type);
+		setName(name);
+		setParameters(parameters);
+		setArrayCount(arrayCount);
+		setThrows(throws_);
+		setBody(block);
+	}
+
+	public MethodDeclaration(Position begin, Position end, final int modifiers, final List<AnnotationExpr> annotations,
+			final List<TypeParameter> typeParameters, final Type type, final String name,
+			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
+		super(begin, end, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
 		setType(type);
@@ -200,15 +213,21 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(typeParameters);
 	}
 
+	/**
+	 * @deprecated Use modifiers
+	 */
+	@Deprecated
+	public boolean isDefault() {
+		return ModifierSet.isDefault(modifiers);
+	}
 
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setDefault(boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
+	/**
+	 * @deprecated Use modifiers
+	 */
+	@Deprecated
+	public void setDefault(boolean isDefault) {
+		modifiers = ModifierSet.addModifier(modifiers, ModifierSet.DEFAULT);
+	}
 
     @Override
     public String getDeclarationAsString() {

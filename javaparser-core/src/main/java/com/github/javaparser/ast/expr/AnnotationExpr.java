@@ -20,6 +20,8 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -32,6 +34,10 @@ public abstract class AnnotationExpr extends Expression {
 	public AnnotationExpr(int beginLine, int beginColumn, int endLine,
 			int endColumn) {
 		super(beginLine, beginColumn, endLine, endColumn);
+	}
+
+	public AnnotationExpr(Position begin, Position end) {
+		super(begin, end);
 	}
 
 	public NameExpr getName() {

@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 
 /**
@@ -34,4 +35,7 @@ public abstract class Expression extends Node {
 		super(beginLine, beginColumn, endLine, endColumn);
 	}
 
+	public Expression(Position begin, Position end) {
+		super(begin, end);
+	}
 }

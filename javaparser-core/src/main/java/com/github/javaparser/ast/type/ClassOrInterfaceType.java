@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -51,6 +52,14 @@ public final class ClassOrInterfaceType extends Type {
 	public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setScope(scope);
+		setName(name);
+		setTypeArgs(typeArgs);
+	}
+
+	public ClassOrInterfaceType(Position begin, Position end,
+			final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
+		super(begin, end);
 		setScope(scope);
 		setName(name);
 		setTypeArgs(typeArgs);

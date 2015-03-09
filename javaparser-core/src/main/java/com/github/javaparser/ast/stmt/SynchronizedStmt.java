@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -45,6 +46,12 @@ public final class SynchronizedStmt extends Statement {
 			final int endLine, final int endColumn, final Expression expr,
 			final BlockStmt block) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setExpr(expr);
+		setBlock(block);
+	}
+
+	public SynchronizedStmt(Position begin, Position end, final Expression expr, final BlockStmt block) {
+		super(begin, end);
 		setExpr(expr);
 		setBlock(block);
 	}

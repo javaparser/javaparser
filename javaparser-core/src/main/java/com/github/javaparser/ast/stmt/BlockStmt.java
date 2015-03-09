@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -42,6 +43,11 @@ public final class BlockStmt extends Statement {
 	public BlockStmt(final int beginLine, final int beginColumn,
 			final int endLine, final int endColumn, final List<Statement> stmts) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setStmts(stmts);
+	}
+
+	public BlockStmt(Position begin, Position end, final List<Statement> stmts) {
+		super(begin, end);
 		setStmts(stmts);
 	}
 

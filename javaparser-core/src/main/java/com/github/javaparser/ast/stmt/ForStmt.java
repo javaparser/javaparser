@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -55,6 +56,16 @@ public final class ForStmt extends Statement {
 			final List<Expression> init, final Expression compare,
 			final List<Expression> update, final Statement body) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setCompare(compare);
+		setInit(init);
+		setUpdate(update);
+		setBody(body);
+	}
+
+	public ForStmt(Position begin, Position end,
+			final List<Expression> init, final Expression compare,
+			final List<Expression> update, final Statement body) {
+		super(begin, end);
 		setCompare(compare);
 		setInit(init);
 		setUpdate(update);

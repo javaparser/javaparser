@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -40,6 +41,11 @@ public final class EnclosedExpr extends Expression {
 	public EnclosedExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression inner) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setInner(inner);
+	}
+
+	public EnclosedExpr(Position begin, Position end, final Expression inner) {
+		super(begin, end);
 		setInner(inner);
 	}
 

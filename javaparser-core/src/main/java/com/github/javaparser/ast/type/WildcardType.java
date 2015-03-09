@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -47,6 +48,12 @@ public final class WildcardType extends Type {
 	public WildcardType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final ReferenceType ext, final ReferenceType sup) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setExtends(ext);
+		setSuper(sup);
+	}
+
+	public WildcardType(Position begin, Position end, final ReferenceType ext, final ReferenceType sup) {
+		super(begin, end);
 		setExtends(ext);
 		setSuper(sup);
 	}

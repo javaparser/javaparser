@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -43,6 +44,12 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 	public NormalAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final NameExpr name, final List<MemberValuePair> pairs) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setName(name);
+		setPairs(pairs);
+	}
+
+	public NormalAnnotationExpr(Position begin, Position end, final NameExpr name, final List<MemberValuePair> pairs) {
+		super(begin, end);
 		setName(name);
 		setPairs(pairs);
 	}

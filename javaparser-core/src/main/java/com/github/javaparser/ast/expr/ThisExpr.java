@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -40,6 +41,11 @@ public final class ThisExpr extends Expression {
 	public ThisExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Expression classExpr) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setClassExpr(classExpr);
+	}
+
+	public ThisExpr(Position begin, Position end, Expression classExpr) {
+		super(begin, end);
 		setClassExpr(classExpr);
 	}
 

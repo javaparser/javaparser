@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -43,6 +44,11 @@ public final class ArrayInitializerExpr extends Expression {
         super(beginLine, beginColumn, endLine, endColumn);
         setValues(values);
     }
+
+	public ArrayInitializerExpr(Position begin, Position end, List<Expression> values) {
+		super(begin, end);
+		setValues(values);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -38,6 +39,11 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
 	public MarkerAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final NameExpr name) {
 		super(beginLine, beginColumn, endLine, endColumn);
+		setName(name);
+	}
+
+	public MarkerAnnotationExpr(Position begin, Position end, final NameExpr name) {
+		super(begin, end);
 		setName(name);
 	}
 

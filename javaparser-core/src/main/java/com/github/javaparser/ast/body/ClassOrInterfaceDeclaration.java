@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -69,6 +70,17 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
+		setInterface(isInterface);
+		setTypeParameters(typeParameters);
+		setExtends(extendsList);
+		setImplements(implementsList);
+	}
+
+	public ClassOrInterfaceDeclaration(Position begin, Position end,
+			final int modifiers, final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
+			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
+			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
+		super(begin, end, annotations, modifiers, name, members);
 		setInterface(isInterface);
 		setTypeParameters(typeParameters);
 		setExtends(extendsList);

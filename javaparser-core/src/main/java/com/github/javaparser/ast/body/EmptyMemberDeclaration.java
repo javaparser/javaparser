@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,6 +38,10 @@ public final class EmptyMemberDeclaration extends BodyDeclaration implements Doc
     public EmptyMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
         super(beginLine, beginColumn, endLine, endColumn, null);
     }
+
+	public EmptyMemberDeclaration(Position begin, Position end) {
+		super(begin, end, null);
+	}
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
