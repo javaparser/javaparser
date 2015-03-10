@@ -430,7 +430,7 @@ Given the class:
 class A {
   // foo
   // bar
-  void aMethod(){};
+  void aMethod(){}
 }
 When the class is parsed by the Java parser
 Then it is dumped to:
@@ -440,8 +440,6 @@ class A {
     // bar
     void aMethod() {
     }
-
-    ;
 }
 
 Scenario: We dump correctly two consecutive line-comments in a method
@@ -452,7 +450,7 @@ class A {
      // foo
      // bar
      int a;
-  };
+  }
 }
 When the class is parsed by the Java parser
 Then it is dumped to:
@@ -463,7 +461,5 @@ class A {
         // bar
         int a;
     }
-
-    ;
 }
 

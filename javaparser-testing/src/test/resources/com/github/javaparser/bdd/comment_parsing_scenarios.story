@@ -159,7 +159,7 @@ class A {
      // foo
      // bar
      int a;
-  };
+  }
 }
 When the class is parsed by the comment parser
 Then the total number of comments is 2
