@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.visitor.DumpVisitor;
 import org.jbehave.core.annotations.*;
 import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
@@ -42,6 +43,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class CommentParsingSteps {
@@ -139,6 +141,13 @@ public class CommentParsingSteps {
             assertThat(lineCommentUnderTest.getEndColumn(), is(expectedLineComment.getEndColumn()));
             index ++;
         }
+    }
+
+    @Then("it is dumped to:$dumpSrc")
+    public void isDumpedTo(String dumpSrc) {
+        DumpVisitor dumpVisitor = new DumpVisitor();
+        dumpVisitor.visit(compilationUnit, null);
+        assertThat(dumpVisitor.getSource().trim(), is(dumpSrc.trim()));
     }
 
     @Then("the compilation unit is not commented")

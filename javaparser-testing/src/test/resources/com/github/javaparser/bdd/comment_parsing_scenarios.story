@@ -150,3 +150,18 @@ Then the block comments have the following positions:
 Then the Javadoc comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
 |15|5|17|8|
+
+Scenario: A method containing two consecutive line comments is parsed correctly
+
+Given the class:
+class A {
+  void aMethod(){
+     // foo
+     // bar
+     int a;
+  }
+}
+When the class is parsed by the comment parser
+Then the total number of comments is 2
+Then line comment 1 is " foo"
+Then line comment 2 is " bar"
