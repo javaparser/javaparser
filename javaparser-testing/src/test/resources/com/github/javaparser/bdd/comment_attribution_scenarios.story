@@ -424,7 +424,7 @@ When the class is parsed by the Java parser
 Then the compilation unit has 1 contained comments
 Then comment 1 in compilation unit commented node is PrimitiveType
 
-Scenario: We dump correctly two consecutive line-comments
+Scenario: We dump correctly two consecutive line-comments in a class
  
 Given the class:
 class A {
@@ -443,3 +443,26 @@ class A {
 
     ;
 }
+
+Scenario: We dump correctly two consecutive line-comments in a method
+
+Given the class:
+class A {
+  void aMethod(){
+     // foo
+     // bar
+     int a;
+  };
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A {
+    
+    void aMethod() {
+        // bar
+        int a;
+    }
+                            
+    ;
+}
+
