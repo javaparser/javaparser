@@ -457,12 +457,13 @@ class A {
 When the class is parsed by the Java parser
 Then it is dumped to:
 class A {
-    
+
     void aMethod() {
+        // foo
         // bar
         int a;
     }
-                            
+
     ;
 }
 

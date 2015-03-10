@@ -1144,6 +1144,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override public void visit(final ExpressionStmt n, final Object arg) {
+		printOrphanCommentsBeforeThisChildNode(n);
 		printJavaComment(n.getComment(), arg);
 		n.getExpression().accept(this, arg);
 		printer.print(";");
