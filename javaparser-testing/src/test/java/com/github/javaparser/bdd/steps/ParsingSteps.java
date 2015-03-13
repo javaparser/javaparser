@@ -104,7 +104,7 @@ public class ParsingSteps {
                                                                      String expectedBody) {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         LambdaExpr lambdaExpr = (LambdaExpr) statement.getChildrenNodes().get(0).getChildrenNodes().get(1).getChildrenNodes().get(1)
-                .getChildrenNodes().get(1).getChildrenNodes().get(2);
+                .getChildrenNodes().get(1).getChildrenNodes().get(1);
         assertThat(lambdaExpr.getBody().toString(), is(expectedBody));
     }
 

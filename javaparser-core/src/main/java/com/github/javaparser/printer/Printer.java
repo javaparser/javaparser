@@ -318,21 +318,21 @@ public class Printer {
                         consumeUntil(emptyEndOfLine.next());
                     }
                 } else {
-                    if (current.is(WHITESPACE)) {
+                    if (current.is(WHITESPACE) && current.is(LINE_ENDING)) {
                         if (format) {
                             writer.append("\n");
                         } else {
                             writer.append(current.image());
                         }
+                        current = current.next();
                     } else if (current.is(COMMENT)) {
                         writer.append(current.image());
+                        current = current.next();
                     } else {
                         if (format || afterAlpha) {
                             writer.append("\n");
                         }
                     }
-
-                    current = current.next();
                 }
             } else {
                 writer.append("\n");
@@ -1605,8 +1605,10 @@ public class Printer {
         public void visit(final ExpressionStmt n, final Void arg) {
             delayedIndent(settings.indentation(STATEMENT));
             printNode(n.getExpression());
-            printSeparator(SeparatorKind.SEMICOLON);
-            printNewLine();
+            if (!(n.getParentNode() instanceof LambdaExpr)) {
+                printSeparator(SeparatorKind.SEMICOLON);
+                printNewLine();
+            }
             unIndent(settings.indentation(STATEMENT));
         }
 
@@ -2078,12 +2080,7 @@ public class Printer {
             }
 
             printOperator(OperatorKind.ARROW);
-            Statement body = n.getBody();
-            if (body instanceof ExpressionStmt) {
-                printNode(((ExpressionStmt) body).getExpression());
-            } else {
-                printNode(body);
-            }
+            printNode(n.getBody());
         }
 
         @Override

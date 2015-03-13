@@ -80,6 +80,9 @@ final class ASTParser extends Parser {
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) throws ParseException {
+        if (lambdaBody instanceof ExpressionStmt) {
+            lambdaBody.setLast(((ExpressionStmt) lambdaBody).getExpression().last());
+        }
 	    if (ret instanceof EnclosedExpr) {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
@@ -87,6 +90,7 @@ final class ASTParser extends Parser {
 	       	    List params = add(null, new Parameter(ret.first(), ret.last(), 0, null, null, false, id));
 	            ret = new LambdaExpr(ret.first(), lambdaBody.last(), params, lambdaBody, true);
 	        } else {
+	            ret.setParentNode(null);
 	            ret = new LambdaExpr(ret.first(), lambdaBody.last(), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
@@ -95,10 +99,10 @@ final class ASTParser extends Parser {
 	        ret = new LambdaExpr(ret.first(), ret.last(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
-	        ret.setLast(lambdaBody.last());
 	    } else {
 	        throw new ParseException("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
 	    }
+	    ret.setLast(lambdaBody.last());
 	    return ret;
     }
 }
@@ -1880,6 +1884,7 @@ Expression Expression():
      {
        inner = generateLambda(((CastExpr)ret).getExpr(), lambdaBody);
        ((CastExpr)ret).setExpr(inner);
+       ret.setLast(inner.last());
      }
      else
      {
@@ -2697,6 +2702,7 @@ ExpressionStmt StatementExpression():
 	     {
            inner = generateLambda(((CastExpr)expr).getExpr(), lambdaBody);
            ((CastExpr)expr).setExpr(inner);
+           expr.setLast(inner.last());
 	     }
 	     else
 	     {
