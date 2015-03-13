@@ -9,14 +9,15 @@ Scenario: A BlockStmt can be created by a provided String
 
 Given a BlockStmt
 When is the String "{return x+y;}" is parsed by the JavaParser using parseBlock
-Then Statement 1 in BlockStmt toString is "return x + y;"
+Then Statement 1 in BlockStmt toString is "return x+y;"
 
 
 Scenario: A Statement can be created by a provided String
 
 Given a Statement
 When is the String "x = x+y;" is parsed by the JavaParser using parseStatement
-Then Statement toString is "x = x + y;"
+Then Statement toString is "x = x+y;
+"
 
 
 Scenario: Adding declarations to a TryStmt it is set as the parent of all provided declarations
