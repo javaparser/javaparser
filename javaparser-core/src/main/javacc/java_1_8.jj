@@ -68,9 +68,9 @@ final class ASTParser extends Parser {
     protected void throwParseException(Token token, String message) throws ParseException {
         StringBuilder buf = new StringBuilder();
         buf.append(message);
-        buf.append(": \"");
+        buf.append(": '");
         buf.append(token.image);
-        buf.append("\" at line ");
+        buf.append("' at line ");
         buf.append(token.beginLine);
         buf.append(", column ");
         buf.append(token.beginColumn);
@@ -1414,14 +1414,14 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	      {
 	        if(isDefault && ret != null && ((MethodDeclaration)ret).getBody() == null)
 	        {
-	          throwParseException(token, "\"default\" methods must have a body");
+	          throwParseException(token, "'default' methods must have a body");
 	        }
 	      }
 	  )
 	  {
 	    if(isDefault && ! (ret instanceof MethodDeclaration))
 	    {
-	      throwParseException(token, "Just methods can have the keyword \"default\".");
+	      throwParseException(token, "Just methods can have the keyword 'default'.");
 	    }
 	  }
 	|
