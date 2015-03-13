@@ -23,6 +23,8 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -49,7 +51,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
      * to not repeat it in every method we store that here.
      */
     private boolean commonNodeEquality(Node n1, Node n2) {
-        return true;
+        return commentsEquals(n1.getCommentAttributes(), n2.getCommentAttributes());
     }
 
 	private <T extends Node> boolean nodesEquals(final List<T> nodes1, final List<T> nodes2) {
@@ -92,6 +94,64 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         }
 		return n1.accept(this, n2).booleanValue();
 	}
+
+    private boolean commentsEquals(final CommentAttributes comments1, final CommentAttributes comments2) {
+        if (comments1 == null) {
+            if (comments2 == null) {
+                return true;
+            }
+            return false;
+        } else if (comments2 == null) {
+            return false;
+        }
+
+        if (!commentsEquals(comments1.getLeadingComments(), comments2.getLeadingComments())) {
+            return false;
+        }
+        if (!commentsEquals(comments1.getDanglingComments(), comments2.getDanglingComments())) {
+            return false;
+        }
+        if (!commentEquals(comments1.getTrailingComment(), comments2.getTrailingComment())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean commentsEquals(List<Comment> comments1, List<Comment> comments2) {
+        if (comments1 == null) {
+            if (comments2 == null) {
+                return true;
+            }
+            return false;
+        } else if (comments2 == null) {
+            return false;
+        }
+
+        if (comments1.size() != comments2.size()) {
+            return false;
+        }
+        for (int i = 0; i < comments1.size(); i++) {
+            if (!commentEquals(comments1.get(i), comments2.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean commentEquals(final Comment comment1, final Comment comment2) {
+        if (comment1 == null) {
+            if (comment2 == null) {
+                return true;
+            }
+            return false;
+        } else if (comment2 == null) {
+            return false;
+        }
+
+        return comment1.getCommentKind() == comment2.getCommentKind() &&
+                comment1.image().equals(comment2.image());
+    }
 
 	private boolean objEquals(final Object n1, final Object n2) {
 		if (n1 == n2) {
@@ -451,7 +511,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 		return Boolean.TRUE;
 	}
-	
+
 	@Override public Boolean visit(final Parameter n1, final Node arg) {
 		final Parameter n2 = (Parameter) arg;
 		if (!nodeEquals(n1.getType(), n2.getType())) {
@@ -459,7 +519,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 		return visit((BaseParameter) n1, arg);
 	}
-	
+
 	@Override public Boolean visit(MultiTypeParameter n1, Node arg) {
 		MultiTypeParameter n2 = (MultiTypeParameter) arg;
 		if (n1.getTypes().size() != n2.getTypes().size()) {
@@ -492,7 +552,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		return Boolean.TRUE;
 	}
-	
+
 	@Override public Boolean visit(final EmptyMemberDeclaration n1, final Node arg) {
 		return Boolean.TRUE;
 	}
