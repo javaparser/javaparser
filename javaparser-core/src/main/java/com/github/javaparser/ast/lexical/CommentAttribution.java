@@ -75,6 +75,7 @@ public class CommentAttribution {
                     inEmptyLine = true;
                 }
             } else {
+                hadEmptyLine = false;
                 inEmptyLine = false;
             }
 
@@ -93,7 +94,7 @@ public class CommentAttribution {
             // Then attribute those to the parent
             if (hadEmptyLine || !(isWhitespace || isComment)) {
                 if (comments != null && !comments.isEmpty()) {
-                    attributes(parent).addDanglingComments(comments);
+                    attributes(parent == null ? node : parent).addDanglingComments(comments);
                     comments.clear();
                     hadEmptyLine = false;
                 }
