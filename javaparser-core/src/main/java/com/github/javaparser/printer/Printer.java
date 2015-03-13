@@ -30,6 +30,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -553,59 +555,81 @@ public class Printer {
             printIndentIfNecessary();
             consumeSeparator(kind);
         }
+
+        protected void printModifiers(List<KeywordKind> modifiers) {
+            consumeCommentsAndWhitespace("", true);
+            printIndentIfNecessary();
+            if (current != null) {
+                while (current != null && !modifiers.isEmpty()) {
+                    if (current.is(KEYWORD)) {
+                        KeywordKind keywordKind = ((Keyword) current).getKeywordKind();
+                        if (modifiers.contains(keywordKind)) {
+                            modifiers.remove(keywordKind);
+
+                            consumeKeyword(keywordKind);
+                            printSpace();
+                        } else {
+                            // Removed modifier
+                            current = current.next();
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            if (!modifiers.isEmpty()) {
+                for (KeywordKind modifier : modifiers) {
+                    printKeyword(modifier);
+                    printSpace();
+                }
+            }
+        }
     }
 
     public class PrintVisitor extends PrintController {
 
         private void printModifiers(final int modifiers) {
+            List<KeywordKind> modifierKeywords = new ArrayList<KeywordKind>();
+
             if (ModifierSet.isPrivate(modifiers)) {
-                printKeyword(KeywordKind.PRIVATE);
-                printSpace();
+                modifierKeywords.add(KeywordKind.PRIVATE);
             }
             if (ModifierSet.isProtected(modifiers)) {
-                printKeyword(KeywordKind.PROTECTED);
-                printSpace();
+                modifierKeywords.add(KeywordKind.PROTECTED);
             }
             if (ModifierSet.isPublic(modifiers)) {
-                printKeyword(KeywordKind.PUBLIC);
-                printSpace();
+                modifierKeywords.add(KeywordKind.PUBLIC);
             }
             if (ModifierSet.isAbstract(modifiers)) {
-                printKeyword(KeywordKind.ABSTRACT);
-                printSpace();
+                modifierKeywords.add(KeywordKind.ABSTRACT);
             }
             if (ModifierSet.isStatic(modifiers)) {
-                printKeyword(KeywordKind.STATIC);
-                printSpace();
+                modifierKeywords.add(KeywordKind.STATIC);
             }
             if (ModifierSet.isDefault(modifiers)) {
-                printKeyword(KeywordKind.DEFAULT);
-                printSpace();
+                modifierKeywords.add(KeywordKind.DEFAULT);
             }
             if (ModifierSet.isFinal(modifiers)) {
-                printKeyword(KeywordKind.FINAL);
-                printSpace();
+                modifierKeywords.add(KeywordKind.FINAL);
             }
             if (ModifierSet.isNative(modifiers)) {
-                printKeyword(KeywordKind.NATIVE);
-                printSpace();
+                modifierKeywords.add(KeywordKind.NATIVE);
             }
             if (ModifierSet.isStrictfp(modifiers)) {
-                printKeyword(KeywordKind.STRICTFP);
-                printSpace();
+                modifierKeywords.add(KeywordKind.STRICTFP);
             }
             if (ModifierSet.isSynchronized(modifiers)) {
-                printKeyword(KeywordKind.SYNCHRONIZED);
-                printSpace();
+                modifierKeywords.add(KeywordKind.SYNCHRONIZED);
             }
             if (ModifierSet.isTransient(modifiers)) {
-                printKeyword(KeywordKind.TRANSIENT);
-                printSpace();
+                modifierKeywords.add(KeywordKind.TRANSIENT);
             }
             if (ModifierSet.isVolatile(modifiers)) {
-                printKeyword(KeywordKind.VOLATILE);
-                printSpace();
+                modifierKeywords.add(KeywordKind.VOLATILE);
             }
+
+            printModifiers(modifierKeywords);
         }
 
         private void printMembers(final List<BodyDeclaration> members) {
