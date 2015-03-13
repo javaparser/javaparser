@@ -23,6 +23,8 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -232,7 +234,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		);
 		return r;
 	}
-	
+
 	@Override
 	public Node visit(MultiTypeParameter _n, Object _arg) {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
@@ -984,7 +986,35 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
         Node r = _node.accept(this, _arg);
         if (r == null)
             return null;
+        r.setCommentAttributes(cloneComments(_node.getCommentAttributes()));
         return (T) r;
     }
 
+    private CommentAttributes cloneComments(CommentAttributes comments) {
+        if (comments == null)
+            return null;
+        CommentAttributes r = new CommentAttributes();
+        r.setLeadingComments(cloneComments(comments.getLeadingComments()));
+        r.setDanglingComments(cloneComments(comments.getDanglingComments()));
+        r.setTrailingComment(cloneComment(comments.getTrailingComment()));
+        return r;
+    }
+
+    public List<Comment> cloneComments(List<Comment> comments) {
+        if (comments == null)
+            return null;
+        List<Comment> r = new ArrayList<Comment>(comments.size());
+        for (Comment comment : comments) {
+            Comment rComment = cloneComment(comment);
+            if (rComment != null)
+                r.add(rComment);
+        }
+        return r;
+    }
+
+    private Comment cloneComment(Comment comment) {
+        if (comment == null)
+            return null;
+        return new Comment(comment.getCommentKind(), comment.image());
+    }
 }
