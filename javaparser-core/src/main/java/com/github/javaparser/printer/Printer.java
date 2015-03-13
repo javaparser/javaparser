@@ -386,7 +386,7 @@ public class Printer {
 
         private void consumeIdentifier(String image) {
             if (current != null) {
-                if (!current.is(IDENTIFIER) || !current.image().equals(image))
+                if (!current.is(IDENTIFIER))
                     throw new IllegalStateException();
                 current = current.next();
             }
