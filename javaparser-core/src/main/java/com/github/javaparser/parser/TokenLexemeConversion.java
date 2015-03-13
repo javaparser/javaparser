@@ -27,20 +27,20 @@ import com.github.javaparser.ast.lexical.*;
  */
 class TokenLexemeConversion {
 
-    static Lexeme instantiate(int kind, final String image) {
-        switch (kind) {
+    static Lexeme instantiate(Token token) {
+        switch (token.kind) {
             case ASTParserConstants.EOF:
-                return new Whitespace(WhitespaceKind.END_OF_FILE, image);
+                return new Whitespace(WhitespaceKind.END_OF_FILE, token.image);
             case ASTParserConstants.WHITESPACE:
-                return new Whitespace(WhitespaceKind.NORMAL, image);
+                return new Whitespace(WhitespaceKind.NORMAL, token.image);
             case ASTParserConstants.NEWLINE:
-                return new Whitespace(WhitespaceKind.LINE_ENDING, image);
+                return new Whitespace(WhitespaceKind.LINE_ENDING, token.image);
             case ASTParserConstants.SINGLE_LINE_COMMENT:
-                return new Comment(CommentKind.SINGLE_LINE, image);
+                return new Comment(CommentKind.SINGLE_LINE, token.image);
             case ASTParserConstants.JAVA_DOC_COMMENT:
-                return new Comment(CommentKind.JAVA_DOC, image);
+                return new Comment(CommentKind.JAVA_DOC, token.image);
             case ASTParserConstants.MULTI_LINE_COMMENT:
-                return new Comment(CommentKind.MULTI_LINE, image);
+                return new Comment(CommentKind.MULTI_LINE, token.image);
             case ASTParserConstants.ABSTRACT:
                 return new Keyword(KeywordKind.ABSTRACT);
             case ASTParserConstants.ASSERT:
@@ -148,37 +148,37 @@ class TokenLexemeConversion {
             case ASTParserConstants.WHILE:
                 return new Keyword(KeywordKind.WHILE);
             case ASTParserConstants.LONG_LITERAL:
-                return new Literal(LiteralKind.LONG, image);
+                return new Literal(LiteralKind.LONG, token.image);
             case ASTParserConstants.INTEGER_LITERAL:
-                return new Literal(LiteralKind.INTEGER, image);
+                return new Literal(LiteralKind.INTEGER, token.image);
             case ASTParserConstants.DECIMAL_LITERAL:
-                return new Literal(LiteralKind.DECIMAL, image);
+                return new Literal(LiteralKind.DECIMAL, token.image);
             case ASTParserConstants.HEX_LITERAL:
-                return new Literal(LiteralKind.HEX, image);
+                return new Literal(LiteralKind.HEX, token.image);
             case ASTParserConstants.OCTAL_LITERAL:
-                return new Literal(LiteralKind.OCTAL, image);
+                return new Literal(LiteralKind.OCTAL, token.image);
             case ASTParserConstants.BINARY_LITERAL:
-                return new Literal(LiteralKind.BINARY, image);
+                return new Literal(LiteralKind.BINARY, token.image);
             case ASTParserConstants.FLOATING_POINT_LITERAL:
-                return new Literal(LiteralKind.FLOATING_POINT, image);
+                return new Literal(LiteralKind.FLOATING_POINT, token.image);
             case ASTParserConstants.DECIMAL_FLOATING_POINT_LITERAL:
-                return new Literal(LiteralKind.DECIMAL_FLOATING_POINT, image);
+                return new Literal(LiteralKind.DECIMAL_FLOATING_POINT, token.image);
             case ASTParserConstants.DECIMAL_EXPONENT:
-                return new Literal(LiteralKind.DECIMAL_EXPONENT, image);
+                return new Literal(LiteralKind.DECIMAL_EXPONENT, token.image);
             case ASTParserConstants.HEXADECIMAL_FLOATING_POINT_LITERAL:
-                return new Literal(LiteralKind.HEXADECIMAL_FLOATING_POINT, image);
+                return new Literal(LiteralKind.HEXADECIMAL_FLOATING_POINT, token.image);
             case ASTParserConstants.HEXADECIMAL_EXPONENT:
-                return new Literal(LiteralKind.HEXADECIMAL_EXPONENT, image);
+                return new Literal(LiteralKind.HEXADECIMAL_EXPONENT, token.image);
             case ASTParserConstants.CHARACTER_LITERAL:
-                return new Literal(LiteralKind.CHARACTER, image);
+                return new Literal(LiteralKind.CHARACTER, token.image);
             case ASTParserConstants.STRING_LITERAL:
-                return new Literal(LiteralKind.STRING, image);
+                return new Literal(LiteralKind.STRING, token.image);
             case ASTParserConstants.IDENTIFIER:
-                return new Identifier(image);
+                return new Identifier(token.image);
             case ASTParserConstants.LETTER:
-                return new Identifier(image);
+                return new Identifier(token.image);
             case ASTParserConstants.PART_LETTER:
-                return new Identifier(image);
+                return new Identifier(token.image);
             case ASTParserConstants.LPAREN:
                 return new Separator(SeparatorKind.LPAREN);
             case ASTParserConstants.RPAREN:
@@ -275,12 +275,15 @@ class TokenLexemeConversion {
                 return new Operator(OperatorKind.ARROW);
             case ASTParserConstants.DOUBLECOLON:
                 return new Operator(OperatorKind.DOUBLECOLON);
-            case ASTParserConstants.RUNSIGNEDSHIFT:
-                return new Operator(OperatorKind.RUNSIGNEDSHIFT);
-            case ASTParserConstants.RSIGNEDSHIFT:
-                return new Operator(OperatorKind.RSIGNEDSHIFT);
             case ASTParserConstants.GT:
-                return new Operator(OperatorKind.GT);
+                switch (token.realKind) {
+                    case ASTParserConstants.RUNSIGNEDSHIFT:
+                        return new Operator(OperatorKind.RUNSIGNEDSHIFT);
+                    case ASTParserConstants.RSIGNEDSHIFT:
+                        return new Operator(OperatorKind.RSIGNEDSHIFT);
+                    default:
+                        return new Operator(OperatorKind.GT);
+                }
 
             default:
                 throw new IllegalArgumentException();

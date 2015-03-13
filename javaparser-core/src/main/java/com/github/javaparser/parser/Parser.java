@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.lexical.Lexeme;
+import com.github.javaparser.ast.lexical.OperatorKind;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
@@ -146,7 +147,13 @@ public abstract class Parser {
     private Lexeme lastLexeme;
 
     private Lexeme buildLexemeChain(Token token) {
-        Lexeme current = TokenLexemeConversion.instantiate(token.kind, token.image);
+        if (token.kind == ASTParserConstants.GT) {
+            if (lastLexeme.is(OperatorKind.RSIGNEDSHIFT, OperatorKind.RUNSIGNEDSHIFT)) {
+                return lastLexeme;
+            }
+        }
+
+        Lexeme current = TokenLexemeConversion.instantiate(token);
         token.lexeme = current;
 
         current.setBegin(new Position(token.beginLine, token.beginColumn));
