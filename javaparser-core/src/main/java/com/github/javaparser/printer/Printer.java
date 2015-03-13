@@ -30,13 +30,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
 import static com.github.javaparser.ast.lexical.LexemeKind.*;
 import static com.github.javaparser.ast.lexical.WhitespaceKind.LINE_ENDING;
 import static com.github.javaparser.ast.lexical.WhitespaceKind.NORMAL;
+import static com.github.javaparser.printer.FormatterSettings.EmptyLineLocation.*;
+import static com.github.javaparser.printer.FormatterSettings.IndentationContext.*;
 
 /**
  * @author Didier Villevalois
@@ -68,16 +69,48 @@ public class Printer {
 
     private final PrintWriter writer;
     private final boolean format;
+    private final FormatterSettings settings;
 
     /**
-     * Creates a Printer that prints to the specified writer.
+     * Creates a Printer that prints to the specified writer with no formatting and the default formatter settings.
+     *
+     * @param writer the writer to print to
+     */
+    public Printer(PrintWriter writer) {
+        this(writer, false, FormatterSettings.DEFAULT);
+    }
+
+    /**
+     * Creates a Printer that prints to the specified writer with the default formatter settings.
      *
      * @param writer the writer to print to
      * @param format whether to format printed nodes
      */
     public Printer(PrintWriter writer, boolean format) {
+        this(writer, format, FormatterSettings.DEFAULT);
+    }
+
+    /**
+     * Creates a Printer that prints to the specified writer with the specified formatter settings.
+     *
+     * @param writer   the writer to print to
+     * @param settings whether to format printed nodes
+     */
+    public Printer(PrintWriter writer, FormatterSettings settings) {
+        this(writer, true, settings);
+    }
+
+    /**
+     * Creates a Printer that prints to the specified writer with the specified formatter settings.
+     *
+     * @param writer   the writer to print to
+     * @param format   whether to format printed nodes
+     * @param settings whether to format printed nodes
+     */
+    public Printer(PrintWriter writer, boolean format, FormatterSettings settings) {
         this.writer = writer;
         this.format = format;
+        this.settings = FormatterSettings.DEFAULT;
     }
 
     /**
@@ -94,6 +127,7 @@ public class Printer {
     private abstract class PrintController implements VoidVisitor<Void> {
 
         private int indentLevel;
+        private int delayedIndentation;
         private boolean needsIndentation;
         private Lexeme current;
         private boolean afterNewContent;
@@ -401,11 +435,13 @@ public class Printer {
             }
         }
 
-        protected void printEmptyLine() {
-            if (followingIsEmptyLine()) {
-                printNewLine();
-            } else if (format || afterNewContent || current == null) {
-                doPrintNewLine("\n");
+        protected void printEmptyLines(int emptyLineCount) {
+            for (int i = 0; i < emptyLineCount; i++) {
+                if (followingIsEmptyLine()) {
+                    printNewLine();
+                } else if (format || afterNewContent || current == null) {
+                    doPrintNewLine("\n");
+                }
             }
         }
 
@@ -414,12 +450,16 @@ public class Printer {
             needsIndentation = true;
         }
 
-        protected void indent() {
-            indentLevel++;
+        protected void indent(int indentation) {
+            indentLevel += indentation;
         }
 
-        protected void unindent() {
-            indentLevel--;
+        protected void delayedIndent(int indentation) {
+            delayedIndentation = indentation;
+        }
+
+        protected void unIndent(int indentation) {
+            indentLevel -= indentation;
         }
 
         private void printIndentIfNecessary() {
@@ -430,6 +470,8 @@ public class Printer {
                 }
                 needsIndentation = false;
             }
+            indentLevel += delayedIndentation;
+            delayedIndentation = 0;
         }
 
         private void doPrintIndent() {
@@ -464,8 +506,6 @@ public class Printer {
         protected void printTrailingComment(Comment comment) {
             boolean followingIsComment = followingIsComment(comment);
             if (current != null && followingIsComment) {
-//                writer.append("BB");
-
                 // Read a space
                 if (current.is(WHITESPACE) && current.is(NORMAL)) {
                     writer.append(current.image());
@@ -478,12 +518,9 @@ public class Printer {
                 if (comment.is(CommentKind.SINGLE_LINE)) {
                     printNewLine();
                 }
-//                writer.append("XX1");
             } else {
-//                writer.append("CC");
                 writer.append(" ");
                 writer.append(comment.image());
-//                writer.append("XX2");
             }
         }
 
@@ -572,15 +609,15 @@ public class Printer {
         }
 
         private void printMembers(final List<BodyDeclaration> members) {
-            printEmptyLine();
+            printEmptyLines(settings.emptyLineCount(BEFORE_MEMBERS));
             for (final Iterator<BodyDeclaration> i = members.iterator(); i.hasNext(); ) {
                 final BodyDeclaration member = i.next();
                 printNode(member);
                 if (i.hasNext()) {
-                    printEmptyLine();
+                    printEmptyLines(settings.emptyLineCount(BETWEEN_MEMBERS));
                 }
             }
-            printEmptyLine();
+            printEmptyLines(settings.emptyLineCount(AFTER_MEMBERS));
         }
 
         private void printMemberAnnotations(final List<AnnotationExpr> annotations) {
@@ -646,25 +683,40 @@ public class Printer {
             printSeparator(SeparatorKind.RPAREN);
         }
 
+        private void printParameters(List<Parameter> parameters) {
+            printSeparator(SeparatorKind.LPAREN);
+            if (parameters != null) {
+                for (final Iterator<Parameter> i = parameters.iterator(); i.hasNext(); ) {
+                    final Parameter p = i.next();
+                    printNode(p);
+                    if (i.hasNext()) {
+                        printSeparator(SeparatorKind.COMMA);
+                        printSpace();
+                    }
+                }
+            }
+            printSeparator(SeparatorKind.RPAREN);
+        }
+
         @Override
         public void visit(final CompilationUnit n, final Void arg) {
             if (n.getPackage() != null) {
                 printNode(n.getPackage());
-                printEmptyLine();
+                printEmptyLines(settings.emptyLineCount(AFTER_PACKAGE_DECLARATION));
             }
 
             if (n.getImports() != null) {
                 for (final ImportDeclaration i : n.getImports()) {
                     printNode(i);
                 }
-                printEmptyLine();
+                printEmptyLines(settings.emptyLineCount(AFTER_IMPORT_DECLARATIONS));
             }
 
             if (n.getTypes() != null) {
                 for (final Iterator<TypeDeclaration> i = n.getTypes().iterator(); i.hasNext(); ) {
                     printNode(i.next());
                     if (i.hasNext()) {
-                        printEmptyLine();
+                        printEmptyLines(settings.emptyLineCount(BETWEEN_TOP_LEVEL_DECLARATIONS));
                     }
                 }
             }
@@ -757,12 +809,12 @@ public class Printer {
             printSpace();
             printSeparator(SeparatorKind.LBRACE);
             printNewLine();
-            indent();
+            indent(settings.indentation(TYPE_BODY));
             if (n.getMembers() != null) {
                 printMembers(n.getMembers());
             }
 
-            unindent();
+            unIndent(settings.indentation(TYPE_BODY));
             printSeparator(SeparatorKind.RBRACE);
             printNewLine();
         }
@@ -1293,9 +1345,9 @@ public class Printer {
                 printSpace();
                 printSeparator(SeparatorKind.LBRACE);
                 printNewLine();
-                indent();
+                indent(settings.indentation(TYPE_BODY));
                 printMembers(n.getAnonymousClassBody());
-                unindent();
+                unIndent(settings.indentation(TYPE_BODY));
                 printSeparator(SeparatorKind.RBRACE);
             }
         }
@@ -1348,18 +1400,7 @@ public class Printer {
             }
             printIdentifier(n.getName());
 
-            printSeparator(SeparatorKind.LPAREN);
-            if (n.getParameters() != null) {
-                for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
-                    final Parameter p = i.next();
-                    printNode(p);
-                    if (i.hasNext()) {
-                        printSeparator(SeparatorKind.COMMA);
-                        printSpace();
-                    }
-                }
-            }
-            printSeparator(SeparatorKind.RPAREN);
+            printParameters(n.getParameters());
 
             if (n.getThrows() != null && !n.getThrows().isEmpty()) {
                 printSpace();
@@ -1391,18 +1432,7 @@ public class Printer {
             printSpace();
             printIdentifier(n.getName());
 
-            printSeparator(SeparatorKind.LPAREN);
-            if (n.getParameters() != null) {
-                for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
-                    final Parameter p = i.next();
-                    printNode(p);
-                    if (i.hasNext()) {
-                        printSeparator(SeparatorKind.COMMA);
-                        printSpace();
-                    }
-                }
-            }
-            printSeparator(SeparatorKind.RPAREN);
+            printParameters(n.getParameters());
 
             for (int i = 0; i < n.getArrayCount(); i++) {
                 printSeparator(SeparatorKind.LBRACKET);
@@ -1515,6 +1545,7 @@ public class Printer {
                 printNode(n.getMessage());
             }
             printSeparator(SeparatorKind.SEMICOLON);
+            printNewLine();
         }
 
         @Override
@@ -1522,11 +1553,11 @@ public class Printer {
             printSeparator(SeparatorKind.LBRACE);
             printNewLine();
             if (n.getStmts() != null) {
-                indent();
+                indent(settings.indentation(BLOCK));
                 for (final Statement s : n.getStmts()) {
                     printNode(s);
                 }
-                unindent();
+                unIndent(settings.indentation(BLOCK));
             }
             printSeparator(SeparatorKind.RBRACE);
         }
@@ -1548,9 +1579,11 @@ public class Printer {
 
         @Override
         public void visit(final ExpressionStmt n, final Void arg) {
+            delayedIndent(settings.indentation(STATEMENT));
             printNode(n.getExpression());
             printSeparator(SeparatorKind.SEMICOLON);
             printNewLine();
+            unIndent(settings.indentation(STATEMENT));
         }
 
         @Override
@@ -1563,11 +1596,11 @@ public class Printer {
             printSpace();
             printSeparator(SeparatorKind.LBRACE);
             if (n.getEntries() != null) {
-                indent();
+                indent(settings.indentation(SWITCH));
                 for (final SwitchEntryStmt e : n.getEntries()) {
                     printNode(e);
                 }
-                unindent();
+                unIndent(settings.indentation(SWITCH));
             }
             printSeparator(SeparatorKind.RBRACE);
 
@@ -1585,14 +1618,14 @@ public class Printer {
                 printOperator(OperatorKind.COLON);
             }
             printNewLine();
-            indent();
+            indent(settings.indentation(SWITCH_CASE));
             if (n.getStmts() != null) {
                 for (final Statement s : n.getStmts()) {
                     printNode(s);
                     printNewLine();
                 }
             }
-            unindent();
+            unIndent(settings.indentation(SWITCH_CASE));
         }
 
         @Override
@@ -1608,6 +1641,7 @@ public class Printer {
 
         @Override
         public void visit(final ReturnStmt n, final Void arg) {
+            delayedIndent(settings.indentation(STATEMENT));
             printKeyword(KeywordKind.RETURN);
             if (n.getExpr() != null) {
                 printSpace();
@@ -1615,6 +1649,7 @@ public class Printer {
             }
             printSeparator(SeparatorKind.SEMICOLON);
             printNewLine();
+            unIndent(settings.indentation(STATEMENT));
         }
 
         @Override
@@ -1643,7 +1678,7 @@ public class Printer {
             printSpace();
             printSeparator(SeparatorKind.LBRACE);
             printNewLine();
-            indent();
+            indent(settings.indentation(TYPE_BODY));
             if (n.getEntries() != null) {
                 printNewLine();
                 for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
@@ -1665,7 +1700,7 @@ public class Printer {
                     printNewLine();
                 }
             }
-            unindent();
+            unIndent(settings.indentation(TYPE_BODY));
             printSeparator(SeparatorKind.RBRACE);
             printNewLine();
         }
@@ -1683,9 +1718,9 @@ public class Printer {
                 printSpace();
                 printSeparator(SeparatorKind.LBRACE);
                 printNewLine();
-                indent();
+                indent(settings.indentation(TYPE_BODY));
                 printMembers(n.getClassBody());
-                unindent();
+                unIndent(settings.indentation(TYPE_BODY));
                 printSeparator(SeparatorKind.RBRACE);
                 printNewLine();
             }
@@ -1721,11 +1756,11 @@ public class Printer {
                 printSpace();
             } else {
                 printNewLine();
-                indent();
+                indent(settings.indentation(IF_ELSE));
             }
             printNode(n.getThenStmt());
             if (!thenBlock)
-                unindent();
+                unIndent(settings.indentation(IF_ELSE));
             if (n.getElseStmt() != null) {
                 if (thenBlock)
                     printSpace();
@@ -1739,11 +1774,11 @@ public class Printer {
                     printSpace();
                 } else {
                     printNewLine();
-                    indent();
+                    indent(settings.indentation(IF_ELSE));
                 }
                 printNode(n.getElseStmt());
                 if (!(elseIf || elseBlock))
-                    unindent();
+                    unIndent(settings.indentation(IF_ELSE));
             }
         }
 
@@ -1873,13 +1908,13 @@ public class Printer {
                         printSeparator(SeparatorKind.SEMICOLON);
                         printNewLine();
                         if (first) {
-                            indent();
+                            indent(settings.indentation(TRY_RESOURCES));
                         }
                     }
                     first = false;
                 }
                 if (n.getResources().size() > 1) {
-                    unindent();
+                    unIndent(settings.indentation(TRY_RESOURCES));
                 }
                 printSeparator(SeparatorKind.RPAREN);
                 printSpace();
@@ -1923,11 +1958,11 @@ public class Printer {
             printSpace();
             printSeparator(SeparatorKind.LBRACE);
             printNewLine();
-            indent();
+            indent(settings.indentation(TYPE_BODY));
             if (n.getMembers() != null) {
                 printMembers(n.getMembers());
             }
-            unindent();
+            unIndent(settings.indentation(TYPE_BODY));
             printSeparator(SeparatorKind.RBRACE);
             printNewLine();
         }
