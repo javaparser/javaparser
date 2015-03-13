@@ -664,16 +664,20 @@ public class Printer {
 
         private void printTypeArgs(final List<Type> args) {
             if (args != null) {
-                printOperator(OperatorKind.LT);
-                for (final Iterator<Type> i = args.iterator(); i.hasNext(); ) {
-                    final Type t = i.next();
-                    printNode(t);
-                    if (i.hasNext()) {
-                        printSeparator(SeparatorKind.COMMA);
-                        printSpace();
+                if (args.isEmpty()) {
+                    printOperator(OperatorKind.DIAMOND);
+                } else {
+                    printOperator(OperatorKind.LT);
+                    for (final Iterator<Type> i = args.iterator(); i.hasNext(); ) {
+                        final Type t = i.next();
+                        printNode(t);
+                        if (i.hasNext()) {
+                            printSeparator(SeparatorKind.COMMA);
+                            printSpace();
+                        }
                     }
+                    printOperator(OperatorKind.GT);
                 }
-                printOperator(OperatorKind.GT);
             }
         }
 

@@ -245,6 +245,8 @@ class TokenLexemeConversion {
                 return new Operator(OperatorKind.REM);
             case ASTParserConstants.LSHIFT:
                 return new Operator(OperatorKind.LSHIFT);
+            case ASTParserConstants.DIAMOND:
+                return new Operator(OperatorKind.DIAMOND);
             case ASTParserConstants.PLUSASSIGN:
                 return new Operator(OperatorKind.PLUSASSIGN);
             case ASTParserConstants.MINUSASSIGN:

@@ -64,6 +64,7 @@ public enum OperatorKind {
     RUNSIGNEDSHIFT(">>>"),
     RSIGNEDSHIFT(">>"),
     GT(">"),
+    DIAMOND("<>"),
     // Keep the last comma
     ;
 
