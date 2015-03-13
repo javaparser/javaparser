@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.DumpVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.printer.Printer;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -221,9 +222,7 @@ public abstract class Node extends Run {
 	 * @return the String representation of this node
 	 */
 	@Override public final String toString() {
-		final DumpVisitor visitor = new DumpVisitor();
-		accept(visitor, null);
-		return visitor.getSource();
+        return Printer.printToString(this);
 	}
 
     public final String toStringWithoutComments() {
