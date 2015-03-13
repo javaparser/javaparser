@@ -2454,8 +2454,8 @@ Expression AllocationExpression(Expression scope):
   "new"
   annotations = Annotations()
   (
-	  type = PrimitiveType() {type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(begin, previous(), type, null, 0);	  }
-	  arr = ArrayDimsAndInits()
+	  type = PrimitiveType()
+	  arr = ArrayDimsAndInits() { type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(begin, previous(), type, null, 0); }
 	  {
 	    arrayExpr.setArraysAnnotations((List)arr[2]);
 	  	if (arr[0] instanceof Integer) {
@@ -2472,7 +2472,7 @@ Expression AllocationExpression(Expression scope):
 	  type = ClassOrInterfaceType()
 
       (
-	      arr = ArrayDimsAndInits() {type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(begin, previous(), type, null, 0);	  }
+	      arr = ArrayDimsAndInits() { type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(begin, previous(), type, null, 0); }
 		  {
 		    arrayExpr.setArraysAnnotations((List)arr[2]);
 		  	if (arr[0] instanceof Integer) {
