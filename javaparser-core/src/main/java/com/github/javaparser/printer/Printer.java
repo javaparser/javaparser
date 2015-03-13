@@ -1289,22 +1289,34 @@ public class Printer {
 
         @Override
         public void visit(final IntegerLiteralExpr n, final Void arg) {
-            printLiteral(LiteralKind.INTEGER, n.getValue());
+            String value = n.getValue();
+            if (value.startsWith("-")) {
+                printOperator(OperatorKind.MINUS);
+                printLiteral(LiteralKind.INTEGER, value.substring(1));
+            } else {
+                printLiteral(LiteralKind.INTEGER, value);
+            }
         }
 
         @Override
         public void visit(final LongLiteralExpr n, final Void arg) {
-            printLiteral(LiteralKind.LONG, n.getValue());
+            String value = n.getValue();
+            if (value.startsWith("-")) {
+                printOperator(OperatorKind.MINUS);
+                printLiteral(LiteralKind.LONG, value.substring(1));
+            } else {
+                printLiteral(LiteralKind.LONG, value);
+            }
         }
 
         @Override
         public void visit(final IntegerLiteralMinValueExpr n, final Void arg) {
-            printLiteral(LiteralKind.INTEGER, n.getValue());
+            visit((IntegerLiteralExpr) n, arg);
         }
 
         @Override
         public void visit(final LongLiteralMinValueExpr n, final Void arg) {
-            printLiteral(LiteralKind.LONG, n.getValue());
+            visit((LongLiteralExpr) n, arg);
         }
 
         @Override
