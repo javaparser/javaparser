@@ -25,10 +25,7 @@ import com.github.javaparser.ast.lexical.Comment;
 import com.github.javaparser.ast.lexical.CommentAttributes;
 import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.lexical.Run;
-import com.github.javaparser.ast.visitor.DumpVisitor;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.visitor.*;
 import com.github.javaparser.printer.Printer;
 
 import java.util.Comparator;
@@ -201,7 +198,7 @@ public abstract class Node extends Run {
     }
 
 	@Override public final int hashCode() {
-		return toString().hashCode();
+		return HashCodeVisitor.hashCode(this);
 	}
 
 	@Override public boolean equals(final Object obj) {
