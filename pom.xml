@@ -39,24 +39,88 @@
 	<name>javaparser-parent</name>
 	<url>https://github.com/javaparser</url>
 	<inceptionYear>2007</inceptionYear>
-	<description>This package contains a Java 1.8 Parser with AST generation and visitor support.
-        The AST records the source code structure, javadoc and comments. Soon will be
-        possible change the AST nodes or create new ones to modify source code like refactoring.
-        This parser is based on Sreenivasa Viswanadha Java 1.5 parser.</description>
+	<description>Java 1.8 Parser Parser and Abstract Syntax Tree for Java</description>
+
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License</name>
+			<url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<developers>
+		<developer>
+			<name>Danny van Bruggen</name>
+			<email>hexagonaal@gmail.com</email>
+			<url>https://github.com/matozoid</url>
+			<id>matozoid</id>
+		</developer>
 		<developer>
 			<name>Júlio Vilmar Gesser</name>
 			<email>jgesser@gmail.com</email>
 		</developer>
+		<developer>
+			<name>Sebastian Kirsch</name>
+			<email>sebastian.kirsch@immobilienscout24.de</email>
+			<url>https://github.com/sebastiankirsch</url>
+			<id>sebastiankirsch</id>
+		</developer>
+		<developer>
+			<name>André Rouél</name>
+			<url>https://github.com/before</url>
+			<id>before</id>
+		</developer>
+		<developer>
+			<name>Nicholas Smith</name>
+			<email>sebastian.kirsch@immobilienscout24.de</email>
+			<url>https://github.com/SmiddyPence</url>
+			<id>SmiddyPence</id>
+		</developer>
+		<developer>
+			<name>Federico Tomassetti</name>
+			<email>federico@tomassetti.me</email>
+			<url>https://github.com/ftomassetti</url>
+			<id>ftomassetti</id>
+		</developer>
+		<developer>
+			<name>Didier Villevalois</name>
+			<email>ptitjes@free.fr</email>
+			<url>https://github.com/ptitjes</url>
+			<id>ptitjes</id>
+		</developer>
 	</developers>
 	<contributors>
 		<contributor>
-			<name>Hendy Irawan</name>
-			<email>hendy@soluvas.com</email>
-			<url>http://www.HendyIrawan.com/</url>
-			<organization>Soluvas</organization>
-			<organizationUrl>http://www.Soluvas.com/</organizationUrl>
+			<name>Junfei Liang</name>
+			<url>https://github.com/fly2best</url>
+		</contributor>
+		<contributor>
+			<name>Jarkko Miettinen</name>
+			<url>https://github.com/jmiettinen</url>
+		</contributor>
+		<contributor>
+			<name>Alexey Morozov</name>
+			<email>morozov@altlinux.org</email>
+			<url>https://github.com/amorozov</url>
+		</contributor>
+		<contributor>
+			<name>Donny Nadolny</name>
+			<email>donny.nadolny@gmail.com</email>
+			<url>https://github.com/dnadolny</url>
+		</contributor>
+		<contributor>
+			<name>Raquel Pau</name>
+			<url>https://github.com/rpau</url>
+		</contributor>
+		<contributor>
+			<name>Chao Shi</name>
+			<email>stepinto@live.com</email>
+			<url>https://github.com/stepinto</url>
+		</contributor>
+		<contributor>
+			<name>Michael Schieder</name>
+			<url>https://github.com/mschieder</url>
 		</contributor>
 	</contributors>
 
@@ -71,7 +135,6 @@
 		<maven-install-plugin.version>2.4</maven-install-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
-
 	</properties>
 
 	<scm>

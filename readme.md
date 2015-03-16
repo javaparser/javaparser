@@ -69,12 +69,10 @@ The libraries javadoc can be found [here](http://javaparser.github.io/javaparser
 
 ## History
 
-This parser is based on Sreenivasa Viswanadha's Java 1.5 parser.
+This parser is based on work by Sreenivasa Viswanadha and Júlio Vilmar Gesser. The original project, now inactive, was originally hosted at [Google Code](http://code.google.com/p/javaparser/) and supported only parsing Java 1.5.
 
-The project was originally hosted at [Google Code](http://code.google.com/p/javaparser/), however support there dwindled.
+The project now supports parsing Java 1.8 and aims to continue support for features in future versions of the Java language.
 
-This repository aims to provide support for issues and add the new Java language features.
+## License
 
-## Licence
-
-Offered under the GNU GENERAL PUBLIC LICENSE that can be found [here](https://github.com/javaparser/javaparser/blob/master/COPYING)
+Offered under the GNU Lesser General Public License: [COPYING.LESSER](https://github.com/javaparser/javaparser/blob/master/COPYING.LESSER), [COPYING](https://github.com/javaparser/javaparser/blob/master/COPYING).
