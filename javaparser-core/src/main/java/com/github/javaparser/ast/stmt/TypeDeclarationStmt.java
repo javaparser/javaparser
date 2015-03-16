@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -38,9 +39,9 @@ public final class TypeDeclarationStmt extends Statement {
 		setTypeDeclaration(typeDecl);
 	}
 
-	public TypeDeclarationStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public TypeDeclarationStmt(Lexeme first, Lexeme last,
 			final TypeDeclaration typeDecl) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setTypeDeclaration(typeDecl);
 	}
 

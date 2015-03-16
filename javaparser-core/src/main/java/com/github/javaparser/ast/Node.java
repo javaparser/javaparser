@@ -20,15 +20,18 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
+import com.github.javaparser.ast.lexical.Lexeme;
+import com.github.javaparser.ast.lexical.Run;
+import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.printer.Printer;
+
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.visitor.DumpVisitor;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -39,36 +42,23 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * 
  * @author Julio Vilmar Gesser
  */
-public abstract class Node {
+public abstract class Node extends Run {
 
-	private int beginLine;
-
-	private int beginColumn;
-
-	private int endLine;
-
-	private int endColumn;
-	
 	private Node parentNode;
+    private CommentAttributes comments;
 
     private List<Node> childrenNodes =  new LinkedList<Node>();
-    private List<Comment> orphanComments = new LinkedList<Comment>();
 
 	/**
 	 * This attribute can store additional information from semantic analysis.
 	 */
 	private Object data;
 
-	private Comment comment;
-
 	public Node() {
 	}
 
-	public Node(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		this.beginLine = beginLine;
-		this.beginColumn = beginColumn;
-		this.endLine = endLine;
-		this.endColumn = endColumn;
+	public Node(Lexeme first, Lexeme last) {
+        super(first, last);
 	}
 
 	/**
@@ -99,30 +89,47 @@ public abstract class Node {
 	public abstract <A> void accept(VoidVisitor<A> v, A arg);
 
 	/**
+	 * Returns the begin position of this node.
+	 *
+	 * @return the begin position, or <code>null</code> if the position has not been set
+	 */
+	public Position getBegin() {
+        Lexeme first = first();
+        return first == null ? null : first.begin();
+	}
+
+	/**
+	 * Returns the end position of this node.
+	 *
+	 * @return the end position, or <code>null</code> if the position has not been set
+	 */
+	public Position getEnd() {
+        Lexeme last = last();
+        return last == null ? null : last.end();
+	}
+
+	/**
 	 * Return the begin column of this node.
 	 * 
 	 * @return the begin column of this node
+	 * @deprecated Use getBegin().column
 	 */
+	@Deprecated()
 	public final int getBeginColumn() {
-		return beginColumn;
+        Position begin = getBegin();
+        return begin == null ? -1 : begin.column;
 	}
 
 	/**
 	 * Return the begin line of this node.
 	 * 
 	 * @return the begin line of this node
+	 * @deprecated Use getBegin().line
 	 */
+	@Deprecated()
 	public final int getBeginLine() {
-		return beginLine;
-	}
-
-	/**
-	 * This is a comment associated with this node.
-	 *
-	 * @return comment property
-	 */
-	public final Comment getComment() {
-		return comment;
+        Position begin = getBegin();
+        return begin == null ? -1 : begin.line;
 	}
 
 	/**
@@ -138,58 +145,33 @@ public abstract class Node {
 	 * Return the end column of this node.
 	 * 
 	 * @return the end column of this node
+	 * @deprecated Use getEnd().column
 	 */
+	@Deprecated()
 	public final int getEndColumn() {
-		return endColumn;
+        Position end = getEnd();
+        return end == null ? -1 : end.column;
 	}
 
 	/**
 	 * Return the end line of this node.
 	 * 
 	 * @return the end line of this node
+	 * @deprecated Use getEnd().line
 	 */
+	@Deprecated()
 	public final int getEndLine() {
-		return endLine;
+        Position end = getEnd();
+        return end == null ? -1 : end.line;
 	}
 
-	/**
-	 * Sets the begin column of this node.
-	 * 
-	 * @param beginColumn
-	 *            the begin column of this node
-	 */
-	public final void setBeginColumn(final int beginColumn) {
-		this.beginColumn = beginColumn;
-	}
+    public void setCommentAttributes(CommentAttributes comments) {
+        this.comments = comments;
+    }
 
-	/**
-	 * Sets the begin line of this node.
-	 * 
-	 * @param beginLine
-	 *            the begin line of this node
-	 */
-	public final void setBeginLine(final int beginLine) {
-		this.beginLine = beginLine;
-	}
-
-	/**
-	 * Use this to store additional information to this node.
-	 *
-	 * @param comment to be set
-	 */
-	public final void setComment(final Comment comment) {
-        if (comment!=null && (this instanceof Comment)){
-            throw new RuntimeException("A comment can not be commented");
-        }
-        if (this.comment!=null)
-        {
-            this.comment.setCommentedNode(null);
-        }
-		this.comment = comment;
-        if (comment!=null) {
-            this.comment.setCommentedNode(this);
-        }
-	}
+    public CommentAttributes getCommentAttributes() {
+        return comments;
+    }
 
 	/**
 	 * Use this to store additional information to this node.
@@ -201,34 +183,12 @@ public abstract class Node {
 	}
 
 	/**
-	 * Sets the end column of this node.
-	 * 
-	 * @param endColumn
-	 *            the end column of this node
-	 */
-	public final void setEndColumn(final int endColumn) {
-		this.endColumn = endColumn;
-	}
-
-	/**
-	 * Sets the end line of this node.
-	 * 
-	 * @param endLine
-	 *            the end line of this node
-	 */
-	public final void setEndLine(final int endLine) {
-		this.endLine = endLine;
-	}
-
-	/**
 	 * Return the String representation of this node.
 	 * 
 	 * @return the String representation of this node
 	 */
 	@Override public final String toString() {
-		final DumpVisitor visitor = new DumpVisitor();
-		accept(visitor, null);
-		return visitor.getSource();
+        return Printer.printToString(this);
 	}
 
     public final String toStringWithoutComments() {
@@ -238,7 +198,7 @@ public abstract class Node {
     }
 
 	@Override public final int hashCode() {
-		return toString().hashCode();
+		return HashCodeVisitor.hashCode(this);
 	}
 
 	@Override public boolean equals(final Object obj) {
@@ -264,11 +224,6 @@ public abstract class Node {
         return true;
     }
 
-    public void addOrphanComment(Comment comment){
-        orphanComments.add(comment);
-        comment.setParentNode(this);
-    }
-
     /**
      * This is a list of Comment which are inside the node and are not associated
      * with any meaningful AST Node.
@@ -281,7 +236,7 @@ public abstract class Node {
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments(){
-        return orphanComments;
+        throw new IllegalStateException("TODO");
     }
 
     /**
@@ -291,17 +246,7 @@ public abstract class Node {
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments(){
-        List<Comment> comments = new LinkedList<Comment>();
-        comments.addAll(getOrphanComments());
-
-        for (Node child : getChildrenNodes()){
-            if (child.getComment()!=null){
-                comments.add(child.getComment());
-            }
-            comments.addAll(child.getAllContainedComments());
-        }
-
-        return comments;
+        throw new IllegalStateException("TODO");
     }
 
     /**
@@ -363,8 +308,10 @@ public abstract class Node {
         }
     }
 
-    public boolean hasComment()
-    {
-        return comment!=null;
-    }
+    public static final Comparator<Node> BEGIN_POSITION_COMPARATOR = new Comparator<Node>() {
+        @Override
+        public int compare(Node o1, Node o2) {
+            return o1.getBegin().compareTo(o2.getBegin());
+        }
+    };
 }

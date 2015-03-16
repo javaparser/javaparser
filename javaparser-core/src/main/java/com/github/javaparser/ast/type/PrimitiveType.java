@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -41,9 +42,9 @@ public final class PrimitiveType extends Type {
 		this.type = type;
 	}
 
-	public PrimitiveType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public PrimitiveType(Lexeme first, Lexeme last,
 			final Primitive type) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		this.type = type;
 	}
 

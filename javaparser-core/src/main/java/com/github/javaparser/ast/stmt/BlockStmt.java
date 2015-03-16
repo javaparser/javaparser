@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -39,9 +40,8 @@ public final class BlockStmt extends Statement {
 		setStmts(stmts);
 	}
 
-	public BlockStmt(final int beginLine, final int beginColumn,
-			final int endLine, final int endColumn, final List<Statement> stmts) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	public BlockStmt(Lexeme first, Lexeme last, final List<Statement> stmts) {
+		super(first, last);
 		setStmts(stmts);
 	}
 

@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -31,8 +32,8 @@ public final class EmptyStmt extends Statement {
 	public EmptyStmt() {
 	}
 
-	public EmptyStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	public EmptyStmt(Lexeme first, Lexeme last) {
+		super(first, last);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

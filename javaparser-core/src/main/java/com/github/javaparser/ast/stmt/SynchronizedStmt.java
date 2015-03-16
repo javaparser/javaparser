@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -41,10 +42,9 @@ public final class SynchronizedStmt extends Statement {
 		setBlock(block);
 	}
 
-	public SynchronizedStmt(final int beginLine, final int beginColumn,
-			final int endLine, final int endColumn, final Expression expr,
+	public SynchronizedStmt(Lexeme first, Lexeme last, final Expression expr,
 			final BlockStmt block) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setExpr(expr);
 		setBlock(block);
 	}

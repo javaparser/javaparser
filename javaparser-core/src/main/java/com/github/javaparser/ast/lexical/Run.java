@@ -18,24 +18,42 @@
  * along with JavaParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.javaparser.bdd;
+package com.github.javaparser.ast.lexical;
 
-import com.github.javaparser.bdd.steps.CommentParsingSteps;
-import de.codecentric.jbehave.junit.monitoring.JUnitReportingRunner;
-import org.jbehave.core.steps.InjectableStepsFactory;
-import org.jbehave.core.steps.InstanceStepsFactory;
-import org.junit.runner.RunWith;
+/**
+ * @author Didier Villevalois
+ */
+public abstract class Run {
 
-@RunWith(JUnitReportingRunner.class)
-public class CommentParsingTest extends BasicJBehaveTest {
+	private Lexeme first, last;
 
-    @Override
-    public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new CommentParsingSteps());
+    public Run() {
+        this.first = null;
+        this.last = null;
     }
 
-    public CommentParsingTest() {
-        super("**/bdd/comment*.story");
+    public Run(Lexeme first, Lexeme last) {
+        this.first = first;
+        this.last = last;
     }
+
+//	public abstract Run enclosing();
+
+//	public abstract List<Run> enclosed();
+
+	public Lexeme first() {
+		return first;
+	}
+
+	public Lexeme last() {
+		return last;
+	}
+
+	public void setFirst(Lexeme first) {
+		this.first = first;
+	}
+
+	public void setLast(Lexeme last) {
+		this.last = last;
+	}
 }
-

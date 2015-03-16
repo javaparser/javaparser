@@ -20,58 +20,13 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BaseParameter;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -96,13 +51,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
      * to not repeat it in every method we store that here.
      */
     private boolean commonNodeEquality(Node n1, Node n2) {
-        if (!nodeEquals(n1.getComment(), n2.getComment())) {
-            return false;
-        }
-        if (!nodesEquals(n1.getOrphanComments(), n2.getOrphanComments())){
-            return false;
-        }
-        return true;
+        return commentsEquals(n1.getCommentAttributes(), n2.getCommentAttributes());
     }
 
 	private <T extends Node> boolean nodesEquals(final List<T> nodes1, final List<T> nodes2) {
@@ -146,6 +95,64 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return n1.accept(this, n2).booleanValue();
 	}
 
+    private boolean commentsEquals(final CommentAttributes comments1, final CommentAttributes comments2) {
+        if (comments1 == null) {
+            if (comments2 == null) {
+                return true;
+            }
+            return false;
+        } else if (comments2 == null) {
+            return false;
+        }
+
+        if (!commentsEquals(comments1.getLeadingComments(), comments2.getLeadingComments())) {
+            return false;
+        }
+        if (!commentsEquals(comments1.getDanglingComments(), comments2.getDanglingComments())) {
+            return false;
+        }
+        if (!commentEquals(comments1.getTrailingComment(), comments2.getTrailingComment())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean commentsEquals(List<Comment> comments1, List<Comment> comments2) {
+        if (comments1 == null) {
+            if (comments2 == null) {
+                return true;
+            }
+            return false;
+        } else if (comments2 == null) {
+            return false;
+        }
+
+        if (comments1.size() != comments2.size()) {
+            return false;
+        }
+        for (int i = 0; i < comments1.size(); i++) {
+            if (!commentEquals(comments1.get(i), comments2.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean commentEquals(final Comment comment1, final Comment comment2) {
+        if (comment1 == null) {
+            if (comment2 == null) {
+                return true;
+            }
+            return false;
+        } else if (comment2 == null) {
+            return false;
+        }
+
+        return comment1.getCommentKind() == comment2.getCommentKind() &&
+                comment1.image().equals(comment2.image());
+    }
+
 	private boolean objEquals(final Object n1, final Object n2) {
 		if (n1 == n2) {
 			return true;
@@ -173,10 +180,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 
 		if (!nodesEquals(n1.getTypes(), n2.getTypes())) {
-			return Boolean.FALSE;
-		}
-
-		if (!nodesEquals(n1.getComments(), n2.getComments())) {
 			return Boolean.FALSE;
 		}
 
@@ -220,34 +223,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return Boolean.FALSE;
 		}
-		return Boolean.TRUE;
-	}
-
-	@Override public Boolean visit(final LineComment n1, final Node arg) {
-		final LineComment n2 = (LineComment) arg;
-
-		if (!objEquals(n1.getContent(), n2.getContent())) {
-			return Boolean.FALSE;
-		}
-
-        if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
-      		return Boolean.FALSE;
-      	}
-
-		return Boolean.TRUE;
-	}
-
-	@Override public Boolean visit(final BlockComment n1, final Node arg) {
-		final BlockComment n2 = (BlockComment) arg;
-
-		if (!objEquals(n1.getContent(), n2.getContent())) {
-			return Boolean.FALSE;
-		}
-
-        if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
-      			return Boolean.FALSE;
-      	}
-
 		return Boolean.TRUE;
 	}
 
@@ -536,7 +511,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 		return Boolean.TRUE;
 	}
-	
+
 	@Override public Boolean visit(final Parameter n1, final Node arg) {
 		final Parameter n2 = (Parameter) arg;
 		if (!nodeEquals(n1.getType(), n2.getType())) {
@@ -544,7 +519,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 		return visit((BaseParameter) n1, arg);
 	}
-	
+
 	@Override public Boolean visit(MultiTypeParameter n1, Node arg) {
 		MultiTypeParameter n2 = (MultiTypeParameter) arg;
 		if (n1.getTypes().size() != n2.getTypes().size()) {
@@ -577,7 +552,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		return Boolean.TRUE;
 	}
-	
+
 	@Override public Boolean visit(final EmptyMemberDeclaration n1, final Node arg) {
 		return Boolean.TRUE;
 	}
@@ -590,16 +565,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
-			return Boolean.FALSE;
-		}
-
-		return Boolean.TRUE;
-	}
-
-	@Override public Boolean visit(final JavadocComment n1, final Node arg) {
-		final JavadocComment n2 = (JavadocComment) arg;
-
-		if (!objEquals(n1.getContent(), n2.getContent())) {
 			return Boolean.FALSE;
 		}
 

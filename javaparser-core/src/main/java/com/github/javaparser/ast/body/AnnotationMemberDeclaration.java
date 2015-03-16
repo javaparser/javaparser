@@ -21,9 +21,11 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -61,8 +63,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+    public AnnotationMemberDeclaration(Lexeme first, Lexeme last, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+        super(first, last, annotations);
         setModifiers(modifiers);
         setType(type);
         setName(name);
@@ -85,7 +87,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
 
     /**
      * Return the modifiers of this member declaration.
-     * 
+     *
      * @see ModifierSet
      * @return modifiers
      */
@@ -120,14 +122,17 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
+    public void setJavaDoc(Comment javadoc) {
+        CommentAttributes comments = getCommentAttributes();
+        if (comments == null) {
+            comments = new CommentAttributes();
+            setCommentAttributes(comments);
+        }
+        comments.setJavadocComment(javadoc);
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return javadocComment;
+    public Comment getJavaDoc() {
+        return getCommentAttributes().getJavadocComment();
     }
-
-    private JavadocComment javadocComment;
 }

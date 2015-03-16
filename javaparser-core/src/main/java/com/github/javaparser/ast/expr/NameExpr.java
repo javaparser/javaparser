@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -37,9 +38,9 @@ public class NameExpr extends Expression {
 		this.name = name;
 	}
 
-	public NameExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public NameExpr(Lexeme first, Lexeme last,
 			final String name) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		this.name = name;
 	}
 

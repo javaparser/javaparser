@@ -23,16 +23,18 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -54,8 +56,6 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	private List<NameExpr> throws_;
 
 	private BlockStmt body;
-
-    private boolean isDefault = false;
 
     public MethodDeclaration() {
 	}
@@ -87,11 +87,11 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setBody(block);
 	}
 
-	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public MethodDeclaration(Lexeme first, Lexeme last,
 			final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations);
+		super(first, last, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
 		setType(type);
@@ -200,15 +200,21 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(typeParameters);
 	}
 
+	/**
+	 * @deprecated Use modifiers
+	 */
+	@Deprecated
+	public boolean isDefault() {
+		return ModifierSet.isDefault(modifiers);
+	}
 
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setDefault(boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
+	/**
+	 * @deprecated Use modifiers
+	 */
+	@Deprecated
+	public void setDefault(boolean isDefault) {
+		modifiers = ModifierSet.addModifier(modifiers, ModifierSet.DEFAULT);
+	}
 
     @Override
     public String getDeclarationAsString() {
@@ -290,14 +296,17 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
+    public void setJavaDoc(Comment javadoc) {
+        CommentAttributes comments = getCommentAttributes();
+        if (comments == null) {
+            comments = new CommentAttributes();
+            setCommentAttributes(comments);
+        }
+        comments.setJavadocComment(javadoc);
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return javadocComment;
+    public Comment getJavaDoc() {
+        return getCommentAttributes().getJavadocComment();
     }
-
-    private JavadocComment javadocComment;
 }

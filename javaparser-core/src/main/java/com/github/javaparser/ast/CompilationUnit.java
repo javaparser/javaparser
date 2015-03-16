@@ -20,13 +20,9 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.Lexeme;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -64,8 +60,8 @@ public final class CompilationUnit extends Node {
         setTypes(types);
     }
 
-    public CompilationUnit(int beginLine, int beginColumn, int endLine, int endColumn, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public CompilationUnit(Lexeme first, Lexeme last, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
+        super(first, last);
         setPackage(pakage);
         setImports(imports);
         setTypes(types);
@@ -89,12 +85,9 @@ public final class CompilationUnit extends Node {
      * 
      * @return list with all comments of this compilation unit or
      *         <code>null</code>
-     * @see JavadocComment
-     * @see com.github.javaparser.ast.comments.LineComment
-     * @see com.github.javaparser.ast.comments.BlockComment
      */
     public List<Comment> getComments() {
-        return this.getAllContainedComments();
+        throw new IllegalArgumentException("TODO");
     }
 
     /**
@@ -130,16 +123,6 @@ public final class CompilationUnit extends Node {
      */
     public List<TypeDeclaration> getTypes() {
         return types;
-    }
-
-    /**
-     * Sets the list of comments of this compilation unit.
-     * 
-     * @param comments
-     *            the list of comments
-     */
-    public void setComments(List<Comment> comments) {
-        throw new RuntimeException("Not implemented!");
     }
 
     /**

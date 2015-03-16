@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -44,10 +45,9 @@ public final class SwitchStmt extends Statement {
 		setEntries(entries);
 	}
 
-	public SwitchStmt(final int beginLine, final int beginColumn,
-			final int endLine, final int endColumn, final Expression selector,
+	public SwitchStmt(Lexeme first, Lexeme last, final Expression selector,
 			final List<SwitchEntryStmt> entries) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setSelector(selector);
 		setEntries(entries);
 	}

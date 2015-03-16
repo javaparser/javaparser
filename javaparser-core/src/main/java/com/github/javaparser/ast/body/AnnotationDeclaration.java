@@ -20,8 +20,10 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -44,8 +46,8 @@ public final class AnnotationDeclaration extends TypeDeclaration implements Docu
         super(annotations, modifiers, name, members);
     }
 
-    public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
+    public AnnotationDeclaration(Lexeme first, Lexeme last, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+        super(first, last, annotations, modifiers, name, members);
     }
 
     @Override
@@ -59,14 +61,17 @@ public final class AnnotationDeclaration extends TypeDeclaration implements Docu
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
+    public void setJavaDoc(Comment javadoc) {
+        CommentAttributes comments = getCommentAttributes();
+        if (comments == null) {
+            comments = new CommentAttributes();
+            setCommentAttributes(comments);
+        }
+        comments.setJavadocComment(javadoc);
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return javadocComment;
+    public Comment getJavaDoc() {
+        return getCommentAttributes().getJavadocComment();
     }
-
-    private JavadocComment javadocComment;
 }

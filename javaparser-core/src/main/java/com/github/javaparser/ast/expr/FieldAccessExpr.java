@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -45,9 +46,9 @@ public final class FieldAccessExpr extends Expression {
 		setField(field);
 	}
 
-	public FieldAccessExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public FieldAccessExpr(Lexeme first, Lexeme last,
 			final Expression scope, final List<Type> typeArgs, final String field) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setScope(scope);
 		setTypeArgs(typeArgs);
 		setField(field);

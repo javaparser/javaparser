@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -44,9 +45,9 @@ public final class WildcardType extends Type {
 		setSuper(sup);
 	}
 
-	public WildcardType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public WildcardType(Lexeme first, Lexeme last,
 			final ReferenceType ext, final ReferenceType sup) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setExtends(ext);
 		setSuper(sup);
 	}

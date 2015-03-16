@@ -20,6 +20,9 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
@@ -40,8 +43,8 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
     	setAnnotations(annotations);
     }
 
-    public BodyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public BodyDeclaration(Lexeme first, Lexeme last, List<AnnotationExpr> annotations) {
+        super(first, last);
     	setAnnotations(annotations);
     }
 

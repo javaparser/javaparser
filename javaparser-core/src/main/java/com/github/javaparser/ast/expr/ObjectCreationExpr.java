@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -52,10 +53,10 @@ public final class ObjectCreationExpr extends Expression {
 		setArgs(args);
 	}
 
-	public ObjectCreationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public ObjectCreationExpr(Lexeme first, Lexeme last,
 			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
 			final List<Expression> args, final List<BodyDeclaration> anonymousBody) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setScope(scope);
 		setType(type);
 		setTypeArgs(typeArgs);

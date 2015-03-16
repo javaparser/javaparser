@@ -22,31 +22,60 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
 
-public class Position {
-    private int line;
-    private int column;
+public class Position implements Comparable<Position> {
+    public final int line;
+    public final int column;
 
-    public static final Position ABSOLUTE_START = new Position(Node.ABSOLUTE_BEGIN_LINE,-1);
-    public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE,-1);
+    public static final Position ABSOLUTE_START = new Position(Node.ABSOLUTE_BEGIN_LINE, -1);
+    public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE, -1);
 
-    public static Position beginOf(Node node){
-        return new Position(node.getBeginColumn(),node.getBeginColumn());
+    /**
+     * @deprecated Use node.getBegin()
+     */
+    @Deprecated
+    public static Position beginOf(Node node) {
+        return node.getBegin();
     }
 
-    public static Position endOf(Node node){
-        return new Position(node.getEndColumn(),node.getEndColumn());
+    /**
+     * @deprecated Use node.getEnd()
+     */
+    @Deprecated
+    public static Position endOf(Node node) {
+        return node.getEnd();
     }
 
-    public Position(int line, int column){
+    public Position(int line, int column) {
         this.line = line;
         this.column = column;
     }
 
-    public int getLine(){
+    /**
+     * @deprecated Use Position.line
+     */
+    @Deprecated
+    public int getLine() {
         return this.line;
     }
 
-    public int getColumn(){
+    /**
+     * @deprecated Use Position.column
+     */
+    @Deprecated
+    public int getColumn() {
         return this.column;
+    }
+
+    @Override
+    public int compareTo(Position o) {
+        return this.line != o.line ? this.line - o.line : this.column - o.column;
+    }
+
+    public Position withLine(int line) {
+        return new Position(line, this.column);
+    }
+
+    public Position withColumn(int column) {
+        return new Position(this.line, column);
     }
 }

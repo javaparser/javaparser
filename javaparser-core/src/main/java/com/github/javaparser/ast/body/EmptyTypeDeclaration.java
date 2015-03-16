@@ -20,8 +20,10 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.lexical.Comment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -34,8 +36,8 @@ public final class EmptyTypeDeclaration extends TypeDeclaration implements Docum
         super(null, 0, null, null);
     }
 
-    public EmptyTypeDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn, null, 0, null, null);
+    public EmptyTypeDeclaration(Lexeme first, Lexeme last) {
+        super(first, last, null, 0, null, null);
     }
 
     @Override
@@ -44,7 +46,7 @@ public final class EmptyTypeDeclaration extends TypeDeclaration implements Docum
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
+    public void setJavaDoc(Comment javadocComment) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -54,7 +56,7 @@ public final class EmptyTypeDeclaration extends TypeDeclaration implements Docum
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
+    public Comment getJavaDoc() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

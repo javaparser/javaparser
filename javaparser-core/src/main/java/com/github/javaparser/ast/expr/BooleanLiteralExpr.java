@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -37,8 +38,8 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     	setValue(value);
     }
 
-    public BooleanLiteralExpr(int beginLine, int beginColumn, int endLine, int endColumn, boolean value) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public BooleanLiteralExpr(Lexeme first, Lexeme last, boolean value) {
+        super(first, last);
         setValue(value);
     }
 

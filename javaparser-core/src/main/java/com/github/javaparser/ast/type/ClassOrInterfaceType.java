@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -48,9 +49,9 @@ public final class ClassOrInterfaceType extends Type {
 		setName(name);
 	}
 
-	public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public ClassOrInterfaceType(Lexeme first, Lexeme last,
 			final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setScope(scope);
 		setName(name);
 		setTypeArgs(typeArgs);

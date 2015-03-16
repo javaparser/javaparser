@@ -55,6 +55,8 @@ public final class ModifierSet {
 
     public static final int STRICTFP = Modifier.STRICT;
 
+	public static final int DEFAULT = 0x00010000;
+
     public static AccessSpecifier getAccessSpecifier(int modifiers) {
         if (isPublic(modifiers)){
             return AccessSpecifier.PUBLIC;
@@ -129,6 +131,10 @@ public final class ModifierSet {
     public static boolean isVolatile(int modifiers) {
         return (modifiers & VOLATILE) != 0;
     }
+
+	public static boolean isDefault(int modifiers) {
+		return (modifiers & DEFAULT) != 0;
+	}
 
     /**
      * Removes the given modifier.

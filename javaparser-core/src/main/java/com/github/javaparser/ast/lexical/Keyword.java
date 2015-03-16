@@ -18,40 +18,38 @@
  * along with JavaParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.javaparser.ast.comments;
+package com.github.javaparser.ast.lexical;
 
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import java.util.EnumSet;
 
 /**
- * <p>
- * AST node that represent block comments.
- * </p>
- * Block comments can has multi lines and are delimited by "/&#42;" and
- * "&#42;/".
- * 
- * @author Julio Vilmar Gesser
+ * @author Didier Villevalois
  */
-public final class BlockComment extends Comment {
+public class Keyword extends Lexeme {
 
-    public BlockComment() {
-    }
+    private final KeywordKind kind;
 
-    public BlockComment(String content) {
-        super(content);
-    }
-
-    public BlockComment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        super(beginLine, beginColumn, endLine, endColumn, content);
+    public Keyword(KeywordKind kind) {
+        super();
+        this.kind = kind;
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
+    public LexemeKind getLexemeKind() {
+        return LexemeKind.KEYWORD;
+    }
+
+    public KeywordKind getKeywordKind() {
+        return kind;
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
+    public boolean is(KeywordKind first, KeywordKind... rest) {
+        return EnumSet.of(first, rest).contains(getKeywordKind());
+    }
+
+    @Override
+    public String image() {
+        return kind.image;
     }
 }

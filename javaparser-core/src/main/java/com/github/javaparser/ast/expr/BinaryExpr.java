@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -28,7 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class BinaryExpr extends Expression {
 
-    public static enum Operator {
+	public static enum Operator {
         or, // ||
         and, // &&
         binOr, // |
@@ -65,8 +66,8 @@ public final class BinaryExpr extends Expression {
     	setOperator(op);
     }
 
-    public BinaryExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression left, Expression right, Operator op) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public BinaryExpr(Lexeme first, Lexeme last, Expression left, Expression right, Operator op) {
+        super(first, last);
     	setLeft(left);
     	setRight(right);
     	setOperator(op);

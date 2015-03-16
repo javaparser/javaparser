@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,8 +38,8 @@ public class MultiTypeParameter extends BaseParameter {
         this.types = types;
     }
 
-    public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, List<Type> types, VariableDeclaratorId id) {
-        super(beginLine, beginColumn, endLine, endColumn, modifiers, annotations, id);
+    public MultiTypeParameter(Lexeme first, Lexeme last, int modifiers, List<AnnotationExpr> annotations, List<Type> types, VariableDeclaratorId id) {
+        super(first, last, modifiers, annotations, id);
         this.types = types;
 	}
 

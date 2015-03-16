@@ -18,34 +18,17 @@
  * along with JavaParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.javaparser.ast.comments;
+package com.github.javaparser.parser;
 
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.lexical.Lexeme;
 
 /**
- * @author Julio Vilmar Gesser
+ * @author Didier Villevalois
  */
-public final class JavadocComment extends Comment {
+class TokenBase {
 
-    public JavadocComment() {
-    }
+	/* Special management of GT to ease generics */
+	int realKind = ASTParserConstants.GT;
 
-    public JavadocComment(String content) {
-        super(content);
-    }
-
-    public JavadocComment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        super(beginLine, beginColumn, endLine, endColumn, content);
-    }
-
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return v.visit(this, arg);
-    }
-
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-        v.visit(this, arg);
-    }
+	Lexeme lexeme;
 }

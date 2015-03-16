@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -41,13 +42,13 @@ public final class CastExpr extends Expression {
     	setExpr(expr);
     }
 
-    public CastExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, Expression expr) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public CastExpr(Lexeme first, Lexeme last, Type type, Expression expr) {
+        super(first, last);
         setType(type);
     	setExpr(expr);
     }
 
-    @Override
+	@Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
     }

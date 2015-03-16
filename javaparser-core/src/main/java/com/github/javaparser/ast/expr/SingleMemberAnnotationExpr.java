@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -38,9 +39,8 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 		setMemberValue(memberValue);
 	}
 
-	public SingleMemberAnnotationExpr(final int beginLine, final int beginColumn, final int endLine,
-			final int endColumn, final NameExpr name, final Expression memberValue) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	public SingleMemberAnnotationExpr(Lexeme first, Lexeme last, final NameExpr name, final Expression memberValue) {
+		super(first, last);
 		setName(name);
 		setMemberValue(memberValue);
 	}

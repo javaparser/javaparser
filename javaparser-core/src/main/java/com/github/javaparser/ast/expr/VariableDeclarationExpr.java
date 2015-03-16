@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
@@ -55,10 +56,10 @@ public final class VariableDeclarationExpr extends Expression {
 		setVars(vars);
 	}
 
-	public VariableDeclarationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public VariableDeclarationExpr(Lexeme first, Lexeme last,
 			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
 			final List<VariableDeclarator> vars) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setModifiers(modifiers);
 		setAnnotations(annotations);
 		setType(type);

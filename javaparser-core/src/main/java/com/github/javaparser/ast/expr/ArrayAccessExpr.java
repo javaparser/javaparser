@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -40,8 +41,8 @@ public final class ArrayAccessExpr extends Expression {
         setIndex(index);
     }
 
-    public ArrayAccessExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression name, Expression index) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public ArrayAccessExpr(Lexeme first, Lexeme last, Expression name, Expression index) {
+        super(first, last);
         setName(name);
         setIndex(index);
     }

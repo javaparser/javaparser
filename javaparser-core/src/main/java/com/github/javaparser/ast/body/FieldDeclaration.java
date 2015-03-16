@@ -21,8 +21,10 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.lexical.Comment;
+import com.github.javaparser.ast.lexical.CommentAttributes;
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -65,14 +67,14 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     	setVariables(variables);
     }
 
-    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+    public FieldDeclaration(Lexeme first, Lexeme last, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+        super(first, last, annotations);
         setModifiers(modifiers);
     	setType(type);
     	setVariables(variables);
     }
 
-    @Override
+	@Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
     }
@@ -115,14 +117,17 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
+    public void setJavaDoc(Comment javadoc) {
+        CommentAttributes comments = getCommentAttributes();
+        if (comments == null) {
+            comments = new CommentAttributes();
+            setCommentAttributes(comments);
+        }
+        comments.setJavadocComment(javadoc);
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        return javadocComment;
+    public Comment getJavaDoc() {
+        return getCommentAttributes().getJavadocComment();
     }
-
-    private JavadocComment javadocComment;
 }

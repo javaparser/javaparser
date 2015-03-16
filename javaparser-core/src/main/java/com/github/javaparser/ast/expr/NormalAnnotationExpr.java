@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -40,9 +41,9 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 		setPairs(pairs);
 	}
 
-	public NormalAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	public NormalAnnotationExpr(Lexeme first, Lexeme last,
 			final NameExpr name, final List<MemberValuePair> pairs) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		super(first, last);
 		setName(name);
 		setPairs(pairs);
 	}

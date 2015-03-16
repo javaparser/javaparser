@@ -20,6 +20,8 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -29,9 +31,8 @@ public abstract class AnnotationExpr extends Expression {
 
 	public AnnotationExpr() {}
 
-	public AnnotationExpr(int beginLine, int beginColumn, int endLine,
-			int endColumn) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	public AnnotationExpr(Lexeme first, Lexeme last) {
+		super(first, last);
 	}
 
 	public NameExpr getName() {

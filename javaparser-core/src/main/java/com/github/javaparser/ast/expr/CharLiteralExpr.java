@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.lexical.Lexeme;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -35,8 +36,8 @@ public final class CharLiteralExpr extends StringLiteralExpr {
         super(value);
     }
 
-    public CharLiteralExpr(int beginLine, int beginColumn, int endLine, int endColumn, String value) {
-        super(beginLine, beginColumn, endLine, endColumn, value);
+    public CharLiteralExpr(Lexeme first, Lexeme last, String value) {
+        super(first, last, value);
     }
 
     @Override
