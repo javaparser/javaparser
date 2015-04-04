@@ -82,6 +82,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
+
 /**
  * Dumps the AST to formatted Java source code.
  * 
@@ -199,7 +201,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	private void printMemberAnnotations(final List<AnnotationExpr> annotations, final Object arg) {
-		if (annotations != null) {
+		if (!isNullOrEmpty(annotations)) {
 			for (final AnnotationExpr a : annotations) {
 				a.accept(this, arg);
 				printer.printLn();
@@ -208,7 +210,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	private void printAnnotations(final List<AnnotationExpr> annotations, final Object arg) {
-		if (annotations != null) {
+		if (!isNullOrEmpty(annotations)) {
 			for (final AnnotationExpr a : annotations) {
 				a.accept(this, arg);
 				printer.print(" ");
@@ -217,7 +219,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	private void printTypeArgs(final List<Type> args, final Object arg) {
-		if (args != null) {
+        if (!isNullOrEmpty(args)) {
 			printer.print("<");
 			for (final Iterator<Type> i = args.iterator(); i.hasNext();) {
 				final Type t = i.next();
@@ -231,7 +233,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	private void printTypeParameters(final List<TypeParameter> args, final Object arg) {
-		if (args != null) {
+        if (!isNullOrEmpty(args)) {
 			printer.print("<");
 			for (final Iterator<TypeParameter> i = args.iterator(); i.hasNext();) {
 				final TypeParameter t = i.next();
@@ -246,7 +248,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
 	private void printArguments(final List<Expression> args, final Object arg) {
 		printer.print("(");
-		if (args != null) {
+        if (!isNullOrEmpty(args)) {
 			for (final Iterator<Expression> i = args.iterator(); i.hasNext();) {
 				final Expression e = i.next();
 				e.accept(this, arg);
@@ -355,7 +357,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
 		printTypeParameters(n.getTypeParameters(), arg);
 
-		if (n.getExtends() != null) {
+		if (!isNullOrEmpty(n.getExtends())) {
 			printer.print(" extends ");
 			for (final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator(); i.hasNext();) {
 				final ClassOrInterfaceType c = i.next();
@@ -366,7 +368,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			}
 		}
 
-		if (n.getImplements() != null) {
+		if (!isNullOrEmpty(n.getImplements())) {
 			printer.print(" implements ");
 			for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext();) {
 				final ClassOrInterfaceType c = i.next();
@@ -379,7 +381,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
 		printer.printLn(" {");
 		printer.indent();
-		if (n.getMembers() != null) {
+		if (!isNullOrEmpty(n.getMembers())) {
 			printMembers(n.getMembers(), arg);
 		}
 
@@ -969,7 +971,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		}
 		printer.print(")");
 
-		if (n.getThrows() != null && !n.getThrows().isEmpty()) {
+		if (!isNullOrEmpty(n.getThrows())) {
 			printer.print(" throws ");
 			for (final Iterator<NameExpr> i = n.getThrows().iterator(); i.hasNext();) {
 				final NameExpr name = i.next();
@@ -1018,7 +1020,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			printer.print("[]");
 		}
 
-		if (n.getThrows() != null && !n.getThrows().isEmpty()) {
+		if (!isNullOrEmpty(n.getThrows())) {
 			printer.print(" throws ");
 			for (final Iterator<NameExpr> i = n.getThrows().iterator(); i.hasNext();) {
 				final NameExpr name = i.next();
