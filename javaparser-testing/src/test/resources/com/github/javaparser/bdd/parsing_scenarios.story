@@ -7,6 +7,7 @@ class ClassWithAConstructor {
     }
 }
 Then constructor 1 in class 1 declaration as a String is "protected ClassWithAConstructor(int a, String b) throws This, AndThat, AndWhatElse"
+Then all nodes refer to their parent
 
 
 Scenario: Test declaration as String exclusing modifiers and throws for constructor on parsed class
@@ -18,6 +19,7 @@ class ClassWithAConstructor {
     }
 }
 Then constructor 1 in class 1 declaration short form as a String is "ClassWithAConstructor(int a, String b)"
+Then all nodes refer to their parent
 
 
 Scenario: Test declaration as String exclusing modifiers and throws for method on parsed class
@@ -31,6 +33,7 @@ class ClassWithAMethod {
     }
 }
 Then method 1 in class 1 declaration as a String is "protected final native List<String> aMethod(int a, String b) throws This, AndThat, AndWhatElse"
+Then all nodes refer to their parent
 
 
 Scenario: Test declaration as String exclusing modifiers and throws for method on parsed class
@@ -44,6 +47,7 @@ class ClassWithAMethod {
     }
 }
 Then method 1 in class 1 declaration as a String short form is "List<String> aMethod(int a, String b)"
+Then all nodes refer to their parent
 
 
 Scenario: The same class source is parsed by two different compilation units and should therefore be equal
@@ -70,6 +74,8 @@ public class ClassEquality {
 }
 Then the CompilationUnit is equal to the second CompilationUnit
 Then the CompilationUnit has the same hashcode to the second CompilationUnit
+Then all nodes refer to their parent
+Then all nodes of the second compilation unit refer to their parent
 
 
 Scenario: Two different class sources are parsed by two different compilation units and should not be equal
@@ -96,6 +102,8 @@ public class DifferentClass {
 }
 Then the CompilationUnit is not equal to the second CompilationUnit
 Then the CompilationUnit has a different hashcode to the second CompilationUnit
+Then all nodes refer to their parent
+Then all nodes of the second compilation unit refer to their parent
 
 
 Scenario: Classes that only differ by comments should not be equal or have the same hashcode
@@ -122,7 +130,8 @@ public class ClassEquality {
 }
 Then the CompilationUnit is not equal to the second CompilationUnit
 Then the CompilationUnit has a different hashcode to the second CompilationUnit
-
+Then all nodes refer to their parent
+Then all nodes of the second compilation unit refer to their parent
 
 
 Scenario: A class with a colon in the annoation value is parsed by the Java Parser
@@ -140,6 +149,7 @@ public class Issue37 {
     protected Test test;
 }
 Then field 1 in class 1 contains annotation 1 value is ""http://someURL.org/""
+Then all nodes refer to their parent
 
 
 Scenario: A class with a Lambdas is parsed by the Java Parser
@@ -147,6 +157,7 @@ Scenario: A class with a Lambdas is parsed by the Java Parser
 Given a CompilationUnit
 When the following source is parsed:
 package bdd.samples;
+import java.util.stream.Stream;
 public class Lambdas {
 
     public static void main(String[] args) {
@@ -154,6 +165,8 @@ public class Lambdas {
         Runnable r1 = () -> System.out.println("Hello world!");
         Runnable r2 = () -> {};
         Runnable r3 = () -> { System.out.println("Hello world two!"); };
+
+        Stream<CharSequence> stream = Stream.generate((Supplier<CharSequence>) () -> "foo");
     }
 }
 Then lambda in statement 1 in method 1 in class 1 is called r1
@@ -164,7 +177,29 @@ Then lambda in statement 2 in method 1 in class 1 block statement is null
 Then lambda in statement 3 in method 1 in class 1 block statement is "System.out.println("Hello world two!");"
 Then lambda in statement 1 in method 1 in class 1 is parent of contained body
 Then lambda in statement 3 in method 1 in class 1 is parent of contained body
+Then all nodes refer to their parent
+Then lambda in method call in statement 4 in method 1 in class 1 body is ""foo";"
 
+
+Scenario: A class with parameterized Lambdas is parsed by the Java Parser
+
+Given a CompilationUnit
+When the following source is parsed:
+package com.github.javapasrser.bdd.parsing;
+import java.util.function.Function;
+public class ParameterizedLambdas {
+    public static void main(String[] args) {
+        Function<Integer,String> f1 = (Integer i) -> String.valueOf(i);
+        Function<Integer,String> f2 = (i) -> String.valueOf(i);
+        Function<Integer,String> f3 = i -> String.valueOf(i);
+    }
+}
+Then lambda in statement 1 in method 1 in class 1 is parent of contained parameter
+Then lambda in statement 2 in method 1 in class 1 is parent of contained parameter
+Then lambda in statement 3 in method 1 in class 1 is parent of contained parameter
+Then lambda in statement 1 in method 1 in class 1 is parent of contained body
+Then lambda in statement 2 in method 1 in class 1 is parent of contained body
+Then lambda in statement 3 in method 1 in class 1 is parent of contained body
 
 
 Scenario: A class with a method reference is parsed by the Java Parser
@@ -186,6 +221,7 @@ public class Person {
 }
 Then method reference in statement 1 in method 1 in class 1 scope is Person
 Then method reference in statement 1 in method 1 in class 1 identifier is compareByAge
+Then all nodes refer to their parent
 
 
 Scenario: An interface with a default method is parsed by the Java Parser
@@ -201,3 +237,4 @@ interface MyInterface {
 }
 Then method 1 class 1 is a default method
 Then method 2 class 1 is not a default method
+Then all nodes refer to their parent

@@ -4,7 +4,9 @@ This package contains a Java 1.8 Parser with AST generation and visitor support.
 
 The AST records the source code structure, javadoc and comments. It is also possible to change the AST nodes or create new ones to modify the source code.
 
-[![Build Status](https://drone.io/github.com/javaparser/javaparser/status.png)](https://drone.io/github.com/javaparser/javaparser/latest)
+[![Join the chat at https://gitter.im/javaparser/javaparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/javaparser/javaparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Build Status](https://travis-ci.org/javaparser/javaparser.svg?branch=master)](https://travis-ci.org/javaparser/javaparser)
 
 ## Features
 
@@ -67,12 +69,10 @@ The libraries javadoc can be found [here](http://javaparser.github.io/javaparser
 
 ## History
 
-This parser is based on Sreenivasa Viswanadha's Java 1.5 parser.
+This parser is based on work by Sreenivasa Viswanadha and Júlio Vilmar Gesser. The original project, now inactive, was originally hosted at [Google Code](http://code.google.com/p/javaparser/) and supported only parsing Java 1.5.
 
-The project was originally hosted at [Google Code](http://code.google.com/p/javaparser/), however support there dwindled.
+The project now supports parsing Java 1.8 and aims to continue support for features in future versions of the Java language.
 
-This repository aims to provide support for issues and add the new Java language features.
+## License
 
-## Licence
-
-Offered under the GNU GENERAL PUBLIC LICENSE that can be found [here](https://github.com/javaparser/javaparser/blob/master/COPYING)
+Offered under the GNU Lesser General Public License: [COPYING.LESSER](https://github.com/javaparser/javaparser/blob/master/COPYING.LESSER), [COPYING](https://github.com/javaparser/javaparser/blob/master/COPYING).

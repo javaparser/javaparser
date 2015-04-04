@@ -22,13 +22,13 @@ options {
   JAVA_UNICODE_ESCAPE=true;
   //COMMON_TOKEN_ACTION=true; // Will not use CommonTokenAction to handle JavaDoc and comments
   //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
-  JDK_VERSION = "1.5";
+  JDK_VERSION = "1.6";
   TOKEN_FACTORY = "ASTParser.GTToken";
 }
 
 PARSER_BEGIN(ASTParser)
 /*
- * 
+ *
  * This file is part of Java 1.8 parser and Abstract Syntax Tree.
  *
  * Java 1.8 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
@@ -109,6 +109,30 @@ final class ASTParser {
         ParseException e = new ParseException(buf.toString());
         e.currentToken = token;
         throw e;
+    }
+
+    private Expression generateLambda(Expression ret, Statement lambdaBody) throws ParseException {
+	    if (ret instanceof EnclosedExpr) {
+	        Expression inner = ((EnclosedExpr) ret).getInner();
+	        if (inner != null && inner instanceof NameExpr) {
+	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getBeginLine(), inner.getBeginColumn(), inner.getEndLine(), inner.getEndColumn(), ((NameExpr)inner).getName(), 0);
+	       	    List params = add(null, new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, null, false, id));
+	            ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), lambdaBody.getEndLine(), lambdaBody.getEndColumn(), params, lambdaBody, true);
+	        } else {
+	            ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), lambdaBody.getEndLine(), lambdaBody.getEndColumn(), null, lambdaBody, true);
+	        }
+	    } else if (ret instanceof NameExpr) {
+		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), ((NameExpr)ret).getName(), 0);
+	        List params = add(null, new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, null, false, id));
+	        ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), params, lambdaBody, false);
+	    } else if (ret instanceof LambdaExpr) {
+	        ((LambdaExpr) ret).setBody(lambdaBody);
+	        ret.setEndLine(lambdaBody.getEndLine());
+	        ret.setEndColumn(lambdaBody.getEndColumn());
+	    } else {
+	        throw new ParseException("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
+	    }
+	    return ret;
     }
     
     static final class GTToken extends Token {
@@ -1885,9 +1909,7 @@ NameExpr SimpleName():
 }
 {
   <IDENTIFIER> { ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image); }
-  {
-      return ret; 
-  }
+  { return ret; }
 }
 
 List NameList():
@@ -1935,35 +1957,14 @@ Expression Expression():
   |
    "->" lambdaBody = LambdaBody()
    {
-     if(ret instanceof EnclosedExpr)
+     if (ret instanceof CastExpr)
      {
-       inner = ((EnclosedExpr)ret).getInner();
-       if(inner != null && inner instanceof NameExpr)
-       {
-         id = new VariableDeclaratorId(inner.getBeginLine(), inner.getBeginColumn(), inner.getEndLine(), inner.getEndColumn(), ((NameExpr)inner).getName(), 0);
-       	 params = add(params, new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, null, false, id));
-         ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), lambdaBody.getEndLine(), lambdaBody.getEndColumn(), params, lambdaBody, true);
-       }
-       else
-       {
-         ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), lambdaBody.getEndLine(), lambdaBody.getEndColumn(), null, lambdaBody, true);
-       }
-     }
-     else if( ret instanceof NameExpr)
-     {
-	   id = new VariableDeclaratorId(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), ((NameExpr)ret).getName(), 0);
-       params = add(params, new Parameter(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), 0, null, null, false, id));
-       ret = new LambdaExpr(ret.getBeginLine(), ret.getBeginColumn(), ret.getEndLine(), ret.getEndColumn(), params, lambdaBody, false);
-     }
-     else if( ret instanceof LambdaExpr)
-     {
-       ((LambdaExpr)ret).setBody(lambdaBody);
-       ret.setEndLine(lambdaBody.getEndLine());
-       ret.setEndColumn(lambdaBody.getEndColumn());
+       inner = generateLambda(((CastExpr)ret).getExpr(), lambdaBody);
+       ((CastExpr)ret).setExpr(inner);
      }
      else
      {
-       ret = null;
+       ret = generateLambda(ret, lambdaBody);
      }
    }
  |  "::"  [typeArgs = TypeParameters() {typeArgs.remove(0);} ] (<IDENTIFIER> | "new")
@@ -1971,14 +1972,10 @@ Expression Expression():
    ret = new MethodReferenceExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, token.image);
  }
    )
-
   ]
 
   { return ret; }
 }
-
-
-
 
 AssignExpr.Operator AssignmentOperator():
 {
@@ -2785,40 +2782,18 @@ ExpressionStmt StatementExpression():
 	 |
 	   "->" lambdaBody = LambdaBody()
 	   {
-	     if(expr instanceof EnclosedExpr)
+	     if (expr instanceof CastExpr)
 	     {
-	       inner = ((EnclosedExpr)expr).getInner();
-	       if(inner != null && inner instanceof NameExpr)
-	       {
-	         id = new VariableDeclaratorId(inner.getBeginLine(), inner.getBeginColumn(), inner.getEndLine(), inner.getEndColumn(), ((NameExpr)inner).getName(), 0);
-	       	 params = add(params, new Parameter(expr.getBeginLine(), expr.getBeginColumn(), expr.getEndLine(), expr.getEndColumn(), 0, null, null, false, id));
-	         expr = new LambdaExpr(expr.getBeginLine(), expr.getBeginColumn(), lambdaBody.getEndLine(), lambdaBody.getEndColumn(), params, lambdaBody, true);
-	       }
-	       else {
-         	 expr = new LambdaExpr(expr.getBeginLine(), expr.getBeginColumn(), lambdaBody.getEndLine(), lambdaBody.getEndColumn(), null, lambdaBody, true);
-
-       	   }
-	     }
-	     else if( expr instanceof NameExpr)
-	     {
-		   id = new VariableDeclaratorId(expr.getBeginLine(), expr.getBeginColumn(), expr.getEndLine(), expr.getEndColumn(), ((NameExpr)expr).getName(), 0);
-	       params = add(params, new Parameter(expr.getBeginLine(), expr.getBeginColumn(), expr.getEndLine(), expr.getEndColumn(), 0, null, null, false, id));
-	       expr = new LambdaExpr(expr.getBeginLine(), expr.getBeginColumn(), expr.getEndLine(), expr.getEndColumn(), params, lambdaBody, false);
-	     }
-	     else if( expr instanceof LambdaExpr)
-	     {
-	       ((LambdaExpr)expr).setBody(lambdaBody);
-	       expr.setEndLine(lambdaBody.getEndLine());
-	       expr.setEndColumn(lambdaBody.getEndColumn());
+           inner = generateLambda(((CastExpr)expr).getExpr(), lambdaBody);
+           ((CastExpr)expr).setExpr(inner);
 	     }
 	     else
 	     {
-	       expr = null;
+	       expr = generateLambda(expr, lambdaBody);
 	     }
 	   }
 	  ]
-
-	)
+  )
   ";"
   { return new ExpressionStmt(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr); }
 }
@@ -3073,10 +3048,7 @@ TryStmt TryStatement():
   	|
   		"finally" finallyBlock = Block()
   )
-  { 
-      TryStmt tmp = new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock);
-      return tmp;
-  }
+  { return new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock); }
 }
 
 

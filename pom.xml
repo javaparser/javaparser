@@ -1,3 +1,23 @@
+<!--
+  ~ Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+  ~ Copyright (C) 2011, 2013-2015 The JavaParser Team.
+  ~
+  ~ This file is part of JavaParser.
+  ~
+  ~ JavaParser is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ JavaParser is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with JavaParser.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
     <modules>
@@ -14,35 +34,99 @@
 	<groupId>com.github.javaparser</groupId>
 	<artifactId>javaparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.1.0-SNAPSHOT</version>
 
 	<name>javaparser-parent</name>
 	<url>https://github.com/javaparser</url>
 	<inceptionYear>2007</inceptionYear>
-	<description>This package contains a Java 1.8 Parser with AST generation and visitor support.
-        The AST records the source code structure, javadoc and comments. Soon will be
-        possible change the AST nodes or create new ones to modify source code like refactoring.
-        This parser is based on Sreenivasa Viswanadha Java 1.5 parser.</description>
+	<description>Java 1.8 Parser Parser and Abstract Syntax Tree for Java</description>
+
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License</name>
+			<url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<developers>
+		<developer>
+			<name>Danny van Bruggen</name>
+			<email>hexagonaal@gmail.com</email>
+			<url>https://github.com/matozoid</url>
+			<id>matozoid</id>
+		</developer>
 		<developer>
 			<name>Júlio Vilmar Gesser</name>
 			<email>jgesser@gmail.com</email>
 		</developer>
+		<developer>
+			<name>Sebastian Kirsch</name>
+			<email>sebastian.kirsch@immobilienscout24.de</email>
+			<url>https://github.com/sebastiankirsch</url>
+			<id>sebastiankirsch</id>
+		</developer>
+		<developer>
+			<name>André Rouél</name>
+			<url>https://github.com/before</url>
+			<id>before</id>
+		</developer>
+		<developer>
+			<name>Nicholas Smith</name>
+			<email>sebastian.kirsch@immobilienscout24.de</email>
+			<url>https://github.com/SmiddyPence</url>
+			<id>SmiddyPence</id>
+		</developer>
+		<developer>
+			<name>Federico Tomassetti</name>
+			<email>federico@tomassetti.me</email>
+			<url>https://github.com/ftomassetti</url>
+			<id>ftomassetti</id>
+		</developer>
+		<developer>
+			<name>Didier Villevalois</name>
+			<email>ptitjes@free.fr</email>
+			<url>https://github.com/ptitjes</url>
+			<id>ptitjes</id>
+		</developer>
 	</developers>
 	<contributors>
 		<contributor>
-			<name>Hendy Irawan</name>
-			<email>hendy@soluvas.com</email>
-			<url>http://www.HendyIrawan.com/</url>
-			<organization>Soluvas</organization>
-			<organizationUrl>http://www.Soluvas.com/</organizationUrl>
+			<name>Junfei Liang</name>
+			<url>https://github.com/fly2best</url>
+		</contributor>
+		<contributor>
+			<name>Jarkko Miettinen</name>
+			<url>https://github.com/jmiettinen</url>
+		</contributor>
+		<contributor>
+			<name>Alexey Morozov</name>
+			<email>morozov@altlinux.org</email>
+			<url>https://github.com/amorozov</url>
+		</contributor>
+		<contributor>
+			<name>Donny Nadolny</name>
+			<email>donny.nadolny@gmail.com</email>
+			<url>https://github.com/dnadolny</url>
+		</contributor>
+		<contributor>
+			<name>Raquel Pau</name>
+			<url>https://github.com/rpau</url>
+		</contributor>
+		<contributor>
+			<name>Chao Shi</name>
+			<email>stepinto@live.com</email>
+			<url>https://github.com/stepinto</url>
+		</contributor>
+		<contributor>
+			<name>Michael Schieder</name>
+			<url>https://github.com/mschieder</url>
 		</contributor>
 	</contributors>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.6</java.version>
+		<java.version>1.8</java.version>
 
 		<!-- Maven Plugins -->
 		<javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
@@ -51,7 +135,6 @@
 		<maven-install-plugin.version>2.4</maven-install-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
-
 	</properties>
 
 	<scm>

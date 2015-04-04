@@ -1,24 +1,23 @@
 /*
- * Copyright (C) 2007 Júlio Vilmar Gesser.
- * 
- * This file is part of Java 1.5 parser and Abstract Syntax Tree.
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
- * Java 1.5 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
+ * This file is part of JavaParser.
+ *
+ * JavaParser is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Java 1.5 parser and Abstract Syntax Tree is distributed in the hope that it will be useful,
+ * JavaParser is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Java 1.5 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
+ * along with JavaParser.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- * Created on 05/10/2006
- */
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -182,11 +181,6 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         this.name = name;
     }
 
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     public void setParameters(final List<Parameter> parameters) {
 		this.parameters = parameters;
 		setAsParentNodeOf(this.parameters);
@@ -216,26 +210,27 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         this.isDefault = isDefault;
     }
 
-    @Override
-    public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
-    /**
-     * The declaration returned has this schema:
-     *
-     * [accessSpecifier] [static] [abstract] [final] [native]
-     * [synchronized] returnType methodName ([paramlist])
-     * [throws exceptionsList]
-     * @return method declaration as String
-     */
     @Override
     public String getDeclarationAsString() {
-        return getDeclarationAsString(true, true);
+        return getDeclarationAsString(true, true, true);
     }
 
     @Override
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
+        return getDeclarationAsString(includingModifiers, includingThrows, true);
+    }
+    
+    /**
+     * The declaration returned has this schema:
+     *
+     * [accessSpecifier] [static] [abstract] [final] [native]
+     * [synchronized] returnType methodName ([paramType [paramName]])
+     * [throws exceptionsList]
+     * @return method declaration as String
+     */
+    @Override
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
@@ -263,14 +258,21 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         sb.append(getName());
         sb.append("(");
         boolean firstParam = true;
-        for (Parameter param : parameters)
+        for (Parameter param : getParameters())
         {
             if (firstParam) {
                 firstParam = false;
             } else {
                 sb.append(", ");
             }
-            sb.append(param.toStringWithoutComments());
+            if (includingParameterName) {
+                sb.append(param.toStringWithoutComments());
+            } else {
+                sb.append(param.getType().toStringWithoutComments());
+                if (param.isVarArgs()) {
+                	sb.append("...");
+                }
+            }
         }
         sb.append(")");
         if (includingThrows) {
@@ -287,4 +289,16 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         }
         return sb.toString();
     }
+
+    @Override
+    public void setJavaDoc(JavadocComment javadocComment) {
+        this.javadocComment = javadocComment;
+    }
+
+    @Override
+    public JavadocComment getJavaDoc() {
+        return javadocComment;
+    }
+
+    private JavadocComment javadocComment;
 }

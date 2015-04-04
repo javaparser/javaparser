@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JavaParser.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
@@ -7,8 +27,13 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
+import java.lang.Override;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
+import static java.lang.Integer.signum;
 
 public class PositionUtils {
 
@@ -16,24 +41,13 @@ public class PositionUtils {
         sortByBeginPosition(nodes, false);
     }
 
-    
-    public static <T extends Node> void sortByBeginPosition(List<T> nodes, boolean ignoringAnnotations){
-        T[] arrayNodos=(T[])new Node[0];
-        arrayNodos = (T[])nodes.toArray(arrayNodos);
-        for (int i=0;i<arrayNodos.length;i++){
-            for (int j=i+1;j<arrayNodos.length;j++){
-                T nodeI = arrayNodos[i];
-                T nodeJ = arrayNodos[j];
-                if (!areInOrder(nodeI, nodeJ, ignoringAnnotations)){
-                    arrayNodos[i]=nodeJ;
-                    arrayNodos[j]=nodeI;
-                }
+    public static <T extends Node> void sortByBeginPosition(List<T> nodes, final boolean ignoringAnnotations){
+        Collections.sort(nodes, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return PositionUtils.compare(o1, o2, ignoringAnnotations);
             }
-        }
-        for (int i=0;i<arrayNodos.length;i++){
-            nodes.set(i,arrayNodos[i]);
-        }
-
+        });
     }
 
     public static boolean areInOrder(Node a, Node b){
@@ -41,16 +55,25 @@ public class PositionUtils {
     }
 
     public static boolean areInOrder(Node a, Node b, boolean ignoringAnnotations){
+        return compare(a, b, ignoringAnnotations) <= 0;
+    }
+
+    private static int compare(Node a, Node b, boolean ignoringAnnotations) {
         if (ignoringAnnotations) {
-            return
-                    (beginLineWithoutConsideringAnnotation(a)<beginLineWithoutConsideringAnnotation(b))
-                            || (beginLineWithoutConsideringAnnotation(a)==beginLineWithoutConsideringAnnotation(b)
-                                && beginColumnWithoutConsideringAnnotation(a)<beginColumnWithoutConsideringAnnotation(b) );
+            int signLine = signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b));
+            if (signLine == 0) {
+                return signum(beginColumnWithoutConsideringAnnotation(a) - beginColumnWithoutConsideringAnnotation(b));
+            } else {
+                return signLine;
+            }
         }
 
-        return
-                (a.getBeginLine()<b.getBeginLine())
-                        || (a.getBeginLine()==b.getBeginLine() && a.getBeginColumn()<b.getBeginColumn() );
+        int signLine = signum( a.getBeginLine() - b.getBeginLine() );
+        if (signLine == 0) {
+            return signum(a.getBeginColumn() - b.getBeginColumn());
+        } else {
+            return signLine;
+        }
     }
 
     public static AnnotationExpr getLastAnnotation(Node node) {
@@ -61,8 +84,7 @@ public class PositionUtils {
                 return null;
             }
             sortByBeginPosition(annotations);
-            AnnotationExpr lastAnnotation = annotations.get(annotations.size()-1);
-            return lastAnnotation;
+            return annotations.get(annotations.size()-1);
         } else {
             return null;
         }
