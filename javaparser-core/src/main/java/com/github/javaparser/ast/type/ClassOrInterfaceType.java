@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type implements NamedNode {
+public final class ClassOrInterfaceType extends Type {
 
 	private ClassOrInterfaceType scope;
 
