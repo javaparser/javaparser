@@ -22,6 +22,7 @@ package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
+import com.github.javaparser.TokenMgrError;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
@@ -46,6 +47,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class CommentParsingSteps {
 
@@ -77,6 +79,16 @@ public class CommentParsingSteps {
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
         compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+    }
+
+    @Then("the Java parser cannot parse it because of lexical errors")
+    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
+        try {
+            compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+            fail("Lexical error expected");
+        } catch (TokenMgrError e) {
+            // ok
+        }
     }
 
     @Then("the total number of comments is $expectedCount")
