@@ -64,11 +64,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
 
 /**
  * A visitor that has a return value.
@@ -136,6 +132,8 @@ public interface GenericVisitor<R, A> {
 	public R visit(VoidType n, A arg);
 
 	public R visit(WildcardType n, A arg);
+
+	public R visit(UnknownType n, A arg);
 
 	//- Expression ----------------------------------------
 

@@ -71,12 +71,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -522,6 +517,10 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			printer.print(" super ");
 			n.getSuper().accept(this, arg);
 		}
+	}
+
+	@Override public void visit(final UnknownType n, final Object arg) {
+		// Nothing to dump
 	}
 
 	@Override public void visit(final FieldDeclaration n, final Object arg) {

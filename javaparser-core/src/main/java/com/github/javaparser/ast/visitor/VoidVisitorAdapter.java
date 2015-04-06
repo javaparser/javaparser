@@ -68,12 +68,8 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
+
 import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
 
 /**
@@ -759,6 +755,10 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final UnaryExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
 		n.getExpr().accept(this, arg);
+	}
+
+	@Override public void visit(final UnknownType n, final A arg) {
+		visitComment(n.getComment(), arg);
 	}
 
 	@Override public void visit(final VariableDeclarationExpr n, final A arg) {

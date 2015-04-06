@@ -31,6 +31,7 @@ import java.util.Map;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -113,6 +114,14 @@ public class ParsingSteps {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
         assertThat(blockStmt.getStmts(), is(nullValue()));
+    }
+
+    @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition has parameters with non-null type")
+    public void thenLambdaInStatementInMethodInClassHasParametersWithNonNullType(int statementPosition, int methodPosition, int classPosition) {
+        LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
+        for (Parameter parameter : lambdaExpr.getParameters()) {
+            assertThat(parameter.getType(), is(notNullValue()));
+        }
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition block statement is \"$expectedBody\"")

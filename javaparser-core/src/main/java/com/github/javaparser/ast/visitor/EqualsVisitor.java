@@ -66,12 +66,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -691,6 +686,15 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodeEquals(n1.getSuper(), n2.getSuper())) {
 			return Boolean.FALSE;
 		}
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
+	}
+
+	@Override public Boolean visit(final UnknownType n1, final Node arg) {
+		final WildcardType n2 = (WildcardType) arg;
+
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return Boolean.FALSE;
 		}
