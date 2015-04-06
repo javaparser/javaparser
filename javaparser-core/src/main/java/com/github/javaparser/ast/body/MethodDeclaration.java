@@ -22,6 +22,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
+import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration {
+public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode {
 
 	private int modifiers;
 

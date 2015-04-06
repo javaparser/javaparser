@@ -20,13 +20,14 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public class NameExpr extends Expression {
+public class NameExpr extends Expression implements NamedNode {
 
 	private String name;
 

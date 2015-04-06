@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.DocumentableNode;
+import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -32,7 +33,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumConstantDeclaration extends BodyDeclaration implements DocumentableNode{
+public final class EnumConstantDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode {
 
     private String name;
 

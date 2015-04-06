@@ -39,7 +39,7 @@ import java.util.List;
  * </pre>
  * @author Julio Vilmar Gesser
  */
-public final class TypeParameter extends Node {
+public final class TypeParameter extends Node implements NamedNode {
 
 	private String name;
 
