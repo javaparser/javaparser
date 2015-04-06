@@ -171,3 +171,16 @@ Scenario: Comments from a file with an non-UTF-8 encoding are parsed correctly
 When read sample "ClassInLatin1" using encoding "ISO-8859-1"
 Then the total number of comments is 3
 Then line comment 2 is " A l'émej in piasì che sent dësgust."
+
+Scenario: Should not recognize /*/ as a comment
+
+Given the class:
+/*/
+class Foo {}
+When the class is parsed by the comment parser
+Then the total number of comments is 0
+
+Given the class:
+/*/
+class Foo {}
+Then the Java parser cannot parse it because of lexical errors
