@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.DumpVisitor;
+import com.github.javaparser.bdd.TestUtils;
 import org.jbehave.core.annotations.*;
 import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
@@ -55,6 +56,12 @@ public class CommentParsingSteps {
     @Given("the class:$classSrc")
     public void givenTheClass(String classSrc) {
         this.sourceUnderTest = classSrc.trim();
+    }
+
+    @When("read sample \"$sampleName\" using encoding \"$encoding\"")
+    public void givenTheClassWithEncoding(String sampleName, String encoding) throws IOException {
+        sourceUnderTest = null;
+        commentsCollection = new CommentsParser().parse(TestUtils.getSampleStream(sampleName), encoding);
     }
 
     @When("the class is parsed by the comment parser")
