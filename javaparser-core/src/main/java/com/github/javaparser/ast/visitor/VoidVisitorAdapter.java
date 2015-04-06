@@ -74,6 +74,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
+import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
 
 /**
  * @author Julio Vilmar Gesser
@@ -122,7 +123,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
 		n.getType().accept(this, arg);
-		if (n.getDimensions() != null) {
+		if (!isNullOrEmpty(n.getDimensions())) {
 			for (final Expression dim : n.getDimensions()) {
 				dim.accept(this, arg);
 			}
