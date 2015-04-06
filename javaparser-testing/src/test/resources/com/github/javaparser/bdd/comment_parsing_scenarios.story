@@ -165,3 +165,16 @@ When the class is parsed by the comment parser
 Then the total number of comments is 2
 Then line comment 1 is " foo"
 Then line comment 2 is " bar"
+
+Scenario: Should not recognize /*/ as a comment
+
+Given the class:
+/*/
+class Foo {}
+When the class is parsed by the comment parser
+Then the total number of comments is 0
+
+Given the class:
+/*/
+class Foo {}
+Then the Java parser cannot parse it because of lexical errors
