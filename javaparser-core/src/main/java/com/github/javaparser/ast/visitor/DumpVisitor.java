@@ -133,37 +133,37 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	private void printModifiers(NodeWithModifiers node) {
-		if (node.getModifiersSet().isPrivate()) {
+		if (node.getModifiersSet().hasPrivate()) {
 			printer.print("private ");
 		}
-		if (node.getModifiersSet().isProtected()) {
+		if (node.getModifiersSet().hasProtected()) {
 			printer.print("protected ");
 		}
-		if (node.getModifiersSet().isPublic()) {
+		if (node.getModifiersSet().hasPublic()) {
 			printer.print("public ");
 		}
-		if (node.getModifiersSet().isAbstract()) {
+		if (node.getModifiersSet().hasAbstract()) {
 			printer.print("abstract ");
 		}
-		if (node.getModifiersSet().isStatic()) {
+		if (node.getModifiersSet().hasStatic()) {
 			printer.print("static ");
 		}
-		if (node.getModifiersSet().isFinal()) {
+		if (node.getModifiersSet().hasFinal()) {
 			printer.print("final ");
 		}
-		if (node.getModifiersSet().isNative()) {
+		if (node.getModifiersSet().hasNative()) {
 			printer.print("native ");
 		}
-		if (node.getModifiersSet().isStrictfp()) {
+		if (node.getModifiersSet().hasStrictfp()) {
 			printer.print("strictfp ");
 		}
-		if (node.getModifiersSet().isSynchronized()) {
+		if (node.getModifiersSet().hasSynchronized()) {
 			printer.print("synchronized ");
 		}
-		if (node.getModifiersSet().isTransient()) {
+		if (node.getModifiersSet().hasTransient()) {
 			printer.print("transient ");
 		}
-		if (node.getModifiersSet().isVolatile()) {
+		if (node.getModifiersSet().hasVolatile()) {
 			printer.print("volatile ");
 		}
 	}

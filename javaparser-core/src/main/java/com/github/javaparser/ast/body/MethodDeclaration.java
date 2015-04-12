@@ -258,19 +258,19 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
             AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(this);
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
-            if (this.getModifiersSet().isStatic()){
+            if (this.getModifiersSet().hasStatic()){
                 sb.append("static ");
             }
-            if (this.getModifiersSet().isAbstract()){
+            if (this.getModifiersSet().hasAbstract()){
                 sb.append("abstract ");
             }
-            if (this.getModifiersSet().isFinal()){
+            if (this.getModifiersSet().hasFinal()){
                 sb.append("final ");
             }
-            if (this.getModifiersSet().isNative()){
+            if (this.getModifiersSet().hasNative()){
                 sb.append("native ");
             }
-            if (this.getModifiersSet().isSynchronized()){
+            if (this.getModifiersSet().hasSynchronized()){
                 sb.append("synchronized ");
             }
         }

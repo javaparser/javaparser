@@ -1,8 +1,5 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.NodeWithModifiers;
-
 import javax.lang.model.element.Modifier;
 import java.util.EnumSet;
 import java.util.Set;
@@ -27,23 +24,23 @@ public class Modifiers {
         return modifiers.contains(modifier);
     }
 
-    public boolean isAbstract() {
+    public boolean hasAbstract() {
         return hasModifier(Modifier.ABSTRACT);
     }
 
-    public boolean isFinal() {
+    public boolean hasFinal() {
         return hasModifier(Modifier.FINAL);
     }
 
-    public boolean isNative() {
+    public boolean hasNative() {
         return hasModifier(Modifier.NATIVE);
     }
 
-    public boolean isPrivate() {
+    public boolean hasPrivate() {
         return hasModifier(Modifier.PRIVATE);
     }
 
-    public boolean isProtected() {
+    public boolean hasProtected() {
         return hasModifier(Modifier.PROTECTED);
     }
 
@@ -55,35 +52,35 @@ public class Modifiers {
      * @return true if modifier denotes package level access
      */
     public boolean hasPackageLevelAccess() {
-        return !isPublic() && !isProtected() && !isPrivate();
+        return !hasPublic() && !hasProtected() && !hasPrivate();
     }
 
-    public boolean isPublic() {
+    public boolean hasPublic() {
         return hasModifier(Modifier.PUBLIC);
     }
 
 
-    public boolean isStatic() {
+    public boolean hasStatic() {
         return hasModifier(Modifier.STATIC);
     }
 
 
-    public boolean isStrictfp() {
+    public boolean hasStrictfp() {
         return hasModifier(Modifier.STRICTFP);
     }
 
 
-    public boolean isSynchronized() {
+    public boolean hasSynchronized() {
         return hasModifier(Modifier.SYNCHRONIZED);
     }
 
 
-    public boolean isTransient() {
+    public boolean hasTransient() {
         return hasModifier(Modifier.TRANSIENT);
     }
 
 
-    public boolean isVolatile() {
+    public boolean hasVolatile() {
         return hasModifier(Modifier.VOLATILE);
     }
 
@@ -118,11 +115,11 @@ public class Modifiers {
     }
 
     public AccessSpecifier getAccessSpecifier() {
-        if (isPublic()){
+        if (hasPublic()){
             return AccessSpecifier.PUBLIC;
-        } else if (isProtected()){
+        } else if (hasProtected()){
             return AccessSpecifier.PROTECTED;
-        } else if (isPrivate()){
+        } else if (hasPrivate()){
             return AccessSpecifier.PRIVATE;
         } else {
             return AccessSpecifier.DEFAULT;
