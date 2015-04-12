@@ -1,6 +1,5 @@
 package com.github.javaparser.ast;
 
-import javax.lang.model.element.Modifier;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -9,6 +8,20 @@ import java.util.Set;
  * @since 2.0.1
  */
 public class Modifiers {
+
+    public static enum Modifier {
+        ABSTRACT,
+        FINAL,
+        NATIVE,
+        PRIVATE,
+        PROTECTED,
+        PUBLIC,
+        STATIC,
+        STRICTFP,
+        SYNCHRONIZED,
+        TRANSIENT,
+        VOLATILE
+    }
 
     private Set<Modifier> modifiers;
     
@@ -20,7 +33,7 @@ public class Modifiers {
         this.modifiers = modifiers;
     }
 
-    public boolean hasModifier(javax.lang.model.element.Modifier modifier) {
+    public boolean hasModifier(Modifier modifier) {
         return modifiers.contains(modifier);
     }
 

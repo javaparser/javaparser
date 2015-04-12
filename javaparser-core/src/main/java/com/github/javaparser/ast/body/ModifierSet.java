@@ -37,19 +37,19 @@ public final class ModifierSet {
 
     /* Definitions of the bits in the modifiers field.  */
     
-    private static Map<javax.lang.model.element.Modifier, Integer> ENUM_TO_INT = new HashMap<javax.lang.model.element.Modifier, Integer>();
+    private static Map<Modifiers.Modifier, Integer> ENUM_TO_INT = new HashMap<Modifiers.Modifier, Integer>();
     
     static {
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.ABSTRACT, Modifier.ABSTRACT);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.FINAL, Modifier.FINAL);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.NATIVE, Modifier.NATIVE);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.PRIVATE, Modifier.PRIVATE);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.PROTECTED, Modifier.PROTECTED);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.PUBLIC, Modifier.PUBLIC);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.STATIC, Modifier.STATIC);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.STRICTFP, Modifier.STRICT);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.SYNCHRONIZED, Modifier.SYNCHRONIZED);
-        ENUM_TO_INT.put(javax.lang.model.element.Modifier.TRANSIENT, Modifier.TRANSIENT);
+        ENUM_TO_INT.put(Modifiers.Modifier.ABSTRACT, Modifier.ABSTRACT);
+        ENUM_TO_INT.put(Modifiers.Modifier.FINAL, Modifier.FINAL);
+        ENUM_TO_INT.put(Modifiers.Modifier.NATIVE, Modifier.NATIVE);
+        ENUM_TO_INT.put(Modifiers.Modifier.PRIVATE, Modifier.PRIVATE);
+        ENUM_TO_INT.put(Modifiers.Modifier.PROTECTED, Modifier.PROTECTED);
+        ENUM_TO_INT.put(Modifiers.Modifier.PUBLIC, Modifier.PUBLIC);
+        ENUM_TO_INT.put(Modifiers.Modifier.STATIC, Modifier.STATIC);
+        ENUM_TO_INT.put(Modifiers.Modifier.STRICTFP, Modifier.STRICT);
+        ENUM_TO_INT.put(Modifiers.Modifier.SYNCHRONIZED, Modifier.SYNCHRONIZED);
+        ENUM_TO_INT.put(Modifiers.Modifier.TRANSIENT, Modifier.TRANSIENT);
     }
 
     public static final int PUBLIC = Modifier.PUBLIC;
@@ -183,7 +183,7 @@ public final class ModifierSet {
 
     public static Modifiers toSet(int modifiersAsInt) {
         Modifiers modifiersAsSet = new Modifiers();
-        for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
+        for (Modifiers.Modifier modifier : ENUM_TO_INT.keySet()) {
             if (hasModifier(modifiersAsInt, ENUM_TO_INT.get(modifier))){
                 modifiersAsSet = modifiersAsSet.set(modifier);
             }
@@ -193,7 +193,7 @@ public final class ModifierSet {
 
     public static int toInt(Modifiers modifiersAsSet) {
         int modifiersAsInt = 0;
-        for (javax.lang.model.element.Modifier modifier : ENUM_TO_INT.keySet()) {
+        for (Modifiers.Modifier modifier : ENUM_TO_INT.keySet()) {
             if (modifiersAsSet.has(modifier)){
                 modifiersAsInt |= ENUM_TO_INT.get(modifier);
             }
