@@ -250,8 +250,14 @@ public abstract class Node {
     hash = addToHashCode(hash, hashMultiplier, this.getBeginColumn());
     hash = addToHashCode(hash, hashMultiplier, this.getEndLine());
     hash = addToHashCode(hash, hashMultiplier, this.getEndColumn());
-    //hash = addToHashCode(hash, hashMultiplier, this.getData().hashCode());
-    hash = addToHashCode(hash, hashMultiplier, this.getComment().hashCode());
+    Object data = this.getData();
+    if (null != data) {
+      hash = addToHashCode(hash, hashMultiplier, data.hashCode());
+    }
+    Comment comment = this.getComment();
+    if (null != comment) {
+      hash = addToHashCode(hash, hashMultiplier, comment.hashCode());
+    }
 		return hash;
 	}
 
