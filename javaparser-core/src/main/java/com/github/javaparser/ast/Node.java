@@ -237,21 +237,21 @@ public abstract class Node {
         return visitor.getSource();
     }
 
-  private final int addToHashCode(int currentHashCode, int hashToAdd) {
-    currentHashCode *= 67;
+  protected final int addToHashCode(int currentHashCode, int hashMultiplier, int hashToAdd) {
+    currentHashCode *= hashMultiplier;
     return currentHashCode + hashToAdd;
   }
 
-	@Override public final int hashCode() {
+	@Override public int hashCode() {
     final int hashMultiplier = 67;
     int hash = 461;
-    hash = addToHashCode(hash, this.toString().hashCode());
-    hash = addToHashCode(hash, this.getBeginLine());
-    hash = addToHashCode(hash, this.getBeginColumn());
-    hash = addToHashCode(hash, this.getEndLine());
-    hash = addToHashCode(hash, this.getEndColumn());
-    hash = addToHashCode(hash, this.getData().hashCode());
-    hash = addToHashCode(hash, this.getComment().hashCode());
+    hash = addToHashCode(hash, hashMultiplier, this.toString().hashCode());
+    hash = addToHashCode(hash, hashMultiplier, this.getBeginLine());
+    hash = addToHashCode(hash, hashMultiplier, this.getBeginColumn());
+    hash = addToHashCode(hash, hashMultiplier, this.getEndLine());
+    hash = addToHashCode(hash, hashMultiplier, this.getEndColumn());
+    //hash = addToHashCode(hash, hashMultiplier, this.getData().hashCode());
+    hash = addToHashCode(hash, hashMultiplier, this.getComment().hashCode());
 		return hash;
 	}
 

@@ -47,6 +47,18 @@ public abstract class Comment extends Node {
         this.content = content;
     }
 
+    @Override public final int hashCode() {
+      final int hashMultiplier = 71;
+      int hash = 463;
+      hash = addToHashCode(hash, hashMultiplier, this.toString().hashCode());
+      hash = addToHashCode(hash, hashMultiplier, this.getBeginLine());
+      hash = addToHashCode(hash, hashMultiplier, this.getBeginColumn());
+      hash = addToHashCode(hash, hashMultiplier, this.getEndLine());
+      hash = addToHashCode(hash, hashMultiplier, this.getEndColumn());
+      hash = addToHashCode(hash, hashMultiplier, this.getContent().hashCode());
+      return hash;
+    }
+
     /**
      * Return the text of the comment.
      * 
