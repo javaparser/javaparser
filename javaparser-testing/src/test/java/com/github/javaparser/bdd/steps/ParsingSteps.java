@@ -263,7 +263,7 @@ public class ParsingSteps {
         Node node = (Node) state.get("selectedNode");
         assertEquals(column, node.getEndColumn());
     }
-    
+
     @Then("no errors are reported")
     public void thenNoErrorsAreReported() {
         // this is present just for readability in the scenario specification
