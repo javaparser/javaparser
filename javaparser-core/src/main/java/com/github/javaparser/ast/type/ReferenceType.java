@@ -91,10 +91,28 @@ public final class ReferenceType extends Type {
 		setAsParentNodeOf(this.type);
 	}
 
+	/**
+	 * <p>Arrays annotations are annotations on the Arrays modifiers of the type.
+	 * Consider this example:</p>
+	 * 
+	 * <p><pre>
+	 * {@code
+	 * int @Ann1 [] @Ann2 [] array;
+	 * }</pre></p>
+	 * 
+	 * <p>in this this method will return a list with the annotation expressions <pre>@Ann1</pre>
+	 * and <pre>@Ann2</pre></p>
+	 * 
+	 * <p>This property is guaranteed to hold: <pre>{@code getArraysAnnotations().size() == getArrayCount()}</pre>
+	 * If a certain array modifier has no annotation the corresponding entry of arraysAnnotations will be null</p>
+	 */
     public List<List<AnnotationExpr>> getArraysAnnotations() {
         return arraysAnnotations;
     }
 
+	/**
+	 * For a description of the arrayAnnotations field refer to {@link #getArraysAnnotations()}
+	 */
     public void setArraysAnnotations(List<List<AnnotationExpr>> arraysAnnotations) {
         this.arraysAnnotations = arraysAnnotations;
     }
