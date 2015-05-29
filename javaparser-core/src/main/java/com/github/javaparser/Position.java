@@ -30,11 +30,11 @@ public class Position {
     public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE,-1);
 
     public static Position beginOf(Node node){
-        return new Position(node.getBeginColumn(),node.getBeginColumn());
+        return new Position(node.getBeginLine(),node.getBeginColumn());
     }
 
     public static Position endOf(Node node){
-        return new Position(node.getEndColumn(),node.getEndColumn());
+        return new Position(node.getEndLine(),node.getEndColumn());
     }
 
     public Position(int line, int column){
