@@ -282,3 +282,15 @@ Then the begin column is 17
 Then the end line is 2
 Then the end column is 29
 
+
+Scenario: simple cast on lambda expression can be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    static final Comparator<ChronoLocalDate> DATE_ORDER =
+        (Comparator<ChronoLocalDate>) (date1, date2) -> {
+            return Long.compare(date1.toEpochDay(), date2.toEpochDay());
+        };
+}
+Then all nodes refer to their parent
