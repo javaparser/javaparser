@@ -280,3 +280,13 @@ class A {
         };
 }
 Then all nodes refer to their parent
+
+Scenario: a combined cast on a literal can be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    static int a = (Comparator<ChronoLocalDate> & Serializable) 1;
+}
+Then all nodes refer to their parent
+
