@@ -2265,7 +2265,9 @@ Expression CastExpression():
 	int line;
 	int column;
 	AnnotationExpr ann;
+	Type st;
 	List annotations = null;
+	List secondaryTypes = null;
 }
 {
   "(" {line=token.beginLine; column=token.beginColumn;}
@@ -2274,7 +2276,7 @@ Expression CastExpression():
   	  LOOKAHEAD(2)
   	  type = PrimitiveType() ")" ret = UnaryExpression() { type.setAnnotations(annotations); ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
   	|
-  	  type = ReferenceType() ")" ret = UnaryExpressionNotPlusMinus() { type.setAnnotations(annotations); ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
+  	  type = ReferenceType() ("&" st = ReferenceType() { secondaryTypes = add(secondaryTypes, st);} )* ")" ret = UnaryExpressionNotPlusMinus() { type.setAnnotations(annotations); ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
   )
   { return ret; }
 }

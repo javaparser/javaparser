@@ -257,6 +257,7 @@ Then method 2 class 1 is not a default method
 Then all nodes refer to their parent
 
 
+<<<<<<< HEAD
 Scenario: A lambda expression inside a conditional expression is parsed by the Java Parser
 
 Given a CompilationUnit
@@ -283,6 +284,8 @@ Then the end line is 2
 Then the end column is 29
 
 
+=======
+>>>>>>> issue 149: adapt grammar to parse combined cast expressions
 Scenario: simple cast on lambda expression can be parsed
 
 Given a CompilationUnit
