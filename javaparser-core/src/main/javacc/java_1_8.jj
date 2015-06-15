@@ -1962,6 +1962,12 @@ Expression Expression():
        inner = generateLambda(((CastExpr)ret).getExpr(), lambdaBody);
        ((CastExpr)ret).setExpr(inner);
      }
+     else if (ret instanceof ConditionalExpr){
+     	 ConditionalExpr ce = (ConditionalExpr) ret;
+         if(ce.getElseExpr() != null){
+            ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
+         }
+     }
      else
      {
        ret = generateLambda(ret, lambdaBody);
