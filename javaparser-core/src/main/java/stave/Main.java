@@ -27,14 +27,11 @@ import java.util.Vector;
 import java.util.ListIterator;
 import java.io.*;
 import java.net.URI;
-import java_cup.runtime.*;
 import javax.tools.JavaFileManager;
 import org.apache.commons.cli.*;
 import stave.java.ast.*;
 import stave.java.visitor.*;
 import stave.javaparser.visitor.*;
-import stave.synctask.ast.*;
-import stave.synctask.visitor.PrettyPrintVisitor;
 
 public class Main {
 
@@ -58,7 +55,7 @@ public class Main {
          String myfooter = "STaVe - SyncTask Verifier - http://www.csc.kth.se/~pedrodg/stave";
 
          HelpFormatter formatter = new HelpFormatter();
-         // formatter.printUsage( new PrintWriter(System.out,true), 100, "java -jar synctask.jar", loptions );
+         // formatter.printUsage( new PrintWriter(System.out,true), 100, "java -jar stave.jar", loptions );
          // formatter.printHelp( mytoolcmd + myoptlist, myheader, loptions, myfooter, false);
          formatter.printHelp( mytoolcmd + myoptlist, loptions, false);
          return(false);
