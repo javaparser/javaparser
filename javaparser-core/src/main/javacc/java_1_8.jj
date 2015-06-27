@@ -2255,6 +2255,7 @@ Expression CastExpression():
 {
 	Expression ret;
 	Type type;
+	List types = null;
 	int line;
 	int column;
 	List annotations = null;
@@ -2266,7 +2267,17 @@ Expression CastExpression():
   	  LOOKAHEAD(2)
   	  type = PrimitiveType(annotations) ")" ret = UnaryExpression() { ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
   	|
-  	  type = ReferenceType(annotations) ")" ret = UnaryExpressionNotPlusMinus() { ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
+  	  type = ReferenceType(annotations) { types = add(types, type); }
+  	  ("&" annotations = Annotations() type = ReferenceType(annotations) { types = add(types, type); } )*
+  	  ")" ret = UnaryExpressionNotPlusMinus()
+  	  {
+  	    if (types.size() > 1) {
+          Node firstType = (Node) types.get(0);
+          Node lastType = (Node) types.get(types.size() - 1);
+          type = new IntersectionType(firstType.getBeginLine(), firstType.getBeginColumn(), lastType.getEndLine(), lastType.getEndColumn(), types);
+  	    }
+  	    ret = new CastExpr(line, column, token.endLine, token.endColumn, type, ret);
+  	  }
   )
   { return ret; }
 }

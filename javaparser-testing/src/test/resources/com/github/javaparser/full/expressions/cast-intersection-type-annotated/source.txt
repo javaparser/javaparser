@@ -1,0 +1,1 @@
+(@Ann1 @Ann2 A & @Ann3 @Ann4 B) v

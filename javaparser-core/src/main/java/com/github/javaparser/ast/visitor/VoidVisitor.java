@@ -99,6 +99,8 @@ public interface VoidVisitor<A> {
 
 	void visit(UnionType n, A arg);
 
+	void visit(IntersectionType n, A arg);
+
 	void visit(UnknownType n, A arg);
 
 	//- Expression ----------------------------------------

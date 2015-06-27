@@ -1461,6 +1461,29 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	}
 
 	@Override
+	public R visit(final IntersectionType n, final A arg) {
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
+			}
+		}
+		{
+			for (final Type type : n.getTypes()) {
+				R result = type.accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
 	public R visit(final UnknownType n, final A arg) {
 		return null;
 	}

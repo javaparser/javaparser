@@ -401,6 +401,18 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	}
 
 	@Override
+	public Node visit(IntersectionType _n, Object _arg) {
+		List<Type> types = visit(_n.getTypes(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		UnionType r = new UnionType(
+				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), types
+		);
+		r.setComment(comment);
+		return r;
+	}
+
+	@Override
 	public Node visit(UnknownType _n, Object _arg) {
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 

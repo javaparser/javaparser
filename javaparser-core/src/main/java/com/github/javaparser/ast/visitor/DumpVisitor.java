@@ -473,6 +473,15 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
+	@Override public void visit(IntersectionType n, Object arg) {
+		Iterator<Type> types = n.getTypes().iterator();
+		types.next().accept(this, arg);
+		while (types.hasNext()) {
+			printer.print(" & ");
+			types.next().accept(this, arg);
+		}
+	}
+
 	@Override public void visit(final UnknownType n, final Object arg) {
 		// Nothing to dump
 	}

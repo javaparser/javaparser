@@ -628,6 +628,24 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return Boolean.TRUE;
 	}
 
+	@Override public Boolean visit(IntersectionType n1, Node arg) {
+		UnionType n2 = (UnionType) arg;
+		if (n1.getTypes().size() != n2.getTypes().size()) {
+			return Boolean.FALSE;
+		}
+		Iterator<Type> n1types = n1.getTypes().iterator();
+		Iterator<Type> n2types = n2.getTypes().iterator();
+		while (n1types.hasNext() && n2types.hasNext()) {
+			if (!nodeEquals(n1types.next(), n2types.next())) {
+				return Boolean.FALSE;
+			}
+		}
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
+	}
+
 	@Override public Boolean visit(final UnknownType n1, final Node arg) {
 		final WildcardType n2 = (WildcardType) arg;
 

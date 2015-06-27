@@ -99,6 +99,8 @@ public interface GenericVisitor<R, A> {
 
 	public R visit(UnionType n, A arg);
 
+	public R visit(IntersectionType n, A arg);
+
 	public R visit(UnknownType n, A arg);
 
 	//- Expression ----------------------------------------

@@ -724,6 +724,18 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		}
 	}
 
+	@Override public void visit(final IntersectionType n, final A arg) {
+		visitComment(n.getComment(), arg);
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
+		for (final Type type : n.getTypes()) {
+			type.accept(this, arg);
+		}
+	}
+
 	@Override public void visit(final UnknownType n, final A arg) {
 		visitComment(n.getComment(), arg);
 	}
