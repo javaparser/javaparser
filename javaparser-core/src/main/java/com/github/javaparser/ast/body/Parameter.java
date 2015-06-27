@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -30,8 +31,15 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends BaseParameter {
+public final class Parameter extends Node {
+
+    private int modifiers;
+
+    private List<AnnotationExpr> annotations;
+
     private Type type;
+
+    private VariableDeclaratorId id;
 
     private boolean isVarArgs;
 
@@ -39,17 +47,31 @@ public final class Parameter extends BaseParameter {
     }
 
     public Parameter(Type type, VariableDeclaratorId id) {
-    	super(id);
+    	super();
+        setId(id);
         setType(type);
     }
 
     public Parameter(int modifiers, Type type, VariableDeclaratorId id) {
-    	super(modifiers, id);
+        super();
+        setModifiers(modifiers);
+        setId(id);
+        setType(type);
+    }
+
+    public Parameter(int modifiers, List<AnnotationExpr> annotations, Type type, VariableDeclaratorId id) {
+        super();
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setId(id);
         setType(type);
     }
 
     public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
-        super(beginLine, beginColumn, endLine, endColumn, modifiers, annotations, id);
+        super(beginLine, beginColumn, endLine, endColumn);
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setId(id);
         setType(type);
         setVarArgs(isVarArgs);
     }
@@ -62,6 +84,39 @@ public final class Parameter extends BaseParameter {
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
+    }
+
+
+    public List<AnnotationExpr> getAnnotations() {
+        return annotations;
+    }
+
+    public VariableDeclaratorId getId() {
+        return id;
+    }
+
+    /**
+     * Return the modifiers of this parameter declaration.
+     *
+     * @see ModifierSet
+     * @return modifiers
+     */
+    public int getModifiers() {
+        return modifiers;
+    }
+
+    public void setAnnotations(List<AnnotationExpr> annotations) {
+        this.annotations = annotations;
+        setAsParentNodeOf(this.annotations);
+    }
+
+    public void setId(VariableDeclaratorId id) {
+        this.id = id;
+        setAsParentNodeOf(this.id);
+    }
+
+    public void setModifiers(int modifiers) {
+        this.modifiers = modifiers;
     }
 
     public Type getType() {

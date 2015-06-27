@@ -20,39 +20,19 @@
 
 package com.github.javaparser.ast.visitor;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CloneVisitor implements GenericVisitor<Node, Object> {
 
@@ -306,21 +286,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		r.setComment(comment);
 		return r;
 	}
-	
-	@Override
-	public Node visit(MultiTypeParameter _n, Object _arg) {
-		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
-		List<Type> types = visit(_n.getTypes(), _arg);
-		VariableDeclaratorId id = cloneNodes(_n.getId(), _arg);
-		Comment comment = cloneNodes(_n.getComment(), _arg);
-
-		MultiTypeParameter r = new MultiTypeParameter(
-				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				_n.getModifiers(), annotations, types, id
-		);
-		r.setComment(comment);
-		return r;
-	}
 
 	@Override
 	public Node visit(EmptyMemberDeclaration _n, Object _arg) {
@@ -418,6 +383,18 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		WildcardType r = new WildcardType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
 				ann, ext, sup
+		);
+		r.setComment(comment);
+		return r;
+	}
+
+	@Override
+	public Node visit(UnionType _n, Object _arg) {
+		List<Type> types = visit(_n.getTypes(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		UnionType r = new UnionType(
+				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), types
 		);
 		r.setComment(comment);
 		return r;
@@ -1131,13 +1108,13 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(CatchClause _n, Object _arg) {
-		MultiTypeParameter except = cloneNodes(_n.getExcept(), _arg);
+		Parameter except = cloneNodes(_n.getExcept(), _arg);
 		BlockStmt catchBlock = cloneNodes(_n.getCatchBlock(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		CatchClause r = new CatchClause(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				except.getModifiers(), except.getAnnotations(), except.getTypes(), except.getId(), catchBlock
+				except, catchBlock
 		);
 		r.setComment(comment);
 		return r;

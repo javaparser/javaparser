@@ -3019,7 +3019,7 @@ TryStmt TryStatement():
 	BlockStmt catchBlock;
 	Modifier exceptModifier;
 	Type exceptType;
-	List exceptTypes = new LinkedList();
+	LinkedList<Type> exceptTypes = new LinkedList<Type>();
 	VariableDeclaratorId exceptId;
 	int line;
 	int column;
@@ -3041,7 +3041,17 @@ TryStmt TryStatement():
   			")"
   			 
   			catchBlock = Block()
-  			{ catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, exceptModifier.modifiers, exceptModifier.annotations, exceptTypes, exceptId, catchBlock)); exceptTypes = new LinkedList(); }
+  			{
+  			  Type firstType = exceptTypes.get(0);
+  			  Type lastType = exceptTypes.get(exceptTypes.size() - 1);
+  			  exceptType = new UnionType(firstType.getBeginLine(), firstType.getBeginColumn(), lastType.getEndLine(), lastType.getEndColumn(), exceptTypes);
+
+              except = new Parameter(
+                exceptType.getBeginLine(), exceptType.getBeginColumn(), exceptId.getEndLine(), exceptId.getEndColumn(),
+                exceptModifier.modifiers, exceptModifier.annotations, exceptType, false, exceptId);
+  			  catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, except, catchBlock));
+  			  exceptTypes = new LinkedList();
+  			}
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|

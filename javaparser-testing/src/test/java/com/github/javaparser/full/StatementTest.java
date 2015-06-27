@@ -22,23 +22,30 @@ package com.github.javaparser.full;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
-import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.full.utils.BulkTestClass;
 import com.github.javaparser.full.utils.BulkTestRunner;
+import com.github.javaparser.full.utils.NormalizedJsonWriter;
+import com.github.javaparser.full.utils.TestResources;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 /**
  * @author Didier Villevalois
  */
 @RunWith(BulkTestRunner.class)
-public class TypeTest extends BaseChunkTest<Type> {
+public class StatementTest extends BaseChunkTest<Statement> {
 
     @Override
     public String testResourcesPath() {
-        return "com/github/javaparser/full/types";
+        return "com/github/javaparser/full/statements";
     }
 
     @Override
-    protected Type parse(String content) throws ParseException {
-        return JavaParser.parseType(content);
+    protected Statement parse(String content) throws ParseException {
+        return JavaParser.parseStatement(content);
     }
 }
