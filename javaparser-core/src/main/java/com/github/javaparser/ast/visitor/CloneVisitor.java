@@ -386,21 +386,12 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	}
 
 	@Override
-	public Node visit(ReferenceType _n, Object _arg) {
+	public Node visit(ArrayType _n, Object _arg) {
 		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
-		Type type_ = cloneNodes(_n.getType(), _arg);
-		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
-		List<List<AnnotationExpr>> _arraysAnnotations = null;
-		if(arraysAnnotations != null){
-			_arraysAnnotations = new LinkedList<List<AnnotationExpr>>();
-			for(List<AnnotationExpr> aux: arraysAnnotations){
-				_arraysAnnotations.add(visit(aux, _arg));
-			}
-		}
+		Type type_ = cloneNodes(_n.getComponentType(), _arg);
 
-        ReferenceType r = new ReferenceType(_n.getBeginLine(),
-                _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_,
-                _n.getArrayCount(), ann, _arraysAnnotations);
+		ArrayType r = new ArrayType(_n.getBeginLine(),
+                _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, ann);
         Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
 		return r;

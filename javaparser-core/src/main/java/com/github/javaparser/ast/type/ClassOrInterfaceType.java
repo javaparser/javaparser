@@ -20,7 +20,6 @@
 
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -29,7 +28,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type {
+public final class ClassOrInterfaceType extends ReferenceType {
 
 	private ClassOrInterfaceType scope;
 

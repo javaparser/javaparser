@@ -1,0 +1,13 @@
+{
+  class: com.github.javaparser.ast.type.PrimitiveType,
+  beginLine: 1,
+  beginColumn: 1,
+  endLine: 1,
+  endColumn: 3,
+  orphanComments: [
+  ],
+  data: null,
+  comment: null,
+  annotations: null,
+  type: Int,
+}

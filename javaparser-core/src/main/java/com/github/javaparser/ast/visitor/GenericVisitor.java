@@ -127,7 +127,7 @@ public interface GenericVisitor<R, A> {
 
 	public R visit(PrimitiveType n, A arg);
 
-	public R visit(ReferenceType n, A arg);
+	public R visit(ArrayType n, A arg);
 
 	public R visit(VoidType n, A arg);
 

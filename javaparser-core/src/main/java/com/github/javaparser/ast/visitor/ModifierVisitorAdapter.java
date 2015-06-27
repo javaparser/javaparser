@@ -786,8 +786,15 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		return n;
 	}
 
-	@Override public Node visit(final ReferenceType n, final A arg) {
-		n.setType((Type) n.getType().accept(this, arg));
+	@Override public Node visit(final ArrayType n, final A arg) {
+		n.setComponentType((Type) n.getComponentType().accept(this, arg));
+		final List<AnnotationExpr> annotations = n.getAnnotations();
+		if (annotations != null) {
+			for (int i = 0; i < annotations.size(); i++) {
+				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
+			}
+			removeNulls(annotations);
+		}
 		return n;
 	}
 

@@ -148,7 +148,7 @@ public class ManipulationSteps {
     public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter param = ASTHelper.createParameter(ASTHelper.createReferenceType(typeName, 0), parameterName);
+        Parameter param = ASTHelper.createParameter(ASTHelper.createType(typeName, 0), parameterName);
         param.setVarArgs(true);
         ASTHelper.addParameter(method, param);
     }

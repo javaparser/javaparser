@@ -633,36 +633,13 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return Boolean.TRUE;
 	}
 
-	@Override public Boolean visit(final ReferenceType n1, final Node arg) {
-		final ReferenceType n2 = (ReferenceType) arg;
+	@Override public Boolean visit(final ArrayType n1, final Node arg) {
+		final ArrayType n2 = (ArrayType) arg;
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
-			return Boolean.FALSE;
-		}
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getComponentType(), n2.getComponentType())) {
 			return Boolean.FALSE;
 		}
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
-			return Boolean.FALSE;
-		}
-		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
-		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
-
-		if (n1a !=null && n2a!= null) {
-			if(n1a.size() != n2a.size()){
-				return Boolean.FALSE;
-			}
-			else{
-				int i = 0;
-				for(List<AnnotationExpr> aux: n1a){
-					if(!nodesEquals(aux, n2a.get(i))){
-						return Boolean.FALSE;
-					}
-					i++;
-				}
-			}
-		}
-		else if (n1a != n2a){
 			return Boolean.FALSE;
 		}
 		return Boolean.TRUE;

@@ -55,5 +55,4 @@ public abstract class Type extends Node {
     public void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
     }
-
 }

@@ -1738,18 +1738,35 @@ Type Type():
 
 ReferenceType ReferenceType():
 {
-	Type type;
-	int arrayCount = 0;
-	List annotations = null;
-	List accum= null;
+	ReferenceType type;
 }
 {
-  (
-   type = PrimitiveType() ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )+
-  |
-   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )*
-  )
-  { return new ReferenceType(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type, arrayCount, null, accum); }
+  ( LOOKAHEAD( ( PrimitiveType() | ClassOrInterfaceType() ) ArrayTypeDims() ) type = ArrayType() | type = ClassOrInterfaceType() )
+  { return type; }
+}
+
+ArrayType ArrayType():
+{
+	Type type;
+}
+{
+  ( type = PrimitiveType() | type = ClassOrInterfaceType() ) type = ArrayTypeDims(type)
+  { return (ArrayType) type; }
+}
+
+ArrayType ArrayTypeDims(Type componentType):
+{
+    Type type = componentType;
+	List annotations = null;
+}
+{
+  ( LOOKAHEAD( Annotations() "[" "]" ) annotations = Annotations() "[" "]"
+    {
+      type = new ArrayType(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type, annotations);
+      annotations = null;
+    }
+  )+
+  { return (ArrayType) type; }
 }
 
 ClassOrInterfaceType ClassOrInterfaceType():

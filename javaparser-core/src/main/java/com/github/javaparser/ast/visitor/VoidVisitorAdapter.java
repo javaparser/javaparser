@@ -651,9 +651,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		n.getQualifier().accept(this, arg);
 	}
 
-	@Override public void visit(final ReferenceType n, final A arg) {
+	@Override public void visit(final ArrayType n, final A arg) {
 		visitComment(n.getComment(), arg);
-		n.getType().accept(this, arg);
+		n.getComponentType().accept(this, arg);
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				a.accept(this, arg);
+			}
+		}
 	}
 
 	@Override public void visit(final ReturnStmt n, final A arg) {

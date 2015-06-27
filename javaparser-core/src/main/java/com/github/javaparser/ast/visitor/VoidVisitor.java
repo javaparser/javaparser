@@ -127,7 +127,7 @@ public interface VoidVisitor<A> {
 
 	void visit(PrimitiveType n, A arg);
 
-	void visit(ReferenceType n, A arg);
+	void visit(ArrayType n, A arg);
 
 	void visit(VoidType n, A arg);
 

@@ -36,11 +36,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 
 import java.util.ArrayList;
@@ -219,21 +215,29 @@ public final class ASTHelper {
      *            number of arrays or <code>0</code> if is not a array.
      * @return instanceof {@link ReferenceType}
      */
-    public static ReferenceType createReferenceType(String name, int arrayCount) {
-        return new ReferenceType(new ClassOrInterfaceType(name), arrayCount);
+    public static Type createType(String name, int arrayCount) {
+        Type type = new ClassOrInterfaceType(name);
+        for (int i = 0; i < arrayCount; i++) {
+            type = new ArrayType(type);
+        }
+        return type;
     }
 
     /**
      * Creates a new {@link ReferenceType} for the given primitive type.
      * 
-     * @param type
-     *            primitive type
+     * @param primitive
+     *            the primitive kind
      * @param arrayCount
      *            number of arrays or <code>0</code> if is not a array.
      * @return instanceof {@link ReferenceType}
      */
-    public static ReferenceType createReferenceType(PrimitiveType type, int arrayCount) {
-        return new ReferenceType(type, arrayCount);
+    public static Type createType(Primitive primitive, int arrayCount) {
+        Type type = new PrimitiveType(primitive);
+        for (int i = 0; i < arrayCount; i++) {
+            type = new ArrayType(type);
+        }
+        return type;
     }
 
     /**

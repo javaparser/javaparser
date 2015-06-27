@@ -408,6 +408,16 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 				}
 			}
 		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
+			}
+		}
 		if (n.getTypeArgs() != null) {
 			for (final Type t : n.getTypeArgs()) {
 				{
@@ -1261,11 +1271,21 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	}
 
 	@Override
-	public R visit(final ReferenceType n, final A arg) {
+	public R visit(final ArrayType n, final A arg) {
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getComponentType().accept(this, arg);
 			if (result != null) {
 				return result;
+			}
+		}
+		if (n.getAnnotations() != null) {
+			for (final AnnotationExpr a : n.getAnnotations()) {
+				{
+					R result = a.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
 			}
 		}
 		return null;

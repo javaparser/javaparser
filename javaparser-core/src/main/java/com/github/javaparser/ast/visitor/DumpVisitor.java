@@ -475,29 +475,16 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	@Override public void visit(final ReferenceType n, final Object arg) {
+	@Override public void visit(final ArrayType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		n.getComponentType().accept(this, arg);
 		if (n.getAnnotations() != null) {
 			for (AnnotationExpr ae : n.getAnnotations()) {
 				ae.accept(this, arg);
 				printer.print(" ");
 			}
 		}
-		n.getType().accept(this, arg);
-		List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
-		for (int i = 0; i < n.getArrayCount(); i++) {
-			if (arraysAnnotations != null && i < arraysAnnotations.size()) {
-				List<AnnotationExpr> annotations = arraysAnnotations.get(i);
-				if (annotations != null) {
-					for (AnnotationExpr ae : annotations) {
-						printer.print(" ");
-						ae.accept(this, arg);
-
-					}
-				}
-			}
-			printer.print("[]");
-		}
+		printer.print("[]");
 	}
 
 	@Override public void visit(final WildcardType n, final Object arg) {
