@@ -1778,7 +1778,12 @@ ClassOrInterfaceType ClassOrInterfaceType(List annotations):
 	int column;
 }
 {
-  <IDENTIFIER> {line=token.beginLine; column=token.beginColumn;} { name = token.image; }
+  <IDENTIFIER>
+  {
+    line = annotations == null || annotations.isEmpty() ? token.beginLine : ((Node) annotations.get(0)).getBeginLine();
+    column = annotations == null || annotations.isEmpty() ? token.beginColumn : ((Node) annotations.get(0)).getBeginColumn();
+  }
+  { name = token.image; }
   [ LOOKAHEAD(2) typeArgs = TypeArguments() {typeArgs.remove(0);} ]
   { ret = new ClassOrInterfaceType(line, column, token.endLine, token.endColumn, annotations, null, name, typeArgs); }
   (
@@ -1829,7 +1834,11 @@ WildcardType Wildcard(List annotations):
 	List boundAnnotations = null;
 }
 {
-   "?" {line=token.beginLine; column=token.beginColumn;}
+   "?"
+  {
+    line = annotations == null || annotations.isEmpty() ? token.beginLine : ((Node) annotations.get(0)).getBeginLine();
+    column = annotations == null || annotations.isEmpty() ? token.beginColumn : ((Node) annotations.get(0)).getBeginColumn();
+  }
    [
 		"extends" boundAnnotations = Annotations() ext = ReferenceType(boundAnnotations)
 	|
@@ -1842,27 +1851,31 @@ WildcardType Wildcard(List annotations):
 
 PrimitiveType PrimitiveType(List annotations):
 {
-	PrimitiveType ret;
+	PrimitiveType.Primitive primitive;
 }
 {
-(
-  "boolean" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, annotations, PrimitiveType.Primitive.Boolean); }
-|
-  "char" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, annotations, PrimitiveType.Primitive.Char); }
-|
-  "byte" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, annotations, PrimitiveType.Primitive.Byte); }
-|
-  "short" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, annotations, PrimitiveType.Primitive.Short); }
-|
-  "int" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, annotations, PrimitiveType.Primitive.Int); }
-|
-  "long" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, annotations, PrimitiveType.Primitive.Long); }
-|
-  "float" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, annotations, PrimitiveType.Primitive.Float); }
-|
-  "double" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, annotations, PrimitiveType.Primitive.Double); }
-)
-{ return ret; }
+  (
+    "boolean" { primitive = PrimitiveType.Primitive.Boolean; }
+  |
+    "char" { primitive = PrimitiveType.Primitive.Char; }
+  |
+    "byte" { primitive = PrimitiveType.Primitive.Byte; }
+  |
+    "short" { primitive = PrimitiveType.Primitive.Short; }
+  |
+    "int" { primitive = PrimitiveType.Primitive.Int; }
+  |
+    "long" { primitive = PrimitiveType.Primitive.Long; }
+  |
+    "float" { primitive = PrimitiveType.Primitive.Float; }
+  |
+    "double" { primitive = PrimitiveType.Primitive.Double; }
+  )
+  {
+    int line = annotations == null || annotations.isEmpty() ? token.beginLine : ((Node) annotations.get(0)).getBeginLine();
+    int column = annotations == null || annotations.isEmpty() ? token.beginColumn : ((Node) annotations.get(0)).getBeginColumn();
+  }
+  { return new PrimitiveType(line, column, token.endLine, token.endColumn, annotations, primitive); }
 }
 
 Type ResultType():

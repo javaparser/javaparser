@@ -15,7 +15,7 @@
     {
       class: com.github.javaparser.ast.type.WildcardType,
       beginLine: 1,
-      beginColumn: 10,
+      beginColumn: 4,
       endLine: 1,
       endColumn: 27,
       orphanComments: [
@@ -50,7 +50,7 @@
       ext: {
         class: com.github.javaparser.ast.type.ClassOrInterfaceType,
         beginLine: 1,
-        beginColumn: 26,
+        beginColumn: 20,
         endLine: 1,
         endColumn: 27,
         orphanComments: [
@@ -103,7 +103,7 @@
       sup: {
         class: com.github.javaparser.ast.type.ClassOrInterfaceType,
         beginLine: 1,
-        beginColumn: 44,
+        beginColumn: 38,
         endLine: 1,
         endColumn: 45,
         orphanComments: [

@@ -1,7 +1,7 @@
 {
   class: com.github.javaparser.ast.type.PrimitiveType,
   beginLine: 1,
-  beginColumn: 8,
+  beginColumn: 1,
   endLine: 1,
   endColumn: 10,
   orphanComments: [
