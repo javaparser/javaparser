@@ -1,0 +1,1 @@
+T1<@Ann1 ? extends @Ann2 T2, ? super @Ann3 T3>

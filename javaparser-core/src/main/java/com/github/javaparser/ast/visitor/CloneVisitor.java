@@ -364,10 +364,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		ClassOrInterfaceType scope = cloneNodes(_n.getScope(), _arg);
 		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
+		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
 
 		ClassOrInterfaceType r = new ClassOrInterfaceType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				scope, _n.getName(), typeArgs
+				ann, scope, _n.getName(), typeArgs
 		);
 		r.setComment(comment);
 		return r;
@@ -376,10 +377,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(PrimitiveType _n, Object _arg) {
 		Comment comment = cloneNodes(_n.getComment(), _arg);
+		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
 
 		PrimitiveType r = new PrimitiveType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				_n.getType()
+				ann, _n.getType()
 		);
 		r.setComment(comment);
 		return r;
@@ -408,13 +410,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(WildcardType _n, Object _arg) {
+		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
 		ReferenceType ext = cloneNodes(_n.getExtends(), _arg);
 		ReferenceType sup = cloneNodes(_n.getSuper(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		WildcardType r = new WildcardType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				ext, sup
+				ann, ext, sup
 		);
 		r.setComment(comment);
 		return r;

@@ -1,0 +1,37 @@
+{
+  class: com.github.javaparser.ast.type.PrimitiveType,
+  beginLine: 1,
+  beginColumn: 8,
+  endLine: 1,
+  endColumn: 10,
+  orphanComments: [
+  ],
+  data: null,
+  comment: null,
+  annotations: [
+    {
+      class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
+      beginLine: 1,
+      beginColumn: 1,
+      endLine: 1,
+      endColumn: 6,
+      orphanComments: [
+      ],
+      data: null,
+      comment: null,
+      name: {
+        class: com.github.javaparser.ast.expr.NameExpr,
+        beginLine: 1,
+        beginColumn: 2,
+        endLine: 1,
+        endColumn: 6,
+        orphanComments: [
+        ],
+        data: null,
+        comment: null,
+        name: Meter,
+      },
+    },
+  ],
+  type: Int,
+}

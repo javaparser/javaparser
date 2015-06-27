@@ -35,8 +35,8 @@ public abstract class Type extends Node {
     public Type() {
     }
 
-    public Type(List<AnnotationExpr> annotation){
-        this.annotations = annotation;
+    public Type(List<AnnotationExpr> annotations){
+        this.annotations = annotations;
     }
 
     public Type(int beginLine, int beginColumn, int endLine, int endColumn) {

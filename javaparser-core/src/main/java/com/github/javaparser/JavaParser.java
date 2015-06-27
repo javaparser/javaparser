@@ -275,7 +275,9 @@ public final class JavaParser {
      */
     public static Type parseType(final String type) throws ParseException {
         StringReader sr = new StringReader(type);
-        Type t = new ASTParser(sr).Type();
+        ASTParser parser = new ASTParser(sr);
+        List annotations = parser.Annotations();
+        Type t = parser.Type(annotations);
         sr.close();
         return t;
     }

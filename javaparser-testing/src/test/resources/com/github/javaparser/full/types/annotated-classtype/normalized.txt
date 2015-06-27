@@ -1,0 +1,39 @@
+{
+  class: com.github.javaparser.ast.type.ClassOrInterfaceType,
+  beginLine: 1,
+  beginColumn: 7,
+  endLine: 1,
+  endColumn: 8,
+  orphanComments: [
+  ],
+  data: null,
+  comment: null,
+  annotations: [
+    {
+      class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
+      beginLine: 1,
+      beginColumn: 1,
+      endLine: 1,
+      endColumn: 5,
+      orphanComments: [
+      ],
+      data: null,
+      comment: null,
+      name: {
+        class: com.github.javaparser.ast.expr.NameExpr,
+        beginLine: 1,
+        beginColumn: 2,
+        endLine: 1,
+        endColumn: 5,
+        orphanComments: [
+        ],
+        data: null,
+        comment: null,
+        name: Ann1,
+      },
+    },
+  ],
+  scope: null,
+  name: T1,
+  typeArgs: null,
+}

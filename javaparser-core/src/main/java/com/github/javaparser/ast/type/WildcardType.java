@@ -20,8 +20,11 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -45,8 +48,8 @@ public final class WildcardType extends Type {
 	}
 
 	public WildcardType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final ReferenceType ext, final ReferenceType sup) {
-		super(beginLine, beginColumn, endLine, endColumn);
+			List<AnnotationExpr> annotations, final ReferenceType ext, final ReferenceType sup) {
+		super(beginLine, beginColumn, endLine, endColumn, annotations);
 		setExtends(ext);
 		setSuper(sup);
 	}

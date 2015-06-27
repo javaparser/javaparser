@@ -20,6 +20,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -49,8 +50,8 @@ public final class ClassOrInterfaceType extends ReferenceType {
 	}
 
 	public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
-		super(beginLine, beginColumn, endLine, endColumn);
+			List<AnnotationExpr> annotations, final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
+		super(beginLine, beginColumn, endLine, endColumn, annotations);
 		setScope(scope);
 		setName(name);
 		setTypeArgs(typeArgs);

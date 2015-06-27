@@ -1,0 +1,118 @@
+{
+  class: com.github.javaparser.ast.type.ClassOrInterfaceType,
+  beginLine: 1,
+  beginColumn: 7,
+  endLine: 1,
+  endColumn: 28,
+  orphanComments: [
+  ],
+  data: null,
+  comment: null,
+  annotations: [
+    {
+      class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
+      beginLine: 1,
+      beginColumn: 1,
+      endLine: 1,
+      endColumn: 5,
+      orphanComments: [
+      ],
+      data: null,
+      comment: null,
+      name: {
+        class: com.github.javaparser.ast.expr.NameExpr,
+        beginLine: 1,
+        beginColumn: 2,
+        endLine: 1,
+        endColumn: 5,
+        orphanComments: [
+        ],
+        data: null,
+        comment: null,
+        name: Ann1,
+      },
+    },
+  ],
+  scope: null,
+  name: T1,
+  typeArgs: [
+    {
+      class: com.github.javaparser.ast.type.ClassOrInterfaceType,
+      beginLine: 1,
+      beginColumn: 16,
+      endLine: 1,
+      endColumn: 17,
+      orphanComments: [
+      ],
+      data: null,
+      comment: null,
+      annotations: [
+        {
+          class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
+          beginLine: 1,
+          beginColumn: 10,
+          endLine: 1,
+          endColumn: 14,
+          orphanComments: [
+          ],
+          data: null,
+          comment: null,
+          name: {
+            class: com.github.javaparser.ast.expr.NameExpr,
+            beginLine: 1,
+            beginColumn: 11,
+            endLine: 1,
+            endColumn: 14,
+            orphanComments: [
+            ],
+            data: null,
+            comment: null,
+            name: Ann2,
+          },
+        },
+      ],
+      scope: null,
+      name: T2,
+      typeArgs: null,
+    },
+    {
+      class: com.github.javaparser.ast.type.ClassOrInterfaceType,
+      beginLine: 1,
+      beginColumn: 26,
+      endLine: 1,
+      endColumn: 27,
+      orphanComments: [
+      ],
+      data: null,
+      comment: null,
+      annotations: [
+        {
+          class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
+          beginLine: 1,
+          beginColumn: 20,
+          endLine: 1,
+          endColumn: 24,
+          orphanComments: [
+          ],
+          data: null,
+          comment: null,
+          name: {
+            class: com.github.javaparser.ast.expr.NameExpr,
+            beginLine: 1,
+            beginColumn: 21,
+            endLine: 1,
+            endColumn: 24,
+            orphanComments: [
+            ],
+            data: null,
+            comment: null,
+            name: Ann3,
+          },
+        },
+      ],
+      scope: null,
+      name: T3,
+      typeArgs: null,
+    },
+  ],
+}

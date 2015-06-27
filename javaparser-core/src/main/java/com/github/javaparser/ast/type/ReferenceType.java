@@ -33,8 +33,8 @@ public abstract class ReferenceType extends Type {
         super();
     }
 
-    public ReferenceType(List<AnnotationExpr> annotation) {
-        super(annotation);
+    public ReferenceType(List<AnnotationExpr> annotations) {
+        super(annotations);
     }
 
     public ReferenceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
