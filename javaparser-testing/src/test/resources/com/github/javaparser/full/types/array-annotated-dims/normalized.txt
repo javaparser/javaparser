@@ -3,7 +3,7 @@
   beginLine: 1,
   beginColumn: 1,
   endLine: 1,
-  endColumn: 52,
+  endColumn: 27,
   orphanComments: [
   ],
   data: null,
@@ -12,9 +12,9 @@
     {
       class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
       beginLine: 1,
-      beginColumn: 32,
+      beginColumn: 11,
       endLine: 1,
-      endColumn: 39,
+      endColumn: 12,
       orphanComments: [
       ],
       data: null,
@@ -22,37 +22,14 @@
       name: {
         class: com.github.javaparser.ast.expr.NameExpr,
         beginLine: 1,
-        beginColumn: 33,
+        beginColumn: 12,
         endLine: 1,
-        endColumn: 39,
+        endColumn: 12,
         orphanComments: [
         ],
         data: null,
         comment: null,
-        name: NotNull,
-      },
-    },
-    {
-      class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
-      beginLine: 1,
-      beginColumn: 41,
-      endLine: 1,
-      endColumn: 49,
-      orphanComments: [
-      ],
-      data: null,
-      comment: null,
-      name: {
-        class: com.github.javaparser.ast.expr.NameExpr,
-        beginLine: 1,
-        beginColumn: 42,
-        endLine: 1,
-        endColumn: 49,
-        orphanComments: [
-        ],
-        data: null,
-        comment: null,
-        name: NonEmpty,
+        name: A,
       },
     },
   ],
@@ -61,7 +38,7 @@
     beginLine: 1,
     beginColumn: 1,
     endLine: 1,
-    endColumn: 30,
+    endColumn: 27,
     orphanComments: [
     ],
     data: null,
@@ -70,9 +47,9 @@
       {
         class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
         beginLine: 1,
-        beginColumn: 20,
+        beginColumn: 17,
         endLine: 1,
-        endColumn: 27,
+        endColumn: 18,
         orphanComments: [
         ],
         data: null,
@@ -80,14 +57,14 @@
         name: {
           class: com.github.javaparser.ast.expr.NameExpr,
           beginLine: 1,
-          beginColumn: 21,
+          beginColumn: 18,
           endLine: 1,
-          endColumn: 27,
+          endColumn: 18,
           orphanComments: [
           ],
           data: null,
           comment: null,
-          name: NotNull,
+          name: B,
         },
       },
     ],
@@ -96,7 +73,7 @@
       beginLine: 1,
       beginColumn: 1,
       endLine: 1,
-      endColumn: 18,
+      endColumn: 27,
       orphanComments: [
       ],
       data: null,
@@ -105,9 +82,9 @@
         {
           class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
           beginLine: 1,
-          beginColumn: 8,
+          beginColumn: 23,
           endLine: 1,
-          endColumn: 15,
+          endColumn: 24,
           orphanComments: [
           ],
           data: null,
@@ -115,14 +92,14 @@
           name: {
             class: com.github.javaparser.ast.expr.NameExpr,
             beginLine: 1,
-            beginColumn: 9,
+            beginColumn: 24,
             endLine: 1,
-            endColumn: 15,
+            endColumn: 24,
             orphanComments: [
             ],
             data: null,
             comment: null,
-            name: NotNull,
+            name: C,
           },
         },
       ],
@@ -131,12 +108,36 @@
         beginLine: 1,
         beginColumn: 1,
         endLine: 1,
-        endColumn: 6,
+        endColumn: 9,
         orphanComments: [
         ],
         data: null,
         comment: null,
-        annotations: null,
+        annotations: [
+          {
+            class: com.github.javaparser.ast.expr.MarkerAnnotationExpr,
+            beginLine: 1,
+            beginColumn: 1,
+            endLine: 1,
+            endColumn: 2,
+            orphanComments: [
+            ],
+            data: null,
+            comment: null,
+            name: {
+              class: com.github.javaparser.ast.expr.NameExpr,
+              beginLine: 1,
+              beginColumn: 2,
+              endLine: 1,
+              endColumn: 2,
+              orphanComments: [
+              ],
+              data: null,
+              comment: null,
+              name: D,
+            },
+          },
+        ],
         scope: null,
         name: String,
         typeArgs: null,

@@ -1756,17 +1756,12 @@ ArrayType ArrayType(List annotations):
 
 ArrayType ArrayTypeDims(Type componentType):
 {
-    Type type = componentType;
+    Type type = null;
 	List annotations = null;
 }
 {
-  ( LOOKAHEAD( Annotations() "[" "]" ) annotations = Annotations() "[" "]"
-    {
-      type = new ArrayType(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type, annotations);
-      annotations = null;
-    }
-  )+
-  { return (ArrayType) type; }
+  annotations = Annotations() "[" "]" ( LOOKAHEAD( Annotations() "[" "]" ) type = ArrayTypeDims(componentType) )?
+  { return new ArrayType(componentType.getBeginLine(), componentType.getBeginColumn(), token.endLine, token.endColumn, type == null ? componentType : type, annotations); }
 }
 
 ClassOrInterfaceType ClassOrInterfaceType(List annotations):

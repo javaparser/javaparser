@@ -14,7 +14,7 @@
     beginLine: 1,
     beginColumn: 1,
     endLine: 1,
-    endColumn: 10,
+    endColumn: 12,
     orphanComments: [
     ],
     data: null,
@@ -25,7 +25,7 @@
       beginLine: 1,
       beginColumn: 1,
       endLine: 1,
-      endColumn: 8,
+      endColumn: 12,
       orphanComments: [
       ],
       data: null,

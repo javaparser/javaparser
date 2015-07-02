@@ -14,7 +14,7 @@
     beginLine: 1,
     beginColumn: 1,
     endLine: 1,
-    endColumn: 5,
+    endColumn: 7,
     orphanComments: [
     ],
     data: null,

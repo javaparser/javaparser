@@ -1,1 +1,1 @@
-String @NotNull [] @NotNull [] @NotNull @NonEmpty []
+@D String @A [] @B [] @C []
