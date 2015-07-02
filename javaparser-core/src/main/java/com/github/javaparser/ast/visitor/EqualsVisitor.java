@@ -20,52 +20,13 @@
 
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BaseParameter;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
 import java.util.Iterator;
@@ -537,26 +498,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodeEquals(n1.getType(), n2.getType())) {
 			return Boolean.FALSE;
 		}
-		return visit((BaseParameter) n1, arg);
-	}
-	
-	@Override public Boolean visit(MultiTypeParameter n1, Node arg) {
-		MultiTypeParameter n2 = (MultiTypeParameter) arg;
-		if (n1.getTypes().size() != n2.getTypes().size()) {
-			return Boolean.FALSE;
-		}
-		Iterator<Type> n1types = n1.getTypes().iterator();
-		Iterator<Type> n2types = n2.getTypes().iterator();
-		while (n1types.hasNext() && n2types.hasNext()) {
-			if (!nodeEquals(n1types.next(), n2types.next())) {
-				return Boolean.FALSE;
-			}
-		}
-		return visit((BaseParameter) n1, arg);
-	}
-
-	protected Boolean visit(final BaseParameter n1, final Node arg) {
-		final BaseParameter n2 = (BaseParameter) arg;
 
 		if (n1.getModifiers() != n2.getModifiers()) {
 			return Boolean.FALSE;
@@ -572,7 +513,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		return Boolean.TRUE;
 	}
-	
+
 	@Override public Boolean visit(final EmptyMemberDeclaration n1, final Node arg) {
 		return Boolean.TRUE;
 	}
@@ -633,36 +574,13 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return Boolean.TRUE;
 	}
 
-	@Override public Boolean visit(final ReferenceType n1, final Node arg) {
-		final ReferenceType n2 = (ReferenceType) arg;
+	@Override public Boolean visit(final ArrayType n1, final Node arg) {
+		final ArrayType n2 = (ArrayType) arg;
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
-			return Boolean.FALSE;
-		}
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getComponentType(), n2.getComponentType())) {
 			return Boolean.FALSE;
 		}
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
-			return Boolean.FALSE;
-		}
-		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
-		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
-
-		if (n1a !=null && n2a!= null) {
-			if(n1a.size() != n2a.size()){
-				return Boolean.FALSE;
-			}
-			else{
-				int i = 0;
-				for(List<AnnotationExpr> aux: n1a){
-					if(!nodesEquals(aux, n2a.get(i))){
-						return Boolean.FALSE;
-					}
-					i++;
-				}
-			}
-		}
-		else if (n1a != n2a){
 			return Boolean.FALSE;
 		}
 		return Boolean.TRUE;
@@ -685,6 +603,42 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		if (!nodeEquals(n1.getSuper(), n2.getSuper())) {
 			return Boolean.FALSE;
+		}
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
+	}
+
+	@Override public Boolean visit(UnionType n1, Node arg) {
+		UnionType n2 = (UnionType) arg;
+		if (n1.getTypes().size() != n2.getTypes().size()) {
+			return Boolean.FALSE;
+		}
+		Iterator<Type> n1types = n1.getTypes().iterator();
+		Iterator<Type> n2types = n2.getTypes().iterator();
+		while (n1types.hasNext() && n2types.hasNext()) {
+			if (!nodeEquals(n1types.next(), n2types.next())) {
+				return Boolean.FALSE;
+			}
+		}
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
+	}
+
+	@Override public Boolean visit(IntersectionType n1, Node arg) {
+		UnionType n2 = (UnionType) arg;
+		if (n1.getTypes().size() != n2.getTypes().size()) {
+			return Boolean.FALSE;
+		}
+		Iterator<Type> n1types = n1.getTypes().iterator();
+		Iterator<Type> n2types = n2.getTypes().iterator();
+		while (n1types.hasNext() && n2types.hasNext()) {
+			if (!nodeEquals(n1types.next(), n2types.next())) {
+				return Boolean.FALSE;
+			}
 		}
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return Boolean.FALSE;

@@ -37,6 +37,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.Type;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -260,6 +261,25 @@ public final class JavaParser {
         Expression e = new ASTParser(sr).Expression();
         sr.close();
         return e;
+    }
+
+    /**
+     * Parses the Java type contained in a {@link String} and returns a
+     * {@link Type} that represents it.
+     *
+     * @param type
+     *            {@link String} containing Java expression
+     * @return Type representing the Java type
+     * @throws ParseException
+     *             if the source code has parser errors
+     */
+    public static Type parseType(final String type) throws ParseException {
+        StringReader sr = new StringReader(type);
+        ASTParser parser = new ASTParser(sr);
+        List annotations = parser.Annotations();
+        Type t = parser.Type(annotations);
+        sr.close();
+        return t;
     }
 
     /**

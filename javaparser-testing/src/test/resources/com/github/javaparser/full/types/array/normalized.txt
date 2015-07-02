@@ -1,0 +1,51 @@
+{
+  class: com.github.javaparser.ast.type.ArrayType,
+  beginLine: 1,
+  beginColumn: 1,
+  endLine: 1,
+  endColumn: 12,
+  orphanComments: [
+  ],
+  data: null,
+  comment: null,
+  annotations: null,
+  componentType: {
+    class: com.github.javaparser.ast.type.ArrayType,
+    beginLine: 1,
+    beginColumn: 1,
+    endLine: 1,
+    endColumn: 12,
+    orphanComments: [
+    ],
+    data: null,
+    comment: null,
+    annotations: null,
+    componentType: {
+      class: com.github.javaparser.ast.type.ArrayType,
+      beginLine: 1,
+      beginColumn: 1,
+      endLine: 1,
+      endColumn: 12,
+      orphanComments: [
+      ],
+      data: null,
+      comment: null,
+      annotations: null,
+      componentType: {
+        class: com.github.javaparser.ast.type.ClassOrInterfaceType,
+        beginLine: 1,
+        beginColumn: 1,
+        endLine: 1,
+        endColumn: 6,
+        orphanComments: [
+        ],
+        data: null,
+        comment: null,
+        annotations: null,
+        scope: null,
+        name: String,
+        typeArgs: null,
+      },
+    },
+  },
+}

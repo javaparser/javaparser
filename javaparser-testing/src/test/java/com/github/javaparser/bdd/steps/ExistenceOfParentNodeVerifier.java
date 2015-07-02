@@ -340,7 +340,7 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(MultiTypeParameter n, Void arg) {
+        public void visit(UnionType n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
         }
@@ -394,7 +394,7 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(ReferenceType n, Void arg) {
+        public void visit(ArrayType n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
         }

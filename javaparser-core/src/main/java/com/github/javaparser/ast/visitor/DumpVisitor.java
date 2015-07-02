@@ -20,63 +20,21 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.PositionUtils.sortByBeginPosition;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.ModifierSet;
-import com.github.javaparser.ast.body.MultiTypeParameter;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.github.javaparser.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
 
 /**
@@ -475,29 +433,16 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	@Override public void visit(final ReferenceType n, final Object arg) {
+	@Override public void visit(final ArrayType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		n.getComponentType().accept(this, arg);
 		if (n.getAnnotations() != null) {
 			for (AnnotationExpr ae : n.getAnnotations()) {
 				ae.accept(this, arg);
 				printer.print(" ");
 			}
 		}
-		n.getType().accept(this, arg);
-		List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
-		for (int i = 0; i < n.getArrayCount(); i++) {
-			if (arraysAnnotations != null && i < arraysAnnotations.size()) {
-				List<AnnotationExpr> annotations = arraysAnnotations.get(i);
-				if (annotations != null) {
-					for (AnnotationExpr ae : annotations) {
-						printer.print(" ");
-						ae.accept(this, arg);
-
-					}
-				}
-			}
-			printer.print("[]");
-		}
+		printer.print("[]");
 	}
 
 	@Override public void visit(final WildcardType n, final Object arg) {
@@ -516,6 +461,24 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		if (n.getSuper() != null) {
 			printer.print(" super ");
 			n.getSuper().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(UnionType n, Object arg) {
+		Iterator<Type> types = n.getTypes().iterator();
+		types.next().accept(this, arg);
+		while (types.hasNext()) {
+			printer.print(" | ");
+			types.next().accept(this, arg);
+		}
+	}
+
+	@Override public void visit(IntersectionType n, Object arg) {
+		Iterator<Type> types = n.getTypes().iterator();
+		types.next().accept(this, arg);
+		while (types.hasNext()) {
+			printer.print(" & ");
+			types.next().accept(this, arg);
 		}
 	}
 
@@ -1052,21 +1015,6 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(" ");
 		n.getId().accept(this, arg);
 	}
-	
-    @Override public void visit(MultiTypeParameter n, Object arg) {
-        printAnnotations(n.getAnnotations(), arg);
-        printModifiers(n.getModifiers());
-
-        Iterator<Type> types = n.getTypes().iterator();
-        types.next().accept(this, arg);
-        while (types.hasNext()) {
-        	printer.print(" | ");
-        	types.next().accept(this, arg);
-        }
-        
-        printer.print(" ");
-        n.getId().accept(this, arg);
-    }
 
 	@Override public void visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);

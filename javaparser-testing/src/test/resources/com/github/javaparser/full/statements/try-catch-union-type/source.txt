@@ -1,0 +1,3 @@
+try {
+} catch (Exception1 | Exception2 ex) {
+}
