@@ -20,15 +20,14 @@
 
 package com.github.javaparser.ast;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.visitor.DumpVisitor;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.visitor.*;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -39,7 +38,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * 
  * @author Julio Vilmar Gesser
  */
-public abstract class Node {
+public abstract class Node implements Cloneable {
 
 	private int beginLine;
 
@@ -248,7 +247,12 @@ public abstract class Node {
         return EqualsVisitor.equals(this, (Node) obj);
 	}
 
-	public Node getParentNode() {
+    @Override
+    public Node clone() {
+        return this.accept(new CloneVisitor(), null);
+    }
+
+    public Node getParentNode() {
 		return parentNode;
 	}
 

@@ -124,3 +124,21 @@ Then method 1 in class 1 has 2 parameters
 Then method 2 in class 1 has 1 parameter
 Then method 1 in class 1 parameter 2 is type int called "value"
 Then method 2 in class 1 parameter 1 is type int called "value"
+
+
+Scenario: Clone a compilation unit
+
+Given a CompilationUnit
+When the following source is parsed:
+package japa.parser.ast.manipulation;
+
+public class UpdateMethod {
+
+    public void changeToUpperCase(String param){}
+
+    public void anotherMethodToChange(){}
+}
+When the compilation unit is cloned
+Then method 1 in class 1 has the name "changeToUpperCase"
+Then method 1 in class 1 has 1 parameters
+Then method 2 in class 1 has 0 parameter
