@@ -75,4 +75,8 @@ The project now supports parsing Java 1.8 and aims to continue support for featu
 
 ## License
 
-Offered under the GNU Lesser General Public License: [COPYING.LESSER](https://github.com/javaparser/javaparser/blob/master/COPYING.LESSER), [COPYING](https://github.com/javaparser/javaparser/blob/master/COPYING).
+JavaParser is available either under the terms of the LGPL License or the Apacha License. You as the user are entitled to choose the terms under which adopt JavaParser.
+
+For details about the LGPL License please refer to [LICENSE.LGPL](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.LGPL).
+
+For details about the Apache License please refer to [LICENSE.APACHE](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.APACHE).
