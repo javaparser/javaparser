@@ -39,14 +39,14 @@ public class Navigator {
                 MethodDeclaration md = (MethodDeclaration)bd;
                 if (md.getName().equals(name)){
                     if (found != null) {
-                        throw new IllegalStateException("Ambiguous name");
+                        throw new IllegalStateException("Ambiguous getName");
                     }
                     found = md;
                 }
             }
         }
         if (found == null) {
-            throw new IllegalStateException("No method with given name");
+            throw new IllegalStateException("No method with given getName");
         }
         return found;
     }

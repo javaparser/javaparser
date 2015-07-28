@@ -7,7 +7,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import org.junit.Test;
 
@@ -36,6 +35,9 @@ public class ContextTest {
         SymbolSolver symbolSolver = new SymbolSolver();
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
+        assertEquals(true, symbolReference.isSolved());
+        assertEquals("i", symbolReference.getCorrespondingDeclaration().getName());
+        assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
     }
 
 }

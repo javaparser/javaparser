@@ -34,7 +34,11 @@ public class JavaParserFactory {
     }
 
     public static SymbolDeclarator getSymbolDeclarator(Node node){
-        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+        if (node instanceof FieldDeclaration) {
+            return new FieldSymbolDeclarator((FieldDeclaration)node);
+        } else {
+            throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+        }
     }
 
 }

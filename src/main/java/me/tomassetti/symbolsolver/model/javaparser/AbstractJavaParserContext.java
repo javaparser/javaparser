@@ -2,11 +2,7 @@ package me.tomassetti.symbolsolver.model.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.*;
-
-import java.util.List;
 
 /**
  * Created by federico on 28/07/15.
@@ -21,7 +17,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     protected final SymbolReference solveWith(SymbolDeclarator symbolDeclarator, String name){
         for (SymbolDeclaration decl : symbolDeclarator.getSymbolDeclarations()){
-            if (decl.name().equals(name)){
+            if (decl.getName().equals(name)){
                 return SymbolReference.solved(decl);
             }
         }

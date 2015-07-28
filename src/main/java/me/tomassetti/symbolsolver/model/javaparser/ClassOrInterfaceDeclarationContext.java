@@ -1,10 +1,9 @@
 package me.tomassetti.symbolsolver.model.javaparser;
 
+import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import me.tomassetti.symbolsolver.model.MethodReference;
-import me.tomassetti.symbolsolver.model.SymbolReference;
-import me.tomassetti.symbolsolver.model.TypeReference;
-import me.tomassetti.symbolsolver.model.TypeSolver;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import me.tomassetti.symbolsolver.model.*;
 
 import java.util.List;
 
@@ -20,9 +19,19 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     @Override
     public SymbolReference solveSymbol(String name, TypeSolver typeSolver) {
         // first among declared fields
+        for (BodyDeclaration member : wrappedNode.getMembers()){
+            if (member instanceof FieldDeclaration) {
+                SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member);
+                SymbolReference ref = solveWith(symbolDeclarator, name);
+                if (ref.isSolved()) {
+                    return ref;
+                }
+            }
+        }
         // then among inherited fields
+        // TODO
         // then to parent
-        throw new UnsupportedOperationException();
+        return getParent().solveSymbol(name, typeSolver);
     }
 
     @Override
