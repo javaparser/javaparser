@@ -49,4 +49,8 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public SymbolReference<ClassDeclaration> solveType(String name, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
 }

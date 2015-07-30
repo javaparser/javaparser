@@ -25,14 +25,30 @@ public class ContextTest {
     }
 
     @Test
-    public void firstTest() throws ParseException {
+    public void resolveDeclaredFieldReference() throws ParseException {
         CompilationUnit cu = parseSample("ReferencesToField");
         ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method1");
         ExpressionStmt stmt = (ExpressionStmt)method1.getBody().getStmts().get(0);
         AssignExpr assignExpr = (AssignExpr)stmt.getExpression();
 
-        SymbolSolver symbolSolver = new SymbolSolver();
+        SymbolSolver symbolSolver = new SymbolSolver(new DummyTypeSolver());
+        SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
+
+        assertEquals(true, symbolReference.isSolved());
+        assertEquals("i", symbolReference.getCorrespondingDeclaration().getName());
+        assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
+    }
+
+    @Test
+    public void resolveInheritedFieldReference() throws ParseException {
+        CompilationUnit cu = parseSample("ReferencesToField");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
+        MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method2");
+        ExpressionStmt stmt = (ExpressionStmt)method1.getBody().getStmts().get(0);
+        AssignExpr assignExpr = (AssignExpr)stmt.getExpression();
+
+        SymbolSolver symbolSolver = new SymbolSolver(new DummyTypeSolver());
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertEquals(true, symbolReference.isSolved());

@@ -21,7 +21,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 return SymbolReference.solved(decl);
             }
         }
-        return SymbolReference.unsolved();
+        return SymbolReference.unsolved(SymbolDeclaration.class);
     }
 
     @Override

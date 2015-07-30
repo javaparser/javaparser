@@ -5,23 +5,23 @@ import java.util.Optional;
 /**
  * Created by federico on 28/07/15.
  */
-public class SymbolReference {
+public class SymbolReference<S extends SymbolDeclaration> {
 
-    private Optional<SymbolDeclaration> correspondingDeclaration;
+    private Optional<S> correspondingDeclaration;
 
-    public static SymbolReference solved(SymbolDeclaration symbolDeclaration){
+    public static <S extends SymbolDeclaration> SymbolReference<S> solved(S symbolDeclaration){
         return new SymbolReference(Optional.of(symbolDeclaration));
     }
 
-    public static SymbolReference unsolved(){
-        return new SymbolReference(Optional.<SymbolDeclaration>empty());
+    public static <S extends SymbolDeclaration> SymbolReference<S> unsolved(Class<S> clazz){
+        return new SymbolReference(Optional.<S>empty());
     }
 
-    private SymbolReference(Optional<SymbolDeclaration> correspondingDeclaration){
+    private SymbolReference(Optional<S> correspondingDeclaration){
         this.correspondingDeclaration = correspondingDeclaration;
     }
 
-    public SymbolDeclaration getCorrespondingDeclaration(){
+    public S getCorrespondingDeclaration(){
         if (!isSolved()) {
             throw new IllegalStateException();
         }

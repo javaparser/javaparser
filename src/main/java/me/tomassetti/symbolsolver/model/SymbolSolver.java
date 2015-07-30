@@ -10,11 +10,9 @@ public class SymbolSolver {
 
     private TypeSolver typeSolver;
 
-    public SymbolSolver() {
-
-    }
-
     public SymbolSolver(TypeSolver typeSolver){
+        if (typeSolver == null) throw new IllegalArgumentException();
+
         this.typeSolver = typeSolver;
     }
 

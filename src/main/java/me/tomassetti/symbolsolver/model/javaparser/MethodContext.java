@@ -33,6 +33,11 @@ public class MethodContext extends AbstractJavaParserContext<com.github.javapars
     }
 
     @Override
+    public SymbolReference<ClassDeclaration> solveType(String name, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public MethodReference solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
