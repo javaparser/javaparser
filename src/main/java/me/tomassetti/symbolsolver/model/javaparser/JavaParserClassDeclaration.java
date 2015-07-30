@@ -29,4 +29,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     public boolean isField() {
         return false;
     }
+
+    @Override
+    public boolean isParameter() {
+        return false;
+    }
 }

@@ -1,10 +1,12 @@
 package me.tomassetti.symbolsolver.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.NameExpr;
 
 import java.util.Optional;
 
@@ -51,4 +53,19 @@ public class Navigator {
         return found;
     }
 
+    public static NameExpr findNameExpression(Node node, String name) {
+        if (node instanceof NameExpr) {
+            NameExpr nameExpr = (NameExpr) node;
+            if (nameExpr.getName().equals(name)) {
+                return nameExpr;
+            }
+        }
+        for (Node child : node.getChildrenNodes()) {
+            NameExpr res = findNameExpression(child, name);
+            if (res != null) {
+                return res;
+            }
+        }
+        return null;
+    }
 }

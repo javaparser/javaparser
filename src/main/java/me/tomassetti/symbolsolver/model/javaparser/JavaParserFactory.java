@@ -35,7 +35,9 @@ public class JavaParserFactory {
 
     public static SymbolDeclarator getSymbolDeclarator(Node node){
         if (node instanceof FieldDeclaration) {
-            return new FieldSymbolDeclarator((FieldDeclaration)node);
+            return new FieldSymbolDeclarator((FieldDeclaration) node);
+        } else if (node instanceof Parameter) {
+            return new ParameterSymbolDeclarator((Parameter) node);
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

@@ -6,4 +6,5 @@ package me.tomassetti.symbolsolver.model;
 public interface SymbolDeclaration {
     String getName();
     boolean isField();
+    boolean isParameter();
 }
