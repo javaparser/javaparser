@@ -10,8 +10,8 @@ import java.util.Optional;
 public class DummyTypeSolver implements TypeSolver {
 
     @Override
-    public SymbolReference<ClassDeclaration> tryToSolveType(String name) {
-        return SymbolReference.unsolved(ClassDeclaration.class);
+    public SymbolReference<TypeDeclaration> tryToSolveType(String name) {
+        return SymbolReference.unsolved(TypeDeclaration.class);
     }
 
     @Override

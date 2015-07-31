@@ -9,8 +9,8 @@ import java.util.Optional;
  */
 public interface TypeSolver {
 
-    public SymbolReference<ClassDeclaration> tryToSolveType(String name);
+    public SymbolReference<TypeDeclaration> tryToSolveType(String name);
 
-    public ClassDeclaration solveType(String name) throws UnsolvedSymbolException;
+    public TypeDeclaration solveType(String name) throws UnsolvedSymbolException;
 
 }

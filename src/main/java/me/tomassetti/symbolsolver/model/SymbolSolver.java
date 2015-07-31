@@ -1,6 +1,8 @@
 package me.tomassetti.symbolsolver.model;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 
 /**
@@ -22,5 +24,13 @@ public class SymbolSolver {
 
     public SymbolReference solveSymbol(String name, Node node) {
         return solveSymbol(name, JavaParserFactory.getContext(node));
+    }
+
+    public SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> solveType(String name, Context context) {
+        return context.solveType(name, typeSolver);
+    }
+
+    public SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> solveType(String name, Node node) {
+        return solveType(name, JavaParserFactory.getContext(node));
     }
 }

@@ -11,9 +11,13 @@ import com.github.javaparser.ast.expr.NameExpr;
 import java.util.Optional;
 
 /**
- * Created by federico on 28/07/15.
+ * This class can be used to conveniently retrieve certain node from a JavaParser AST.
  */
-public class Navigator {
+public final class Navigator {
+
+    private Navigator() {
+        // prevent instantiation
+    }
 
     public static Optional<TypeDeclaration> findType(CompilationUnit cu, String name) {
         return cu.getTypes().stream().filter((t)->t.getName().equals(name)).findFirst();

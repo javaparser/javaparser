@@ -34,4 +34,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     public boolean isParameter() {
         return false;
     }
+
+    @Override
+    public String getQualifiedName() {
+        throw new UnsupportedOperationException();
+    }
 }

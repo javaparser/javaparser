@@ -1,6 +1,5 @@
 package me.tomassetti.symbolsolver;
 
-import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.model.*;

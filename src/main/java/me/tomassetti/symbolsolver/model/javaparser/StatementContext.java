@@ -4,6 +4,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.TypeDeclaration;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
     }
 
     @Override
-    public SymbolReference<ClassDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 }

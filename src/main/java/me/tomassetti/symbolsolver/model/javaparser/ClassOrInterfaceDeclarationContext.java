@@ -35,7 +35,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         // then among inherited fields
         if (!wrappedNode.isInterface() && wrappedNode.getExtends().size() > 0){
             String superClassName = wrappedNode.getExtends().get(0).getName();
-            SymbolReference<ClassDeclaration> superClass = solveType(superClassName, typeSolver);
+            SymbolReference<TypeDeclaration> superClass = solveType(superClassName, typeSolver);
             if (!superClass.isSolved()) {
                 throw new UnsolvedTypeException(this, superClassName);
             }
@@ -50,7 +50,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     @Override
-    public SymbolReference<ClassDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)){
             return SymbolReference.solved(new JavaParserClassDeclaration(this.wrappedNode));
         }

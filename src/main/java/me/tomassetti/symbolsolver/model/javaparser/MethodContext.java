@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.model.javaparser;
 
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.*;
@@ -33,8 +34,8 @@ public class MethodContext extends AbstractJavaParserContext<com.github.javapars
     }
 
     @Override
-    public SymbolReference<ClassDeclaration> solveType(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+    public SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+        return getParent().solveType(name, typeSolver);
     }
 
     @Override
