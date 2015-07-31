@@ -97,5 +97,28 @@ public class ContextTest {
         verify(typeSolver, compilationUnitDecl);
     }
 
+    @Test
+    public void resolveReferenceUsingQualifiedName() throws ParseException {
+        CompilationUnit cu = parseSample("Navigator2");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
+        Parameter param = method.getParameters().get(0);
+
+        ClassDeclaration compilationUnitDecl = createMock(ClassDeclaration.class);
+        expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
+        expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
+        TypeSolver typeSolver = createMock(TypeSolver.class);
+        expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        replay(typeSolver, compilationUnitDecl);
+        SymbolReference<TypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
+
+        assertEquals(true, ref.isSolved());
+        assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
+        assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
+
+        verify(typeSolver, compilationUnitDecl);
+    }
+
 
 }

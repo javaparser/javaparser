@@ -38,12 +38,13 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
             if (!importDecl.isStatic()) {
                 if (!importDecl.isAsterisk()) {
-                    System.out.println("IMPORT "+importDecl);
                     if (importDecl.getName() instanceof QualifiedNameExpr) {
                         String qName = importDecl.getName().toString();
-                        SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                        if (ref.isSolved()) {
-                            return ref;
+                        if (qName.equals(name) || qName.endsWith("." + name)) {
+                            SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                            if (ref.isSolved()) {
+                                return ref;
+                            }
                         }
                     } else {
                         throw new UnsupportedOperationException();
