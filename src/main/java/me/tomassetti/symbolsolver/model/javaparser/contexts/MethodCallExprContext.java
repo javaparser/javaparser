@@ -4,7 +4,6 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 
 import java.util.List;
 
@@ -28,17 +27,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope() != null) {
-            // TODO resolve the scope and get a context from there
-            SymbolReference<SymbolDeclaration> declScope = new JavaParserFacade(typeSolver).solve(wrappedNode.getScope());
-            if (declScope.isSolved()) {
-                TypeDeclaration typeOfDeclScope = declScope.getCorrespondingDeclaration().getType();
-                return typeOfDeclScope.getContext().solveMethod(name, parameterTypes, typeSolver);
-            } else {
-                // TODO this should be improved to indicate that is the scope that has not been solved
-                throw new UnsolvedSymbolException(this, name);
-            }
+            TypeUsage typeOfScope = new JavaParserFacade(typeSolver).getType(wrappedNode.getScope());
+            return typeOfScope.solveMethod(name, parameterTypes);
         } else {
             return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
         }

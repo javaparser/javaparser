@@ -1,9 +1,6 @@
 package me.tomassetti.symbolsolver.model;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
@@ -41,11 +38,11 @@ public class SymbolSolver {
         return solveType(name, JavaParserFactory.getContext(node));
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String methodName, List<TypeReference> params, Context context) {
+    public SymbolReference<MethodDeclaration> solveMethod(String methodName, List<TypeUsage> params, Context context) {
         return context.solveMethod(methodName, params, typeSolver);
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String methodName, List<TypeReference> params, Node node) {
+    public SymbolReference<MethodDeclaration> solveMethod(String methodName, List<TypeUsage> params, Node node) {
         return solveMethod(methodName, params, JavaParserFactory.getContext(node));
     }
 
@@ -61,7 +58,7 @@ public class SymbolSolver {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type), classType.getName());
             }
             if (!(ref.getCorrespondingDeclaration().isType())) {
-                throw new IllegalStateException();
+                throw new IllegalStateException(ref.getCorrespondingDeclaration().toString());
             }
             return ref.getCorrespondingDeclaration().asTypeDeclaration();
         } else {

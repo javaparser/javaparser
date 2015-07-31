@@ -1,10 +1,10 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import me.tomassetti.symbolsolver.model.ClassDeclaration;
-import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+
+import java.util.List;
 
 /**
  * Created by federico on 30/07/15.
@@ -20,6 +20,11 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     @Override
     public Context getContext() {
         return JavaParserFactory.getContext(wrappedNode);
+    }
+
+    @Override
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

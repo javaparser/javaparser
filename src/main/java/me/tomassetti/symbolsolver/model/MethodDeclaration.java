@@ -5,4 +5,6 @@ package me.tomassetti.symbolsolver.model;
  */
 public interface MethodDeclaration extends SymbolDeclaration {
     TypeDeclaration getType();
+
+    TypeDeclaration getReturnType();
 }
