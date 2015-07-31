@@ -120,5 +120,28 @@ public class ContextTest {
         verify(typeSolver, compilationUnitDecl);
     }
 
+    @Test
+    public void resolveReferenceToClassesInTheSamePackage() throws ParseException {
+        CompilationUnit cu = parseSample("Navigator3");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
+        Parameter param = method.getParameters().get(0);
+
+        ClassDeclaration compilationUnitDecl = createMock(ClassDeclaration.class);
+        expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
+        expect(compilationUnitDecl.getQualifiedName()).andReturn("my.packagez.CompilationUnit");
+        TypeSolver typeSolver = createMock(TypeSolver.class);
+        expect(typeSolver.tryToSolveType("my.packagez.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        replay(typeSolver, compilationUnitDecl);
+        SymbolReference<TypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
+
+        assertEquals(true, ref.isSolved());
+        assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
+        assertEquals("my.packagez.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
+
+        verify(typeSolver, compilationUnitDecl);
+    }
+
 
 }
