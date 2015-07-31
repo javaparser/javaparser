@@ -2,15 +2,12 @@ package me.tomassetti.symbolsolver.model.javaparser;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.visitor.GenericVisitor;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolDeclarator;
+import me.tomassetti.symbolsolver.model.TypeSolver;
+import me.tomassetti.symbolsolver.model.javaparser.contexts.*;
 
 /**
  * Created by federico on 28/07/15.
@@ -26,6 +23,8 @@ public class JavaParserFactory {
             return new MethodContext((MethodDeclaration)node);
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration)node);
+        } else if (node instanceof MethodCallExpr) {
+            return new MethodCallExprContext((MethodCallExpr)node);
         } else if (node instanceof EnumDeclaration) {
             throw new UnsupportedOperationException();
         } else {
@@ -33,11 +32,11 @@ public class JavaParserFactory {
         }
     }
 
-    public static SymbolDeclarator getSymbolDeclarator(Node node){
+    public static SymbolDeclarator getSymbolDeclarator(Node node, TypeSolver typeSolver){
         if (node instanceof FieldDeclaration) {
-            return new FieldSymbolDeclarator((FieldDeclaration) node);
+            return new FieldSymbolDeclarator((FieldDeclaration) node, typeSolver);
         } else if (node instanceof Parameter) {
-            return new ParameterSymbolDeclarator((Parameter) node);
+            return new ParameterSymbolDeclarator((Parameter) node, typeSolver);
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

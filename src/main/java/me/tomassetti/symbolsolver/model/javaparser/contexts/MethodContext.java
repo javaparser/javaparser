@@ -1,18 +1,17 @@
-package me.tomassetti.symbolsolver.model.javaparser;
+package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.javaparser.contexts.AbstractJavaParserContext;
 
 import java.util.List;
 
 /**
  * Created by federico on 28/07/15.
  */
-public class MethodContext extends AbstractJavaParserContext<com.github.javaparser.ast.body.MethodDeclaration> {
+public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> {
 
 
     public MethodContext(MethodDeclaration wrappedNode) {
@@ -22,7 +21,7 @@ public class MethodContext extends AbstractJavaParserContext<com.github.javapars
     @Override
     public SymbolReference solveSymbol(String name, TypeSolver typeSolver) {
         for (Parameter parameter : wrappedNode.getParameters()) {
-            SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter);
+            SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
             SymbolReference symbolReference = solveWith(sb, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;
@@ -39,8 +38,13 @@ public class MethodContext extends AbstractJavaParserContext<com.github.javapars
     }
 
     @Override
-    public MethodReference solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+    public SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver) {
+        if (wrappedNode.getName().equals(name)) {
+            // TODO understand if signature is compatible
+            throw new UnsupportedOperationException();
+        }
+
+        return getParent().solveMethod(name, parameterTypes, typeSolver);
     }
 
 }

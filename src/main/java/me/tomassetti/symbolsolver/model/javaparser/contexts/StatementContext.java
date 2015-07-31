@@ -1,10 +1,12 @@
-package me.tomassetti.symbolsolver.model.javaparser;
+package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.javaparser.contexts.AbstractJavaParserContext;
 
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
             throw new RuntimeException();
         }
         for (int i = position-1; i>=0; i--){
-            SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStmts().get(i));
+            SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStmts().get(i), typeSolver);
             SymbolReference symbolReference = solveWith(symbolDeclarator, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;
@@ -46,8 +48,8 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
     }
 
     @Override
-    public MethodReference solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver) {
+        return getParent().solveMethod(name, parameterTypes, typeSolver);
     }
 
     @Override

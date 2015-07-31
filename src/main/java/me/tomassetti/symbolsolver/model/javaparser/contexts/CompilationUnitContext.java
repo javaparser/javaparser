@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.javaparser;
+package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.QualifiedNameExpr;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     @Override
     public SymbolReference solveSymbol(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        return solveType(name, typeSolver);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public MethodReference solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 }

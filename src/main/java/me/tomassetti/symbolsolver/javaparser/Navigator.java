@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
 import java.util.Optional;
@@ -66,6 +67,22 @@ public final class Navigator {
         }
         for (Node child : node.getChildrenNodes()) {
             NameExpr res = findNameExpression(child, name);
+            if (res != null) {
+                return res;
+            }
+        }
+        return null;
+    }
+
+    public static MethodCallExpr findMethodCall(Node node, String methodName) {
+        if (node instanceof MethodCallExpr) {
+            MethodCallExpr methodCallExpr = (MethodCallExpr) node;
+            if (methodCallExpr.getName().equals(methodName)) {
+                return methodCallExpr;
+            }
+        }
+        for (Node child : node.getChildrenNodes()) {
+            MethodCallExpr res = findMethodCall(child, methodName);
             if (res != null) {
                 return res;
             }

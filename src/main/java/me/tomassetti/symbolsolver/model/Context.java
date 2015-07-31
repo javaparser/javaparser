@@ -10,7 +10,7 @@ import java.util.List;
 public interface Context {
     public SymbolReference solveSymbol(String name, TypeSolver typeSolver);
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
-    public MethodReference solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver);
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeReference> parameterTypes, TypeSolver typeSolver);
     public Context getParent();
     public boolean isRoot();
 }

@@ -1,7 +1,9 @@
 package me.tomassetti.symbolsolver;
 
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import javassist.compiler.ast.Expr;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.MethodDeclaration;
 
@@ -20,6 +22,14 @@ public class JavaParserFacade {
 
     public SymbolReference solve(NameExpr nameExpr) {
         return symbolSolver.solveSymbol(nameExpr.getName(), nameExpr);
+    }
+
+    public SymbolReference solve(Expression expr) {
+        if (expr instanceof NameExpr) {
+            return solve((NameExpr)expr);
+        } else {
+            throw new IllegalArgumentException(expr.getClass().getCanonicalName());
+        }
     }
 
     /**

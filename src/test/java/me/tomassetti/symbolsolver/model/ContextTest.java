@@ -3,10 +3,12 @@ package me.tomassetti.symbolsolver.model;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
@@ -14,6 +16,8 @@ import org.junit.Test;
 import static org.easymock.EasyMock.*;
 
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -165,5 +169,40 @@ public class ContextTest {
         verify(typeSolver, stringDecl);
     }
 
+    @Test
+    public void resolveReferenceToMethod() throws ParseException {
+        CompilationUnit cu = parseSample("Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
+        MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes");
+
+        Context compilationUnitCtx = createMock(Context.class);
+        me.tomassetti.symbolsolver.model.MethodDeclaration getTypes = createMock(me.tomassetti.symbolsolver.model.MethodDeclaration.class);
+        expect(getTypes.getName()).andReturn("getTypes");
+
+        ClassDeclaration compilationUnit = createMock(ClassDeclaration.class);
+        expect(compilationUnit.getName()).andReturn("CompilationUnit");
+        expect(compilationUnit.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
+        expect(compilationUnit.isType()).andReturn(true);
+        expect(compilationUnit.asTypeDeclaration()).andReturn(compilationUnit);
+        expect(compilationUnit.getContext()).andReturn(compilationUnitCtx);
+        expect(getTypes.getType()).andReturn(compilationUnit);
+        TypeSolver typeSolver = createMock(TypeSolver.class);
+        expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnit));
+        expect(compilationUnitCtx.solveMethod("getTypes", Collections.emptyList(), typeSolver)).andReturn(SymbolReference.solved(getTypes));
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        replay(typeSolver, compilationUnit, compilationUnitCtx, getTypes);
+        Node ctx = callToGetTypes;
+        System.out.println("CTX "+ctx+" "+ctx.getClass());
+        ctx = ctx.getParentNode();
+        System.out.println("SCOPE "+callToGetTypes.getScope()+" "+callToGetTypes.getScope().getClass());
+        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("getTypes", Collections.emptyList(), callToGetTypes);
+
+        assertEquals(true, ref.isSolved());
+        assertEquals("getTypes", ref.getCorrespondingDeclaration().getName());
+        assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getType().getQualifiedName());
+
+        verify(typeSolver);
+    }
 
 }

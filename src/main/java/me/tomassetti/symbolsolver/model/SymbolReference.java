@@ -17,6 +17,13 @@ public class SymbolReference<S extends SymbolDeclaration> {
         return new SymbolReference(Optional.<S>empty());
     }
 
+    @Override
+    public String toString() {
+        return "SymbolReference{" +
+                "correspondingDeclaration=" + correspondingDeclaration +
+                '}';
+    }
+
     private SymbolReference(Optional<? extends S> correspondingDeclaration){
         this.correspondingDeclaration = correspondingDeclaration;
     }
