@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 public class ContextTest {
 
     private CompilationUnit parseSample(String sampleName) throws ParseException {
-        InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java");
+        InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
         return JavaParser.parse(is);
     }
 
