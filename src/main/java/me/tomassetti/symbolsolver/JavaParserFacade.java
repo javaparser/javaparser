@@ -1,7 +1,10 @@
 package me.tomassetti.symbolsolver;
 
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.MethodDeclaration;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
@@ -18,6 +21,13 @@ public class JavaParserFacade {
 
     public SymbolReference solve(NameExpr nameExpr) {
         return symbolSolver.solveSymbol(nameExpr.getName(), nameExpr);
+    }
+
+    /**
+     * Given a method call find out to which method declaration it corresponds.
+     */
+    public SymbolReference<MethodDeclaration> solve(MethodCallExpr methodCallExpr) {
+        throw new UnsupportedOperationException();
     }
 
 }
