@@ -57,10 +57,16 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         // Look in current package
         if (this.wrappedNode.getPackage() != null) {
             String qName = this.wrappedNode.getPackage().getName().toString() + "." + name;
-            SymbolReference < me.tomassetti.symbolsolver.model.TypeDeclaration > ref = typeSolver.tryToSolveType(qName);
+            SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref.isSolved()) {
                 return ref;
             }
+        }
+
+        // Look in the java.lang package
+        SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> ref = typeSolver.tryToSolveType("java.lang."+name);
+        if (ref.isSolved()) {
+            return ref;
         }
 
         // DO NOT look for absolute name if this name is not qualified: you cannot import classes from the default package

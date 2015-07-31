@@ -7,17 +7,17 @@ import java.util.Optional;
  */
 public class SymbolReference<S extends SymbolDeclaration> {
 
-    private Optional<S> correspondingDeclaration;
+    private Optional<? extends S> correspondingDeclaration;
 
-    public static <S extends SymbolDeclaration> SymbolReference<S> solved(S symbolDeclaration){
+    public static <S extends SymbolDeclaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration){
         return new SymbolReference(Optional.of(symbolDeclaration));
     }
 
-    public static <S extends SymbolDeclaration> SymbolReference<S> unsolved(Class<S> clazz){
+    public static <S extends SymbolDeclaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz){
         return new SymbolReference(Optional.<S>empty());
     }
 
-    private SymbolReference(Optional<S> correspondingDeclaration){
+    private SymbolReference(Optional<? extends S> correspondingDeclaration){
         this.correspondingDeclaration = correspondingDeclaration;
     }
 
