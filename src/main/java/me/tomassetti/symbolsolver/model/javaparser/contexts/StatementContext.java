@@ -1,11 +1,13 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 
 import java.util.List;
 
@@ -23,6 +25,9 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
         // we should look in all the statements preceding, treating them as SymbolDeclarators
         if (wrappedNode.getParentNode() instanceof com.github.javaparser.ast.body.MethodDeclaration){
             return getParent().solveSymbol(name, typeSolver);
+        }
+        if (wrappedNode.getParentNode() instanceof LambdaExpr){
+            throw new UnsupportedOperationException();
         }
         BlockStmt blockStmt = (BlockStmt)wrappedNode.getParentNode();
         int position = -1;

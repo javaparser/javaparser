@@ -12,7 +12,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import java.util.Optional;
 
 /**
- * This class can be used to conveniently retrieve certain node from a JavaParser AST.
+ * This class can be used to easily retrieve nodes from a JavaParser AST.
  */
 public final class Navigator {
 

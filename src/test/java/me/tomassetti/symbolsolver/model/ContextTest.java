@@ -221,4 +221,21 @@ public class ContextTest {
         assertEquals("java.util.Collection", ref.getCorrespondingDeclaration().getType().getQualifiedName());
     }
 
+    @Test
+    public void resolveReferenceToLambdaParam() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
+        MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
+
+        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToGetName);
+
+        assertEquals(true, ref.isSolved());
+        assertEquals("getName", ref.getCorrespondingDeclaration().getName());
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", ref.getCorrespondingDeclaration().getType().getQualifiedName());
+    }
+
 }
