@@ -12,9 +12,11 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
+import me.tomassetti.symbolsolver.model.typesolvers.JarTypeSolver;
 import org.junit.Test;
 import static org.easymock.EasyMock.*;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
@@ -202,35 +204,21 @@ public class ContextTest {
         verify(typeSolver);
     }
 
-    /*@Test
-    public void resolveCascadeOfReferencesToMethod() throws ParseException {
+    @Test
+    public void resolveCascadeOfReferencesToMethod() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream");
 
-        AVOID MOCKING SO MUCH
-
-        ClassDeclaration compilationUnit = createMock(ClassDeclaration.class);
-        //expect(compilationUnit.getName()).andReturn("CompilationUnit");
-        //expect(compilationUnit.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
-        expect(compilationUnit.isType()).andReturn(true);
-        expect(compilationUnit.asTypeDeclaration()).andReturn(compilationUnit);
-        //expect(compilationUnit.getContext()).andReturn(compilationUnitCtx);
-        //expect(getTypes.getType()).andReturn(compilationUnit);
-        TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnit));
-        //expect(compilationUnitCtx.solveMethod("getTypes", Collections.emptyList(), typeSolver)).andReturn(SymbolReference.solved(getTypes));
+        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        replay(typeSolver, compilationUnit);
-        //replay(typeSolver, compilationUnit, compilationUnitCtx, getTypes);
         SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream);
 
         assertEquals(true, ref.isSolved());
         assertEquals("stream", ref.getCorrespondingDeclaration().getName());
         assertEquals("java.util.Collection", ref.getCorrespondingDeclaration().getType().getQualifiedName());
-
-        verify(typeSolver);
-    }*/
+    }
 
 }
