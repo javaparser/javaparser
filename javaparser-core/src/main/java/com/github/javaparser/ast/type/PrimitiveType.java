@@ -20,6 +20,8 @@
 
 package com.github.javaparser.ast.type;
 
+import java.util.HashMap;
+
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -38,14 +40,22 @@ public final class PrimitiveType extends Type {
 		Float   ("Float"),
 		Double  ("Double");
 
-		private final ClassOrInterfaceType correspondingClassType;
-
-		public ClassOrInterfaceType toClassType() {
-			return correspondingClassType;
+		static final HashMap<String, PrimitiveType.Primitive> unboxMap = new HashMap<String, PrimitiveType.Primitive>();
+		static {
+			for(PrimitiveType.Primitive unboxedType : PrimitiveType.Primitive.values()) {
+				String boxedTypeName = unboxedType.toBoxedType().getName();
+				unboxMap.put(boxedTypeName, unboxedType);
+			}
 		}
 
-		private Primitive(String nameOfCorrespondingClassType) {
-			correspondingClassType = new ClassOrInterfaceType(nameOfCorrespondingClassType);
+		private final ClassOrInterfaceType boxedType;
+
+		public ClassOrInterfaceType toBoxedType() {
+			return boxedType;
+		}
+
+		private Primitive(String nameOfBoxedType) {
+			boxedType = new ClassOrInterfaceType(nameOfBoxedType);
 		}
 	}
 
@@ -76,8 +86,8 @@ public final class PrimitiveType extends Type {
 		return type;
 	}
 
-	public ClassOrInterfaceType toClassType() {
-		return type.toClassType();
+	public ClassOrInterfaceType toBoxedType() {
+		return type.toBoxedType();
 	}
 
 	public void setType(final Primitive type) {
