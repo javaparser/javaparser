@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.model.*;
@@ -65,6 +66,8 @@ public class JavaParserFacade {
             }
             return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration().getReturnType());
             // the type is the return type of the method
+        } else if (node instanceof LambdaExpr) {
+            throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
