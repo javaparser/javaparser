@@ -76,9 +76,9 @@ public class JavaParserSymbolDeclaration implements SymbolDeclaration {
             Parameter parameter = (Parameter) wrappedNode;
             if (wrappedNode.getParentNode() instanceof LambdaExpr){
                 int pos = getParamPos(parameter);
-                System.out.println("PARAM to solve "+wrappedNode);
-                System.out.println("LAMBDA");
-                System.out.println(wrappedNode.getParentNode());
+                //System.out.println("PARAM to solve "+wrappedNode);
+                //System.out.println("LAMBDA");
+                //System.out.println(wrappedNode.getParentNode());
                 TypeUsage lambdaType = new JavaParserFacade(typeSolver).getType(wrappedNode.getParentNode());
 
                 // TODO understand from the context to which method this corresponds
