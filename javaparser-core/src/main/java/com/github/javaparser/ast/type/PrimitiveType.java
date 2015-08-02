@@ -29,7 +29,24 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class PrimitiveType extends Type {
 
 	public enum Primitive {
-		Boolean, Char, Byte, Short, Int, Long, Float, Double
+		Boolean ("Boolean"),
+		Char    ("Character"),
+		Byte    ("Byte"),
+		Short   ("Short"),
+		Int     ("Integer"),
+		Long    ("Long"),
+		Float   ("Float"),
+		Double  ("Double");
+
+		private final ClassOrInterfaceType correspondingClassType;
+
+		public ClassOrInterfaceType toClassType() {
+			return correspondingClassType;
+		}
+
+		private Primitive(String nameOfCorrespondingClassType) {
+			correspondingClassType = new ClassOrInterfaceType(nameOfCorrespondingClassType);
+		}
 	}
 
 	private Primitive type;
@@ -57,6 +74,10 @@ public final class PrimitiveType extends Type {
 
 	public Primitive getType() {
 		return type;
+	}
+
+	public ClassOrInterfaceType toClassType() {
+		return type.toClassType();
 	}
 
 	public void setType(final Primitive type) {
