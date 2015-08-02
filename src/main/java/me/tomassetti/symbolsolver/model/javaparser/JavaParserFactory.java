@@ -18,7 +18,9 @@ public class JavaParserFactory {
         if (node instanceof CompilationUnit) {
             return new CompilationUnitContext((CompilationUnit)node);
         } else if (node instanceof Statement) {
-            return new StatementContext((Statement)node);
+            return new StatementContext((Statement) node);
+        } else if (node instanceof LambdaExpr){
+            return new LambdaExprContext((LambdaExpr) node);
         } else if (node instanceof MethodDeclaration) {
             return new MethodContext((MethodDeclaration)node);
         } else if (node instanceof ClassOrInterfaceDeclaration) {

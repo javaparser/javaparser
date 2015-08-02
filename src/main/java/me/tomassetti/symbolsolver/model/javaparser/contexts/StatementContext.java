@@ -27,7 +27,7 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
             return getParent().solveSymbol(name, typeSolver);
         }
         if (wrappedNode.getParentNode() instanceof LambdaExpr){
-            throw new UnsupportedOperationException();
+            return getParent().solveSymbol(name, typeSolver);
         }
         BlockStmt blockStmt = (BlockStmt)wrappedNode.getParentNode();
         int position = -1;
