@@ -29,6 +29,13 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     }
 
     @Override
+    public String toString() {
+        return "TypeUsageOfTypeDeclaration{" +
+                "typeDeclaration=" + typeDeclaration +
+                '}';
+    }
+
+    @Override
     public String getTypeName() {
         return typeDeclaration.getName();
     }

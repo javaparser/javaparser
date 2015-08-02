@@ -40,6 +40,6 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public TypeDeclaration getType() {
-        throw new UnsupportedOperationException();
+        return new ReflectionClassDeclaration(type);
     }
 }

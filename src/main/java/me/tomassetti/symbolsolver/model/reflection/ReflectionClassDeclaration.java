@@ -5,10 +5,13 @@ import javassist.CtClass;
 import me.tomassetti.symbolsolver.model.*;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Created by federico on 02/08/15.
@@ -42,13 +45,42 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public String toString() {
+        return "ReflectionClassDeclaration{" +
+                "clazz=" + clazz.getCanonicalName() +
+                '}';
+    }
+
+    @Override
     public TypeUsage getUsage(Node node) {
-        throw new UnsupportedOperationException();
+        if (!this.getTypeParameters().isEmpty()) {
+            throw new UnsupportedOperationException("Find parameters");
+        }
+        return new TypeUsageOfTypeDeclaration(this);
     }
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage) {
-        throw new UnsupportedOperationException();
+        if (typeUsage instanceof LambdaTypeUsagePlaceholder) {
+            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
+                    getQualifiedName().equals(Function.class.getCanonicalName());
+        }
+        if (typeUsage.isArray()) {
+            return false;
+        }
+        if (typeUsage.isPrimitive()){
+            return false;
+        }
+        if (!typeUsage.getTypeName().equals(getQualifiedName())){
+            return false;
+        }
+        return true;
+        /*if (typeUsage instanceof TypeUsageOfTypeDeclaration) {
+            TypeUsageOfTypeDeclaration typeUsageOfTypeDeclaration = (TypeUsageOfTypeDeclaration)typeUsage;
+
+        } else {
+            throw new UnsupportedOperationException();
+        }*/
     }
 
     @Override
@@ -79,5 +111,14 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public TypeDeclaration getType() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<TypeParameter> getTypeParameters() {
+        List<TypeParameter> params = new ArrayList<>();
+        for (TypeVariable tv : this.clazz.getTypeParameters()) {
+            params.add(new ReflectionTypeParameter(tv));
+        }
+        return params;
     }
 }

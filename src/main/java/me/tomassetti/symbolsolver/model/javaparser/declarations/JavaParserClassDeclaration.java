@@ -72,4 +72,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     public boolean isAssignableBy(TypeUsage typeUsage) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public List<TypeParameter> getTypeParameters() {
+        throw new UnsupportedOperationException();
+    }
 }

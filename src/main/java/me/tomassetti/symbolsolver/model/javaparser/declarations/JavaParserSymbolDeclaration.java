@@ -83,6 +83,8 @@ public class JavaParserSymbolDeclaration implements SymbolDeclaration {
                 //System.out.println(wrappedNode.getParentNode());
                 TypeUsage lambdaType = new JavaParserFacade(typeSolver).getType(wrappedNode.getParentNode());
 
+                System.out.println("We should be able to calculate the type parameters");
+                System.out.println("LambdaType "+lambdaType);
                 // TODO understand from the context to which method this corresponds
                 //MethodDeclaration methodDeclaration = new JavaParserFacade(typeSolver).getMethodCalled
                 //MethodDeclaration methodCalled = new JavaParserFacade(typeSolver).solve()

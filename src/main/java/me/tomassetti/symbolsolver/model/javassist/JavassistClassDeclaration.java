@@ -107,4 +107,9 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     public TypeDeclaration getType() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public List<TypeParameter> getTypeParameters() {
+        throw new UnsupportedOperationException();
+    }
 }
