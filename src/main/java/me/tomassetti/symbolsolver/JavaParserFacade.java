@@ -114,6 +114,10 @@ public class JavaParserFacade {
         return new MethodCallExprContext(methodCallExpr).solveMethod(methodCallExpr.getName(), params, typeSolver);
     }
 
+    public TypeDeclaration convert(Type type, Node node) {
+        return convert(type, JavaParserFactory.getContext(node));
+    }
+
     public TypeDeclaration convert(Type type, Context context) {
         if (type instanceof ReferenceType) {
             ReferenceType referenceType = (ReferenceType) type;

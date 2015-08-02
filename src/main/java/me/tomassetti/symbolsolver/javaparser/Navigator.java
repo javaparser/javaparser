@@ -2,12 +2,10 @@ package me.tomassetti.symbolsolver.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
 import java.util.Optional;
 
@@ -83,6 +81,23 @@ public final class Navigator {
         }
         for (Node child : node.getChildrenNodes()) {
             MethodCallExpr res = findMethodCall(child, methodName);
+            if (res != null) {
+                return res;
+            }
+        }
+        return null;
+    }
+
+    public static VariableDeclarator demandVariableDeclaration(Node node, String name) {
+        System.out.println(node.getClass());
+        if (node instanceof VariableDeclarator) {
+            VariableDeclarator variableDeclarator = (VariableDeclarator)node;
+            if (variableDeclarator.getId().getName().equals(name)) {
+                return variableDeclarator;
+            }
+        }
+        for (Node child : node.getChildrenNodes()) {
+            VariableDeclarator res = demandVariableDeclaration(child, name);
             if (res != null) {
                 return res;
             }
