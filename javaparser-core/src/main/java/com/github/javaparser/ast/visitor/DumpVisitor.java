@@ -1563,7 +1563,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			printer.print(")");
 		}
 
-		printer.print("->");
+		printer.print(" -> ");
 		Statement body = n.getBody();
 		if (body instanceof ExpressionStmt) {
 			// Print the expression directly
