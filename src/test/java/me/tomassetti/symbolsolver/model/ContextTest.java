@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -222,6 +223,41 @@ public class ContextTest {
     }
 
     @Test
+    public void resolveReferenceToJreType() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("NavigatorSimplified");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
+
+        SOLVE STREAM TYPE REF
+
+        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call);
+
+        assertEquals(true, ref.isSolved());
+        assertEquals("isEmpty", ref.getCorrespondingDeclaration().getName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().getQualifiedName());
+    }
+
+    /*@Test
+    public void resolveReferenceToLambdaParamSimplified() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("NavigatorSimplified");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
+        MethodCallExpr call = Navigator.findMethodCall(method, "isEmpty");
+
+        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call);
+
+        assertEquals(true, ref.isSolved());
+        assertEquals("isEmpty", ref.getCorrespondingDeclaration().getName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().getQualifiedName());
+    }*/
+
+    /*@Test
     public void resolveReferenceToLambdaParam() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -231,12 +267,12 @@ public class ContextTest {
         String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToGetName);
+        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("getName", Collections.emptyList(), callToGetName);
 
         assertEquals(true, ref.isSolved());
         assertEquals("getName", ref.getCorrespondingDeclaration().getName());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", ref.getCorrespondingDeclaration().getType().getQualifiedName());
-    }
+    }*/
 
     /*@Test
     public void resolveReferenceToOverloadMethodWithNullParam() throws ParseException, IOException {

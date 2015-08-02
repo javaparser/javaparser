@@ -5,10 +5,12 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 
 /**
  * Created by federico on 28/07/15.
@@ -74,7 +76,7 @@ public class JavaParserSymbolDeclaration implements SymbolDeclaration {
     public TypeDeclaration getType() {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
-            if (wrappedNode.getParentNode() instanceof LambdaExpr){
+            if (wrappedNode.getParentNode() instanceof LambdaExpr) {
                 int pos = getParamPos(parameter);
                 //System.out.println("PARAM to solve "+wrappedNode);
                 //System.out.println("LAMBDA");
@@ -87,6 +89,14 @@ public class JavaParserSymbolDeclaration implements SymbolDeclaration {
                 throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
             } else {
                 return new SymbolSolver(typeSolver).solveType(parameter.getType());
+            }
+        } else if (wrappedNode instanceof VariableDeclarator) {
+            VariableDeclarator variableDeclarator = (VariableDeclarator)wrappedNode;
+            if (wrappedNode.getParentNode() instanceof VariableDeclarationExpr) {
+                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr)variableDeclarator.getParentNode();
+                return new JavaParserFacade(typeSolver).convert(variableDeclarationExpr.getType(), JavaParserFactory.getContext(wrappedNode));
+            } else {
+                throw new UnsupportedOperationException(wrappedNode.getParentNode().getClass().getCanonicalName());
             }
         } else {
             throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());

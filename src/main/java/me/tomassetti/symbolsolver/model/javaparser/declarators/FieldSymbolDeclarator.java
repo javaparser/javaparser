@@ -1,6 +1,7 @@
-package me.tomassetti.symbolsolver.model.javaparser;
+package me.tomassetti.symbolsolver.model.javaparser.declarators;
 
-import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import me.tomassetti.symbolsolver.model.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.SymbolDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
@@ -13,17 +14,19 @@ import java.util.List;
 /**
  * Created by federico on 28/07/15.
  */
-public class ParameterSymbolDeclarator extends AbstractSymbolDeclarator<Parameter> {
+public class FieldSymbolDeclarator extends AbstractSymbolDeclarator<FieldDeclaration> {
 
 
-    public ParameterSymbolDeclarator(Parameter wrappedNode, TypeSolver typeSolver) {
+    public FieldSymbolDeclarator(FieldDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
     @Override
     public List<SymbolDeclaration> getSymbolDeclarations() {
         List<SymbolDeclaration> symbols = new LinkedList<>();
-        symbols.add(JavaParserSymbolDeclaration.parameter(wrappedNode, typeSolver));
+        for (VariableDeclarator v : wrappedNode.getVariables()) {
+            symbols.add(JavaParserSymbolDeclaration.field(v, typeSolver));
+        }
         return symbols;
     }
 

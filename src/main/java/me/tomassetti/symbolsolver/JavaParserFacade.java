@@ -1,10 +1,14 @@
 package me.tomassetti.symbolsolver;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
@@ -12,6 +16,7 @@ import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContext;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -109,4 +114,20 @@ public class JavaParserFacade {
         return new MethodCallExprContext(methodCallExpr).solveMethod(methodCallExpr.getName(), params, typeSolver);
     }
 
+    public TypeDeclaration convert(Type type, Context context) {
+        if (type instanceof ReferenceType) {
+            ReferenceType referenceType = (ReferenceType) type;
+            // TODO consider array modifiers
+            return convert(referenceType.getType(), context);
+        } else if (type instanceof ClassOrInterfaceType) {
+            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)type;
+            SymbolReference<TypeDeclaration> ref = context.solveType(classOrInterfaceType.getName(), typeSolver);
+            if (!ref.isSolved()) {
+                throw new UnsolvedSymbolException(null, classOrInterfaceType.getName());
+            }
+            return ref.getCorrespondingDeclaration();
+        } else {
+            throw new UnsupportedOperationException(type.getClass().getCanonicalName());
+        }
+    }
 }

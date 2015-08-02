@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.javaparser;
+package me.tomassetti.symbolsolver.model.javaparser.declarators;
 
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.SymbolDeclaration;
