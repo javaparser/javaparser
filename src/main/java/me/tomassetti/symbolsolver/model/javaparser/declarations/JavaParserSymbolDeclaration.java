@@ -3,12 +3,12 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
-import me.tomassetti.symbolsolver.model.SymbolDeclaration;
-import me.tomassetti.symbolsolver.model.SymbolSolver;
-import me.tomassetti.symbolsolver.model.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.TypeSolver;
+import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.model.*;
 
 /**
  * Created by federico on 28/07/15.
@@ -73,11 +73,30 @@ public class JavaParserSymbolDeclaration implements SymbolDeclaration {
     @Override
     public TypeDeclaration getType() {
         if (wrappedNode instanceof Parameter) {
-            Parameter parameter = (Parameter)wrappedNode;
-            return new SymbolSolver(typeSolver).solveType(parameter.getType());
+            Parameter parameter = (Parameter) wrappedNode;
+            if (wrappedNode.getParentNode() instanceof LambdaExpr){
+                int pos = getParamPos(parameter);
+                // TODO understand from the context to which method this corresponds
+                //MethodDeclaration methodCalled = new JavaParserFacade(typeSolver).solve()
+                throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
+            } else {
+                return new SymbolSolver(typeSolver).solveType(parameter.getType());
+            }
         } else {
             throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
         }
+    }
+
+    private int getParamPos(Parameter parameter) {
+        int pos = 0;
+        for (Node node : parameter.getParentNode().getChildrenNodes()) {
+            if (node == parameter) {
+                return pos;
+            } else if (node instanceof Parameter){
+                pos++;
+            }
+        }
+        return pos;
     }
 
 }

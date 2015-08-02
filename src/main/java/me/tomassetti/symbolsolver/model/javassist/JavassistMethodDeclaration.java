@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.model.javassist;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.TypeDeclaration;
 
 /**
@@ -52,5 +53,19 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int getNoParams() {
+        try {
+            return ctMethod.getParameterTypes().length;
+        } catch (NotFoundException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ParameterDeclaration getParam(int i) {
+        throw new UnsupportedOperationException();
     }
 }

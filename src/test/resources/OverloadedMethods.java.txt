@@ -1,0 +1,27 @@
+/**
+ * Created by federico on 02/08/15.
+ */
+public class OverloadedMethods {
+
+    public void overloaded(Object o){
+
+    }
+
+    public void overloaded(String o){
+
+    }
+
+    public void m1(){
+        overloaded(null);
+    }
+
+    public void m2(){
+        String s = null;
+        overloaded(s);
+    }
+
+    public void m3(){
+        Object o = null;
+        overloaded(o);
+    }
+}
