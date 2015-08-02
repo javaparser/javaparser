@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.javassist;
 
+import com.github.javaparser.ast.Node;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
@@ -65,6 +66,11 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         }
 
         return SymbolReference.unsolved(MethodDeclaration.class);
+    }
+
+    @Override
+    public TypeUsage getUsage(Node node) {
+        return new TypeUsageOfTypeDeclaration(getType());
     }
 
     @Override

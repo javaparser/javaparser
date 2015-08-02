@@ -10,6 +10,7 @@ import me.tomassetti.symbolsolver.model.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContext;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -47,7 +48,7 @@ public class JavaParserFacade {
         List<TypeUsage> params = new LinkedList<>();
         for (Expression expression : methodCallExpr.getArgs()) {
             if (expression instanceof LambdaExpr) {
-                throw new UnsupportedOperationException();
+                params.add(new LambdaTypeUsagePlaceholder());
             } else {
                 params.add(new JavaParserFacade(typeSolver).getType(expression));
             }
@@ -78,14 +79,18 @@ public class JavaParserFacade {
         } else if (node instanceof LambdaExpr) {
             if (node.getParentNode() instanceof MethodCallExpr) {
                 MethodCallExpr callExpr = (MethodCallExpr)node.getParentNode();
+                int pos = JavaParserSymbolDeclaration.getParamPos(node);
                 SymbolReference<MethodDeclaration> refMethod = new JavaParserFacade(typeSolver).solve(callExpr);
                 if (!refMethod.isSolved()) {
                     throw new UnsolvedSymbolException(null, callExpr.getName());
                 }
+                System.out.println("Method "+refMethod.getCorrespondingDeclaration().getName());
+                System.out.println("Method param "+refMethod.getCorrespondingDeclaration().getParam(pos));
+                return refMethod.getCorrespondingDeclaration().getParam(pos).getType().getUsage(node);
                 //System.out.println("LAMBDA " + node.getParentNode());
                 //System.out.println("LAMBDA CLASS " + node.getParentNode().getClass().getCanonicalName());
                 //TypeUsage typeOfMethod = new JavaParserFacade(typeSolver).getType(node.getParentNode());
-                throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
+                //throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
             } else {
                 throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
             }

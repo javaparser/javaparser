@@ -1,5 +1,7 @@
 package me.tomassetti.symbolsolver.model;
 
+import com.github.javaparser.ast.Node;
+
 import java.util.List;
 
 /**
@@ -10,4 +12,11 @@ public interface TypeDeclaration extends SymbolDeclaration {
     Context getContext();
 
     SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes);
+
+    /**
+     * Get how the type is used in the given context.
+     * @param node
+     * @return
+     */
+    TypeUsage getUsage(Node node);
 }

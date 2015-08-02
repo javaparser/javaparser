@@ -5,6 +5,7 @@ import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserParameterDeclaration;
 
 /**
  * Created by federico on 01/08/15.
@@ -66,6 +67,10 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        throw new UnsupportedOperationException();
+        try {
+            return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i]);
+        } catch (NotFoundException e){
+            throw new RuntimeException(e);
+        }
     }
 }

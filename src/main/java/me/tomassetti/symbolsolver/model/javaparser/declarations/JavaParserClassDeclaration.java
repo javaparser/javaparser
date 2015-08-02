@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
@@ -60,5 +61,10 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     @Override
     public String getQualifiedName() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public TypeUsage getUsage(Node node) {
+        return new TypeUsageOfTypeDeclaration(getType());
     }
 }

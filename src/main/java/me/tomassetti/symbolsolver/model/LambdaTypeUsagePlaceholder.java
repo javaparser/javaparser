@@ -3,16 +3,9 @@ package me.tomassetti.symbolsolver.model;
 import java.util.List;
 
 /**
- * Created by federico on 31/07/15.
+ * Created by federico on 02/08/15.
  */
-public class TypeUsageOfTypeDeclaration implements TypeUsage {
-
-    private TypeDeclaration typeDeclaration;
-
-    public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration) {
-        this.typeDeclaration = typeDeclaration;
-    }
-
+public class LambdaTypeUsagePlaceholder implements TypeUsage {
     @Override
     public boolean isArray() {
         return false;
@@ -24,13 +17,18 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     }
 
     @Override
-    public boolean isReferenceType() {
+    public boolean isFunctionOrPredicate() {
         return true;
     }
 
     @Override
+    public boolean isReferenceType() {
+        return false;
+    }
+
+    @Override
     public String getTypeName() {
-        return typeDeclaration.getName();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -45,10 +43,6 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
-        return typeDeclaration.solveMethod(name, parameterTypes);
-    }
-
-    public boolean isFunctionOrPredicate() {
-        return false;
+        throw new UnsupportedOperationException();
     }
 }

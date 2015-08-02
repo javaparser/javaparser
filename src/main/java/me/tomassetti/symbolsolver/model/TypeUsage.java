@@ -15,6 +15,8 @@ public interface TypeUsage {
     boolean isArray();
     boolean isPrimitive();
 
+    boolean isFunctionOrPredicate();
+
     /**
      * Class, interface and enum are reference-type
      * @return

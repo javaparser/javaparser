@@ -93,7 +93,7 @@ public class JavaParserSymbolDeclaration implements SymbolDeclaration {
         }
     }
 
-    private int getParamPos(Parameter parameter) {
+    public static int getParamPos(Parameter parameter) {
         int pos = 0;
         for (Node node : parameter.getParentNode().getChildrenNodes()) {
             if (node == parameter) {
@@ -105,4 +105,15 @@ public class JavaParserSymbolDeclaration implements SymbolDeclaration {
         return pos;
     }
 
+    public static int getParamPos(Node node) {
+        if (node.getParentNode() instanceof MethodCallExpr) {
+            MethodCallExpr call = (MethodCallExpr)node.getParentNode();
+            for (int i=0;i<call.getArgs().size();i++){
+                if (call.getArgs().get(i) == node) return i;
+            }
+            throw new IllegalStateException();
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 }
