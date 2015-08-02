@@ -19,4 +19,6 @@ public interface TypeDeclaration extends SymbolDeclaration {
      * @return
      */
     TypeUsage getUsage(Node node);
+
+    boolean isAssignableBy(TypeUsage typeUsage);
 }

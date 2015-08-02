@@ -67,4 +67,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     public TypeUsage getUsage(Node node) {
         return new TypeUsageOfTypeDeclaration(getType());
     }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
+        throw new UnsupportedOperationException();
+    }
 }

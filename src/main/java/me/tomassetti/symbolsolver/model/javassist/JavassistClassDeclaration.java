@@ -74,6 +74,11 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public String getName() {
         return ctClass.getSimpleName();
     }

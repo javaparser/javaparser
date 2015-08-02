@@ -5,18 +5,36 @@ import me.tomassetti.symbolsolver.model.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 
-/**
- * Created by federico on 01/08/15.
- */
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class CombinedTypeSolver implements TypeSolver {
+
+    private List<TypeSolver> elements = new ArrayList<>();
+
+    public void add(TypeSolver typeSolver){
+        this.elements.add(typeSolver);
+    }
 
     @Override
     public SymbolReference<TypeDeclaration> tryToSolveType(String name) {
-        throw new UnsupportedOperationException();
+        for (TypeSolver ts : elements){
+            SymbolReference<TypeDeclaration> res = ts.tryToSolveType(name);
+            if (res.isSolved()) {
+                return res;
+            }
+        }
+        return SymbolReference.unsolved(TypeDeclaration.class);
     }
 
     @Override
     public TypeDeclaration solveType(String name) throws UnsolvedSymbolException {
-        throw new UnsupportedOperationException();
+        SymbolReference<TypeDeclaration> res = tryToSolveType(name);
+        if (res.isSolved()) {
+            return res.getCorrespondingDeclaration();
+        } else {
+            throw new UnsolvedSymbolException(null, name);
+        }
     }
 }
