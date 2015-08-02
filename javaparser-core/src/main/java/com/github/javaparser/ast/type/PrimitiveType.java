@@ -20,6 +20,8 @@
 
 package com.github.javaparser.ast.type;
 
+import java.util.HashMap;
+
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -29,7 +31,32 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class PrimitiveType extends Type {
 
 	public enum Primitive {
-		Boolean, Char, Byte, Short, Int, Long, Float, Double
+		Boolean ("Boolean"),
+		Char    ("Character"),
+		Byte    ("Byte"),
+		Short   ("Short"),
+		Int     ("Integer"),
+		Long    ("Long"),
+		Float   ("Float"),
+		Double  ("Double");
+
+		static final HashMap<String, PrimitiveType.Primitive> unboxMap = new HashMap<String, PrimitiveType.Primitive>();
+		static {
+			for(PrimitiveType.Primitive unboxedType : PrimitiveType.Primitive.values()) {
+				String boxedTypeName = unboxedType.toBoxedType().getName();
+				unboxMap.put(boxedTypeName, unboxedType);
+			}
+		}
+
+		private final ClassOrInterfaceType boxedType;
+
+		public ClassOrInterfaceType toBoxedType() {
+			return boxedType;
+		}
+
+		private Primitive(String nameOfBoxedType) {
+			boxedType = new ClassOrInterfaceType(nameOfBoxedType);
+		}
 	}
 
 	private Primitive type;
@@ -57,6 +84,10 @@ public final class PrimitiveType extends Type {
 
 	public Primitive getType() {
 		return type;
+	}
+
+	public ClassOrInterfaceType toBoxedType() {
+		return type.toBoxedType();
 	}
 
 	public void setType(final Primitive type) {
