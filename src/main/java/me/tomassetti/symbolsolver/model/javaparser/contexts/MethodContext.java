@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -19,7 +20,7 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
     }
 
     @Override
-    public SymbolReference solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
             SymbolReference symbolReference = solveWith(sb, name);

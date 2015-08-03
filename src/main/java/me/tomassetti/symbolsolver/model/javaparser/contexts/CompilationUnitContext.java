@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.QualifiedNameExpr;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -22,8 +23,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public SymbolReference solveSymbol(String name, TypeSolver typeSolver) {
-        return solveType(name, typeSolver);
+    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
     @Override

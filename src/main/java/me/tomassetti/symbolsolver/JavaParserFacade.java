@@ -70,7 +70,7 @@ public class JavaParserFacade {
     public TypeUsage getType(Node node) {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
-            SymbolReference<ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbol(nameExpr.getName(), nameExpr);
+            SymbolReference<? extends ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbol(nameExpr.getName(), nameExpr);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(nameExpr), nameExpr.getName());
             }

@@ -5,6 +5,7 @@ import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -20,7 +21,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public SymbolReference solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
     }
 
@@ -35,7 +36,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             TypeUsage typeOfScope = new JavaParserFacade(typeSolver).getType(wrappedNode.getScope());
             return typeOfScope.solveMethod(name, parameterTypes);
         } else {
-            return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
+            throw new UnsupportedOperationException();
+            //return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
         }
     }
 }

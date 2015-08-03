@@ -26,19 +26,19 @@ public class SymbolSolver {
         this.typeSolver = typeSolver;
     }
 
-    public SymbolReference solveSymbol(String name, Context context) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, Context context) {
         return context.solveSymbol(name, typeSolver);
     }
 
-    public SymbolReference solveSymbol(String name, Node node) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, Node node) {
         return solveSymbol(name, JavaParserFactory.getContext(node));
     }
 
-    public SymbolReference<TypeDeclaration> solveType(String name, Context context) {
+    public SymbolReference<? extends TypeDeclaration> solveType(String name, Context context) {
         return context.solveType(name, typeSolver);
     }
 
-    public SymbolReference<TypeDeclaration> solveType(String name, Node node) {
+    public SymbolReference<? extends TypeDeclaration> solveType(String name, Node node) {
         return solveType(name, JavaParserFactory.getContext(node));
     }
 
@@ -56,12 +56,15 @@ public class SymbolSolver {
             // TODO consider array modifiers
             return solveType(referenceType.getType());
         } else if (type instanceof ClassOrInterfaceType) {
+
+            should call typesolver here!
+
             ClassOrInterfaceType classType = (ClassOrInterfaceType) type;
-            SymbolReference<ValueDeclaration> ref = solveSymbol(classType.getName(), type);
+            SymbolReference<? extends ValueDeclaration> ref = solveSymbol(classType.getName(), type);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type), classType.getName());
             }
-            if (!(ref.getCorrespondingDeclaration().isType())) {
+            if (!ref.getCorrespondingDeclaration().isType()) {
                 throw new IllegalStateException(ref.getCorrespondingDeclaration().toString());
             }
             return ref.getCorrespondingDeclaration().asTypeDeclaration();
