@@ -213,7 +213,7 @@ public class ContextTest {
         //verify(typeSolver);
     }
 
-    /*@Test
+    @Test
     public void resolveCascadeOfReferencesToMethod() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
@@ -260,7 +260,7 @@ public class ContextTest {
         assertEquals(true, ref.isSolved());
         assertEquals("isEmpty", ref.getCorrespondingDeclaration().getName());
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
-    }*/
+    }
 
     /*@Test
     public void resolveReferenceToLambdaParam() throws ParseException, IOException {

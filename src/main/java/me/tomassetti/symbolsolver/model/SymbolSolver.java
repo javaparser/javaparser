@@ -57,7 +57,9 @@ public class SymbolSolver {
             return solveType(referenceType.getType());
         } else if (type instanceof ClassOrInterfaceType) {
 
-            should call typesolver here!
+            //should call typesolver here!
+
+            /*if (0 == 0) throw new RuntimeException(type.getParentNode().getParentNode().toString());
 
             ClassOrInterfaceType classType = (ClassOrInterfaceType) type;
             SymbolReference<? extends ValueDeclaration> ref = solveSymbol(classType.getName(), type);
@@ -67,7 +69,13 @@ public class SymbolSolver {
             if (!ref.getCorrespondingDeclaration().isType()) {
                 throw new IllegalStateException(ref.getCorrespondingDeclaration().toString());
             }
-            return ref.getCorrespondingDeclaration().asTypeDeclaration();
+            return ref.getCorrespondingDeclaration().asTypeDeclaration();*/
+            String name = ((ClassOrInterfaceType) type).getName();
+            SymbolReference<TypeDeclaration> ref = JavaParserFactory.getContext(type).solveType(name, typeSolver);
+            if (!ref.isSolved()) {
+                throw new UnsolvedSymbolException(JavaParserFactory.getContext(type), name);
+            }
+            return ref.getCorrespondingDeclaration();
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
