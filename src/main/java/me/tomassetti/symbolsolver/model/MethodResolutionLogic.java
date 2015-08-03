@@ -31,6 +31,10 @@ public class MethodResolutionLogic {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }
         if (applicableMethods.size() == 1) {
+            // Find parameters
+
+
+
             return SymbolReference.solved(applicableMethods.get(0));
         } else {
             throw new UnsupportedOperationException();

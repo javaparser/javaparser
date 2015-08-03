@@ -45,4 +45,9 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public List<TypeUsage> parameters() {
+        throw new UnsupportedOperationException();
+    }
 }

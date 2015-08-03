@@ -34,4 +34,6 @@ public interface TypeUsage {
     Context getContext();
 
     SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes);
+
+    List<TypeUsage> parameters();
 }

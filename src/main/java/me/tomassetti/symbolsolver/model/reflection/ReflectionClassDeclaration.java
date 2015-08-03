@@ -54,7 +54,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public TypeUsage getUsage(Node node) {
         if (!this.getTypeParameters().isEmpty()) {
-            throw new UnsupportedOperationException("Find parameters");
+            throw new UnsupportedOperationException("Find parameters of "+this+" in "+node);
         }
         return new TypeUsageOfTypeDeclaration(this);
     }

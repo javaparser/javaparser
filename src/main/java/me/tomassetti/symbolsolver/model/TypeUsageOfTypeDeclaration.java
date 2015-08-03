@@ -55,6 +55,11 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         return typeDeclaration.solveMethod(name, parameterTypes);
     }
 
+    @Override
+    public List<TypeUsage> parameters() {
+        throw new UnsupportedOperationException();
+    }
+
     public boolean isFunctionOrPredicate() {
         return false;
     }

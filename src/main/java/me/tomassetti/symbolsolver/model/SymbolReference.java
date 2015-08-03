@@ -1,5 +1,7 @@
 package me.tomassetti.symbolsolver.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -8,6 +10,7 @@ import java.util.Optional;
 public class SymbolReference<S extends SymbolDeclaration> {
 
     private Optional<? extends S> correspondingDeclaration;
+    private Map<String, TypeUsage> typeParametersByName = new HashMap<>();
 
     public static <S extends SymbolDeclaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration){
         return new SymbolReference(Optional.of(symbolDeclaration));
