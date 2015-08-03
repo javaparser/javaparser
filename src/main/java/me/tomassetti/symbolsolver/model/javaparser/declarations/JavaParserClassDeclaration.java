@@ -3,7 +3,10 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
 
@@ -29,6 +32,11 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public TypeUsage getUsage(Node node) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public String getName() {
         return wrappedNode.getName();
     }
@@ -48,7 +56,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         return true;
     }
 
-    @Override
+    /*@Override
     public TypeDeclaration asTypeDeclaration() {
         return this;
     }
@@ -56,17 +64,17 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     @Override
     public TypeDeclaration getType() {
         throw new UnsupportedOperationException();
-    }
+    }*/
 
     @Override
     public String getQualifiedName() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    /*@Override
     public TypeUsage getUsage(Node node) {
         return new TypeUsageOfTypeDeclaration(getType());
-    }
+    }*/
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage) {

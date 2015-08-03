@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.model.reflection;
 
-import me.tomassetti.symbolsolver.model.ParameterDeclaration;
-import me.tomassetti.symbolsolver.model.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 
 /**
  * Created by federico on 02/08/15.

@@ -1,7 +1,9 @@
 package me.tomassetti.symbolsolver.model;
 
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**

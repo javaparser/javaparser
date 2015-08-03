@@ -5,6 +5,11 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
 
@@ -70,7 +75,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
     @Override
     public TypeUsage getUsage(Node node) {
-        return new TypeUsageOfTypeDeclaration(getType());
+        return new TypeUsageOfTypeDeclaration(this);
     }
 
     @Override
@@ -98,7 +103,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         return true;
     }
 
-    @Override
+    /*@Override
     public TypeDeclaration asTypeDeclaration() {
         return this;
     }
@@ -106,7 +111,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     @Override
     public TypeDeclaration getType() {
         throw new UnsupportedOperationException();
-    }
+    }*/
 
     @Override
     public List<TypeParameter> getTypeParameters() {

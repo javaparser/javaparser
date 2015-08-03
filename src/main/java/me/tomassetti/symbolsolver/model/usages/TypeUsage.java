@@ -1,4 +1,8 @@
-package me.tomassetti.symbolsolver.model;
+package me.tomassetti.symbolsolver.model.usages;
+
+import me.tomassetti.symbolsolver.model.Context;
+import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.List;
 

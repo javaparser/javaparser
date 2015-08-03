@@ -1,8 +1,10 @@
-package me.tomassetti.symbolsolver.model;
+package me.tomassetti.symbolsolver.model.typesolvers;
 
+import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
+import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
-
-import java.util.Optional;
 
 /**
  * Created by federico on 30/07/15.

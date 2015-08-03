@@ -1,11 +1,15 @@
 package me.tomassetti.symbolsolver.model.javassist;
 
+import com.github.javaparser.ast.Node;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-import me.tomassetti.symbolsolver.model.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.ParameterDeclaration;
-import me.tomassetti.symbolsolver.model.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserParameterDeclaration;
+import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+
+import java.util.List;
 
 /**
  * Created by federico on 01/08/15.
@@ -37,13 +41,18 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         return false;
     }
 
-    @Override
+    /*@Override
     public TypeDeclaration asTypeDeclaration() {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public TypeDeclaration getType() {
+        return new JavassistClassDeclaration(ctMethod.getDeclaringClass());
+    }*/
+
+    @Override
+    public TypeDeclaration declaringType() {
         return new JavassistClassDeclaration(ctMethod.getDeclaringClass());
     }
 
@@ -72,5 +81,15 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         } catch (NotFoundException e){
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public MethodUsage getUsage(Node node) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<TypeParameter> getTypeParameters() {
+        return null;
     }
 }

@@ -1,9 +1,8 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarators;
 
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import me.tomassetti.symbolsolver.model.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.SymbolDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
 
@@ -23,8 +22,8 @@ public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableD
     }
 
     @Override
-    public List<SymbolDeclaration> getSymbolDeclarations() {
-        List<SymbolDeclaration> symbols = wrappedNode.getVars().stream().map(
+    public List<ValueDeclaration> getSymbolDeclarations() {
+        List<ValueDeclaration> symbols = wrappedNode.getVars().stream().map(
                 v -> JavaParserSymbolDeclaration.field(v, typeSolver)
         ).collect(
                 Collectors.toCollection(() -> new LinkedList<>()));

@@ -1,8 +1,7 @@
 package me.tomassetti.symbolsolver.model;
 
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
-
-import java.util.Optional;
 
 /**
  * Created by federico on 28/07/15.

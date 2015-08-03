@@ -2,9 +2,8 @@ package me.tomassetti.symbolsolver.model.typesolvers;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import me.tomassetti.symbolsolver.model.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.SymbolReference;
-import me.tomassetti.symbolsolver.model.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.javassist.JavassistClassDeclaration;

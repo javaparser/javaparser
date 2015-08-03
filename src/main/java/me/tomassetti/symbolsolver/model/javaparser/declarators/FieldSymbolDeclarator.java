@@ -2,8 +2,8 @@ package me.tomassetti.symbolsolver.model.javaparser.declarators;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import me.tomassetti.symbolsolver.model.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.SymbolDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
 
@@ -22,8 +22,8 @@ public class FieldSymbolDeclarator extends AbstractSymbolDeclarator<FieldDeclara
     }
 
     @Override
-    public List<SymbolDeclaration> getSymbolDeclarations() {
-        List<SymbolDeclaration> symbols = new LinkedList<>();
+    public List<ValueDeclaration> getSymbolDeclarations() {
+        List<ValueDeclaration> symbols = new LinkedList<>();
         for (VariableDeclarator v : wrappedNode.getVariables()) {
             symbols.add(JavaParserSymbolDeclaration.field(v, typeSolver));
         }

@@ -4,6 +4,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
 
@@ -32,12 +33,12 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
     }
 
     @Override
-    public SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         return getParent().solveType(name, typeSolver);
     }
 
     @Override
-    public SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getName().equals(name)) {
             // TODO understand if signature is compatible
             throw new UnsupportedOperationException();

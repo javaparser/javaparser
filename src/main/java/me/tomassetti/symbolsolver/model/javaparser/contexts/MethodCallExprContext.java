@@ -3,7 +3,10 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
 

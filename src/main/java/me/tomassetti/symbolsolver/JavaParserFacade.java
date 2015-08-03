@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -10,13 +9,16 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContext;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class JavaParserFacade {
     public TypeUsage getType(Node node) {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
-            SymbolReference<SymbolDeclaration> ref = new SymbolSolver(typeSolver).solveSymbol(nameExpr.getName(), nameExpr);
+            SymbolReference<ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbol(nameExpr.getName(), nameExpr);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(nameExpr), nameExpr.getName());
             }

@@ -6,16 +6,17 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.visitor.GenericVisitor;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 /**
  * Created by federico on 28/07/15.
  */
-public class JavaParserSymbolDeclaration implements SymbolDeclaration {
+public class JavaParserSymbolDeclaration implements ValueDeclaration {
 
     private String name;
     private Node wrappedNode;

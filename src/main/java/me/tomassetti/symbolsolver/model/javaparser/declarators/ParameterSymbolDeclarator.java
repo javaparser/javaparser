@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarators;
 
 import com.github.javaparser.ast.body.Parameter;
-import me.tomassetti.symbolsolver.model.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.SymbolDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
 
@@ -21,8 +21,8 @@ public class ParameterSymbolDeclarator extends AbstractSymbolDeclarator<Paramete
     }
 
     @Override
-    public List<SymbolDeclaration> getSymbolDeclarations() {
-        List<SymbolDeclaration> symbols = new LinkedList<>();
+    public List<ValueDeclaration> getSymbolDeclarations() {
+        List<ValueDeclaration> symbols = new LinkedList<>();
         symbols.add(JavaParserSymbolDeclaration.parameter(wrappedNode, typeSolver));
         return symbols;
     }

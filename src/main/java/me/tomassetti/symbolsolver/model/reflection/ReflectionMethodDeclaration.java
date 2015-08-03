@@ -1,10 +1,14 @@
 package me.tomassetti.symbolsolver.model.reflection;
 
-import me.tomassetti.symbolsolver.model.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.ParameterDeclaration;
-import me.tomassetti.symbolsolver.model.TypeDeclaration;
+import com.github.javaparser.ast.Node;
+import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * Created by federico on 02/08/15.
@@ -37,13 +41,18 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         return false;
     }
 
-    @Override
+    /*@Override
     public TypeDeclaration asTypeDeclaration() {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public TypeDeclaration getType() {
+        throw new UnsupportedOperationException();
+    }*/
+
+    @Override
+    public TypeDeclaration declaringType() {
         throw new UnsupportedOperationException();
     }
 
@@ -60,5 +69,15 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     @Override
     public ParameterDeclaration getParam(int i) {
         return new ReflectionParameterDeclaration(method.getParameterTypes()[i]);
+    }
+
+    @Override
+    public MethodUsage getUsage(Node node) {
+        return null;
+    }
+
+    @Override
+    public List<TypeParameter> getTypeParameters() {
+        return null;
     }
 }

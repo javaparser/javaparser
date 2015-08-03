@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 
 /**
@@ -17,12 +18,12 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     }
 
     protected final SymbolReference solveWith(SymbolDeclarator symbolDeclarator, String name){
-        for (SymbolDeclaration decl : symbolDeclarator.getSymbolDeclarations()){
+        for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()){
             if (decl.getName().equals(name)){
                 return SymbolReference.solved(decl);
             }
         }
-        return SymbolReference.unsolved(SymbolDeclaration.class);
+        return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
     @Override

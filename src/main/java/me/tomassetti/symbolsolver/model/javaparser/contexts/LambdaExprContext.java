@@ -1,12 +1,12 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import me.tomassetti.symbolsolver.model.SymbolDeclarator;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 
 import java.util.List;
@@ -36,12 +36,12 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     }
 
     @Override
-    public SymbolReference<me.tomassetti.symbolsolver.model.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         return getParent().solveType(name, typeSolver);
     }
 
     @Override
-    public SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         return getParent().solveMethod(name, parameterTypes, typeSolver);
     }
 

@@ -2,11 +2,12 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.body.*;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedTypeException;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
 
