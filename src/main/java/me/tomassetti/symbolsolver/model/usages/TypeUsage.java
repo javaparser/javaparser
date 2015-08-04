@@ -2,9 +2,12 @@ package me.tomassetti.symbolsolver.model.usages;
 
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.TypeSolver;
+import me.tomassetti.symbolsolver.model.Value;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Reference to a type. A TypeRef could be a primitive type or a reference type (enum, class, interface).
@@ -37,9 +40,13 @@ public interface TypeUsage {
      */
     Context getContext();
 
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes);
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
 
     List<TypeUsage> parameters();
 
     boolean isTypeVariable();
+
+    default Optional<Value> getField(String name, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
 }

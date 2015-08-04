@@ -37,13 +37,13 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
             methods.add(methodDeclaration);
         }
-        return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes);
+        return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
     }
 
     @Override
@@ -89,6 +89,16 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public boolean isTypeVariable() {
         return false;
+    }
+
+    @Override
+    public FieldDeclaration getField(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasField(String name) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -34,7 +34,7 @@ public class Value {
         return typeUsage;
     }
 
-    public static Value from(ValueDeclaration decl) {
-        return new Value(decl.getTypeUsage(), decl.getName(), decl.isField());
+    public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
+        return new Value(decl.getTypeUsage(typeSolver), decl.getName(), decl.isField());
     }
 }

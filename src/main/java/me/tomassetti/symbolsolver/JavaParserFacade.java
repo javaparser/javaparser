@@ -3,13 +3,11 @@ package me.tomassetti.symbolsolver;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
+import jdk.nashorn.internal.ir.Symbol;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -21,10 +19,7 @@ import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContex
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -78,7 +73,7 @@ public class JavaParserFacade {
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(nameExpr), nameExpr.getName());
             }
-            return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration().getType());
+            return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration().getType(typeSolver));
         } else if (node instanceof MethodCallExpr) {
             // first solve the method
             SymbolReference<MethodDeclaration> ref = new JavaParserFacade(typeSolver).solveMethod((MethodCallExpr)node);
@@ -97,7 +92,7 @@ public class JavaParserFacade {
                 }
                 System.out.println("Method " + refMethod.getCorrespondingDeclaration().getName());
                 System.out.println("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
-                return refMethod.getCorrespondingDeclaration().getParam(pos).getType().getUsage(node);
+                return refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver).getUsage(node);
                 //System.out.println("LAMBDA " + node.getParentNode());
                 //System.out.println("LAMBDA CLASS " + node.getParentNode().getClass().getCanonicalName());
                 //TypeUsage typeOfMethod = new JavaParserFacade(typeSolver).getType(node.getParentNode());
@@ -107,11 +102,23 @@ public class JavaParserFacade {
             }
         } else if (node instanceof VariableDeclarator) {
             if (node.getParentNode() instanceof FieldDeclaration) {
-                FieldDeclaration parent = (FieldDeclaration)node.getParentNode();
+                FieldDeclaration parent = (FieldDeclaration) node.getParentNode();
                 return new JavaParserFacade(typeSolver).convertToUsage(parent.getType(), parent);
             } else {
                 throw new UnsupportedOperationException(node.getParentNode().getClass().getCanonicalName());
             }
+        } else if (node instanceof FieldAccessExpr) {
+            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
+            Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
+            if (value.isPresent()) {
+                return value.get().getUsage();
+            } else {
+                throw new UnsolvedSymbolException(null, fieldAccessExpr.getField());
+            }
+        } else if (node instanceof ObjectCreationExpr) {
+            ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr)node;
+            TypeUsage typeUsage = new JavaParserFacade(typeSolver).convertToUsage(objectCreationExpr.getType(), node);
+            return typeUsage;
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

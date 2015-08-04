@@ -3,7 +3,9 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.TypeParameter;
 import me.tomassetti.symbolsolver.model.Context;
+import me.tomassetti.symbolsolver.model.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
@@ -32,7 +34,14 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public String toString() {
+        return "JavaParserTypeVariableDeclaration{" +
+                wrappedNode.getName() +
+                '}';
+    }
+
+    @Override
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 
@@ -49,6 +58,16 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     @Override
     public boolean isTypeVariable() {
         return true;
+    }
+
+    @Override
+    public FieldDeclaration getField(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasField(String name) {
+        return false;
     }
 
     @Override

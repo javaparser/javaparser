@@ -3,8 +3,9 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.*;
 import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
@@ -29,7 +30,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 
@@ -119,6 +120,38 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     @Override
     public boolean isTypeVariable() {
         return false;
+    }
+
+    @Override
+    public FieldDeclaration getField(String name) {
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
+                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
+                for (VariableDeclarator vd : field.getVariables()) {
+                    if (vd.getId().getName().equals(name)){
+                        return new JavaParserFieldDeclaration(vd);
+                    }
+                }
+            }
+        }
+
+        throw new UnsupportedOperationException("Derived fields");
+    }
+
+    @Override
+    public boolean hasField(String name) {
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
+                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
+                for (VariableDeclarator vd : field.getVariables()) {
+                    if (vd.getId().getName().equals(name)){
+                        return true;
+                    }
+                }
+            }
+        }
+
+        throw new UnsupportedOperationException("Derived fields");
     }
 
     @Override

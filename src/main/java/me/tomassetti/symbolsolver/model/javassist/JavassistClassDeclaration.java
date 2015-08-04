@@ -38,7 +38,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
 
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)){
@@ -50,7 +50,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass).solveMethod(name, parameterTypes);
+                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass).solveMethod(name, parameterTypes, typeSolver);
                 if (ref.isSolved()) {
                     return ref;
                 }
@@ -61,7 +61,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(interfaze).solveMethod(name, parameterTypes);
+                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(interfaze).solveMethod(name, parameterTypes, typeSolver);
                 if (ref.isSolved()) {
                     return ref;
                 }
@@ -86,6 +86,16 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     @Override
     public boolean isTypeVariable() {
         return false;
+    }
+
+    @Override
+    public FieldDeclaration getField(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasField(String name) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

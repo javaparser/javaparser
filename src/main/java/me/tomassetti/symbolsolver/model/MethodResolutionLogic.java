@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  */
 public class MethodResolutionLogic {
 
-    public static boolean isApplicable(MethodDeclaration method, String name, List<TypeUsage> paramTypes) {
+    public static boolean isApplicable(MethodDeclaration method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
         if (!method.getName().equals(name)) {
             return false;
         }
@@ -20,15 +20,15 @@ public class MethodResolutionLogic {
             return false;
         }
         for (int i=0; i<method.getNoParams(); i++) {
-            if (!method.getParam(i).getType().isAssignableBy(paramTypes.get(i))){
+            if (!method.getParam(i).getType(typeSolver).isAssignableBy(paramTypes.get(i))){
                 return false;
             }
         }
         return true;
     }
 
-    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<TypeUsage> paramTypes){
-        List<MethodDeclaration> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, paramTypes)).collect(Collectors.toList());
+    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver){
+        List<MethodDeclaration> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, paramTypes, typeSolver)).collect(Collectors.toList());
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }

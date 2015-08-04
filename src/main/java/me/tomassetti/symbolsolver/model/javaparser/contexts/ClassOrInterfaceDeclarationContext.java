@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -64,7 +65,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         for (BodyDeclaration member : wrappedNode.getMembers()){
             if (member instanceof FieldDeclaration) {
                 SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
-                Optional<Value> ref = solveWithAsValue(symbolDeclarator, name);
+                Optional<Value> ref = solveWithAsValue(symbolDeclarator, name, typeSolver);
                 if (ref.isPresent()) {
                     return ref;
                 }

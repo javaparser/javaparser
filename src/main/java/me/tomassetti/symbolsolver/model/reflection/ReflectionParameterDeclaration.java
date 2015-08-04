@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.reflection;
 
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 
@@ -39,7 +40,7 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeDeclaration getType() {
+    public TypeDeclaration getType(TypeSolver typeSolver) {
         return new ReflectionClassDeclaration(type);
     }
 }

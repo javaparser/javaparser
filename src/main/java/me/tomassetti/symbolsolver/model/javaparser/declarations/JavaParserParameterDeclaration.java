@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 
@@ -33,7 +34,7 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeDeclaration getType() {
+    public TypeDeclaration getType(TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 }

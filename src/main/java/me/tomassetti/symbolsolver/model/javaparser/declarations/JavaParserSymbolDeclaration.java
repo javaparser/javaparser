@@ -75,7 +75,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public TypeDeclaration getType() {
+    public TypeDeclaration getType(TypeSolver typeSolver) {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
             if (wrappedNode.getParentNode() instanceof LambdaExpr) {
@@ -135,7 +135,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public TypeUsage getTypeUsage() {
+    public TypeUsage getTypeUsage(TypeSolver typeSolver) {
         return new JavaParserFacade(typeSolver).getType(wrappedNode);
     }
 }

@@ -8,9 +8,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
@@ -131,6 +133,21 @@ public class GenericsTest {
         TypeUsage typeParam = typeUsage.parameters().get(0);
         assertEquals(true, typeParam.isTypeVariable());
         assertEquals("A", typeParam.getTypeName());
+    }
+
+    @Test
+    public void resolveUsageOfGenericFieldSimpleCase() throws ParseException {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo1");
+
+        ExpressionStmt stmt = (ExpressionStmt)method.getBody().getStmts().get(0);
+        Expression expression = stmt.getExpression();
+        TypeUsage typeUsage = new JavaParserFacade(new JreTypeSolver()).getType(expression);
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("java.lang.String", typeUsage.getTypeName());
     }
 
 

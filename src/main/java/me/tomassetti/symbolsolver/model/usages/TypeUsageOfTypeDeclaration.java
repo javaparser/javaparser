@@ -1,14 +1,13 @@
 package me.tomassetti.symbolsolver.model.usages;
 
-import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.SymbolReference;
-import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -47,7 +46,24 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     public String toString() {
         return "TypeUsageOfTypeDeclaration{" +
                 "typeDeclaration=" + typeDeclaration +
+                ", typeParameters=" + typeParameters +
                 '}';
+    }
+
+    @Override
+    public Optional<Value> getField(String name, TypeSolver typeSolver) {
+        if (!typeDeclaration.hasField(name)){
+            return Optional.empty();
+        }
+        TypeDeclaration typeOfField = typeDeclaration.getField(name).getType(typeSolver);
+        TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
+
+        ora io dovrei capire che mi ha restituito una variabile che si riferisce alla classe
+        rappresentata da THIS. Per capirlo potremmo associare piu' info alle TypeVariable,
+        mettendo dove sono state dichiarate
+
+        if (0 == 0) throw new RuntimeException("REPLACE TYPE VARIABLES "+typeUsage);
+        return Optional.of(new Value(typeUsage, name, true));
     }
 
     @Override
@@ -66,8 +82,8 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
-        return typeDeclaration.solveMethod(name, parameterTypes);
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        return typeDeclaration.solveMethod(name, parameterTypes, typeSolver);
     }
 
     @Override

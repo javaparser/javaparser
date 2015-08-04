@@ -8,6 +8,7 @@ import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by federico on 28/07/15.
@@ -31,6 +32,20 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
 
         // if nothing is found we should ask the parent context
         return getParent().solveSymbol(name, typeSolver);
+    }
+
+    @Override
+    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+        for (Parameter parameter : wrappedNode.getParameters()) {
+            SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
+            Optional<Value> symbolReference = solveWithAsValue(sb, name, typeSolver);
+            if (symbolReference.isPresent()) {
+                return symbolReference;
+            }
+        }
+
+        // if nothing is found we should ask the parent context
+        return getParent().solveSymbolAsValue(name, typeSolver);
     }
 
     @Override

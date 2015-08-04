@@ -32,6 +32,8 @@ public class JavaParserFactory {
             return new MethodCallExprContext((MethodCallExpr)node);
         } else if (node instanceof EnumDeclaration) {
             throw new UnsupportedOperationException();
+        } else if (node instanceof FieldAccessExpr) {
+            return new FieldAccessContext((FieldAccessExpr)node);
         } else {
             return getContext(node.getParentNode());
         }

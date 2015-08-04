@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.javassist;
 
 import javassist.CtClass;
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 
@@ -47,7 +48,7 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeDeclaration getType() {
+    public TypeDeclaration getType(TypeSolver typeSolver) {
         return new JavassistClassDeclaration(type);
     }
 }
