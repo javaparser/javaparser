@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.javaparser;
 
 import java.util.Optional;
+import java.util.List;
 
 public final class Generics {
 
