@@ -1,6 +1,8 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
@@ -68,7 +70,40 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
     @Override
     public String getQualifiedName() {
-        throw new UnsupportedOperationException();
+        String containerName = containerName("", wrappedNode.getParentNode());
+        if (containerName.isEmpty()) {
+            return wrappedNode.getName();
+        } else {
+            return containerName + "." + wrappedNode.getName();
+        }
+    }
+
+    private String containerName(String base, Node container) {
+        if (container instanceof ClassOrInterfaceDeclaration) {
+            String b = containerName(base, container.getParentNode());
+            String cn = ((ClassOrInterfaceDeclaration)container).getName();
+            if (b.isEmpty()) {
+                return cn;
+            } else {
+                return b + "." + cn;
+            }
+        } else if (container instanceof CompilationUnit) {
+            PackageDeclaration p = ((CompilationUnit) container).getPackage();
+            if (p != null) {
+                String b = p.getName().toString();
+                if (base.isEmpty()) {
+                    return b;
+                } else {
+                    return b + "." + base;
+                }
+            } else {
+                return base;
+            }
+        } else if (container != null) {
+            return containerName(base, container.getParentNode());
+        } else {
+            return base;
+        }
     }
 
     /*@Override

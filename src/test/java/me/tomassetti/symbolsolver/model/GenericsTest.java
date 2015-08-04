@@ -40,7 +40,7 @@ public class GenericsTest {
     }
 
     @Test
-    public void resolveDeclaredFieldReference() throws ParseException {
+    public void resolveFieldWithGenericTypeToString() throws ParseException {
         CompilationUnit cu = parseSample("Generics");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         VariableDeclarator fieldS = Navigator.demandField(clazz, "s");
@@ -55,6 +55,42 @@ public class GenericsTest {
         TypeUsage typeUsage = symbolReference.get().getUsage();
         assertEquals(1, typeUsage.parameters().size());
         assertEquals("java.lang.String", typeUsage.parameters().get(0).getTypeName());
+    }
+
+    @Test
+    public void resolveFieldWithGenericTypeToDeclaredClass() throws ParseException {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
+        VariableDeclarator fieldS = Navigator.demandField(clazz, "g");
+
+        SymbolSolver symbolSolver = new SymbolSolver(new JreTypeSolver());
+        Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("g", fieldS);
+
+        assertEquals(true, symbolReference.isPresent());
+        assertEquals("g", symbolReference.get().getName());
+        assertEquals(true, symbolReference.get().isField());
+
+        TypeUsage typeUsage = symbolReference.get().getUsage();
+        assertEquals(1, typeUsage.parameters().size());
+        assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", typeUsage.parameters().get(0).getTypeName());
+    }
+
+    @Test
+    public void resolveFieldWithGenericTypeToInteger() throws ParseException {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
+        VariableDeclarator fieldS = Navigator.demandField(clazz, "i");
+
+        SymbolSolver symbolSolver = new SymbolSolver(new JreTypeSolver());
+        Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("i", fieldS);
+
+        assertEquals(true, symbolReference.isPresent());
+        assertEquals("i", symbolReference.get().getName());
+        assertEquals(true, symbolReference.get().isField());
+
+        TypeUsage typeUsage = symbolReference.get().getUsage();
+        assertEquals(1, typeUsage.parameters().size());
+        assertEquals("java.lang.Integer", typeUsage.parameters().get(0).getTypeName());
     }
 
 }
