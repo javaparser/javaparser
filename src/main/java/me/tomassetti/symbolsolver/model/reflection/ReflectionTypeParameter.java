@@ -19,6 +19,21 @@ public class ReflectionTypeParameter implements TypeParameter {
     }
 
     @Override
+    public boolean declaredOnClass() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean declaredOnMethod() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getQNameOfDeclaringClass() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public String toString() {
         return "ReflectionTypeParameter{" +
                 "typeVariable=" + typeVariable +

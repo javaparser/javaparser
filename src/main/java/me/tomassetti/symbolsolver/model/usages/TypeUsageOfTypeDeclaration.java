@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.model.usages;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.Collections;
@@ -50,6 +51,17 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
                 '}';
     }
 
+    private Optional<TypeUsage> typeParamByName(String name){
+        int i =  0;
+        for (TypeParameter tp : typeDeclaration.getTypeParameters()){
+            if (tp.getName().equals(name)) {
+                return Optional.of(this.typeParameters.get(i));
+            }
+            i++;
+        }
+        return Optional.empty();
+    }
+
     @Override
     public Optional<Value> getField(String name, TypeSolver typeSolver) {
         if (!typeDeclaration.hasField(name)){
@@ -58,11 +70,20 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         TypeDeclaration typeOfField = typeDeclaration.getField(name).getType(typeSolver);
         TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
 
-        ora io dovrei capire che mi ha restituito una variabile che si riferisce alla classe
-        rappresentata da THIS. Per capirlo potremmo associare piu' info alle TypeVariable,
-        mettendo dove sono state dichiarate
+        //ora io dovrei capire che mi ha restituito una variabile che si riferisce alla classe
+        //rappresentata da THIS. Per capirlo potremmo associare piu' info alle TypeVariable,
+        //mettendo dove sono state dichiarate
 
-        if (0 == 0) throw new RuntimeException("REPLACE TYPE VARIABLES "+typeUsage);
+        if (typeUsage.isTypeVariable()) {
+            TypeParameter typeParameter = typeUsage.asTypeParameter();
+            if (typeParameter.declaredOnClass()) {
+                Optional<TypeUsage> typeParam = typeParamByName(typeParameter.getName());
+                if (typeParam.isPresent()) {
+                    typeUsage = typeParam.get();
+                }
+            }
+        }
+
         return Optional.of(new Value(typeUsage, name, true));
     }
 
@@ -89,6 +110,15 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     @Override
     public List<TypeUsage> parameters() {
         return typeParameters;
+    }
+
+    @Override
+    public TypeParameter asTypeParameter() {
+        if (this.typeDeclaration instanceof JavaParserTypeVariableDeclaration){
+            JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration)this.typeDeclaration;
+            return javaParserTypeVariableDeclaration.asTypeParameter();
+        }
+        throw new UnsupportedOperationException(this.typeDeclaration.getClass().getCanonicalName());
     }
 
     @Override

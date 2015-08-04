@@ -11,7 +11,9 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 30/07/15.
@@ -156,6 +158,12 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        if (this.wrappedNode.getTypeParameters() == null) {
+            return Collections.emptyList();
+        } else {
+            return this.wrappedNode.getTypeParameters().stream().map(
+                    (tp) -> new JavaParserTypeParameter(tp)
+            ).collect(Collectors.toList());
+        }
     }
 }

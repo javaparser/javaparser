@@ -94,4 +94,8 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     public List<me.tomassetti.symbolsolver.model.TypeParameter> getTypeParameters() {
         throw new UnsupportedOperationException();
     }
+
+    public me.tomassetti.symbolsolver.model.TypeParameter asTypeParameter() {
+        return new JavaParserTypeParameter(this.wrappedNode);
+    }
 }

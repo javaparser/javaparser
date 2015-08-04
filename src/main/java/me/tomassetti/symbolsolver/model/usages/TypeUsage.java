@@ -1,9 +1,6 @@
 package me.tomassetti.symbolsolver.model.usages;
 
-import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.SymbolReference;
-import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.Value;
+import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.List;
@@ -47,6 +44,10 @@ public interface TypeUsage {
     boolean isTypeVariable();
 
     default Optional<Value> getField(String name, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
+    default TypeParameter asTypeParameter() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 }

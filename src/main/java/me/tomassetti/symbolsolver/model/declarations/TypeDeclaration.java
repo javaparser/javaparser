@@ -32,4 +32,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     FieldDeclaration getField(String name);
 
     boolean hasField(String name);
+
+
 }
