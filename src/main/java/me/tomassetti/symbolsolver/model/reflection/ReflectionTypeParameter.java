@@ -12,4 +12,16 @@ public class ReflectionTypeParameter implements TypeParameter {
     public ReflectionTypeParameter(TypeVariable typeVariable) {
         this.typeVariable = typeVariable;
     }
+
+    @Override
+    public String getName() {
+        return typeVariable.getName();
+    }
+
+    @Override
+    public String toString() {
+        return "ReflectionTypeParameter{" +
+                "typeVariable=" + typeVariable +
+                '}';
+    }
 }

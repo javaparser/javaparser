@@ -9,6 +9,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
@@ -42,14 +43,16 @@ public class SymbolSolver {
         return solveType(name, JavaParserFactory.getContext(node));
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String methodName, List<TypeUsage> params, Context context) {
-        return context.solveMethod(methodName, params, typeSolver);
+    public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Context context) {
+        //return context.solveMethod(methodName, params, typeSolver);
+        //throw new UnsupportedOperationException();
+        return new MethodUsage(context.solveMethod(methodName, params, typeSolver));
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String methodName, List<TypeUsage> params, Node node) {
+    public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Node node) {
         return solveMethod(methodName, params, JavaParserFactory.getContext(node));
     }
-
+;
     public TypeDeclaration solveType(Type type) {
         if (type instanceof ReferenceType) {
             ReferenceType referenceType = (ReferenceType) type;

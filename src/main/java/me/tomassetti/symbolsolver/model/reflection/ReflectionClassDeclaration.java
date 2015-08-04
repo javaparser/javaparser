@@ -55,7 +55,8 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
     @Override
     public TypeUsage getUsage(Node node) {
-        if (!this.getTypeParameters().isEmpty()) {
+        for (TypeParameter tp : this.getTypeParameters()){
+            System.out.println(tp);
             throw new UnsupportedOperationException("Find parameters of "+this+" in "+node);
         }
         return new TypeUsageOfTypeDeclaration(this);
