@@ -75,6 +75,11 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         return typeParameters;
     }
 
+    @Override
+    public boolean isTypeVariable() {
+        return typeDeclaration.isTypeVariable();
+    }
+
     public boolean isFunctionOrPredicate() {
         return false;
     }

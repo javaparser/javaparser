@@ -24,4 +24,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     TypeUsage getUsage(Node node);
 
     boolean isAssignableBy(TypeUsage typeUsage);
+
+    boolean isTypeVariable();
 }

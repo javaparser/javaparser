@@ -93,4 +93,24 @@ public class GenericsTest {
         assertEquals("java.lang.Integer", typeUsage.parameters().get(0).getTypeName());
     }
 
+    @Test
+    public void resolveFieldOfVariableType() throws ParseException {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+        VariableDeclarator field = Navigator.demandField(clazz, "a");
+
+        SymbolSolver symbolSolver = new SymbolSolver(new JreTypeSolver());
+        Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("a", field);
+
+        assertEquals(true, symbolReference.isPresent());
+        assertEquals("a", symbolReference.get().getName());
+        assertEquals(true, symbolReference.get().isField());
+
+        TypeUsage typeUsage = symbolReference.get().getUsage();
+        System.out.println(typeUsage.getClass().getCanonicalName());
+        assertEquals(true, typeUsage.isTypeVariable());
+        assertEquals("A", typeUsage.getTypeName());
+    }
+
+
 }

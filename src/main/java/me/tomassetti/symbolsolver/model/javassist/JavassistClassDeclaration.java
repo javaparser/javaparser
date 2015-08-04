@@ -84,6 +84,11 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isTypeVariable() {
+        return false;
+    }
+
+    @Override
     public String getName() {
         return ctClass.getSimpleName();
     }

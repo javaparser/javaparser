@@ -53,4 +53,9 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     public List<TypeUsage> parameters() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public boolean isTypeVariable() {
+        return false;
+    }
 }

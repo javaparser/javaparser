@@ -41,4 +41,5 @@ public interface TypeUsage {
 
     List<TypeUsage> parameters();
 
+    boolean isTypeVariable();
 }

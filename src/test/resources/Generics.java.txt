@@ -9,3 +9,12 @@ public final class Generics {
     Optional<Generics> g;
 
 }
+
+public final class SomeCollection<A> {
+
+    private A a;
+    private List<A> as;
+
+    public abstract <B extends A> List<B> foo(B b);
+
+}

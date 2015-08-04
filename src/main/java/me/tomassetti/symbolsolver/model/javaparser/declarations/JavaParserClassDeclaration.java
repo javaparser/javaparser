@@ -117,6 +117,11 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isTypeVariable() {
+        return false;
+    }
+
+    @Override
     public List<TypeParameter> getTypeParameters() {
         throw new UnsupportedOperationException();
     }

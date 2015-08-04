@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -8,6 +9,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedTypeException;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
@@ -90,6 +92,13 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)){
             return SymbolReference.solved(new JavaParserClassDeclaration(this.wrappedNode));
+        }
+        if (this.wrappedNode.getTypeParameters() != null) {
+            for (com.github.javaparser.ast.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
+                if (typeParameter.getName().equals(name)) {
+                    return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter));
+                }
+            }
         }
         // TODO consider also internal classes
         return getParent().solveType(name, typeSolver);

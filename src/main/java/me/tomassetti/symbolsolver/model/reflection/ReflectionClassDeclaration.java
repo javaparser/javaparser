@@ -87,6 +87,11 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isTypeVariable() {
+        return false;
+    }
+
+    @Override
     public String getName() {
         return clazz.getSimpleName();
     }
