@@ -2,11 +2,14 @@ package me.tomassetti.symbolsolver.model.usages;
 
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.TypeParameter;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 31/07/15.
@@ -14,9 +17,15 @@ import java.util.List;
 public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     private TypeDeclaration typeDeclaration;
+    private List<TypeUsage> typeParameters;
 
     public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration) {
+        this(typeDeclaration, Collections.emptyList());
+    }
+
+    public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters) {
         this.typeDeclaration = typeDeclaration;
+        this.typeParameters = typeParameters;
     }
 
     @Override
@@ -43,7 +52,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     @Override
     public String getTypeName() {
-        return typeDeclaration.getName();
+        return typeDeclaration.getQualifiedName();
     }
 
     @Override
@@ -63,7 +72,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     @Override
     public List<TypeUsage> parameters() {
-        throw new UnsupportedOperationException();
+        return typeParameters;
     }
 
     public boolean isFunctionOrPredicate() {

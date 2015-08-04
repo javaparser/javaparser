@@ -1,0 +1,11 @@
+package me.tomassetti.symbolsolver.javaparser;
+
+import java.util.Optional;
+
+public final class Generics {
+
+    Optional<String> s;
+    Optional<Integer> i;
+    Optional<Generics> g;
+
+}

@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.LambdaExpr;
@@ -98,6 +99,9 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
             if (wrappedNode.getParentNode() instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr)variableDeclarator.getParentNode();
                 return new JavaParserFacade(typeSolver).convert(variableDeclarationExpr.getType(), JavaParserFactory.getContext(wrappedNode));
+            } else if (wrappedNode.getParentNode() instanceof FieldDeclaration) {
+                FieldDeclaration fieldDeclaration = (FieldDeclaration)variableDeclarator.getParentNode();
+                return new JavaParserFacade(typeSolver).convert(fieldDeclaration.getType(), JavaParserFactory.getContext(wrappedNode));
             } else {
                 throw new UnsupportedOperationException(wrappedNode.getParentNode().getClass().getCanonicalName());
             }
@@ -128,5 +132,10 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public TypeUsage getTypeUsage() {
+        return new JavaParserFacade(typeSolver).getType(wrappedNode);
     }
 }

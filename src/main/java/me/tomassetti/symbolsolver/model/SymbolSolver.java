@@ -13,6 +13,7 @@ import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by federico on 28/07/15.
@@ -34,6 +35,15 @@ public class SymbolSolver {
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, Node node) {
         return solveSymbol(name, JavaParserFactory.getContext(node));
     }
+
+    public Optional<Value> solveSymbolAsValue(String name, Context context) {
+        return context.solveSymbolAsValue(name, typeSolver);
+    }
+
+    public Optional<Value> solveSymbolAsValue(String name, Node node) {
+        return solveSymbolAsValue(name, JavaParserFactory.getContext(node));
+    }
+
 
     public SymbolReference<? extends TypeDeclaration> solveType(String name, Context context) {
         return context.solveType(name, typeSolver);

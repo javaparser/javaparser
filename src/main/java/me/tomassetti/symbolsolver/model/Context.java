@@ -6,6 +6,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Context is very similar to scope.
@@ -16,4 +17,7 @@ public interface Context {
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
     public Context getParent();
     public boolean isRoot();
+    default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
 }

@@ -51,9 +51,23 @@ public final class Navigator {
             }
         }
         if (found == null) {
-            throw new IllegalStateException("No method with given getName");
+            throw new IllegalStateException("No method with given name");
         }
         return found;
+    }
+
+    public static VariableDeclarator demandField(ClassOrInterfaceDeclaration cd, String name) {
+        for (BodyDeclaration bd : cd.getMembers()) {
+            if (bd instanceof FieldDeclaration) {
+                FieldDeclaration fd = (FieldDeclaration) bd;
+                for (VariableDeclarator vd : fd.getVariables()) {
+                    if (vd.getId().getName().equals(name)) {
+                        return vd;
+                    }
+                }
+            }
+        }
+        throw new IllegalStateException("No fieldwith given name");
     }
 
     public static NameExpr findNameExpression(Node node, String name) {

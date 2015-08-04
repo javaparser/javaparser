@@ -6,6 +6,8 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 
+import java.util.Optional;
+
 /**
  * Created by federico on 28/07/15.
  */
@@ -24,6 +26,15 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
         }
         return SymbolReference.unsolved(ValueDeclaration.class);
+    }
+
+    protected final Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name){
+        for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()){
+            if (decl.getName().equals(name)){
+                return Optional.of(Value.from(decl));
+            }
+        }
+        return Optional.empty();
     }
 
     @Override

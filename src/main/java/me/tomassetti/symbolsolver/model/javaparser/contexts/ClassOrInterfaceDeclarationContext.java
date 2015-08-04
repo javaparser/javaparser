@@ -11,6 +11,7 @@ import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassD
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by federico on 28/07/15.
@@ -51,6 +52,38 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
         // then to parent
         return getParent().solveSymbol(name, typeSolver);
+    }
+
+    @Override
+    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+        if (typeSolver == null) throw new IllegalArgumentException();
+
+        // first among declared fields
+        for (BodyDeclaration member : wrappedNode.getMembers()){
+            if (member instanceof FieldDeclaration) {
+                SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
+                Optional<Value> ref = solveWithAsValue(symbolDeclarator, name);
+                if (ref.isPresent()) {
+                    return ref;
+                }
+            }
+        }
+
+        // then among inherited fields
+        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && wrappedNode.getExtends().size() > 0){
+            String superClassName = wrappedNode.getExtends().get(0).getName();
+            SymbolReference<TypeDeclaration> superClass = solveType(superClassName, typeSolver);
+            if (!superClass.isSolved()) {
+                throw new UnsolvedTypeException(this, superClassName);
+            }
+            Optional<Value> ref = superClass.getCorrespondingDeclaration().getContext().solveSymbolAsValue(name, typeSolver);
+            if (ref.isPresent()) {
+                return ref;
+            }
+        }
+
+        // then to parent
+        return getParent().solveSymbolAsValue(name, typeSolver);
     }
 
     @Override
