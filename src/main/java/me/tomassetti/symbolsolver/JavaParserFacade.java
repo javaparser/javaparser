@@ -124,11 +124,11 @@ public class JavaParserFacade {
         }
     }
 
-    private TypeUsage convertToUsage(Type type, Node context) {
+    public TypeUsage convertToUsage(Type type, Node context) {
         return convertToUsage(type, JavaParserFactory.getContext(context));
     }
 
-    private TypeUsage convertToUsage(Type type, Context context) {
+    public TypeUsage convertToUsage(Type type, Context context) {
         if (type instanceof ReferenceType) {
             ReferenceType referenceType = (ReferenceType) type;
             // TODO consider array modifiers

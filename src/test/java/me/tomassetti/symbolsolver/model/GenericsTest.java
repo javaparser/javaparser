@@ -150,5 +150,40 @@ public class GenericsTest {
         assertEquals("java.lang.String", typeUsage.getTypeName());
     }
 
+    //PRIMA UN TEST CHE DICA CHE IL TIPO DEL CAMPO AS e' LIST<A> NON LIST<E>
+    @Test
+    public void resolveUsageOfGenericFieldIntermediateCase() throws ParseException {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+
+        VariableDeclarator field = Navigator.demandField(clazz, "as");
+
+        TypeUsage typeUsage = new JavaParserFacade(new JreTypeSolver()).getType(field);
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("java.util.List", typeUsage.getTypeName());
+        assertEquals(1, typeUsage.parameters().size());
+        assertEquals(true, typeUsage.parameters().get(0).isTypeVariable());
+        assertEquals("A", typeUsage.parameters().get(0).getTypeName());
+    }
+
+    @Test
+    public void resolveUsageOfGenericFieldAdvancedCase() throws ParseException {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo2");
+
+        ExpressionStmt stmt = (ExpressionStmt)method.getBody().getStmts().get(0);
+        Expression expression = stmt.getExpression();
+        TypeUsage typeUsage = new JavaParserFacade(new JreTypeSolver()).getType(expression);
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("java.util.List", typeUsage.getTypeName());
+        assertEquals(1, typeUsage.parameters().size());
+        assertEquals(false, typeUsage.parameters().get(0).isTypeVariable());
+        assertEquals("java.lang.String", typeUsage.parameters().get(0).getTypeName());
+    }
+
 
 }

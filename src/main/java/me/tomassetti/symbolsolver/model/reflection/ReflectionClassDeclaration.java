@@ -135,7 +135,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     public List<TypeParameter> getTypeParameters() {
         List<TypeParameter> params = new ArrayList<>();
         for (TypeVariable tv : this.clazz.getTypeParameters()) {
-            params.add(new ReflectionTypeParameter(tv));
+            params.add(new ReflectionTypeParameter(tv, true));
         }
         return params;
     }

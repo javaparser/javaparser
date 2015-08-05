@@ -8,9 +8,11 @@ import java.lang.reflect.TypeVariable;
 public class ReflectionTypeParameter implements TypeParameter {
 
     private TypeVariable typeVariable;
+    private boolean declaredOnClass;
 
-    public ReflectionTypeParameter(TypeVariable typeVariable) {
+    public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass) {
         this.typeVariable = typeVariable;
+        this.declaredOnClass = declaredOnClass;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class ReflectionTypeParameter implements TypeParameter {
 
     @Override
     public boolean declaredOnClass() {
-        throw new UnsupportedOperationException();
+        return declaredOnClass;
     }
 
     @Override

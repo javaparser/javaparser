@@ -6,6 +6,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,11 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     private List<TypeUsage> typeParameters;
 
     public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration) {
-        this(typeDeclaration, Collections.emptyList());
+        this(typeDeclaration, deriveParams(typeDeclaration));
+    }
+
+    private static List<TypeUsage> deriveParams(TypeDeclaration typeDeclaration) {
+        return typeDeclaration.getTypeParameters().stream().map((tp)->new TypeUsageOfTypeParameter(tp)).collect(Collectors.toList());
     }
 
     public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters) {
@@ -67,13 +72,27 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         if (!typeDeclaration.hasField(name)){
             return Optional.empty();
         }
-        TypeDeclaration typeOfField = typeDeclaration.getField(name).getType(typeSolver);
-        TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
+        TypeUsage typeUsage = typeDeclaration.getField(name).getTypeUsage(typeSolver);
+        //TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
 
         //ora io dovrei capire che mi ha restituito una variabile che si riferisce alla classe
         //rappresentata da THIS. Per capirlo potremmo associare piu' info alle TypeVariable,
         //mettendo dove sono state dichiarate
 
+
+        typeUsage = replaceTypeParams(typeUsage);
+
+        return Optional.of(new Value(typeUsage, name, true));
+    }
+
+    @Override
+    public TypeUsage replaceParam(int i, TypeUsage replaced) {
+        ArrayList<TypeUsage> typeParametersCorrected = new ArrayList<>(typeParameters);
+        typeParametersCorrected.set(i, replaced);
+        return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParametersCorrected);
+    }
+
+    private TypeUsage replaceTypeParams(TypeUsage typeUsage){
         if (typeUsage.isTypeVariable()) {
             TypeParameter typeParameter = typeUsage.asTypeParameter();
             if (typeParameter.declaredOnClass()) {
@@ -84,7 +103,15 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
             }
         }
 
-        return Optional.of(new Value(typeUsage, name, true));
+        for (int i=0; i<typeUsage.parameters().size(); i++) {
+            TypeUsage replaced = replaceTypeParams(typeUsage.parameters().get(i));
+            // Identity comparison on purpose
+            if (replaced != typeUsage.parameters().get(i)) {
+                typeUsage = typeUsage.replaceParam(i, replaced);
+            }
+        }
+
+        return typeUsage;
     }
 
     @Override

@@ -10,6 +10,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -92,7 +93,7 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
 
     @Override
     public List<me.tomassetti.symbolsolver.model.TypeParameter> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyList();
     }
 
     public me.tomassetti.symbolsolver.model.TypeParameter asTypeParameter() {

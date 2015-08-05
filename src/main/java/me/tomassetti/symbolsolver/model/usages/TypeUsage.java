@@ -50,4 +50,14 @@ public interface TypeUsage {
     default TypeParameter asTypeParameter() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
+
+    /**
+     * Create a copy of the value with the type parameter changed.
+     * @param i
+     * @param replaced
+     * @return
+     */
+    default TypeUsage replaceParam(int i, TypeUsage replaced) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
 }
