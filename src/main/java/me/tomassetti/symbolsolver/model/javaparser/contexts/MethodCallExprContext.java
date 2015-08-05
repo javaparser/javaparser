@@ -7,9 +7,11 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by federico on 31/07/15.
@@ -21,6 +23,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        if (wrappedNode.getScope() != null) {
+            TypeUsage typeOfScope = new JavaParserFacade(typeSolver).getType(wrappedNode.getScope());
+            return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver);
+        } else {
+            throw new UnsupportedOperationException();
+            //return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
+        }
+    }
+
+    @Override
     public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
     }
@@ -28,6 +41,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+        return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbolAsValue(name, typeSolver);
     }
 
     @Override

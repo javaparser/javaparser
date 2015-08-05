@@ -19,6 +19,8 @@ public interface TypeUsage {
     boolean isArray();
     boolean isPrimitive();
 
+    Optional<TypeUsage> parameterByName(String name);
+
     boolean isFunctionOrPredicate();
 
     /**
@@ -38,6 +40,9 @@ public interface TypeUsage {
     Context getContext();
 
     SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
 
     List<TypeUsage> parameters();
 

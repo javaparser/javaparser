@@ -4,11 +4,20 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by federico on 02/08/15.
  */
 public class LambdaTypeUsagePlaceholder implements TypeUsage {
+
+    private int pos;
+    private SymbolReference<MethodDeclaration> method;
+
+    public LambdaTypeUsagePlaceholder(int pos) {
+        this.pos = pos;
+    }
+
     @Override
     public boolean isArray() {
         return false;
@@ -17,6 +26,11 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     @Override
     public boolean isPrimitive() {
         return false;
+    }
+
+    @Override
+    public Optional<TypeUsage> parameterByName(String name) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -57,5 +71,9 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     @Override
     public boolean isTypeVariable() {
         return false;
+    }
+
+    public void setMethod(SymbolReference<MethodDeclaration> method) {
+        this.method = method;
     }
 }

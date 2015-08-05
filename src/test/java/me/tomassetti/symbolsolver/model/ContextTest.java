@@ -20,6 +20,7 @@ import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JarTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import org.junit.Test;
 import static org.easymock.EasyMock.*;
 
@@ -188,23 +189,6 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
 
-        /*Context compilationUnitCtx = createMock(Context.class);
-        me.tomassetti.symbolsolver.model.declarations.MethodDeclaration getTypes = createMock(me.tomassetti.symbolsolver.model.declarations.MethodDeclaration.class);
-        expect(getTypes.getName()).andReturn("getTypes");
-
-        ClassDeclaration compilationUnit = createMock(ClassDeclaration.class);
-        expect(compilationUnit.getName()).andReturn("CompilationUnit");
-        expect(compilationUnit.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
-        expect(compilationUnit.isType()).andReturn(true);
-        //expect(compilationUnit.asTypeDeclaration()).andReturn(compilationUnit);
-        expect(compilationUnit.getContext()).andReturn(compilationUnitCtx);
-        expect(compilationUnit.solveMethod("getTypes", Collections.emptyList())).andReturn(SymbolReference.solved(getTypes));
-        expect(getTypes.declaringType()).andReturn(compilationUnit);
-        TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnit));
-        //expect(compilationUnitCtx.solveMethod("getTypes", Collections.emptyList(), typeSolver)).andReturn(SymbolReference.solved(getTypes));
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        replay(typeSolver, compilationUnit, compilationUnitCtx, getTypes);*/
         MethodUsage ref = symbolSolver.solveMethod("getTypes", Collections.emptyList(), callToGetTypes);
 
         assertEquals("getTypes", ref.getName());
@@ -243,6 +227,35 @@ public class ContextTest {
         assertEquals("java.util.stream.Stream",streamType.getQualifiedName());
     }
 
+    @Test
+    public void resolveReferenceToMethodWithLambda() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("NavigatorSimplified");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
+        MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "filter");
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        TypeUsage ref = new JavaParserFacade(typeSolver).getType(methodCallExpr);
+
+        assertEquals("java.util.stream.Stream", ref.getTypeName());
+        assertEquals(1, ref.parameters().size());
+        assertEquals("java.lang.String", ref.parameters().get(0).getTypeName());
+    }
+
+    /*@Test
+    public void resolveReferenceToLambdaParamBase() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("NavigatorSimplified");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
+        NameExpr refToT = Navigator.findNameExpression(method, "t");
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        TypeUsage ref = new JavaParserFacade(typeSolver).getType(refToT);
+
+        assertEquals("java.lang.String", ref.getTypeName());
+    }
+
     /*@Test
     public void resolveReferenceToLambdaParamSimplified() throws ParseException, IOException {
         CompilationUnit cu = parseSample("NavigatorSimplified");
@@ -250,9 +263,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr call = Navigator.findMethodCall(method, "isEmpty");
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new JreTypeSolver());
+        TypeSolver typeSolver = new JreTypeSolver();
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call);
 

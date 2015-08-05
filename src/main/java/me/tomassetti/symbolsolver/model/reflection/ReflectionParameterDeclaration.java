@@ -3,6 +3,8 @@ package me.tomassetti.symbolsolver.model.reflection;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 /**
  * Created by federico on 02/08/15.
@@ -20,6 +22,13 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
+    public String toString() {
+        return "ReflectionParameterDeclaration{" +
+                "type=" + type +
+                '}';
+    }
+
+    @Override
     public boolean isField() {
         return false;
     }
@@ -27,6 +36,11 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
     @Override
     public boolean isParameter() {
         return true;
+    }
+
+    @Override
+    public TypeUsage getTypeUsage(TypeSolver typeSolver) {
+        return new TypeUsageOfTypeDeclaration(getType(typeSolver));
     }
 
     @Override

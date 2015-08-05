@@ -5,9 +5,11 @@ import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by federico on 31/07/15.
@@ -34,4 +36,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     boolean hasField(String name);
 
 
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
 }

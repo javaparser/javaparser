@@ -37,6 +37,13 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public String toString() {
+        return "ReflectionMethodDeclaration{" +
+                "method=" + method +
+                '}';
+    }
+
+    @Override
     public boolean isType() {
         return false;
     }
@@ -58,7 +65,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public TypeDeclaration getReturnType() {
-        throw new UnsupportedOperationException();
+        return new ReflectionClassDeclaration(method.getReturnType());
     }
 
     @Override

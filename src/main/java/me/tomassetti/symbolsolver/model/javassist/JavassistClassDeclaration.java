@@ -10,12 +10,14 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +37,42 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     @Override
     public String getQualifiedName() {
         return ctClass.getName();
+    }
+
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+
+        for (CtMethod method : ctClass.getDeclaredMethods()) {
+            if (method.getName().equals(name)){
+                // TODO check parameters
+                return Optional.of(new MethodUsage(new JavassistMethodDeclaration(method), typeSolver));
+            }
+        }
+
+        try {
+            CtClass superClass = ctClass.getSuperclass();
+            if (superClass != null) {
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass).solveMethodAsUsage(name, parameterTypes, typeSolver);
+                if (ref.isPresent()) {
+                    return ref;
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            for (CtClass interfaze : ctClass.getInterfaces()) {
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze).solveMethodAsUsage(name, parameterTypes, typeSolver);
+                if (ref.isPresent()) {
+                    return ref;
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return Optional.empty();
     }
 
     @Override
@@ -140,7 +178,6 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         } else {
             try {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                System.out.println("Type params" + classSignature.getParameters());
                 return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp)->new JavassistTypeParameter(tp)).collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);

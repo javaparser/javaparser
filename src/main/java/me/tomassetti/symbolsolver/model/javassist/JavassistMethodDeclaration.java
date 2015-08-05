@@ -22,6 +22,13 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     private CtMethod ctMethod;
 
     @Override
+    public String toString() {
+        return "JavassistMethodDeclaration{" +
+                "ctMethod=" + ctMethod +
+                '}';
+    }
+
+    @Override
     public String getName() {
         return ctMethod.getName();
     }

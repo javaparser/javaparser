@@ -16,7 +16,7 @@ public class JavassistTypeParameter implements TypeParameter {
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        return wrapped.getName();
     }
 
     @Override

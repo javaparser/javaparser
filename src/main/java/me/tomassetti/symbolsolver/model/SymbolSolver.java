@@ -55,7 +55,7 @@ public class SymbolSolver {
     public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Context context) {
         //return context.solveMethod(methodName, params, typeSolver);
         //throw new UnsupportedOperationException();
-        return new MethodUsage(context.solveMethod(methodName, params, typeSolver));
+        return new MethodUsage(context.solveMethod(methodName, params, typeSolver), typeSolver);
     }
 
     public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Node node) {

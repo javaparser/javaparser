@@ -8,6 +8,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class TypeUsageOfTypeParameter implements TypeUsage {
 
@@ -35,6 +36,11 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
+    public Optional<TypeUsage> parameterByName(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean isFunctionOrPredicate() {
         return false;
     }
@@ -46,7 +52,7 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
 
     @Override
     public String getTypeName() {
-        throw new UnsupportedOperationException();
+        return typeParameter.getName();
     }
 
     @Override

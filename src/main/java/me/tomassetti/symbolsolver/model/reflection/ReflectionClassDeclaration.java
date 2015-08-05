@@ -1,10 +1,12 @@
 package me.tomassetti.symbolsolver.model.reflection;
 
 import com.github.javaparser.ast.Node;
+import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -12,6 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -33,7 +36,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
     @Override
     public Context getContext() {
-        throw new UnsupportedOperationException();
+        return new ClassOrInterfaceDeclarationContext(clazz);
     }
 
     @Override
@@ -56,10 +59,24 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public TypeUsage getUsage(Node node) {
         for (TypeParameter tp : this.getTypeParameters()){
-            System.out.println(tp);
             throw new UnsupportedOperationException("Find parameters of "+this+" in "+node);
         }
         return new TypeUsageOfTypeDeclaration(this);
+    }
+
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        List<MethodDeclaration> methods = new ArrayList<>();
+        for (Method method : clazz.getMethods()) {
+            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
+            methods.add(methodDeclaration);
+        }
+        SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
+        if (ref.isSolved()) {
+            return Optional.of(new JavaParserFacade(typeSolver).convertToUsage(ref.getCorrespondingDeclaration(), getContext()));
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override

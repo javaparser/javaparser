@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -12,6 +13,7 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
@@ -19,7 +21,11 @@ import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContex
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +35,14 @@ public class JavaParserFacade {
 
     private TypeSolver typeSolver;
     private SymbolSolver symbolSolver;
+
+    private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
+    static {
+        logger.setLevel(Level.FINEST);
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        consoleHandler.setLevel(Level.FINEST);
+        logger.addHandler(consoleHandler);
+    }
 
     public JavaParserFacade(TypeSolver typeSolver) {
         this.typeSolver = typeSolver;
@@ -52,35 +66,45 @@ public class JavaParserFacade {
      */
     public SymbolReference<MethodDeclaration> solve(MethodCallExpr methodCallExpr) {
         List<TypeUsage> params = new LinkedList<>();
+        List<LambdaTypeUsagePlaceholder> placeholders = new LinkedList<>();
+        int i = 0;
         for (Expression expression : methodCallExpr.getArgs()) {
             if (expression instanceof LambdaExpr) {
-                params.add(new LambdaTypeUsagePlaceholder());
+                LambdaTypeUsagePlaceholder placeholder = new LambdaTypeUsagePlaceholder(i);
+                params.add(placeholder);
+                placeholders.add(placeholder);
             } else {
                 params.add(new JavaParserFacade(typeSolver).getType(expression));
             }
+            i++;
         }
-        return JavaParserFactory.getContext(methodCallExpr).solveMethod(methodCallExpr.getName(), params, typeSolver);
+        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr).solveMethod(methodCallExpr.getName(), params, typeSolver);
+        for (LambdaTypeUsagePlaceholder placeholder : placeholders) {
+            placeholder.setMethod(res);
+        }
+        return res;
+    }
+
+    public TypeUsage getType(Node node) {
+        return getType(node, true);
     }
 
     /**
      * Should return more like a TypeApplication: a TypeDeclaration and possible parameters or array modifiers.
      * @return
      */
-    public TypeUsage getType(Node node) {
+    public TypeUsage getType(Node node, boolean solveLambdas) {
+        if (node == null) throw new IllegalArgumentException();
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
-            SymbolReference<? extends ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbol(nameExpr.getName(), nameExpr);
-            if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(JavaParserFactory.getContext(nameExpr), nameExpr.getName());
-            }
-            return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration().getType(typeSolver));
+            return new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr).get().getUsage();
         } else if (node instanceof MethodCallExpr) {
+            logger.finest("getType on method call " + node);
             // first solve the method
-            SymbolReference<MethodDeclaration> ref = new JavaParserFacade(typeSolver).solveMethod((MethodCallExpr)node);
-            if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(JavaParserFactory.getContext(node), ((MethodCallExpr)node).getName());
-            }
-            return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration().getReturnType());
+            MethodUsage ref = new JavaParserFacade(typeSolver).solveMethodAsUsage((MethodCallExpr) node);
+            logger.finest("getType on method call " + node + " resolved to " + ref);
+            logger.finest("getType on method call " + node + " return type is " + ref.returnType());
+            return ref.returnType();
             // the type is the return type of the method
         } else if (node instanceof LambdaExpr) {
             if (node.getParentNode() instanceof MethodCallExpr) {
@@ -90,9 +114,13 @@ public class JavaParserFacade {
                 if (!refMethod.isSolved()) {
                     throw new UnsolvedSymbolException(null, callExpr.getName());
                 }
-                System.out.println("Method " + refMethod.getCorrespondingDeclaration().getName());
-                System.out.println("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
-                return refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver).getUsage(node);
+                logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
+                //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
+                if (solveLambdas) {
+                    return refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver).getUsage(node);
+                } else {
+                    return new TypeUsageOfTypeDeclaration(refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver));
+                }
                 //System.out.println("LAMBDA " + node.getParentNode());
                 //System.out.println("LAMBDA CLASS " + node.getParentNode().getClass().getCanonicalName());
                 //TypeUsage typeOfMethod = new JavaParserFacade(typeSolver).getType(node.getParentNode());
@@ -104,9 +132,15 @@ public class JavaParserFacade {
             if (node.getParentNode() instanceof FieldDeclaration) {
                 FieldDeclaration parent = (FieldDeclaration) node.getParentNode();
                 return new JavaParserFacade(typeSolver).convertToUsage(parent.getType(), parent);
+            } else if (node.getParentNode() instanceof VariableDeclarationExpr) {
+                VariableDeclarationExpr parent = (VariableDeclarationExpr) node.getParentNode();
+                return new JavaParserFacade(typeSolver).convertToUsage(parent.getType(), parent);
             } else {
                 throw new UnsupportedOperationException(node.getParentNode().getClass().getCanonicalName());
             }
+        } else if (node instanceof Parameter) {
+            Parameter parameter = (Parameter)node;
+            return new JavaParserFacade(typeSolver).convertToUsage(parameter.getType(), parameter);
         } else if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
             Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
@@ -179,5 +213,73 @@ public class JavaParserFacade {
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
+    }
+
+    public MethodUsage solveMethodAsUsage(MethodCallExpr call) {
+        List<TypeUsage> params = new ArrayList<>();
+        if (call.getArgs() != null) {
+            for (Expression param : call.getArgs()) {
+                params.add(getType(param, false));
+            }
+        }
+        TypeUsage typeOfScope = getType(call.getScope());
+        logger.finest("facade solveMethodAsUsage, params " + params);
+        logger.finest("facade solveMethodAsUsage, scope " + typeOfScope);
+
+        // TODO take params from scope and substitute them in ref
+
+        Optional<MethodUsage> ref = new MethodCallExprContext(call).solveMethodAsUsage(call.getName(), params, typeSolver);
+
+        if (!ref.isPresent()){
+            throw new UnsolvedSymbolException(null, call.getName());
+        } else {
+            logger.finest("facade solveMethodAsUsage, ref " + ref.get());
+            MethodUsage methodUsage = ref.get();
+            methodUsage = replaceParams(methodUsage, typeOfScope);
+            TypeUsage returnType = replaceParams(methodUsage.returnType(), typeOfScope);
+            methodUsage = methodUsage.replaceReturnType(returnType);
+            return methodUsage;
+        }
+    }
+
+    private MethodUsage replaceParams(MethodUsage methodUsage, TypeUsage typeOfScope) {
+        logger.finest("ReplaceParams " + methodUsage);
+        logger.finest("ReplaceParams N params " + methodUsage.getParamTypes().size());
+        for (int i=0;i<methodUsage.getParamTypes().size();i++) {
+            TypeUsage typeUsage = methodUsage.getParamTypes().get(i);
+            TypeUsage replaced = replaceParams(typeUsage, typeOfScope);
+            logger.finest("ReplaceParams param type " + typeUsage);
+            if (replaced != typeUsage) {
+                logger.finest("ReplaceParams param -> " + replaced);
+                methodUsage = methodUsage.replaceParamType(i, replaced);
+            }
+
+        }
+        logger.finest("Final method usage "+methodUsage);
+        return methodUsage;
+    }
+
+    private TypeUsage replaceParams(TypeUsage typeToReplace, TypeUsage typeOfScope) {
+        if (typeToReplace.isTypeVariable()) {
+            Optional<TypeUsage> replacement = typeOfScope.parameterByName(typeToReplace.getTypeName());
+            if (replacement.isPresent()) {
+                return replacement.get();
+            } else {
+                return typeToReplace;
+            }
+        } else {
+            for (int i=0;i<typeToReplace.parameters().size();i++){
+                TypeUsage typeUsage = typeToReplace.parameters().get(i);
+                TypeUsage replaced = replaceParams(typeUsage, typeOfScope);
+                if (replaced != typeUsage) {
+                    typeToReplace = typeToReplace.replaceParam(i, replaced);
+                }
+            }
+            return typeToReplace;
+        }
+    }
+
+    public MethodUsage convertToUsage(MethodDeclaration methodDeclaration, Context context) {
+        return new MethodUsage(methodDeclaration, typeSolver);
     }
 }

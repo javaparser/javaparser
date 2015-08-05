@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.usages;
 
+import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -44,6 +45,18 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     }
 
     @Override
+    public Optional<TypeUsage> parameterByName(String name) {
+        int i=0;
+        for (TypeParameter tp : typeDeclaration.getTypeParameters()) {
+            if (tp.getName().equals(name)) {
+                return Optional.of(typeParameters.get(i));
+            }
+            i++;
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public boolean isReferenceType() {
         return true;
     }
@@ -83,6 +96,11 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         typeUsage = replaceTypeParams(typeUsage);
 
         return Optional.of(new Value(typeUsage, name, true));
+    }
+
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        return typeDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
 
     @Override

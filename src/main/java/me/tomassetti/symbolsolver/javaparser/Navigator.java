@@ -103,7 +103,6 @@ public final class Navigator {
     }
 
     public static VariableDeclarator demandVariableDeclaration(Node node, String name) {
-        System.out.println(node.getClass());
         if (node instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator)node;
             if (variableDeclarator.getId().getName().equals(name)) {
