@@ -255,7 +255,7 @@ public class ContextTest {
         assertEquals("java.lang.String", ref.getTypeName());
     }
 
-    /*@Test
+    @Test
     public void resolveReferenceToLambdaParamSimplified() throws ParseException, IOException {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -268,7 +268,7 @@ public class ContextTest {
 
         assertEquals("isEmpty", ref.getName());
         assertEquals("java.lang.String", ref.declaringType().getQualifiedName());
-    }*/
+    }
 
     /*@Test
     public void resolveReferenceToLambdaParam() throws ParseException, IOException {

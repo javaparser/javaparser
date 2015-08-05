@@ -60,7 +60,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public TypeDeclaration declaringType() {
-        throw new UnsupportedOperationException();
+        return new ReflectionClassDeclaration(method.getDeclaringClass());
     }
 
     @Override
