@@ -1,7 +1,5 @@
 package me.tomassetti.symbolsolver.model;
 
-import com.github.javaparser.ast.body.VariableDeclarator;
-import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 

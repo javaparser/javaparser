@@ -242,7 +242,7 @@ public class ContextTest {
         assertEquals("java.lang.String", ref.parameters().get(0).getTypeName());
     }
 
-    /*@Test
+    @Test
     public void resolveReferenceToLambdaParamBase() throws ParseException, IOException {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -250,7 +250,6 @@ public class ContextTest {
         NameExpr refToT = Navigator.findNameExpression(method, "t");
 
         TypeSolver typeSolver = new JreTypeSolver();
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         TypeUsage ref = new JavaParserFacade(typeSolver).getType(refToT);
 
         assertEquals("java.lang.String", ref.getTypeName());

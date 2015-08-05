@@ -1,22 +1,65 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.SymbolDeclarator;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
+import me.tomassetti.symbolsolver.model.Value;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 
 import java.util.List;
+import java.util.Optional;
 
-/**
- * Created by federico on 28/07/15.
- */
 public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
+    @Override
+    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+        for (Parameter parameter : wrappedNode.getParameters()) {
+            SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
+            if (wrappedNode.getParentNode() instanceof MethodCallExpr){
+                MethodCallExpr methodCallExpr = (MethodCallExpr)wrappedNode.getParentNode();
+                MethodUsage methodUsage = new JavaParserFacade(typeSolver).solveMethodAsUsage(methodCallExpr);
+                int i = pos(methodCallExpr, wrappedNode);
+                TypeUsage lambdaType = methodUsage.getParamTypes().get(i);
+                Value value = new Value(lambdaType.parameters().get(0), name, false);
+                return Optional.of(value);
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // if nothing is found we should ask the parent context
+        return getParent().solveSymbolAsValue(name, typeSolver);
+    }
+
+    private int pos(MethodCallExpr callExpr, Expression param){
+        int i = 0;
+        for (Expression p : callExpr.getArgs()) {
+            if (p == param) {
+                return i;
+            }
+            i++;
+        }
+        throw new IllegalArgumentException();
+    }
+
+    protected final Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver){
+        for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()){
+            if (decl.getName().equals(name)){
+
+                throw new UnsupportedOperationException();
+            }
+        }
+        return Optional.empty();
+    }
 
     public LambdaExprContext(LambdaExpr wrappedNode) {
         super(wrappedNode);

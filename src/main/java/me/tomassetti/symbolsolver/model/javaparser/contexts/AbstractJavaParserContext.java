@@ -28,7 +28,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
-    protected final Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver){
+    protected Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver){
         for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()){
             if (decl.getName().equals(name)){
                 return Optional.of(Value.from(decl, typeSolver));

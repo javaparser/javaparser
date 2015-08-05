@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnknownType;
 import jdk.nashorn.internal.ir.Symbol;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -97,6 +98,7 @@ public class JavaParserFacade {
         if (node == null) throw new IllegalArgumentException();
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
+            logger.finest("getType on name expr " + node);
             return new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr).get().getUsage();
         } else if (node instanceof MethodCallExpr) {
             logger.finest("getType on method call " + node);
@@ -140,6 +142,9 @@ public class JavaParserFacade {
             }
         } else if (node instanceof Parameter) {
             Parameter parameter = (Parameter)node;
+            if (parameter.getType() instanceof UnknownType){
+                throw new IllegalStateException("Parameter has unknown type: " + parameter);
+            }
             return new JavaParserFacade(typeSolver).convertToUsage(parameter.getType(), parameter);
         } else if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
@@ -159,6 +164,9 @@ public class JavaParserFacade {
     }
 
     public TypeUsage convertToUsage(Type type, Node context) {
+        if (type instanceof UnknownType){
+            throw new IllegalArgumentException("Unknown type");
+        }
         return convertToUsage(type, JavaParserFactory.getContext(context));
     }
 
