@@ -270,7 +270,7 @@ public class ContextTest {
         String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("getName", Collections.emptyList(), callToGetName);
+        SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> ref = symbolSolver.solveMethod("getName", Collections.emptyList(), callToGetName);
 
         assertEquals(true, ref.isSolved());
         assertEquals("getName", ref.getCorrespondingDeclaration().getName());

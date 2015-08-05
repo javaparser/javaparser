@@ -4,6 +4,8 @@ import com.github.javaparser.ast.Node;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -11,7 +13,10 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 01/08/15.
@@ -130,6 +135,16 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        if (null == ctClass.getGenericSignature()) {
+            return Collections.emptyList();
+        } else {
+            try {
+                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                System.out.println("Type params" + classSignature.getParameters());
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp)->new JavassistTypeParameter(tp)).collect(Collectors.toList());
+            } catch (BadBytecode badBytecode) {
+                throw new RuntimeException(badBytecode);
+            }
+        }
     }
 }
