@@ -22,32 +22,18 @@ package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
-import com.github.javaparser.TokenMgrError;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.DumpVisitor;
-import com.github.javaparser.bdd.TestUtils;
-import org.jbehave.core.annotations.Alias;
+
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.jbehave.core.model.ExamplesTable;
-import org.jbehave.core.steps.Parameters;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
-import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 public class DumpingSteps {
 
