@@ -41,7 +41,7 @@ public class JavaParserFacade {
     static {
         logger.setLevel(Level.FINEST);
         ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.FINEST);
+        consoleHandler.setLevel(Level.FINER);
         logger.addHandler(consoleHandler);
     }
 
@@ -106,12 +106,16 @@ public class JavaParserFacade {
     public TypeUsage getType(Node node, boolean solveLambdas) {
         if (solveLambdas){
             if (!cacheWithLambadsSolved.containsKey(node)){
-                cacheWithLambadsSolved.put(node, getTypeConcrete(node, solveLambdas));
+                TypeUsage res = getTypeConcrete(node, solveLambdas);
+                cacheWithLambadsSolved.put(node, res);
+                logger.finer("getType on " + node + " -> " + res);
             }
             return cacheWithLambadsSolved.get(node);
         } else {
             if (!cacheWithoutLambadsSolved.containsKey(node)){
-                cacheWithoutLambadsSolved.put(node, getTypeConcrete(node, solveLambdas));
+                TypeUsage res = getTypeConcrete(node, solveLambdas);
+                cacheWithoutLambadsSolved.put(node, res);
+                logger.finer("getType on " + node + " (no solveLambdas) -> " + res);
             }
             return cacheWithoutLambadsSolved.get(node);
         }
@@ -288,13 +292,12 @@ public class JavaParserFacade {
                 logger.finest("ReplaceParams param -> " + replaced);
                 methodUsage = methodUsage.replaceParamType(i, replaced);
             }
-
         }
         logger.finest("Final method usage "+methodUsage);
         return methodUsage;
     }
 
-    private TypeUsage replaceParams(TypeUsage typeToReplace, TypeUsage typeOfScope) {
+    public static TypeUsage replaceParams(TypeUsage typeToReplace, TypeUsage typeOfScope) {
         if (typeToReplace.isTypeVariable()) {
             Optional<TypeUsage> replacement = typeOfScope.parameterByName(typeToReplace.getTypeName());
             if (replacement.isPresent()) {

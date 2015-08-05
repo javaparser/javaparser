@@ -9,9 +9,18 @@ import me.tomassetti.symbolsolver.model.TypeParameter;
 public class JavassistTypeParameter implements TypeParameter {
 
     private SignatureAttribute.TypeParameter wrapped;
+    private boolean declaredOnClass;
 
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped) {
+    @Override
+    public String toString() {
+        return "JavassistTypeParameter{" +
+                wrapped.getName()
+                +'}';
+    }
+
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, boolean declaredOnClass) {
         this.wrapped = wrapped;
+        this.declaredOnClass = declaredOnClass;
     }
 
     @Override
@@ -21,7 +30,7 @@ public class JavassistTypeParameter implements TypeParameter {
 
     @Override
     public boolean declaredOnClass() {
-        throw new UnsupportedOperationException();
+        return declaredOnClass;
     }
 
     @Override

@@ -14,10 +14,7 @@ import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -39,13 +36,52 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         return ctClass.getName();
     }
 
+    private List<TypeUsage> parseTypeParameters(String signature, TypeSolver typeSolver) {
+        String originalSignature = signature;
+        if (signature.contains("<")) {
+            signature = signature.substring(signature.indexOf('<') + 1);
+            if (!signature.endsWith(">")) {
+                throw new IllegalArgumentException();
+            }
+            signature = signature.substring(0, signature.length() - 1);
+            if (signature.contains(",")){
+                throw new UnsupportedOperationException();
+            }
+            if (signature.contains("<")){
+                throw new UnsupportedOperationException(originalSignature);
+            }
+            if (signature.contains(">")){
+                throw new UnsupportedOperationException();
+            }
+            List<TypeUsage> typeUsages = new ArrayList<>();
+            TypeDeclaration typeDeclaration = typeSolver.solveType(signature);
+            typeUsages.add(new TypeUsageOfTypeDeclaration(typeDeclaration));
+            return typeUsages;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
 
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)){
                 // TODO check parameters
-                return Optional.of(new MethodUsage(new JavassistMethodDeclaration(method), typeSolver));
+                MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver), typeSolver);
+                try {
+                    SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
+                    List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver);
+                    TypeUsage newReturnType = methodUsage.returnType();
+                    for (int i=0;i<parametersOfReturnType.size();i++) {
+                        newReturnType = newReturnType.replaceParam(i, parametersOfReturnType.get(i));
+                    }
+                    methodUsage = methodUsage.replaceReturnType(newReturnType);
+                    return Optional.of(methodUsage);
+                } catch (BadBytecode e){
+                    throw new RuntimeException(e);
+                }
             }
         }
 
@@ -86,7 +122,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)){
                 // TODO check parameters
-                return SymbolReference.solved(new JavassistMethodDeclaration(method));
+                return SymbolReference.solved(new JavassistMethodDeclaration(method, typeSolver));
             }
         }
 
@@ -172,13 +208,18 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }*/
 
     @Override
+    public String toString() {
+        return "JavassistClassDeclaration }" + ctClass.getName() + '}';
+    }
+
+    @Override
     public List<TypeParameter> getTypeParameters() {
         if (null == ctClass.getGenericSignature()) {
             return Collections.emptyList();
         } else {
             try {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp)->new JavassistTypeParameter(tp)).collect(Collectors.toList());
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp)->new JavassistTypeParameter(tp, true)).collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);
             }

@@ -269,7 +269,24 @@ public class ContextTest {
         assertEquals("isEmpty", ref.getName());
         assertEquals("java.lang.String", ref.declaringType().getQualifiedName());
     }
-    /*
+
+    @Test
+    public void resolveGenericReturnTypeOfMethodInJar() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
+        MethodCallExpr call = Navigator.findMethodCall(method, "getTypes");
+
+        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("getTypes", methodUsage.getName());
+        assertEquals("java.util.List", methodUsage.returnType().getTypeName());
+        assertEquals(1, methodUsage.returnType().parameters().size());
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().parameters().get(0).getTypeName());
+    }
+/*
     @Test
     public void resolveReferenceToLambdaParam() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");

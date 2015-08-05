@@ -64,7 +64,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     @Override
     public String toString() {
         return "TypeUsageOfTypeDeclaration{" +
-                "typeDeclaration=" + typeDeclaration +
+                "declaration=" + typeDeclaration +
                 ", typeParameters=" + typeParameters +
                 '}';
     }
@@ -100,7 +100,22 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        return typeDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver);
+
+        Optional<MethodUsage> ref = typeDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver);
+        if (ref.isPresent()) {
+            MethodUsage methodUsage = ref.get();
+            TypeUsage returnType = replaceTypeParams(methodUsage.returnType());
+            if (returnType != methodUsage.returnType()){
+                methodUsage = methodUsage.replaceReturnType(returnType);
+            }
+            for (int i=0;i<methodUsage.getParamTypes().size();i++){
+                TypeUsage replaced = replaceTypeParams(methodUsage.getParamTypes().get(i));
+                methodUsage = methodUsage.replaceParamType(i, replaced);
+            }
+            return Optional.of(methodUsage);
+        } else {
+            return ref;
+        }
     }
 
     @Override

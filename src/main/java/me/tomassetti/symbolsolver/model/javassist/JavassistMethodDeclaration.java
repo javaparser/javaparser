@@ -3,23 +3,32 @@ package me.tomassetti.symbolsolver.model.javassist;
 import com.github.javaparser.ast.Node;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by federico on 01/08/15.
  */
 public class JavassistMethodDeclaration implements MethodDeclaration {
-    public JavassistMethodDeclaration(CtMethod ctMethod) {
+    public JavassistMethodDeclaration(CtMethod ctMethod, TypeSolver typeSolver) {
         this.ctMethod = ctMethod;
+        this.typeSolver = typeSolver;
     }
 
     private CtMethod ctMethod;
+    private TypeSolver typeSolver;
 
     @Override
     public String toString() {
@@ -63,6 +72,8 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         return new JavassistClassDeclaration(ctMethod.getDeclaringClass());
     }
 
+    /*            SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());*/
+
     @Override
     public TypeDeclaration getReturnType() {
         try {
@@ -97,6 +108,6 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

@@ -28,7 +28,7 @@ public class MethodUsage {
         returnType = new TypeUsageOfTypeDeclaration(declaration.getReturnType());
     }
 
-    private MethodUsage(MethodDeclaration declaration, List<TypeUsage> paramTypes, TypeUsage returnType) {
+    public MethodUsage(MethodDeclaration declaration, List<TypeUsage> paramTypes, TypeUsage returnType) {
         this.declaration = declaration;
         this.paramTypes = paramTypes;
         this.returnType = returnType;
@@ -58,6 +58,9 @@ public class MethodUsage {
     }
 
     public MethodUsage replaceParamType(int i, TypeUsage replaced) {
+        if (paramTypes.get(i) == replaced) {
+            return this;
+        }
         List<TypeUsage> newParams = new LinkedList<>(paramTypes);
         newParams.set(i, replaced);
         return new MethodUsage(declaration, newParams, returnType);
