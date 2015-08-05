@@ -36,8 +36,13 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<TypeUsage> parameterByName(String name) {
-        throw new UnsupportedOperationException();
+        return Optional.empty();
     }
 
     @Override

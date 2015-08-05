@@ -144,7 +144,7 @@ public class GenericsTest {
 
         ExpressionStmt stmt = (ExpressionStmt)method.getBody().getStmts().get(0);
         Expression expression = stmt.getExpression();
-        TypeUsage typeUsage = new JavaParserFacade(new JreTypeSolver()).getType(expression);
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.lang.String", typeUsage.getTypeName());
@@ -158,7 +158,7 @@ public class GenericsTest {
 
         VariableDeclarator field = Navigator.demandField(clazz, "as");
 
-        TypeUsage typeUsage = new JavaParserFacade(new JreTypeSolver()).getType(field);
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(field);
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.util.List", typeUsage.getTypeName());
@@ -176,7 +176,7 @@ public class GenericsTest {
 
         ExpressionStmt stmt = (ExpressionStmt)method.getBody().getStmts().get(0);
         Expression expression = stmt.getExpression();
-        TypeUsage typeUsage = new JavaParserFacade(new JreTypeSolver()).getType(expression);
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.util.List", typeUsage.getTypeName());

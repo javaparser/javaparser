@@ -34,7 +34,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
 
     @Override
     public TypeUsage getTypeUsage(TypeSolver typeSolver) {
-        return new JavaParserFacade(typeSolver).convertToUsage(fieldDeclaration.getType(), fieldDeclaration);
+        return JavaParserFacade.get(typeSolver).convertToUsage(fieldDeclaration.getType(), fieldDeclaration);
         /*TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeDeclaration);
         if (!typeUsage.parameters().isEmpty()) {
             throw new UnsupportedOperationException(typeUsage.toString()+" "+fieldDeclaration.getType());
@@ -73,7 +73,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
 
     @Override
     public TypeDeclaration getType(TypeSolver typeSolver) {
-        return new JavaParserFacade(typeSolver).convert(fieldDeclaration.getType(), fieldDeclaration);
+        return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), fieldDeclaration);
     }
 
     @Override

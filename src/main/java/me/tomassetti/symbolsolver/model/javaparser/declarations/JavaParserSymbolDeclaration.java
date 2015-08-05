@@ -80,11 +80,11 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
             Parameter parameter = (Parameter) wrappedNode;
             if (wrappedNode.getParentNode() instanceof LambdaExpr) {
                 int pos = getParamPos(parameter);
-                TypeUsage lambdaType = new JavaParserFacade(typeSolver).getType(wrappedNode.getParentNode());
+                TypeUsage lambdaType = JavaParserFacade.get(typeSolver).getType(wrappedNode.getParentNode());
 
                 // TODO understand from the context to which method this corresponds
-                //MethodDeclaration methodDeclaration = new JavaParserFacade(typeSolver).getMethodCalled
-                //MethodDeclaration methodCalled = new JavaParserFacade(typeSolver).solve()
+                //MethodDeclaration methodDeclaration = JavaParserFacade.get(typeSolver).getMethodCalled
+                //MethodDeclaration methodCalled = JavaParserFacade.get(typeSolver).solve()
                 throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
             } else {
                 return new SymbolSolver(typeSolver).solveType(parameter.getType());
@@ -93,10 +93,10 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
             VariableDeclarator variableDeclarator = (VariableDeclarator)wrappedNode;
             if (wrappedNode.getParentNode() instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr)variableDeclarator.getParentNode();
-                return new JavaParserFacade(typeSolver).convert(variableDeclarationExpr.getType(), JavaParserFactory.getContext(wrappedNode));
+                return JavaParserFacade.get(typeSolver).convert(variableDeclarationExpr.getType(), JavaParserFactory.getContext(wrappedNode));
             } else if (wrappedNode.getParentNode() instanceof FieldDeclaration) {
                 FieldDeclaration fieldDeclaration = (FieldDeclaration)variableDeclarator.getParentNode();
-                return new JavaParserFacade(typeSolver).convert(fieldDeclaration.getType(), JavaParserFactory.getContext(wrappedNode));
+                return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), JavaParserFactory.getContext(wrappedNode));
             } else {
                 throw new UnsupportedOperationException(wrappedNode.getParentNode().getClass().getCanonicalName());
             }
@@ -131,6 +131,6 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
 
     @Override
     public TypeUsage getTypeUsage(TypeSolver typeSolver) {
-        return new JavaParserFacade(typeSolver).getType(wrappedNode);
+        return JavaParserFacade.get(typeSolver).getType(wrappedNode);
     }
 }

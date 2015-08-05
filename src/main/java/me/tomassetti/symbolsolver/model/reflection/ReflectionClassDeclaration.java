@@ -73,7 +73,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         }
         SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
         if (ref.isSolved()) {
-            return Optional.of(new JavaParserFacade(typeSolver).convertToUsage(ref.getCorrespondingDeclaration(), getContext()));
+            return Optional.of(JavaParserFacade.get(typeSolver).convertToUsage(ref.getCorrespondingDeclaration(), getContext()));
         } else {
             return Optional.empty();
         }

@@ -45,10 +45,18 @@ public class JavaParserFacade {
         logger.addHandler(consoleHandler);
     }
 
-    public JavaParserFacade(TypeSolver typeSolver) {
+    private JavaParserFacade(TypeSolver typeSolver) {
         this.typeSolver = typeSolver;
         this.symbolSolver = new SymbolSolver(typeSolver);
     }
+
+    public static JavaParserFacade get(TypeSolver typeSolver){
+        if (!instances.containsKey(typeSolver)){
+            instances.put(typeSolver, new JavaParserFacade(typeSolver));
+        }
+        return instances.get(typeSolver);
+    }
+
 
     public SymbolReference solve(NameExpr nameExpr) {
         return symbolSolver.solveSymbol(nameExpr.getName(), nameExpr);
@@ -90,11 +98,30 @@ public class JavaParserFacade {
         return getType(node, true);
     }
 
+    private Map<Node, TypeUsage> cacheWithLambadsSolved = new WeakHashMap<>();
+    private Map<Node, TypeUsage> cacheWithoutLambadsSolved = new WeakHashMap<>();
+
+    private static Map<TypeSolver, JavaParserFacade> instances = new HashMap<>();
+
+    public TypeUsage getType(Node node, boolean solveLambdas) {
+        if (solveLambdas){
+            if (!cacheWithLambadsSolved.containsKey(node)){
+                cacheWithLambadsSolved.put(node, getTypeConcrete(node, solveLambdas));
+            }
+            return cacheWithLambadsSolved.get(node);
+        } else {
+            if (!cacheWithoutLambadsSolved.containsKey(node)){
+                cacheWithoutLambadsSolved.put(node, getTypeConcrete(node, solveLambdas));
+            }
+            return cacheWithoutLambadsSolved.get(node);
+        }
+    }
+
     /**
      * Should return more like a TypeApplication: a TypeDeclaration and possible parameters or array modifiers.
      * @return
      */
-    public TypeUsage getType(Node node, boolean solveLambdas) {
+    private TypeUsage getTypeConcrete(Node node, boolean solveLambdas) {
         if (node == null) throw new IllegalArgumentException();
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;

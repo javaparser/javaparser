@@ -26,7 +26,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
             if (wrappedNode.getParentNode() instanceof MethodCallExpr){
                 MethodCallExpr methodCallExpr = (MethodCallExpr)wrappedNode.getParentNode();
-                MethodUsage methodUsage = new JavaParserFacade(typeSolver).solveMethodAsUsage(methodCallExpr);
+                MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                 int i = pos(methodCallExpr, wrappedNode);
                 TypeUsage lambdaType = methodUsage.getParamTypes().get(i);
                 Value value = new Value(lambdaType.parameters().get(0), name, false);

@@ -25,7 +25,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope() != null) {
-            TypeUsage typeOfScope = new JavaParserFacade(typeSolver).getType(wrappedNode.getScope());
+            TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
             return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver);
         } else {
             throw new UnsupportedOperationException();
@@ -51,7 +51,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope() != null) {
-            TypeUsage typeOfScope = new JavaParserFacade(typeSolver).getType(wrappedNode.getScope());
+            TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
             return typeOfScope.solveMethod(name, parameterTypes, typeSolver);
         } else {
             throw new UnsupportedOperationException();
