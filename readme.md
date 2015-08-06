@@ -73,6 +73,18 @@ This parser is based on work by Sreenivasa Viswanadha and Júlio Vilmar Gesser. 
 
 The project now supports parsing Java 1.8 and aims to continue support for features in future versions of the Java language.
 
+## Related projects
+
+From JavaParser other projects have been derived:
+
+* [Walkmod](http://walkmod.com/): a tool to automatically correct violations of code conventions
+
+## Credits
+
+This project has been maintained thanks to the joint efforts of many contributors: we are extremely grateful to all of them.
+
+In particular we are thankful to the contributions we received by the [Walkmod](http://walkmod.com/) project which permitted to finalize support for Java 8. The author granted us the permissions to release that code also under the Apache License and we have greatly appreciated that.
+
 ## License
 
 JavaParser is available either under the terms of the LGPL License or the Apacha License. You as the user are entitled to choose the terms under which adopt JavaParser.
