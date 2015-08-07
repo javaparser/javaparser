@@ -463,3 +463,36 @@ class A {
     }
 }
 
+Scenario: We dump correctly orphan comments in a for loop
+Given the class:
+class A {
+    public static List calcularResultadoFinal(List avaliacoes) throws SQLException, ClassNotFoundException{
+        for(Avaliacao avaliacao: avaliacoes){
+            // if(avaliacao.obterAprovacao()){
+            // avaliacao.setResultadoFinal("Aprovado");
+            // }else{
+            // avaliacao.setResultadoFinal("Reprovado");
+            // }
+            avaliacao.setEmAberto(false);
+            avaliacao.editar();
+        }
+        return avaliacoes;
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A {
+
+    public static List calcularResultadoFinal(List avaliacoes) throws SQLException, ClassNotFoundException {
+        for (Avaliacao avaliacao : avaliacoes) {
+            // if(avaliacao.obterAprovacao()){
+            // avaliacao.setResultadoFinal("Aprovado");
+            // }else{
+            // avaliacao.setResultadoFinal("Reprovado");
+            // }
+            avaliacao.setEmAberto(false);
+            avaliacao.editar();
+        }
+        return avaliacoes;
+    }
+}
