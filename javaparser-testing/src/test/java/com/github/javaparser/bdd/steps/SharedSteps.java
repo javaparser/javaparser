@@ -35,6 +35,7 @@ import org.jbehave.core.annotations.When;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
@@ -75,9 +76,9 @@ public class SharedSteps {
 
 
     @When("the \"$fileName\" is parsed")
-    public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException {
+    public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException, URISyntaxException {
         URL url = getClass().getResource("../samples/" + fileName);
-        CompilationUnit compilationUnit = JavaParser.parse(new File(url.getPath()));
+        CompilationUnit compilationUnit = JavaParser.parse(new File(url.toURI()));
         state.put("cu1", compilationUnit);
     }
 
