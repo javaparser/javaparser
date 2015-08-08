@@ -25,6 +25,9 @@ import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -76,6 +79,16 @@ public final class ClassOrInterfaceType extends Type {
 
 	public List<Type> getTypeArgs() {
 		return typeArgs;
+	}
+
+	public boolean isBoxedType() {
+		return PrimitiveType.unboxMap.containsKey(name);
+	}
+
+	public PrimitiveType toUnboxedType() throws UnsupportedOperationException {
+		if(!isBoxedType())
+			throw new UnsupportedOperationException(name + " isn't a boxed type.");
+		return new PrimitiveType(PrimitiveType.unboxMap.get(name));
 	}
 
 	public void setName(final String name) {

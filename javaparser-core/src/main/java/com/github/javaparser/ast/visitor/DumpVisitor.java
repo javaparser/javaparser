@@ -1564,15 +1564,14 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			printer.print(")");
 		}
 
-		printer.print("->");
+		printer.print(" -> ");
 		Statement body = n.getBody();
-		String bodyStr = body.toString();
 		if (body instanceof ExpressionStmt) {
-			// removing ';'
-			bodyStr = bodyStr.substring(0, bodyStr.length() - 1);
+			// Print the expression directly
+			((ExpressionStmt) body).getExpression().accept(this, arg);
+		} else {
+			body.accept(this, arg);
 		}
-		printer.print(bodyStr);
-
 	}
 
 
