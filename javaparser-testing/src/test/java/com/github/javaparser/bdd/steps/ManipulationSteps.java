@@ -187,6 +187,12 @@ public class ManipulationSteps {
         ASTHelper.addParameter(method, ASTHelper.createParameter(ASTHelper.INT_TYPE, paramName));
     }
 
+    @When("the compilation unit is cloned")
+    public void whenTheCompilationUnitIsCloned() throws CloneNotSupportedException {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        state.put("cu1", compilationUnit.clone());
+    }
+
     @When("the ChangeNameToUpperCaseVisitor visits to compilation unit")
     public void whenTheVisitorVisitsToCompilationUnit() {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
