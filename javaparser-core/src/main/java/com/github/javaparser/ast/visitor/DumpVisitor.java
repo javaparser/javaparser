@@ -133,7 +133,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		}
 
 		public void printLn() {
-			buf.append("\n");
+			buf.append(System.getProperty("line.separator"));
 			indented = false;
 		}
 
