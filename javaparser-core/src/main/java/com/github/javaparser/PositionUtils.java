@@ -36,7 +36,11 @@ import java.util.List;
 
 import static java.lang.Integer.signum;
 
-public class PositionUtils {
+public final class PositionUtils {
+
+    private PositionUtils() {
+        // prevent instantiation
+    }
 
     public static <T extends Node> void sortByBeginPosition(List<T> nodes){
         sortByBeginPosition(nodes, false);
