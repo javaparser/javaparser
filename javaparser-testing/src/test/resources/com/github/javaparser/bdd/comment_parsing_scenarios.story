@@ -184,3 +184,16 @@ Given the class:
 /*/
 class Foo {}
 Then the Java parser cannot parse it because of lexical errors
+
+Scenario: A Class With Character Literal is processed by the Comments Parser
+Given the class:
+class A {
+    /** comment1 */
+    private char c = '"';
+    /** comment2 */
+    private String d;
+}
+When the class is parsed by the comment parser
+Then the total number of comments is 2
+Then Javadoc comment 1 is "comment1"
+Then Javadoc comment 2 is "comment2"

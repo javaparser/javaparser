@@ -34,7 +34,8 @@ public class CommentsParser {
         CODE,
         IN_LINE_COMMENT,
         IN_BLOCK_COMMENT,
-        IN_STRING;
+        IN_STRING,
+        IN_CHAR;
     }
 
     private static final int COLUMNS_PER_TAB = 4;
@@ -86,6 +87,8 @@ public class CommentsParser {
                         currentContent = new StringBuffer();
                     } else if (c == '"') {
                         state = State.IN_STRING;
+                    } else if (c == '\'') {
+                        state = State.IN_CHAR;
                     } else {
                         // nothing to do
                     }
@@ -128,6 +131,11 @@ public class CommentsParser {
                     break;
                 case IN_STRING:
                     if (!prevTwoChars.peekLast().equals('\\') && c == '"') {
+                        state = State.CODE;
+                    }
+                    break;
+                case IN_CHAR:
+                    if (!prevTwoChars.peekLast().equals('\\') && c == '\'') {
                         state = State.CODE;
                     }
                     break;
