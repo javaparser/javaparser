@@ -209,5 +209,13 @@ public class ParsingSteps {
         ExistenceOfParentNodeVerifier parentVerifier = new ExistenceOfParentNodeVerifier();
         parentVerifier.verify(compilationUnit);
     }
+    
+    @Then("ThenExpr in the conditional expression of the statement $statementPosition in method $methodPosition in class $classPosition is LambdaExpr")
+    public void thenLambdaInConditionalExpressionInMethodInClassIsParentOfContainedParameter(int statementPosition, int methodPosition, int classPosition) {
+    	Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
+    	ReturnStmt returnStmt = (ReturnStmt) statement;
+    	ConditionalExpr conditionalExpr = (ConditionalExpr)returnStmt.getExpr();
+        assertThat(conditionalExpr.getElseExpr().getClass().getName(), is(LambdaExpr.class.getName()));
+    }
 
 }
