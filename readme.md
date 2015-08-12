@@ -26,7 +26,7 @@ Current 1.8 Release
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.1</version>
 </dependency>
 ```
 
@@ -65,7 +65,7 @@ In the second instance please feel free to open an [issue](https://github.com/ja
 
 ## Javadoc
 
-The libraries javadoc can be found [here](http://javaparser.github.io/javaparser/javadoc-current/)
+The libraries javadoc can be found [here](http://www.javadoc.io/doc/com.github.javaparser/javaparser-core/)
 
 ## History
 
