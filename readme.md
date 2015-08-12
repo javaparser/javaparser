@@ -87,7 +87,7 @@ In particular we are thankful to the contributions we received by the [Walkmod](
 
 ## License
 
-JavaParser is available either under the terms of the LGPL License or the Apacha License. You as the user are entitled to choose the terms under which adopt JavaParser.
+JavaParser is available either under the terms of the LGPL License or the Apache License. You as the user are entitled to choose the terms under which adopt JavaParser.
 
 For details about the LGPL License please refer to [LICENSE.LGPL](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.LGPL).
 
