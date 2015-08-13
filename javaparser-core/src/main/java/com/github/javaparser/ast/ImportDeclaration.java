@@ -59,10 +59,16 @@ public final class ImportDeclaration extends Node {
         asterisk = false;
     }
 
+    /**
+     * Create an empty import declaration without specifying its position.
+     */
     public static ImportDeclaration createEmptyDeclaration(){
         return new ImportDeclaration();
     }
 
+    /**
+     * Create an empty import declaration specifying its position.
+     */
     public static ImportDeclaration createEmptyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn){
         return new ImportDeclaration(beginLine, beginColumn, endLine, endColumn);
     }
@@ -82,6 +88,9 @@ public final class ImportDeclaration extends Node {
         this.isEmptyImportDeclaration = false;
     }
 
+    /**
+     * Is this an empty import declaration or a normal import declaration?
+     */
     public boolean isEmptyImportDeclaration(){
         return this.isEmptyImportDeclaration;
     }
@@ -100,6 +109,7 @@ public final class ImportDeclaration extends Node {
      * Retrieves the name of the import.
      * 
      * @return the name of the import
+     * @throws UnsupportedOperationException when invoked on an empty import declaration
      */
     public NameExpr getName() {
         if (isEmptyImportDeclaration) {
@@ -133,6 +143,7 @@ public final class ImportDeclaration extends Node {
      * 
      * @param asterisk
      *            <code>true</code> if this import is asterisk
+     * @throws UnsupportedOperationException when setting true on an empty import declaration
      */
     public void setAsterisk(boolean asterisk) {
         if (isEmptyImportDeclaration && asterisk) {
@@ -146,6 +157,7 @@ public final class ImportDeclaration extends Node {
      * 
      * @param name
      *            the name to set
+     * @throws UnsupportedOperationException when invoked on an empty import declaration
      */
     public void setName(NameExpr name) {
         if (isEmptyImportDeclaration) {
@@ -160,6 +172,7 @@ public final class ImportDeclaration extends Node {
      * 
      * @param static_
      *            <code>true</code> if this import is static
+     * @throws UnsupportedOperationException when setting true on an empty import declaration
      */
     public void setStatic(boolean static_) {
         if (isEmptyImportDeclaration && static_) {
