@@ -24,8 +24,6 @@ package com.github.javaparser;
 import static com.github.javaparser.PositionUtils.areInOrder;
 import static com.github.javaparser.PositionUtils.sortByBeginPosition;
 
-import com.github.javaparser.ASTParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
