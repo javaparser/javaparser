@@ -1147,10 +1147,21 @@ CompilationUnit CompilationUnit():
 }
 {
   [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() {line = pakage.getBeginLine(); column = pakage.getBeginColumn();} ]
-  ( in = ImportDeclaration() { if(line==-1){line = in.getBeginLine(); column = in.getBeginColumn();} imports = add(imports, in); } | ";" )*
+  ( in = ImportDeclaration()       { if(line==-1){line = in.getBeginLine(); column = in.getBeginColumn();} imports = add(imports, in); } |
+    in = EmptyImportDeclaration() { if(line==-1){line = in.getBeginLine(); column = in.getBeginColumn();} imports = add(imports, in); } )*
   ( tn = TypeDeclaration() { if(line==-1){line = tn.getBeginLine(); column = tn.getBeginColumn();} types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
   { return new CompilationUnit(line == -1 ? 0 : line, column, token.endLine, token.endColumn,pakage, imports, types); }
+}
+
+ImportDeclaration EmptyImportDeclaration():
+{
+	int line = -1;
+	int column = 0;
+}
+{
+    ";"
+    { return ImportDeclaration.createEmptyDeclaration(line, column, token.endLine, token.endColumn); }
 }
 
 PackageDeclaration PackageDeclaration():
