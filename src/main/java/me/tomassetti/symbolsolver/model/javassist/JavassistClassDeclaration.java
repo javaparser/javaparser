@@ -10,6 +10,7 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.javassist.contexts.JavassistMethodContext;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
@@ -36,7 +37,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         return ctClass.getName();
     }
 
-    private List<TypeUsage> parseTypeParameters(String signature, TypeSolver typeSolver) {
+    private List<TypeUsage> parseTypeParameters(String signature, TypeSolver typeSolver, Context context) {
         String originalSignature = signature;
         if (signature.contains("<")) {
             signature = signature.substring(signature.indexOf('<') + 1);
@@ -54,8 +55,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
                 throw new UnsupportedOperationException();
             }
             List<TypeUsage> typeUsages = new ArrayList<>();
-            TypeDeclaration typeDeclaration = typeSolver.solveType(signature);
-            typeUsages.add(new TypeUsageOfTypeDeclaration(typeDeclaration));
+            typeUsages.add(new SymbolSolver(typeSolver).solveTypeUsage(signature, context));
             return typeUsages;
         } else {
             return Collections.emptyList();
@@ -72,7 +72,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
                 MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver), typeSolver);
                 try {
                     SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
-                    List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver);
+                    List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method));
                     TypeUsage newReturnType = methodUsage.returnType();
                     for (int i=0;i<parametersOfReturnType.size();i++) {
                         newReturnType = newReturnType.replaceParam(i, parametersOfReturnType.get(i));

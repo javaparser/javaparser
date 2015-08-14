@@ -11,6 +11,7 @@ import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,5 +92,11 @@ public class SymbolSolver {
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
+    }
+
+    public TypeUsage solveTypeUsage(String name, Context context) {
+        TypeDeclaration typeDeclaration = typeSolver.solveType(name);
+        TypeUsageOfTypeDeclaration typeUsage = new TypeUsageOfTypeDeclaration(typeDeclaration);
+        return typeUsage;
     }
 }
