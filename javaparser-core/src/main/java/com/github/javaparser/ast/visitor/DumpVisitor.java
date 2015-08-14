@@ -1131,6 +1131,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 			}
 			printer.unindent();
 		}
+		printOrphanCommentsEnding(n);
 		printer.print("}");
 
 	}
