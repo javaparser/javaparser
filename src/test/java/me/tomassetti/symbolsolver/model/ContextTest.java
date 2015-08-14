@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -286,9 +287,39 @@ public class ContextTest {
         assertEquals(1, methodUsage.returnType().parameters().size());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().parameters().get(0).getTypeName());
     }
-/*
+
     @Test
+    public void resolveLambdaType() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
+        MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter");
+        Expression lambdaExpr = callToFilter.getArgs().get(0);
+
+        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        TypeUsage typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
+
+        assertEquals("Predicate<com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.getTypeName());
+    }
+
+    /*@Test
     public void resolveReferenceToLambdaParam() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
+        MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
+        Expression referenceToT = callToGetName.getScope();
+
+        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        TypeUsage typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
+
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", typeOfT.getTypeName());
+    }
+
+    /*@Test
+    public void resolveReferenceToCallOnLambdaParam() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
