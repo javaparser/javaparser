@@ -2540,9 +2540,10 @@ Expression AllocationExpression(Expression scope):
 
   (ann = Annotation()   { annotations = add(annotations, ann);})*
   (
-	  type = PrimitiveType() {type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(line, column, token.endLine, token.endColumn, type, null, 0);	  }
+	  type = PrimitiveType() {type.setAnnotations(annotations); }
 	  arr = ArrayDimsAndInits()
 	  {
+	    arrayExpr = new ArrayCreationExpr(line, column, token.endLine, token.endColumn, type, null, 0);
 	    arrayExpr.setArraysAnnotations((List)arr[2]);
 	  	if (arr[0] instanceof Integer) {
 	  	    arrayExpr.setArrayCount(((Integer)arr[0]).intValue());
