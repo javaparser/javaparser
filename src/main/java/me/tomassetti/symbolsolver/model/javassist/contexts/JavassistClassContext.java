@@ -47,7 +47,7 @@ public class JavassistClassContext implements Context {
                 for (SignatureAttribute.TypeParameter tp : classSignature.getParameters()) {
                     if (tp.getName().equals(name)) {
                         System.out.println("FOUND TP");
-                        OK, ora bisognerebbe capire come prendere il valore corrispondente
+                        //OK, ora bisognerebbe capire come prendere il valore corrispondente
                     }
                 }
             }

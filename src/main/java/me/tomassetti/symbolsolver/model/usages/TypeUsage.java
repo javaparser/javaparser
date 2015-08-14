@@ -40,7 +40,7 @@ public interface TypeUsage {
     Context getContext();
 
     SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 

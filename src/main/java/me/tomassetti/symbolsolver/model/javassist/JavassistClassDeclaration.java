@@ -37,7 +37,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         return ctClass.getName();
     }
 
-    private List<TypeUsage> parseTypeParameters(String signature, TypeSolver typeSolver, Context context) {
+    private List<TypeUsage> parseTypeParameters(String signature, TypeSolver typeSolver, Context context, Context invokationContext) {
         String originalSignature = signature;
         if (signature.contains("<")) {
             signature = signature.substring(signature.indexOf('<') + 1);
@@ -55,7 +55,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
                 throw new UnsupportedOperationException();
             }
             List<TypeUsage> typeUsages = new ArrayList<>();
-            typeUsages.add(new SymbolSolver(typeSolver).solveTypeUsage(signature, context));
+            typeUsages.add(new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext));
             return typeUsages;
         } else {
             return Collections.emptyList();
@@ -64,7 +64,8 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver,
+                                                    Context invokationContext) {
 
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)){
@@ -72,7 +73,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
                 MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver), typeSolver);
                 try {
                     SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
-                    List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method));
+                    List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
                     TypeUsage newReturnType = methodUsage.returnType();
                     for (int i=0;i<parametersOfReturnType.size();i++) {
                         newReturnType = newReturnType.replaceParam(i, parametersOfReturnType.get(i));
@@ -88,7 +89,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass).solveMethodAsUsage(name, parameterTypes, typeSolver);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext);
                 if (ref.isPresent()) {
                     return ref;
                 }
@@ -99,7 +100,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze).solveMethodAsUsage(name, parameterTypes, typeSolver);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext);
                 if (ref.isPresent()) {
                     return ref;
                 }

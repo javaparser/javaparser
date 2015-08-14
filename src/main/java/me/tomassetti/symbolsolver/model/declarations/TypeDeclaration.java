@@ -36,7 +36,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     boolean hasField(String name);
 
 
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 }

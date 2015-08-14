@@ -36,7 +36,7 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         return Optional.empty();
     }
 

@@ -65,7 +65,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
