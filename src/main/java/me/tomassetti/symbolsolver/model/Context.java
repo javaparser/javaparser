@@ -13,6 +13,9 @@ import java.util.Optional;
  * Context is very similar to scope.
  */
 public interface Context {
+    default Optional<TypeUsage> solveGenericType(String name) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
     public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);

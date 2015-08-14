@@ -288,7 +288,7 @@ public class ContextTest {
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().parameters().get(0).getTypeName());
     }*/
 
-    @Test
+    /*@Test
     public void resolveTypeUsageOfFirstMethodInGenericClass() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -299,10 +299,12 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetTypes);
 
-        assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().getTypeName());
-    }
+        assertEquals("java.util.List", filterUsage.returnType().getTypeName());
+        assertEquals(1, filterUsage.returnType().parameters().size());
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", filterUsage.returnType().parameters().get(0).getTypeName());
+    }*/
 
-    /*@Test
+    @Test
     public void resolveTypeUsageOfMethodInGenericClass() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");

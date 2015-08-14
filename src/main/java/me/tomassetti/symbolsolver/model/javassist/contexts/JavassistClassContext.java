@@ -2,6 +2,8 @@ package me.tomassetti.symbolsolver.model.javassist.contexts;
 
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
@@ -9,6 +11,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import sun.reflect.generics.tree.ClassSignature;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,11 +19,11 @@ import java.util.Optional;
 /**
  * Created by fede on 8/14/15.
  */
-public class JavassistMethodContext implements Context {
+public class JavassistClassContext implements Context {
 
-    private CtMethod wrappedNode;
+    private CtClass wrappedNode;
 
-    public JavassistMethodContext(CtMethod wrappedNode) {
+    public JavassistClassContext(CtClass wrappedNode) {
         this.wrappedNode = wrappedNode;
     }
 
@@ -36,8 +39,23 @@ public class JavassistMethodContext implements Context {
 
     @Override
     public Optional<TypeUsage> solveGenericType(String name) {
-        // TODO consider generic parameters of the method
-        return getParent().solveGenericType(name);
+        System.out.println("NAME " + wrappedNode.getName());
+        System.out.println("SIGNATURE " +wrappedNode.getGenericSignature());
+        try {
+            if (wrappedNode.getGenericSignature() != null) {
+                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(wrappedNode.getGenericSignature());
+                for (SignatureAttribute.TypeParameter tp : classSignature.getParameters()) {
+                    if (tp.getName().equals(name)) {
+                        System.out.println("FOUND TP");
+                        OK, ora bisognerebbe capire come prendere il valore corrispondente
+                    }
+                }
+            }
+        } catch (BadBytecode bb) {
+            throw new RuntimeException(bb);
+        }
+        return Optional.empty();
+        //throw new UnsupportedOperationException("TO be implemented");
     }
 
     @Override
@@ -47,8 +65,7 @@ public class JavassistMethodContext implements Context {
 
     @Override
     public Context getParent() {
-        CtClass ctClass = wrappedNode.getDeclaringClass();
-        return new JavassistClassContext(ctClass);
+        throw new UnsupportedOperationException();
     }
 
     @Override

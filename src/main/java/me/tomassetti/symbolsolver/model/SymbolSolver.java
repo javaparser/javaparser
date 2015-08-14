@@ -95,6 +95,10 @@ public class SymbolSolver {
     }
 
     public TypeUsage solveTypeUsage(String name, Context context) {
+        Optional<TypeUsage> genericType = context.solveGenericType(name);
+        if (genericType.isPresent()) {
+            return genericType.get();
+        }
         TypeDeclaration typeDeclaration = typeSolver.solveType(name);
         TypeUsageOfTypeDeclaration typeUsage = new TypeUsageOfTypeDeclaration(typeDeclaration);
         return typeUsage;
