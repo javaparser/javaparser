@@ -21,12 +21,15 @@
  
 package com.github.javaparser.bdd.steps;
 
+import com.github.javaparser.ASTHelper;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import org.hamcrest.CoreMatchers;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -37,12 +40,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class SharedSteps {
@@ -69,11 +74,16 @@ public class SharedSteps {
         state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
     }
 
+    @When("the following source is parsed (trimming space):$classSrc")
+    public void whenTheFollowingSourceIsParsedTrimmingSpace(String classSrc) throws ParseException {
+        state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.trim().getBytes())));
+    }
+
+
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
     public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException {
         state.put("cu2", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
     }
-
 
     @When("the \"$fileName\" is parsed")
     public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException, URISyntaxException {
@@ -114,11 +124,44 @@ public class SharedSteps {
         assertThat(compilationUnit.hashCode(), not(equalTo(compilationUnit2.hashCode())));
     }
 
-
     @Then("the expected source should be:$classSrc")
     public void thenTheExpectedSourcesShouldBe(String classSrc) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         assertThat(compilationUnit.toString(), CoreMatchers.is(equalToIgnoringWhiteSpace(classSrc)));
+    }
+
+    @Then("the begin line is $line")
+    public void thenTheBeginLineIs(int line) {
+        Node node = (Node) state.get("selectedNode");
+        assertEquals(line, node.getBeginLine());
+    }
+
+    @Then("the begin column is $line")
+    public void thenTheBeginColumnIs(int column) {
+        Node node = (Node) state.get("selectedNode");
+        assertEquals(column, node.getBeginColumn());
+    }
+
+    @Then("the end line is $line")
+    public void thenTheEndLineIs(int line) {
+        Node node = (Node) state.get("selectedNode");
+        assertEquals(line, node.getEndLine());
+    }
+
+    @Then("the end column is $line")
+    public void thenTheEndColumnIs(int column) {
+        Node node = (Node) state.get("selectedNode");
+        assertEquals(column, node.getEndColumn());
+    }
+
+    @When("I take the ArrayCreationExpr")
+    public void iTakeTheArrayCreationExpr() {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        List<ArrayCreationExpr> arrayCreationExprs = ASTHelper.getNodesByType(compilationUnit, ArrayCreationExpr.class);
+        if (arrayCreationExprs.size() != 1) {
+            throw new RuntimeException("Exactly one ArrayCreationExpr expected");
+        }
+        state.put("selectedNode", arrayCreationExprs.get(0));
     }
 
     public static BodyDeclaration getMemberByTypeAndPosition(TypeDeclaration typeDeclaration, int position,
