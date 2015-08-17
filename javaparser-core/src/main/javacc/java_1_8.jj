@@ -1571,20 +1571,38 @@ MethodDeclaration MethodDeclaration(Modifier modifier):
 	BlockStmt block = null;
 	int line = modifier.beginLine;
 	int column = modifier.beginColumn;
+	Type throwType;
 }
 {
   // Modifiers already matched in the caller!
   [ typeParameters = TypeParameters() { int[] lineCol=(int[])typeParameters.remove(0); if(line==-1){ line=lineCol[0]; column=lineCol[1];} } ]
   type = ResultType() { if(line==-1){line=type.getBeginLine(); column=type.getBeginColumn();}}
   name = Name() parameters = FormalParameters() ( "[" "]" { arrayCount++; } )*
-  [ "throws" throws_ = NameList() ]
+  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
-
   { 
       MethodDeclaration tmp = new MethodDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, typeParameters, type, null, parameters, arrayCount, throws_, block);
       tmp.setNameExpr(name);
       return tmp;
   }
+}
+
+ReferenceType ReferenceTypeWithAnnotations():
+{
+	List annotations = new ArrayList();
+	AnnotationExpr annotation = null;
+	ReferenceType type;
+}
+{
+    (annotation = Annotation() { annotations = add(annotations, annotation); } )* type = ReferenceType() {
+        if (type.getAnnotations() != null) {
+            type.getAnnotations().addAll(annotations);
+        } else {
+            type.setAnnotations(annotations);
+        }
+        return type;
+    }
 }
 
 List FormalParameters():
