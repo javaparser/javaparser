@@ -1302,12 +1302,10 @@ List ImplementsList(boolean isInterface):
 {
    List ret = new LinkedList();
    ClassOrInterfaceType cit;
-   AnnotationExpr ann;
-   List annotations = null;
 }
 {
-   "implements" (ann = Annotation()   { annotations = add(annotations, ann);})* cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); }
-   ( "," cit = ClassOrInterfaceType() { ret.add(cit); } )*
+   "implements" cit = ClassOrInterfaceTypeWithAnnotations() { ret.add(cit); }
+   ( "," cit = ClassOrInterfaceTypeWithAnnotations() { ret.add(cit); } )*
    {
       if (isInterface)
          throwParseException(token, "An interface cannot implement other interfaces");
@@ -1813,6 +1811,24 @@ ClassOrInterfaceType ClassOrInterfaceType():
   )*
   { return ret; }
 }
+
+ClassOrInterfaceType ClassOrInterfaceTypeWithAnnotations():
+{
+	List annotations = new ArrayList();
+	AnnotationExpr annotation = null;
+	ClassOrInterfaceType type;
+}
+{
+    (annotation = Annotation() { annotations = add(annotations, annotation); } )* type = ClassOrInterfaceType() {
+        if (type.getAnnotations() != null) {
+            type.getAnnotations().addAll(annotations);
+        } else {
+            type.setAnnotations(annotations);
+        }
+        return type;
+    }
+}
+
 
 List TypeArguments():
 {
