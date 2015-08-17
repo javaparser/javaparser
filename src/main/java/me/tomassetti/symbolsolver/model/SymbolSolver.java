@@ -54,9 +54,11 @@ public class SymbolSolver {
     }
 
     public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Context context) {
-        //return context.solveMethod(methodName, params, typeSolver);
-        //throw new UnsupportedOperationException();
-        return new MethodUsage(context.solveMethod(methodName, params, typeSolver), typeSolver);
+        SymbolReference<MethodDeclaration> decl = context.solveMethod(methodName, params, typeSolver);
+        if (!decl.isSolved()) {
+            throw new UnsolvedSymbolException(context, methodName);
+        }
+        return new MethodUsage(decl.getCorrespondingDeclaration(), typeSolver);
     }
 
     public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Node node) {

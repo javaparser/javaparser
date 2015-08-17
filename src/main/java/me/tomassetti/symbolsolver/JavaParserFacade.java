@@ -17,6 +17,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.NullTypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
@@ -191,9 +192,11 @@ public class JavaParserFacade {
                 throw new UnsolvedSymbolException(null, fieldAccessExpr.getField());
             }
         } else if (node instanceof ObjectCreationExpr) {
-            ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr)node;
+            ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) node;
             TypeUsage typeUsage = new JavaParserFacade(typeSolver).convertToUsage(objectCreationExpr.getType(), node);
             return typeUsage;
+        } else if (node instanceof NullLiteralExpr) {
+            return new NullTypeUsage();
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
@@ -336,6 +339,7 @@ public class JavaParserFacade {
      * "this" inserted in the given point, which type would have?
      */
     public TypeUsage getTypeOfThisIn(Node node) {
+        // TODO consider static methods
         if (node instanceof ClassOrInterfaceDeclaration) {
             JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)node);
             return new TypeUsageOfTypeDeclaration(classDeclaration);

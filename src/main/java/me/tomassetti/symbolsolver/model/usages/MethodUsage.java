@@ -37,10 +37,6 @@ public class MethodUsage {
     private List<TypeUsage> paramTypes = new ArrayList<>();
     private TypeUsage returnType;
 
-    public MethodUsage(SymbolReference<MethodDeclaration> ref, TypeSolver typeSolver) {
-        this(ref.getCorrespondingDeclaration(), typeSolver);
-    }
-
     public String getName() {
         return declaration.getName();
     }

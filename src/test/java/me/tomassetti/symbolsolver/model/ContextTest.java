@@ -387,7 +387,7 @@ public class ContextTest {
 
         DummyTypeSolver typeSolver = new DummyTypeSolver();
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        MethodUsage ref = symbolSolver.solveMethod("overloaded", Collections.emptyList(), call);
+        MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
         assertEquals("overloaded", ref.getName());
         assertEquals(1, ref.getNoParams());

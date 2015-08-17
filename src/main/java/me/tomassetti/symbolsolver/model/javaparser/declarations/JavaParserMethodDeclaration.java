@@ -41,7 +41,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        throw new UnsupportedOperationException();
+        return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i));
     }
 
     @Override
