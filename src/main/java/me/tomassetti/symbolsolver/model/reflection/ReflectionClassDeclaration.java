@@ -112,17 +112,17 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean canBeAssignedBy(TypeDeclaration other) {
         if (getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
         if (clazz.getSuperclass() != null) {
-            if (new ReflectionClassDeclaration(clazz.getSuperclass()).isAssignableBy(other)){
+            if (new ReflectionClassDeclaration(clazz.getSuperclass()).canBeAssignedBy(other)){
                 return true;
             }
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
-            if (new ReflectionClassDeclaration(interfaze).isAssignableBy(other)){
+            if (new ReflectionClassDeclaration(interfaze).canBeAssignedBy(other)){
                 return true;
             }
         }

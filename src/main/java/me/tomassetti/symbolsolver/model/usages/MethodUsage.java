@@ -25,7 +25,7 @@ public class MethodUsage {
         for (int i=0;i<declaration.getNoParams();i++){
             paramTypes.add(declaration.getParam(i).getTypeUsage(typeSolver));
         }
-        returnType = new TypeUsageOfTypeDeclaration(declaration.getReturnType());
+        returnType = new TypeUsageOfTypeDeclaration(declaration.getReturnType(typeSolver));
     }
 
     public MethodUsage(MethodDeclaration declaration, List<TypeUsage> paramTypes, TypeUsage returnType) {

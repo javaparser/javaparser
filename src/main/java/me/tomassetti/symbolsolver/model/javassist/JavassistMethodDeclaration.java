@@ -76,7 +76,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     /*            SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());*/
 
     @Override
-    public TypeDeclaration getReturnType() {
+    public TypeDeclaration getReturnType(TypeSolver typeSolver) {
         try {
             return new JavassistClassDeclaration(ctMethod.getReturnType());
         } catch (NotFoundException e) {
@@ -108,7 +108,12 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public MethodUsage resolveTypeVariables(Context context) {
+    public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Context getContext() {
         throw new UnsupportedOperationException();
     }
 

@@ -42,7 +42,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
 
-    default boolean isAssignableBy(TypeDeclaration other) {
+    default boolean canBeAssignedBy(TypeDeclaration other) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 }

@@ -57,11 +57,11 @@ public class MethodResolutionLogic {
             TypeDeclaration tdA = methodA.getParam(i).getType(typeSolver);
             TypeDeclaration tdB = methodB.getParam(i).getType(typeSolver);
             // B is more specific
-            if (tdA.isAssignableBy(tdB) && !tdB.isAssignableBy(tdA)) {
+            if (tdB.canBeAssignedBy(tdA) && !tdA.canBeAssignedBy(tdB)) {
                 return false;
             }
             // A is more specific
-            if (tdB.isAssignableBy(tdA) && !tdA.isAssignableBy(tdB)) {
+            if (tdA.canBeAssignedBy(tdB) && !tdB.canBeAssignedBy(tdA)) {
                 oneMoreSpecificFound = true;
             }
         }

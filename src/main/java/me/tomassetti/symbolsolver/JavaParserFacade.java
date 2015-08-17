@@ -6,15 +6,13 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.ast.type.*;
 import jdk.nashorn.internal.ir.Symbol;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.VoidTypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.NullTypeUsage;
@@ -251,12 +249,14 @@ public class JavaParserFacade {
             // TODO consider array modifiers
             return convert(referenceType.getType(), context);
         } else if (type instanceof ClassOrInterfaceType) {
-            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)type;
+            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             SymbolReference<TypeDeclaration> ref = context.solveType(classOrInterfaceType.getName(), typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(null, classOrInterfaceType.getName());
             }
             return ref.getCorrespondingDeclaration();
+        } else if (type instanceof VoidType) {
+            return new VoidTypeDeclaration();
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }

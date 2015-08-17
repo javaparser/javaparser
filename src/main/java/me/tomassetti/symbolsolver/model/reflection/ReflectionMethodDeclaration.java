@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.model.reflection;
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -49,23 +50,13 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         return false;
     }
 
-    /*@Override
-    public TypeDeclaration asTypeDeclaration() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public TypeDeclaration getType() {
-        throw new UnsupportedOperationException();
-    }*/
-
     @Override
     public TypeDeclaration declaringType() {
         return new ReflectionClassDeclaration(method.getDeclaringClass());
     }
 
     @Override
-    public TypeDeclaration getReturnType() {
+    public TypeDeclaration getReturnType(TypeSolver typeSolver) {
         return new ReflectionClassDeclaration(method.getReturnType());
     }
 
@@ -90,7 +81,12 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public MethodUsage resolveTypeVariables(Context context) {
+    public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Context getContext() {
         throw new UnsupportedOperationException();
     }
 }
