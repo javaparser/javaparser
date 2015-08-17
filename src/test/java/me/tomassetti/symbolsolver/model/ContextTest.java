@@ -318,7 +318,7 @@ public class ContextTest {
         assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().getTypeNameWithParams());
     }
 
-    /*@Test
+    @Test
     public void resolveTypeUsageOfCascadeMethodInGenericClass() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -329,10 +329,10 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToFilter);
 
-        assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().getTypeName());
+        assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().getTypeNameWithParams());
     }
 
-    /*@Test
+    @Test
     public void resolveLambdaType() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -344,7 +344,7 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         TypeUsage typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
 
-        assertEquals("Predicate<com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.getTypeName());
+        assertEquals("java.util.function.Predicate<com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.getTypeNameWithParams());
     }
 
     /*@Test
