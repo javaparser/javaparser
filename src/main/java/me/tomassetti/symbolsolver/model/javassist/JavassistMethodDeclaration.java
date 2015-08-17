@@ -5,6 +5,7 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
+import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.TypeParameter;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -103,6 +104,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
     @Override
     public MethodUsage getUsage(Node node) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public MethodUsage resolveTypeVariables(Context context) {
         throw new UnsupportedOperationException();
     }
 

@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import com.github.javaparser.ast.Node;
+import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 
 /**
@@ -22,4 +23,10 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
      * @return
      */
     MethodUsage getUsage(Node node);
+
+    /**
+     * Create the MethodUsage corresponding to this declaration with all generic types solved in the given
+     * context.
+     */
+    MethodUsage resolveTypeVariables(Context context);
 }

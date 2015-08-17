@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.reflection;
 
 import com.github.javaparser.ast.Node;
+import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.TypeParameter;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
@@ -86,5 +87,10 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     @Override
     public List<TypeParameter> getTypeParameters() {
         return null;
+    }
+
+    @Override
+    public MethodUsage resolveTypeVariables(Context context) {
+        throw new UnsupportedOperationException();
     }
 }

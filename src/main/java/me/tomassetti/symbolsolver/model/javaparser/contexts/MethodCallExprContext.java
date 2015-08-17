@@ -23,6 +23,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
+    public Optional<TypeUsage> solveGenericType(String name) {
+        throw new UnsupportedOperationException(name);
+    }
+
+    @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope() != null) {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
