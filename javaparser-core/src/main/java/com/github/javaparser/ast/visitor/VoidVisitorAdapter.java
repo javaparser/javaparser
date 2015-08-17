@@ -559,7 +559,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			}
 		}
 		if (n.getThrows() != null) {
-			for (final NameExpr name : n.getThrows()) {
+			for (final ReferenceType name : n.getThrows()) {
 				name.accept(this, arg);
 			}
 		}

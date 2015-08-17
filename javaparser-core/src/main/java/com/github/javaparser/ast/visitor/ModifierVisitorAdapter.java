@@ -675,10 +675,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(parameters);
 		}
-		final List<NameExpr> throwz = n.getThrows();
+		final List<ReferenceType> throwz = n.getThrows();
 		if (throwz != null) {
 			for (int i = 0; i < throwz.size(); i++) {
-				throwz.set(i, (NameExpr) throwz.get(i).accept(this, arg));
+				throwz.set(i, (ReferenceType) throwz.get(i).accept(this, arg));
 			}
 			removeNulls(throwz);
 		}
