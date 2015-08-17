@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public interface Context {
 
-    default Optional<TypeUsage> solveGenericType(String name) {
+    default Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 

@@ -38,7 +38,7 @@ public class ContextTest {
         return JavaParser.parse(is);
     }
 
-    /*@Test
+    @Test
     public void resolveDeclaredFieldReference() throws ParseException {
         CompilationUnit cu = parseSample("ReferencesToField");
         ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
@@ -286,9 +286,9 @@ public class ContextTest {
         assertEquals("java.util.List", methodUsage.returnType().getTypeName());
         assertEquals(1, methodUsage.returnType().parameters().size());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().parameters().get(0).getTypeName());
-    }*/
+    }
 
-    /*@Test
+    @Test
     public void resolveTypeUsageOfFirstMethodInGenericClass() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -302,7 +302,7 @@ public class ContextTest {
         assertEquals("java.util.List", filterUsage.returnType().getTypeName());
         assertEquals(1, filterUsage.returnType().parameters().size());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", filterUsage.returnType().parameters().get(0).getTypeName());
-    }*/
+    }
 
     @Test
     public void resolveTypeUsageOfMethodInGenericClass() throws ParseException, IOException {
@@ -315,7 +315,7 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToStream);
 
-        assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().getTypeName());
+        assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().getTypeNameWithParams());
     }
 
     /*@Test

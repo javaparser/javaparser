@@ -38,7 +38,7 @@ public class JavassistClassContext implements Context {
     }
 
     @Override
-    public Optional<TypeUsage> solveGenericType(String name) {
+    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
         System.out.println("NAME " + wrappedNode.getName());
         System.out.println("SIGNATURE " +wrappedNode.getGenericSignature());
         try {

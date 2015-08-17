@@ -118,6 +118,18 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     }
 
     @Override
+    public Optional<TypeUsage> solveGenericType(String name) {
+        int i=0;
+        for (TypeParameter tp :typeDeclaration.getTypeParameters()){
+            if (tp.getName().equals(name)){
+                return Optional.of(this.typeParameters.get(i));
+            }
+            i++;
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public TypeUsage replaceParam(int i, TypeUsage replaced) {
         ArrayList<TypeUsage> typeParametersCorrected = new ArrayList<>(typeParameters);
         typeParametersCorrected.set(i, replaced);

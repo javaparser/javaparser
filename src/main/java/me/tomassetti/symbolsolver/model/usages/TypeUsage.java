@@ -31,6 +31,25 @@ public interface TypeUsage {
 
     String getTypeName();
 
+    default String getTypeNameWithParams() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(getTypeName());
+        if (parameters().size() > 0){
+            sb.append("<");
+            boolean first = true;
+            for (TypeUsage param : parameters()) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(", ");
+                }
+                sb.append(param.getTypeNameWithParams());
+            }
+            sb.append(">");
+        }
+        return sb.toString();
+    }
+
     TypeUsage getBaseType();
 
     /* Represent the position of the reference, it is used when solving symbols
@@ -63,6 +82,10 @@ public interface TypeUsage {
      * @return
      */
     default TypeUsage replaceParam(int i, TypeUsage replaced) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
+    default Optional<TypeUsage> solveGenericType(String name) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 }

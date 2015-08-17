@@ -95,7 +95,7 @@ public class SymbolSolver {
     }
 
     public TypeUsage solveTypeUsage(String name, Context context) {
-        Optional<TypeUsage> genericType = context.solveGenericType(name);
+        Optional<TypeUsage> genericType = context.solveGenericType(name, typeSolver);
         if (genericType.isPresent()) {
             return genericType.get();
         }
