@@ -407,6 +407,18 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		return r;
 	}
 
+    @Override
+    public Node visit(MultiBoundType _n, Object _arg) {
+        List<ReferenceType> elements = visit(_n.getElements(), _arg);
+
+        MultiBoundType r = new MultiBoundType(_n.getBeginLine(),
+                _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
+                elements);
+        Comment comment = cloneNodes(_n.getComment(), _arg);
+        r.setComment(comment);
+        return r;
+    }
+
 	@Override
 	public Node visit(VoidType _n, Object _arg) {
 		Comment comment = cloneNodes(_n.getComment(), _arg);

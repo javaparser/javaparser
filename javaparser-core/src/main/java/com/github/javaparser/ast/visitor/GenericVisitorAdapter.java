@@ -69,6 +69,7 @@ import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.type.*;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 
 /**
  * @author Julio Vilmar Gesser
@@ -1271,6 +1272,19 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		}
 		return null;
 	}
+
+    @Override
+    public R visit(final MultiBoundType n, final A arg) {
+        {
+            for (ReferenceType element : n.getElements()) {
+                R result = element.accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
 
 	@Override
 	public R visit(final ReturnStmt n, final A arg) {

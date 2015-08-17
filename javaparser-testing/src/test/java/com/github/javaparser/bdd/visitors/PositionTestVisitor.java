@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -341,6 +342,11 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final ReferenceType n, final Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override public void visit(final MultiBoundType n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }

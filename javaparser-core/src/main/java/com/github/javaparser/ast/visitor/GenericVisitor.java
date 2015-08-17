@@ -130,6 +130,8 @@ public interface GenericVisitor<R, A> {
 
 	public R visit(ReferenceType n, A arg);
 
+    public R visit(MultiBoundType n, A arg);
+
 	public R visit(VoidType n, A arg);
 
 	public R visit(WildcardType n, A arg);

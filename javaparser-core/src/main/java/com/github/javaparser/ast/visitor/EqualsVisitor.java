@@ -669,6 +669,31 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return Boolean.TRUE;
 	}
 
+    @Override public Boolean visit(final MultiBoundType n1, final Node arg) {
+        final MultiBoundType n2 = (MultiBoundType) arg;
+
+        List<ReferenceType> n1Elements = n1.getElements();
+        List<ReferenceType> n2Elements = n2.getElements();
+
+        if (n1Elements !=null && n2Elements != null) {
+            if(n1Elements.size() != n2Elements.size()){
+                return Boolean.FALSE;
+            }
+            else{
+                int i = 0;
+                for(ReferenceType aux: n1Elements){
+                    if(aux.accept(this, n2Elements.get(i))) {
+                        return Boolean.FALSE;
+                    }
+                    i++;
+                }
+            }
+        }  else if (n1Elements != n2Elements){
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
 	public Boolean visit(VoidType n1, Node arg) {
 		VoidType n2 = (VoidType) arg;
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
