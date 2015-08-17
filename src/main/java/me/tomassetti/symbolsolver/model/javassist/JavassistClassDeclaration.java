@@ -72,13 +72,15 @@ public class JavassistClassDeclaration implements ClassDeclaration {
                 // TODO check parameters
                 MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver), typeSolver);
                 try {
-                    SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
-                    List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
-                    TypeUsage newReturnType = methodUsage.returnType();
-                    for (int i=0;i<parametersOfReturnType.size();i++) {
-                        newReturnType = newReturnType.replaceParam(i, parametersOfReturnType.get(i));
+                    if (method.getGenericSignature() != null) {
+                        SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
+                        List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
+                        TypeUsage newReturnType = methodUsage.returnType();
+                        for (int i = 0; i < parametersOfReturnType.size(); i++) {
+                            newReturnType = newReturnType.replaceParam(i, parametersOfReturnType.get(i));
+                        }
+                        methodUsage = methodUsage.replaceReturnType(newReturnType);
                     }
-                    methodUsage = methodUsage.replaceReturnType(newReturnType);
                     return Optional.of(methodUsage);
                 } catch (BadBytecode e){
                     throw new RuntimeException(e);

@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -14,6 +15,7 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
@@ -328,5 +330,17 @@ public class JavaParserFacade {
 
     public MethodUsage convertToUsage(MethodDeclaration methodDeclaration, Context context) {
         return new MethodUsage(methodDeclaration, typeSolver);
+    }
+
+    /**
+     * "this" inserted in the given point, which type would have?
+     */
+    public TypeUsage getTypeOfThisIn(Node node) {
+        if (node instanceof ClassOrInterfaceDeclaration) {
+            JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)node);
+            return new TypeUsageOfTypeDeclaration(classDeclaration);
+        } else {
+            return getTypeOfThisIn(node.getParentNode());
+        }
     }
 }

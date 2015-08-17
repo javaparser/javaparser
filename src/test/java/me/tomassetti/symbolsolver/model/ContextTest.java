@@ -28,6 +28,7 @@ import static org.easymock.EasyMock.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -347,7 +348,7 @@ public class ContextTest {
         assertEquals("java.util.function.Predicate<com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.getTypeNameWithParams());
     }
 
-    /*@Test
+    @Test
     public void resolveReferenceToLambdaParam() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -362,7 +363,7 @@ public class ContextTest {
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", typeOfT.getTypeName());
     }
 
-    /*@Test
+    @Test
     public void resolveReferenceToCallOnLambdaParam() throws ParseException, IOException {
         CompilationUnit cu = parseSample("Navigator");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -377,7 +378,7 @@ public class ContextTest {
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.declaringType().getQualifiedName());
     }
 
-    /*@Test
+    @Test
     public void resolveReferenceToOverloadMethodWithNullParam() throws ParseException, IOException {
         CompilationUnit cu = parseSample("OverloadedMethods");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
@@ -386,15 +387,14 @@ public class ContextTest {
 
         DummyTypeSolver typeSolver = new DummyTypeSolver();
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("overloaded", Collections.emptyList(), call);
+        MethodUsage ref = symbolSolver.solveMethod("overloaded", Collections.emptyList(), call);
 
-        assertEquals(true, ref.isSolved());
-        assertEquals("overloaded", ref.getCorrespondingDeclaration().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getParam(0).getType());
+        assertEquals("overloaded", ref.getName());
+        assertEquals(1, ref.getNoParams());
+        assertEquals("java.lang.String", ref.getParamTypes().get(0).getTypeName());
     }
 
-    @Test
+    /*@Test
     public void resolveReferenceToOverloadMethodFindStricter() throws ParseException, IOException {
         CompilationUnit cu = parseSample("OverloadedMethods");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");

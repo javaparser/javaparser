@@ -73,4 +73,8 @@ public class MethodUsage {
             return new MethodUsage(declaration, paramTypes, returnType);
         }
     }
+
+    public int getNoParams() {
+        return paramTypes.size();
+    }
 }

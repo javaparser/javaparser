@@ -18,7 +18,9 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     String getQualifiedName();
     Context getContext();
 
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
+    default SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        return getContext().solveMethod(name, parameterTypes, typeSolver);
+    }
 
     /**
      * Get how the type is used in the given context.
@@ -37,6 +39,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
 
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
 }

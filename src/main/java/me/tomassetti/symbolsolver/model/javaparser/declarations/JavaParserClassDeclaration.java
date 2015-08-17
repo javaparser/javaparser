@@ -32,11 +32,6 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public TypeUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }
@@ -60,16 +55,6 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     public boolean isType() {
         return true;
     }
-
-    /*@Override
-    public TypeDeclaration asTypeDeclaration() {
-        return this;
-    }
-
-    @Override
-    public TypeDeclaration getType() {
-        throw new UnsupportedOperationException();
-    }*/
 
     @Override
     public String getQualifiedName() {
@@ -108,11 +93,6 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             return base;
         }
     }
-
-    /*@Override
-    public TypeUsage getUsage(Node node) {
-        return new TypeUsageOfTypeDeclaration(getType());
-    }*/
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage) {
