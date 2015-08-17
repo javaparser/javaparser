@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
@@ -35,8 +36,36 @@ public class MethodResolutionLogic {
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
         } else {
-            throw new UnsupportedOperationException("We should find how to discriminate between these candidates");
+            MethodDeclaration winningCandidate = applicableMethods.get(0);
+            for (int i=1; i<applicableMethods.size(); i++) {
+                MethodDeclaration other = applicableMethods.get(i);
+                if (isMoreSpecific(winningCandidate, other, typeSolver)) {
+                    // nothing to do
+                } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
+                    winningCandidate = other;
+                } else {
+                    throw new RuntimeException("Ambiguous method call: cannot find a most applicable method");
+                }
+            }
+            return SymbolReference.solved(winningCandidate);
         }
+    }
+
+    private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, TypeSolver typeSolver) {
+        boolean oneMoreSpecificFound = false;
+        for (int i=0; i < methodA.getNoParams(); i++){
+            TypeDeclaration tdA = methodA.getParam(i).getType(typeSolver);
+            TypeDeclaration tdB = methodB.getParam(i).getType(typeSolver);
+            // B is more specific
+            if (tdA.isAssignableBy(tdB) && !tdB.isAssignableBy(tdA)) {
+                return false;
+            }
+            // A is more specific
+            if (tdB.isAssignableBy(tdA) && !tdA.isAssignableBy(tdB)) {
+                oneMoreSpecificFound = true;
+            }
+        }
+        return oneMoreSpecificFound;
     }
 
 }

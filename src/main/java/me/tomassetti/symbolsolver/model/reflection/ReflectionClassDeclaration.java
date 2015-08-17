@@ -99,12 +99,6 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             return false;
         }
         return true;
-        /*if (typeUsage instanceof TypeUsageOfTypeDeclaration) {
-            TypeUsageOfTypeDeclaration typeUsageOfTypeDeclaration = (TypeUsageOfTypeDeclaration)typeUsage;
-
-        } else {
-            throw new UnsupportedOperationException();
-        }*/
     }
 
     @Override
@@ -115,6 +109,24 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public FieldDeclaration getField(String name) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        if (getQualifiedName().equals(other.getQualifiedName())) {
+            return true;
+        }
+        if (clazz.getSuperclass() != null) {
+            if (new ReflectionClassDeclaration(clazz.getSuperclass()).isAssignableBy(other)){
+                return true;
+            }
+        }
+        for (Class<?> interfaze : clazz.getInterfaces()) {
+            if (new ReflectionClassDeclaration(interfaze).isAssignableBy(other)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

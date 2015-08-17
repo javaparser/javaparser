@@ -41,4 +41,8 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
+
+    default boolean isAssignableBy(TypeDeclaration other) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
 }
