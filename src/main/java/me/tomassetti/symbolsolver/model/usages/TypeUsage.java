@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.model.usages;
 
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,5 +88,24 @@ public interface TypeUsage {
 
     default Optional<TypeUsage> solveGenericType(String name) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
+    default TypeUsage solveGenericTypes(Context context, TypeSolver typeSolver) {
+        if (isTypeVariable()) {
+            Optional<TypeUsage> solved = context.solveGenericType(getTypeName(), typeSolver);
+            if (solved.isPresent()) {
+                return solved.get();
+            } else {
+                throw new UnsolvedSymbolException(context, getTypeName());
+            }
+        } else {
+            TypeUsage result = this;
+            int i=0;
+            for (TypeUsage tp : this.parameters()) {
+                result = result.replaceParam(i, tp.solveGenericTypes(context, typeSolver));
+                i++;
+            }
+            return result;
+        }
     }
 }

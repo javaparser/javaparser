@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
@@ -38,6 +39,15 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
         // if nothing is found we should ask the parent context
         return getParent().solveSymbolAsValue(name, typeSolver);
+    }
+
+    @Override
+    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
+        MethodCallExpr parentNode = (MethodCallExpr)wrappedNode.getParentNode();
+        int pos = pos(parentNode, wrappedNode);
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage((MethodCallExpr) parentNode);
+        TypeUsage lambda = methodUsage.getParamTypes().get(pos);
+        return Optional.of(lambda.parameters().get(0));
     }
 
     private int pos(MethodCallExpr callExpr, Expression param){

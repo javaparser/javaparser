@@ -150,7 +150,10 @@ public class JavaParserFacade {
                 logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
                 if (solveLambdas) {
-                    return refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver).getUsage(node);
+                    TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver).getUsage(node);
+                    // We need to replace the type variables
+                    result = result.solveGenericTypes(JavaParserFactory.getContext(node), typeSolver);
+                    return result;
                 } else {
                     return new TypeUsageOfTypeDeclaration(refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver));
                 }
