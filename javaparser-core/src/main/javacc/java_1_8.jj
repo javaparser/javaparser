@@ -1760,6 +1760,21 @@ ReferenceType ReferenceType():
   { return new ReferenceType(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type, arrayCount, null, accum); }
 }
 
+MultiBoundType MultiBoundType():
+{
+	int line;
+	int column;
+	Type elementType;
+	List elements = null;
+}
+{
+    elementType=ReferenceType() {
+        line=elementType.getBeginLine(); column=elementType.getBeginColumn();
+        elements = add(elements, elementType); }
+    "&" (elementType=ReferenceType() { elements = add(elements, elementType); } )+
+    { return new MultiBoundType(line, column, token.endLine, token.endColumn, elements); }
+}
+
 ClassOrInterfaceType ClassOrInterfaceType():
 {
 	ClassOrInterfaceType ret;
@@ -2267,19 +2282,32 @@ Expression CastExpression():
 	AnnotationExpr ann;
 	Type st;
 	List annotations = null;
-	List secondaryTypes = null;
+	List typesOfMultiCast = null;
+	boolean isMulti = false;
 }
 {
   "(" {line=token.beginLine; column=token.beginColumn;}
    (ann = Annotation()   { annotations = add(annotations, ann);})*
   (
   	  LOOKAHEAD(2)
-  	  type = PrimitiveType() ")" ret = UnaryExpression() { type.setAnnotations(annotations); ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
+  	  type = PrimitiveType() ")" ret = UnaryExpression() { type.setAnnotations(annotations); ret = new CastExpr(line, column, token.endLine, token.endColumn, type, ret); }
   	|
-  	  type = ReferenceType() ("&" st = ReferenceType() { secondaryTypes = add(secondaryTypes, st);} )* ")" ret = UnaryExpressionNotPlusMinus() { type.setAnnotations(annotations); ret = new CastExpr(line, column, token.endLine, token.endColumn,type, ret); }
-  )
+  	  type = ReferenceType() { typesOfMultiCast = add(typesOfMultiCast, type); type.setAnnotations(annotations); }
+  	  ( "&" type = ReferenceType() {
+  	    typesOfMultiCast = add(typesOfMultiCast, type);
+  	    }
+  	  )*
+  	  ")" ret = UnaryExpressionNotPlusMinus() {
+  	    if (typesOfMultiCast.size() > 1) {
+  	        type = new MultiBoundType(line, column, token.endLine, token.endColumn, typesOfMultiCast);
+  	    }
+  	    ret = new CastExpr(line, column, token.endLine, token.endColumn, type, ret);
+  	  }
+ )
   { return ret; }
 }
+
+
 
 Expression PrimaryExpression():
 {
