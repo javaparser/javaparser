@@ -39,23 +39,25 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
-        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-            if (!importDecl.isStatic()) {
-                if (!importDecl.isAsterisk()) {
-                    if (importDecl.getName() instanceof QualifiedNameExpr) {
-                        String qName = importDecl.getName().toString();
-                        if (qName.equals(name) || qName.endsWith("." + name)) {
-                            SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                            if (ref.isSolved()) {
-                                return ref;
+        if (wrappedNode.getImports() != null) {
+            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+                if (!importDecl.isStatic()) {
+                    if (!importDecl.isAsterisk()) {
+                        if (importDecl.getName() instanceof QualifiedNameExpr) {
+                            String qName = importDecl.getName().toString();
+                            if (qName.equals(name) || qName.endsWith("." + name)) {
+                                SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                                if (ref.isSolved()) {
+                                    return ref;
+                                }
                             }
+                        } else {
+                            throw new UnsupportedOperationException();
                         }
-                    } else {
-                        throw new UnsupportedOperationException();
                     }
                 }
-            }
 
+            }
         }
 
         // Look in current package

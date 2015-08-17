@@ -33,13 +33,9 @@ public class MethodResolutionLogic {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }
         if (applicableMethods.size() == 1) {
-            // Find parameters
-
-
-
             return SymbolReference.solved(applicableMethods.get(0));
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("We should find how to discriminate between these candidates");
         }
     }
 

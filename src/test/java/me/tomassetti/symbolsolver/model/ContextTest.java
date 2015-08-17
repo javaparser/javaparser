@@ -385,7 +385,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "m1");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
 
-        DummyTypeSolver typeSolver = new DummyTypeSolver();
+        JreTypeSolver typeSolver = new JreTypeSolver();
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 

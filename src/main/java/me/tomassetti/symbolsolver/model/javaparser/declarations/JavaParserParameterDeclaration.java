@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
 import com.github.javaparser.ast.body.Parameter;
+import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -43,6 +44,6 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public TypeDeclaration getType(TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
     }
 }

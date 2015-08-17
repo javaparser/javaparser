@@ -7,6 +7,7 @@ import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.NullTypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -81,6 +82,9 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage) {
+        if (typeUsage instanceof NullTypeUsage) {
+            return true;
+        }
         if (typeUsage instanceof LambdaTypeUsagePlaceholder) {
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
