@@ -5,7 +5,7 @@ import me.tomassetti.symbolsolver.model.SymbolDeclarator;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 
 /**
- * Created by federico on 28/07/15.
+ * @author Federico Tomassetti
  */
 public abstract class AbstractSymbolDeclarator<N extends Node> implements SymbolDeclarator {
 
