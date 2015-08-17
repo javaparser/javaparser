@@ -9,5 +9,6 @@ notifications:
       - "https://webhooks.gitter.im/e/ec3127975d8a2b8f11d0"
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
-
+after_success:
+  - mvn test jacoco:report coveralls:report
 # http://lint.travis-ci.org/ validator

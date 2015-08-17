@@ -8,6 +8,8 @@ The AST records the source code structure, javadoc and comments. It is also poss
 
 [![Build Status](https://travis-ci.org/javaparser/javaparser.svg?branch=master)](https://travis-ci.org/javaparser/javaparser)
 
+[![Coverage Status](https://coveralls.io/repos/javaparser/javaparser/badge.svg?branch=master&service=github)](https://coveralls.io/github/javaparser/javaparser?branch=master)
+
 ## Features
 
 *   Light weight
