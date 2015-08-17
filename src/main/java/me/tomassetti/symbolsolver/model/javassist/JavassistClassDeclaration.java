@@ -7,9 +7,8 @@ import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javassist.contexts.JavassistMethodContext;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Created by federico on 01/08/15.
  */
-public class JavassistClassDeclaration implements ClassDeclaration {
+public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
 
     private CtClass ctClass;
 
@@ -196,8 +195,23 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
     public boolean isType() {
         return true;
+    }
+
+    @Override
+    public boolean isClass() {
+        return !ctClass.isInterface();
+    }
+
+    @Override
+    public boolean isInterface() {
+        return ctClass.isInterface();
     }
 
     /*@Override

@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesolvers;
 
-import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
@@ -17,7 +17,7 @@ public class DummyTypeSolver implements TypeSolver {
     }
 
     @Override
-    public ClassDeclaration solveType(String name) throws UnsolvedSymbolException {
+    public ClassOrInterfaceDeclaration solveType(String name) throws UnsolvedSymbolException {
         throw new UnsolvedSymbolException(null, name);
     }
 }

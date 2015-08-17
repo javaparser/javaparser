@@ -54,19 +54,24 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
     public boolean isType() {
         return false;
     }
 
-    /*@Override
-    public TypeDeclaration asTypeDeclaration() {
-        throw new UnsupportedOperationException();
+    @Override
+    public boolean isClass() {
+        return false;
     }
 
     @Override
-    public TypeDeclaration getType() {
-        return new JavassistClassDeclaration(ctMethod.getDeclaringClass());
-    }*/
+    public boolean isInterface() {
+        return false;
+    }
 
     @Override
     public TypeDeclaration declaringType() {

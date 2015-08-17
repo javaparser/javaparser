@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.model.reflection;
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 /**
  * Created by federico on 02/08/15.
  */
-public class ReflectionClassDeclaration implements ClassDeclaration {
+public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
 
     private Class<?> clazz;
 
@@ -150,8 +150,23 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
     public boolean isType() {
         return true;
+    }
+
+    @Override
+    public boolean isClass() {
+        return !clazz.isInterface();
+    }
+
+    @Override
+    public boolean isInterface() {
+        return clazz.isInterface();
     }
 
     /*@Override

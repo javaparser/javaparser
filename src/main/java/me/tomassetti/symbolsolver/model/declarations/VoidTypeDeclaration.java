@@ -64,8 +64,23 @@ public class VoidTypeDeclaration implements TypeDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
     public boolean isType() {
-        throw new UnsupportedOperationException();
+        return true;
+    }
+
+    @Override
+    public boolean isClass() {
+        return false;
+    }
+
+    @Override
+    public boolean isInterface() {
+        return false;
     }
 
     @Override

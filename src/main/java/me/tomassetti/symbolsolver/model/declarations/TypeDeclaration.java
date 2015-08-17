@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by federico on 31/07/15.
+ * @author Federico Tomassetti
  */
 public interface TypeDeclaration extends Declaration, TypeParametrized {
     String getQualifiedName();
@@ -36,7 +36,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     FieldDeclaration getField(String name);
 
     boolean hasField(String name);
-
 
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);

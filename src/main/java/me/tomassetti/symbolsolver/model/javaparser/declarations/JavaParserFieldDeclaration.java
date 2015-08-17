@@ -28,48 +28,9 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public TypeDeclaration asTypeDeclaration() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public TypeUsage getTypeUsage(TypeSolver typeSolver) {
         return JavaParserFacade.get(typeSolver).convertToUsage(fieldDeclaration.getType(), fieldDeclaration);
-        /*TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeDeclaration);
-        if (!typeUsage.parameters().isEmpty()) {
-            throw new UnsupportedOperationException(typeUsage.toString()+" "+fieldDeclaration.getType());
-        }
-        return typeUsage;*/
     }
-
-    /*private TypeUsage replaceTypeParams(TypeUsage typeUsage){
-        System.out.println("GOT "+typeUsage);
-        if (typeUsage.isTypeVariable()) {
-            System.out.println("  is type variable");
-            TypeParameter typeParameter = typeUsage.asTypeParameter();
-            if (typeParameter.declaredOnClass()) {
-                System.out.println("  declared on class");
-                System.out.println("  type param name "+typeParameter.getName());
-                Optional<TypeUsage> typeParam = typeParamByName(typeParameter.getName());
-                if (typeParam.isPresent()) {
-                    typeUsage = typeParam.get();
-                }
-            }
-        }
-
-        for (int i=0; i<typeUsage.parameters().size(); i++) {
-            TypeUsage replaced = replaceTypeParams(typeUsage.parameters().get(i));
-            // Identity comparison on purpose
-            if (replaced != typeUsage.parameters().get(i)) {
-                typeUsage = typeUsage.replaceParam(i, replaced);
-            }
-        }
-
-        System.out.println("TRANSFORMED IN "+typeUsage);
-
-        return typeUsage;
-    }*/
-
 
     @Override
     public TypeDeclaration getType(TypeSolver typeSolver) {
@@ -78,21 +39,36 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        return variableDeclarator.getId().getName();
     }
 
     @Override
     public boolean isField() {
-        throw new UnsupportedOperationException();
+        return true;
     }
 
     @Override
     public boolean isParameter() {
-        throw new UnsupportedOperationException();
+        return false;
+    }
+
+    @Override
+    public boolean isVariable() {
+        return false;
     }
 
     @Override
     public boolean isType() {
-        throw new UnsupportedOperationException();
+        return false;
+    }
+
+    @Override
+    public boolean isClass() {
+        return false;
+    }
+
+    @Override
+    public boolean isInterface() {
+        return false;
     }
 }

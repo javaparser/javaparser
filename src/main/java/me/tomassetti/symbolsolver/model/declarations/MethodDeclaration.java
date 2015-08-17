@@ -10,6 +10,10 @@ import me.tomassetti.symbolsolver.model.usages.MethodUsage;
  */
 public interface MethodDeclaration extends Declaration, TypeParametrized {
 
+    /**
+     * The type in which the method is declared.
+     * @return
+     */
     TypeDeclaration declaringType();
 
     TypeDeclaration getReturnType(TypeSolver typeSolver);

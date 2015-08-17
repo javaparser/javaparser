@@ -6,8 +6,7 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -18,13 +17,13 @@ import java.util.stream.Collectors;
 /**
  * Created by federico on 30/07/15.
  */
-public class JavaParserClassDeclaration implements ClassDeclaration {
+public class JavaParserClassDeclaration implements ClassOrInterfaceDeclaration {
 
-    public JavaParserClassDeclaration(ClassOrInterfaceDeclaration wrappedNode) {
+    public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode) {
         this.wrappedNode = wrappedNode;
     }
 
-    private ClassOrInterfaceDeclaration wrappedNode;
+    private com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode;
 
     @Override
     public Context getContext() {
@@ -52,8 +51,23 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
     public boolean isType() {
         return true;
+    }
+
+    @Override
+    public boolean isClass() {
+        return !wrappedNode.isInterface();
+    }
+
+    @Override
+    public boolean isInterface() {
+        return wrappedNode.isInterface();
     }
 
     @Override
@@ -67,9 +81,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     private String containerName(String base, Node container) {
-        if (container instanceof ClassOrInterfaceDeclaration) {
+        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
             String b = containerName(base, container.getParentNode());
-            String cn = ((ClassOrInterfaceDeclaration)container).getName();
+            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)container).getName();
             if (b.isEmpty()) {
                 return cn;
             } else {

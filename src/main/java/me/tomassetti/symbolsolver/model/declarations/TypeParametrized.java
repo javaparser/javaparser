@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by federico on 03/08/15.
+ * @author Federico Tomassetti
  */
 public interface TypeParametrized {
 

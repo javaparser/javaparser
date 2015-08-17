@@ -122,8 +122,23 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
     public boolean isType() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isClass() {
+        return false;
+    }
+
+    @Override
+    public boolean isInterface() {
+        return false;
     }
 
     @Override

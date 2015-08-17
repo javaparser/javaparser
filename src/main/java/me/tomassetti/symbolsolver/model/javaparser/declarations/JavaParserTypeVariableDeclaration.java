@@ -87,8 +87,23 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
     public boolean isType() {
         return true;
+    }
+
+    @Override
+    public boolean isClass() {
+        return false;
+    }
+
+    @Override
+    public boolean isInterface() {
+        return false;
     }
 
     @Override

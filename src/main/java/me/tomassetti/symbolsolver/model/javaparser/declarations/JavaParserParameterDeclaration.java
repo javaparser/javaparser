@@ -38,11 +38,6 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeDeclaration asTypeDeclaration() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public TypeDeclaration getType(TypeSolver typeSolver) {
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
     }

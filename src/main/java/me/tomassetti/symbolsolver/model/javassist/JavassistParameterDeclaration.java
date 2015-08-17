@@ -50,11 +50,6 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeDeclaration asTypeDeclaration() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public TypeDeclaration getType(TypeSolver typeSolver) {
         return new JavassistClassDeclaration(type);
     }

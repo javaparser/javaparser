@@ -39,6 +39,11 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "ReflectionMethodDeclaration{" +
                 "method=" + method +
@@ -47,6 +52,16 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public boolean isType() {
+        return false;
+    }
+
+    @Override
+    public boolean isClass() {
+        return false;
+    }
+
+    @Override
+    public boolean isInterface() {
         return false;
     }
 

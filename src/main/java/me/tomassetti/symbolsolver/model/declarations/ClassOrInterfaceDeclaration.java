@@ -5,11 +5,8 @@ import me.tomassetti.symbolsolver.model.TypeParameter;
 import java.util.List;
 
 /**
- * A class declaration.
- * Not an interface declaration.
+ * A class or interface declaration.
  */
-public interface ClassDeclaration extends TypeDeclaration {
-
+public interface ClassOrInterfaceDeclaration extends TypeDeclaration {
     public List<TypeParameter> getTypeParameters();
-
 }

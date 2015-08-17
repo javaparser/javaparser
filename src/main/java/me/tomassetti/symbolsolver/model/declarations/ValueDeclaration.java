@@ -4,11 +4,9 @@ import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 /**
- * Created by federico on 28/07/15.
+ * @author Federico Tomassetti
  */
 public interface ValueDeclaration extends Declaration {
-
-    TypeDeclaration asTypeDeclaration();
 
     TypeDeclaration getType(TypeSolver typeSolver);
 

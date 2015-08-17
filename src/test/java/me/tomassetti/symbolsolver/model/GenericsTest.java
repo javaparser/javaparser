@@ -5,33 +5,18 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
-import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
-import me.tomassetti.symbolsolver.model.typesolvers.JarTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.Optional;
 
-import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class GenericsTest {

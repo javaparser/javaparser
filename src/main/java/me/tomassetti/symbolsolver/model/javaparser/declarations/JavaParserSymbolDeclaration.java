@@ -23,14 +23,15 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     private Node wrappedNode;
     private boolean field;
     private boolean parameter;
+    private boolean variable;
     private TypeSolver typeSolver;
 
     public static JavaParserSymbolDeclaration field(VariableDeclarator wrappedNode, TypeSolver typeSolver) {
-        return new JavaParserSymbolDeclaration(wrappedNode, wrappedNode.getId().getName(), typeSolver, true, false);
+        return new JavaParserSymbolDeclaration(wrappedNode, wrappedNode.getId().getName(), typeSolver, true, false, false);
     }
 
     public static JavaParserSymbolDeclaration parameter(Parameter parameter, TypeSolver typeSolver) {
-        return new JavaParserSymbolDeclaration(parameter, parameter.getId().getName(), typeSolver, false, true);
+        return new JavaParserSymbolDeclaration(parameter, parameter.getId().getName(), typeSolver, false, true, false);
     }
 
     @Override
@@ -41,10 +42,11 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
                 '}';
     }
 
-    private JavaParserSymbolDeclaration(Node wrappedNode, String name, TypeSolver typeSolver, boolean field, boolean parameter) {
+    private JavaParserSymbolDeclaration(Node wrappedNode, String name, TypeSolver typeSolver, boolean field, boolean parameter, boolean variable) {
         this.name = name;
         this.wrappedNode = wrappedNode;
         this.field = field;
+        this.variable = variable;
         this.parameter = parameter;
         this.typeSolver = typeSolver;
     }
@@ -65,13 +67,23 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
+    public boolean isVariable() {
+        return variable;
+    }
+
+    @Override
     public boolean isType() {
         return false;
     }
 
     @Override
-    public TypeDeclaration asTypeDeclaration() {
-        throw new UnsupportedOperationException();
+    public boolean isClass() {
+        return false;
+    }
+
+    @Override
+    public boolean isInterface() {
+        return false;
     }
 
     @Override
