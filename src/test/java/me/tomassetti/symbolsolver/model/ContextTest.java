@@ -386,7 +386,6 @@ public class ContextTest {
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
 
         JreTypeSolver typeSolver = new JreTypeSolver();
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
         assertEquals("overloaded", ref.getName());
@@ -394,21 +393,19 @@ public class ContextTest {
         assertEquals("java.lang.String", ref.getParamTypes().get(0).getTypeName());
     }
 
-    /*@Test
+    @Test
     public void resolveReferenceToOverloadMethodFindStricter() throws ParseException, IOException {
         CompilationUnit cu = parseSample("OverloadedMethods");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m2");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
 
-        DummyTypeSolver typeSolver = new DummyTypeSolver();
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("overloaded", Collections.emptyList(), call);
+        JreTypeSolver typeSolver = new JreTypeSolver();
+        MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
-        assertEquals(true, ref.isSolved());
-        assertEquals("overloaded", ref.getCorrespondingDeclaration().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getParam(0).getType());
+        assertEquals("overloaded", ref.getName());
+        assertEquals(1, ref.getNoParams());
+        assertEquals("java.lang.String", ref.getParamTypes().get(0).getTypeName());
     }
 
     @Test
@@ -418,14 +415,12 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "m3");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
 
-        DummyTypeSolver typeSolver = new DummyTypeSolver();
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference<me.tomassetti.symbolsolver.model.MethodDeclaration> ref = symbolSolver.solveMethod("overloaded", Collections.emptyList(), call);
+        JreTypeSolver typeSolver = new JreTypeSolver();
+        MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
-        assertEquals(true, ref.isSolved());
-        assertEquals("overloaded", ref.getCorrespondingDeclaration().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
-        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(0).getType());
-    }*/
+        assertEquals("overloaded", ref.getName());
+        assertEquals(1, ref.getNoParams());
+        assertEquals("java.lang.Object", ref.getParamTypes().get(0).getTypeName());
+    }
 
 }
