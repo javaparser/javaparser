@@ -9,6 +9,8 @@ import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javassist.contexts.JavassistMethodContext;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
@@ -114,6 +116,16 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Context getContext() {
         throw new UnsupportedOperationException();
     }
@@ -213,16 +225,6 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
     public boolean isInterface() {
         return ctClass.isInterface();
     }
-
-    /*@Override
-    public TypeDeclaration asTypeDeclaration() {
-        return this;
-    }
-
-    @Override
-    public TypeDeclaration getType() {
-        throw new UnsupportedOperationException();
-    }*/
 
     @Override
     public String toString() {

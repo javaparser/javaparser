@@ -1,9 +1,9 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import javassist.compiler.ast.Member;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -21,9 +21,9 @@ import java.util.Optional;
 /**
  * @author Federico Tomassetti
  */
-public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContext<ClassOrInterfaceDeclaration> {
+public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclaration> {
 
-    public ClassOrInterfaceDeclarationContext(ClassOrInterfaceDeclaration wrappedNode) {
+    public EnumDeclarationContext(EnumDeclaration wrappedNode) {
         super(wrappedNode);
     }
 
@@ -39,19 +39,6 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                 if (ref.isSolved()) {
                     return ref;
                 }
-            }
-        }
-
-        // then among inherited fields
-        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && wrappedNode.getExtends().size() > 0){
-            String superClassName = wrappedNode.getExtends().get(0).getName();
-            SymbolReference<TypeDeclaration> superClass = solveType(superClassName, typeSolver);
-            if (!superClass.isSolved()) {
-                throw new UnsolvedTypeException(this, superClassName);
-            }
-            SymbolReference ref = superClass.getCorrespondingDeclaration().getContext().solveSymbol(name, typeSolver);
-            if (ref.isSolved()) {
-                return ref;
             }
         }
 
@@ -74,44 +61,36 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             }
         }
 
-        // then among inherited fields
-        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && wrappedNode.getExtends().size() > 0){
-            String superClassName = wrappedNode.getExtends().get(0).getName();
-            SymbolReference<TypeDeclaration> superClass = solveType(superClassName, typeSolver);
-            if (!superClass.isSolved()) {
-                throw new UnsolvedTypeException(this, superClassName);
-            }
-            Optional<Value> ref = superClass.getCorrespondingDeclaration().getContext().solveSymbolAsValue(name, typeSolver);
-            if (ref.isPresent()) {
-                return ref;
-            }
-        }
-
         // then to parent
         return getParent().solveSymbolAsValue(name, typeSolver);
     }
 
     @Override
     public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
-        for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
-            if (tp.getName().equals(name)) {
-                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp)));
-            }
-        }
         return Optional.empty();
     }
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        SymbolReference<TypeDeclaration> ref = getDeclaration().solveType(name, typeSolver);
-        if (ref.isSolved()) {
-            return ref;
+        if (this.wrappedNode.getName().equals(name)){
+            return SymbolReference.solved(new JavaParserEnumDeclaration(this.wrappedNode));
         }
-        return getParent().solveType(name, typeSolver);
-    }
 
-    private TypeDeclaration getDeclaration() {
-        return new JavaParserClassDeclaration(this.wrappedNode);
+        // Internal classes
+        for (BodyDeclaration member : this.wrappedNode.getMembers()){
+            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
+                com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
+                if (internalType.getName().equals(name)) {
+                    if (internalType instanceof ClassOrInterfaceDeclaration) {
+                        return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) internalType));
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
+                }
+            }
+        }
+
+        return getParent().solveType(name, typeSolver);
     }
 
     @Override

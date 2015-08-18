@@ -8,6 +8,7 @@ import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.Collections;
@@ -69,6 +70,16 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     @Override
     public boolean hasField(String name) {
         return false;
+    }
+
+    @Override
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
+        return SymbolReference.unsolved(ValueDeclaration.class);
+    }
+
+    @Override
+    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -7,10 +7,12 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.reflection.*;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
+import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -114,5 +116,114 @@ public class ClassOrInterfaceDeclarationContextTest {
         assertEquals(false, ref.isSolved());
     }
 
+    @Test
+    public void solveTypeRefToItself() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("A", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToUnexisting() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("Foo", new DummyTypeSolver());
+        assertEquals(false, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToObject() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("Object", new JreTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToJavaLangObject() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("java.lang.Object", new JreTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToInternalClass() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("B", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToInternalEnum() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("E", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToInternalOfInternalClass() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("C", new DummyTypeSolver());
+        assertEquals(false, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToAnotherClassInFile() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("Super", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToQualifiedInternalClass() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("A.B", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToQualifiedInternalOfInternalClass() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("B.C", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
+
+    @Test
+    public void solveTypeRefToMoreQualifiedInternalOfInternalClass() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypes");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("A.B.C", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+    }
 
 }

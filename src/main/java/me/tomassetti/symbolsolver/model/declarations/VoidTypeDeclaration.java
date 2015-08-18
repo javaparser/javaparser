@@ -1,11 +1,10 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import com.github.javaparser.ast.Node;
-import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,6 +45,16 @@ public class VoidTypeDeclaration implements TypeDeclaration {
     @Override
     public boolean hasField(String name) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
+        return SymbolReference.unsolved(ValueDeclaration.class);
+    }
+
+    @Override
+    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
+        return SymbolReference.unsolved(TypeDeclaration.class);
     }
 
     @Override

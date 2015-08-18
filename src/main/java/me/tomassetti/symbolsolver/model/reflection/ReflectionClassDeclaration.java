@@ -6,6 +6,7 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.NullTypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
@@ -130,6 +131,16 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
+        return SymbolReference.unsolved(ValueDeclaration.class);
+    }
+
+    @Override
+    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
+        return SymbolReference.unsolved(TypeDeclaration.class);
+    }
+
+    @Override
     public boolean hasField(String name) {
         throw new UnsupportedOperationException();
     }
@@ -168,16 +179,6 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
     public boolean isInterface() {
         return clazz.isInterface();
     }
-
-    /*@Override
-    public TypeDeclaration asTypeDeclaration() {
-        return this;
-    }
-
-    @Override
-    public TypeDeclaration getType() {
-        throw new UnsupportedOperationException();
-    }*/
 
     @Override
     public List<TypeParameter> getTypeParameters() {

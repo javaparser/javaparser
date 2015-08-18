@@ -44,4 +44,14 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     default boolean canBeAssignedBy(TypeDeclaration other) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
+
+    SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver);
+
+    /**
+     * Try to solve a symbol just in the declaration, it does not delegate to the container.
+     * @param substring
+     * @param typeSolver
+     * @return
+     */
+    SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
 }

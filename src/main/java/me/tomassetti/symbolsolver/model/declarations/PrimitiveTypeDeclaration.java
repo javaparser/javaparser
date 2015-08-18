@@ -3,9 +3,7 @@ package me.tomassetti.symbolsolver.model.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
-import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
@@ -58,6 +56,16 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
     @Override
     public boolean hasField(String name) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
+        return SymbolReference.unsolved(ValueDeclaration.class);
+    }
+
+    @Override
+    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
+        return SymbolReference.unsolved(TypeDeclaration.class);
     }
 
     @Override

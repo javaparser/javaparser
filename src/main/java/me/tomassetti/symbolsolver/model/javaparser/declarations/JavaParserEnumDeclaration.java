@@ -3,13 +3,13 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.EnumDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 /**
  * Created by federico on 30/07/15.
  */
-public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration {
+public class JavaParserEnumDeclaration implements EnumDeclaration {
 
-    public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode) {
+    public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode) {
         this.wrappedNode = wrappedNode;
     }
 
-    private com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode;
+    private com.github.javaparser.ast.body.EnumDeclaration wrappedNode;
 
     @Override
     public Context getContext() {
@@ -65,12 +65,12 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
 
     @Override
     public boolean isClass() {
-        return !wrappedNode.isInterface();
+        return false;
     }
 
     @Override
     public boolean isInterface() {
-        return wrappedNode.isInterface();
+        return false;
     }
 
     @Override
@@ -159,59 +159,12 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        if (this.wrappedNode.getName().equals(name)){
-            return SymbolReference.solved(this);
-        }
-        if (this.wrappedNode.getTypeParameters() != null) {
-            for (com.github.javaparser.ast.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
-                if (typeParameter.getName().equals(name)) {
-                    return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter));
-                }
-            }
-        }
-
-        // Internal classes
-        for (BodyDeclaration member : this.wrappedNode.getMembers()){
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
-                String prefix = internalType.getName() + ".";
-                if (internalType.getName().equals(name)) {
-                    if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType));
-                    } else if (internalType instanceof EnumDeclaration) {
-                        return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType));
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-                } else if (name.startsWith(prefix) && name.length() > prefix.length()) {
-                    if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType).solveType(name.substring(prefix.length()), typeSolver);
-                    } else if (internalType instanceof EnumDeclaration) {
-                        return new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType).solveType(name.substring(prefix.length()), typeSolver);
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-                }
-            }
-        }
-
-        String prefix = wrappedNode.getName() + ".";
-        if (name.startsWith(prefix) && name.length() > prefix.length()){
-            return new JavaParserClassDeclaration(this.wrappedNode).solveType(name.substring(prefix.length()), typeSolver);
-        }
-
-        return SymbolReference.unsolved(TypeDeclaration.class);
+    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        if (this.wrappedNode.getTypeParameters() == null) {
-            return Collections.emptyList();
-        } else {
-            return this.wrappedNode.getTypeParameters().stream().map(
-                    (tp) -> new JavaParserTypeParameter(tp)
-            ).collect(Collectors.toList());
-        }
+        return Collections.emptyList();
     }
 }
