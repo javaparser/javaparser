@@ -210,7 +210,7 @@ public class JavaParserFacade {
             // TODO consider array modifiers
             return convertToUsage(referenceType.getType(), context);
         } else if (type instanceof ClassOrInterfaceType) {
-            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)type;
+            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             SymbolReference<TypeDeclaration> ref = context.solveType(classOrInterfaceType.getName(), typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(null, classOrInterfaceType.getName());
@@ -218,9 +218,11 @@ public class JavaParserFacade {
             TypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
             List<TypeUsage> typeParameters = Collections.emptyList();
             if (classOrInterfaceType.getTypeArgs() != null) {
-                typeParameters = classOrInterfaceType.getTypeArgs().stream().map((pt)->convertToUsage(pt, context)).collect(Collectors.toList());
+                typeParameters = classOrInterfaceType.getTypeArgs().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
             }
             return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParameters);
+        } else if (type instanceof PrimitiveType) {
+            return new TypeUsageOfTypeDeclaration(new PrimitiveTypeDeclaration((PrimitiveType)type), Collections.emptyList());
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }

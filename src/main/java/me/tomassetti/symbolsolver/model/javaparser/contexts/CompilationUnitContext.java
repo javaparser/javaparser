@@ -12,6 +12,7 @@ import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassD
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by federico on 30/07/15.
@@ -20,6 +21,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     public CompilationUnitContext(CompilationUnit wrappedNode) {
         super(wrappedNode);
+    }
+
+    @Override
+    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+        return Optional.empty();
     }
 
     @Override

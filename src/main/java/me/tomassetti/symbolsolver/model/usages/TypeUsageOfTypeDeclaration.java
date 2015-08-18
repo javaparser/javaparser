@@ -1,14 +1,11 @@
 package me.tomassetti.symbolsolver.model.usages;
 
-import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeVariableDeclaration;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
