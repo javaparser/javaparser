@@ -51,8 +51,4 @@ public class JavassistMethodContext implements Context {
         return new JavassistClassContext(ctClass);
     }
 
-    @Override
-    public boolean isRoot() {
-        throw new UnsupportedOperationException();
-    }
 }

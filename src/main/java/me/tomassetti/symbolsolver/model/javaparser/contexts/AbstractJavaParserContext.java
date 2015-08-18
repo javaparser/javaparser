@@ -42,8 +42,4 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         return JavaParserFactory.getContext(wrappedNode.getParentNode());
     }
 
-    @Override
-    public final boolean isRoot() {
-        return (wrappedNode instanceof CompilationUnit);
-    }
 }

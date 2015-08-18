@@ -22,11 +22,7 @@ public interface Context {
     public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
 
-    public default MethodUsage replaceTypeVariables(TypeUsage typeUsage) {
-        throw new UnsupportedOperationException();
-    }
     public Context getParent();
-    public boolean isRoot();
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }

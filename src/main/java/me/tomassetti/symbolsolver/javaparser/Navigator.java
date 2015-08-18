@@ -67,7 +67,7 @@ public final class Navigator {
                 }
             }
         }
-        throw new IllegalStateException("No fieldwith given name");
+        throw new IllegalStateException("No field with given name");
     }
 
     public static NameExpr findNameExpression(Node node, String name) {

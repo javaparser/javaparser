@@ -1,21 +1,14 @@
 package me.tomassetti.symbolsolver.model.reflection;
 
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.model.Context;
+import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.javaparser.UnsolvedTypeException;
-import me.tomassetti.symbolsolver.model.javaparser.contexts.AbstractJavaParserContext;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by federico on 28/07/15.
@@ -49,8 +42,4 @@ public class ClassOrInterfaceDeclarationContext implements Context {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public boolean isRoot() {
-        throw new UnsupportedOperationException();
-    }
 }

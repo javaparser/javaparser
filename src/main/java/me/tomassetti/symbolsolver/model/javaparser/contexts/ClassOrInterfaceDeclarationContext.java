@@ -11,15 +11,17 @@ import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedTypeException;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserMethodDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeParameter;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeParameter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by federico on 28/07/15.
+ * @author Federico Tomassetti
  */
 public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContext<ClassOrInterfaceDeclaration> {
 
@@ -89,6 +91,16 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
         // then to parent
         return getParent().solveSymbolAsValue(name, typeSolver);
+    }
+
+    @Override
+    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
+        for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
+            if (tp.getName().equals(name)) {
+                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp)));
+            }
+        }
+        return Optional.empty();
     }
 
     @Override

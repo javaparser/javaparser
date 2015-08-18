@@ -68,8 +68,4 @@ public class JavassistClassContext implements Context {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public boolean isRoot() {
-        throw new UnsupportedOperationException();
-    }
 }
