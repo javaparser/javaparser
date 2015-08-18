@@ -6,6 +6,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.Context;
+import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.reflection.*;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
@@ -57,5 +59,60 @@ public class ClassOrInterfaceDeclarationContextTest {
 
         assertEquals(false, d.isPresent());
     }
+
+    @Test
+    public void solveSymbolReferringToDeclaredInstanceField() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithSymbols");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("i", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+    }
+
+    @Test
+    public void solveSymbolReferringToDeclaredStaticField() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithSymbols");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("j", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("long", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+    }
+
+    @Test
+    public void solveSymbolReferringToInehritedInstanceField() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithSymbols");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("k", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("boolean", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+    }
+
+    @Test
+    public void solveSymbolReferringToInheritedStaticField() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithSymbols");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("m", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("char", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+    }
+
+    @Test
+    public void solveSymbolReferringToUnknownElement() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithSymbols");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("zzz", new DummyTypeSolver());
+        assertEquals(false, ref.isSolved());
+    }
+
 
 }

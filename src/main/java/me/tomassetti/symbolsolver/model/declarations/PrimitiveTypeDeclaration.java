@@ -1,0 +1,102 @@
+package me.tomassetti.symbolsolver.model.declarations;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.Type;
+import me.tomassetti.symbolsolver.model.Context;
+import me.tomassetti.symbolsolver.model.FieldDeclaration;
+import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+
+import java.util.List;
+
+/**
+ * Created by federico on 18/08/15.
+ */
+public class PrimitiveTypeDeclaration implements TypeDeclaration {
+
+    private String name;
+
+    public PrimitiveTypeDeclaration(javax.lang.model.type.PrimitiveType wrapped) {
+        this.name = wrapped.getKind().name().toLowerCase();
+    }
+
+    public PrimitiveTypeDeclaration(PrimitiveType type) {
+        this.name = type.getType().name().toLowerCase();
+    }
+
+    @Override
+    public String getQualifiedName() {
+        return name;
+    }
+
+    @Override
+    public Context getContext() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public TypeUsage getUsage(Node node) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isTypeVariable() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public FieldDeclaration getField(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasField(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean isField() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isParameter() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isVariable() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isType() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isClass() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isInterface() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<TypeParameter> getTypeParameters() {
+        throw new UnsupportedOperationException();
+    }
+}

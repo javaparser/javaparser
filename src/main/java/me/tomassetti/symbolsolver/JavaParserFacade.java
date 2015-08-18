@@ -9,10 +9,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.*;
 import jdk.nashorn.internal.ir.Symbol;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.VoidTypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.NullTypeUsage;
@@ -257,6 +254,8 @@ public class JavaParserFacade {
             return ref.getCorrespondingDeclaration();
         } else if (type instanceof VoidType) {
             return new VoidTypeDeclaration();
+        } else if (type instanceof PrimitiveType) {
+            return new PrimitiveTypeDeclaration((PrimitiveType)type);
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
