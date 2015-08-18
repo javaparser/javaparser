@@ -1,33 +1,38 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
+import me.tomassetti.symbolsolver.model.AbstractTest;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.reflection.*;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import org.junit.Assert;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import java.io.InputStream;
 import java.util.Optional;
 
-/**
- * Created by federico on 18/08/15.
- */
-public class ClassOrInterfaceDeclarationContextTest {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-    private CompilationUnit parseSample(String sampleName) throws ParseException {
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream(sampleName + ".java.txt");
-        return JavaParser.parse(is);
+/**
+ * @author Federico Tomassetti
+ */
+public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
+
+    @Test
+    public void getParentForTopClass() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithTypeVariables");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        assertFalse(null == context.getParent());
+        assertEquals(new CompilationUnitContext(cu), context.getParent());
     }
 
     @Test

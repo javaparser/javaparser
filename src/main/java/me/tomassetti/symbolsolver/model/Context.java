@@ -15,14 +15,20 @@ import java.util.Optional;
  */
 public interface Context {
 
+    public Context getParent();
+
+    /* Type resolution */
+
     default Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
-    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
 
-    public Context getParent();
+    /* Symbols resolution */
+
+    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
