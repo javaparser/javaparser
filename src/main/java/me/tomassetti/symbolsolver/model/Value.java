@@ -35,4 +35,5 @@ public class Value {
     public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
         return new Value(decl.getTypeUsage(typeSolver), decl.getName(), decl.isField());
     }
+
 }

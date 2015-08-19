@@ -126,6 +126,11 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
+    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Context getContext() {
         throw new UnsupportedOperationException();
     }
@@ -172,7 +177,7 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
+    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

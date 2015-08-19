@@ -6,13 +6,17 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import jdk.nashorn.internal.ir.Symbol;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,6 +87,18 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
         }
     }
 
+    @Override
+    public boolean canBeAssignedBy(TypeDeclaration other, TypeSolver typeSolver) {
+        List<TypeDeclaration> ancestorsOfOther = other.getAllAncestors(typeSolver);
+        ancestorsOfOther.add(other);
+        for (TypeDeclaration ancestorOfOther : ancestorsOfOther) {
+            if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private String containerName(String base, Node container) {
         if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
             String b = containerName(base, container.getParentNode());
@@ -112,8 +128,16 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
-        throw new UnsupportedOperationException();
+    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
+        if (typeUsage.isNull()) {
+            return true;
+        }
+        if (typeUsage.isReferenceType()){
+            TypeDeclaration other = typeSolver.solveType(typeUsage.getTypeName());
+            return canBeAssignedBy(other, typeSolver);
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 
     @Override
@@ -202,6 +226,32 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
         }
 
         return SymbolReference.unsolved(TypeDeclaration.class);
+    }
+
+    @Override
+    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        List<TypeDeclaration> ancestors = new ArrayList<>();
+        if (wrappedNode.getExtends() != null) {
+            for (ClassOrInterfaceType extended : wrappedNode.getExtends()){
+                SymbolReference<TypeDeclaration> superclass = solveType(extended.getName(), typeSolver);
+                if (!superclass.isSolved()) {
+                    throw new UnsolvedSymbolException(null, extended.getName());
+                }
+                ancestors.add(superclass.getCorrespondingDeclaration());
+                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors(typeSolver));
+            }
+        }
+        if (wrappedNode.getImplements() != null) {
+            for (ClassOrInterfaceType implemented : wrappedNode.getImplements()){
+                SymbolReference<TypeDeclaration> superclass = solveType(implemented.getName(), typeSolver);
+                if (!superclass.isSolved()) {
+                    throw new UnsolvedSymbolException(null, implemented.getName());
+                }
+                ancestors.add(superclass.getCorrespondingDeclaration());
+                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors(typeSolver));
+            }
+        }
+        return ancestors;
     }
 
     @Override

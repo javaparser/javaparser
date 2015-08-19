@@ -20,6 +20,10 @@ public interface TypeUsage {
     boolean isArray();
     boolean isPrimitive();
 
+    default boolean isNull() {
+        return false;
+    }
+
     Optional<TypeUsage> parameterByName(String name);
 
     boolean isFunctionOrPredicate();

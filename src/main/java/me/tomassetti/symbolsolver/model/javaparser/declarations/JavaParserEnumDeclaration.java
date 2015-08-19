@@ -112,7 +112,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
+    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 
@@ -160,6 +160,11 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

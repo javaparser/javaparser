@@ -6,6 +6,7 @@ import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,13 +40,15 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
-        throw new UnsupportedOperationException();
+    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
+        // TODO consider promotions
+        // TODO consider auto-unboxing
+        return typeUsage.isPrimitive() && typeUsage.getTypeName().equals(getName());
     }
 
     @Override
     public boolean isTypeVariable() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     @Override
@@ -66,6 +69,11 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
     @Override
     public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
         return SymbolReference.unsolved(TypeDeclaration.class);
+    }
+
+    @Override
+    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        return Collections.emptyList();
     }
 
     @Override
@@ -105,6 +113,6 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyList();
     }
 }

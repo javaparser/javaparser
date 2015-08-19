@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.TypeParameter;
@@ -30,7 +31,11 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public TypeDeclaration declaringType() {
-        throw new UnsupportedOperationException();
+        if (wrappedNode.getParentNode() instanceof ClassOrInterfaceDeclaration) {
+            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)wrappedNode.getParentNode());
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 
     @Override

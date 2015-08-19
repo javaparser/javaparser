@@ -10,9 +10,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by federico on 17/08/15.
+ * Created by federico on 18/08/15.
  */
-public class NullTypeUsage implements TypeUsage {
+public class PrimitiveTypeUsage implements TypeUsage {
+
+    private String name;
+
+    public static final PrimitiveTypeUsage INT = new PrimitiveTypeUsage("int");
+
+    private PrimitiveTypeUsage(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean isArray() {
         return false;
@@ -20,10 +29,6 @@ public class NullTypeUsage implements TypeUsage {
 
     @Override
     public boolean isPrimitive() {
-        return false;
-    }
-
-    public boolean isNull() {
         return true;
     }
 
@@ -39,12 +44,12 @@ public class NullTypeUsage implements TypeUsage {
 
     @Override
     public boolean isReferenceType() {
-        return true;
+        return false;
     }
 
     @Override
     public String getTypeName() {
-        throw new UnsupportedOperationException();
+        return name;
     }
 
     @Override

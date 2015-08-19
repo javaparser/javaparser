@@ -1,16 +1,18 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import javassist.compiler.ast.Member;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedTypeException;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.*;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserMethodDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeParameter;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeParameter;
 
@@ -125,7 +127,22 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                 }
             }
         }
-        // TODO consider inherited methods
+
+        if (this.wrappedNode.getExtends() != null && !this.wrappedNode.getExtends().isEmpty()) {
+            if (this.wrappedNode.getExtends().size() > 1) {
+                throw new UnsupportedOperationException();
+            }
+            String superclassName = this.wrappedNode.getExtends().get(0).getName();
+            SymbolReference<TypeDeclaration> superclass = solveType(superclassName, typeSolver);
+            if (!superclass.isSolved()) {
+                throw new UnsolvedSymbolException(this, superclassName);
+            }
+            SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().getContext().solveMethod(name, parameterTypes, typeSolver);
+            if (res.isSolved()) {
+                candidateMethods.add(res.getCorrespondingDeclaration());
+            }
+        }
+
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, parameterTypes, typeSolver);
     }
 }

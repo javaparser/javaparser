@@ -1,6 +1,8 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.SymbolReference;
@@ -8,6 +10,7 @@ import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +32,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
      */
     TypeUsage getUsage(Node node);
 
-    boolean isAssignableBy(TypeUsage typeUsage);
+    boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver);
 
     boolean isTypeVariable();
 
@@ -41,7 +44,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
 
-    default boolean canBeAssignedBy(TypeDeclaration other) {
+    default boolean canBeAssignedBy(TypeDeclaration other, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
@@ -54,4 +57,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
      * @return
      */
     SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
+
+    List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver);
 }

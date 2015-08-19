@@ -15,6 +15,7 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -82,7 +83,7 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
+    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
         if (typeUsage instanceof NullTypeUsage) {
             return true;
         }
@@ -113,17 +114,17 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedBy(TypeDeclaration other) {
+    public boolean canBeAssignedBy(TypeDeclaration other, TypeSolver typeSolver) {
         if (getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
         if (clazz.getSuperclass() != null) {
-            if (new ReflectionClassDeclaration(clazz.getSuperclass()).canBeAssignedBy(other)){
+            if (new ReflectionClassDeclaration(clazz.getSuperclass()).canBeAssignedBy(other, typeSolver)){
                 return true;
             }
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
-            if (new ReflectionClassDeclaration(interfaze).canBeAssignedBy(other)){
+            if (new ReflectionClassDeclaration(interfaze).canBeAssignedBy(other, typeSolver)){
                 return true;
             }
         }
@@ -138,6 +139,22 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
     @Override
     public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
         return SymbolReference.unsolved(TypeDeclaration.class);
+    }
+
+    @Override
+    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        List<TypeDeclaration> ancestors = new LinkedList<>();
+        if (clazz.getSuperclass() != null) {
+            TypeDeclaration superclass = new ReflectionClassDeclaration(clazz.getSuperclass());
+            ancestors.add(superclass);
+            ancestors.addAll(superclass.getAllAncestors(typeSolver));
+        }
+        for (Class<?> interfaze : clazz.getInterfaces()) {
+            TypeDeclaration interfazeDecl = new ReflectionClassDeclaration(interfaze);
+            ancestors.add(interfazeDecl);
+            ancestors.addAll(interfazeDecl.getAllAncestors(typeSolver));
+        }
+        return ancestors;
     }
 
     @Override

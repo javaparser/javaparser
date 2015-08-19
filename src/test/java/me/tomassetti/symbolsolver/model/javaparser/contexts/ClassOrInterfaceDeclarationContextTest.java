@@ -3,16 +3,21 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.AbstractTest;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.Value;
+import me.tomassetti.symbolsolver.model.declarations.AmbiguityException;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.*;
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -285,4 +290,149 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         assertEquals(true, ref.isSolved());
     }
 
+    @Test
+    public void solveMethodSimpleCase() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo0", ImmutableList.of(), new JreTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNoParams());
+    }
+
+    @Test
+    public void solveMethodOverrideCase() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo1", ImmutableList.of(), new JreTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNoParams());
+    }
+
+    @Test
+    public void solveMethodInheritedCase() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo2", ImmutableList.of(), new JreTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("Super", ref.getCorrespondingDeclaration().declaringType().getName());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNoParams());
+    }
+
+    @Test
+    public void solveMethodWithPrimitiveParameters() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        TypeUsage intType = PrimitiveTypeUsage.INT;
+
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo3", ImmutableList.of(intType), new JreTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
+        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
+    }
+
+    @Test
+    public void solveMethodWithMoreSpecializedParameter() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        TypeUsage stringType = new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(String.class));
+
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo4", ImmutableList.of(stringType), new JreTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
+        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
+    }
+
+    @Test(expected = AmbiguityException.class)
+    public void solveMethodWithAmbiguosCall() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(new NullTypeUsage()), new JreTypeSolver());
+    }
+
+    @Test
+    public void solveMethodAsUsageSimpleCase() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo0", ImmutableList.of(), new JreTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("A", ref.get().declaringType().getName());
+        assertEquals(0, ref.get().getNoParams());
+    }
+
+    @Test
+    public void solveMethodAsUsageOverrideCase() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo1", ImmutableList.of(), new JreTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("A", ref.get().declaringType().getName());
+        assertEquals(0, ref.get().getNoParams());
+    }
+
+    @Test
+    public void solveMethodAsUsageInheritedCase() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo2", ImmutableList.of(), new JreTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("Super", ref.get().declaringType().getName());
+        assertEquals(0, ref.get().getNoParams());
+    }
+
+    @Test
+    public void solveMethodAsUsageWithPrimitiveParameters() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        TypeUsage intType = PrimitiveTypeUsage.INT;
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo3", ImmutableList.of(intType), new JreTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("A", ref.get().declaringType().getName());
+        assertEquals(1, ref.get().getNoParams());
+    }
+
+    @Test
+    public void solveMethodAsUsageWithMoreSpecializedParameter() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        TypeUsage stringType = new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(String.class));
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo4", ImmutableList.of(stringType), new JreTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("A", ref.get().declaringType().getName());
+        assertEquals(1, ref.get().getNoParams());
+    }
+
+    @Test(expected = AmbiguityException.class)
+    public void solveMethodAsUsageWithAmbiguosCall() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithMethods");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(new NullTypeUsage()), new JreTypeSolver());
+    }
 }

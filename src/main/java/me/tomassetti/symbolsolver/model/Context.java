@@ -25,7 +25,7 @@ public interface Context {
 
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
 
-    /* Symbols resolution */
+    /* Symbol resolution */
 
     public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 

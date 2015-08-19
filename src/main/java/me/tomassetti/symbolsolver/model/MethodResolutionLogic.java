@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model;
 
+import me.tomassetti.symbolsolver.model.declarations.AmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
@@ -21,13 +22,21 @@ public class MethodResolutionLogic {
             return false;
         }
         for (int i=0; i<method.getNoParams(); i++) {
-            if (!method.getParam(i).getType(typeSolver).isAssignableBy(paramTypes.get(i))){
+            if (!method.getParam(i).getType(typeSolver).isAssignableBy(paramTypes.get(i), typeSolver)){
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     *
+     * @param methods we expect the methods to be ordered such that inherited methods are later in the list
+     * @param name
+     * @param paramTypes
+     * @param typeSolver
+     * @return
+     */
     public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver){
         List<MethodDeclaration> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, paramTypes, typeSolver)).collect(Collectors.toList());
         if (applicableMethods.isEmpty()) {
@@ -44,7 +53,11 @@ public class MethodResolutionLogic {
                 } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
                     winningCandidate = other;
                 } else {
-                    throw new RuntimeException("Ambiguous method call: cannot find a most applicable method");
+                    if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                        throw new AmbiguityException("Ambiguous method call: cannot find a most applicable method");
+                    } else {
+                        // we expect the methods to be ordered such that inherited methods are later in the list
+                    }
                 }
             }
             return SymbolReference.solved(winningCandidate);
@@ -57,11 +70,11 @@ public class MethodResolutionLogic {
             TypeDeclaration tdA = methodA.getParam(i).getType(typeSolver);
             TypeDeclaration tdB = methodB.getParam(i).getType(typeSolver);
             // B is more specific
-            if (tdB.canBeAssignedBy(tdA) && !tdA.canBeAssignedBy(tdB)) {
+            if (tdB.canBeAssignedBy(tdA, typeSolver) && !tdA.canBeAssignedBy(tdB, typeSolver)) {
                 return false;
             }
             // A is more specific
-            if (tdA.canBeAssignedBy(tdB) && !tdB.canBeAssignedBy(tdA)) {
+            if (tdA.canBeAssignedBy(tdB, typeSolver) && !tdB.canBeAssignedBy(tdA, typeSolver)) {
                 oneMoreSpecificFound = true;
             }
         }

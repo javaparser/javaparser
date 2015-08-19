@@ -28,8 +28,8 @@ public class VoidTypeDeclaration implements TypeDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
-        throw new UnsupportedOperationException();
+    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
+        return false;
     }
 
     @Override
@@ -55,6 +55,11 @@ public class VoidTypeDeclaration implements TypeDeclaration {
     @Override
     public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
         return SymbolReference.unsolved(TypeDeclaration.class);
+    }
+
+    @Override
+    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        return Collections.emptyList();
     }
 
     @Override
