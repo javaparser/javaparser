@@ -32,7 +32,17 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
 
         // solve absolute references
-        TODO implement
+        String itName = name;
+        while (itName.contains(".")) {
+            String typeName = getType(itName);
+            String memberName = getMember(itName);
+            SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> type = this.solveType(typeName, typeSolver);
+            if (type.isSolved()) {
+                return type.getCorrespondingDeclaration().solveSymbol(memberName, typeSolver);
+            } else {
+                itName = typeName;
+            }
+        }
 
         // Look among statically imported values
         if (wrappedNode.getImports() != null) {
@@ -48,12 +58,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         if (importDecl.getName() instanceof QualifiedNameExpr) {
                             String qName = importDecl.getName().toString();
                             // split in field/method name and type name
-                            int index = qName.lastIndexOf('.');
-                            if (index == -1) {
-                                throw new UnsupportedOperationException();
-                            }
-                            String typeName = qName.substring(0, index);
-                            String memberName = qName.substring(index + 1);
+                            String typeName = getType(qName);
+                            String memberName = getMember(qName);
 
                             me.tomassetti.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(typeName);
                             return importedType.solveSymbol(memberName, typeSolver);
@@ -68,14 +74,34 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
+    private String getType(String qName){
+        int index = qName.lastIndexOf('.');
+        if (index == -1) {
+            throw new UnsupportedOperationException();
+        }
+        String typeName = qName.substring(0, index);
+        return typeName;
+    }
+
+    private String getMember(String qName){
+        int index = qName.lastIndexOf('.');
+        if (index == -1) {
+            throw new UnsupportedOperationException();
+        }
+        String memberName = qName.substring(index + 1);
+        return memberName;
+    }
+
     @Override
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        for (TypeDeclaration type : wrappedNode.getTypes()) {
-            if (type.getName().equals(name)){
-                if (type instanceof ClassOrInterfaceDeclaration) {
-                    return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)type));
-                } else {
-                    throw new UnsupportedOperationException();
+        if (wrappedNode.getTypes() != null) {
+            for (TypeDeclaration type : wrappedNode.getTypes()) {
+                if (type.getName().equals(name)) {
+                    if (type instanceof ClassOrInterfaceDeclaration) {
+                        return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) type));
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
                 }
             }
         }

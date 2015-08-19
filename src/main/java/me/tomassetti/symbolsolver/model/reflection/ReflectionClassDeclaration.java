@@ -12,6 +12,7 @@ import me.tomassetti.symbolsolver.model.usages.NullTypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -132,7 +133,12 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        for (Field field : clazz.getFields()){
+            if (field.getName().equals(name)) {
+                return SymbolReference.solved(new ReflectionFieldDeclaration(field));
+            }
+        }
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
 

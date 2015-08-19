@@ -33,6 +33,9 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     }
 
     public AbstractJavaParserContext(N wrappedNode) {
+        if (wrappedNode ==  null) {
+            throw new NullPointerException();
+        }
         this.wrappedNode = wrappedNode;
     }
 

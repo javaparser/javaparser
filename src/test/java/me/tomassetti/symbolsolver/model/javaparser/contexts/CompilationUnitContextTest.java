@@ -64,6 +64,8 @@ public class CompilationUnitContextTest extends AbstractTest {
         assertEquals(false, d.isPresent());
     }
 
+
+    //new JarTypeSolver("src/test/resources/junit-4.8.1.jar")
     @Test
     public void solveSymbolReferringToStaticallyImportedValue() throws ParseException {
         CompilationUnit cu = parseSample("CompilationUnitSymbols");
@@ -89,9 +91,9 @@ public class CompilationUnitContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("CompilationUnitSymbols");
         Context context = new CompilationUnitContext(cu);
 
-        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("java.lang.System.out", new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
+        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("java.lang.System.out", new JreTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).getQualifiedName());
     }
 
 /*    @Test
