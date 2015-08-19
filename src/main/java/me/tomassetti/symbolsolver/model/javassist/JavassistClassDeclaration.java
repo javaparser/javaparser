@@ -262,7 +262,7 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
 
     @Override
     public String toString() {
-        return "JavassistClassDeclaration }" + ctClass.getName() + '}';
+        return "JavassistClassDeclaration {" + ctClass.getName() + '}';
     }
 
     @Override

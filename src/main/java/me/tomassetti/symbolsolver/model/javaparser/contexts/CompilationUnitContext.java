@@ -50,7 +50,12 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (importDecl.isStatic()) {
                     if (importDecl.isAsterisk()) {
                         if (importDecl.getName() instanceof QualifiedNameExpr) {
-                            throw new UnsupportedOperationException("A");
+                            String qName = importDecl.getName().toString();
+                            me.tomassetti.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(qName);
+                            SymbolReference<? extends ValueDeclaration> ref = importedType.solveSymbol(name, typeSolver);
+                            if (ref.isSolved()) {
+                                return ref;
+                            }
                         } else {
                             throw new UnsupportedOperationException("B");
                         }
@@ -61,8 +66,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                             String typeName = getType(qName);
                             String memberName = getMember(qName);
 
-                            me.tomassetti.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(typeName);
-                            return importedType.solveSymbol(memberName, typeSolver);
+                            if (memberName.equals(name)) {
+                                me.tomassetti.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(typeName);
+                                return importedType.solveSymbol(memberName, typeSolver);
+                            }
                         } else {
                             throw new UnsupportedOperationException("C");
                         }
