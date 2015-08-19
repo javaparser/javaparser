@@ -30,7 +30,13 @@ public interface Context {
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        SymbolReference<? extends ValueDeclaration> ref = solveSymbol(name, typeSolver);
+        if (ref.isSolved()) {
+            Value value = Value.from(ref.getCorrespondingDeclaration(), typeSolver);
+            return Optional.of(value);
+        } else {
+            return Optional.empty();
+        }
     }
 
     /* Methods resolution */

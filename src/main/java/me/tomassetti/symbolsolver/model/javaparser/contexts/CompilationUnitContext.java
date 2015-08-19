@@ -24,11 +24,6 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        return Optional.empty();
-    }
-
-    @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
 
         // solve absolute references
