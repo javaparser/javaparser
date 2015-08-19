@@ -21,7 +21,7 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
     }
 
     @Override
-    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
             SymbolReference symbolReference = solveWith(sb, name);

@@ -43,7 +43,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
     }
 

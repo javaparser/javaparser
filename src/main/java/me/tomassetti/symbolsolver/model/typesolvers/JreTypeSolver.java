@@ -25,8 +25,4 @@ public class JreTypeSolver implements TypeSolver {
         }
     }
 
-    @Override
-    public TypeDeclaration solveType(String name) throws UnsolvedSymbolException {
-        throw new UnsupportedOperationException();
-    }
 }

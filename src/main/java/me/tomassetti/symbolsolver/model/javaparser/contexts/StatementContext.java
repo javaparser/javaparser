@@ -54,7 +54,7 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
     }
 
     @Override
-    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         // we should look in all the statements preceding, treating them as SymbolDeclarators
         if (wrappedNode.getParentNode() instanceof com.github.javaparser.ast.body.MethodDeclaration){
             return getParent().solveSymbol(name, typeSolver);

@@ -15,11 +15,13 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
+import me.tomassetti.symbolsolver.model.typesolvers.JarTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.*;
-import org.easymock.EasyMock;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -28,44 +30,34 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author Federico Tomassetti
  */
-public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
+public class CompilationUnitContextTest extends AbstractTest {
 
     @Test
-    public void getParentForTopClass() throws ParseException {
+    public void getParent() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+        Context context = new CompilationUnitContext(cu);
 
-        assertFalse(null == context.getParent());
-        assertEquals(new CompilationUnitContext(cu), context.getParent());
+        assertTrue(null == context.getParent());
     }
 
     @Test
     public void solveExistingGenericType() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+        Context context = new CompilationUnitContext(cu);
 
         Optional<TypeUsage> a = context.solveGenericType("A", new DummyTypeSolver());
         Optional<TypeUsage> b = context.solveGenericType("B", new DummyTypeSolver());
         Optional<TypeUsage> c = context.solveGenericType("C", new DummyTypeSolver());
 
-        assertEquals(true, a.isPresent());
-        assertEquals("A", a.get().getTypeName());
-        assertEquals(true, a.get().isTypeVariable());
-        assertEquals(true, b.isPresent());
-        assertEquals("B", b.get().getTypeName());
-        assertEquals(true, b.get().isTypeVariable());
-        assertEquals(true, c.isPresent());
-        assertEquals("C", c.get().getTypeName());
-        assertEquals(true, c.get().isTypeVariable());
+        assertEquals(false, a.isPresent());
+        assertEquals(false, b.isPresent());
+        assertEquals(false, c.isPresent());
     }
 
     @Test
     public void solveUnexistingGenericType() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+        Context context = new CompilationUnitContext(cu);
 
         Optional<TypeUsage> d = context.solveGenericType("D", new DummyTypeSolver());
 
@@ -73,23 +65,42 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
     }
 
     @Test
-    public void solveSymbolReferringToDeclaredInstanceField() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithSymbols");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
+    public void solveSymbolReferringToStaticallyImportedValue() throws ParseException {
+        CompilationUnit cu = parseSample("CompilationUnitSymbols");
+        Context context = new CompilationUnitContext(cu);
 
-        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("i", new DummyTypeSolver());
+        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("out", new JreTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
     }
 
     @Test
+    public void solveSymbolReferringToStaticallyImportedUsingAsteriskValue() throws ParseException {
+        CompilationUnit cu = parseSample("CompilationUnitSymbols");
+        Context context = new CompilationUnitContext(cu);
+
+        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("err", new JreTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+    }
+
+    @Test
+    public void solveSymbolReferringToStaticField() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("CompilationUnitSymbols");
+        Context context = new CompilationUnitContext(cu);
+
+        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("java.lang.System.out", new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
+        assertEquals(true, ref.isSolved());
+        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+    }
+
+/*    @Test
     public void solveSymbolReferringToDeclaredStaticField() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
-        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("j", new DummyTypeSolver());
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("j", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("long", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
     }
@@ -100,7 +111,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
-        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("k", new DummyTypeSolver());
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("k", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("boolean", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
     }
@@ -111,7 +122,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
-        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("m", new DummyTypeSolver());
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("m", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("char", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
     }
@@ -122,7 +133,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
-        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("zzz", new DummyTypeSolver());
+        SymbolReference<ValueDeclaration> ref = context.solveSymbol("zzz", new DummyTypeSolver());
         assertEquals(false, ref.isSolved());
     }
 
@@ -434,5 +445,5 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(new NullTypeUsage()), new JreTypeSolver());
-    }
+    }*/
 }

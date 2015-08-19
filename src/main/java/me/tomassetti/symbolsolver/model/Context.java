@@ -20,14 +20,14 @@ public interface Context {
     /* Type resolution */
 
     default Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        return Optional.empty();
     }
 
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
 
     /* Symbol resolution */
 
-    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());

@@ -30,7 +30,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     @Override
-    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         if (typeSolver == null) throw new IllegalArgumentException();
 
         // first among declared fields

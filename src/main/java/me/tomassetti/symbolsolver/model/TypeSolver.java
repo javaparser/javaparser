@@ -10,6 +10,13 @@ public interface TypeSolver {
 
     public SymbolReference<TypeDeclaration> tryToSolveType(String name);
 
-    public TypeDeclaration solveType(String name) throws UnsolvedSymbolException;
+    public default TypeDeclaration solveType(String name) throws UnsolvedSymbolException {
+        SymbolReference<TypeDeclaration> ref = tryToSolveType(name);
+        if (ref.isSolved()) {
+            return ref.getCorrespondingDeclaration();
+        } else {
+            throw new UnsolvedSymbolException(null, name);
+        }
+    }
 
 }

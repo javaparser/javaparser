@@ -27,7 +27,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
     }
 
     @Override
-    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
     }
 

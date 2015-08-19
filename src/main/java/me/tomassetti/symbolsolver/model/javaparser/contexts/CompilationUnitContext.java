@@ -29,7 +29,42 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+
+        // solve absolute references
+        TODO implement
+
+        // Look among statically imported values
+        if (wrappedNode.getImports() != null) {
+            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+                if (importDecl.isStatic()) {
+                    if (importDecl.isAsterisk()) {
+                        if (importDecl.getName() instanceof QualifiedNameExpr) {
+                            throw new UnsupportedOperationException("A");
+                        } else {
+                            throw new UnsupportedOperationException("B");
+                        }
+                    } else {
+                        if (importDecl.getName() instanceof QualifiedNameExpr) {
+                            String qName = importDecl.getName().toString();
+                            // split in field/method name and type name
+                            int index = qName.lastIndexOf('.');
+                            if (index == -1) {
+                                throw new UnsupportedOperationException();
+                            }
+                            String typeName = qName.substring(0, index);
+                            String memberName = qName.substring(index + 1);
+
+                            me.tomassetti.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(typeName);
+                            return importedType.solveSymbol(memberName, typeSolver);
+                        } else {
+                            throw new UnsupportedOperationException("C");
+                        }
+                    }
+                }
+            }
+        }
+
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
@@ -62,7 +97,6 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         }
                     }
                 }
-
             }
         }
 

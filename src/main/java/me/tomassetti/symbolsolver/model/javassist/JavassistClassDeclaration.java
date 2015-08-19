@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.model.javassist;
 
 import com.github.javaparser.ast.Node;
 import javassist.CtClass;
+import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -116,8 +117,37 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        for (CtField field : ctClass.getDeclaredFields()) {
+            if (field.getName().equals(name)){
+                return SymbolReference.solved(new JavassistFieldDeclaration(field, typeSolver));
+            }
+        }
+
+        try {
+            CtClass superClass = ctClass.getSuperclass();
+            if (superClass != null) {
+                SymbolReference<? extends ValueDeclaration> ref = new JavassistClassDeclaration(superClass).solveSymbol(name, typeSolver);
+                if (ref.isSolved()) {
+                    return ref;
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            for (CtClass interfaze : ctClass.getInterfaces()) {
+                SymbolReference<? extends ValueDeclaration> ref = new JavassistClassDeclaration(interfaze).solveSymbol(name, typeSolver);
+                if (ref.isSolved()) {
+                    return ref;
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
     @Override
@@ -137,7 +167,6 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)){
                 // TODO check parameters
