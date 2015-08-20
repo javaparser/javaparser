@@ -17,6 +17,7 @@ public class PrimitiveTypeUsage implements TypeUsage {
     private String name;
 
     public static final PrimitiveTypeUsage INT = new PrimitiveTypeUsage("int");
+    public static final PrimitiveTypeUsage BOOLEAN = new PrimitiveTypeUsage("boolean");
 
     private PrimitiveTypeUsage(String name) {
         this.name = name;

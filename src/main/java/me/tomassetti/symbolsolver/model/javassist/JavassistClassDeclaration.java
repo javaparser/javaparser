@@ -18,6 +18,8 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -207,7 +209,37 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        if (typeUsage.isNull()) {
+            return true;
+        }
+
+        if (typeUsage instanceof LambdaTypeUsagePlaceholder){
+            if (ctClass.getName().equals(Predicate.class.getCanonicalName()) || ctClass.getName().equals(Function.class.getCanonicalName())){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        // TODO look into generics
+        if (typeUsage.getTypeName().equals(this.getQualifiedName())){
+            return true;
+        }
+        try {
+            if (this.ctClass.getSuperclass() != null) {
+                if (new JavassistClassDeclaration(this.ctClass.getSuperclass()).isAssignableBy(typeUsage, typeSolver)){
+                    return true;
+                }
+            }
+            for (CtClass interfaze : ctClass.getInterfaces()) {
+                if (new JavassistClassDeclaration(interfaze).isAssignableBy(typeUsage, typeSolver)){
+                    return true;
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 
     @Override

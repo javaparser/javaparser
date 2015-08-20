@@ -1,41 +1,24 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by federico on 18/08/15.
+ * Created by federico on 20/08/15.
  */
-public class PrimitiveTypeDeclaration implements TypeDeclaration {
-
-    private String name;
-
-    public PrimitiveTypeDeclaration(javax.lang.model.type.PrimitiveType wrapped) {
-        this.name = wrapped.getKind().name().toLowerCase();
+public class ArrayTypeDeclaration implements TypeDeclaration {
+    public ArrayTypeDeclaration(TypeDeclaration componentType) {
+        this.componentType = componentType;
     }
 
-    @Override
-    public boolean isPrimitive() {
-        return true;
-    }
-
-    public PrimitiveTypeDeclaration(PrimitiveType type) {
-        this.name = type.getType().name().toLowerCase();
-    }
-
-    private PrimitiveTypeDeclaration(String name) {
-        this.name = name;
-    }
+    private TypeDeclaration componentType;
 
     @Override
     public String getQualifiedName() {
-        return name;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -50,14 +33,16 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
-        // TODO consider promotions
-        // TODO consider auto-unboxing
-        return typeUsage.isPrimitive() && typeUsage.getTypeName().equals(getName());
+        if (typeUsage.isArray()) {
+            return componentType.isAssignableBy(typeUsage.getBaseType(), typeSolver);
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean isTypeVariable() {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -72,22 +57,22 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        return SymbolReference.unsolved(ValueDeclaration.class);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        return SymbolReference.unsolved(TypeDeclaration.class);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
-        return Collections.emptyList();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -122,10 +107,6 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        return Collections.emptyList();
-    }
-
-    public static PrimitiveTypeDeclaration byName(String name) {
-        return new PrimitiveTypeDeclaration(name);
+        throw new UnsupportedOperationException();
     }
 }

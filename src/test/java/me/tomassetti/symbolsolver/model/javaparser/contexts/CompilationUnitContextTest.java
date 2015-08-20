@@ -10,6 +10,7 @@ import me.tomassetti.symbolsolver.model.declarations.AmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.javassist.JavassistClassDeclaration;
 import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
@@ -177,6 +178,16 @@ public class CompilationUnitContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu);
 
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+        typeSolver.add(new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
+        typeSolver.add(new JreTypeSolver());
+
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertFalse", ImmutableList.of(PrimitiveTypeUsage.BOOLEAN), typeSolver);
+        assertEquals(true, ref.isSolved());
+        assertEquals("assertFalse", ref.getCorrespondingDeclaration().getName());
+        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals("boolean", ref.getCorrespondingDeclaration().getParam(0).getType(typeSolver).getQualifiedName());
+        assertEquals(true, ref.getCorrespondingDeclaration().getParam(0).getType(typeSolver).isPrimitive());
     }
 
     @Test

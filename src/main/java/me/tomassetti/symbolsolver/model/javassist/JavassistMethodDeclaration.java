@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.javassist;
 
 import com.github.javaparser.ast.Node;
+import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -83,11 +84,13 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     @Override
     public TypeDeclaration getReturnType(TypeSolver typeSolver) {
         try {
-            return new JavassistClassDeclaration(ctMethod.getReturnType());
+            return JavassistFactory.typeDeclarationFor(ctMethod.getReturnType());
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+
+
 
     @Override
     public int getNoParams() {

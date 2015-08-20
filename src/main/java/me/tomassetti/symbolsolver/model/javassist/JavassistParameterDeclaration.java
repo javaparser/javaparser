@@ -51,6 +51,6 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public TypeDeclaration getType(TypeSolver typeSolver) {
-        return new JavassistClassDeclaration(type);
+        return JavassistFactory.typeDeclarationFor(type);
     }
 }
