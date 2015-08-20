@@ -157,6 +157,38 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        if (wrappedNode.getImports() != null) {
+            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+                if (importDecl.isStatic()) {
+                    if (importDecl.isAsterisk()) {
+                        if (importDecl.getName() instanceof QualifiedNameExpr) {
+                            String qName = importDecl.getName().toString();
+                            me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(qName);
+                            SymbolReference<MethodDeclaration> method = ref.solveMethod(name, parameterTypes, typeSolver);
+                            if (method.isSolved()) {
+                                return method;
+                            }
+                        } else {
+                            throw new UnsupportedOperationException();
+                        }
+                    } else {
+                        if (importDecl.getName() instanceof QualifiedNameExpr) {
+                            String qName = importDecl.getName().toString();
+                            if (qName.equals(name) || qName.endsWith("." + name)) {
+                                String typeName = getType(qName);
+                                me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
+                                SymbolReference<MethodDeclaration> method = ref.solveMethod(name, parameterTypes, typeSolver);
+                                if (method.isSolved()) {
+                                    return method;
+                                }
+                            }
+                        } else {
+                            throw new UnsupportedOperationException();
+                        }
+                    }
+                }
+            }
+        }
+        return SymbolReference.unsolved(MethodDeclaration.class);
     }
 }

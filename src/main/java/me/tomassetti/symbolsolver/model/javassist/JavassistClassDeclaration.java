@@ -167,10 +167,10 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)){
-                // TODO check parameters
-                return SymbolReference.solved(new JavassistMethodDeclaration(method, typeSolver));
+                candidates.add(new JavassistMethodDeclaration(method, typeSolver));
             }
         }
 
@@ -179,7 +179,7 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
             if (superClass != null) {
                 SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass).solveMethod(name, parameterTypes, typeSolver);
                 if (ref.isSolved()) {
-                    return ref;
+                    candidates.add(ref.getCorrespondingDeclaration());
                 }
             }
         } catch (NotFoundException e) {
@@ -190,14 +190,14 @@ public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
             for (CtClass interfaze : ctClass.getInterfaces()) {
                 SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(interfaze).solveMethod(name, parameterTypes, typeSolver);
                 if (ref.isSolved()) {
-                    return ref;
+                    candidates.add(ref.getCorrespondingDeclaration());
                 }
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        return SymbolReference.unsolved(MethodDeclaration.class);
+        return MethodResolutionLogic.findMostApplicable(candidates, name, parameterTypes, typeSolver);
     }
 
     @Override

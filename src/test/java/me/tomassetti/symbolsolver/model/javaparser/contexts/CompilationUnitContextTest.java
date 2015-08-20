@@ -172,117 +172,32 @@ public class CompilationUnitContextTest extends AbstractTest {
         assertEquals("org.junit.Assume", ref.getCorrespondingDeclaration().getQualifiedName());
     }
 
+    @Test
+    public void solveMethodStaticallyImportedWithAsterisk() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("CompilationUnitWithImports");
+        Context context = new CompilationUnitContext(cu);
+
+    }
+
+    @Test
+    public void solveMethodStaticallyImportedWithoutAsterisk() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("CompilationUnitSymbols");
+        Context context = new CompilationUnitContext(cu);
+
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+        typeSolver.add(new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
+        typeSolver.add(new JreTypeSolver());
+
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(new NullTypeUsage(), new NullTypeUsage()), typeSolver);
+        assertEquals(true, ref.isSolved());
+        assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
+        assertEquals(2, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(0).getType(typeSolver).getQualifiedName());
+        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(1).getType(typeSolver).getQualifiedName());
+
+    }
+
 /*
-
-    @Test
-    public void solveTypeRefToItself() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("A", new DummyTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToUnexisting() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("Foo", new DummyTypeSolver());
-        assertEquals(false, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToObject() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("Object", new JreTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToJavaLangObject() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("java.lang.Object", new JreTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToInternalClass() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("B", new DummyTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToInternalEnum() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("E", new DummyTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToInternalOfInternalClass() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("C", new DummyTypeSolver());
-        assertEquals(false, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToAnotherClassInFile() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("Super", new DummyTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToQualifiedInternalClass() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("A.B", new DummyTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToQualifiedInternalOfInternalClass() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("B.C", new DummyTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
-
-    @Test
-    public void solveTypeRefToMoreQualifiedInternalOfInternalClass() throws ParseException {
-        CompilationUnit cu = parseSample("ClassWithTypes");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
-
-        SymbolReference<TypeDeclaration> ref = context.solveType("A.B.C", new DummyTypeSolver());
-        assertEquals(true, ref.isSolved());
-    }
 
     @Test
     public void solveMethodSimpleCase() throws ParseException {
