@@ -16,10 +16,12 @@ import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JarTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.*;
+import org.easymock.EasyMock;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -132,6 +134,42 @@ public class CompilationUnitContextTest extends AbstractTest {
         Optional<Value> ref = context.solveSymbolAsValue("java.lang.System.out", new JreTypeSolver());
         assertEquals(true, ref.isPresent());
         assertEquals("java.io.PrintStream", ref.get().getUsage().getTypeName());
+    }
+
+    @Test
+    public void solveTypeInSamePackage() throws ParseException {
+        CompilationUnit cu = parseSample("CompilationUnitWithImports");
+        Context context = new CompilationUnitContext(cu);
+
+        TypeDeclaration otherClass = EasyMock.createMock(TypeDeclaration.class);
+        EasyMock.expect(otherClass.getQualifiedName()).andReturn("com.foo.OtherClassInSamePackage");
+        DummyTypeSolver dummyTypeSolver = new DummyTypeSolver();
+        dummyTypeSolver.addDeclaration("com.foo.OtherClassInSamePackage", otherClass);
+        EasyMock.replay(otherClass);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("OtherClassInSamePackage", dummyTypeSolver);
+        assertEquals(true, ref.isSolved());
+        assertEquals("com.foo.OtherClassInSamePackage", ref.getCorrespondingDeclaration().getQualifiedName());
+    }
+
+    @Test
+    public void solveTypeImported() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("CompilationUnitWithImports");
+        Context context = new CompilationUnitContext(cu);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("Assert", new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
+        assertEquals(true, ref.isSolved());
+        assertEquals("org.junit.Assert", ref.getCorrespondingDeclaration().getQualifiedName());
+    }
+
+    @Test
+    public void solveTypeNotImported() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("CompilationUnitWithImports");
+        Context context = new CompilationUnitContext(cu);
+
+        SymbolReference<TypeDeclaration> ref = context.solveType("org.junit.Assume", new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
+        assertEquals(true, ref.isSolved());
+        assertEquals("org.junit.Assume", ref.getCorrespondingDeclaration().getQualifiedName());
     }
 
 /*
