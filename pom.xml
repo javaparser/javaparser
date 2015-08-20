@@ -124,6 +124,9 @@
 		<maven-install-plugin.version>2.4</maven-install-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
+        <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
+        <maven-jacoco-plugin.version>0.7.5.201505241946</maven-jacoco-plugin.version>
+        <maven-coveralls-plugin.version>3.1.0</maven-coveralls-plugin.version>
 	</properties>
 
 	<scm>
@@ -176,6 +179,16 @@
 					<artifactId>maven-release-plugin</artifactId>
 					<version>${maven-release-plugin.version}</version>
 				</plugin>
+                <plugin>
+                    <groupId>org.eluder.coveralls</groupId>
+                    <artifactId>coveralls-maven-plugin</artifactId>
+                    <version>${maven-coveralls-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${maven-jacoco-plugin.version}</version>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
