@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -31,18 +32,18 @@ import java.util.List;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 public class MultiTypeParameter extends BaseParameter {
-    private List<Type> types;
+    private UnionType type;
 	
     public MultiTypeParameter() {}
 
-    public MultiTypeParameter(int modifiers, List<AnnotationExpr> annotations, List<Type> types, VariableDeclaratorId id) {
+    public MultiTypeParameter(int modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
         super(modifiers, annotations, id);
-        this.types = types;
+        this.type = type;
     }
 
-    public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, List<Type> types, VariableDeclaratorId id) {
+    public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
         super(beginLine, beginColumn, endLine, endColumn, modifiers, annotations, id);
-        this.types = types;
+        this.type = type;
 	}
 
     @Override
@@ -55,13 +56,11 @@ public class MultiTypeParameter extends BaseParameter {
         v.visit(this, arg);
     }
 
-    public List<Type> getTypes() {
-        types = ensureNotNull(types);
-        return types;
+    public UnionType getType() {
+        return type;
     }
 
-    public void setTypes(List<Type> types) {
-        this.types = types;
-        setAsParentNodeOf(types);
+    public void setType(UnionType type) {
+        this.type = type;
     }
 }

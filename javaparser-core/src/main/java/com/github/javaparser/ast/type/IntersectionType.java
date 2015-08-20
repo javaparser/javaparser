@@ -9,12 +9,12 @@ import java.util.List;
 /**
  * @since 3.0.0
  */
-public class MultiBoundType extends Type {
+public class IntersectionType extends Type {
 
     private List<ReferenceType> elements;
 
-    public MultiBoundType(int beginLine, int beginColumn, int endLine,
-                         int endColumn, List<ReferenceType> elements) {
+    public IntersectionType(int beginLine, int beginColumn, int endLine,
+                            int endColumn, List<ReferenceType> elements) {
         super(beginLine, beginColumn, endLine, endColumn);
         setElements(elements);
     }
@@ -23,7 +23,7 @@ public class MultiBoundType extends Type {
         return elements;
     }
 
-    public MultiBoundType(List<ReferenceType> elements) {
+    public IntersectionType(List<ReferenceType> elements) {
         super();
         setElements(elements);
     }
