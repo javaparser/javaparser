@@ -256,9 +256,6 @@ Then method 1 class 1 is a default method
 Then method 2 class 1 is not a default method
 Then all nodes refer to their parent
 
-<<<<<<< HEAD
-
-<<<<<<< HEAD
 Scenario: A lambda expression inside a conditional expression is parsed by the Java Parser
 
 Given a CompilationUnit

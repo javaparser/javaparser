@@ -345,7 +345,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
-    @Override public void visit(final MultiBoundType n, final Object arg) {
+    @Override public void visit(final IntersectionType n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }

@@ -1760,7 +1760,7 @@ ReferenceType ReferenceType():
   { return new ReferenceType(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type, arrayCount, null, accum); }
 }
 
-MultiBoundType MultiBoundType():
+IntersectionType IntersectionType():
 {
 	int line;
 	int column;
@@ -1772,7 +1772,7 @@ MultiBoundType MultiBoundType():
         line=elementType.getBeginLine(); column=elementType.getBeginColumn();
         elements = add(elements, elementType); }
     "&" (elementType=ReferenceType() { elements = add(elements, elementType); } )+
-    { return new MultiBoundType(line, column, token.endLine, token.endColumn, elements); }
+    { return new IntersectionType(line, column, token.endLine, token.endColumn, elements); }
 }
 
 ClassOrInterfaceType ClassOrInterfaceType():
@@ -2299,7 +2299,7 @@ Expression CastExpression():
   	  )*
   	  ")" ret = UnaryExpressionNotPlusMinus() {
   	    if (typesOfMultiCast.size() > 1) {
-  	        type = new MultiBoundType(line, column, token.endLine, token.endColumn, typesOfMultiCast);
+  	        type = new IntersectionType(line, column, token.endLine, token.endColumn, typesOfMultiCast);
   	    }
   	    ret = new CastExpr(line, column, token.endLine, token.endColumn, type, ret);
   	  }
@@ -3066,6 +3066,7 @@ TryStmt TryStatement():
 	int column;
 	int cLine;
 	int cColumn;
+	Type type;
 }
 {
   "try" {line=token.beginLine; column=token.beginColumn;}
@@ -3082,7 +3083,14 @@ TryStmt TryStatement():
   			")"
   			 
   			catchBlock = Block()
-  			{ catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, exceptModifier.modifiers, exceptModifier.annotations, exceptTypes, exceptId, catchBlock)); exceptTypes = new LinkedList(); }
+  			{
+  			   if (exceptTypes.size() > 1) {
+  			        type = new UnionType(exceptTypes);
+  			   } else {
+  			        type = (Type)exceptTypes.get(0);
+  			   }
+  			   catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, exceptModifier.modifiers, exceptModifier.annotations, type, exceptId, catchBlock));
+  			   exceptTypes = new LinkedList(); }
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|
