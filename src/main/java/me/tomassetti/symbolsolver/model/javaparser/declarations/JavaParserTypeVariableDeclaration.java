@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.TypeParameter;
 import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.FieldDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;

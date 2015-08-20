@@ -2,14 +2,10 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
 import com.github.javaparser.ast.body.VariableDeclarator;
 import me.tomassetti.symbolsolver.JavaParserFacade;
-import me.tomassetti.symbolsolver.model.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
-
-import java.util.Optional;
 
 /**
  * Created by federico on 04/08/15.

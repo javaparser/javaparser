@@ -1,36 +1,34 @@
-package me.tomassetti.symbolsolver.model.reflection;
+package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
-import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-
-import java.lang.reflect.Field;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 
 /**
- * Created by federico on 19/08/15.
+ * Created by federico on 21/08/15.
  */
-public class ReflectionFieldDeclaration implements FieldDeclaration {
+public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
-    public ReflectionFieldDeclaration(Field field) {
-        this.field = field;
+    public JavaParserEnumConstantDeclaration(com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode) {
+        this.wrappedNode = wrappedNode;
     }
 
-    private Field field;
+    private com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode;
 
     @Override
     public TypeDeclaration getType(TypeSolver typeSolver) {
-        // TODO consider interfaces, enums, primitive types, arrays
-        return new ReflectionClassDeclaration(field.getType());
+        return new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode());
     }
 
     @Override
     public String getName() {
-        return field.getName();
+        return wrappedNode.getName();
     }
 
     @Override
     public boolean isField() {
-        return true;
+        return false;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model;
+package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 

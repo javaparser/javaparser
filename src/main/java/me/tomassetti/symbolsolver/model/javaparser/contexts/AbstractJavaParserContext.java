@@ -5,6 +5,7 @@ import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.Optional;
 
@@ -30,6 +31,16 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     @Override
     public int hashCode() {
         return wrappedNode != null ? wrappedNode.hashCode() : 0;
+    }
+
+    @Override
+    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
+        Context parent = getParent();
+        if (parent == null) {
+            return Optional.empty();
+        } else {
+            return parent.solveGenericType(name, typeSolver);
+        }
     }
 
     public AbstractJavaParserContext(N wrappedNode) {

@@ -1,18 +1,15 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.javaparser.UnsolvedTypeException;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.*;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeParameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +28,14 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         if (typeSolver == null) throw new IllegalArgumentException();
 
-        // first among declared fields
+        // among constants
+        for (EnumConstantDeclaration constant : wrappedNode.getEntries()) {
+            if (constant.getName().equals(name)) {
+                return SymbolReference.solved(new JavaParserEnumConstantDeclaration(constant));
+            }
+        }
+
+        // among declared fields
         for (BodyDeclaration member : wrappedNode.getMembers()){
             if (member instanceof FieldDeclaration) {
                 SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
@@ -66,12 +70,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
     }
 
     @Override
-    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
-        return Optional.empty();
-    }
-
-    @Override
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)){
             return SymbolReference.solved(new JavaParserEnumDeclaration(this.wrappedNode));
         }
@@ -94,8 +93,8 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        List<MethodDeclaration> candidateMethods = new ArrayList<>();
+    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        List<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> candidateMethods = new ArrayList<>();
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
                 com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration)member;

@@ -4,7 +4,6 @@ import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 

@@ -1,17 +1,13 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 

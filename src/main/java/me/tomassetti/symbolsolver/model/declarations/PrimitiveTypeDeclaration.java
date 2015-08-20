@@ -2,7 +2,6 @@ package me.tomassetti.symbolsolver.model.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 

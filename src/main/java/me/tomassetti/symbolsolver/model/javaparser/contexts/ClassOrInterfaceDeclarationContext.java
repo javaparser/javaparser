@@ -100,7 +100,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                 return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp)));
             }
         }
-        return Optional.empty();
+        return getParent().solveGenericType(name, typeSolver);
     }
 
     @Override

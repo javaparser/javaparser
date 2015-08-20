@@ -37,6 +37,17 @@ public final class Navigator {
         return cd;
     }
 
+    public static EnumDeclaration demandEnum(CompilationUnit cu, String name) {
+        Optional<TypeDeclaration> res = findType(cu, name);
+        if (!res.isPresent()) {
+            throw new IllegalStateException("No type found");
+        }
+        if (!(res.get() instanceof EnumDeclaration)){
+            throw new IllegalStateException("Type is not an enum");
+        }
+        return (EnumDeclaration) res.get();
+    }
+
     public static MethodDeclaration demandMethod(ClassOrInterfaceDeclaration cd, String name) {
         MethodDeclaration found = null;
         for (BodyDeclaration bd : cd.getMembers()) {
