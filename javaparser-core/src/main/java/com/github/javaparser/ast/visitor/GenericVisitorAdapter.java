@@ -69,7 +69,6 @@ import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.type.*;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 
 /**
  * @author Julio Vilmar Gesser
@@ -305,7 +304,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	@Override
 	public R visit(final CatchClause n, final A arg) {
 		{
-			R result = n.getExcept().accept(this, arg);
+			R result = n.getParam().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1230,8 +1229,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			for (final Type type : n.getTypes()) {
-				R result = type.accept(this, arg);
+			if (n.getType() != null) {
+				R result = n.getType().accept(this, arg);
 				if (result != null) {
 					return result;
 				}
@@ -1274,7 +1273,20 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	}
 
     @Override
-    public R visit(final MultiBoundType n, final A arg) {
+    public R visit(final IntersectionType n, final A arg) {
+        {
+            for (ReferenceType element : n.getElements()) {
+                R result = element.accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final UnionType n, final A arg) {
         {
             for (ReferenceType element : n.getElements()) {
                 R result = element.accept(this, arg);

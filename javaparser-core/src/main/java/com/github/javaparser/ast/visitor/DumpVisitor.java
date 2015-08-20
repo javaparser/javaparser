@@ -511,7 +511,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-    @Override public void visit(final MultiBoundType n, final Object arg) {
+    @Override public void visit(final IntersectionType n, final Object arg) {
         printJavaComment(n.getComment(), arg);
         boolean isFirst = true;
         for (ReferenceType element : n.getElements()) {
@@ -520,6 +520,19 @@ public class DumpVisitor implements VoidVisitor<Object> {
                 isFirst = false;
             } else {
                 printer.print(" & ");
+            }
+        }
+    }
+
+    @Override public void visit(final UnionType n, final Object arg) {
+        printJavaComment(n.getComment(), arg);
+        boolean isFirst = true;
+        for (ReferenceType element : n.getElements()) {
+            element.accept(this, arg);
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                printer.print(" | ");
             }
         }
     }
@@ -1082,11 +1095,9 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
 
-        Iterator<Type> types = n.getTypes().iterator();
-        types.next().accept(this, arg);
-        while (types.hasNext()) {
-        	printer.print(" | ");
-        	types.next().accept(this, arg);
+        Type type = n.getType();
+        if (type != null) {
+        	type.accept(this, arg);
         }
         
         printer.print(" ");
@@ -1466,7 +1477,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override public void visit(final CatchClause n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print(" catch (");
-		n.getExcept().accept(this, arg);
+		n.getParam().accept(this, arg);
 		printer.print(") ");
 		n.getCatchBlock().accept(this, arg);
 

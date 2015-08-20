@@ -248,7 +248,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final CatchClause n, final A arg) {
-		n.setExcept((MultiTypeParameter) n.getExcept().accept(this, arg));
+		n.setParam((Parameter)n.getParam().accept(this, arg));
 		n.setCatchBlock((BlockStmt) n.getCatchBlock().accept(this, arg));
 		return n;
 
@@ -757,11 +757,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	
 	@Override public Node visit(MultiTypeParameter n, A arg) {
     	visit((BaseParameter) n, arg);
-    	List<Type> types = new LinkedList<Type>();
-    	for (Type type : n.getTypes()) {
-    		types.add((Type) type.accept(this, arg));
-    	}
-        n.setTypes(types);
+        n.setType((UnionType)n.getType().accept(this, arg));
         return n;
     }
 

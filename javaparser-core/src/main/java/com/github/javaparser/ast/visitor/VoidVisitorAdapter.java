@@ -187,7 +187,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final CatchClause n, final A arg) {
 		visitComment(n.getComment(), arg);
-		n.getExcept().accept(this, arg);
+		n.getParam().accept(this, arg);
 		n.getCatchBlock().accept(this, arg);
 	}
 
@@ -637,8 +637,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 				a.accept(this, arg);
 			}
 		}
-		for (final Type type : n.getTypes()) {
-			type.accept(this, arg);
+        if (n.getType() != null) {
+			n.getType().accept(this, arg);
 		}
 		n.getId().accept(this, arg);
 	}
@@ -657,7 +657,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		n.getType().accept(this, arg);
 	}
 
-    @Override public void visit(final MultiBoundType n, final A arg) {
+    @Override public void visit(final IntersectionType n, final A arg) {
+        visitComment(n.getComment(), arg);
+        for (ReferenceType element : n.getElements()) {
+            element.accept(this, arg);
+        }
+    }
+
+    @Override public void visit(final UnionType n, final A arg) {
         visitComment(n.getComment(), arg);
         for (ReferenceType element : n.getElements()) {
             element.accept(this, arg);

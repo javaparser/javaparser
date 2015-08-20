@@ -130,7 +130,9 @@ public interface GenericVisitor<R, A> {
 
 	public R visit(ReferenceType n, A arg);
 
-    public R visit(MultiBoundType n, A arg);
+    public R visit(IntersectionType n, A arg);
+
+    public R visit(UnionType n, A arg);
 
 	public R visit(VoidType n, A arg);
 

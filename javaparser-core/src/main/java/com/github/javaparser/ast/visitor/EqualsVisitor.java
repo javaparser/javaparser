@@ -543,16 +543,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	
 	@Override public Boolean visit(MultiTypeParameter n1, Node arg) {
 		MultiTypeParameter n2 = (MultiTypeParameter) arg;
-		if (n1.getTypes().size() != n2.getTypes().size()) {
-			return Boolean.FALSE;
-		}
-		Iterator<Type> n1types = n1.getTypes().iterator();
-		Iterator<Type> n2types = n2.getTypes().iterator();
-		while (n1types.hasNext() && n2types.hasNext()) {
-			if (!nodeEquals(n1types.next(), n2types.next())) {
-				return Boolean.FALSE;
-			}
-		}
+        if (!nodeEquals(n1.getType(), n2.getType())) {
+            return Boolean.FALSE;
+        }
 		return visit((BaseParameter) n1, arg);
 	}
 
@@ -669,8 +662,33 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return Boolean.TRUE;
 	}
 
-    @Override public Boolean visit(final MultiBoundType n1, final Node arg) {
-        final MultiBoundType n2 = (MultiBoundType) arg;
+    @Override public Boolean visit(final IntersectionType n1, final Node arg) {
+        final IntersectionType n2 = (IntersectionType) arg;
+
+        List<ReferenceType> n1Elements = n1.getElements();
+        List<ReferenceType> n2Elements = n2.getElements();
+
+        if (n1Elements !=null && n2Elements != null) {
+            if(n1Elements.size() != n2Elements.size()){
+                return Boolean.FALSE;
+            }
+            else{
+                int i = 0;
+                for(ReferenceType aux: n1Elements){
+                    if(aux.accept(this, n2Elements.get(i))) {
+                        return Boolean.FALSE;
+                    }
+                    i++;
+                }
+            }
+        }  else if (n1Elements != n2Elements){
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    @Override public Boolean visit(final UnionType n1, final Node arg) {
+        final UnionType n2 = (UnionType) arg;
 
         List<ReferenceType> n1Elements = n1.getElements();
         List<ReferenceType> n2Elements = n2.getElements();
@@ -1441,7 +1459,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	@Override public Boolean visit(final CatchClause n1, final Node arg) {
 		final CatchClause n2 = (CatchClause) arg;
 
-		if (!nodeEquals(n1.getExcept(), n2.getExcept())) {
+		if (!nodeEquals(n1.getParam(), n2.getParam())) {
 			return Boolean.FALSE;
 		}
 
