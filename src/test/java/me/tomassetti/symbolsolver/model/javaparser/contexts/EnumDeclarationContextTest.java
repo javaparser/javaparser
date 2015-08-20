@@ -60,6 +60,39 @@ public class EnumDeclarationContextTest extends AbstractTest {
         assertEquals("MyEnum", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
     }
 
+    @Test
+    public void solveSymbolAsValueReferringToDeclaredInstanceField() throws ParseException {
+        CompilationUnit cu = parseSample("AnEnum");
+        com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
+        Context context = new EnumDeclarationContext(enumDeclaration);
+
+        Optional<Value> ref = context.solveSymbolAsValue("i", new DummyTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("int", ref.get().getUsage().getTypeName());
+    }
+
+    @Test
+    public void solveSymbolAsValueReferringToDeclaredStaticField() throws ParseException {
+        CompilationUnit cu = parseSample("AnEnum");
+        com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
+        Context context = new EnumDeclarationContext(enumDeclaration);
+
+        Optional<Value> ref = context.solveSymbolAsValue("j", new DummyTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("long", ref.get().getUsage().getTypeName());
+    }
+
+    @Test
+    public void solveSymbolAsValueReferringToValue() throws ParseException {
+        CompilationUnit cu = parseSample("AnEnum");
+        com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
+        Context context = new EnumDeclarationContext(enumDeclaration);
+
+        Optional<Value> ref = context.solveSymbolAsValue("E1", new DummyTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("MyEnum", ref.get().getUsage().getTypeName());
+    }
+
     /*
 
     @Test

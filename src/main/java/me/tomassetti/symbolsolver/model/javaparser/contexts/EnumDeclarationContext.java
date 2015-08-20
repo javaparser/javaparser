@@ -49,26 +49,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
         // then to parent
         return getParent().solveSymbol(name, typeSolver);
     }
-
-    @Override
-    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        if (typeSolver == null) throw new IllegalArgumentException();
-
-        // first among declared fields
-        for (BodyDeclaration member : wrappedNode.getMembers()){
-            if (member instanceof FieldDeclaration) {
-                SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
-                Optional<Value> ref = solveWithAsValue(symbolDeclarator, name, typeSolver);
-                if (ref.isPresent()) {
-                    return ref;
-                }
-            }
-        }
-
-        // then to parent
-        return getParent().solveSymbolAsValue(name, typeSolver);
-    }
-
+    
     @Override
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)){
