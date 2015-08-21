@@ -37,6 +37,16 @@ public class VoidTypeDeclaration implements TypeDeclaration {
     }
 
     @Override
+    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public FieldDeclaration getField(String name) {
         throw new UnsupportedOperationException();
     }

@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
@@ -137,6 +138,36 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
         } else {
             throw new UnsupportedOperationException();
         }
+    }
+
+    @Override
+    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+        if (other.isPrimitive()) {
+            return false;
+        }
+        // TODO consider generic types
+        if (this.getQualifiedName().equals(other.getQualifiedName())) {
+            return true;
+        }
+        if (this.wrappedNode.getExtends() != null){
+            for (ClassOrInterfaceType type : wrappedNode.getExtends()){
+                TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
+                if (ancestor.canBeAssignedTo(other, typeSolver)) {
+                    return true;
+                }
+            }
+        }
+
+        if (this.wrappedNode.getImplements() != null){
+            for (ClassOrInterfaceType type : wrappedNode.getImplements()){
+                TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
+                if (ancestor.canBeAssignedTo(other, typeSolver)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override

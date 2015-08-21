@@ -48,6 +48,15 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
     }
 
     @Override
+    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+        if (other instanceof PrimitiveTypeDeclaration) {
+            return this.getName().equals(other.getName());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
         // TODO consider promotions
         // TODO consider auto-unboxing
