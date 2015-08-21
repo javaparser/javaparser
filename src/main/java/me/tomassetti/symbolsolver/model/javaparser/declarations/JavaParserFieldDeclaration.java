@@ -58,13 +58,4 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
         return false;
     }
 
-    @Override
-    public boolean isClass() {
-        return false;
-    }
-
-    @Override
-    public boolean isInterface() {
-        return false;
-    }
 }

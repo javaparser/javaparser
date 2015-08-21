@@ -137,16 +137,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isClass() {
-        return false;
-    }
-
-    @Override
-    public boolean isInterface() {
-        return false;
-    }
-
-    @Override
     public List<TypeParameter> getTypeParameters() {
         throw new UnsupportedOperationException();
     }

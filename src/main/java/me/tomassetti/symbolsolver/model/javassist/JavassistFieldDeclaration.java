@@ -45,14 +45,4 @@ public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.mod
     public boolean isType() {
         return false;
     }
-
-    @Override
-    public boolean isClass() {
-        return false;
-    }
-
-    @Override
-    public boolean isInterface() {
-        return false;
-    }
 }

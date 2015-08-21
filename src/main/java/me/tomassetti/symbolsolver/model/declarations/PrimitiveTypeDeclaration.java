@@ -110,16 +110,6 @@ public class PrimitiveTypeDeclaration implements TypeDeclaration {
     }
 
     @Override
-    public boolean isClass() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isInterface() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<TypeParameter> getTypeParameters() {
         return Collections.emptyList();
     }

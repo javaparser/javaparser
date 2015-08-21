@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * A declaration of a type. It could be a primitive type, an enum, a class, an interface or a type variable.
+ * It cannot be an annotation or an array.
+ *
  * @author Federico Tomassetti
  */
 public interface TypeDeclaration extends Declaration, TypeParametrized {
@@ -31,12 +34,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver);
 
-    boolean isTypeVariable();
-
-    default boolean isArray() {
-        return false;
-    }
-
     FieldDeclaration getField(String name);
 
     boolean hasField(String name);
@@ -45,7 +42,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
 
-    default boolean canBeAssignedBy(TypeDeclaration other, TypeSolver typeSolver) {
+    default boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
         return isAssignableBy(new TypeUsageOfTypeDeclaration(other), typeSolver);
     }
 
@@ -64,4 +61,18 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     default boolean isPrimitive() {
         return false;
     }
+
+    default boolean isClass() {
+        return false;
+    }
+
+    default boolean isInterface() {
+        return false;
+    }
+
+    default boolean isEnum() {
+        return false;
+    }
+
+    default boolean isTypeVariable() { return false; }
 }

@@ -77,16 +77,6 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public boolean isClass() {
-        return false;
-    }
-
-    @Override
-    public boolean isInterface() {
-        return false;
-    }
-
-    @Override
     public TypeDeclaration getType(TypeSolver typeSolver) {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;

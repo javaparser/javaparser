@@ -1,7 +1,12 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 /**
- * Created by federico on 18/08/15.
+ * @author Federico Tomassetti
  */
 public interface EnumDeclaration extends TypeDeclaration {
+
+    @Override
+    default boolean isEnum() {
+        return true;
+    }
 }

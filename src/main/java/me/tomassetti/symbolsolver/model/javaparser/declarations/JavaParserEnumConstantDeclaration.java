@@ -46,13 +46,4 @@ public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
         return false;
     }
 
-    @Override
-    public boolean isClass() {
-        return false;
-    }
-
-    @Override
-    public boolean isInterface() {
-        return false;
-    }
 }

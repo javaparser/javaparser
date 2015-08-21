@@ -87,7 +87,7 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
     }
 
     @Override
-    public boolean canBeAssignedBy(TypeDeclaration other, TypeSolver typeSolver) {
+    public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
         List<TypeDeclaration> ancestorsOfOther = other.getAllAncestors(typeSolver);
         ancestorsOfOther.add(other);
         for (TypeDeclaration ancestorOfOther : ancestorsOfOther) {
@@ -133,7 +133,7 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
         }
         if (typeUsage.isReferenceType()){
             TypeDeclaration other = typeSolver.solveType(typeUsage.getTypeName());
-            return canBeAssignedBy(other, typeSolver);
+            return isAssignableBy(other, typeSolver);
         } else {
             throw new UnsupportedOperationException();
         }

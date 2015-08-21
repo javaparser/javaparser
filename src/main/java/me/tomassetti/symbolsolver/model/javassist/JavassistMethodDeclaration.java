@@ -65,16 +65,6 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isClass() {
-        return false;
-    }
-
-    @Override
-    public boolean isInterface() {
-        return false;
-    }
-
-    @Override
     public TypeDeclaration declaringType() {
         return new JavassistClassDeclaration(ctMethod.getDeclaringClass());
     }

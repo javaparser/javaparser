@@ -5,10 +5,16 @@ package me.tomassetti.symbolsolver.model.declarations;
  */
 public interface Declaration {
     String getName();
-    boolean isField();
-    boolean isParameter();
-    boolean isVariable();
-    boolean isType();
-    boolean isClass();
-    boolean isInterface();
+    default boolean isField() {
+        return false;
+    }
+    default boolean isParameter() {
+        return false;
+    }
+    default boolean isVariable() {
+        return false;
+    }
+    default boolean isType() {
+        return false;
+    }
 }

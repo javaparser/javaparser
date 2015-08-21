@@ -25,13 +25,4 @@ public interface ParameterDeclaration extends ValueDeclaration {
         return false;
     }
 
-    @Override
-    default boolean isClass() {
-        return false;
-    }
-
-    @Override
-    default boolean isInterface() {
-        return false;
-    }
 }
