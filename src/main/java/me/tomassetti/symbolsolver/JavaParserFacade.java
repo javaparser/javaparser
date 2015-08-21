@@ -205,7 +205,6 @@ public class JavaParserFacade {
                     throw new UnsolvedSymbolException(fieldAccessExpr.getField());
                 }
             } catch (UnsolvedSymbolException e){
-                System.out.println("FOO");
                 // Sure, it was not found as value because maybe it is a type and this is a static access
                 if (fieldAccessExpr.getScope() instanceof NameExpr){
                     NameExpr staticValue = (NameExpr)fieldAccessExpr.getScope();
