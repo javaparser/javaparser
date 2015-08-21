@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * Created by federico on 01/08/15.
  */
-public class JavassistClassDeclaration implements ClassOrInterfaceDeclaration {
+public class JavassistClassDeclaration implements ClassDeclaration {
 
     private CtClass ctClass;
 

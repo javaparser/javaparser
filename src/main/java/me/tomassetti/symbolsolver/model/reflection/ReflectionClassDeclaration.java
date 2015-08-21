@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 /**
  * Created by federico on 02/08/15.
  */
-public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
+public class ReflectionClassDeclaration implements ClassDeclaration {
 
     private Class<?> clazz;
 
@@ -82,9 +82,6 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
         if (other instanceof LambdaTypeUsagePlaceholder) {
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
-        }
-        if (other.isPrimitive()){
-            return false;
         }
         if (other.getQualifiedName().equals(getQualifiedName())){
             return true;

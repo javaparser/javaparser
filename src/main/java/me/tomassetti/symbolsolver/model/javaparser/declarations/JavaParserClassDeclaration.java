@@ -7,7 +7,6 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * Created by federico on 30/07/15.
  */
-public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration {
+public class JavaParserClassDeclaration implements ClassDeclaration {
 
     public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode) {
         this.wrappedNode = wrappedNode;
@@ -142,9 +141,6 @@ public class JavaParserClassDeclaration implements me.tomassetti.symbolsolver.mo
 
     @Override
     public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
-        if (other.isPrimitive()) {
-            return false;
-        }
         // TODO consider generic types
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;

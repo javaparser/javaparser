@@ -220,7 +220,7 @@ public class JavaParserFacade {
             }
             return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParameters);
         } else if (type instanceof PrimitiveType) {
-            return new TypeUsageOfTypeDeclaration(new PrimitiveTypeDeclaration((PrimitiveType)type), Collections.emptyList());
+            return PrimitiveTypeUsage.byName(((PrimitiveType)type).getType().name());
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }

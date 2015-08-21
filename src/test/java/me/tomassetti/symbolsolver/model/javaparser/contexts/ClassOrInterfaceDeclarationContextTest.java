@@ -9,7 +9,7 @@ import me.tomassetti.symbolsolver.model.AbstractTest;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.Value;
-import me.tomassetti.symbolsolver.model.declarations.AmbiguityException;
+import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -17,7 +17,6 @@ import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.*;
-import org.easymock.EasyMock;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -354,7 +353,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
     }
 
-    @Test(expected = AmbiguityException.class)
+    @Test(expected = MethodAmbiguityException.class)
     public void solveMethodWithAmbiguosCall() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
@@ -427,7 +426,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         assertEquals(1, ref.get().getNoParams());
     }
 
-    @Test(expected = AmbiguityException.class)
+    @Test(expected = MethodAmbiguityException.class)
     public void solveMethodAsUsageWithAmbiguosCall() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");

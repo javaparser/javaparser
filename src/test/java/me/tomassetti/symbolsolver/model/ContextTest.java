@@ -13,7 +13,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
-import me.tomassetti.symbolsolver.model.declarations.ClassOrInterfaceDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JarTypeSolver;
@@ -90,7 +90,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ClassOrInterfaceDeclaration compilationUnitDecl = createMock(ClassOrInterfaceDeclaration.class);
+        ClassDeclaration compilationUnitDecl = createMock(ClassDeclaration.class);
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
@@ -113,11 +113,11 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ClassOrInterfaceDeclaration compilationUnitDecl = createMock(ClassOrInterfaceDeclaration.class);
+        ClassDeclaration compilationUnitDecl = createMock(ClassDeclaration.class);
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.tryToSolveType("java.lang.com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.unsolved(ClassOrInterfaceDeclaration.class));
+        expect(typeSolver.tryToSolveType("java.lang.com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.unsolved(ClassDeclaration.class));
         expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, compilationUnitDecl);
@@ -137,7 +137,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ClassOrInterfaceDeclaration compilationUnitDecl = createMock(ClassOrInterfaceDeclaration.class);
+        ClassDeclaration compilationUnitDecl = createMock(ClassDeclaration.class);
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("my.packagez.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
@@ -160,7 +160,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(1);
 
-        ClassOrInterfaceDeclaration stringDecl = createMock(ClassOrInterfaceDeclaration.class);
+        ClassDeclaration stringDecl = createMock(ClassDeclaration.class);
         expect(stringDecl.getName()).andReturn("String");
         expect(stringDecl.getQualifiedName()).andReturn("java.lang.String");
         TypeSolver typeSolver = createMock(TypeSolver.class);

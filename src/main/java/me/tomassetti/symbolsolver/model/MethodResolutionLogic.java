@@ -1,8 +1,7 @@
 package me.tomassetti.symbolsolver.model;
 
-import me.tomassetti.symbolsolver.model.declarations.AmbiguityException;
+import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
@@ -54,7 +53,7 @@ public class MethodResolutionLogic {
                     winningCandidate = other;
                 } else {
                     if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
-                        throw new AmbiguityException("Ambiguous method call: cannot find a most applicable method: "+winningCandidate+", "+other);
+                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: "+winningCandidate+", "+other);
                     } else {
                         // we expect the methods to be ordered such that inherited methods are later in the list
                     }

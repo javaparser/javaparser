@@ -2,16 +2,11 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.declarations.AmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.javassist.JavassistClassDeclaration;
-import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JarTypeSolver;
@@ -22,7 +17,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;

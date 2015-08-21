@@ -62,10 +62,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver);
 
-    default boolean isPrimitive() {
-        return false;
-    }
-
     default boolean isClass() {
         return false;
     }
@@ -79,4 +75,14 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     }
 
     default boolean isTypeVariable() { return false; }
+
+    @Override
+    default boolean isType() {
+        return true;
+    }
+
+    @Override
+    default TypeDeclaration asType() {
+        return this;
+    }
 }
