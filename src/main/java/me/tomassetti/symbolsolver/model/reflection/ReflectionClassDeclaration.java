@@ -78,6 +78,32 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
     }
 
     @Override
+    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+        if (other instanceof LambdaTypeUsagePlaceholder) {
+            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
+                    getQualifiedName().equals(Function.class.getCanonicalName());
+        }
+        if (other.isPrimitive()){
+            return false;
+        }
+        if (other.getQualifiedName().equals(getQualifiedName())){
+            return true;
+        }
+        if (this.clazz.getSuperclass() != null) {
+            if (new ReflectionClassDeclaration(clazz.getSuperclass()).canBeAssignedTo(other, typeSolver)){
+                return true;
+            }
+        }
+        for (Class interfaze : clazz.getInterfaces()){
+            if (new ReflectionClassDeclaration(interfaze).canBeAssignedTo(other, typeSolver)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
         if (typeUsage instanceof NullTypeUsage) {
             return true;
@@ -92,10 +118,15 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
         if (typeUsage.isPrimitive()){
             return false;
         }
-        if (!typeUsage.getTypeName().equals(getQualifiedName())){
-            return false;
+        if (typeUsage.getTypeName().equals(getQualifiedName())){
+            return true;
         }
-        return true;
+        if (typeUsage instanceof TypeUsageOfTypeDeclaration){
+            TypeUsageOfTypeDeclaration otherTypeDeclaration = (TypeUsageOfTypeDeclaration)typeUsage;
+            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
+        }
+
+        return false;
     }
 
     @Override
@@ -108,8 +139,8 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
+    /*@Override
+    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
         if (getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
@@ -124,7 +155,7 @@ public class ReflectionClassDeclaration implements ClassOrInterfaceDeclaration {
             }
         }
         return false;
-    }
+    }*/
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {

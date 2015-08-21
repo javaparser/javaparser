@@ -8,6 +8,8 @@ import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeVa
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +19,14 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     private TypeDeclaration typeDeclaration;
     private List<TypeUsage> typeParameters;
+
+    public TypeDeclaration getTypeDeclaration() {
+        return typeDeclaration;
+    }
+
+    public void setTypeDeclaration(TypeDeclaration typeDeclaration) {
+        this.typeDeclaration = typeDeclaration;
+    }
 
     public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration) {
         this(typeDeclaration, deriveParams(typeDeclaration));
@@ -82,6 +92,10 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         if (!typeDeclaration.hasField(name)){
             return Optional.empty();
         }
+        //Qui succede che getField avrebbe il tipo E. Devo vedere se io ho tipi da sostituire.
+
+
+
         TypeUsage typeUsage = typeDeclaration.getField(name).getType(typeSolver);
         //TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
 
@@ -90,6 +104,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         //mettendo dove sono state dichiarate
 
 
+        // Mi pare risolviamo nel punto sbagliato, dovrebbe essere
         typeUsage = replaceTypeParams(typeUsage);
 
         return Optional.of(new Value(typeUsage, name, true));
@@ -196,7 +211,12 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     @Override
     public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
-        if (other instanceof TypeUsageOfTypeDeclaration) {
+        if (other instanceof NullTypeUsage){
+            return !this.isPrimitive();
+        }
+        if (other instanceof LambdaTypeUsagePlaceholder) {
+            return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
+        } else if (other instanceof TypeUsageOfTypeDeclaration) {
             TypeUsageOfTypeDeclaration otherTUOTD = (TypeUsageOfTypeDeclaration)other;
             return typeDeclaration.isAssignableBy(otherTUOTD.typeDeclaration, typeSolver);
         } else {

@@ -71,11 +71,11 @@ public class MethodResolutionLogic {
             TypeUsage tdB = methodB.getParam(i).getType(typeSolver);
             // B is more specific
             if (tdB.isAssignableBy(tdA, typeSolver) && !tdA.isAssignableBy(tdB, typeSolver)) {
-                return false;
+                oneMoreSpecificFound = true;
             }
             // A is more specific
             if (tdA.isAssignableBy(tdB, typeSolver) && !tdB.isAssignableBy(tdA, typeSolver)) {
-                oneMoreSpecificFound = true;
+                return false;
             }
         }
         return oneMoreSpecificFound;

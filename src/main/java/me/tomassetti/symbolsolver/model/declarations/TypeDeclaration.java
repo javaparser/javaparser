@@ -34,6 +34,10 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver);
 
+    default boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+        return other.isAssignableBy(this, typeSolver);
+    }
+
     FieldDeclaration getField(String name);
 
     boolean hasField(String name);

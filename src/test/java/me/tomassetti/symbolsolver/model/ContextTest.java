@@ -222,7 +222,6 @@ public class ContextTest {
         TypeSolver typeSolver = new JreTypeSolver();
         TypeUsage streamType = JavaParserFacade.get(typeSolver).convert(streamJavaParserType, method);
 
-        assertEquals("Stream", streamType.getTypeName());
         assertEquals("java.util.stream.Stream",streamType.getQualifiedName());
     }
 
