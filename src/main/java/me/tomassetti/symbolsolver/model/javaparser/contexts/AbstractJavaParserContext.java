@@ -1,6 +1,5 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -10,7 +9,7 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import java.util.Optional;
 
 /**
- * Created by federico on 28/07/15.
+ * @author Federico Tomassetti
  */
 public abstract class AbstractJavaParserContext<N extends Node> implements Context {
 
