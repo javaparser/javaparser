@@ -170,5 +170,4 @@ public class GenericsTest {
         assertEquals("java.lang.String", typeUsage.parameters().get(0).getTypeName());
     }
 
-
 }

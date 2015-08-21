@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -250,7 +251,11 @@ public class JavaParserFacade {
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(null, classOrInterfaceType.getName());
             }
-            return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration());
+            List<TypeUsage> typeParameters = Collections.emptyList();
+            if (classOrInterfaceType.getTypeArgs() != null) {
+                typeParameters = classOrInterfaceType.getTypeArgs().stream().map((t)->convert(t, context)).collect(Collectors.toList());
+            }
+            return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration(), typeParameters);
         } else if (type instanceof VoidType) {
             return new VoidTypeUsage();
         } else if (type instanceof PrimitiveType) {
