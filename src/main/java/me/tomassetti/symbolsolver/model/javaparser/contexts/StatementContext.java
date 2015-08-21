@@ -59,8 +59,14 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
         if (wrappedNode.getParentNode() instanceof com.github.javaparser.ast.body.MethodDeclaration){
             return getParent().solveSymbol(name, typeSolver);
         }
+        if (wrappedNode.getParentNode() instanceof com.github.javaparser.ast.body.ConstructorDeclaration){
+            return getParent().solveSymbol(name, typeSolver);
+        }
         if (wrappedNode.getParentNode() instanceof LambdaExpr){
             return getParent().solveSymbol(name, typeSolver);
+        }
+        if (!(wrappedNode.getParentNode() instanceof BlockStmt)) {
+            throw new UnsupportedOperationException(name + " has parent "+wrappedNode.getParentNode()+" (class: "+wrappedNode.getParentNode().getClass().getCanonicalName()+")");
         }
         BlockStmt blockStmt = (BlockStmt)wrappedNode.getParentNode();
         int position = -1;

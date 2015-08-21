@@ -172,7 +172,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name) {
+    public FieldDeclaration getField(String name, TypeSolver typeSolver) {
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
                 com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
@@ -188,7 +188,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean hasField(String name) {
+    public boolean hasField(String name, TypeSolver typeSolver) {
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
                 com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
@@ -261,7 +261,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             for (ClassOrInterfaceType extended : wrappedNode.getExtends()){
                 SymbolReference<TypeDeclaration> superclass = solveType(extended.getName(), typeSolver);
                 if (!superclass.isSolved()) {
-                    throw new UnsolvedSymbolException(null, extended.getName());
+                    throw new UnsolvedSymbolException(extended.getName());
                 }
                 ancestors.add(superclass.getCorrespondingDeclaration());
                 ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors(typeSolver));
@@ -271,7 +271,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()){
                 SymbolReference<TypeDeclaration> superclass = solveType(implemented.getName(), typeSolver);
                 if (!superclass.isSolved()) {
-                    throw new UnsolvedSymbolException(null, implemented.getName());
+                    throw new UnsolvedSymbolException(implemented.getName());
                 }
                 ancestors.add(superclass.getCorrespondingDeclaration());
                 ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors(typeSolver));

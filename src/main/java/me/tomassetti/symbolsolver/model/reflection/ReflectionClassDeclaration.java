@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.usages.*;
 
 import java.lang.reflect.Field;
@@ -132,8 +133,18 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name) {
-        throw new UnsupportedOperationException();
+    public FieldDeclaration getField(String name, TypeSolver typeSolver) {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.getName().equals(name)) {
+                return new ReflectionFieldDeclaration(field);
+            }
+        }
+        for (TypeDeclaration ancestor : getAllAncestors(typeSolver)) {
+            if (ancestor.hasField(name, typeSolver)) {
+                return ancestor.getField(name, typeSolver);
+            }
+        }
+        throw new UnsolvedSymbolException("Field in " + this, name);
     }
 
     /*@Override
@@ -186,7 +197,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean hasField(String name) {
+    public boolean hasField(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

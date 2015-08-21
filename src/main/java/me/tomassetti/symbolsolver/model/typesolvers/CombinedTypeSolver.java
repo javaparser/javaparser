@@ -33,7 +33,7 @@ public class CombinedTypeSolver implements TypeSolver {
         if (res.isSolved()) {
             return res.getCorrespondingDeclaration();
         } else {
-            throw new UnsolvedSymbolException(null, name);
+            throw new UnsolvedSymbolException(name);
         }
     }
 }

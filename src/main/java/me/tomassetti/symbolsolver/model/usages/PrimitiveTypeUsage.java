@@ -24,6 +24,14 @@ public class PrimitiveTypeUsage implements TypeUsage {
     public static final PrimitiveTypeUsage FLOAT = new PrimitiveTypeUsage("float");
     public static final PrimitiveTypeUsage DOUBLE = new PrimitiveTypeUsage("double");
     public static final PrimitiveTypeUsage SHORT = new PrimitiveTypeUsage("short");
+
+    @Override
+    public String toString() {
+        return "PrimitiveTypeUsage{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
     public static final List<PrimitiveTypeUsage> ALL = ImmutableList.of(INT, BOOLEAN, LONG, CHAR, FLOAT, DOUBLE, SHORT);
 
     private PrimitiveTypeUsage(String name) {

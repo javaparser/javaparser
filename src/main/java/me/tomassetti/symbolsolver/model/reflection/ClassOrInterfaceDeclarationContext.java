@@ -8,6 +8,8 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
@@ -24,7 +26,12 @@ public class ClassOrInterfaceDeclarationContext implements Context {
 
     @Override
     public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        for (Field field : wrapped.getFields()) {
+            if (Modifier.isStatic(field.getModifiers()) && field.getName().equals(name)) {
+                return SymbolReference.solved(new ReflectionFieldDeclaration(field));
+            }
+        }
+        return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
     @Override

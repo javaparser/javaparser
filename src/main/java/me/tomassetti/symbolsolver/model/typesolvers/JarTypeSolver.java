@@ -127,7 +127,7 @@ public class JarTypeSolver implements TypeSolver {
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
         } else {
-            throw new UnsolvedSymbolException(null, name);
+            throw new UnsolvedSymbolException(name);
         }
     }
 }

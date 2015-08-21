@@ -38,9 +38,9 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return other.isAssignableBy(this, typeSolver);
     }
 
-    FieldDeclaration getField(String name);
+    FieldDeclaration getField(String name, TypeSolver typeSolver);
 
-    boolean hasField(String name);
+    boolean hasField(String name, TypeSolver typeSolver);
 
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);

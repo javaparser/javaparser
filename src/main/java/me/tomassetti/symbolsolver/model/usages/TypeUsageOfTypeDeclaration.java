@@ -89,14 +89,14 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     @Override
     public Optional<Value> getField(String name, TypeSolver typeSolver) {
-        if (!typeDeclaration.hasField(name)){
+        if (!typeDeclaration.hasField(name, typeSolver)){
             return Optional.empty();
         }
         //Qui succede che getField avrebbe il tipo E. Devo vedere se io ho tipi da sostituire.
 
 
 
-        TypeUsage typeUsage = typeDeclaration.getField(name).getType(typeSolver);
+        TypeUsage typeUsage = typeDeclaration.getField(name, typeSolver).getType(typeSolver);
         //TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
 
         //ora io dovrei capire che mi ha restituito una variabile che si riferisce alla classe

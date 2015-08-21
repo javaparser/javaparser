@@ -44,7 +44,11 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
     @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         Expression scope = wrappedNode.getScope();
-        TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
-        return typeOfScope.getField(name, typeSolver);
+        if (wrappedNode.getFieldExpr().toString().equals(name)) {
+            TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
+            return typeOfScope.getField(name, typeSolver);
+        } else {
+            return getParent().solveSymbolAsValue(name, typeSolver);
+        }
     }
 }

@@ -54,7 +54,7 @@ public class JavaParserFacade {
     }
 
 
-    public SymbolReference solve(NameExpr nameExpr) {
+    public SymbolReference<? extends ValueDeclaration> solve(NameExpr nameExpr) {
         return symbolSolver.solveSymbol(nameExpr.getName(), nameExpr);
     }
 
@@ -126,7 +126,25 @@ public class JavaParserFacade {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
             logger.finest("getType on name expr " + node);
-            return new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr).get().getUsage();
+            Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
+            if (!value.isPresent()){
+                throw new UnsolvedSymbolException("Solving "+node, nameExpr.getName());
+                /*// Maybe we are accessing a static field
+                SymbolReference<TypeDeclaration> type = JavaParserFactory.getContext(node).solveType(nameExpr.getName(), typeSolver);
+                if (!type.isSolved()) {
+                    throw new UnsolvedSymbolException("Solving "+node, nameExpr.getName());
+                } else {
+                    throw new UnsupportedOperationException("da finire");
+                    /*value = type.getCorrespondingDeclaration().getContext().solveSymbolAsValue(nameExpr.getName(), typeSolver);
+                    if (!value.isPresent()) {
+                        throw new UnsolvedSymbolException("Solving "+node, nameExpr.getName());
+                    } else {
+                        return value.get().getUsage();
+                    }
+                }*/
+            } else {
+                return value.get().getUsage();
+            }
         } else if (node instanceof MethodCallExpr) {
             logger.finest("getType on method call " + node);
             // first solve the method
@@ -141,7 +159,7 @@ public class JavaParserFacade {
                 int pos = JavaParserSymbolDeclaration.getParamPos(node);
                 SymbolReference<MethodDeclaration> refMethod = new JavaParserFacade(typeSolver).solve(callExpr);
                 if (!refMethod.isSolved()) {
-                    throw new UnsolvedSymbolException(null, callExpr.getName());
+                    throw new UnsolvedSymbolException(callExpr.getName());
                 }
                 logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
@@ -178,11 +196,30 @@ public class JavaParserFacade {
             return new JavaParserFacade(typeSolver).convertToUsage(parameter.getType(), parameter);
         } else if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
-            Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
-            if (value.isPresent()) {
-                return value.get().getUsage();
-            } else {
-                throw new UnsolvedSymbolException(null, fieldAccessExpr.getField());
+            // We should understand if this is a static access
+            try {
+                Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
+                if (value.isPresent()) {
+                    return value.get().getUsage();
+                } else {
+                    throw new UnsolvedSymbolException(fieldAccessExpr.getField());
+                }
+            } catch (UnsolvedSymbolException e){
+                System.out.println("FOO");
+                // Sure, it was not found as value because maybe it is a type and this is a static access
+                if (fieldAccessExpr.getScope() instanceof NameExpr){
+                    NameExpr staticValue = (NameExpr)fieldAccessExpr.getScope();
+                    SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr).solveType(staticValue.toString(), typeSolver);
+                    if (!typeAccessedStatically.isSolved()) {
+                        throw e;
+                    } else {
+                        // TODO here maybe we have to substitute type parameters
+                        return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField(), typeSolver).getType(typeSolver);
+                    }
+                } else {
+                    throw e;
+                }
+
             }
         } else if (node instanceof ObjectCreationExpr) {
             ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) node;
@@ -190,6 +227,8 @@ public class JavaParserFacade {
             return typeUsage;
         } else if (node instanceof NullLiteralExpr) {
             return new NullTypeUsage();
+        } else if (node instanceof BooleanLiteralExpr) {
+            return PrimitiveTypeUsage.BOOLEAN;
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
@@ -211,7 +250,7 @@ public class JavaParserFacade {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             SymbolReference<TypeDeclaration> ref = context.solveType(classOrInterfaceType.getName(), typeSolver);
             if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(null, classOrInterfaceType.getName());
+                throw new UnsolvedSymbolException(classOrInterfaceType.getName());
             }
             TypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
             List<TypeUsage> typeParameters = Collections.emptyList();
@@ -249,7 +288,7 @@ public class JavaParserFacade {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             SymbolReference<TypeDeclaration> ref = context.solveType(classOrInterfaceType.getName(), typeSolver);
             if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(null, classOrInterfaceType.getName());
+                throw new UnsolvedSymbolException(classOrInterfaceType.getName());
             }
             List<TypeUsage> typeParameters = Collections.emptyList();
             if (classOrInterfaceType.getTypeArgs() != null) {
@@ -282,7 +321,7 @@ public class JavaParserFacade {
         Optional<MethodUsage> ref = new MethodCallExprContext(call).solveMethodAsUsage(call.getName(), params, typeSolver);
 
         if (!ref.isPresent()){
-            throw new UnsolvedSymbolException(null, call.getName());
+            throw new UnsolvedSymbolException(call.getName());
         } else {
             logger.finest("facade solveMethodAsUsage, ref " + ref.get());
             MethodUsage methodUsage = ref.get();

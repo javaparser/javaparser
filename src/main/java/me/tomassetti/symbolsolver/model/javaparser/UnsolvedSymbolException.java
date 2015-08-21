@@ -7,7 +7,7 @@ import me.tomassetti.symbolsolver.model.Context;
  */
 public class UnsolvedSymbolException extends RuntimeException {
 
-    private Context context;
+    private String context;
     private String name;
 
     @Override
@@ -19,7 +19,17 @@ public class UnsolvedSymbolException extends RuntimeException {
     }
 
     public UnsolvedSymbolException(Context context, String name) {
+        this.context = context.toString();
+        this.name = name;
+    }
+
+    public UnsolvedSymbolException(String context, String name) {
         this.context = context;
+        this.name = name;
+    }
+
+    public UnsolvedSymbolException(String name) {
+        this.context = "unknown";
         this.name = name;
     }
 }
