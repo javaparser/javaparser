@@ -39,7 +39,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public TypeDeclaration getReturnType(TypeSolver typeSolver) {
+    public TypeUsage getReturnType(TypeSolver typeSolver) {
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), getContext());
     }
 
@@ -63,10 +63,10 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver) {
-        TypeUsage returnType = replaceTypeParams(new TypeUsageOfTypeDeclaration(new JavaParserMethodDeclaration(wrappedNode).getReturnType(typeSolver)), typeSolver, context);
+        TypeUsage returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode).getReturnType(typeSolver), typeSolver, context);
         List<TypeUsage> params = new ArrayList<>();
         for (int i=0;i<wrappedNode.getParameters().size();i++){
-            TypeUsage replaced = replaceTypeParams(new TypeUsageOfTypeDeclaration(new JavaParserMethodDeclaration(wrappedNode).getParam(i).getType(typeSolver)), typeSolver, context);
+            TypeUsage replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode).getParam(i).getType(typeSolver), typeSolver, context);
             params.add(replaced);
         }
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode), params, returnType);

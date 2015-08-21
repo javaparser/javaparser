@@ -33,11 +33,6 @@ public class NullTypeUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isFunctionOrPredicate() {
-        return false;
-    }
-
-    @Override
     public boolean isReferenceType() {
         return true;
     }
@@ -70,5 +65,15 @@ public class NullTypeUsage implements TypeUsage {
     @Override
     public boolean isTypeVariable() {
         return false;
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getQualifiedName() {
+        throw new UnsupportedOperationException();
     }
 }

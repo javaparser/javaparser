@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 /**
  * A declaration of a method (either in an interface, a class or an enum).
@@ -16,7 +17,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
      */
     TypeDeclaration declaringType();
 
-    TypeDeclaration getReturnType(TypeSolver typeSolver);
+    TypeUsage getReturnType(TypeSolver typeSolver);
 
     int getNoParams();
 

@@ -80,7 +80,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("i", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getTypeName());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("j", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("long", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+        assertEquals("long", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getTypeName());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("k", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("boolean", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+        assertEquals("boolean", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getTypeName());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("m", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("char", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getName());
+        assertEquals("char", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getTypeName());
     }
 
     @Test

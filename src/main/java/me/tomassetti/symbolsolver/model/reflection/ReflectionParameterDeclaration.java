@@ -39,17 +39,12 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeUsage getTypeUsage(TypeSolver typeSolver) {
-        return new TypeUsageOfTypeDeclaration(getType(typeSolver));
-    }
-
-    @Override
     public boolean isType() {
         return false;
     }
 
     @Override
-    public TypeDeclaration getType(TypeSolver typeSolver) {
-        return new ReflectionClassDeclaration(type);
+    public TypeUsage getType(TypeSolver typeSolver) {
+        return ReflectionFactory.typeUsageFor(type);
     }
 }

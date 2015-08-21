@@ -8,6 +8,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -61,8 +62,8 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public TypeDeclaration getReturnType(TypeSolver typeSolver) {
-        return new ReflectionClassDeclaration(method.getReturnType());
+    public TypeUsage getReturnType(TypeSolver typeSolver) {
+        return ReflectionFactory.typeUsageFor(method.getReturnType());
     }
 
     @Override

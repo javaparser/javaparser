@@ -67,8 +67,8 @@ public class MethodResolutionLogic {
     private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
         for (int i=0; i < methodA.getNoParams(); i++){
-            TypeDeclaration tdA = methodA.getParam(i).getType(typeSolver);
-            TypeDeclaration tdB = methodB.getParam(i).getType(typeSolver);
+            TypeUsage tdA = methodA.getParam(i).getType(typeSolver);
+            TypeUsage tdB = methodB.getParam(i).getType(typeSolver);
             // B is more specific
             if (tdB.isAssignableBy(tdA, typeSolver) && !tdA.isAssignableBy(tdB, typeSolver)) {
                 return false;

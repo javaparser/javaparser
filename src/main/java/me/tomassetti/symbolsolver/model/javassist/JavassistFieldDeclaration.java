@@ -1,8 +1,10 @@
 package me.tomassetti.symbolsolver.model.javassist;
 
 import javassist.CtField;
+import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 /**
  * Created by federico on 01/08/15.
@@ -17,8 +19,12 @@ public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.mod
     private TypeSolver typeSolver;
 
     @Override
-    public TypeDeclaration getType(TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+    public TypeUsage getType(TypeSolver typeSolver) {
+        try {
+            return JavassistFactory.typeUsageFor(ctField.getType());
+        } catch (NotFoundException e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

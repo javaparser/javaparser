@@ -1,5 +1,8 @@
-package me.tomassetti.symbolsolver.model;
+package me.tomassetti.symbolsolver.model.usages;
 
+import me.tomassetti.symbolsolver.model.Context;
+import me.tomassetti.symbolsolver.model.SymbolReference;
+import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -31,11 +34,6 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     @Override
     public Optional<TypeUsage> parameterByName(String name) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isFunctionOrPredicate() {
-        return true;
     }
 
     @Override
@@ -75,5 +73,15 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
     public void setMethod(SymbolReference<MethodDeclaration> method) {
         this.method = method;
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getQualifiedName() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -18,11 +18,6 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
                 '}';
     }
 
-    @Override
-    public TypeUsage getTypeUsage(TypeSolver typeSolver) {
-        return new TypeUsageOfTypeDeclaration(getType(typeSolver));
-    }
-
     private CtClass type;
 
     public JavassistParameterDeclaration(CtClass type) {
@@ -50,7 +45,7 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeDeclaration getType(TypeSolver typeSolver) {
-        return JavassistFactory.typeDeclarationFor(type);
+    public TypeUsage getType(TypeSolver typeSolver) {
+        return JavassistFactory.typeUsageFor(type);
     }
 }

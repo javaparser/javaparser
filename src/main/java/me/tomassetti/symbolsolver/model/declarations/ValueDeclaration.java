@@ -9,9 +9,6 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
  */
 public interface ValueDeclaration extends Declaration {
 
-    TypeDeclaration getType(TypeSolver typeSolver);
+    TypeUsage getType(TypeSolver typeSolver);
 
-    default TypeUsage getTypeUsage(TypeSolver typeSolver) {
-        return new TypeUsageOfTypeDeclaration(getType(typeSolver));
-    }
 }

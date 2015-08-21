@@ -24,12 +24,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public TypeUsage getTypeUsage(TypeSolver typeSolver) {
-        return JavaParserFacade.get(typeSolver).convertToUsage(fieldDeclaration.getType(), fieldDeclaration);
-    }
-
-    @Override
-    public TypeDeclaration getType(TypeSolver typeSolver) {
+    public TypeUsage getType(TypeSolver typeSolver) {
         return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), fieldDeclaration);
     }
 
@@ -43,19 +38,5 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
         return true;
     }
 
-    @Override
-    public boolean isParameter() {
-        return false;
-    }
-
-    @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
-    public boolean isType() {
-        return false;
-    }
 
 }

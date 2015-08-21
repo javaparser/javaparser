@@ -17,8 +17,13 @@ import java.util.Optional;
  */
 public interface TypeUsage {
 
-    boolean isArray();
-    boolean isPrimitive();
+    default boolean isArray() {
+        return false;
+    }
+
+    default boolean isPrimitive() {
+        return false;
+    }
 
     default boolean isNull() {
         return false;
@@ -26,13 +31,13 @@ public interface TypeUsage {
 
     Optional<TypeUsage> parameterByName(String name);
 
-    boolean isFunctionOrPredicate();
-
     /**
      * Class, interface and enum are reference-type
      * @return
      */
-    boolean isReferenceType();
+    default boolean isReferenceType() {
+        return false;
+    }
 
     String getTypeName();
 
@@ -70,7 +75,9 @@ public interface TypeUsage {
 
     List<TypeUsage> parameters();
 
-    boolean isTypeVariable();
+    default boolean isTypeVariable() {
+        return false;
+    }
 
     default Optional<Value> getField(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
@@ -112,4 +119,8 @@ public interface TypeUsage {
             return result;
         }
     }
+
+    boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver);
+
+    String getQualifiedName();
 }

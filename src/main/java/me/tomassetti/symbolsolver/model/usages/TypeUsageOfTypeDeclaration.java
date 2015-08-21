@@ -82,7 +82,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         if (!typeDeclaration.hasField(name)){
             return Optional.empty();
         }
-        TypeUsage typeUsage = typeDeclaration.getField(name).getTypeUsage(typeSolver);
+        TypeUsage typeUsage = typeDeclaration.getField(name).getType(typeSolver);
         //TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
 
         //ora io dovrei capire che mi ha restituito una variabile che si riferisce alla classe
@@ -194,7 +194,18 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         return typeDeclaration.isTypeVariable();
     }
 
-    public boolean isFunctionOrPredicate() {
-        return false;
+    @Override
+    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
+        if (other instanceof TypeUsageOfTypeDeclaration) {
+            TypeUsageOfTypeDeclaration otherTUOTD = (TypeUsageOfTypeDeclaration)other;
+            return typeDeclaration.isAssignableBy(otherTUOTD.typeDeclaration, typeSolver);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public String getQualifiedName() {
+        return typeDeclaration.getQualifiedName();
     }
 }

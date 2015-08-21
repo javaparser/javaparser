@@ -7,20 +7,17 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.*;
-import jdk.nashorn.internal.ir.Symbol;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.ReferenceType;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.usages.NullTypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContext;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -148,12 +145,12 @@ public class JavaParserFacade {
                 logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
                 if (solveLambdas) {
-                    TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver).getUsage(node);
+                    TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver);
                     // We need to replace the type variables
                     result = result.solveGenericTypes(JavaParserFactory.getContext(node), typeSolver);
                     return result;
                 } else {
-                    return new TypeUsageOfTypeDeclaration(refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver));
+                    return refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver);
                 }
                 //System.out.println("LAMBDA " + node.getParentNode());
                 //System.out.println("LAMBDA CLASS " + node.getParentNode().getClass().getCanonicalName());
@@ -238,11 +235,11 @@ public class JavaParserFacade {
         return new MethodCallExprContext(methodCallExpr).solveMethod(methodCallExpr.getName(), params, typeSolver);
     }
 
-    public TypeDeclaration convert(Type type, Node node) {
+    public TypeUsage convert(Type type, Node node) {
         return convert(type, JavaParserFactory.getContext(node));
     }
 
-    public TypeDeclaration convert(Type type, Context context) {
+    public TypeUsage convert(Type type, Context context) {
         if (type instanceof ReferenceType) {
             ReferenceType referenceType = (ReferenceType) type;
             // TODO consider array modifiers
@@ -253,11 +250,12 @@ public class JavaParserFacade {
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(null, classOrInterfaceType.getName());
             }
-            return ref.getCorrespondingDeclaration();
+            return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration());
         } else if (type instanceof VoidType) {
-            return new VoidTypeDeclaration();
+            return new VoidTypeUsage();
         } else if (type instanceof PrimitiveType) {
-            return new PrimitiveTypeDeclaration((PrimitiveType)type);
+            PrimitiveType primitiveType = (PrimitiveType)type;
+            return PrimitiveTypeUsage.byName(primitiveType.getType().name());
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }

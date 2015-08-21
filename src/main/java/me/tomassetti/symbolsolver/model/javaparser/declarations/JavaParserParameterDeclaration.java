@@ -5,6 +5,7 @@ import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 /**
  * Created by federico on 02/08/15.
@@ -38,7 +39,7 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeDeclaration getType(TypeSolver typeSolver) {
+    public TypeUsage getType(TypeSolver typeSolver) {
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
     }
 }

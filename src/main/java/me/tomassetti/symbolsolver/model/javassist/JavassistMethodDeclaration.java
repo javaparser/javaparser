@@ -1,11 +1,8 @@
 package me.tomassetti.symbolsolver.model.javassist;
 
 import com.github.javaparser.ast.Node;
-import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.TypeParameter;
 import me.tomassetti.symbolsolver.model.TypeSolver;
@@ -14,10 +11,7 @@ import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,12 +63,10 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         return new JavassistClassDeclaration(ctMethod.getDeclaringClass());
     }
 
-    /*            SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());*/
-
     @Override
-    public TypeDeclaration getReturnType(TypeSolver typeSolver) {
+    public TypeUsage getReturnType(TypeSolver typeSolver) {
         try {
-            return JavassistFactory.typeDeclarationFor(ctMethod.getReturnType());
+            return JavassistFactory.typeUsageFor(ctMethod.getReturnType());
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }

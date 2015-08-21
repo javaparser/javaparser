@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.model.reflection;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.lang.reflect.Field;
 
@@ -18,9 +19,9 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
     private Field field;
 
     @Override
-    public TypeDeclaration getType(TypeSolver typeSolver) {
+    public TypeUsage getType(TypeSolver typeSolver) {
         // TODO consider interfaces, enums, primitive types, arrays
-        return new ReflectionClassDeclaration(field.getType());
+        return ReflectionFactory.typeUsageFor(field.getType());
     }
 
     @Override

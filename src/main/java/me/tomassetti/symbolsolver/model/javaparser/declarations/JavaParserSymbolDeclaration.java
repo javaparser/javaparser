@@ -13,6 +13,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 /**
  * Created by federico on 28/07/15.
@@ -77,7 +78,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public TypeDeclaration getType(TypeSolver typeSolver) {
+    public TypeUsage getType(TypeSolver typeSolver) {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
             if (wrappedNode.getParentNode() instanceof LambdaExpr) {
@@ -89,7 +90,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
                 //MethodDeclaration methodCalled = JavaParserFacade.get(typeSolver).solve()
                 throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
             } else {
-                return new SymbolSolver(typeSolver).solveType(parameter.getType());
+                return new TypeUsageOfTypeDeclaration(new SymbolSolver(typeSolver).solveType(parameter.getType()));
             }
         } else if (wrappedNode instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator)wrappedNode;
@@ -131,8 +132,8 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         }
     }
 
-    @Override
+    /*@Override
     public TypeUsage getTypeUsage(TypeSolver typeSolver) {
         return JavaParserFacade.get(typeSolver).getType(wrappedNode);
-    }
+    }*/
 }
