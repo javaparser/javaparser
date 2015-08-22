@@ -5,6 +5,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
+import me.tomassetti.symbolsolver.model.reflection.ReflectionInterfaceDeclaration;
 
 /**
  * Created by federico on 01/08/15.
@@ -16,7 +17,11 @@ public class JreTypeSolver implements TypeSolver {
         if (name.startsWith("java.") || name.startsWith("javax.")) {
             try {
                 Class<?> clazz = JreTypeSolver.class.getClassLoader().loadClass(name);
-                return SymbolReference.solved(new ReflectionClassDeclaration(clazz));
+                if (clazz.isInterface()) {
+                    return SymbolReference.solved(new ReflectionInterfaceDeclaration(clazz));
+                } else {
+                    return SymbolReference.solved(new ReflectionClassDeclaration(clazz));
+                }
             } catch (ClassNotFoundException e){
                 return SymbolReference.unsolved(TypeDeclaration.class);
             }

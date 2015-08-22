@@ -23,14 +23,7 @@ public final class Navigator {
     }
 
     public static ClassOrInterfaceDeclaration demandClass(CompilationUnit cu, String name) {
-        Optional<TypeDeclaration> res = findType(cu, name);
-        if (!res.isPresent()) {
-            throw new IllegalStateException("No type found");
-        }
-        if (!(res.get() instanceof ClassOrInterfaceDeclaration)){
-            throw new IllegalStateException("Type is not a class");
-        }
-        ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)res.get();
+        ClassOrInterfaceDeclaration cd = demandClassOrInterface(cu, name);
         if (cd.isInterface()) {
             throw new IllegalStateException("Type is not a class");
         }
@@ -127,5 +120,17 @@ public final class Navigator {
             }
         }
         return null;
+    }
+
+    public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String name) {
+        Optional<TypeDeclaration> res = findType(compilationUnit, name);
+        if (!res.isPresent()) {
+            throw new IllegalStateException("No type found");
+        }
+        if (!(res.get() instanceof ClassOrInterfaceDeclaration)){
+            throw new IllegalStateException("Type is not a class or an interface");
+        }
+        ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)res.get();
+        return cd;
     }
 }

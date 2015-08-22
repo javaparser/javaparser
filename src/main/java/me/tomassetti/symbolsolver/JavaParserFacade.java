@@ -37,9 +37,9 @@ public class JavaParserFacade {
 
     private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
     static {
-        logger.setLevel(Level.FINEST);
+        logger.setLevel(Level.INFO);
         ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.FINER);
+        consoleHandler.setLevel(Level.INFO);
         logger.addHandler(consoleHandler);
     }
 

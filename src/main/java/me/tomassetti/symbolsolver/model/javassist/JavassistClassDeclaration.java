@@ -286,7 +286,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public TypeDeclaration getSuperClass(TypeSolver typeSolvers) {
+    public ClassDeclaration getSuperClass(TypeSolver typeSolvers) {
         try {
             if (ctClass.getSuperclass() == null) {
                 throw new UnsupportedOperationException();
@@ -295,6 +295,11 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -48,8 +48,24 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
         return wrappedNode.getName();
     }
 
+    @Override
+    public InterfaceDeclaration asInterface() {
+        return this;
+    }
+
     public boolean isInterface() {
         return true;
+    }
+
+    @Override
+    public List<InterfaceDeclaration> getInterfacesExtended(TypeSolver typeSolver) {
+        List<InterfaceDeclaration> interfaces = new ArrayList<>();
+        if (wrappedNode.getImplements() != null) {
+            for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
+                interfaces.add(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asInterface());
+            }
+        }
+        return interfaces;
     }
 
     @Override

@@ -17,6 +17,8 @@ public class ReflectionFactory {
             return new ArrayTypeUsage(typeUsageFor(clazz.getComponentType()));
         } else if (clazz.isPrimitive()) {
             return PrimitiveTypeUsage.byName(clazz.getName());
+        } else if (clazz.isInterface()) {
+            return new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(clazz));
         } else {
             return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(clazz));
         }

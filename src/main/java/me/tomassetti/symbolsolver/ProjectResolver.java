@@ -7,13 +7,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import me.tomassetti.symbolsolver.model.SymbolReference;
-import me.tomassetti.symbolsolver.model.SymbolSolver;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
@@ -32,10 +27,10 @@ public class ProjectResolver {
     private static void solveField(Node node) {
         if (node instanceof Expression) {
             Expression expression = (Expression)node;
-            System.out.println("  Looking into " + node);
+            //System.out.println("  Looking into " + node);
             TypeUsage ref =  JavaParserFacade.get(typeSolver).getType(expression);
-            System.out.println("  * solving " + node + " : " + ref);
-            System.out.println("  " + node.getParentNode().getClass().getCanonicalName());
+            //System.out.println("  * solving " + node + " : " + ref);
+            //System.out.println("  " + node.getParentNode().getClass().getCanonicalName());
         } else {
             for (Node child : node.getChildrenNodes()){
                 solveField(child);
@@ -45,7 +40,15 @@ public class ProjectResolver {
 
     private static void solveTypeDecl(ClassOrInterfaceDeclaration node) {
         TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
-        System.out.println("Solved "+ typeDeclaration.getQualifiedName());
+        if (typeDeclaration.isClass()) {
+            System.out.println("\n[ Class "+ typeDeclaration.getQualifiedName() + " ]");
+            for (TypeDeclaration sc : typeDeclaration.asClass().getAllSuperClasses(typeSolver)) {
+                System.out.println("  superclass: " + sc.getQualifiedName());
+            }
+            for (TypeDeclaration sc : typeDeclaration.asClass().getAllInterfaces(typeSolver)) {
+                System.out.println("  interface: " + sc.getQualifiedName());
+            }
+        }
     }
 
     private static void solve(Node node) {

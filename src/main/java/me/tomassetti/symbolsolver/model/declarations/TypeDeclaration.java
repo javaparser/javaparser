@@ -89,4 +89,8 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     default ClassDeclaration asClass() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
+
+    default InterfaceDeclaration asInterface() {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
 }

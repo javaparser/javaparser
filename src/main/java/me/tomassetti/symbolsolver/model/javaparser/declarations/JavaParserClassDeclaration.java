@@ -79,8 +79,23 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         if (wrappedNode.getExtends() == null || wrappedNode.getExtends().isEmpty()) {
             return typeSolver.solveType("java.lang.Object").asType().asClass();
         } else {
-            return solveType(wrappedNode.getExtends().get(0).getName(), typeSolver).getCorrespondingDeclaration().asClass();
+            SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
+            if (!ref.isSolved()) {
+                throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
+            }
+            return ref.getCorrespondingDeclaration().asClass();
         }
+    }
+
+    @Override
+    public List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver) {
+        List<InterfaceDeclaration> interfaces = new ArrayList<>();
+        if (wrappedNode.getImplements() != null) {
+            for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
+                interfaces.add(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface());
+            }
+        }
+        return interfaces;
     }
 
     public ClassDeclaration asClass() {
@@ -274,7 +289,8 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             return new JavaParserClassDeclaration(this.wrappedNode).solveType(name.substring(prefix.length()), typeSolver);
         }
 
-        return SymbolReference.unsolved(TypeDeclaration.class);
+        //return SymbolReference.unsolved(TypeDeclaration.class);
+        return getContext().getParent().solveType(name, typeSolver);
     }
 
     @Override

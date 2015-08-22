@@ -20,14 +20,15 @@ import java.util.function.Predicate;
 /**
  * Created by federico on 02/08/15.
  */
-public class ReflectionClassDeclaration implements ClassDeclaration {
+public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
 
     private Class<?> clazz;
 
-    public ReflectionClassDeclaration(Class<?> clazz) {
-        if (clazz.isInterface()) {
+    public ReflectionInterfaceDeclaration(Class<?> clazz) {
+        if (!clazz.isInterface()) {
             throw new IllegalArgumentException();
         }
+
         this.clazz = clazz;
     }
 
@@ -91,12 +92,12 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             return true;
         }
         if (this.clazz.getSuperclass() != null) {
-            if (new ReflectionClassDeclaration(clazz.getSuperclass()).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionInterfaceDeclaration(clazz.getSuperclass()).canBeAssignedTo(other, typeSolver)){
                 return true;
             }
         }
         for (Class interfaze : clazz.getInterfaces()){
-            if (new ReflectionClassDeclaration(interfaze).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionInterfaceDeclaration(interfaze).canBeAssignedTo(other, typeSolver)){
                 return true;
             }
         }
@@ -184,8 +185,19 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public ClassDeclaration asClass() {
-        return this;
+    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        List<TypeDeclaration> ancestors = new LinkedList<>();
+        if (clazz.getSuperclass() != null) {
+            TypeDeclaration superclass = new ReflectionInterfaceDeclaration(clazz.getSuperclass());
+            ancestors.add(superclass);
+            ancestors.addAll(superclass.getAllAncestors(typeSolver));
+        }
+        for (Class<?> interfaze : clazz.getInterfaces()) {
+            TypeDeclaration interfazeDecl = new ReflectionInterfaceDeclaration(interfaze);
+            ancestors.add(interfazeDecl);
+            ancestors.addAll(interfazeDecl.getAllAncestors(typeSolver));
+        }
+        return ancestors;
     }
 
     @Override
@@ -199,50 +211,22 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean isField() {
-        return false;
-    }
-
-    @Override
-    public boolean isParameter() {
-        return false;
-    }
-
-    @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
-    public boolean isType() {
+    public boolean isInterface() {
         return true;
     }
 
     @Override
-    public boolean isClass() {
-        return !clazz.isInterface();
-    }
-
-    @Override
-    public ClassDeclaration getSuperClass(TypeSolver typeSolvers) {
-        if (clazz.getSuperclass() == null) {
-            return null;
-        }
-        return new ReflectionClassDeclaration(clazz.getSuperclass());
-    }
-
-    @Override
-    public List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver) {
-        List<InterfaceDeclaration> interfaces = new ArrayList<>();
+    public List<InterfaceDeclaration> getInterfacesExtended(TypeSolver typeSolver) {
+        List<InterfaceDeclaration> res = new ArrayList<>();
         for (Class i : clazz.getInterfaces()) {
-            interfaces.add(new ReflectionInterfaceDeclaration(i));
+            res.add(new ReflectionInterfaceDeclaration(i));
         }
-        return interfaces;
+        return res;
     }
 
     @Override
-    public boolean isInterface() {
-        return clazz.isInterface();
+    public InterfaceDeclaration asInterface() {
+        return this;
     }
 
     @Override
