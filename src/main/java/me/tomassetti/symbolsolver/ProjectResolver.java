@@ -4,6 +4,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -11,6 +12,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.SymbolSolver;
 import me.tomassetti.symbolsolver.model.TypeSolver;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JavaParserTypeSolver;
@@ -41,13 +43,20 @@ public class ProjectResolver {
         }
     }
 
+    private static void solveTypeDecl(ClassOrInterfaceDeclaration node) {
+        TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
+        System.out.println("Solved "+ typeDeclaration.getQualifiedName());
+    }
+
     private static void solve(Node node) {
-        if (node instanceof FieldDeclaration) {
+        if (node instanceof ClassOrInterfaceDeclaration) {
+            solveTypeDecl((ClassOrInterfaceDeclaration)node);
+        }  else if (node instanceof FieldDeclaration) {
             solveField(node);
-        } else {
-            for (Node child : node.getChildrenNodes()){
-                solve(child);
-            }
+            return;
+        }
+        for (Node child : node.getChildrenNodes()){
+            solve(child);
         }
     }
 

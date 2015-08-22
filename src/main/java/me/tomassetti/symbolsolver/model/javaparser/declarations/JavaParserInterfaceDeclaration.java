@@ -3,14 +3,13 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
@@ -23,16 +22,16 @@ import java.util.stream.Collectors;
 /**
  * Created by federico on 30/07/15.
  */
-public class JavaParserClassDeclaration implements ClassDeclaration {
+public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
 
-    public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode) {
-        if (wrappedNode.isInterface()) {
+    public JavaParserInterfaceDeclaration(ClassOrInterfaceDeclaration wrappedNode) {
+        if (!wrappedNode.isInterface()) {
             throw new IllegalArgumentException();
         }
         this.wrappedNode = wrappedNode;
     }
 
-    private com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode;
+    private ClassOrInterfaceDeclaration wrappedNode;
 
     @Override
     public Context getContext() {
@@ -49,47 +48,8 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         return wrappedNode.getName();
     }
 
-    @Override
-    public boolean isField() {
-        return false;
-    }
-
-    @Override
-    public boolean isParameter() {
-        return false;
-    }
-
-    @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
-    public boolean isType() {
-        return true;
-    }
-
-    @Override
-    public boolean isClass() {
-        return !wrappedNode.isInterface();
-    }
-
-    @Override
-    public ClassDeclaration getSuperClass(TypeSolver typeSolver) {
-        if (wrappedNode.getExtends() == null || wrappedNode.getExtends().isEmpty()) {
-            return typeSolver.solveType("java.lang.Object").asType().asClass();
-        } else {
-            return solveType(wrappedNode.getExtends().get(0).getName(), typeSolver).getCorrespondingDeclaration().asClass();
-        }
-    }
-
-    public ClassDeclaration asClass() {
-        return this;
-    }
-
-    @Override
     public boolean isInterface() {
-        return wrappedNode.isInterface();
+        return true;
     }
 
     @Override
@@ -115,9 +75,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     private String containerName(String base, Node container) {
-        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
+        if (container instanceof ClassOrInterfaceDeclaration) {
             String b = containerName(base, container.getParentNode());
-            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)container).getName();
+            String cn = ((ClassOrInterfaceDeclaration)container).getName();
             if (b.isEmpty()) {
                 return cn;
             } else {
@@ -251,17 +211,17 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
                 String prefix = internalType.getName() + ".";
                 if (internalType.getName().equals(name)) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType));
+                        return SymbolReference.solved(new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) internalType));
                     } else if (internalType instanceof EnumDeclaration) {
-                        return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType));
+                        return SymbolReference.solved(new JavaParserEnumDeclaration((EnumDeclaration) internalType));
                     } else {
                         throw new UnsupportedOperationException();
                     }
                 } else if (name.startsWith(prefix) && name.length() > prefix.length()) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType).solveType(name.substring(prefix.length()), typeSolver);
+                        return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) internalType).solveType(name.substring(prefix.length()), typeSolver);
                     } else if (internalType instanceof EnumDeclaration) {
-                        return new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType).solveType(name.substring(prefix.length()), typeSolver);
+                        return new JavaParserEnumDeclaration((EnumDeclaration) internalType).solveType(name.substring(prefix.length()), typeSolver);
                     } else {
                         throw new UnsupportedOperationException();
                     }
@@ -271,7 +231,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
         String prefix = wrappedNode.getName() + ".";
         if (name.startsWith(prefix) && name.length() > prefix.length()){
-            return new JavaParserClassDeclaration(this.wrappedNode).solveType(name.substring(prefix.length()), typeSolver);
+            return new JavaParserInterfaceDeclaration(this.wrappedNode).solveType(name.substring(prefix.length()), typeSolver);
         }
 
         return SymbolReference.unsolved(TypeDeclaration.class);

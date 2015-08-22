@@ -286,6 +286,18 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public TypeDeclaration getSuperClass(TypeSolver typeSolvers) {
+        try {
+            if (ctClass.getSuperclass() == null) {
+                throw new UnsupportedOperationException();
+            }
+            return new JavassistClassDeclaration(ctClass.getSuperclass()).asClass();
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public boolean isInterface() {
         return ctClass.isInterface();
     }

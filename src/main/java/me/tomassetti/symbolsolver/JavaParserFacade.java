@@ -12,6 +12,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
@@ -403,6 +404,14 @@ public class JavaParserFacade {
 
     public MethodUsage convertToUsage(MethodDeclaration methodDeclaration, Context context) {
         return new MethodUsage(methodDeclaration, typeSolver);
+    }
+
+    public TypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration){
+        if (classOrInterfaceDeclaration.isInterface()) {
+            return new JavaParserInterfaceDeclaration(classOrInterfaceDeclaration);
+        } else {
+            return new JavaParserClassDeclaration(classOrInterfaceDeclaration);
+        }
     }
 
     /**

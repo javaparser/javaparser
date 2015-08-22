@@ -19,12 +19,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
-public class GenericsTest {
-
-    private CompilationUnit parseSample(String sampleName) throws ParseException {
-        InputStream is = GenericsTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
-        return JavaParser.parse(is);
-    }
+public class GenericsTest extends AbstractTest{
 
     @Test
     public void resolveFieldWithGenericTypeToString() throws ParseException {

@@ -181,6 +181,11 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public ClassDeclaration asClass() {
+        return this;
+    }
+
+    @Override
     public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
         List<TypeDeclaration> ancestors = new LinkedList<>();
         if (clazz.getSuperclass() != null) {
@@ -229,6 +234,14 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public boolean isClass() {
         return !clazz.isInterface();
+    }
+
+    @Override
+    public TypeDeclaration getSuperClass(TypeSolver typeSolvers) {
+        if (clazz.getSuperclass() == null) {
+            return null;
+        }
+        return new ReflectionClassDeclaration(clazz.getSuperclass());
     }
 
     @Override
