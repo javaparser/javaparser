@@ -188,6 +188,13 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public String toString() {
+        return "JavaParserClassDeclaration{" +
+                "wrappedNode=" + wrappedNode +
+                '}';
+    }
+
+    @Override
     public boolean hasField(String name, TypeSolver typeSolver) {
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){

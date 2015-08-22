@@ -12,6 +12,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
@@ -228,6 +229,33 @@ public class JavaParserFacade {
             return new NullTypeUsage();
         } else if (node instanceof BooleanLiteralExpr) {
             return PrimitiveTypeUsage.BOOLEAN;
+        } else if (node instanceof IntegerLiteralExpr) {
+            return PrimitiveTypeUsage.INT;
+        } else if (node instanceof LongLiteralExpr) {
+            return PrimitiveTypeUsage.LONG;
+        } else if (node instanceof CharLiteralExpr) {
+            return PrimitiveTypeUsage.CHAR;
+        } else if (node instanceof StringLiteralExpr) {
+            return new TypeUsageOfTypeDeclaration(new JreTypeSolver().solveType("java.lang.String"));
+        } else if (node instanceof UnaryExpr) {
+            UnaryExpr unaryExpr = (UnaryExpr)node;
+            switch (unaryExpr.getOperator()) {
+                case negative:
+                    return getTypeConcrete(unaryExpr.getExpr(), solveLambdas);
+                case inverse:
+                case not:
+                case posIncrement:
+                default:
+                    throw new UnsupportedOperationException(unaryExpr.getOperator().name());
+            }
+        } else if (node instanceof BinaryExpr) {
+            BinaryExpr binaryExpr = (BinaryExpr)node;
+            switch (binaryExpr.getOperator()) {
+                case plus:
+                    return getTypeConcrete(binaryExpr.getLeft(), solveLambdas);
+                default:
+                    throw new UnsupportedOperationException(binaryExpr.getOperator().name());
+            }
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

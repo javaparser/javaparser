@@ -13,6 +13,7 @@ import me.tomassetti.symbolsolver.model.SymbolSolver;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
+import me.tomassetti.symbolsolver.model.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -65,9 +66,10 @@ public class ProjectResolver {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-        File src = new File("/home/federico/repos/javaparser/javaparser-core/src/main");
+        File src = new File("/home/federico/repos/javaparser/javaparser-core/src/main/java");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new JreTypeSolver());
+        combinedTypeSolver.add(new JavaParserTypeSolver(src));
         typeSolver = combinedTypeSolver;
         solve(src);
     }
