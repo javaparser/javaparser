@@ -23,8 +23,10 @@ public class JavaParserFactory {
             return null;
         } else if (node instanceof CompilationUnit) {
             return new CompilationUnitContext((CompilationUnit)node);
-        } else if (node instanceof Statement) {
-            return new StatementContext((Statement) node);
+        } else if (node instanceof ForeachStmt) {
+            return new ForechStatementContext((ForeachStmt)node);
+        } else if (node instanceof ForStmt) {
+            return new ForStatementContext((ForStmt)node);
         } else if (node instanceof LambdaExpr){
             return new LambdaExprContext((LambdaExpr) node);
         } else if (node instanceof MethodDeclaration) {
@@ -36,7 +38,9 @@ public class JavaParserFactory {
         } else if (node instanceof EnumDeclaration) {
             return new EnumDeclarationContext((EnumDeclaration)node);
         } else if (node instanceof FieldAccessExpr) {
-            return new FieldAccessContext((FieldAccessExpr)node);
+            return new FieldAccessContext((FieldAccessExpr) node);
+        } else if (node instanceof Statement) {
+            return new StatementContext((Statement) node);
         } else {
             return getContext(node.getParentNode());
         }
@@ -56,6 +60,9 @@ public class JavaParserFactory {
             }
         } else if (node instanceof IfStmt) {
             return new NoSimboyDeclarator(node, typeSolver);
+        } else if (node instanceof ForeachStmt) {
+            ForeachStmt foreachStmt = (ForeachStmt)node;
+            return new VariableSymbolDeclarator((VariableDeclarationExpr) (foreachStmt.getVariable()), typeSolver);
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

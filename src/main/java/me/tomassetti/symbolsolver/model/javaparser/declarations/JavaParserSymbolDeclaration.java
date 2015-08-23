@@ -37,6 +37,10 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         return new JavaParserSymbolDeclaration(parameter, parameter.getId().getName(), typeSolver, false, true, false);
     }
 
+    public static JavaParserSymbolDeclaration localVar(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
+        return new JavaParserSymbolDeclaration(variableDeclarator, variableDeclarator.getId().getName(), typeSolver, false, false, true);
+    }
+
     @Override
     public String toString() {
         return "JavaParserSymbolDeclaration{" +

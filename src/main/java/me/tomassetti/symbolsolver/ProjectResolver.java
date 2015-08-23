@@ -14,6 +14,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
@@ -28,6 +29,10 @@ import java.io.IOException;
 public class ProjectResolver {
 
     private static TypeSolver typeSolver;
+
+    private static int ok = 0;
+    private static int ko = 0;
+    private static int unsupported = 0;
 
     private static void solveField(Node node) {
         if (node instanceof Expression) {
@@ -69,8 +74,15 @@ public class ProjectResolver {
                 // skip
             } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)){
                 //System.out.println(node + " GOOD from " + node.getParentNode().getClass().getCanonicalName());
-                TypeUsage ref =  JavaParserFacade.get(typeSolver).getType(node);
-                System.out.println("  Line " + node.getBeginLine()+") "+ node +" ==> "+ref.prettyPrint());
+                try {
+                    TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
+                    System.out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.prettyPrint());
+                    ok++;
+                } catch (UnsupportedOperationException upe){
+                    unsupported++;
+                } catch (RuntimeException re){
+                    ko++;
+                }
             } else {
                 //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());
             }
@@ -103,6 +115,9 @@ public class ProjectResolver {
         combinedTypeSolver.add(new JavaParserTypeSolver(new File("/home/federico/repos/javaparser/javaparser-core/target/generated-sources/javacc")));
         typeSolver = combinedTypeSolver;
         solve(src);
+        System.out.println("OK "+ ok);
+        System.out.println("KO "+ ko);
+        System.out.println("UNSUPPORTED "+ unsupported);
     }
 
 }

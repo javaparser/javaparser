@@ -280,10 +280,22 @@ public class JavaParserFacade {
             CastExpr enclosedExpr = (CastExpr)node;
             return convertToUsage(enclosedExpr.getType(), JavaParserFactory.getContext(node));
         } else if (node instanceof AssignExpr) {
-            AssignExpr assignExpr = (AssignExpr)node;
+            AssignExpr assignExpr = (AssignExpr) node;
             return getTypeConcrete(assignExpr.getTarget(), solveLambdas);
+        } else if (node instanceof ThisExpr) {
+            return new TypeUsageOfTypeDeclaration(getTypeDeclaration(findContainingTypeDecl(node)));
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+        }
+    }
+
+    private ClassOrInterfaceDeclaration findContainingTypeDecl(Node node){
+        if (node instanceof ClassOrInterfaceDeclaration) {
+            return (ClassOrInterfaceDeclaration)node;
+        } else if (node.getParentNode() == null) {
+            throw new IllegalArgumentException();
+        } else {
+            return findContainingTypeDecl(node.getParentNode());
         }
     }
 
