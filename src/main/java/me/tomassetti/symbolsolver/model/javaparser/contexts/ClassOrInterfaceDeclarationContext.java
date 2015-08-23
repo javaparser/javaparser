@@ -11,6 +11,7 @@ import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedTypeException;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserMethodDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeParameter;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
@@ -113,7 +114,11 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     private TypeDeclaration getDeclaration() {
-        return new JavaParserClassDeclaration(this.wrappedNode);
+        if (this.wrappedNode.isInterface()){
+            return new JavaParserInterfaceDeclaration(this.wrappedNode);
+        } else {
+            return new JavaParserClassDeclaration(this.wrappedNode);
+        }
     }
 
     @Override
@@ -141,6 +146,11 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
+        }
+
+        SymbolReference<MethodDeclaration> parentSolution = getParent().solveMethod(name, parameterTypes, typeSolver);
+        if (parentSolution.isSolved()) {
+            candidateMethods.add(parentSolution.getCorrespondingDeclaration());
         }
 
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, parameterTypes, typeSolver);

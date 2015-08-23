@@ -27,7 +27,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
     public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode) {
         if (wrappedNode.isInterface()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Interface given");
         }
         this.wrappedNode = wrappedNode;
     }

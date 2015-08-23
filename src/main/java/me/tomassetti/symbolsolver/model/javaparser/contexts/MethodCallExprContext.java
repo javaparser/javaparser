@@ -55,8 +55,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 throw e;
             }
         } else {
-            TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-            return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);
+            //TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
+            //return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);
+            return getParent().solveMethodAsUsage(name, parameterTypes, typeSolver);
         }
     }
 

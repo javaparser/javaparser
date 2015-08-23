@@ -88,7 +88,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        return new MethodUsage(new ReflectionMethodDeclaration(method), typeSolver);
     }
 
     @Override

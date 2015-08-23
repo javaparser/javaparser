@@ -268,6 +268,14 @@ public class JavaParserFacade {
         } else if (node instanceof VariableDeclarationExpr) {
             VariableDeclarationExpr expr = (VariableDeclarationExpr)node;
             return convertToUsage(expr.getType(), JavaParserFactory.getContext(node));
+        } else if (node instanceof InstanceOfExpr) {
+            return PrimitiveTypeUsage.BOOLEAN;
+        } else if (node instanceof EnclosedExpr) {
+            EnclosedExpr enclosedExpr = (EnclosedExpr)node;
+            return getTypeConcrete(enclosedExpr.getInner(), solveLambdas);
+        } else if (node instanceof CastExpr) {
+            CastExpr enclosedExpr = (CastExpr)node;
+            return convertToUsage(enclosedExpr.getType(), JavaParserFactory.getContext(node));
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
@@ -372,7 +380,7 @@ public class JavaParserFacade {
         Context context = JavaParserFactory.getContext(call);
         Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName(), params, typeSolver);
         if (!methodUsage.isPresent()) {
-            throw new RuntimeException("Method cannot be resolved " + call.getName());
+            throw new RuntimeException("Method cannot be resolved " + call.getName()+" in context " + call+ " (line: "+call.getBeginLine()+") "+context);
         }
         return methodUsage.get();
     }

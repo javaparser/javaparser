@@ -9,6 +9,7 @@ import me.tomassetti.symbolsolver.model.SymbolDeclarator;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.javaparser.contexts.*;
 import me.tomassetti.symbolsolver.model.javaparser.declarators.FieldSymbolDeclarator;
+import me.tomassetti.symbolsolver.model.javaparser.declarators.NoSimboyDeclarator;
 import me.tomassetti.symbolsolver.model.javaparser.declarators.ParameterSymbolDeclarator;
 import me.tomassetti.symbolsolver.model.javaparser.declarators.VariableSymbolDeclarator;
 
@@ -47,12 +48,14 @@ public class JavaParserFactory {
         } else if (node instanceof Parameter) {
             return new ParameterSymbolDeclarator((Parameter) node, typeSolver);
         } else if (node instanceof ExpressionStmt) {
-            ExpressionStmt expressionStmt = (ExpressionStmt)node;
+            ExpressionStmt expressionStmt = (ExpressionStmt) node;
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
-                return new VariableSymbolDeclarator((VariableDeclarationExpr)(expressionStmt.getExpression()), typeSolver);
+                return new VariableSymbolDeclarator((VariableDeclarationExpr) (expressionStmt.getExpression()), typeSolver);
             } else {
-                throw new UnsupportedOperationException("ExpressionStmt " + expressionStmt.getExpression().getClass().getCanonicalName());
+                return new NoSimboyDeclarator(node, typeSolver);
             }
+        } else if (node instanceof IfStmt) {
+            return new NoSimboyDeclarator(node, typeSolver);
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

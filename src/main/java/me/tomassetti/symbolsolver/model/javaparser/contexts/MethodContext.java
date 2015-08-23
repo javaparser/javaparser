@@ -75,10 +75,10 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
 
     @Override
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        if (wrappedNode.getName().equals(name)) {
+        /*if (wrappedNode.getName().equals(name)) {
             // TODO understand if signature is compatible
             throw new UnsupportedOperationException();
-        }
+        }*/
 
         return getParent().solveMethod(name, parameterTypes, typeSolver);
     }
