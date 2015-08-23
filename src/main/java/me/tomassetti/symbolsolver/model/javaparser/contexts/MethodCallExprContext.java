@@ -55,9 +55,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 throw e;
             }
         } else {
+            if (wrappedNode.getParentNode() instanceof MethodCallExpr) {
+                MethodCallExpr parent = (MethodCallExpr)wrappedNode.getParentNode();
+                if (parent.getScope() == wrappedNode) {
+                    return getParent().getParent().solveMethodAsUsage(name, parameterTypes, typeSolver);
+                }
+            }
             //TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
             //return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);
-            return getParent().solveMethodAsUsage(name, parameterTypes, typeSolver);
+            Context parentContext = getParent();
+            //System.out.println("NAME "+name);
+            return parentContext.solveMethodAsUsage(name, parameterTypes, typeSolver);
         }
     }
 

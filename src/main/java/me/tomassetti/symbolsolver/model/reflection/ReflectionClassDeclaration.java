@@ -96,7 +96,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             }
         }
         for (Class interfaze : clazz.getInterfaces()){
-            if (new ReflectionClassDeclaration(interfaze).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionInterfaceDeclaration(interfaze).canBeAssignedTo(other, typeSolver)){
                 return true;
             }
         }

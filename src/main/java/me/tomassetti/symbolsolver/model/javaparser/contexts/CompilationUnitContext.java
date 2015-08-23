@@ -123,6 +123,12 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         } else {
                             throw new UnsupportedOperationException();
                         }
+                    } else {
+                        String qName = importDecl.getName().toString() + "." + name;
+                        SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                        if (ref.isSolved()) {
+                            return ref;
+                        }
                     }
                 }
             }

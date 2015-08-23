@@ -243,8 +243,9 @@ public class JavaParserFacade {
             switch (unaryExpr.getOperator()) {
                 case negative:
                     return getTypeConcrete(unaryExpr.getExpr(), solveLambdas);
-                case inverse:
                 case not:
+                    return PrimitiveTypeUsage.BOOLEAN;
+                case inverse:
                 case posIncrement:
                 default:
                     throw new UnsupportedOperationException(unaryExpr.getOperator().name());
@@ -261,6 +262,8 @@ public class JavaParserFacade {
                 case greaterEquals:
                 case equals:
                 case notEquals:
+                case or:
+                case and:
                     return PrimitiveTypeUsage.BOOLEAN;
                 default:
                     throw new UnsupportedOperationException(binaryExpr.getOperator().name());
@@ -276,6 +279,9 @@ public class JavaParserFacade {
         } else if (node instanceof CastExpr) {
             CastExpr enclosedExpr = (CastExpr)node;
             return convertToUsage(enclosedExpr.getType(), JavaParserFactory.getContext(node));
+        } else if (node instanceof AssignExpr) {
+            AssignExpr assignExpr = (AssignExpr)node;
+            return getTypeConcrete(assignExpr.getTarget(), solveLambdas);
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

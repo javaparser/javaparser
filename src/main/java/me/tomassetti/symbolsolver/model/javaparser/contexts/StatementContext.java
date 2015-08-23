@@ -35,6 +35,9 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
         if (wrappedNode.getParentNode() instanceof IfStmt){
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
+        if (!(wrappedNode.getParentNode() instanceof BlockStmt)) {
+            return getParent().solveSymbolAsValue(name, typeSolver);
+        }
         BlockStmt blockStmt = (BlockStmt)wrappedNode.getParentNode();
         int position = -1;
         for (int i=0; i<blockStmt.getStmts().size(); i++){
