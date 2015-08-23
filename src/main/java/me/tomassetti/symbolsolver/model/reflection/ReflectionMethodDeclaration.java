@@ -11,6 +11,7 @@ import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -63,7 +64,8 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public TypeUsage getReturnType(TypeSolver typeSolver) {
-        return ReflectionFactory.typeUsageFor(method.getReturnType());
+        return ReflectionFactory.typeUsageFor(method.getGenericReturnType());
+        //return ReflectionFactory.typeUsageFor(method.getReturnType());
     }
 
     @Override

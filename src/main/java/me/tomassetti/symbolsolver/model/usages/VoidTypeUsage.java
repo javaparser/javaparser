@@ -13,6 +13,8 @@ import java.util.Optional;
  * Created by federico on 21/08/15.
  */
 public class VoidTypeUsage implements TypeUsage {
+    public static final TypeUsage INSTANCE = new VoidTypeUsage();
+
     @Override
     public Optional<TypeUsage> parameterByName(String name) {
         throw new UnsupportedOperationException();

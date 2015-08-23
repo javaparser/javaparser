@@ -365,28 +365,11 @@ public class JavaParserFacade {
                 params.add(getType(param, false));
             }
         }
-        /*TypeUsage typeOfScope = getType(call.getScope());
-        logger.finest("facade solveMethodAsUsage, params " + params);
-        logger.finest("facade solveMethodAsUsage, scope " + typeOfScope);
-
-        // TODO take params from scope and substitute them in ref
-
-        Optional<MethodUsage> ref = new MethodCallExprContext(call).solveMethodAsUsage(call.getName(), params, typeSolver);
-
-        if (!ref.isPresent()){
-            throw new UnsolvedSymbolException(call.getName());
-        } else {
-            logger.finest("facade solveMethodAsUsage, ref " + ref.get());
-            MethodUsage methodUsage = ref.get();
-            methodUsage = replaceParams(methodUsage, typeOfScope);
-            TypeUsage returnType = replaceParams(methodUsage.returnType(), typeOfScope);
-            methodUsage = methodUsage.replaceReturnType(returnType);
-            return methodUsage;
-        }*/
         Context context = JavaParserFactory.getContext(call);
         Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName(), params, typeSolver);
         if (!methodUsage.isPresent()) {
-            throw new RuntimeException("Method cannot be resolved " + call.getName()+" in context " + call+ " (line: "+call.getBeginLine()+") "+context);
+            throw new RuntimeException("Method" +
+                    " '"+call.getName()+"' cannot be resolved in context " + call+ " (line: "+call.getBeginLine()+") "+context);
         }
         return methodUsage.get();
     }

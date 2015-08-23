@@ -1,9 +1,15 @@
 package me.tomassetti.symbolsolver.model.reflection;
 
+import com.github.javaparser.ast.TypeParameter;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.javassist.JavassistClassDeclaration;
 import me.tomassetti.symbolsolver.model.usages.*;
+import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 
 /**
  * Created by federico on 02/08/15.
@@ -22,6 +28,34 @@ public class ReflectionFactory {
             return new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(clazz));
         } else {
             return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(clazz));
+        }
+    }
+
+    public static TypeUsage typeUsageFor(Type type) {
+        if (type instanceof TypeVariable) {
+            TypeVariable tv = (TypeVariable) type;
+            // TODO the false value is arbitrary...
+            me.tomassetti.symbolsolver.model.TypeParameter typeParameter = new ReflectionTypeParameter(tv, true);
+            return new TypeUsageOfTypeParameter(typeParameter);
+        } else if (type instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) type;
+            // TODO deal with type parameters
+            return typeUsageFor(pt.getRawType());
+        } else if (type instanceof Class){
+            Class c = (Class)type;
+            if (c.isPrimitive()) {
+                if (c.getName().equals("void")) {
+                    return VoidTypeUsage.INSTANCE;
+                } else {
+                    return PrimitiveTypeUsage.byName(c.getName());
+                }
+            } else if (c.isInterface()) {
+                return new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(c));
+            } else {
+                return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(c));
+            }
+        } else {
+            throw new UnsupportedOperationException(type.getClass().getCanonicalName()+" "+type);
         }
     }
 }

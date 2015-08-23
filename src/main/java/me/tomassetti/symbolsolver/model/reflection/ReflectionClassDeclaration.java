@@ -28,6 +28,12 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         if (clazz.isInterface()) {
             throw new IllegalArgumentException();
         }
+        if (clazz.isPrimitive()) {
+            throw new IllegalArgumentException();
+        }
+        if (clazz.isArray()) {
+            throw new IllegalArgumentException();
+        }
         this.clazz = clazz;
     }
 
