@@ -23,7 +23,14 @@ public interface Context {
         return Optional.empty();
     }
 
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
+    default SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+        Context parent = getParent();
+        if (parent == null) {
+            return SymbolReference.unsolved(TypeDeclaration.class);
+        } else {
+            return getParent().solveType(name, typeSolver);
+        }
+    }
 
     /* Symbol resolution */
 

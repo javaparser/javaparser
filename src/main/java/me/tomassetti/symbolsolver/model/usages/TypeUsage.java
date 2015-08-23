@@ -123,4 +123,6 @@ public interface TypeUsage {
     boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver);
 
     String getQualifiedName();
+
+    String prettyPrint();
 }

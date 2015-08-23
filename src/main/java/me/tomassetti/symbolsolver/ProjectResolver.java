@@ -3,10 +3,15 @@ package me.tomassetti.symbolsolver;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
@@ -57,6 +62,19 @@ public class ProjectResolver {
         }  else if (node instanceof FieldDeclaration) {
             solveField(node);
             return;
+        } else if (node instanceof Expression) {
+            if ((node.getParentNode() instanceof ImportDeclaration) || (node.getParentNode() instanceof Expression)
+                    || (node.getParentNode() instanceof MethodDeclaration)
+                    || (node.getParentNode() instanceof PackageDeclaration)) {
+                // skip
+            } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)){
+                //System.out.println(node + " GOOD from " + node.getParentNode().getClass().getCanonicalName());
+                TypeUsage ref =  JavaParserFacade.get(typeSolver).getType(node);
+                System.out.println("  Line " + node.getBeginLine()+") "+ node +" ==> "+ref.prettyPrint());
+            } else {
+                //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());
+            }
+
         }
         for (Node child : node.getChildrenNodes()){
             solve(child);

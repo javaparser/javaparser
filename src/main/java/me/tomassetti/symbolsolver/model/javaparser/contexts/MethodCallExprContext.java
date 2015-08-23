@@ -33,6 +33,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        // TODO consider call of static methods
         if (wrappedNode.getScope() != null) {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
             return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);
@@ -45,11 +46,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
-    }
-
-    @Override
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -316,7 +316,7 @@ public class JavaParserFacade {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             SymbolReference<TypeDeclaration> ref = context.solveType(classOrInterfaceType.getName(), typeSolver);
             if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(classOrInterfaceType.getName());
+                throw new UnsolvedSymbolException(context, classOrInterfaceType.getName());
             }
             List<TypeUsage> typeParameters = Collections.emptyList();
             if (classOrInterfaceType.getTypeArgs() != null) {

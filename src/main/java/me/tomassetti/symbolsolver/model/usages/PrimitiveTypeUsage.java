@@ -111,4 +111,9 @@ public class PrimitiveTypeUsage implements TypeUsage {
     public String getQualifiedName() {
         return name;
     }
+
+    @Override
+    public String prettyPrint() {
+        return name;
+    }
 }

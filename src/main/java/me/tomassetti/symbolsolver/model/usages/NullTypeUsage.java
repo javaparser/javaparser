@@ -76,4 +76,9 @@ public class NullTypeUsage implements TypeUsage {
     public String getQualifiedName() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public String prettyPrint() {
+        return "null";
+    }
 }

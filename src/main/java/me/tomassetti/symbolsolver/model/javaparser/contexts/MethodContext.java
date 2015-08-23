@@ -1,11 +1,14 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.*;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeParameter;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeParameter;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +38,16 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
     }
 
     @Override
+    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
+        for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
+            if (tp.getName().equals(name)){
+                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp)));
+            }
+        }
+        return super.solveGenericType(name, typeSolver);
+    }
+
+    @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
@@ -50,6 +63,11 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
 
     @Override
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+        for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
+            if (tp.getName().equals(name)){
+                return SymbolReference.solved(new JavaParserTypeParameter(tp));
+            }
+        }
         return getParent().solveType(name, typeSolver);
     }
 

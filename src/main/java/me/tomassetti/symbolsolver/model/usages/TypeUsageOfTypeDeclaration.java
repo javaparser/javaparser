@@ -228,4 +228,9 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     public String getQualifiedName() {
         return typeDeclaration.getQualifiedName();
     }
+
+    @Override
+    public String prettyPrint() {
+        return getTypeNameWithParams();
+    }
 }
