@@ -91,7 +91,10 @@ public class ProjectResolver {
                     }
                     unsupportedMap.put(line, unsupportedMap.get(line) + 1);
                     unsupported++;
-                    throw upe;
+                    if (upe.getMessage() != null && upe.getMessage().startsWith("FOO")){
+                        throw upe;
+                    }
+                    //throw upe;
                 } catch (RuntimeException re){
                     String line = re.getStackTrace()[0].toString();
                     if (!koMap.containsKey(line)) {
@@ -99,7 +102,7 @@ public class ProjectResolver {
                     }
                     koMap.put(line, koMap.get(line) + 1);
                     ko++;
-                    throw re;
+                    //throw re;
                 }
             } else {
                 //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());

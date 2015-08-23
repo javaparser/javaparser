@@ -19,6 +19,9 @@ public final class Navigator {
     }
 
     public static Optional<TypeDeclaration> findType(CompilationUnit cu, String name) {
+        if (cu.getTypes() == null) {
+            return Optional.empty();
+        }
         return cu.getTypes().stream().filter((t)->t.getName().equals(name)).findFirst();
     }
 
@@ -128,7 +131,7 @@ public final class Navigator {
             throw new IllegalStateException("No type found");
         }
         if (!(res.get() instanceof ClassOrInterfaceDeclaration)){
-            throw new IllegalStateException("Type is not a class or an interface");
+            throw new IllegalStateException("Type is not a class or an interface, it is "+res.get().getClass().getCanonicalName());
         }
         ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)res.get();
         return cd;

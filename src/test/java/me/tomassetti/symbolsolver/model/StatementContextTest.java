@@ -3,11 +3,13 @@ package me.tomassetti.symbolsolver.model;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -49,6 +51,23 @@ public class StatementContextTest extends AbstractTest {
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).getQualifiedName());
+    }
+
+    @Test
+    public void resolveLocalAndSeveralAnnidatedLevels() throws ParseException {
+        CompilationUnit cu = parseSample("LocalVariableInParent");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
+        MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo4");
+        MethodCallExpr call = Navigator.findMethodCall(method, "add");
+
+        TypeSolver typeSolver = new JreTypeSolver();
+
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
+        assertTrue(ref.isSolved());
+        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType(typeSolver).getTypeNameWithParams());
+
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+        assertEquals("add", methodUsage.getName());
     }
 
 }

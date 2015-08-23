@@ -13,6 +13,10 @@ public abstract class AbstractTest {
 
     protected CompilationUnit parseSample(String sampleName) throws ParseException {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(sampleName + ".java.txt");
-        return JavaParser.parse(is);
+        CompilationUnit cu = JavaParser.parse(is);
+        if (cu == null) {
+            throw new IllegalStateException();
+        }
+        return cu;
     }
 }

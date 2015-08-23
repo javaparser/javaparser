@@ -1,6 +1,8 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.ForeachStmt;
@@ -24,7 +26,18 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        if (0 == 0) { throw new UnsupportedOperationException(); }
+        for (Expression expression : wrappedNode.getInit()) {
+            if (expression instanceof VariableDeclarationExpr) {
+                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr)expression;
+                for (VariableDeclarator variableDeclarator : variableDeclarationExpr.getVars()){
+                    if (variableDeclarator.getId().getName().equals(name)) {
+                        return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
+                    }
+                }
+            } else {
+                throw new UnsupportedOperationException(expression.getClass().getCanonicalName());
+            }
+        }
 
         if (wrappedNode.getParentNode() instanceof BlockStmt) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);

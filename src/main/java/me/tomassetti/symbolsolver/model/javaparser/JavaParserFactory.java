@@ -64,7 +64,7 @@ public class JavaParserFactory {
             ForeachStmt foreachStmt = (ForeachStmt)node;
             return new VariableSymbolDeclarator((VariableDeclarationExpr) (foreachStmt.getVariable()), typeSolver);
         } else {
-            throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+            return new NoSimboyDeclarator(node, typeSolver);
         }
     }
 

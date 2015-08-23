@@ -1,3 +1,11 @@
+import java.util.List;
+
+class Node {
+}
+
+class Comment {
+}
+
 class LocalVariableInParent {
 
     void foo1() {
@@ -24,6 +32,18 @@ class LocalVariableInParent {
        for (Node child : null){
             String s;
             s;
+        }
+    }
+
+    void foo4() {
+        List<Node> children = node.getChildrenNodes();
+        for (Node child : children){
+            List<Comment> commentsInsideChild = new LinkedList<Comment>();
+            for (Comment c : commentsToAttribute){
+                if (true){
+                    commentsInsideChild.add(c);
+                }
+            }
         }
     }
 

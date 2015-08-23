@@ -128,9 +128,6 @@ public class JavaParserFacade {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
             logger.finest("getType on name expr " + node);
-            if (nameExpr.getName().equals("commentsInsideChild")) {
-                System.out.println("Foo");
-            }
             Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
             if (!value.isPresent()){
                 throw new UnsolvedSymbolException("Solving "+node, nameExpr.getName());
@@ -232,11 +229,15 @@ public class JavaParserFacade {
             UnaryExpr unaryExpr = (UnaryExpr)node;
             switch (unaryExpr.getOperator()) {
                 case negative:
+                case positive:
                     return getTypeConcrete(unaryExpr.getExpr(), solveLambdas);
                 case not:
                     return PrimitiveTypeUsage.BOOLEAN;
-                case inverse:
                 case posIncrement:
+                case preIncrement:
+                case preDecrement:
+                case posDecrement:
+                    return getTypeConcrete(unaryExpr.getExpr(), solveLambdas);
                 default:
                     throw new UnsupportedOperationException(unaryExpr.getOperator().name());
             }
@@ -353,8 +354,10 @@ public class JavaParserFacade {
         } else if (type instanceof VoidType) {
             return new VoidTypeUsage();
         } else if (type instanceof PrimitiveType) {
-            PrimitiveType primitiveType = (PrimitiveType)type;
+            PrimitiveType primitiveType = (PrimitiveType) type;
             return PrimitiveTypeUsage.byName(primitiveType.getType().name());
+        } else if (type instanceof WildcardType) {
+            return new WildcardUsage();
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
