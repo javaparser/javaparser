@@ -1,0 +1,30 @@
+class LocalVariableInParent {
+
+    void foo1() {
+       for (Node child : null){
+            String s;
+            for (Object c : null){
+                if (true){
+                    s;
+                }
+            }
+        }
+    }
+
+    void foo3() {
+       for (Node child : null){
+            String s;
+            for (Object c : null){
+                s;
+            }
+        }
+    }
+
+    void foo2() {
+       for (Node child : null){
+            String s;
+            s;
+        }
+    }
+
+}

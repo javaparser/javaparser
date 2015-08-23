@@ -130,7 +130,6 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         }
         if (typeUsage instanceof TypeUsageOfTypeDeclaration){
             TypeUsageOfTypeDeclaration otherTypeDeclaration = (TypeUsageOfTypeDeclaration)typeUsage;
-            System.out.println(otherTypeDeclaration.getTypeDeclaration().getClass());
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
         }
 
@@ -197,7 +196,17 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
     @Override
     public boolean hasField(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        for (Field field : clazz.getDeclaredFields()){
+            if (field.getName().equals(name)) {
+                return true;
+            }
+        }
+        ClassDeclaration superclass = getSuperClass(typeSolver);
+        if (superclass == null) {
+            return false;
+        } else {
+            return superclass.hasField(name, typeSolver);
+        }
     }
 
     @Override

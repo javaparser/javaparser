@@ -60,6 +60,32 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
         return getParent().solveSymbolAsValue(name, typeSolver);
     }
 
+    public static SymbolReference<? extends ValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt){
+        if (!(stmt.getParentNode() instanceof BlockStmt)){
+            throw new IllegalArgumentException();
+        }
+        BlockStmt blockStmt = (BlockStmt)stmt.getParentNode();
+        int position = -1;
+        for (int i=0; i<blockStmt.getStmts().size(); i++){
+            if (blockStmt.getStmts().get(i).equals(stmt)){
+                position = i;
+            }
+        }
+        if (position == -1){
+            throw new RuntimeException();
+        }
+        for (int i = position-1; i>=0; i--){
+            SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStmts().get(i), typeSolver);
+            SymbolReference symbolReference = solveWith(symbolDeclarator, name);
+            if (symbolReference.isSolved()) {
+                return symbolReference;
+            }
+        }
+
+        // if nothing is found we should ask the parent context
+        return JavaParserFactory.getContext(stmt.getParentNode()).solveSymbol(name, typeSolver);
+    }
+
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         // we should look in all the statements preceding, treating them as SymbolDeclarators

@@ -49,7 +49,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         this.wrappedNode = wrappedNode;
     }
 
-    protected final SymbolReference<ValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name){
+    protected static final SymbolReference<ValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name){
         for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()){
             if (decl.getName().equals(name)){
                 return SymbolReference.solved(decl);

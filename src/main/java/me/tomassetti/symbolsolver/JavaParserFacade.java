@@ -128,22 +128,12 @@ public class JavaParserFacade {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
             logger.finest("getType on name expr " + node);
+            if (nameExpr.getName().equals("commentsInsideChild")) {
+                System.out.println("Foo");
+            }
             Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
             if (!value.isPresent()){
                 throw new UnsolvedSymbolException("Solving "+node, nameExpr.getName());
-                /*// Maybe we are accessing a static field
-                SymbolReference<TypeDeclaration> type = JavaParserFactory.getContext(node).solveType(nameExpr.getName(), typeSolver);
-                if (!type.isSolved()) {
-                    throw new UnsolvedSymbolException("Solving "+node, nameExpr.getName());
-                } else {
-                    throw new UnsupportedOperationException("da finire");
-                    /*value = type.getCorrespondingDeclaration().getContext().solveSymbolAsValue(nameExpr.getName(), typeSolver);
-                    if (!value.isPresent()) {
-                        throw new UnsolvedSymbolException("Solving "+node, nameExpr.getName());
-                    } else {
-                        return value.get().getUsage();
-                    }
-                }*/
             } else {
                 return value.get().getUsage();
             }

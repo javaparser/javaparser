@@ -22,6 +22,8 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by federico on 21/08/15.
@@ -33,6 +35,9 @@ public class ProjectResolver {
     private static int ok = 0;
     private static int ko = 0;
     private static int unsupported = 0;
+
+    private static Map<String, Integer> unsupportedMap = new HashMap<>();
+    private static Map<String, Integer> koMap = new HashMap<>();
 
     private static void solveField(Node node) {
         if (node instanceof Expression) {
@@ -78,11 +83,23 @@ public class ProjectResolver {
                     TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
                     System.out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.prettyPrint());
                     ok++;
-                    System.out.println("OK "+ok+" KO "+ko+" unsupported "+unsupported);
+                    //System.out.println("OK "+ok+" KO "+ko+" unsupported "+unsupported);
                 } catch (UnsupportedOperationException upe){
+                    String line = upe.getStackTrace()[0].toString();
+                    if (!unsupportedMap.containsKey(line)) {
+                        unsupportedMap.put(line, 0);
+                    }
+                    unsupportedMap.put(line, unsupportedMap.get(line) + 1);
                     unsupported++;
+                    throw upe;
                 } catch (RuntimeException re){
+                    String line = re.getStackTrace()[0].toString();
+                    if (!koMap.containsKey(line)) {
+                        koMap.put(line, 0);
+                    }
+                    koMap.put(line, koMap.get(line) + 1);
                     ko++;
+                    throw re;
                 }
             } else {
                 //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());
@@ -119,6 +136,15 @@ public class ProjectResolver {
         System.out.println("OK "+ ok);
         System.out.println("KO "+ ko);
         System.out.println("UNSUPPORTED "+ unsupported);
+
+        System.out.println(" == UNSUPPORTED ==");
+        for (String cause : unsupportedMap.keySet()){
+            System.out.println("* "+ cause+ " : "+ unsupportedMap.get(cause));
+        }
+        System.out.println(" == KO ==");
+        for (String cause : koMap.keySet()){
+            System.out.println("* "+ cause+ " : "+ koMap.get(cause));
+        }
     }
 
 }

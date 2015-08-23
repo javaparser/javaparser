@@ -238,7 +238,12 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             }
         }
 
-        throw new UnsupportedOperationException("Derived fields");
+        ClassDeclaration superclass = this.getSuperClass(typeSolver);
+        if (superclass != null) {
+            return superclass.hasField(name, typeSolver);
+        } else {
+            return false;
+        }
     }
 
     @Override

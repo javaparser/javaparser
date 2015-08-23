@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForeachStmt;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
@@ -29,7 +30,11 @@ public class ForechStatementContext extends AbstractJavaParserContext<ForeachStm
         if (variableDeclarator.getId().getName().equals(name)) {
             return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
         } else {
-            return getParent().solveSymbol(name, typeSolver);
+            if (wrappedNode.getParentNode() instanceof BlockStmt) {
+                return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
+            } else {
+                return getParent().solveSymbol(name, typeSolver);
+            }
         }
     }
 
