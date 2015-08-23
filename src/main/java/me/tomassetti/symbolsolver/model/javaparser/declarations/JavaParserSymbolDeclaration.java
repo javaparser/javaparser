@@ -7,11 +7,13 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.type.PrimitiveType;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.usages.PrimitiveTypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
@@ -90,7 +92,11 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
                 //MethodDeclaration methodCalled = JavaParserFacade.get(typeSolver).solve()
                 throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
             } else {
-                return new TypeUsageOfTypeDeclaration(new SymbolSolver(typeSolver).solveType(parameter.getType()));
+                if (parameter.getType() instanceof PrimitiveType) {
+                    return PrimitiveTypeUsage.byName(((PrimitiveType) parameter.getType()).getType().name());
+                } else {
+                    return new TypeUsageOfTypeDeclaration(new SymbolSolver(typeSolver).solveType(parameter.getType()));
+                }
             }
         } else if (wrappedNode instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator)wrappedNode;

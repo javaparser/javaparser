@@ -1,12 +1,14 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
@@ -35,8 +37,23 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         // TODO consider call of static methods
         if (wrappedNode.getScope() != null) {
-            TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-            return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);
+            try {
+                TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+                return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);
+            } catch (UnsolvedSymbolException e){
+                // ok, maybe it was instead a static access, so let's look for a type
+                if (wrappedNode.getScope() instanceof NameExpr){
+                    String className = ((NameExpr)wrappedNode.getScope()).getName();
+                    SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
+                    if (ref.isSolved()) {
+                        SymbolReference<MethodDeclaration> m = ref.getCorrespondingDeclaration().solveMethod(name, parameterTypes, typeSolver);
+                        if (m.isSolved()) {
+                            return Optional.of(new MethodUsage(m.getCorrespondingDeclaration(), typeSolver));
+                        }
+                    }
+                }
+                throw e;
+            }
         } else {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
             return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);

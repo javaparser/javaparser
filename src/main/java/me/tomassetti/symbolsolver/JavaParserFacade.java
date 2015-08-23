@@ -250,13 +250,24 @@ public class JavaParserFacade {
                     throw new UnsupportedOperationException(unaryExpr.getOperator().name());
             }
         } else if (node instanceof BinaryExpr) {
-            BinaryExpr binaryExpr = (BinaryExpr)node;
+            BinaryExpr binaryExpr = (BinaryExpr) node;
             switch (binaryExpr.getOperator()) {
                 case plus:
+                case minus:
                     return getTypeConcrete(binaryExpr.getLeft(), solveLambdas);
+                case lessEquals:
+                case less:
+                case greater:
+                case greaterEquals:
+                case equals:
+                case notEquals:
+                    return PrimitiveTypeUsage.BOOLEAN;
                 default:
                     throw new UnsupportedOperationException(binaryExpr.getOperator().name());
             }
+        } else if (node instanceof VariableDeclarationExpr) {
+            VariableDeclarationExpr expr = (VariableDeclarationExpr)node;
+            return convertToUsage(expr.getType(), JavaParserFactory.getContext(node));
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

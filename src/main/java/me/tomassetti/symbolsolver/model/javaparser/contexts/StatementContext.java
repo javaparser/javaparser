@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -29,6 +30,9 @@ public class StatementContext extends AbstractJavaParserContext<Statement> {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
         if (wrappedNode.getParentNode() instanceof LambdaExpr){
+            return getParent().solveSymbolAsValue(name, typeSolver);
+        }
+        if (wrappedNode.getParentNode() instanceof IfStmt){
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
         BlockStmt blockStmt = (BlockStmt)wrappedNode.getParentNode();

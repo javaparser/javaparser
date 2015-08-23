@@ -63,9 +63,11 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
 
     @Override
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
-            if (tp.getName().equals(name)){
-                return SymbolReference.solved(new JavaParserTypeParameter(tp));
+        if (wrappedNode.getTypeParameters() != null) {
+            for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
+                if (tp.getName().equals(name)) {
+                    return SymbolReference.solved(new JavaParserTypeParameter(tp));
+                }
             }
         }
         return getParent().solveType(name, typeSolver);
