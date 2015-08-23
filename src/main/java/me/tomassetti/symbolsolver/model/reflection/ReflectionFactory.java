@@ -7,6 +7,7 @@ import me.tomassetti.symbolsolver.model.javassist.JavassistClassDeclaration;
 import me.tomassetti.symbolsolver.model.usages.*;
 import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -41,19 +42,24 @@ public class ReflectionFactory {
             ParameterizedType pt = (ParameterizedType) type;
             // TODO deal with type parameters
             return typeUsageFor(pt.getRawType());
-        } else if (type instanceof Class){
-            Class c = (Class)type;
+        } else if (type instanceof Class) {
+            Class c = (Class) type;
             if (c.isPrimitive()) {
                 if (c.getName().equals("void")) {
                     return VoidTypeUsage.INSTANCE;
                 } else {
                     return PrimitiveTypeUsage.byName(c.getName());
                 }
+            } else if (c.isArray()) {
+                return new ArrayTypeUsage(typeUsageFor(c.getComponentType()));
             } else if (c.isInterface()) {
                 return new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(c));
             } else {
                 return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(c));
             }
+        } else if (type instanceof GenericArrayType){
+            GenericArrayType genericArrayType = (GenericArrayType)type;
+            return new ArrayTypeUsage(typeUsageFor(genericArrayType.getGenericComponentType()));
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName()+" "+type);
         }

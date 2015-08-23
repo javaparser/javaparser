@@ -42,7 +42,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     boolean hasField(String name, TypeSolver typeSolver);
 
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
 

@@ -6,14 +6,18 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
+import java.lang.reflect.Type;
+
 /**
  * Created by federico on 02/08/15.
  */
 public class ReflectionParameterDeclaration implements ParameterDeclaration {
     private Class<?> type;
+    private Type genericType;
 
-    public ReflectionParameterDeclaration(Class<?> type) {
+    public ReflectionParameterDeclaration(Class<?> type, Type genericType) {
         this.type = type;
+        this.genericType = genericType;
     }
 
     @Override
@@ -45,6 +49,6 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public TypeUsage getType(TypeSolver typeSolver) {
-        return ReflectionFactory.typeUsageFor(type);
+        return ReflectionFactory.typeUsageFor(genericType);
     }
 }

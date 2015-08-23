@@ -18,6 +18,10 @@ public class MethodUsage {
                 '}';
     }
 
+    public MethodDeclaration getDeclaration() {
+        return declaration;
+    }
+
     private MethodDeclaration declaration;
 
     public MethodUsage(MethodDeclaration declaration, TypeSolver typeSolver) {
@@ -72,5 +76,36 @@ public class MethodUsage {
 
     public int getNoParams() {
         return paramTypes.size();
+    }
+
+    public TypeUsage getParamType(int i, TypeSolver typeSolver) {
+        TypeUsage typeUsage = declaration.getParam(i).getType(typeSolver);
+        return typeUsage;
+    }
+
+    public MethodUsage replaceNameParam(String name, TypeUsage typeUsage) {
+        // TODO if the method declaration has a type param with that name ignore this call
+        // TODO consider return type
+        MethodUsage res = this;
+        for (int i = 0; i<paramTypes.size(); i++){
+            res = replaceParamType(i, replaceNameParam(name, typeUsage, paramTypes.get(i)));
+        }
+        return res;
+    }
+
+    private TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
+        if (typeToBeExamined.isTypeVariable()){
+            if (typeToBeExamined.getTypeName().equals(name)) {
+                return newValue;
+            } else {
+                return typeToBeExamined;
+            }
+        }
+        int i = 0;
+        for (TypeUsage param : typeToBeExamined.parameters()) {
+            typeToBeExamined = typeToBeExamined.replaceParam(i, replaceNameParam(name, newValue, typeToBeExamined.parameters().get(i)));
+            i++;
+        }
+        return typeToBeExamined;
     }
 }

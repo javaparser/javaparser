@@ -47,4 +47,11 @@ class LocalVariableInParent {
         }
     }
 
+    void foo5() {
+        List<Comment> commentsInsideChild;
+        Comment c;
+        commentsInsideChild.add(c);
+    }
+
+
 }

@@ -67,7 +67,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver,
-                                                    Context invokationContext) {
+                                                    Context invokationContext, List<TypeUsage> typeParameterValues) {
 
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)){
@@ -93,7 +93,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, null);
                 if (ref.isPresent()) {
                     return ref;
                 }
@@ -104,7 +104,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, null);
                 if (ref.isPresent()) {
                     return ref;
                 }

@@ -112,7 +112,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
-        Optional<MethodUsage> ref = typeDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext);
+        Optional<MethodUsage> ref = typeDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameters);
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
             TypeUsage returnType = replaceTypeParams(methodUsage.returnType());

@@ -2,9 +2,11 @@ package me.tomassetti.symbolsolver.model;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -22,6 +24,22 @@ public class MethodResolutionLogic {
         }
         for (int i=0; i<method.getNoParams(); i++) {
             if (!method.getParam(i).getType(typeSolver).isAssignableBy(paramTypes.get(i), typeSolver)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isApplicable(MethodUsage method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
+        if (!method.getName().equals(name)) {
+            return false;
+        }
+        // TODO Consider varargs
+        if (method.getNoParams() != paramTypes.size()) {
+            return false;
+        }
+        for (int i=0; i<method.getNoParams(); i++) {
+            if (!method.getParamType(i, typeSolver).isAssignableBy(paramTypes.get(i), typeSolver)){
                 return false;
             }
         }
@@ -80,4 +98,47 @@ public class MethodResolutionLogic {
         return oneMoreSpecificFound;
     }
 
+    private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB, TypeSolver typeSolver) {
+        boolean oneMoreSpecificFound = false;
+        for (int i=0; i < methodA.getNoParams(); i++){
+            TypeUsage tdA = methodA.getParamType(i, typeSolver);
+            TypeUsage tdB = methodB.getParamType(i, typeSolver);
+            // B is more specific
+            if (tdB.isAssignableBy(tdA, typeSolver) && !tdA.isAssignableBy(tdB, typeSolver)) {
+                oneMoreSpecificFound = true;
+            }
+            // A is more specific
+            if (tdA.isAssignableBy(tdB, typeSolver) && !tdB.isAssignableBy(tdA, typeSolver)) {
+                return false;
+            }
+        }
+        return oneMoreSpecificFound;
+    }
+
+    public static Optional<MethodUsage> findMostApplicableUsage(List<MethodUsage> methods, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        List<MethodUsage> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, parameterTypes, typeSolver)).collect(Collectors.toList());
+        if (applicableMethods.isEmpty()) {
+            return Optional.empty();
+        }
+        if (applicableMethods.size() == 1) {
+            return Optional.of(applicableMethods.get(0));
+        } else {
+            MethodUsage winningCandidate = applicableMethods.get(0);
+            for (int i=1; i<applicableMethods.size(); i++) {
+                MethodUsage other = applicableMethods.get(i);
+                if (isMoreSpecific(winningCandidate, other, typeSolver)) {
+                    // nothing to do
+                } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
+                    winningCandidate = other;
+                } else {
+                    if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: "+winningCandidate+", "+other);
+                    } else {
+                        // we expect the methods to be ordered such that inherited methods are later in the list
+                    }
+                }
+            }
+            return Optional.of(winningCandidate);
+        }
+    }
 }

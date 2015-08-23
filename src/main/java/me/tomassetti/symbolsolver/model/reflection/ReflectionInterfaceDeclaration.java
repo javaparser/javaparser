@@ -68,18 +68,19 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
-        List<MethodDeclaration> methods = new ArrayList<>();
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
+        List<MethodUsage> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
-            methods.add(methodDeclaration);
+            MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+            int i = 0;
+            for (TypeParameter tp : getTypeParameters()){
+                methodUsage = methodUsage.replaceNameParam(tp.getName(), typeParameterValues.get(i));
+                i++;
+            }
+            methods.add(methodUsage);
         }
-        SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
-        if (ref.isSolved()) {
-            return Optional.of(JavaParserFacade.get(typeSolver).convertToUsage(ref.getCorrespondingDeclaration(), getContext()));
-        } else {
-            return Optional.empty();
-        }
+        return MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);
     }
 
     @Override

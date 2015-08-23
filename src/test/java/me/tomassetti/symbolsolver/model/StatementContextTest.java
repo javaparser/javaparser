@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 public class StatementContextTest extends AbstractTest {
 
-    @Test
+    /*@Test
     public void resolveLocalVariableInParentOfParent() throws ParseException {
         CompilationUnit cu = parseSample("LocalVariableInParent");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
@@ -58,6 +58,23 @@ public class StatementContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("LocalVariableInParent");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo4");
+        MethodCallExpr call = Navigator.findMethodCall(method, "add");
+
+        TypeSolver typeSolver = new JreTypeSolver();
+
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
+        assertTrue(ref.isSolved());
+        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType(typeSolver).getTypeNameWithParams());
+
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+        assertEquals("add", methodUsage.getName());
+    }*/
+
+    @Test
+    public void resolveMethodOnGenericClass() throws ParseException {
+        CompilationUnit cu = parseSample("LocalVariableInParent");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
+        MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo5");
         MethodCallExpr call = Navigator.findMethodCall(method, "add");
 
         TypeSolver typeSolver = new JreTypeSolver();

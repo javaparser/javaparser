@@ -65,7 +65,6 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     @Override
     public TypeUsage getReturnType(TypeSolver typeSolver) {
         return ReflectionFactory.typeUsageFor(method.getGenericReturnType());
-        //return ReflectionFactory.typeUsageFor(method.getReturnType());
     }
 
     @Override
@@ -75,17 +74,17 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        return new ReflectionParameterDeclaration(method.getParameterTypes()[i]);
+        return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
     }
 
     @Override
     public MethodUsage getUsage(Node node) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
