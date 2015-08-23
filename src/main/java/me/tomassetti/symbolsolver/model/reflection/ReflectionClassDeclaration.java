@@ -130,6 +130,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         }
         if (typeUsage instanceof TypeUsageOfTypeDeclaration){
             TypeUsageOfTypeDeclaration otherTypeDeclaration = (TypeUsageOfTypeDeclaration)typeUsage;
+            System.out.println(otherTypeDeclaration.getTypeDeclaration().getClass());
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
         }
 

@@ -10,6 +10,7 @@ import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,6 +58,28 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     @Override
     public boolean isType() {
         return true;
+    }
+
+    @Override
+    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+        // Enums cannot be extended
+        if (other.getQualifiedName().equals(this.getQualifiedName())) {
+            return true;
+        }
+        if (other.getQualifiedName().equals(Enum.class.getCanonicalName())) {
+            return true;
+        }
+        // Enum implements Comparable and Serializable
+        if (other.getQualifiedName().equals(Comparable.class.getCanonicalName())) {
+            return true;
+        }
+        if (other.getQualifiedName().equals(Serializable.class.getCanonicalName())) {
+            return true;
+        }
+        if (other.getQualifiedName().equals(Object.class.getCanonicalName())) {
+            return true;
+        }
+        return false;
     }
 
     @Override

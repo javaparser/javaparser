@@ -78,6 +78,7 @@ public class ProjectResolver {
                     TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
                     System.out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.prettyPrint());
                     ok++;
+                    System.out.println("OK "+ok+" KO "+ko+" unsupported "+unsupported);
                 } catch (UnsupportedOperationException upe){
                     unsupported++;
                 } catch (RuntimeException re){
