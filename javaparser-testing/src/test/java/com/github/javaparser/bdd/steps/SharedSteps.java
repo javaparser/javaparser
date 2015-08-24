@@ -79,7 +79,6 @@ public class SharedSteps {
         state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.trim().getBytes())));
     }
 
-
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
     public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException {
         state.put("cu2", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
@@ -128,40 +127,6 @@ public class SharedSteps {
     public void thenTheExpectedSourcesShouldBe(String classSrc) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         assertThat(compilationUnit.toString(), CoreMatchers.is(equalToIgnoringWhiteSpace(classSrc)));
-    }
-
-    @Then("the begin line is $line")
-    public void thenTheBeginLineIs(int line) {
-        Node node = (Node) state.get("selectedNode");
-        assertEquals(line, node.getBeginLine());
-    }
-
-    @Then("the begin column is $line")
-    public void thenTheBeginColumnIs(int column) {
-        Node node = (Node) state.get("selectedNode");
-        assertEquals(column, node.getBeginColumn());
-    }
-
-    @Then("the end line is $line")
-    public void thenTheEndLineIs(int line) {
-        Node node = (Node) state.get("selectedNode");
-        assertEquals(line, node.getEndLine());
-    }
-
-    @Then("the end column is $line")
-    public void thenTheEndColumnIs(int column) {
-        Node node = (Node) state.get("selectedNode");
-        assertEquals(column, node.getEndColumn());
-    }
-
-    @When("I take the ArrayCreationExpr")
-    public void iTakeTheArrayCreationExpr() {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        List<ArrayCreationExpr> arrayCreationExprs = ASTHelper.getNodesByType(compilationUnit, ArrayCreationExpr.class);
-        if (arrayCreationExprs.size() != 1) {
-            throw new RuntimeException("Exactly one ArrayCreationExpr expected");
-        }
-        state.put("selectedNode", arrayCreationExprs.get(0));
     }
 
     public static BodyDeclaration getMemberByTypeAndPosition(TypeDeclaration typeDeclaration, int position,

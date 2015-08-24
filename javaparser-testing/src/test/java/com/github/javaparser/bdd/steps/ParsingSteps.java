@@ -21,12 +21,15 @@
  
 package com.github.javaparser.bdd.steps;
 
+import com.github.javaparser.ASTHelper;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
@@ -34,6 +37,7 @@ import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAnd
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class ParsingSteps {
@@ -218,4 +222,37 @@ public class ParsingSteps {
         assertThat(conditionalExpr.getElseExpr().getClass().getName(), is(LambdaExpr.class.getName()));
     }
 
+    @Then("the begin line is $line")
+    public void thenTheBeginLineIs(int line) {
+        Node node = (Node) state.get("selectedNode");
+        assertEquals(line, node.getBeginLine());
+    }
+
+    @Then("the begin column is $column")
+    public void thenTheBeginColumnIs(int column) {
+        Node node = (Node) state.get("selectedNode");
+        assertEquals(column, node.getBeginColumn());
+    }
+
+    @Then("the end line is $line")
+    public void thenTheEndLineIs(int line) {
+        Node node = (Node) state.get("selectedNode");
+        assertEquals(line, node.getEndLine());
+    }
+
+    @Then("the end column is $column")
+    public void thenTheEndColumnIs(int column) {
+        Node node = (Node) state.get("selectedNode");
+        assertEquals(column, node.getEndColumn());
+    }
+
+    @When("I take the ArrayCreationExpr")
+    public void iTakeTheArrayCreationExpr() {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        List<ArrayCreationExpr> arrayCreationExprs = ASTHelper.getNodesByType(compilationUnit, ArrayCreationExpr.class);
+        if (arrayCreationExprs.size() != 1) {
+            throw new RuntimeException("Exactly one ArrayCreationExpr expected");
+        }
+        state.put("selectedNode", arrayCreationExprs.get(0));
+    }
 }
