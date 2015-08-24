@@ -59,6 +59,10 @@ public class SharedSteps {
         this.state = state;
     }
 
+    /*
+     * Given steps
+     */
+
     @Given("a CompilationUnit")
     public void givenACompilationUnit() {
         state.put("cu1", new CompilationUnit());
@@ -68,6 +72,10 @@ public class SharedSteps {
     public void givenASecondCompilationUnit() {
         state.put("cu2", new CompilationUnit());
     }
+
+    /*
+     * When steps
+     */
 
     @When("the following source is parsed:$classSrc")
     public void whenTheFollowingSourceIsParsed(String classSrc) throws ParseException {

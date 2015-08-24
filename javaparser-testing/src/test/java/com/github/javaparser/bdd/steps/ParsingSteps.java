@@ -48,6 +48,24 @@ public class ParsingSteps {
         this.state = state;
     }
 
+    /*
+     * When steps
+     */
+
+    @When("I take the ArrayCreationExpr")
+    public void iTakeTheArrayCreationExpr() {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        List<ArrayCreationExpr> arrayCreationExprs = ASTHelper.getNodesByType(compilationUnit, ArrayCreationExpr.class);
+        if (arrayCreationExprs.size() != 1) {
+            throw new RuntimeException("Exactly one ArrayCreationExpr expected");
+        }
+        state.put("selectedNode", arrayCreationExprs.get(0));
+    }
+
+    /*
+     * Then steps
+     */
+
     @Then("constructor $constructorPosition in class $classPosition declaration as a String is \"$expectedString\"")
     public void thenTheConstructorDeclarationAsAStringIs(int constructorPosition, int classPosition, String expectedString) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
@@ -246,13 +264,4 @@ public class ParsingSteps {
         assertEquals(column, node.getEndColumn());
     }
 
-    @When("I take the ArrayCreationExpr")
-    public void iTakeTheArrayCreationExpr() {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        List<ArrayCreationExpr> arrayCreationExprs = ASTHelper.getNodesByType(compilationUnit, ArrayCreationExpr.class);
-        if (arrayCreationExprs.size() != 1) {
-            throw new RuntimeException("Exactly one ArrayCreationExpr expected");
-        }
-        state.put("selectedNode", arrayCreationExprs.get(0));
-    }
 }
