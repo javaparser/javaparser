@@ -127,6 +127,9 @@ public class JavaParserFacade {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
             logger.finest("getType on name expr " + node);
+            if (nameExpr.getName().equals("Boolean") && nameExpr.getBeginLine()==452 && !new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr).isPresent()) {
+                System.out.println("GOTCHA");
+            }
             Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
             if (!value.isPresent()){
                 throw new UnsolvedSymbolException("FOO Solving "+node, nameExpr.getName());
