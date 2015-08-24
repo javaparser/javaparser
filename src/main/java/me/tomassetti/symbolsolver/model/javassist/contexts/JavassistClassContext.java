@@ -39,14 +39,12 @@ public class JavassistClassContext implements Context {
 
     @Override
     public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
-        System.out.println("NAME " + wrappedNode.getName());
-        System.out.println("SIGNATURE " +wrappedNode.getGenericSignature());
         try {
             if (wrappedNode.getGenericSignature() != null) {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(wrappedNode.getGenericSignature());
                 for (SignatureAttribute.TypeParameter tp : classSignature.getParameters()) {
                     if (tp.getName().equals(name)) {
-                        System.out.println("FOUND TP");
+                        throw new UnsupportedOperationException();
                         //OK, ora bisognerebbe capire come prendere il valore corrispondente
                     }
                 }

@@ -30,10 +30,6 @@ public class MethodResolutionLogic {
                 expectedType = replaceTypeParam(expectedType, tp);
             }
 
-            if (name.equals("cloneNodes")) {
-                System.out.println("foo");
-            }
-
             if (!expectedType.isAssignableBy(paramTypes.get(i), typeSolver)){
                 return false;
             }

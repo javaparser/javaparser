@@ -35,9 +35,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        if (name.equals("cloneNodes")) {
-            System.out.println("FOO");
-        }
         // TODO consider call of static methods
         if (wrappedNode.getScope() != null) {
             try {
@@ -69,10 +66,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     return getParent().getParent().solveMethodAsUsage(name, parameterTypes, typeSolver);
                 }
             }
-            //TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-            //return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);
             Context parentContext = getParent();
-            //System.out.println("NAME "+name);
             return parentContext.solveMethodAsUsage(name, parameterTypes, typeSolver);
         }
     }
