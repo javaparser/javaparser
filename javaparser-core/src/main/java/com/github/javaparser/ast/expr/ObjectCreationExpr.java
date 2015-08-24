@@ -45,7 +45,8 @@ public final class ObjectCreationExpr extends Expression {
 
 	private List<Expression> args = Collections.emptyList();
 
-	private List<BodyDeclaration> anonymousClassBody = Collections.emptyList();
+    // This can be null, to indicate there is no body
+    private List<BodyDeclaration> anonymousClassBody;
 
 	public ObjectCreationExpr() {
 	}
@@ -96,8 +97,10 @@ public final class ObjectCreationExpr extends Expression {
 	}
 
 	public void setAnonymousClassBody(final List<BodyDeclaration> anonymousClassBody) {
-		this.anonymousClassBody = ensureNotNull(anonymousClassBody);
-		setAsParentNodeOf(this.anonymousClassBody);
+		this.anonymousClassBody =anonymousClassBody;
+        if (this.anonymousClassBody != null) {
+            setAsParentNodeOf(this.anonymousClassBody);
+        }
 	}
 
 	public void setArgs(final List<Expression> args) {
