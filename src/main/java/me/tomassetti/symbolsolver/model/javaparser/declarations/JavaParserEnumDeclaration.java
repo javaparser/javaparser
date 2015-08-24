@@ -132,7 +132,10 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        if (typeUsage.isNull()) {
+            return true;
+        }
+        return typeUsage.getQualifiedName().equals(getQualifiedName());
     }
 
     @Override
@@ -142,34 +145,38 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
 
     @Override
     public FieldDeclaration getField(String name, TypeSolver typeSolver) {
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)){
-                        return new JavaParserFieldDeclaration(vd);
+        if (this.wrappedNode.getMembers() != null) {
+            for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+                if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                    com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                    for (VariableDeclarator vd : field.getVariables()) {
+                        if (vd.getId().getName().equals(name)) {
+                            return new JavaParserFieldDeclaration(vd);
+                        }
                     }
                 }
             }
         }
 
-        throw new UnsupportedOperationException("Derived fields");
+        throw new UnsupportedOperationException("FOO " +"Derived fields");
     }
 
     @Override
     public boolean hasField(String name, TypeSolver typeSolver) {
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)){
-                        return true;
+        if (this.wrappedNode != null) {
+            for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+                if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                    com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                    for (VariableDeclarator vd : field.getVariables()) {
+                        if (vd.getId().getName().equals(name)) {
+                            return true;
+                        }
                     }
                 }
             }
         }
 
-        throw new UnsupportedOperationException("Derived fields");
+        return false;
     }
 
     @Override

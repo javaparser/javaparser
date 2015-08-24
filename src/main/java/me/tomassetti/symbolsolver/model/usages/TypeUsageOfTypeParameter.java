@@ -90,7 +90,7 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
         if (other.isTypeVariable()) {
             return getTypeName().equals(other.getTypeName());
         } else {
-            throw new UnsupportedOperationException("to " + other);
+            return false;
         }
     }
 

@@ -255,7 +255,7 @@ public class JavaParserFacade {
                 case and:
                     return PrimitiveTypeUsage.BOOLEAN;
                 default:
-                    throw new UnsupportedOperationException(binaryExpr.getOperator().name());
+                    throw new UnsupportedOperationException("FOO " +binaryExpr.getOperator().name());
             }
         } else if (node instanceof VariableDeclarationExpr) {
             VariableDeclarationExpr expr = (VariableDeclarationExpr)node;
@@ -326,7 +326,7 @@ public class JavaParserFacade {
         } else if (type instanceof PrimitiveType) {
             return PrimitiveTypeUsage.byName(((PrimitiveType)type).getType().name());
         } else {
-            throw new UnsupportedOperationException(type.getClass().getCanonicalName());
+            throw new UnsupportedOperationException("FOO " +type.getClass().getCanonicalName());
         }
     }
 
