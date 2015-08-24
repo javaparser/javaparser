@@ -31,6 +31,8 @@ public class JavaParserFactory {
             return new LambdaExprContext((LambdaExpr) node);
         } else if (node instanceof MethodDeclaration) {
             return new MethodContext((MethodDeclaration)node);
+        } else if (node instanceof ConstructorDeclaration) {
+            return new ConstructorContext((ConstructorDeclaration)node);
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration)node);
         } else if (node instanceof MethodCallExpr) {

@@ -1,16 +1,17 @@
 package me.tomassetti.symbolsolver;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.ReferenceType;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.*;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.*;
@@ -446,6 +447,16 @@ public class JavaParserFacade {
             }
         } else {
             return new TypeUsageOfTypeDeclaration(typeDeclaration);
+        }
+    }
+
+    public TypeDeclaration getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration typeDeclaration) {
+        if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
+            return getTypeDeclaration((ClassOrInterfaceDeclaration)typeDeclaration);
+        } else if (typeDeclaration instanceof EnumDeclaration){
+            return new JavaParserEnumDeclaration((EnumDeclaration)typeDeclaration);
+        } else {
+            throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
         }
     }
 }

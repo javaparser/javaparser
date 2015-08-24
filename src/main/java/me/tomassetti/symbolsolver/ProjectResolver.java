@@ -107,7 +107,7 @@ public class ProjectResolver {
                     }
                     koMap.put(line, koMap.get(line) + 1);
                     ko++;
-                    //throw re;
+                    throw re;
                 }
             } else {
                 //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());

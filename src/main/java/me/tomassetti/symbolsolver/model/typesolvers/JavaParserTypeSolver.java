@@ -15,6 +15,7 @@ import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassD
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -45,8 +46,11 @@ public class JavaParserTypeSolver implements TypeSolver {
         if (srcFile.exists()) {
             try {
                 CompilationUnit compilationUnit = JavaParser.parse(srcFile);
-                ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClassOrInterface(compilationUnit, simpleName(name));
-                TypeDeclaration typeDeclaration = JavaParserFacade.get(this).getTypeDeclaration(classOrInterfaceDeclaration);
+                Optional<com.github.javaparser.ast.body.TypeDeclaration> astTypeDeclaration = Navigator.findType(compilationUnit, simpleName(name));
+                if (!astTypeDeclaration.isPresent()) {
+                    return SymbolReference.unsolved(TypeDeclaration.class);
+                }
+                TypeDeclaration typeDeclaration = JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get());
                 return SymbolReference.solved(typeDeclaration);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
