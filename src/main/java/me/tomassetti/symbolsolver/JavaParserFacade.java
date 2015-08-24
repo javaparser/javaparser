@@ -11,14 +11,12 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.ReferenceType;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserInterfaceDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.*;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContext;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserSymbolDeclaration;
 
 import java.util.*;
 import java.util.logging.ConsoleHandler;
@@ -319,7 +317,12 @@ public class JavaParserFacade {
             if (classOrInterfaceType.getTypeArgs() != null) {
                 typeParameters = classOrInterfaceType.getTypeArgs().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
             }
-            return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParameters);
+            if (typeDeclaration.isTypeVariable()) {
+                JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration)typeDeclaration;
+                return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
+            } else {
+                return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParameters);
+            }
         } else if (type instanceof PrimitiveType) {
             return PrimitiveTypeUsage.byName(((PrimitiveType)type).getType().name());
         } else {
@@ -356,7 +359,16 @@ public class JavaParserFacade {
             if (classOrInterfaceType.getTypeArgs() != null) {
                 typeParameters = classOrInterfaceType.getTypeArgs().stream().map((t)->convert(t, context)).collect(Collectors.toList());
             }
-            return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration(), typeParameters);
+            if (ref.getCorrespondingDeclaration().isTypeVariable()) {
+                if (ref.getCorrespondingDeclaration() instanceof JavaParserTypeParameter) {
+                    return new TypeUsageOfTypeParameter((JavaParserTypeParameter)ref.getCorrespondingDeclaration());
+                } else {
+                    JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) ref.getCorrespondingDeclaration();
+                    return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
+                }
+            } else {
+                return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration(), typeParameters);
+            }
         } else if (type instanceof VoidType) {
             return new VoidTypeUsage();
         } else if (type instanceof PrimitiveType) {
@@ -443,6 +455,19 @@ public class JavaParserFacade {
             return new TypeUsageOfTypeDeclaration(classDeclaration);
         } else {
             return getTypeOfThisIn(node.getParentNode());
+        }
+    }
+
+    public TypeUsage convertToUsage(TypeDeclaration typeDeclaration) {
+        if (typeDeclaration.isTypeVariable()) {
+            if (typeDeclaration instanceof JavaParserTypeParameter) {
+                return new TypeUsageOfTypeParameter((JavaParserTypeParameter)typeDeclaration);
+            } else {
+                JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) typeDeclaration;
+                return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
+            }
+        } else {
+            return new TypeUsageOfTypeDeclaration(typeDeclaration);
         }
     }
 }

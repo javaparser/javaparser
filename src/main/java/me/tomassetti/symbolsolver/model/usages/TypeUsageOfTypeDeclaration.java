@@ -26,10 +26,16 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
 
     public void setTypeDeclaration(TypeDeclaration typeDeclaration) {
         this.typeDeclaration = typeDeclaration;
+        if (this.typeDeclaration.isTypeVariable()) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration) {
         this(typeDeclaration, deriveParams(typeDeclaration));
+        if (this.typeDeclaration.isTypeVariable()) {
+            throw new IllegalArgumentException();
+        }
     }
 
     private static List<TypeUsage> deriveParams(TypeDeclaration typeDeclaration) {
@@ -39,6 +45,9 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters) {
         this.typeDeclaration = typeDeclaration;
         this.typeParameters = typeParameters;
+        if (this.typeDeclaration.isTypeVariable()) {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

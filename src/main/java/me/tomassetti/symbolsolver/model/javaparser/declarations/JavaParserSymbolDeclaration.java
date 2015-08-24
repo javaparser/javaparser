@@ -99,7 +99,8 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
                 if (parameter.getType() instanceof PrimitiveType) {
                     return PrimitiveTypeUsage.byName(((PrimitiveType) parameter.getType()).getType().name());
                 } else {
-                    return new TypeUsageOfTypeDeclaration(new SymbolSolver(typeSolver).solveType(parameter.getType()));
+                    // new TypeUsageOfTypeDeclaration(new SymbolSolver(typeSolver).solveType(parameter.getType()))
+                    return JavaParserFacade.get(typeSolver).convertToUsage(new SymbolSolver(typeSolver).solveType(parameter.getType()));
                 }
             }
         } else if (wrappedNode instanceof VariableDeclarator) {

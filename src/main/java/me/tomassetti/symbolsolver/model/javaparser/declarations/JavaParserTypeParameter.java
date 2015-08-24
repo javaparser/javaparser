@@ -91,6 +91,11 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
     }
 
     @Override
+    public boolean isTypeVariable() {
+        return true;
+    }
+
+    @Override
     public List<TypeParameter> getTypeParameters() {
         return Collections.emptyList();
     }

@@ -79,12 +79,14 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     private Optional<TypeUsage> typeParamByName(String name, TypeSolver typeSolver, Context context){
         int i =  0;
-        for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()){
-            if (tp.getName().equals(name)) {
-                TypeUsage typeUsage = JavaParserFacade.get(typeSolver).convertToUsage( this.wrappedNode.getParameters().get(i).getType(), context);
-                return Optional.of(typeUsage);
+        if (wrappedNode.getTypeParameters() != null) {
+            for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
+                if (tp.getName().equals(name)) {
+                    TypeUsage typeUsage = JavaParserFacade.get(typeSolver).convertToUsage(this.wrappedNode.getParameters().get(i).getType(), context);
+                    return Optional.of(typeUsage);
+                }
+                i++;
             }
-            i++;
         }
         return Optional.empty();
     }

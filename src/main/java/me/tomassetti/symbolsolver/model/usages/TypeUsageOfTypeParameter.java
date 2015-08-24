@@ -87,7 +87,11 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
 
     @Override
     public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        if (other.isTypeVariable()) {
+            return getTypeName().equals(other.getTypeName());
+        } else {
+            throw new UnsupportedOperationException("to " + other);
+        }
     }
 
     @Override
