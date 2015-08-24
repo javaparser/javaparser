@@ -46,6 +46,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     String className = ((NameExpr)wrappedNode.getScope()).getName();
                     SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
                     if (ref.isSolved()) {
+                        if (name.equals("getModifiers") && !ref.getCorrespondingDeclaration().solveMethod(name, parameterTypes, typeSolver).isSolved()){
+                            System.out.println("FOO");
+                        }
                         SymbolReference<MethodDeclaration> m = ref.getCorrespondingDeclaration().solveMethod(name, parameterTypes, typeSolver);
                         if (m.isSolved()) {
                             return Optional.of(new MethodUsage(m.getCorrespondingDeclaration(), typeSolver));

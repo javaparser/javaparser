@@ -1,6 +1,8 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -70,6 +72,20 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     @Override
     public final Context getParent() {
+        if (wrappedNode.getParentNode() instanceof MethodCallExpr) {
+            MethodCallExpr parentCall = (MethodCallExpr)wrappedNode.getParentNode();
+            boolean found = false;
+            if (parentCall.getArgs() != null) {
+                for (Expression expression : parentCall.getArgs()) {
+                    if (expression == wrappedNode) {
+                        found = true;
+                    }
+                }
+            }
+            if (found) {
+                return JavaParserFactory.getContext(wrappedNode.getParentNode().getParentNode());
+            }
+        }
         return JavaParserFactory.getContext(wrappedNode.getParentNode());
     }
 
