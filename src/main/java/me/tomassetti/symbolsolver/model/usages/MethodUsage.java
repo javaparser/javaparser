@@ -79,8 +79,9 @@ public class MethodUsage {
     }
 
     public TypeUsage getParamType(int i, TypeSolver typeSolver) {
-        TypeUsage typeUsage = declaration.getParam(i).getType(typeSolver);
-        return typeUsage;
+        //TypeUsage typeUsage = declaration.getParam(i).getType(typeSolver);
+        //return typeUsage;
+        return paramTypes.get(i);
     }
 
     public MethodUsage replaceNameParam(String name, TypeUsage typeUsage) {

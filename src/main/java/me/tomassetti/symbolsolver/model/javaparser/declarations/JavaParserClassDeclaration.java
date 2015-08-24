@@ -253,8 +253,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        //throw new UnsupportedOperationException("Solving symbol " + name);
+        return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
     @Override

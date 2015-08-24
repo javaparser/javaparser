@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 public class StatementContextTest extends AbstractTest {
 
-    /*@Test
+    @Test
     public void resolveLocalVariableInParentOfParent() throws ParseException {
         CompilationUnit cu = parseSample("LocalVariableInParent");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
@@ -68,7 +68,7 @@ public class StatementContextTest extends AbstractTest {
 
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
         assertEquals("add", methodUsage.getName());
-    }*/
+    }
 
     @Test
     public void resolveMethodOnGenericClass() throws ParseException {
