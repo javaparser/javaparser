@@ -107,9 +107,9 @@ public class ProjectResolver {
                     }
                     koMap.put(line, koMap.get(line) + 1);
                     ko++;
-                    if (re.getMessage() != null && re.getMessage().contains("FOO")){
+                    /*if (re.getMessage() != null && re.getMessage().contains("cloneNodes")){
                         throw re;
-                    }
+                    }*/
                     re.printStackTrace();
                    // throw re;
                 }

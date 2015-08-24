@@ -194,12 +194,10 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
-        if (this.wrappedNode.getExtends() != null){
-            for (ClassOrInterfaceType type : wrappedNode.getExtends()){
-                TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
-                if (ancestor.canBeAssignedTo(other, typeSolver)) {
-                    return true;
-                }
+        ClassDeclaration superclass = getSuperClass(typeSolver);
+        if (superclass != null) {
+            if (superclass.canBeAssignedTo(other, typeSolver)) {
+                return true;
             }
         }
 
@@ -326,24 +324,19 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     @Override
     public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
         List<TypeDeclaration> ancestors = new ArrayList<>();
-        if (wrappedNode.getExtends() != null) {
-            for (ClassOrInterfaceType extended : wrappedNode.getExtends()){
-                SymbolReference<TypeDeclaration> superclass = solveType(extended.getName(), typeSolver);
-                if (!superclass.isSolved()) {
-                    throw new UnsolvedSymbolException(extended.getName());
-                }
-                ancestors.add(superclass.getCorrespondingDeclaration());
-                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors(typeSolver));
-            }
+        ClassDeclaration superclass = getSuperClass(typeSolver);
+        if (superclass != null) {
+            ancestors.add(superclass);
+            ancestors.addAll(superclass.getAllAncestors(typeSolver));
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()){
-                SymbolReference<TypeDeclaration> superclass = solveType(implemented.getName(), typeSolver);
-                if (!superclass.isSolved()) {
+                SymbolReference<TypeDeclaration> ancestor = solveType(implemented.getName(), typeSolver);
+                if (!ancestor.isSolved()) {
                     throw new UnsolvedSymbolException(implemented.getName());
                 }
-                ancestors.add(superclass.getCorrespondingDeclaration());
-                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors(typeSolver));
+                ancestors.add(ancestor.getCorrespondingDeclaration());
+                ancestors.addAll(ancestor.getCorrespondingDeclaration().getAllAncestors(typeSolver));
             }
         }
         return ancestors;

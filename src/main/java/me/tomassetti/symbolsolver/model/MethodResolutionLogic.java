@@ -2,8 +2,10 @@ package me.tomassetti.symbolsolver.model;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,11 +25,31 @@ public class MethodResolutionLogic {
             return false;
         }
         for (int i=0; i<method.getNoParams(); i++) {
-            if (!method.getParam(i).getType(typeSolver).isAssignableBy(paramTypes.get(i), typeSolver)){
+            TypeUsage expectedType = method.getParam(i).getType(typeSolver);
+            for (TypeParameter tp : method.getTypeParameters()) {
+                expectedType = replaceTypeParam(expectedType, tp);
+            }
+
+            if (name.equals("cloneNodes")) {
+                System.out.println("foo");
+            }
+
+            if (!expectedType.isAssignableBy(paramTypes.get(i), typeSolver)){
                 return false;
             }
         }
         return true;
+    }
+
+    private static TypeUsage replaceTypeParam(TypeUsage typeUsage, TypeParameter tp){
+        if (typeUsage.isTypeVariable()) {
+            if (typeUsage.getTypeName().equals(tp.getName())) {
+                // TODO use bounds
+                return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class));
+            }
+        }
+        // TODO consider annidated types
+        return typeUsage;
     }
 
     public static boolean isApplicable(MethodUsage method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {

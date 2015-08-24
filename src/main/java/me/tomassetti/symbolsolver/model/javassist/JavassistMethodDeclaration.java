@@ -3,6 +3,8 @@ package me.tomassetti.symbolsolver.model.javassist;
 import com.github.javaparser.ast.Node;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.TypeParameter;
 import me.tomassetti.symbolsolver.model.TypeSolver;
@@ -12,7 +14,11 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 01/08/15.
@@ -109,6 +115,14 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        try {
+            if (ctMethod.getGenericSignature() == null) {
+                return Collections.emptyList();
+            }
+            SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
+            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp)->new JavassistTypeParameter(jasTp, false)).collect(Collectors.toList());
+        } catch (BadBytecode badBytecode) {
+            throw new RuntimeException(badBytecode);
+        }
     }
 }

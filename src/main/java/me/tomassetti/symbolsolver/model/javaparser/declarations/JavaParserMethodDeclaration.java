@@ -15,8 +15,10 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 17/08/15.
@@ -140,6 +142,9 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        if (this.wrappedNode.getTypeParameters() == null) {
+            return Collections.emptyList();
+        }
+        return this.wrappedNode.getTypeParameters().stream().map((astTp)->new JavaParserTypeParameter(astTp)).collect(Collectors.toList());
     }
 }

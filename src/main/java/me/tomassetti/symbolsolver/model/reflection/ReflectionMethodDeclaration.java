@@ -12,7 +12,10 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 02/08/15.
@@ -88,7 +91,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        return Arrays.stream(method.getTypeParameters()).map((refTp)->new ReflectionTypeParameter(refTp, false)).collect(Collectors.toList());
     }
 
     @Override
