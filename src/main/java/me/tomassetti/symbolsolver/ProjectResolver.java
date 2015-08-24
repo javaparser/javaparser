@@ -94,7 +94,7 @@ public class ProjectResolver {
                     if (upe.getMessage() != null && upe.getMessage().contains("FOO")){
                         throw upe;
                     }
-                    throw upe;
+                    //throw upe;
                 } catch (RuntimeException re){
                     String line;
                     if (re.getStackTrace().length == 0) {
@@ -110,7 +110,7 @@ public class ProjectResolver {
                     if (re.getMessage() != null && re.getMessage().contains("FOO")){
                         throw re;
                     }
-                   throw re;
+                   // throw re;
                 }
             } else {
                 //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());

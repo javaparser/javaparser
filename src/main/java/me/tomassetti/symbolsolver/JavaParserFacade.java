@@ -291,9 +291,11 @@ public class JavaParserFacade {
         }
     }
 
-    private ClassOrInterfaceDeclaration findContainingTypeDecl(Node node){
+    private com.github.javaparser.ast.body.TypeDeclaration findContainingTypeDecl(Node node){
         if (node instanceof ClassOrInterfaceDeclaration) {
-            return (ClassOrInterfaceDeclaration)node;
+            return (ClassOrInterfaceDeclaration) node;
+        } else if (node instanceof EnumDeclaration) {
+            return (EnumDeclaration)node;
         } else if (node.getParentNode() == null) {
             throw new IllegalArgumentException();
         } else {

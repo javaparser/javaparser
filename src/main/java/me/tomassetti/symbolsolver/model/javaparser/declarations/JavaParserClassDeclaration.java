@@ -40,6 +40,24 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavaParserClassDeclaration that = (JavaParserClassDeclaration) o;
+
+        if (!wrappedNode.equals(that.wrappedNode)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return wrappedNode.hashCode();
+    }
+
+    @Override
+
     public TypeUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

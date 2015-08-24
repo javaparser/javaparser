@@ -10,11 +10,15 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.model.usages.ArrayTypeUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by federico on 30/07/15.
@@ -172,6 +176,89 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavaParserEnumDeclaration that = (JavaParserEnumDeclaration) o;
+
+        if (!wrappedNode.equals(that.wrappedNode)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return wrappedNode.hashCode();
+    }
+
+    private class ValuesMethod implements MethodDeclaration {
+
+        @Override
+        public TypeDeclaration declaringType() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public TypeUsage getReturnType(TypeSolver typeSolver) {
+            return new ArrayTypeUsage(new TypeUsageOfTypeDeclaration(JavaParserEnumDeclaration.this));
+        }
+
+        @Override
+        public int getNoParams() {
+            return 0;
+        }
+
+        @Override
+        public ParameterDeclaration getParam(int i) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public MethodUsage getUsage(Node node) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver) {
+            return new MethodUsage(this, typeSolver);
+        }
+
+        @Override
+        public Context getContext() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getName() {
+            return "values";
+        }
+
+        @Override
+        public List<TypeParameter> getTypeParameters() {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        if (name.equals("values") && parameterTypes.size() == 0) {
+            return SymbolReference.solved(new ValuesMethod());
+        }
+        // TODO add methods inherited from Enum
+        return getContext().solveMethod(name, parameterTypes, typeSolver);
+    }
+
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
+        if (name.equals("values") && parameterTypes.size() == 0) {
+            return Optional.of(new ValuesMethod().getUsage(null));
+        }
+        // TODO add methods inherited from Enum
+        return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
+    }
+
+    @Override
     public boolean hasField(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getMembers() != null) {
             for (BodyDeclaration member : this.wrappedNode.getMembers()) {
@@ -184,6 +271,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
                     }
                 }
             }
+
         }
 
         if (this.wrappedNode.getEntries() != null) {

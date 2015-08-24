@@ -25,6 +25,10 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return getContext().solveMethod(name, parameterTypes, typeSolver);
     }
 
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
+        return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
+    }
+
     /**
      * Get how the type is used in the given context.
      * @param node
@@ -41,10 +45,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     FieldDeclaration getField(String name, TypeSolver typeSolver);
 
     boolean hasField(String name, TypeSolver typeSolver);
-
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
-        return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
-    }
 
     default boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
         return isAssignableBy(new TypeUsageOfTypeDeclaration(other), typeSolver);

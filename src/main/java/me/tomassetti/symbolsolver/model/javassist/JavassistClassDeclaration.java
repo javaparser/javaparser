@@ -35,6 +35,24 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavassistClassDeclaration that = (JavassistClassDeclaration) o;
+
+        if (!ctClass.equals(that.ctClass)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return ctClass.hashCode();
+    }
+
+    @Override
+
     public String getQualifiedName() {
         return ctClass.getName();
     }

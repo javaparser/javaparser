@@ -53,7 +53,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                         if (m.isSolved()) {
                             return Optional.of(new MethodUsage(m.getCorrespondingDeclaration(), typeSolver));
                         } else {
-                            throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(), "Method "+name+" with parameterTypes "+parameterTypes);
+                            throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(), "Method '"+name+"' with parameterTypes "+parameterTypes);
                         }
                     } else {
                         throw e;

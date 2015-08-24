@@ -44,6 +44,23 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavaParserInterfaceDeclaration that = (JavaParserInterfaceDeclaration) o;
+
+        if (!wrappedNode.equals(that.wrappedNode)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return wrappedNode.hashCode();
+    }
+
+    @Override
     public String getName() {
         return wrappedNode.getName();
     }
