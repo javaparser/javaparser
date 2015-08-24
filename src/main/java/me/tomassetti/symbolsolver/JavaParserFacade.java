@@ -275,8 +275,14 @@ public class JavaParserFacade {
             return getTypeConcrete(assignExpr.getTarget(), solveLambdas);
         } else if (node instanceof ThisExpr) {
             return new TypeUsageOfTypeDeclaration(getTypeDeclaration(findContainingTypeDecl(node)));
+        } else if (node instanceof ConditionalExpr) {
+            ConditionalExpr conditionalExpr = (ConditionalExpr)node;
+            return getTypeConcrete(conditionalExpr.getThenExpr(), solveLambdas);
+        } else if (node instanceof ArrayCreationExpr) {
+            ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)node;
+            return convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node));
         } else {
-            throw new UnsupportedOperationException("FOO " + node.getClass().getCanonicalName());
+            throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
     }
 
