@@ -110,6 +110,7 @@ public class ProjectResolver {
                     if (re.getMessage() != null && re.getMessage().contains("FOO")){
                         throw re;
                     }
+                    re.printStackTrace();
                    // throw re;
                 }
             } else {
