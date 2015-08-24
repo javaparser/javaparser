@@ -24,6 +24,7 @@ public class PrimitiveTypeUsage implements TypeUsage {
     public static final PrimitiveTypeUsage FLOAT = new PrimitiveTypeUsage("float");
     public static final PrimitiveTypeUsage DOUBLE = new PrimitiveTypeUsage("double");
     public static final PrimitiveTypeUsage SHORT = new PrimitiveTypeUsage("short");
+    public static final PrimitiveTypeUsage BYTE = new PrimitiveTypeUsage("byte");
 
     @Override
     public String toString() {
@@ -32,7 +33,7 @@ public class PrimitiveTypeUsage implements TypeUsage {
                 '}';
     }
 
-    public static final List<PrimitiveTypeUsage> ALL = ImmutableList.of(INT, BOOLEAN, LONG, CHAR, FLOAT, DOUBLE, SHORT);
+    public static final List<PrimitiveTypeUsage> ALL = ImmutableList.of(INT, BOOLEAN, LONG, CHAR, FLOAT, DOUBLE, SHORT, BYTE);
 
     private PrimitiveTypeUsage(String name) {
         this.name = name;

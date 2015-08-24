@@ -96,8 +96,8 @@ public class JavaParserFacade {
         return getType(node, true);
     }
 
-    private Map<Node, TypeUsage> cacheWithLambadsSolved = new WeakHashMap<>();
-    private Map<Node, TypeUsage> cacheWithoutLambadsSolved = new WeakHashMap<>();
+    private Map<Node, TypeUsage> cacheWithLambadsSolved = new IdentityHashMap<>();
+    private Map<Node, TypeUsage> cacheWithoutLambadsSolved = new IdentityHashMap<>();
 
     private static Map<TypeSolver, JavaParserFacade> instances = new HashMap<>();
 
@@ -276,7 +276,7 @@ public class JavaParserFacade {
         } else if (node instanceof ThisExpr) {
             return new TypeUsageOfTypeDeclaration(getTypeDeclaration(findContainingTypeDecl(node)));
         } else {
-            throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+            throw new UnsupportedOperationException("FOO " + node.getClass().getCanonicalName());
         }
     }
 
