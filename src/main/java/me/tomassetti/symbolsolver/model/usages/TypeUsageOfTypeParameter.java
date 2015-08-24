@@ -21,6 +21,23 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TypeUsageOfTypeParameter that = (TypeUsageOfTypeParameter) o;
+
+        if (!typeParameter.equals(that.typeParameter)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return typeParameter.hashCode();
+    }
+
     public TypeUsageOfTypeParameter(TypeParameter typeParameter) {
         this.typeParameter = typeParameter;
     }

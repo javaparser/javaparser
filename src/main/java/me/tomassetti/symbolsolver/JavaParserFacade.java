@@ -216,7 +216,7 @@ public class JavaParserFacade {
             TypeUsage typeUsage = new JavaParserFacade(typeSolver).convertToUsage(objectCreationExpr.getType(), node);
             return typeUsage;
         } else if (node instanceof NullLiteralExpr) {
-            return new NullTypeUsage();
+            return NullTypeUsage.INSTANCE;
         } else if (node instanceof BooleanLiteralExpr) {
             return PrimitiveTypeUsage.BOOLEAN;
         } else if (node instanceof IntegerLiteralExpr) {
@@ -339,7 +339,7 @@ public class JavaParserFacade {
         } else if (type instanceof WildcardType) {
             return new WildcardUsage((WildcardType)type);
         } else if (type instanceof VoidType) {
-            return new VoidTypeUsage();
+            return VoidTypeUsage.INSTANCE;
         } else {
             throw new UnsupportedOperationException("FOO " +type.getClass().getCanonicalName());
         }

@@ -24,6 +24,23 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
     private Class<?> clazz;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReflectionClassDeclaration that = (ReflectionClassDeclaration) o;
+
+        if (!clazz.equals(that.clazz)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return clazz.hashCode();
+    }
+
     public ReflectionClassDeclaration(Class<?> clazz) {
         if (clazz.isInterface()) {
             throw new IllegalArgumentException();
@@ -32,6 +49,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             throw new IllegalArgumentException();
         }
         if (clazz.isArray()) {
+
             throw new IllegalArgumentException();
         }
         this.clazz = clazz;

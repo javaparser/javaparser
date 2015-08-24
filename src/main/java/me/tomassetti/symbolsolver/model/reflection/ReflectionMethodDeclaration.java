@@ -59,7 +59,11 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public TypeDeclaration declaringType() {
-        return new ReflectionClassDeclaration(method.getDeclaringClass());
+        if (method.getDeclaringClass().isInterface()) {
+            return new ReflectionInterfaceDeclaration(method.getDeclaringClass());
+        } else {
+            return new ReflectionClassDeclaration(method.getDeclaringClass());
+        }
     }
 
     @Override

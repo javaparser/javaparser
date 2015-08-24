@@ -21,7 +21,7 @@ public class ReflectionFactory {
             return new ArrayTypeUsage(typeUsageFor(clazz.getComponentType()));
         } else if (clazz.isPrimitive()) {
             if (clazz.getName().equals("void")) {
-                return new VoidTypeUsage();
+                return VoidTypeUsage.INSTANCE;
             } else {
                 return PrimitiveTypeUsage.byName(clazz.getName());
             }

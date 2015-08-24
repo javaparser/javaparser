@@ -20,6 +20,26 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     private TypeDeclaration typeDeclaration;
     private List<TypeUsage> typeParameters;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TypeUsageOfTypeDeclaration that = (TypeUsageOfTypeDeclaration) o;
+
+        if (!typeDeclaration.equals(that.typeDeclaration)) return false;
+        if (!typeParameters.equals(that.typeParameters)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = typeDeclaration.hashCode();
+        result = 31 * result + typeParameters.hashCode();
+        return result;
+    }
+
     public TypeDeclaration getTypeDeclaration() {
         return typeDeclaration;
     }

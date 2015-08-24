@@ -132,7 +132,9 @@ public class MethodResolutionLogic {
                     winningCandidate = other;
                 } else {
                     if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
-                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: "+winningCandidate+", "+other);
+                        if (!areOverride(winningCandidate, other)) {
+                            throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other + ". First declared in " + winningCandidate.declaringType().getQualifiedName());
+                        }
                     } else {
                         // we expect the methods to be ordered such that inherited methods are later in the list
                     }
@@ -140,5 +142,20 @@ public class MethodResolutionLogic {
             }
             return Optional.of(winningCandidate);
         }
+    }
+
+    private static boolean areOverride(MethodUsage winningCandidate, MethodUsage other) {
+        if (!winningCandidate.getName().equals(other.getName())) {
+            return false;
+        }
+        if (winningCandidate.getNoParams() != other.getNoParams()) {
+            return false;
+        }
+        for (int i=0;i<winningCandidate.getNoParams();i++) {
+            if (!winningCandidate.getParamTypes().get(i).equals(other.getParamTypes().get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

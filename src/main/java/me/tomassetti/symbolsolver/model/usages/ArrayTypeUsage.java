@@ -13,6 +13,22 @@ import java.util.Optional;
  * Created by federico on 21/08/15.
  */
 public class ArrayTypeUsage implements TypeUsage {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ArrayTypeUsage that = (ArrayTypeUsage) o;
+
+        if (!baseType.equals(that.baseType)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return baseType.hashCode();
+    }
 
     private TypeUsage baseType;
 

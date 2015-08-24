@@ -193,7 +193,7 @@ public class CompilationUnitContextTest extends AbstractTest {
         typeSolver.add(new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
         typeSolver.add(new JreTypeSolver());
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(new NullTypeUsage(), new NullTypeUsage()), typeSolver);
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(NullTypeUsage.INSTANCE, NullTypeUsage.INSTANCE), typeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
         assertEquals(2, ref.getCorrespondingDeclaration().getNoParams());

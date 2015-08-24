@@ -359,7 +359,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(new NullTypeUsage()), new JreTypeSolver());
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(NullTypeUsage.INSTANCE), new JreTypeSolver());
     }
 
     @Test
@@ -432,6 +432,6 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(new NullTypeUsage()), new JreTypeSolver());
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(NullTypeUsage.INSTANCE), new JreTypeSolver());
     }
 }

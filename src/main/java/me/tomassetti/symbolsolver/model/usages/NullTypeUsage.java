@@ -13,6 +13,13 @@ import java.util.Optional;
  * Created by federico on 17/08/15.
  */
 public class NullTypeUsage implements TypeUsage {
+
+    public static final NullTypeUsage INSTANCE = new NullTypeUsage();
+
+    private NullTypeUsage() {
+
+    }
+
     @Override
     public boolean isArray() {
         return false;

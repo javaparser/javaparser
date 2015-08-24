@@ -15,6 +15,10 @@ import java.util.Optional;
 public class VoidTypeUsage implements TypeUsage {
     public static final TypeUsage INSTANCE = new VoidTypeUsage();
 
+    private VoidTypeUsage() {
+
+    }
+
     @Override
     public Optional<TypeUsage> parameterByName(String name) {
         throw new UnsupportedOperationException();

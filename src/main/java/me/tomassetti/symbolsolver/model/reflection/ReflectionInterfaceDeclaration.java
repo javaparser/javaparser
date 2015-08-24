@@ -68,6 +68,23 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReflectionInterfaceDeclaration that = (ReflectionInterfaceDeclaration) o;
+
+        if (!clazz.equals(that.clazz)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return clazz.hashCode();
+    }
+
+    @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
@@ -79,6 +96,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
                 i++;
             }
             methods.add(methodUsage);
+
         }
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);
     }

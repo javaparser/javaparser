@@ -15,9 +15,30 @@ import java.util.Optional;
  */
 public class WildcardUsage implements TypeUsage {
 
+    private WildcardType type;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WildcardUsage that = (WildcardUsage) o;
+
+        if (!type.equals(that.type)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return type.hashCode();
+    }
 
     public WildcardUsage(WildcardType type) {
-
+        if (type == null) {
+            throw new NullPointerException();
+        }
+        this.type = type;
     }
 
     @Override
