@@ -17,9 +17,9 @@ import java.util.Optional;
 /**
  * Created by federico on 28/07/15.
  */
-public class StatementContext extends AbstractJavaParserContext<Statement> {
+public class StatementContext<N extends Statement> extends AbstractJavaParserContext<N> {
 
-    public StatementContext(Statement wrappedNode) {
+    public StatementContext(N wrappedNode) {
         super(wrappedNode);
     }
 

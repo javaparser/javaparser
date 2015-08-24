@@ -129,7 +129,7 @@ public class JavaParserFacade {
             logger.finest("getType on name expr " + node);
             Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
             if (!value.isPresent()){
-                throw new UnsolvedSymbolException("Solving "+node, nameExpr.getName());
+                throw new UnsolvedSymbolException("FOO Solving "+node, nameExpr.getName());
             } else {
                 return value.get().getUsage();
             }

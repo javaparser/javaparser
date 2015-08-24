@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.SwitchStmt;
 
 import java.util.Optional;
 
@@ -135,5 +136,27 @@ public final class Navigator {
         }
         ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)res.get();
         return cd;
+    }
+
+    public static SwitchStmt findSwitch(Node node) {
+        SwitchStmt res = findSwitchHelper(node);
+        if (res == null) {
+            throw new IllegalArgumentException();
+        } else {
+            return res;
+        }
+    }
+
+    private static SwitchStmt findSwitchHelper(Node node) {
+        if (node instanceof SwitchStmt) {
+            return (SwitchStmt)node;
+        }
+        for (Node child : node.getChildrenNodes()){
+            SwitchStmt resChild = findSwitchHelper(child);
+            if (resChild != null) {
+                return resChild;
+            }
+        }
+        return null;
     }
 }

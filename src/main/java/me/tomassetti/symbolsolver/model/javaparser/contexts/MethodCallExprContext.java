@@ -49,10 +49,15 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                         SymbolReference<MethodDeclaration> m = ref.getCorrespondingDeclaration().solveMethod(name, parameterTypes, typeSolver);
                         if (m.isSolved()) {
                             return Optional.of(new MethodUsage(m.getCorrespondingDeclaration(), typeSolver));
+                        } else {
+                            throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(), "Method "+name+" with parameterTypes "+parameterTypes);
                         }
+                    } else {
+                        throw e;
                     }
+                } else {
+                    throw e;
                 }
-                throw e;
             }
         } else {
             if (wrappedNode.getParentNode() instanceof MethodCallExpr) {

@@ -42,6 +42,11 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         return typeDeclaration.getTypeParameters().stream().map((tp)->new TypeUsageOfTypeParameter(tp)).collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isEnum() {
+        return typeDeclaration.isEnum();
+    }
+
     public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters) {
         this.typeDeclaration = typeDeclaration;
         this.typeParameters = typeParameters;

@@ -17,6 +17,7 @@ public class WildcardUsage implements TypeUsage {
 
 
     public WildcardUsage(WildcardType type) {
+
     }
 
     @Override

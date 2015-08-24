@@ -41,6 +41,8 @@ public class JavaParserFactory {
             return new EnumDeclarationContext((EnumDeclaration)node);
         } else if (node instanceof FieldAccessExpr) {
             return new FieldAccessContext((FieldAccessExpr) node);
+        } else if (node instanceof SwitchStmt) {
+            return new SwitchContext((SwitchStmt) node);
         } else if (node instanceof Statement) {
             return new StatementContext((Statement) node);
         } else {

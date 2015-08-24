@@ -91,7 +91,7 @@ public class ProjectResolver {
                     }
                     unsupportedMap.put(line, unsupportedMap.get(line) + 1);
                     unsupported++;
-                    if (upe.getMessage() != null && upe.getMessage().startsWith("FOO")){
+                    if (upe.getMessage() != null && upe.getMessage().contains("FOO")){
                         throw upe;
                     }
                     //throw upe;
@@ -107,7 +107,10 @@ public class ProjectResolver {
                     }
                     koMap.put(line, koMap.get(line) + 1);
                     ko++;
-                    throw re;
+                    if (re.getMessage() != null && re.getMessage().contains("FOO")){
+                        throw re;
+                    }
+                   // throw re;
                 }
             } else {
                 //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());

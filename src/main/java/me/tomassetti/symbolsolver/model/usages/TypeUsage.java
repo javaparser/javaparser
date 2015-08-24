@@ -125,4 +125,8 @@ public interface TypeUsage {
     String getQualifiedName();
 
     String prettyPrint();
+
+    default boolean isEnum() {
+        return false;
+    }
 }
