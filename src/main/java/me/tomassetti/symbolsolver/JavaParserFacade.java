@@ -254,6 +254,9 @@ public class JavaParserFacade {
                 case or:
                 case and:
                     return PrimitiveTypeUsage.BOOLEAN;
+                case binAnd:
+                case binOr:
+                    return getTypeConcrete(binaryExpr.getLeft(), solveLambdas);
                 default:
                     throw new UnsupportedOperationException("FOO " +binaryExpr.getOperator().name());
             }
@@ -318,13 +321,21 @@ public class JavaParserFacade {
                 typeParameters = classOrInterfaceType.getTypeArgs().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
             }
             if (typeDeclaration.isTypeVariable()) {
-                JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration)typeDeclaration;
-                return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
+                if (typeDeclaration instanceof TypeParameter) {
+                    return new TypeUsageOfTypeParameter((TypeParameter)typeDeclaration);
+                } else {
+                    JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) typeDeclaration;
+                    return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
+                }
             } else {
                 return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParameters);
             }
         } else if (type instanceof PrimitiveType) {
-            return PrimitiveTypeUsage.byName(((PrimitiveType)type).getType().name());
+            return PrimitiveTypeUsage.byName(((PrimitiveType) type).getType().name());
+        } else if (type instanceof WildcardType) {
+            return new WildcardUsage((WildcardType)type);
+        } else if (type instanceof VoidType) {
+            return new VoidTypeUsage();
         } else {
             throw new UnsupportedOperationException("FOO " +type.getClass().getCanonicalName());
         }
@@ -345,40 +356,7 @@ public class JavaParserFacade {
     }
 
     public TypeUsage convert(Type type, Context context) {
-        if (type instanceof ReferenceType) {
-            ReferenceType referenceType = (ReferenceType) type;
-            // TODO consider array modifiers
-            return convert(referenceType.getType(), context);
-        } else if (type instanceof ClassOrInterfaceType) {
-            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
-            SymbolReference<TypeDeclaration> ref = context.solveType(classOrInterfaceType.getName(), typeSolver);
-            if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(context, classOrInterfaceType.getName());
-            }
-            List<TypeUsage> typeParameters = Collections.emptyList();
-            if (classOrInterfaceType.getTypeArgs() != null) {
-                typeParameters = classOrInterfaceType.getTypeArgs().stream().map((t)->convert(t, context)).collect(Collectors.toList());
-            }
-            if (ref.getCorrespondingDeclaration().isTypeVariable()) {
-                if (ref.getCorrespondingDeclaration() instanceof JavaParserTypeParameter) {
-                    return new TypeUsageOfTypeParameter((JavaParserTypeParameter)ref.getCorrespondingDeclaration());
-                } else {
-                    JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) ref.getCorrespondingDeclaration();
-                    return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
-                }
-            } else {
-                return new TypeUsageOfTypeDeclaration(ref.getCorrespondingDeclaration(), typeParameters);
-            }
-        } else if (type instanceof VoidType) {
-            return new VoidTypeUsage();
-        } else if (type instanceof PrimitiveType) {
-            PrimitiveType primitiveType = (PrimitiveType) type;
-            return PrimitiveTypeUsage.byName(primitiveType.getType().name());
-        } else if (type instanceof WildcardType) {
-            return new WildcardUsage();
-        } else {
-            throw new UnsupportedOperationException(type.getClass().getCanonicalName());
-        }
+        return convertToUsage(type, context);
     }
 
     public MethodUsage solveMethodAsUsage(MethodCallExpr call) {

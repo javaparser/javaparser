@@ -96,7 +96,12 @@ public class ProjectResolver {
                     }
                     //throw upe;
                 } catch (RuntimeException re){
-                    String line = re.getStackTrace()[0].toString();
+                    String line;
+                    if (re.getStackTrace().length == 0) {
+                        throw re;
+                    } else {
+                        line = re.getStackTrace()[0].toString();
+                    }
                     if (!koMap.containsKey(line)) {
                         koMap.put(line, 0);
                     }

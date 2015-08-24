@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.usages;
 
+import com.github.javaparser.ast.type.WildcardType;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
@@ -14,6 +15,9 @@ import java.util.Optional;
  */
 public class WildcardUsage implements TypeUsage {
 
+
+    public WildcardUsage(WildcardType type) {
+    }
 
     @Override
     public Optional<TypeUsage> parameterByName(String name) {

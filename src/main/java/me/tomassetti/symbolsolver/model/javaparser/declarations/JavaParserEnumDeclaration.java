@@ -4,10 +4,12 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.io.Serializable;
@@ -158,12 +160,20 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
             }
         }
 
-        throw new UnsupportedOperationException("FOO " +"Derived fields");
+        if (this.wrappedNode.getEntries() != null) {
+            for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
+                if (member.getName().equals(name)) {
+                    return new JavaParserFieldDeclaration(member);
+                }
+            }
+        }
+
+        throw new UnsolvedSymbolException("Field "+name);
     }
 
     @Override
     public boolean hasField(String name, TypeSolver typeSolver) {
-        if (this.wrappedNode != null) {
+        if (this.wrappedNode.getMembers() != null) {
             for (BodyDeclaration member : this.wrappedNode.getMembers()) {
                 if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
                     com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
@@ -172,6 +182,14 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
                             return true;
                         }
                     }
+                }
+            }
+        }
+
+        if (this.wrappedNode.getEntries() != null) {
+            for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
+                if (member.getName().equals(name)) {
+                    return true;
                 }
             }
         }
