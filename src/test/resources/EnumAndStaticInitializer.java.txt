@@ -1,0 +1,25 @@
+import java.util.HashMap;
+
+class MyClass {
+
+    public enum Primitive {
+		Boolean ("Boolean"),
+		Char    ("Character"),
+		Byte    ("Byte"),
+		Short   ("Short"),
+		Int     ("Integer"),
+		Long    ("Long"),
+		Float   ("Float"),
+		Double  ("Double");
+
+		final String nameOfBoxedType;
+    }
+
+    static final HashMap<String, Primitive> unboxMap = new HashMap<String, Primitive>();
+	static {
+		for(Primitive unboxedType : Primitive.values()) {
+			unboxMap.put(unboxedType.nameOfBoxedType, unboxedType);
+		}
+	}
+
+}

@@ -2,6 +2,8 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeParameter;
@@ -13,6 +15,7 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 04/08/15.
@@ -43,6 +46,20 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
     @Override
     public String getQNameOfDeclaringClass() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Bound> getBounds(TypeSolver typeSolver) {
+        if (wrappedNode.getTypeBound() == null) {
+            return Collections.emptyList();
+        }
+        return wrappedNode.getTypeBound().stream().map((astB)->toBound(astB, typeSolver)).collect(Collectors.toList());
+    }
+
+    private Bound toBound(ClassOrInterfaceType classOrInterfaceType, TypeSolver typeSolver) {
+        TypeUsage typeUsage = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
+        Bound bound = Bound.extendsBound(typeUsage);
+        return bound;
     }
 
     @Override

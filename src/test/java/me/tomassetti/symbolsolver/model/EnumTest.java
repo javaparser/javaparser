@@ -12,6 +12,7 @@ import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -32,6 +33,14 @@ public class EnumTest extends AbstractTest {
         assertEquals("SwitchOnEnum.MyEnum", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).getQualifiedName());
     }
 
+    @Test
+    public void enumAndStaticInitializer() throws ParseException {
+        CompilationUnit cu = parseSample("EnumAndStaticInitializer");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
+        MethodCallExpr call = Navigator.findMethodCall(clazz, "put");
 
+        TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(call);
+        assertEquals("MyClass.Primitive", ref.getTypeName());
+    }
 
 }

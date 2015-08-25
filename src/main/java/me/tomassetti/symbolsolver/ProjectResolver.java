@@ -56,12 +56,12 @@ public class ProjectResolver {
     private static void solveTypeDecl(ClassOrInterfaceDeclaration node) {
         TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
         if (typeDeclaration.isClass()) {
-            System.out.println("\n[ Class "+ typeDeclaration.getQualifiedName() + " ]");
+            //System.out.println("\n[ Class "+ typeDeclaration.getQualifiedName() + " ]");
             for (TypeDeclaration sc : typeDeclaration.asClass().getAllSuperClasses(typeSolver)) {
-                System.out.println("  superclass: " + sc.getQualifiedName());
+                //System.out.println("  superclass: " + sc.getQualifiedName());
             }
             for (TypeDeclaration sc : typeDeclaration.asClass().getAllInterfaces(typeSolver)) {
-                System.out.println("  interface: " + sc.getQualifiedName());
+                //System.out.println("  interface: " + sc.getQualifiedName());
             }
         }
     }
@@ -80,7 +80,7 @@ public class ProjectResolver {
             } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)){
                 try {
                     TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
-                    System.out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.prettyPrint());
+                    //System.out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.prettyPrint());
                     ok++;
                 } catch (UnsupportedOperationException upe){
                     String line = upe.getStackTrace()[0].toString();
@@ -96,11 +96,7 @@ public class ProjectResolver {
                     //throw upe;
                 } catch (RuntimeException re){
                     String line;
-                    if (re.getStackTrace().length == 0) {
-                        throw re;
-                    } else {
-                        line = re.getStackTrace()[0].toString();
-                    }
+                    line = re.getStackTrace()[0].toString();
                     if (!koMap.containsKey(line)) {
                         koMap.put(line, 0);
                     }
@@ -130,7 +126,7 @@ public class ProjectResolver {
             }
         } else {
             if (file.getName().endsWith(".java")) {
-                //if (!(file.getName().contains("VoidVisitorAdapter")||file.getName().contains("GenericVisitorAdapter.java"))) {
+                //if (!(file.getName().contains("SourcesHelper"))) {
                 //    return;
                 //}
                 System.out.println("- parsing " + file.getAbsolutePath());

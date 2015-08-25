@@ -48,7 +48,7 @@ public class WildcardUsage implements TypeUsage {
 
     @Override
     public String getTypeName() {
-        throw new UnsupportedOperationException();
+        return type.toStringWithoutComments();
     }
 
     @Override
@@ -83,6 +83,6 @@ public class WildcardUsage implements TypeUsage {
 
     @Override
     public String prettyPrint() {
-        throw new UnsupportedOperationException();
+        return getTypeName();
     }
 }

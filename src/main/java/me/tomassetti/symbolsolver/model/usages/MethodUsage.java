@@ -89,7 +89,9 @@ public class MethodUsage {
         // TODO consider return type
         MethodUsage res = this;
         for (int i = 0; i<paramTypes.size(); i++){
-            res = replaceParamType(i, replaceNameParam(name, typeUsage, paramTypes.get(i)));
+            TypeUsage originalParamType = paramTypes.get(i);
+            TypeUsage newParamType = replaceNameParam(name, typeUsage, originalParamType);
+            res = res.replaceParamType(i, newParamType);
         }
         return res;
     }

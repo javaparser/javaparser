@@ -94,9 +94,16 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
-            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
-            MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
-            methods.add(methodUsage);
+            if (method.getName().equals(name)) {
+                MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
+                MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+                for (int i=0;i<getTypeParameters().size();i++){
+                    String nameToReplace = getTypeParameters().get(i).getName();
+                    TypeUsage newValue = typeParameterValues.get(i);
+                    methodUsage = methodUsage.replaceNameParam(nameToReplace, newValue);
+                }
+                methods.add(methodUsage);
+            }
         }
         Optional<MethodUsage> ref = MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);
         return ref;

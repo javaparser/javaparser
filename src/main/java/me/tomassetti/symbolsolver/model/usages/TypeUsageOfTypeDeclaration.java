@@ -4,6 +4,7 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeVariableDeclaration;
+import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,10 +112,21 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     }
 
     private Optional<TypeUsage> typeParamByName(String name){
+        List<TypeUsage> typeParameters = this.typeParameters;
+        if (typeDeclaration.getTypeParameters().size() != typeParameters.size()){
+            if (typeParameters.size() > 0) {
+                throw new UnsupportedOperationException();
+            }
+            // type parameters not specified, default to Object
+            typeParameters = new ArrayList<>();
+            for (int i=0;i<typeDeclaration.getTypeParameters().size();i++){
+                typeParameters.add(new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class)));
+            }
+        }
         int i =  0;
         for (TypeParameter tp : typeDeclaration.getTypeParameters()){
             if (tp.getName().equals(name)) {
-                return Optional.of(this.typeParameters.get(i));
+                return Optional.of(typeParameters.get(i));
             }
             i++;
         }
@@ -248,13 +260,32 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         if (other instanceof NullTypeUsage){
             return !this.isPrimitive();
         }
+        // consider boxing
+        if (other.isPrimitive()) {
+            if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+                return true;
+            } else {
+                return isCorrespondingBoxingType(other.getTypeName());
+            }
+        }
         if (other instanceof LambdaTypeUsagePlaceholder) {
             return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
         } else if (other instanceof TypeUsageOfTypeDeclaration) {
             TypeUsageOfTypeDeclaration otherTUOTD = (TypeUsageOfTypeDeclaration)other;
             return typeDeclaration.isAssignableBy(otherTUOTD.typeDeclaration, typeSolver);
+
+
         } else {
             return false;
+        }
+    }
+
+    private boolean isCorrespondingBoxingType(String typeName) {
+        switch (typeName) {
+            case "char":
+                return getQualifiedName().equals(Character.class.getCanonicalName());
+            default:
+                throw new UnsupportedOperationException(typeName);
         }
     }
 

@@ -316,8 +316,11 @@ public class JavaParserFacade {
     public TypeUsage convertToUsage(Type type, Context context) {
         if (type instanceof ReferenceType) {
             ReferenceType referenceType = (ReferenceType) type;
-            // TODO consider array modifiers
-            return convertToUsage(referenceType.getType(), context);
+            TypeUsage typeUsage = convertToUsage(referenceType.getType(), context);
+            for (int i=0;i<referenceType.getArrayCount();i++){
+                typeUsage = new ArrayTypeUsage(typeUsage);
+            }
+            return typeUsage;
         } else if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
@@ -347,7 +350,7 @@ public class JavaParserFacade {
         } else if (type instanceof VoidType) {
             return VoidTypeUsage.INSTANCE;
         } else {
-            throw new UnsupportedOperationException("FOO " +type.getClass().getCanonicalName());
+            throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
     }
 

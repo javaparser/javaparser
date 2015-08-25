@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 
 public class GenericsTest extends AbstractTest{
 
-    /*@Test
+    @Test
     public void resolveFieldWithGenericTypeToString() throws ParseException {
         CompilationUnit cu = parseSample("Generics");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
@@ -193,7 +193,7 @@ public class GenericsTest extends AbstractTest{
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("AnnotationExpr", typeUsage.getTypeName());
-    }*/
+    }
 
     @Test
     public void methodTypeParams() throws ParseException {

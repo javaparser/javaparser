@@ -29,7 +29,7 @@ public class MethodResolutionLogic {
             boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(paramTypes.get(i), typeSolver);
             if (!isAssignableWithoutSubstitution) {
                 for (TypeParameter tp : method.getTypeParameters()) {
-                    expectedType = replaceTypeParam(expectedType, tp);
+                    expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                 }
 
                 if (!expectedType.isAssignableBy(paramTypes.get(i), typeSolver)) {
@@ -40,11 +40,17 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    private static TypeUsage replaceTypeParam(TypeUsage typeUsage, TypeParameter tp){
+    private static TypeUsage replaceTypeParam(TypeUsage typeUsage, TypeParameter tp, TypeSolver typeSolver){
         if (typeUsage.isTypeVariable()) {
             if (typeUsage.getTypeName().equals(tp.getName())) {
-                // TODO use bounds
-                return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class));
+                List<TypeParameter.Bound> bounds = tp.getBounds(typeSolver);
+                if (bounds.size() > 1) {
+                    throw new UnsupportedOperationException();
+                } else if (bounds.size() == 1){
+                    return bounds.get(0).getType();
+                } else {
+                    return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class));
+                }
             }
         }
         // TODO consider annidated types

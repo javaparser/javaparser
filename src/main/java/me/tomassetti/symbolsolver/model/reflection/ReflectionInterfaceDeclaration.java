@@ -86,16 +86,28 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
+        if (typeParameterValues.size() != getTypeParameters().size()) {
+            if (typeParameterValues.size() != 0){
+                throw new UnsupportedOperationException();
+            }
+            // Parameters not specified, so default to Object
+            typeParameterValues = new ArrayList<>();
+            for (int i=0;i<getTypeParameters().size();i++){
+                typeParameterValues.add(new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class)));
+            }
+        }
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
-            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
-            MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
-            int i = 0;
-            for (TypeParameter tp : getTypeParameters()){
-                methodUsage = methodUsage.replaceNameParam(tp.getName(), typeParameterValues.get(i));
-                i++;
+            if (method.getName().equals(name)) {
+                MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
+                MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+                int i = 0;
+                for (TypeParameter tp : getTypeParameters()) {
+                    methodUsage = methodUsage.replaceNameParam(tp.getName(), typeParameterValues.get(i));
+                    i++;
+                }
+                methods.add(methodUsage);
             }
-            methods.add(methodUsage);
 
         }
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);

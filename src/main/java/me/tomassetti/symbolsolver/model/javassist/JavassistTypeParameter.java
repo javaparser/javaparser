@@ -2,6 +2,10 @@ package me.tomassetti.symbolsolver.model.javassist;
 
 import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.TypeSolver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by federico on 05/08/15.
@@ -41,5 +45,17 @@ public class JavassistTypeParameter implements TypeParameter {
     @Override
     public String getQNameOfDeclaringClass() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Bound> getBounds(TypeSolver typeSolver) {
+        List<Bound> bounds = new ArrayList<>();
+        if (wrapped.getClassBound() != null) {
+            throw new UnsupportedOperationException(wrapped.getClassBound().toString());
+        }
+        for (SignatureAttribute.ObjectType ot : wrapped.getInterfaceBound()) {
+            throw new UnsupportedOperationException(ot.toString());
+        }
+        return bounds;
     }
 }

@@ -2,8 +2,13 @@ package me.tomassetti.symbolsolver.model.reflection;
 
 
 import me.tomassetti.symbolsolver.model.TypeParameter;
+import me.tomassetti.symbolsolver.model.TypeSolver;
 
 import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class ReflectionTypeParameter implements TypeParameter {
 
@@ -33,6 +38,11 @@ public class ReflectionTypeParameter implements TypeParameter {
     @Override
     public String getQNameOfDeclaringClass() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Bound> getBounds(TypeSolver typeSolver) {
+        return Arrays.stream(typeVariable.getBounds()).map((refB)->Bound.extendsBound(ReflectionFactory.typeUsageFor(refB))).collect(Collectors.toList());
     }
 
     @Override
