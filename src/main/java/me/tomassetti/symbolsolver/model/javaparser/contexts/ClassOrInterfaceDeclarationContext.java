@@ -142,7 +142,17 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
-            SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().getContext().solveMethod(name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().solveMethod(name, parameterTypes, typeSolver);
+            if (res.isSolved()) {
+                candidateMethods.add(res.getCorrespondingDeclaration());
+            }
+        } else {
+            String superclassName = "java.lang.Object";
+            SymbolReference<TypeDeclaration> superclass = solveType(superclassName, typeSolver);
+            if (!superclass.isSolved()) {
+                throw new UnsolvedSymbolException(this, superclassName);
+            }
+            SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().solveMethod(name, parameterTypes, typeSolver);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }

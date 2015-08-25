@@ -9,6 +9,7 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
@@ -100,7 +101,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             for (TypeDeclaration type : wrappedNode.getTypes()) {
                 if (type.getName().equals(name)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
-                        return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) type));
+                        if (((ClassOrInterfaceDeclaration) type).isInterface()) {
+                            return SymbolReference.solved(new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) type));
+                        } else {
+                            return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) type));
+                        }
                     } else {
                         throw new UnsupportedOperationException();
                     }

@@ -26,7 +26,7 @@ public class VoidTypeUsage implements TypeUsage {
 
     @Override
     public String getTypeName() {
-        throw new UnsupportedOperationException();
+        return "void";
     }
 
     @Override

@@ -78,12 +78,10 @@ public class ProjectResolver {
                     || (node.getParentNode() instanceof PackageDeclaration)) {
                 // skip
             } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)){
-                //System.out.println(node + " GOOD from " + node.getParentNode().getClass().getCanonicalName());
                 try {
                     TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
                     System.out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.prettyPrint());
                     ok++;
-                    //System.out.println("OK "+ok+" KO "+ko+" unsupported "+unsupported);
                 } catch (UnsupportedOperationException upe){
                     String line = upe.getStackTrace()[0].toString();
                     if (!unsupportedMap.containsKey(line)) {
@@ -94,6 +92,7 @@ public class ProjectResolver {
                     if (upe.getMessage() != null && upe.getMessage().contains("FOO")){
                         throw upe;
                     }
+                    System.err.println(upe.getMessage());
                     //throw upe;
                 } catch (RuntimeException re){
                     String line;
@@ -110,8 +109,9 @@ public class ProjectResolver {
                     /*if (re.getMessage() != null && re.getMessage().contains("cloneNodes")){
                         throw re;
                     }*/
-                    re.printStackTrace();
-                   // throw re;
+                    //re.printStackTrace();
+                    System.err.println(re.getMessage());
+                    //throw re;
                 }
             } else {
                 //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());
@@ -130,6 +130,9 @@ public class ProjectResolver {
             }
         } else {
             if (file.getName().endsWith(".java")) {
+                //if (!(file.getName().contains("VoidVisitorAdapter")||file.getName().contains("GenericVisitorAdapter.java"))) {
+                //    return;
+                //}
                 System.out.println("- parsing " + file.getAbsolutePath());
                 CompilationUnit cu = JavaParser.parse(file);
                 solve(cu);
