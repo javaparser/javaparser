@@ -78,7 +78,7 @@ public class WildcardUsage implements TypeUsage {
 
     @Override
     public String getQualifiedName() {
-        throw new UnsupportedOperationException();
+        return getTypeName();
     }
 
     @Override

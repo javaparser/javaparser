@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 
 import java.util.Optional;
@@ -129,7 +130,7 @@ public final class Navigator {
     public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String name) {
         Optional<TypeDeclaration> res = findType(compilationUnit, name);
         if (!res.isPresent()) {
-            throw new IllegalStateException("No type found");
+            throw new IllegalStateException("No type named '" + name + "'found");
         }
         if (!(res.get() instanceof ClassOrInterfaceDeclaration)){
             throw new IllegalStateException("Type is not a class or an interface, it is "+res.get().getClass().getCanonicalName());
@@ -158,5 +159,31 @@ public final class Navigator {
             }
         }
         return null;
+    }
+
+    private static <N> N findNodeOfGivenClasshHelper(Node node, Class<N> clazz) {
+        if (clazz.isInstance(node)) {
+            return clazz.cast(node);
+        }
+        for (Node child : node.getChildrenNodes()){
+            N resChild = findNodeOfGivenClasshHelper(child, clazz);
+            if (resChild != null) {
+                return resChild;
+            }
+        }
+        return null;
+    }
+
+    public static<N> N findNodeOfGivenClass(Node node, Class<N> clazz) {
+        N res = findNodeOfGivenClasshHelper(node, clazz);
+        if (res == null) {
+            throw new IllegalArgumentException();
+        } else {
+            return res;
+        }
+    }
+
+    public static ReturnStmt findReturnStmt(MethodDeclaration method) {
+        return findNodeOfGivenClass(method, ReturnStmt.class);
     }
 }

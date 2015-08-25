@@ -93,7 +93,7 @@ public class ProjectResolver {
                         throw upe;
                     }
                     System.err.println(upe.getMessage());
-                    //throw upe;
+                    throw upe;
                 } catch (RuntimeException re){
                     String line;
                     line = re.getStackTrace()[0].toString();
@@ -107,7 +107,7 @@ public class ProjectResolver {
                     }*/
                     //re.printStackTrace();
                     System.err.println(re.getMessage());
-                    //throw re;
+                    throw re;
                 }
             } else {
                 //System.out.println(node + " ? from " + node.getParentNode().getClass().getCanonicalName());

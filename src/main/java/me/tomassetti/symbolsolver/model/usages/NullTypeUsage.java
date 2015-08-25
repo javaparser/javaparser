@@ -81,7 +81,7 @@ public class NullTypeUsage implements TypeUsage {
 
     @Override
     public String getQualifiedName() {
-        throw new UnsupportedOperationException();
+        return "null";
     }
 
     @Override

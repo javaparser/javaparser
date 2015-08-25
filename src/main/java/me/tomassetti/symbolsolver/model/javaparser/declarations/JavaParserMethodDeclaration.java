@@ -13,11 +13,9 @@ import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.usages.WildcardUsage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -64,14 +62,61 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver) {
+    public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes) {
         TypeUsage returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode).getReturnType(typeSolver), typeSolver, context);
         List<TypeUsage> params = new ArrayList<>();
         for (int i=0;i<wrappedNode.getParameters().size();i++){
             TypeUsage replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode).getParam(i).getType(typeSolver), typeSolver, context);
             params.add(replaced);
         }
+
+        // We now look at the type parameter for the method which we can derive from the parameter types
+        // and then we replace them in the return type
+        Map<String, TypeUsage> determinedTypeParameters = new HashMap<>();
+        for (int i=0; i < getNoParams(); i++) {
+            TypeUsage formalParamType = getParam(i).getType(typeSolver);
+            TypeUsage actualParamType = parameterTypes.get(i);
+            determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
+        }
+
+        for (String determinedParam : determinedTypeParameters.keySet()) {
+            returnType = returnType.replaceParam(determinedParam, determinedTypeParameters.get(determinedParam));
+        }
+
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode), params, returnType);
+    }
+
+    private void determineTypeParameters(Map<String, TypeUsage> determinedTypeParameters, TypeUsage formalParamType, TypeUsage actualParamType, TypeSolver typeSolver){
+        if (actualParamType.isNull()) {
+            return;
+        }
+        if (actualParamType.isTypeVariable()) {
+            return;
+        }
+        if (formalParamType.isTypeVariable()) {
+            determinedTypeParameters.put(formalParamType.getTypeName(), actualParamType);
+            return;
+        }
+        if (formalParamType instanceof WildcardUsage) {
+            return;
+        }
+        if (!formalParamType.getQualifiedName().equals(actualParamType.getQualifiedName())){
+            List<TypeUsageOfTypeDeclaration> ancestors = actualParamType.getAllAncestors(typeSolver);
+            final String formalParamTypeQName = formalParamType.getQualifiedName();
+            List<TypeUsage> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+            if (correspondingFormalType.size() == 0) {
+                throw new IllegalArgumentException();
+            }
+            actualParamType = correspondingFormalType.get(0);
+        }
+        List<TypeUsage> formalTypeParams = formalParamType.parameters();
+        List<TypeUsage> actualTypeParams = actualParamType.parameters();
+        if (formalTypeParams.size() != actualTypeParams.size()) {
+            throw new UnsupportedOperationException();
+        }
+        for (int i=0;i<formalTypeParams.size();i++){
+            determineTypeParameters(determinedTypeParameters, formalTypeParams.get(i), actualTypeParams.get(i), typeSolver);
+        }
     }
 
     @Override

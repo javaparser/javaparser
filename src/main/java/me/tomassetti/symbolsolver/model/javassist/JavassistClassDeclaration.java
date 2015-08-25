@@ -174,7 +174,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

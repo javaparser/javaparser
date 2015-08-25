@@ -53,7 +53,22 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
+    public TypeUsage replaceParam(String name, TypeUsage replaced) {
+        if (name.equals(typeParameter.getName())) {
+            return replaced;
+        } else {
+            return this;
+        }
+    }
+
+    @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+        for (TypeParameter.Bound bound : typeParameter.getBounds(typeSolver)) {
+            Optional<MethodUsage> methodUsage = bound.getType().solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext);
+            if (methodUsage.isPresent()) {
+                return methodUsage;
+            }
+        }
         return Optional.empty();
     }
 

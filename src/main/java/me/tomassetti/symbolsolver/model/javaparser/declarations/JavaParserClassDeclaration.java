@@ -7,6 +7,8 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
+import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
@@ -14,6 +16,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -137,9 +140,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
-        List<TypeDeclaration> ancestorsOfOther = other.getAllAncestors(typeSolver);
-        ancestorsOfOther.add(other);
-        for (TypeDeclaration ancestorOfOther : ancestorsOfOther) {
+        List<TypeUsageOfTypeDeclaration> ancestorsOfOther = other.getAllAncestors(typeSolver);
+        ancestorsOfOther.add(new TypeUsageOfTypeDeclaration(other));
+        for (TypeUsageOfTypeDeclaration ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;
             }
@@ -322,24 +325,38 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
-        List<TypeDeclaration> ancestors = new ArrayList<>();
+    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        List<TypeUsageOfTypeDeclaration> ancestors = new ArrayList<>();
         ClassDeclaration superclass = getSuperClass(typeSolver);
         if (superclass != null) {
-            ancestors.add(superclass);
+            ancestors.add(new TypeUsageOfTypeDeclaration(superclass));
             ancestors.addAll(superclass.getAllAncestors(typeSolver));
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()){
-                SymbolReference<TypeDeclaration> ancestor = solveType(implemented.getName(), typeSolver);
-                if (!ancestor.isSolved()) {
-                    throw new UnsolvedSymbolException(implemented.getName());
-                }
-                ancestors.add(ancestor.getCorrespondingDeclaration());
-                ancestors.addAll(ancestor.getCorrespondingDeclaration().getAllAncestors(typeSolver));
+                TypeUsageOfTypeDeclaration ancestor = toTypeUsage(implemented, typeSolver);
+                ancestors.add(ancestor);
+                ancestors.addAll(ancestor.getAllAncestors(typeSolver));
             }
         }
         return ancestors;
+    }
+
+    private TypeUsageOfTypeDeclaration toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver){
+        SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver);
+        if (!ancestor.isSolved()) {
+            throw new UnsolvedSymbolException(type.getName());
+        }
+        if (type.getTypeArgs() != null) {
+            List<TypeUsage> typeParams = type.getTypeArgs().stream().map((t)->toTypeUsage(t, typeSolver)).collect(Collectors.toList());
+            return new TypeUsageOfTypeDeclaration(ancestor.getCorrespondingDeclaration(), typeParams);
+        } else {
+            return new TypeUsageOfTypeDeclaration(ancestor.getCorrespondingDeclaration());
+        }
+    }
+
+    private TypeUsage toTypeUsage(Type type, TypeSolver typeSolver){
+        return JavaParserFacade.get(typeSolver).convert(type, type);
     }
 
     @Override

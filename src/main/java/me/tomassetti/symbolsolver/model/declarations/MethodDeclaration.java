@@ -6,6 +6,8 @@ import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.List;
+
 /**
  * A declaration of a method (either in an interface, a class or an enum).
  */
@@ -34,7 +36,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
      * Create the MethodUsage corresponding to this declaration with all generic types solved in the given
      * context.
      */
-    MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver);
+    MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes);
 
     Context getContext();
 }

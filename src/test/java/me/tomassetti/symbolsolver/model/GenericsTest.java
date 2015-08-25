@@ -8,12 +8,16 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContext;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -208,4 +212,85 @@ public class GenericsTest extends AbstractTest{
         assertEquals("void", typeUsage.getTypeName());
     }
 
+    @Test
+    public void classCastScope() throws ParseException {
+        CompilationUnit cu = parseSample("ClassCast");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassCast");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "getNodesByType");
+        MethodCallExpr call = Navigator.findMethodCall(method, "cast");
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        Expression scope = call.getScope();
+        TypeUsage typeUsage = JavaParserFacade.get(typeSolver).getType(scope);
+
+        System.out.println(typeUsage);
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("java.lang.Class<N>", typeUsage.getTypeNameWithParams());
+    }
+
+    @Test
+    public void classCast() throws ParseException {
+        CompilationUnit cu = parseSample("ClassCast");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassCast");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "getNodesByType");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
+
+        assertEquals(true, typeUsage.isTypeVariable());
+        assertEquals("N", typeUsage.getTypeNameWithParams());
+    }
+
+    @Test
+    public void typeParamOnReturnTypeStep1() throws ParseException {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        ThisExpr thisExpr = Navigator.findNodeOfGivenClass(method, ThisExpr.class);
+
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(thisExpr);
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("TypeParamOnReturnType", typeUsage.getTypeNameWithParams());
+    }
+
+    @Test
+    public void typeParamOnReturnTypeStep2() throws ParseException {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        NameExpr n1 = Navigator.findNameExpression(method, "n1");
+
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(n1);
+
+        assertEquals(true, typeUsage.isTypeVariable());
+        assertEquals("T", typeUsage.getTypeNameWithParams());
+    }
+
+    @Test
+    public void typeParamOnReturnTypeStep3() throws ParseException {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        MethodCallExpr call = Navigator.findMethodCall(method, "accept");
+
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(call);
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("java.lang.Boolean", typeUsage.getTypeNameWithParams());
+    }
+
+    @Test
+    public void typeParamOnReturnType() throws ParseException {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("boolean", typeUsage.getTypeNameWithParams());
+    }
 }

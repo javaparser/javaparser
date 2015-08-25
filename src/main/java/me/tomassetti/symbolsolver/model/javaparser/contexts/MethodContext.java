@@ -53,6 +53,7 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
             Optional<Value> symbolReference = solveWithAsValue(sb, name, typeSolver);
             if (symbolReference.isPresent()) {
+                // Perform parameter type substitution as needed
                 return symbolReference;
             }
         }

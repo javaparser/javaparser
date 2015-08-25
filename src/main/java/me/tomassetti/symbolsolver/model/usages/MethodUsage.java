@@ -86,17 +86,17 @@ public class MethodUsage {
 
     public MethodUsage replaceNameParam(String name, TypeUsage typeUsage) {
         // TODO if the method declaration has a type param with that name ignore this call
-        // TODO consider return type
         MethodUsage res = this;
         for (int i = 0; i<paramTypes.size(); i++){
             TypeUsage originalParamType = paramTypes.get(i);
             TypeUsage newParamType = replaceNameParam(name, typeUsage, originalParamType);
             res = res.replaceParamType(i, newParamType);
         }
+        res = res.replaceReturnType(replaceNameParam(name, typeUsage, res.returnType));
         return res;
     }
 
-    private TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
+    private static TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
         if (typeToBeExamined.isTypeVariable()){
             if (typeToBeExamined.getTypeName().equals(name)) {
                 return newValue;

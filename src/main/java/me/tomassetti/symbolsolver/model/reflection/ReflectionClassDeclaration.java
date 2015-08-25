@@ -170,9 +170,9 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
                 return new ReflectionFieldDeclaration(field);
             }
         }
-        for (TypeDeclaration ancestor : getAllAncestors(typeSolver)) {
-            if (ancestor.hasField(name, typeSolver)) {
-                return ancestor.getField(name, typeSolver);
+        for (TypeUsageOfTypeDeclaration ancestor : getAllAncestors(typeSolver)) {
+            if (ancestor.getTypeDeclaration().hasField(name, typeSolver)) {
+                return ancestor.getTypeDeclaration().getField(name, typeSolver);
             }
         }
         throw new UnsolvedSymbolException("Field in " + this, name);

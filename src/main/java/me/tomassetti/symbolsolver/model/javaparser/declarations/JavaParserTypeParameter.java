@@ -12,6 +12,7 @@ import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 import java.util.Collections;
 import java.util.List;
@@ -103,7 +104,7 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
     }
 
     @Override
-    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

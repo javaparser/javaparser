@@ -174,9 +174,9 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
                 return new ReflectionFieldDeclaration(field);
             }
         }
-        for (TypeDeclaration ancestor : getAllAncestors(typeSolver)) {
-            if (ancestor.hasField(name, typeSolver)) {
-                return ancestor.getField(name, typeSolver);
+        for (TypeUsageOfTypeDeclaration ancestor : getAllAncestors(typeSolver)) {
+            if (ancestor.getTypeDeclaration().hasField(name, typeSolver)) {
+                return ancestor.getTypeDeclaration().getField(name, typeSolver);
             }
         }
         throw new UnsolvedSymbolException("Field in " + this, name);
@@ -216,15 +216,15 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
-        List<TypeDeclaration> ancestors = new LinkedList<>();
+    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        List<TypeUsageOfTypeDeclaration> ancestors = new LinkedList<>();
         if (clazz.getSuperclass() != null) {
-            TypeDeclaration superclass = new ReflectionInterfaceDeclaration(clazz.getSuperclass());
+            TypeUsageOfTypeDeclaration superclass = new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(clazz.getSuperclass()));
             ancestors.add(superclass);
             ancestors.addAll(superclass.getAllAncestors(typeSolver));
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
-            TypeDeclaration interfazeDecl = new ReflectionInterfaceDeclaration(interfaze);
+            TypeUsageOfTypeDeclaration interfazeDecl = new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(interfaze));
             ancestors.add(interfazeDecl);
             ancestors.addAll(interfazeDecl.getAllAncestors(typeSolver));
         }

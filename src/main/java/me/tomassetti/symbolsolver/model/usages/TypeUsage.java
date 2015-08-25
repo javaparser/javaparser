@@ -4,6 +4,7 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,6 +98,11 @@ public interface TypeUsage {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
+    default TypeUsage replaceParam(String name, TypeUsage replaced) {
+        //throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        return this;
+    }
+
     default Optional<TypeUsage> solveGenericType(String name) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
@@ -128,5 +134,9 @@ public interface TypeUsage {
 
     default boolean isEnum() {
         return false;
+    }
+
+    default List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        return Collections.emptyList();
     }
 }

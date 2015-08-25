@@ -1,10 +1,12 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.model.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A class declaration.
@@ -42,13 +44,13 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
     }
 
     @Override
-    default List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
-        List<TypeDeclaration> ancestors = new LinkedList<>();
+    default List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        List<TypeUsageOfTypeDeclaration> ancestors = new LinkedList<>();
         if (getSuperClass(typeSolver) != null) {
-            ancestors.add(getSuperClass(typeSolver));
+            ancestors.add(new TypeUsageOfTypeDeclaration(getSuperClass(typeSolver)));
             ancestors.addAll(getSuperClass(typeSolver).getAllAncestors(typeSolver));
         }
-        ancestors.addAll(getAllInterfaces(typeSolver));
+        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new TypeUsageOfTypeDeclaration(i)).collect(Collectors.toList()));
         return ancestors;
     }
 

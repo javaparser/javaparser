@@ -220,7 +220,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
         }
 
         @Override
-        public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver) {
+        public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes) {
             return new MethodUsage(this, typeSolver);
         }
 
@@ -296,7 +296,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public List<TypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

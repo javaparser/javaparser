@@ -78,7 +78,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        return getParent().solveSymbolAsValue(name, typeSolver);
+        Context parentContext = getParent();
+        return parentContext.solveSymbolAsValue(name, typeSolver);
     }
 
     @Override

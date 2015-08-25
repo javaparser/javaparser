@@ -194,6 +194,21 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParametersCorrected);
     }
 
+    @Override
+    public TypeUsage replaceParam(String name, TypeUsage replaced) {
+        List<TypeUsage> newParams = typeParameters.stream().map((tp)->tp.replaceParam(name, replaced)).collect(Collectors.toList());
+        if (typeParameters.equals(newParams)) {
+            return this;
+        } else {
+            return new TypeUsageOfTypeDeclaration(typeDeclaration, newParams);
+        }
+    }
+
+    @Override
+    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+        return typeDeclaration.getAllAncestors(typeSolver);
+    }
+
     private TypeUsage replaceTypeParams(TypeUsage typeUsage){
         if (typeUsage.isTypeVariable()) {
             TypeParameter typeParameter = typeUsage.asTypeParameter();
@@ -271,10 +286,12 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         if (other instanceof LambdaTypeUsagePlaceholder) {
             return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
         } else if (other instanceof TypeUsageOfTypeDeclaration) {
-            TypeUsageOfTypeDeclaration otherTUOTD = (TypeUsageOfTypeDeclaration)other;
+            TypeUsageOfTypeDeclaration otherTUOTD = (TypeUsageOfTypeDeclaration) other;
             return typeDeclaration.isAssignableBy(otherTUOTD.typeDeclaration, typeSolver);
 
-
+        } else if (other.isTypeVariable()) {
+            // TODO look bounds...
+            return true;
         } else {
             return false;
         }

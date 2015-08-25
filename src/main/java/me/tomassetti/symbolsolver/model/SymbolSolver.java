@@ -42,7 +42,8 @@ public class SymbolSolver {
     }
 
     public Optional<Value> solveSymbolAsValue(String name, Node node) {
-        return solveSymbolAsValue(name, JavaParserFactory.getContext(node));
+        Context context = JavaParserFactory.getContext(node);
+        return solveSymbolAsValue(name, context);
     }
 
     public SymbolReference<? extends TypeDeclaration> solveType(String name, Context context) {

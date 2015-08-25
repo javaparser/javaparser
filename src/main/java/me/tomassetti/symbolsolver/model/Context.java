@@ -61,7 +61,7 @@ public interface Context {
         SymbolReference<MethodDeclaration> methodSolved = solveMethod(name, parameterTypes, typeSolver);
         if (methodSolved.isSolved()) {
             MethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
-            return Optional.of(methodDeclaration.resolveTypeVariables(this, typeSolver));
+            return Optional.of(methodDeclaration.resolveTypeVariables(this, typeSolver, parameterTypes));
         } else {
             return Optional.empty();
         }

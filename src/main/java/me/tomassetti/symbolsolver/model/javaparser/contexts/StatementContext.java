@@ -58,7 +58,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbolAsValue(name, typeSolver);
+        Context parentContext = getParent();
+        return parentContext.solveSymbolAsValue(name, typeSolver);
     }
 
     public static SymbolReference<? extends ValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt){
