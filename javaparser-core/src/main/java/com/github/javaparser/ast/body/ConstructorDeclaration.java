@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import java.util.List;
@@ -34,12 +34,12 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.type.Type;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode {
+public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration,
+        NamedNode {
 
     private int modifiers;
 
@@ -61,7 +61,8 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         setName(name);
     }
 
-    public ConstructorDeclaration(int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
+    public ConstructorDeclaration(int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters,
+                                  String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
         super(annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -71,7 +72,9 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         setBlock(block);
     }
 
-    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
+    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+                                  List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
+                                  List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
         super(beginLine, beginColumn, endLine, endColumn, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -110,7 +113,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public NameExpr getNameExpr() {
-      return name;
+        return name;
     }
 
     public List<Parameter> getParameters() {
@@ -133,7 +136,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     public void setBlock(BlockStmt block) {
         this.block = block;
-		setAsParentNodeOf(this.block);
+        setAsParentNodeOf(this.block);
     }
 
     public void setModifiers(int modifiers) {
@@ -150,17 +153,17 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
-		setAsParentNodeOf(this.parameters);
+        setAsParentNodeOf(this.parameters);
     }
 
     public void setThrows(List<NameExpr> throws_) {
         this.throws_ = throws_;
-		setAsParentNodeOf(this.throws_);
+        setAsParentNodeOf(this.throws_);
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
-		setAsParentNodeOf(this.typeParameters);
+        setAsParentNodeOf(this.typeParameters);
     }
 
     /**
@@ -170,7 +173,8 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
      * [throws exceptionsList]
      */
     @Override
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows,
+                                         boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
