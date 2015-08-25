@@ -22,6 +22,7 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -280,6 +281,17 @@ public final class ASTHelper {
             type.setMembers(members);
         }
         members.add(decl);
+    }
+
+    public static <N extends Node> List<N> getNodesByType(Node container, Class<N> clazz) {
+        List<N> nodes = new ArrayList<N>();
+        for (Node child : container.getChildrenNodes()) {
+            if (clazz.isInstance(child)) {
+                nodes.add(clazz.cast(child));
+            }
+            nodes.addAll(getNodesByType(child, clazz));
+        }
+        return nodes;
     }
 
 }
