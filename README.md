@@ -1,4 +1,8 @@
 # java-symbol-solver
+
+[![Build Status](https://travis-ci.org/ftomassetti/java-symbol-solver.svg?branch=master)](https://travis-ci.org/ftomassetti/java-symbol-solver)
+
+
 A Symbol Solver for Java built on top of [JavaParser](https://github.com/javaparser/javaparser/).
 
 ## Goal of the project
