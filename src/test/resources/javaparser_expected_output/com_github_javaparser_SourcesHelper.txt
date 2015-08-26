@@ -8,7 +8,7 @@
   Line 33) s.hasNext() ? s.next() : "" ==> java.lang.String
   Line 38) java.util.Scanner s = new java.util.Scanner(in).useDelimiter("\\A") ==> java.util.Scanner
   Line 38) new java.util.Scanner(in).useDelimiter("\\A") ==> java.util.Scanner
-  Line 39) s.hasNext() ? s.next() : "" ==> java.lang.Object
+  Line 39) s.hasNext() ? s.next() : "" ==> java.lang.String
   Line 43) byte[] rawData = encoding != null ? s.getBytes(encoding) : s.getBytes() ==> byte[]
   Line 43) encoding != null ? s.getBytes(encoding) : s.getBytes() ==> byte[]
   Line 44) new ByteArrayInputStream(rawData) ==> java.io.ByteArrayInputStream

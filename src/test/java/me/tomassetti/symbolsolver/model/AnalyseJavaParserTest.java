@@ -53,7 +53,8 @@ public class AnalyseJavaParserTest {
         assertEquals(0, sourceFileInfoExtractor.getKo());
         assertEquals(0, sourceFileInfoExtractor.getUnsupported());
 
-        File dstFile = new File("src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_")+ ".txt");
+        String path = "src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_")+ ".txt";
+        File dstFile = new File(path);
 
         String expected = readFile(dstFile);
 
@@ -61,7 +62,7 @@ public class AnalyseJavaParserTest {
         String[] expectedLines = expected.split("\n");
 
         for (int i=0; i<Math.min(outputLines.length, expectedLines.length); i++) {
-            assertEquals(expectedLines[i], outputLines[i]);
+            assertEquals("Line " + (i+1) + " of " + path + " is different from what is expected", expectedLines[i], outputLines[i]);
         }
 
         assertEquals(expectedLines.length, outputLines.length);
@@ -83,9 +84,17 @@ public class AnalyseJavaParserTest {
     }
 
     @Test
-    public void parseStatements() throws IOException, ParseException {
+    public void parseStatement() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/Statement");
+    }
+
+    @Test
+    public void parseCatchClaus() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/CatchClause");
+    }
+
+    @Test
+    public void parseStatements() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/LabeledStmt");
         parse("com/github/javaparser/ast/stmt/BreakStmt");
         parse("com/github/javaparser/ast/stmt/ReturnStmt");
@@ -174,6 +183,21 @@ public class AnalyseJavaParserTest {
     }
 
     @Test
+    public void parseSourcesHelper() throws IOException, ParseException {
+        parse("com/github/javaparser/SourcesHelper");
+    }
+
+    @Test
+    public void parseComments() throws IOException, ParseException {
+        parse("com/github/javaparser/ast/comments/LineComment");
+        parse("com/github/javaparser/ast/comments/Comment");
+        parse("com/github/javaparser/ast/comments/CommentsParser");
+        parse("com/github/javaparser/ast/comments/JavadocComment");
+        parse("com/github/javaparser/ast/comments/BlockComment");
+        parse("com/github/javaparser/ast/comments/CommentsCollection");
+    }
+
+    @Test
     public void parseTheRest() throws IOException, ParseException {
         parse("com/github/javaparser/ast/internal/Utils");
         parse("com/github/javaparser/ast/body/AnnotationMemberDeclaration");
@@ -206,15 +230,7 @@ public class AnalyseJavaParserTest {
         parse("com/github/javaparser/ast/CompilationUnit");
         parse("com/github/javaparser/ast/TypeParameter");
         parse("com/github/javaparser/ast/ImportDeclaration");
-        parse("com/github/javaparser/ast/comments/LineComment");
-        parse("com/github/javaparser/ast/comments/Comment");
-        // TODO fix this one
-        // parse("com/github/javaparser/ast/comments/CommentsParser");
-        parse("com/github/javaparser/ast/comments/JavadocComment");
-        parse("com/github/javaparser/ast/comments/BlockComment");
-        parse("com/github/javaparser/ast/comments/CommentsCollection");
         parse("com/github/javaparser/Position");
-        parse("com/github/javaparser/SourcesHelper");
         parse("com/github/javaparser/ASTHelper");
     }
 
