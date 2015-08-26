@@ -1,0 +1,1 @@
+- parsing /home/federico/repos/java-symbol-solver/src/test/resources/javaparser_src/proper_source/com/github/javaparser/ast/stmt/SwitchStmt.java
