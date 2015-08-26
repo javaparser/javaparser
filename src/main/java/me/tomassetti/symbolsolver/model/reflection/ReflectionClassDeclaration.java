@@ -9,13 +9,13 @@ import me.tomassetti.symbolsolver.model.usages.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 02/08/15.
@@ -65,12 +65,74 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         return new ClassOrInterfaceDeclarationContext(clazz);
     }
 
+    private static class ParameterComparator implements Comparator<Parameter> {
+
+        @Override
+        public int compare(Parameter o1, Parameter o2) {
+            int compareName = o1.getName().compareTo(o2.getName());
+            if (compareName != 0) return compareName;
+            int compareType = new ClassComparator().compare(o1.getType(), o2.getType());
+            if (compareType != 0) return compareType;
+            return 0;
+        }
+    }
+
+    private static class ClassComparator implements Comparator<Class<?>> {
+
+        @Override
+        public int compare(Class<?> o1, Class<?> o2) {
+            int subCompare;
+            subCompare = o1.getCanonicalName().compareTo(o2.getCanonicalName());
+            if (subCompare != 0) return subCompare;
+            subCompare = Boolean.compare(o1.isAnnotation(), o2.isAnnotation());
+            if (subCompare != 0) return subCompare;
+            subCompare = Boolean.compare(o1.isArray(), o2.isArray());
+            if (subCompare != 0) return subCompare;
+            subCompare = Boolean.compare(o1.isEnum(), o2.isEnum());
+            if (subCompare != 0) return subCompare;
+            subCompare = Boolean.compare(o1.isInterface(), o2.isInterface());
+            if (subCompare != 0) return subCompare;
+            return 0;
+        }
+    }
+
+    private static class MethodComparator implements Comparator<Method> {
+
+        @Override
+        public int compare(Method o1, Method o2) {
+            int compareName = o1.getName().compareTo(o2.getName());
+            if (compareName != 0) return compareName;
+            int compareNParams = o1.getParameterCount() - o2.getParameterCount();
+            if (compareNParams != 0) return compareNParams;
+            for (int i=0;i<o1.getParameterCount();i++) {
+                int compareParam = new ParameterComparator().compare(o1.getParameters()[i], o2.getParameters()[i]);
+                if (compareParam != 0) return compareParam;
+            }
+            int compareResult = new ClassComparator().compare(o1.getReturnType(), o2.getReturnType());
+            if (compareResult != 0) return compareResult;
+            return 0;
+        }
+    }
+
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         List<MethodDeclaration> methods = new ArrayList<>();
-        for (Method method : clazz.getMethods()) {
+        for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
             methods.add(methodDeclaration);
+        }
+        ClassDeclaration superClass = getSuperClass(typeSolver);
+        if (superClass != null) {
+            SymbolReference<MethodDeclaration> ref = superClass.solveMethod(name, parameterTypes, typeSolver);
+            if (ref.isSolved()) {
+                methods.add(ref.getCorrespondingDeclaration());
+            }
+        }
+        for (InterfaceDeclaration interfaceDeclaration : getInterfaces(typeSolver)) {
+            SymbolReference<MethodDeclaration> ref = interfaceDeclaration.solveMethod(name, parameterTypes, typeSolver);
+            if (ref.isSolved()) {
+                methods.add(ref.getCorrespondingDeclaration());
+            }
         }
         return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
     }
@@ -93,16 +155,27 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
-        for (Method method : clazz.getMethods()) {
-            if (method.getName().equals(name)) {
-                MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
-                MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
-                for (int i=0;i<getTypeParameters().size();i++){
-                    String nameToReplace = getTypeParameters().get(i).getName();
-                    TypeUsage newValue = typeParameterValues.get(i);
-                    methodUsage = methodUsage.replaceNameParam(nameToReplace, newValue);
-                }
-                methods.add(methodUsage);
+        for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
+            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
+            MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+            for (int i=0;i<getTypeParameters().size();i++){
+                String nameToReplace = getTypeParameters().get(i).getName();
+                TypeUsage newValue = typeParameterValues.get(i);
+                methodUsage = methodUsage.replaceNameParam(nameToReplace, newValue);
+            }
+            methods.add(methodUsage);
+        }
+        ClassDeclaration superClass = getSuperClass(typeSolver);
+        if (superClass != null) {
+            Optional<MethodUsage> ref = superClass.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+            if (ref.isPresent()) {
+                methods.add(ref.get());
+            }
+        }
+        for (InterfaceDeclaration interfaceDeclaration : getInterfaces(typeSolver)) {
+            Optional<MethodUsage> ref = interfaceDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+            if (ref.isPresent()) {
+                methods.add(ref.get());
             }
         }
         Optional<MethodUsage> ref = MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);

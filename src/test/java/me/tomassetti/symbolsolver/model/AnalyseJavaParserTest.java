@@ -39,6 +39,8 @@ public class AnalyseJavaParserTest {
         return new String(encoded, StandardCharsets.UTF_8);
     }
 
+    private static final boolean DEBUG = true;
+
     private void parse(String fileName) throws IOException, ParseException {
         File sourceFile = new File(src.getAbsolutePath() + "/" + fileName + ".java");
         SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
@@ -50,11 +52,15 @@ public class AnalyseJavaParserTest {
         sourceFileInfoExtractor.solve(sourceFile);
         String output = outErrStream.toString();
 
-        assertEquals(0, sourceFileInfoExtractor.getKo());
-        assertEquals(0, sourceFileInfoExtractor.getUnsupported());
-
         String path = "src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_")+ ".txt";
         File dstFile = new File(path);
+
+        if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)){
+            System.err.println(output);
+        }
+
+        assertTrue("No failures expected when analyzing " + path, 0 == sourceFileInfoExtractor.getKo());
+        assertTrue("No UnsupportedOperationException expected when analyzing " + path, 0 == sourceFileInfoExtractor.getUnsupported());
 
         String expected = readFile(dstFile);
 

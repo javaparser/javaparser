@@ -87,13 +87,16 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
         if (typeParameterValues.size() != getTypeParameters().size()) {
-            if (typeParameterValues.size() != 0){
-                throw new UnsupportedOperationException();
-            }
-            // Parameters not specified, so default to Object
-            typeParameterValues = new ArrayList<>();
-            for (int i=0;i<getTypeParameters().size();i++){
-                typeParameterValues.add(new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class)));
+            //if (typeParameterValues.size() != 0){
+            //    throw new UnsupportedOperationException("I have solved parameters for " + clazz.getCanonicalName() +". Values given are: "+typeParameterValues);
+            //}
+            // if it is zero we are going to ignore them
+            if (this.getTypeParameters().size() != 0) {
+                // Parameters not specified, so default to Object
+                typeParameterValues = new ArrayList<>();
+                for (int i = 0; i < getTypeParameters().size(); i++) {
+                    typeParameterValues.add(new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class)));
+                }
             }
         }
         List<MethodUsage> methods = new ArrayList<>();

@@ -164,7 +164,7 @@ public class MethodResolutionLogic {
                         }
                     } else {
                         // we expect the methods to be ordered such that inherited methods are later in the list
-                        throw new UnsupportedOperationException();
+                        //throw new UnsupportedOperationException();
                     }
                 }
             }
