@@ -11,11 +11,11 @@ A Symbol Solver can associate a symbol in your code to its declaration. This is 
 Consider this:
 
 ```java
-    int a = 0;
-    while (true) {
-        String a = "hello!";
-        Object foo = a + 1;
-    }
+int a = 0;
+while (true) {
+    String a = "hello!";
+    Object foo = a + 1;
+}
 ```
 
 In the expression `a + 1` a parser (like JavaParser) is not able to tell us to which definition of `a` we are referring to and consequently it cannot tell us the type of `a`. The JavaSymbolSolver is able to do so.
@@ -40,10 +40,10 @@ The only configuration that it requires is part of the `TypeSolver` instance to 
 In the tests you can find an example of instanting `TypeSolver`s:
 
 ```java
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new JreTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/proper_source")));
-        combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/generated")));
+CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+combinedTypeSolver.add(new JreTypeSolver());
+combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/proper_source")));
+combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/generated")));
 ```
 
 Typically to analize a project you want to create one instance of `JavaParserTypeSolver` for each source directory, one instance of `JarTypeSolver` for each dependency and one `JreTypeSolver` then you can combine all of them in a `CombinedTypeSolver` and pass that around.
