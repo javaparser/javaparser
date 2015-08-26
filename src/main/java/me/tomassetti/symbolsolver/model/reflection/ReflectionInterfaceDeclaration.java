@@ -137,6 +137,10 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
             }
         }
 
+        if (other.getQualifiedName().equals(Object.class.getCanonicalName())) {
+            return true;
+        }
+
         return false;
     }
 

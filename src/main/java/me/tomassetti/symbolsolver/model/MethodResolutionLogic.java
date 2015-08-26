@@ -130,12 +130,16 @@ public class MethodResolutionLogic {
         for (int i=0; i < methodA.getNoParams(); i++){
             TypeUsage tdA = methodA.getParamType(i, typeSolver);
             TypeUsage tdB = methodB.getParamType(i, typeSolver);
+
+            boolean aIsAssignableByB = tdA.isAssignableBy(tdB, typeSolver);
+            boolean bIsAssignableByA = tdB.isAssignableBy(tdA, typeSolver);
+
             // B is more specific
-            if (tdB.isAssignableBy(tdA, typeSolver) && !tdA.isAssignableBy(tdB, typeSolver)) {
+            if (bIsAssignableByA && !aIsAssignableByB) {
                 oneMoreSpecificFound = true;
             }
             // A is more specific
-            if (tdA.isAssignableBy(tdB, typeSolver) && !tdB.isAssignableBy(tdA, typeSolver)) {
+            if (aIsAssignableByB && !bIsAssignableByA) {
                 return false;
             }
         }

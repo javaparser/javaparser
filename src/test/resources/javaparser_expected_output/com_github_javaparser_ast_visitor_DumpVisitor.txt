@@ -16,14 +16,14 @@
   Line 117) int i = 0 ==> int
   Line 117) 0 ==> int
   Line 117) i++ ==> int
-  Line 118) buf.append("    ") ==> java.lang.AbstractStringBuilder
+  Line 118) buf.append("    ") ==> java.lang.StringBuilder
   Line 123) !indented ==> boolean
   Line 124) makeIndent() ==> void
   Line 125) indented = true ==> boolean
-  Line 127) buf.append(arg) ==> java.lang.AbstractStringBuilder
+  Line 127) buf.append(arg) ==> java.lang.StringBuilder
   Line 131) print(arg) ==> void
   Line 132) printLn() ==> void
-  Line 136) buf.append(System.getProperty("line.separator")) ==> java.lang.AbstractStringBuilder
+  Line 136) buf.append(System.getProperty("line.separator")) ==> java.lang.StringBuilder
   Line 137) indented = false ==> boolean
   Line 141) buf.toString() ==> java.lang.String
   Line 145) getSource() ==> java.lang.String
