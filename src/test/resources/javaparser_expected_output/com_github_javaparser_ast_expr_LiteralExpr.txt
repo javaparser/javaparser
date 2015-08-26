@@ -1,1 +1,9 @@
-- parsing /home/federico/repos/java-symbol-solver/src/test/resources/javaparser_src/proper_source/com/github/javaparser/ast/expr/LiteralExpr.java
+
+[ Class com.github.javaparser.ast.expr.LiteralExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  Line 33) beginLine ==> int
+  Line 33) beginColumn ==> int
+  Line 33) endLine ==> int
+  Line 33) endColumn ==> int

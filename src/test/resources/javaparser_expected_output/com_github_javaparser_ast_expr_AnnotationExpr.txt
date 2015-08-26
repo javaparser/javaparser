@@ -1,1 +1,12 @@
-- parsing /home/federico/repos/java-symbol-solver/src/test/resources/javaparser_src/proper_source/com/github/javaparser/ast/expr/AnnotationExpr.java
+
+[ Class com.github.javaparser.ast.expr.AnnotationExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  Line 35) beginLine ==> int
+  Line 35) beginColumn ==> int
+  Line 35) endLine ==> int
+  Line 35) endColumn ==> int
+  Line 39) name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 43) this.name = name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 44) setAsParentNodeOf(name) ==> void

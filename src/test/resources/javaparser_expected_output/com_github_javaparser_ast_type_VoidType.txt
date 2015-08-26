@@ -1,1 +1,11 @@
-- parsing /home/federico/repos/java-symbol-solver/src/test/resources/javaparser_src/proper_source/com/github/javaparser/ast/type/VoidType.java
+
+[ Class com.github.javaparser.ast.type.VoidType ]
+  superclass: com.github.javaparser.ast.type.Type
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  Line 36) beginLine ==> int
+  Line 36) beginColumn ==> int
+  Line 36) endLine ==> int
+  Line 36) endColumn ==> int
+  Line 40) v.visit(this, arg) ==> R
+  Line 44) v.visit(this, arg) ==> void

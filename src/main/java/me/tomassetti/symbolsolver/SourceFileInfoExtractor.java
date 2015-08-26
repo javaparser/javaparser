@@ -37,6 +37,12 @@ public class SourceFileInfoExtractor {
     private int ko = 0;
     private int unsupported = 0;
 
+    public void setPrintFileName(boolean printFileName) {
+        this.printFileName = printFileName;
+    }
+
+    private boolean printFileName = true;
+
     public void clear() {
         ok = 0;
         ko = 0;
@@ -70,12 +76,12 @@ public class SourceFileInfoExtractor {
     private void solveTypeDecl(ClassOrInterfaceDeclaration node) {
         TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
         if (typeDeclaration.isClass()) {
-            //out.println("\n[ Class "+ typeDeclaration.getQualifiedName() + " ]");
+            out.println("\n[ Class "+ typeDeclaration.getQualifiedName() + " ]");
             for (TypeDeclaration sc : typeDeclaration.asClass().getAllSuperClasses(typeSolver)) {
-                //out.println("  superclass: " + sc.getQualifiedName());
+                out.println("  superclass: " + sc.getQualifiedName());
             }
             for (TypeDeclaration sc : typeDeclaration.asClass().getAllInterfaces(typeSolver)) {
-                //out.println("  interface: " + sc.getQualifiedName());
+                out.println("  interface: " + sc.getQualifiedName());
             }
         }
     }
@@ -91,7 +97,7 @@ public class SourceFileInfoExtractor {
             } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)){
                 try {
                     TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
-                    //out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.prettyPrint());
+                    out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.prettyPrint());
                     ok++;
                 } catch (UnsupportedOperationException upe){
                     unsupported++;
@@ -114,7 +120,9 @@ public class SourceFileInfoExtractor {
             }
         } else {
             if (file.getName().endsWith(".java")) {
-                out.println("- parsing " + file.getAbsolutePath());
+                if (printFileName) {
+                    out.println("- parsing " + file.getAbsolutePath());
+                }
                 CompilationUnit cu = JavaParser.parse(file);
                 solve(cu);
             }

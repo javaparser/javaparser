@@ -28,6 +28,7 @@ public class AnalyseJavaParserTest {
         combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/generated")));
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
         sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
+        sourceFileInfoExtractor.setPrintFileName(false);
         return sourceFileInfoExtractor;
     }
 
@@ -47,14 +48,14 @@ public class AnalyseJavaParserTest {
         sourceFileInfoExtractor.setOut(outErr);
         sourceFileInfoExtractor.setErr(outErr);
         sourceFileInfoExtractor.solve(sourceFile);
-        String output = outErrStream.toString().trim();
+        String output = outErrStream.toString();
 
         assertEquals(0, sourceFileInfoExtractor.getKo());
         assertEquals(0, sourceFileInfoExtractor.getUnsupported());
 
         File dstFile = new File("src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_")+ ".txt");
 
-        String expected = readFile(dstFile).trim();
+        String expected = readFile(dstFile);
 
         String[] outputLines = output.split("\n");
         String[] expectedLines = expected.split("\n");

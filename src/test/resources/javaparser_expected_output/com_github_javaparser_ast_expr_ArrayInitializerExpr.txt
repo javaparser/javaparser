@@ -1,1 +1,16 @@
-- parsing /home/federico/repos/java-symbol-solver/src/test/resources/javaparser_src/proper_source/com/github/javaparser/ast/expr/ArrayInitializerExpr.java
+
+[ Class com.github.javaparser.ast.expr.ArrayInitializerExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  Line 40) setValues(values) ==> void
+  Line 44) beginLine ==> int
+  Line 44) beginColumn ==> int
+  Line 44) endLine ==> int
+  Line 44) endColumn ==> int
+  Line 45) setValues(values) ==> void
+  Line 50) v.visit(this, arg) ==> R
+  Line 55) v.visit(this, arg) ==> void
+  Line 59) values ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 63) this.values = values ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 64) setAsParentNodeOf(this.values) ==> void

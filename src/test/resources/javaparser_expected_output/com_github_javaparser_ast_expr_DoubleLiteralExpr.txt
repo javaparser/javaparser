@@ -1,1 +1,15 @@
-- parsing /home/federico/repos/java-symbol-solver/src/test/resources/javaparser_src/proper_source/com/github/javaparser/ast/expr/DoubleLiteralExpr.java
+
+[ Class com.github.javaparser.ast.expr.DoubleLiteralExpr ]
+  superclass: com.github.javaparser.ast.expr.StringLiteralExpr
+  superclass: com.github.javaparser.ast.expr.LiteralExpr
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  Line 36) value ==> java.lang.String
+  Line 41) beginLine ==> int
+  Line 41) beginColumn ==> int
+  Line 41) endLine ==> int
+  Line 41) endColumn ==> int
+  Line 41) value ==> java.lang.String
+  Line 45) v.visit(this, arg) ==> R
+  Line 49) v.visit(this, arg) ==> void
