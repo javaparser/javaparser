@@ -32,12 +32,23 @@ TypeUsage typeOfTheNode = JavaParserFacade.get(typeSolver).getType(node);
 Easy, right?
 
 The only configuration that it requires is part of the `TypeSolver` instance to pass it. A `TypeSolver` is the mechanism that is used to find the classes referenced in your code. For example your class could import or extend a given class and the `TypeSolver` will find it and build a model of it, later used to solve symbols. Basically there are four `TypeSolver`:
-* `JreTypeSolver`
-* `JarTypeSolver`
-* `JavaParserTypeSolver`
-* `CombinedTypeSolver` 
+* `JavaParserTypeSolver`: look for the type in a directory of source files
+* `JarTypeSolver`: look for the type in a JAR file
+* `JreTypeSolver`: look for the type using reflection. This is needed because some classes are not available in any other way (for example the `Object` class). However this should be used exclusively for files in the java or javax packages
+* `CombinedTypeSolver`: permits to combine several instances of `TypeSolver`s
 
-We plan to write soon more examples and tutorials
+In the tests you can find an example of instanting `TypeSolver`s:
+
+```java
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+        combinedTypeSolver.add(new JreTypeSolver());
+        combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/proper_source")));
+        combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/generated")));
+```
+
+Typically to analize a project you want to create one instance of `JavaParserTypeSolver` for each source directory, one instance of `JarTypeSolver` for each dependency and one `JreTypeSolver` then you can combine all of them in a `CombinedTypeSolver` and pass that around.
+
+_We plan to write soon more examples and tutorials._
 
 ## Status of the project
 
