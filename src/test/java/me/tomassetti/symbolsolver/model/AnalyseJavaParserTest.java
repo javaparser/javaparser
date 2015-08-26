@@ -47,15 +47,23 @@ public class AnalyseJavaParserTest {
         sourceFileInfoExtractor.setOut(outErr);
         sourceFileInfoExtractor.setErr(outErr);
         sourceFileInfoExtractor.solve(sourceFile);
-        String output = outErrStream.toString();
+        String output = outErrStream.toString().trim();
 
         assertEquals(0, sourceFileInfoExtractor.getKo());
         assertEquals(0, sourceFileInfoExtractor.getUnsupported());
 
         File dstFile = new File("src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_")+ ".txt");
 
-        String expected = readFile(dstFile);
-        assertEquals(expected, output);
+        String expected = readFile(dstFile).trim();
+
+        String[] outputLines = output.split("\n");
+        String[] expectedLines = expected.split("\n");
+
+        for (int i=0; i<Math.min(outputLines.length, expectedLines.length); i++) {
+            assertEquals(expectedLines[i], outputLines[i]);
+        }
+
+        assertEquals(expectedLines.length, outputLines.length);
 
         // If we need to update the file uncomment these lines
         //PrintWriter writer = new PrintWriter(dstFile.getAbsoluteFile(), "UTF-8");
