@@ -5,7 +5,7 @@
   Line 30) streamToString(in) ==> java.lang.String
   Line 32) java.util.Scanner s = new java.util.Scanner(in, encoding).useDelimiter("\\A") ==> java.util.Scanner
   Line 32) new java.util.Scanner(in, encoding).useDelimiter("\\A") ==> java.util.Scanner
-  Line 33) s.hasNext() ? s.next() : "" ==> java.lang.Object
+  Line 33) s.hasNext() ? s.next() : "" ==> java.lang.String
   Line 38) java.util.Scanner s = new java.util.Scanner(in).useDelimiter("\\A") ==> java.util.Scanner
   Line 38) new java.util.Scanner(in).useDelimiter("\\A") ==> java.util.Scanner
   Line 39) s.hasNext() ? s.next() : "" ==> java.lang.Object
