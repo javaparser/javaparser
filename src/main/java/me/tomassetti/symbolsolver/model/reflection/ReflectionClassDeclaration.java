@@ -118,6 +118,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
+            if (method.isBridge() || method.isSynthetic()) continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
             methods.add(methodDeclaration);
         }
@@ -156,6 +157,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
+            if (method.isBridge() || method.isSynthetic()) continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
             MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
             for (int i=0;i<getTypeParameters().size();i++){

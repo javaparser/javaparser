@@ -72,7 +72,7 @@ public class SymbolResolutionTest extends AbstractTest {
         CompilationUnit cu = parseSample("JreConditionalExpression");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo1");
-        MethodCallExpr expression = Navigator.findMethodCall(method, "hasNext");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "next");
 
         TypeSolver typeSolver = new JreTypeSolver();
         TypeUsage ref = JavaParserFacade.get(typeSolver).getType(expression);

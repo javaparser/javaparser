@@ -18,6 +18,6 @@
   Line 49) new StringBuilder() ==> java.lang.StringBuilder
   Line 50) int numChars ==> int
   Line 52) (numChars = reader.read(arr, 0, arr.length)) > 0 ==> boolean
-  Line 53) buf.append(arr, 0, numChars) ==> java.lang.AbstractStringBuilder
+  Line 53) buf.append(arr, 0, numChars) ==> java.lang.StringBuilder
   Line 56) buf.toString() ==> java.lang.String
   Line 60) new StringReader(s) ==> java.io.StringReader

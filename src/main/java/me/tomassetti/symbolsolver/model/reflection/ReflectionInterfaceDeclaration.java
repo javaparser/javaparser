@@ -46,6 +46,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
+            if (method.isBridge() || method.isSynthetic()) continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
             methods.add(methodDeclaration);
         }
@@ -101,7 +102,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
         }
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
-            if (method.getName().equals(name)) {
+            if (method.getName().equals(name) && !method.isBridge() && !method.isSynthetic()) {
                 MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
                 MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
                 int i = 0;

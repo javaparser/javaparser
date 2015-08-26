@@ -26,6 +26,9 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     public ReflectionMethodDeclaration(Method method) {
         this.method = method;
+        if (method.isSynthetic() || method.isBridge()) {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

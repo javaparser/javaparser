@@ -15,6 +15,7 @@ import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -87,6 +88,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<TypeUsage> typeParameterValues) {
 
+        // TODO avoid bridge and synthetic methods
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)){
                 // TODO check parameters
@@ -187,6 +189,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
+            // TODO avoid bridge and synthetic methods
             if (method.getName().equals(name)){
                 candidates.add(new JavassistMethodDeclaration(method, typeSolver));
             }
