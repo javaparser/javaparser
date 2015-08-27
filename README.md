@@ -60,7 +60,7 @@ This code is available under the Apache License.
 
 ## Development
 
-We use Travis to ensure our tests are passing all the time and we use [Walkmod]() to ensure code conventions are respected.
+We use Travis to ensure our tests are passing all the time and we use [Walkmod](http://walkmod.com) to ensure code conventions are respected.
 The _dev-files_ dir contains configurations for the Eclipse and the IDEA formatters (I took them from the JavaParser project, thanks guys!).
 
 ## Contributing
