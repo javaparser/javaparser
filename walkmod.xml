@@ -20,6 +20,7 @@
 		</walker>
 		<writer path="src/main/java"
 			type="org.walkmod:walkmod-javalang-plugin:string-writer">
+            <param name="configFile">dev-files/eclipse-formatter.xml</param>
 		</writer>
-	</chain>
+    </chain>
 </walkmod>
