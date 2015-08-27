@@ -17,13 +17,13 @@ import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.usages.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.javaparser.contexts.MethodCallExprContext;
+
 
 import java.util.*;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collector;
+
 import java.util.stream.Collectors;
 
 /**
@@ -354,15 +354,7 @@ public class JavaParserFacade {
         }
     }
 
-    private SymbolReference<MethodDeclaration> solveMethod(MethodCallExpr methodCallExpr) {
-        List<TypeUsage> params = new ArrayList<>();
-        if (methodCallExpr.getArgs() != null) {
-            for (Expression param : methodCallExpr.getArgs()) {
-                params.add(getType(param));
-            }
-        }
-        return new MethodCallExprContext(methodCallExpr).solveMethod(methodCallExpr.getName(), params, typeSolver);
-    }
+    
 
     public TypeUsage convert(Type type, Node node) {
         return convert(type, JavaParserFactory.getContext(node));
@@ -388,21 +380,7 @@ public class JavaParserFacade {
         return methodUsage.get();
     }
 
-    private MethodUsage replaceParams(MethodUsage methodUsage, TypeUsage typeOfScope) {
-        logger.finest("ReplaceParams " + methodUsage);
-        logger.finest("ReplaceParams N params " + methodUsage.getParamTypes().size());
-        for (int i=0;i<methodUsage.getParamTypes().size();i++) {
-            TypeUsage typeUsage = methodUsage.getParamTypes().get(i);
-            TypeUsage replaced = replaceParams(typeUsage, typeOfScope);
-            logger.finest("ReplaceParams param type " + typeUsage);
-            if (replaced != typeUsage) {
-                logger.finest("ReplaceParams param -> " + replaced);
-                methodUsage = methodUsage.replaceParamType(i, replaced);
-            }
-        }
-        logger.finest("Final method usage "+methodUsage);
-        return methodUsage;
-    }
+    
 
     public static TypeUsage replaceParams(TypeUsage typeToReplace, TypeUsage typeOfScope) {
         if (typeToReplace.isTypeVariable()) {

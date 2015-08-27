@@ -15,7 +15,7 @@ import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
-import java.lang.reflect.Modifier;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;

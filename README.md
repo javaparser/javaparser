@@ -58,6 +58,11 @@ This project is young but we have already tried it on significant projects and i
 
 This code is available under the Apache License.
 
+## Development
+
+We use Travis to ensure our tests are passing all the time and we use [Walkmod](http://walkmod.com) to ensure code conventions are respected.
+The _dev-files_ dir contains configurations for the Eclipse and the IDEA formatters (I took them from the JavaParser project, thanks guys!).
+
 ## Contributing
 
 I would absolutely love every possible kind of contributions: if you have questions, ideas, need help or want to propose a change just open an issue. Pull-requests are greatly appreciated.

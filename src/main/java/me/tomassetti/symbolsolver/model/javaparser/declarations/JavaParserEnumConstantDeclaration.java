@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.model.javaparser.declarations;
 
 import com.github.javaparser.ast.body.EnumDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;

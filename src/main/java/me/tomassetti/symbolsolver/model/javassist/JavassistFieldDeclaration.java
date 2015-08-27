@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.model.javassist;
 import javassist.CtField;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 /**
