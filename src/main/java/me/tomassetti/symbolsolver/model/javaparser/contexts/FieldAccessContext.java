@@ -2,10 +2,10 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
+
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.SymbolReference;
-import me.tomassetti.symbolsolver.model.SymbolSolver;
+
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.Value;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;

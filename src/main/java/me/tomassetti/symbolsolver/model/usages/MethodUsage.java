@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.usages;
 
-import me.tomassetti.symbolsolver.model.SymbolReference;
+
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -105,10 +105,7 @@ public class MethodUsage {
             }
         }
         int i = 0;
-        for (TypeUsage param : typeToBeExamined.parameters()) {
-            typeToBeExamined = typeToBeExamined.replaceParam(i, replaceNameParam(name, newValue, typeToBeExamined.parameters().get(i)));
-            i++;
-        }
+        
         return typeToBeExamined;
     }
 }

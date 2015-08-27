@@ -1,11 +1,11 @@
 package me.tomassetti.symbolsolver.model.reflection;
 
-import com.github.javaparser.ast.TypeParameter;
-import javassist.CtClass;
-import javassist.NotFoundException;
-import me.tomassetti.symbolsolver.model.javassist.JavassistClassDeclaration;
+
+
+
+
 import me.tomassetti.symbolsolver.model.usages.*;
-import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
+
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;

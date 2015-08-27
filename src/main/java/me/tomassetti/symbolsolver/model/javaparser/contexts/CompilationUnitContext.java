@@ -13,7 +13,7 @@ import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserInterf
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.List;
-import java.util.Optional;
+
 
 /**
  * Created by federico on 30/07/15.

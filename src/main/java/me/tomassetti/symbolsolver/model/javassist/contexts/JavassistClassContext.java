@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.model.javassist.contexts;
 
 import javassist.CtClass;
-import javassist.CtMethod;
+
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.Context;
@@ -11,7 +11,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import sun.reflect.generics.tree.ClassSignature;
+
 
 import java.util.List;
 import java.util.Optional;

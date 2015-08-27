@@ -3,15 +3,15 @@ package me.tomassetti.symbolsolver.model.typesolvers;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
+
+
+
 
 import java.io.File;
 import java.io.IOException;

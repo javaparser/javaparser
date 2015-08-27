@@ -2,9 +2,9 @@ package me.tomassetti.symbolsolver.model.reflection;
 
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+
 
 import java.lang.reflect.Type;
 

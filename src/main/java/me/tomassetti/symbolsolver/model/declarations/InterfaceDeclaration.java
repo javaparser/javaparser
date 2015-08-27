@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.model.declarations;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.List;
 
 /**

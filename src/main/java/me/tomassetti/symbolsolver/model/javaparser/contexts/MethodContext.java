@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.ast.*;
+
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.*;

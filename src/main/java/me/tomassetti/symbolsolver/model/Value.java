@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.model;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
-import java.lang.reflect.Type;
+
 
 /**
  * Created by federico on 04/08/15.

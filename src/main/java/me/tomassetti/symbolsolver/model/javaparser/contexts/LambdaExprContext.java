@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
-import com.github.javaparser.ast.Node;
+
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;

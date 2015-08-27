@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.model.reflection;
 
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.lang.reflect.Field;

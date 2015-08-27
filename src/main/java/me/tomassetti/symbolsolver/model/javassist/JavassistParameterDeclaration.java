@@ -3,9 +3,9 @@ package me.tomassetti.symbolsolver.model.javassist;
 import javassist.CtClass;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+
 
 /**
  * Created by federico on 02/08/15.

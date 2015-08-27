@@ -13,7 +13,7 @@ import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 /**
  * @author Federico Tomassetti

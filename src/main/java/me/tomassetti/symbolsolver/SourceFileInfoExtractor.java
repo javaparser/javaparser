@@ -7,24 +7,24 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
+
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
-import me.tomassetti.symbolsolver.model.typesolvers.JavaParserTypeSolver;
-import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
+
+
+
 import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
+
+
+
 
 /**
  * It print information extracted from a source file. It is mainly intended as an example usage of JavaSymbolSolver.
