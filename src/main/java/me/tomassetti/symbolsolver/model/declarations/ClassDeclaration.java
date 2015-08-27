@@ -50,7 +50,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
             ancestors.add(new TypeUsageOfTypeDeclaration(getSuperClass(typeSolver)));
             ancestors.addAll(getSuperClass(typeSolver).getAllAncestors(typeSolver));
         }
-        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new TypeUsageOfTypeDeclaration(i)).collect(Collectors.toList()));
+        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new TypeUsageOfTypeDeclaration(i)).collect(Collectors.<TypeUsageOfTypeDeclaration>toList()));
         return ancestors;
     }
 
