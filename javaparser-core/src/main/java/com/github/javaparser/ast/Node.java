@@ -237,8 +237,28 @@ public abstract class Node implements Cloneable {
         return visitor.getSource();
     }
 
-	@Override public final int hashCode() {
-		return toString().hashCode();
+  protected final int addToHashCode(int currentHashCode, int hashMultiplier, int hashToAdd) {
+    currentHashCode *= hashMultiplier;
+    return currentHashCode + hashToAdd;
+  }
+
+	@Override public int hashCode() {
+    final int hashMultiplier = 67;
+    int hash = 461;
+    hash = addToHashCode(hash, hashMultiplier, this.toString().hashCode());
+    hash = addToHashCode(hash, hashMultiplier, this.getBeginLine());
+    hash = addToHashCode(hash, hashMultiplier, this.getBeginColumn());
+    hash = addToHashCode(hash, hashMultiplier, this.getEndLine());
+    hash = addToHashCode(hash, hashMultiplier, this.getEndColumn());
+    Object data = this.getData();
+    if (null != data) {
+      hash = addToHashCode(hash, hashMultiplier, data.hashCode());
+    }
+    Comment comment = this.getComment();
+    if (null != comment) {
+      hash = addToHashCode(hash, hashMultiplier, comment.hashCode());
+    }
+		return hash;
 	}
 
 	@Override public boolean equals(final Object obj) {
