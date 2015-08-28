@@ -27,21 +27,22 @@ import java.util.ArrayList;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.type.Type;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode {
+public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, NodeWithModifiers {
 
-    private int modifiers;
+    private Modifiers modifiers = new Modifiers();
 
     private List<TypeParameter> typeParameters;
 
@@ -97,11 +98,25 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     /**
      * Return the modifiers of this member declaration.
-     * 
+     *
+     * @see ModifierSet
+     * @return modifiers
+     * @deprecated please use getModifiersSet instead
+     */
+    @Override
+    @Deprecated
+    public int getModifiers() {
+        return ModifierSet.toInt(modifiers);
+    }
+
+    /**
+     * Return the modifiers of this member declaration.
+     *
      * @see ModifierSet
      * @return modifiers
      */
-    public int getModifiers() {
+    @Override
+    public Modifiers getModifiersSet() {
         return modifiers;
     }
 
@@ -136,9 +151,14 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 		setAsParentNodeOf(this.block);
     }
 
-    public void setModifiers(int modifiers) {
+    public final void setModifiers(Modifiers modifiers) {
         this.modifiers = modifiers;
     }
+
+    public final void setModifiers(int modifiers) {
+        this.modifiers = ModifierSet.toSet(modifiers);
+    }
+
 
     public void setName(String name) {
         this.name = new NameExpr(name);
@@ -173,7 +193,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(this);
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
         }

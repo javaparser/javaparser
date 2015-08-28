@@ -22,8 +22,11 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifiers;
+import com.github.javaparser.ast.NodeWithModifiers;
 
 import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Class to hold modifiers.<br>
@@ -33,6 +36,21 @@ import java.lang.reflect.Modifier;
 public final class ModifierSet {
 
     /* Definitions of the bits in the modifiers field.  */
+    
+    private static Map<Modifiers.Modifier, Integer> ENUM_TO_INT = new HashMap<Modifiers.Modifier, Integer>();
+    
+    static {
+        ENUM_TO_INT.put(Modifiers.Modifier.ABSTRACT, Modifier.ABSTRACT);
+        ENUM_TO_INT.put(Modifiers.Modifier.FINAL, Modifier.FINAL);
+        ENUM_TO_INT.put(Modifiers.Modifier.NATIVE, Modifier.NATIVE);
+        ENUM_TO_INT.put(Modifiers.Modifier.PRIVATE, Modifier.PRIVATE);
+        ENUM_TO_INT.put(Modifiers.Modifier.PROTECTED, Modifier.PROTECTED);
+        ENUM_TO_INT.put(Modifiers.Modifier.PUBLIC, Modifier.PUBLIC);
+        ENUM_TO_INT.put(Modifiers.Modifier.STATIC, Modifier.STATIC);
+        ENUM_TO_INT.put(Modifiers.Modifier.STRICTFP, Modifier.STRICT);
+        ENUM_TO_INT.put(Modifiers.Modifier.SYNCHRONIZED, Modifier.SYNCHRONIZED);
+        ENUM_TO_INT.put(Modifiers.Modifier.TRANSIENT, Modifier.TRANSIENT);
+    }
 
     public static final int PUBLIC = Modifier.PUBLIC;
 
@@ -56,6 +74,7 @@ public final class ModifierSet {
 
     public static final int STRICTFP = Modifier.STRICT;
 
+    @Deprecated
     public static AccessSpecifier getAccessSpecifier(int modifiers) {
         if (isPublic(modifiers)){
             return AccessSpecifier.PUBLIC;
@@ -68,30 +87,40 @@ public final class ModifierSet {
         }
     }
 
+    public static AccessSpecifier getAccessSpecifier(NodeWithModifiers modifiers) {
+        return modifiers.getModifiersSet().getAccessSpecifier();
+    }
+
     public static int addModifier(int modifiers, int mod) {
         return modifiers | mod;
     }
 
+    @Deprecated
     public static boolean hasModifier(int modifiers, int modifier) {
         return (modifiers & modifier) != 0;
     }
 
+    @Deprecated
     public static boolean isAbstract(int modifiers) {
         return (modifiers & ABSTRACT) != 0;
     }
 
+    @Deprecated
     public static boolean isFinal(int modifiers) {
         return (modifiers & FINAL) != 0;
     }
 
+    @Deprecated
     public static boolean isNative(int modifiers) {
         return (modifiers & NATIVE) != 0;
     }
 
+    @Deprecated
     public static boolean isPrivate(int modifiers) {
         return (modifiers & PRIVATE) != 0;
     }
 
+    @Deprecated
     public static boolean isProtected(int modifiers) {
         return (modifiers & PROTECTED) != 0;
     }
@@ -103,30 +132,38 @@ public final class ModifierSet {
      * @param modifiers indicator
      * @return true if modifier denotes package level access
      */
+    @Deprecated
     public static boolean hasPackageLevelAccess(int modifiers) {
         return !isPublic(modifiers) && !isProtected(modifiers) && !isPrivate(modifiers);
     }
 
+    @Deprecated
     public static boolean isPublic(int modifiers) {
         return (modifiers & PUBLIC) != 0;
     }
 
+    @Deprecated
     public static boolean isStatic(int modifiers) {
         return (modifiers & STATIC) != 0;
     }
 
+    @Deprecated
     public static boolean isStrictfp(int modifiers) {
         return (modifiers & STRICTFP) != 0;
     }
 
+    @Deprecated
     public static boolean isSynchronized(int modifiers) {
         return (modifiers & SYNCHRONIZED) != 0;
     }
 
+    @Deprecated
     public static boolean isTransient(int modifiers) {
         return (modifiers & TRANSIENT) != 0;
     }
 
+
+    @Deprecated
     public static boolean isVolatile(int modifiers) {
         return (modifiers & VOLATILE) != 0;
     }
@@ -142,5 +179,25 @@ public final class ModifierSet {
     }
 
     private ModifierSet() {
+    }
+
+    public static Modifiers toSet(int modifiersAsInt) {
+        Modifiers modifiersAsSet = new Modifiers();
+        for (Modifiers.Modifier modifier : ENUM_TO_INT.keySet()) {
+            if (hasModifier(modifiersAsInt, ENUM_TO_INT.get(modifier))){
+                modifiersAsSet = modifiersAsSet.set(modifier);
+            }
+        }
+        return modifiersAsSet;
+    }
+
+    public static int toInt(Modifiers modifiersAsSet) {
+        int modifiersAsInt = 0;
+        for (Modifiers.Modifier modifier : ENUM_TO_INT.keySet()) {
+            if (modifiersAsSet.has(modifier)){
+                modifiersAsInt |= ENUM_TO_INT.get(modifier);
+            }
+        }
+        return modifiersAsInt;
     }
 }

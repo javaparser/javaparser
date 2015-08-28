@@ -21,13 +21,15 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.Modifiers;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
 import java.util.List;
 
-public abstract class BaseParameter extends Node {
-    private int modifiers;
+public abstract class BaseParameter extends Node implements NodeWithModifiers {
+    private Modifiers modifiers = new Modifiers();
 
     private List<AnnotationExpr> annotations;
     
@@ -67,12 +69,26 @@ public abstract class BaseParameter extends Node {
     }
 
     /**
-     * Return the modifiers of this parameter declaration.
-     * 
+     * Return the modifiers of this member declaration.
+     *
+     * @see ModifierSet
+     * @return modifiers
+     * @deprecated please use getModifiersSet instead
+     */
+    @Override
+    @Deprecated
+    public int getModifiers() {
+        return ModifierSet.toInt(modifiers);
+    }
+
+    /**
+     * Return the modifiers of this member declaration.
+     *
      * @see ModifierSet
      * @return modifiers
      */
-    public int getModifiers() {
+    @Override
+    public Modifiers getModifiersSet() {
         return modifiers;
     }
 
@@ -86,7 +102,12 @@ public abstract class BaseParameter extends Node {
         setAsParentNodeOf(this.id);
     }
 
-    public void setModifiers(int modifiers) {
+    public final void setModifiers(Modifiers modifiers) {
         this.modifiers = modifiers;
     }
+
+    public final void setModifiers(int modifiers) {
+        this.modifiers = ModifierSet.toSet(modifiers);
+    }
+
 }

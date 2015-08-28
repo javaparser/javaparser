@@ -24,7 +24,9 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -39,9 +41,9 @@ import java.util.ArrayList;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode {
+public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, NodeWithModifiers {
 
-	private int modifiers;
+	private Modifiers modifiers = new Modifiers();
 
 	private List<TypeParameter> typeParameters;
 
@@ -126,8 +128,22 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	 * 
 	 * @see ModifierSet
 	 * @return modifiers
+	 * @deprecated please use getModifiersSet instead
 	 */
+	@Override
+	@Deprecated
 	public int getModifiers() {
+		return ModifierSet.toInt(modifiers);
+	}
+
+	/**
+	 * Return the modifiers of this member declaration.
+	 *
+	 * @see ModifierSet
+	 * @return modifiers
+	 */
+	@Override
+	public Modifiers getModifiersSet() {
 		return modifiers;
 	}
 
@@ -170,9 +186,14 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(this.body);
 	}
 
-	public void setModifiers(final int modifiers) {
+	public final void setModifiers(Modifiers modifiers) {
 		this.modifiers = modifiers;
 	}
+
+	public final void setModifiers(int modifiers) {
+		this.modifiers = ModifierSet.toSet(modifiers);
+	}
+
 
 	public void setName(final String name) {
 		this.name = new NameExpr(name);
@@ -234,22 +255,22 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuffer sb = new StringBuffer();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(this);
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
-            if (ModifierSet.isStatic(getModifiers())){
+            if (this.getModifiersSet().hasStatic()){
                 sb.append("static ");
             }
-            if (ModifierSet.isAbstract(getModifiers())){
+            if (this.getModifiersSet().hasAbstract()){
                 sb.append("abstract ");
             }
-            if (ModifierSet.isFinal(getModifiers())){
+            if (this.getModifiersSet().hasFinal()){
                 sb.append("final ");
             }
-            if (ModifierSet.isNative(getModifiers())){
+            if (this.getModifiersSet().hasNative()){
                 sb.append("native ");
             }
-            if (ModifierSet.isSynchronized(getModifiers())){
+            if (this.getModifiersSet().hasSynchronized()){
                 sb.append("synchronized ");
             }
         }

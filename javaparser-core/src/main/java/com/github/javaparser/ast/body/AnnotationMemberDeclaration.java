@@ -23,6 +23,8 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.Modifiers;
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -35,9 +37,9 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode {
+public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode, NodeWithModifiers {
 
-    private int modifiers;
+    private Modifiers modifiers = new Modifiers();
 
     private Type type;
 
@@ -87,11 +89,25 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
 
     /**
      * Return the modifiers of this member declaration.
-     * 
+     *
+     * @see ModifierSet
+     * @return modifiers
+     * @deprecated please use getModifiersSet instead
+     */
+    @Override
+    @Deprecated
+    public int getModifiers() {
+        return ModifierSet.toInt(modifiers);
+    }
+
+    /**
+     * Return the modifiers of this member declaration.
+     *
      * @see ModifierSet
      * @return modifiers
      */
-    public int getModifiers() {
+    @Override
+    public Modifiers getModifiersSet() {
         return modifiers;
     }
 
@@ -108,9 +124,14 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
         setAsParentNodeOf(defaultValue);
     }
 
-    public void setModifiers(int modifiers) {
+    public final void setModifiers(Modifiers modifiers) {
         this.modifiers = modifiers;
     }
+
+    public final void setModifiers(int modifiers) {
+        this.modifiers = ModifierSet.toSet(modifiers);
+    }
+
 
     public void setName(String name) {
         this.name = name;

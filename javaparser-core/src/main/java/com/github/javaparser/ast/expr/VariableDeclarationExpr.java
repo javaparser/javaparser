@@ -21,7 +21,9 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.Modifiers;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -32,9 +34,9 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarationExpr extends Expression {
+public final class VariableDeclarationExpr extends Expression implements NodeWithModifiers {
 
-	private int modifiers;
+	private Modifiers modifiers = new Modifiers();
 
 	private List<AnnotationExpr> annotations;
 
@@ -79,12 +81,26 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	/**
-	 * Return the modifiers of this variable declaration.
-	 * 
-	 * @see ModifierSet
+	 * Return the modifiers of this member declaration.
+	 *
+	 * @see com.github.javaparser.ast.body.ModifierSet
+	 * @return modifiers
+	 * @deprecated please use getModifiersSet instead
+	 */
+	@Override
+	@Deprecated
+	public int getModifiers() {
+		return ModifierSet.toInt(modifiers);
+	}
+
+	/**
+	 * Return the modifiers of this member declaration.
+	 *
+	 * @see com.github.javaparser.ast.body.ModifierSet
 	 * @return modifiers
 	 */
-	public int getModifiers() {
+	@Override
+	public Modifiers getModifiersSet() {
 		return modifiers;
 	}
 
@@ -101,8 +117,12 @@ public final class VariableDeclarationExpr extends Expression {
 		setAsParentNodeOf(this.annotations);
 	}
 
-	public void setModifiers(final int modifiers) {
+	public final void setModifiers(Modifiers modifiers) {
 		this.modifiers = modifiers;
+	}
+
+	public final void setModifiers(int modifiers) {
+		this.modifiers = ModifierSet.toSet(modifiers);
 	}
 
 	public void setType(final Type type) {
