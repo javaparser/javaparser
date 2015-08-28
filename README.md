@@ -63,7 +63,7 @@ This code is available under the Apache License.
 We use Travis to ensure our tests are passing all the time and we use [Walkmod](http://walkmod.com) to ensure code conventions are respected.
 The _dev-files_ dir contains configurations for the Eclipse and the IDEA formatters (I took them from the JavaParser project, thanks guys!).
 
-[![Walkmod Status](http://walkmod.com/pulls/ftomassetti/java-symbol-solver/master/status.svg)](https://walkmod.com)
+[![Walkmod Status](http://walkmod.com/pulls/ftomassetti/java-symbol-solver/master/status.svg)](http://walkmod.com)
 
 ## Contributing
 
