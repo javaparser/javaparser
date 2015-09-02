@@ -4,11 +4,10 @@ This package contains a Java 1.8 Parser with AST generation and visitor support.
 
 The AST records the source code structure, javadoc and comments. It is also possible to change the AST nodes or create new ones to modify the source code.
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.javaparser/javaparser-core.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.javaparser%22%20AND%20a%3A%22javaparser-core%22)
 [![Build Status](https://travis-ci.org/javaparser/javaparser.svg?branch=master)](https://travis-ci.org/javaparser/javaparser)
 [![Coverage Status](https://coveralls.io/repos/javaparser/javaparser/badge.svg?branch=master&service=github)](https://coveralls.io/github/javaparser/javaparser?branch=master)
 [![Join the chat at https://gitter.im/javaparser/javaparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/javaparser/javaparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.javaparser/javaparser-core.svg)]()
 
 ## Features
 
@@ -24,15 +23,17 @@ The AST records the source code structure, javadoc and comments. It is also poss
 The project binaries are available in Maven Central.  Just add the following to your maven configuration or taylor to your own dependency management system.
 
 Current 1.8 Release
+
 ```xml
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>2.2.1</version>
+    <version>2.2.2</version>
 </dependency>
 ```
 
 Final 1.7 Release
+
 ```xml
 <dependency>
     <groupId>com.google.code.javaparser</groupId>
