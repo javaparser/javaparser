@@ -54,6 +54,10 @@ public class SharedSteps {
         this.state = state;
     }
 
+    /*
+     * Given steps
+     */
+
     @Given("a CompilationUnit")
     public void givenACompilationUnit() {
         state.put("cu1", new CompilationUnit());
@@ -64,16 +68,24 @@ public class SharedSteps {
         state.put("cu2", new CompilationUnit());
     }
 
+    /*
+     * When steps
+     */
+
     @When("the following source is parsed:$classSrc")
     public void whenTheFollowingSourceIsParsed(String classSrc) throws ParseException {
         state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
+    }
+
+    @When("the following source is parsed (trimming space):$classSrc")
+    public void whenTheFollowingSourceIsParsedTrimmingSpace(String classSrc) throws ParseException {
+        state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.trim().getBytes())));
     }
 
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
     public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException {
         state.put("cu2", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
     }
-
 
     @When("the \"$fileName\" is parsed")
     public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException, URISyntaxException {
@@ -113,7 +125,6 @@ public class SharedSteps {
 
         assertThat(compilationUnit.hashCode(), not(equalTo(compilationUnit2.hashCode())));
     }
-
 
     @Then("the expected source should be:$classSrc")
     public void thenTheExpectedSourcesShouldBe(String classSrc) {

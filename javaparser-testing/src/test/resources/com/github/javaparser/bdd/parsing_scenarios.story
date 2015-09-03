@@ -267,3 +267,18 @@ public class A{
 	}
 }
 Then ThenExpr in the conditional expression of the statement 1 in method 1 in class 1 is LambdaExpr
+
+
+Scenario: Parsing array creation expressions the positions are correct
+
+Given a CompilationUnit
+When the following source is parsed (trimming space):
+public class A{
+    int[][] a = new int[][]{};
+}
+When I take the ArrayCreationExpr
+Then the begin line is 2
+Then the begin column is 17
+Then the end line is 2
+Then the end column is 29
+

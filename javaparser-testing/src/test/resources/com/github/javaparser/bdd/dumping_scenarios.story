@@ -30,3 +30,28 @@ public class B {
         System.out.println(i);
     };
 }
+
+
+Scenario: Dumping orphan comments in empty method
+Given the class:
+class A {
+    public void helloWorld(String greeting, String name) {
+        //sdfsdfsdf
+            //sdfds
+        /*
+                            dgfdgfdgfdgfdgfd
+         */
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A {
+
+    public void helloWorld(String greeting, String name) {
+    //sdfsdfsdf
+    //sdfds
+    /*
+                            dgfdgfdgfdgfdgfd
+         */
+    }
+}
