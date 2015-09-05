@@ -36,13 +36,13 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public final class ExplicitConstructorInvocationStmt extends Statement {
 
-	private List<Type> typeArgs = Collections.emptyList();
+	private List<Type> typeArgs;
 
 	private boolean isThis;
 
 	private Expression expr;
 
-	private List<Expression> args = Collections.emptyList();
+	private List<Expression> args;
 
 	public ExplicitConstructorInvocationStmt() {
 	}
@@ -76,7 +76,8 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public List<Expression> getArgs() {
-		return args;
+		args = ensureNotNull(args);
+        return args;
 	}
 
 	public Expression getExpr() {
@@ -84,7 +85,8 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public List<Type> getTypeArgs() {
-		return typeArgs;
+		typeArgs = ensureNotNull(typeArgs);
+        return typeArgs;
 	}
 
 	public boolean isThis() {
@@ -92,7 +94,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public void setArgs(final List<Expression> args) {
-		this.args = ensureNotNull(args);
+		this.args = args;
 		setAsParentNodeOf(this.args);
 	}
 
@@ -106,7 +108,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = ensureNotNull(typeArgs);
+		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
 	}
 }

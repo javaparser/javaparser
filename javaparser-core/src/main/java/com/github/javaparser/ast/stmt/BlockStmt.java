@@ -34,7 +34,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public final class BlockStmt extends Statement {
 
-	private List<Statement> stmts = Collections.emptyList();
+	private List<Statement> stmts;
 
 	public BlockStmt() {
 	}
@@ -60,11 +60,12 @@ public final class BlockStmt extends Statement {
 	}
 
 	public List<Statement> getStmts() {
-		return stmts;
+		stmts = ensureNotNull(stmts);
+        return stmts;
 	}
 
 	public void setStmts(final List<Statement> stmts) {
-		this.stmts = ensureNotNull(stmts);
+		this.stmts = stmts;
 		setAsParentNodeOf(this.stmts);
 	}
 }

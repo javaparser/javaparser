@@ -23,9 +23,11 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.internal.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +46,7 @@ import java.util.List;
  */
 public final class PackageDeclaration extends Node {
 
-    private List<AnnotationExpr> annotations = Collections.emptyList();
+    private List<AnnotationExpr> annotations;
 
     private NameExpr name;
 
@@ -83,6 +85,7 @@ public final class PackageDeclaration extends Node {
      * @return list of annotations or <code>null</code>
      */
     public List<AnnotationExpr> getAnnotations() {
+        annotations = Utils.ensureNotNull(annotations);
         return annotations;
     }
 
@@ -100,9 +103,6 @@ public final class PackageDeclaration extends Node {
      *            the annotations to set
      */
     public void setAnnotations(List<AnnotationExpr> annotations) {
-        if (annotations == null) {
-            annotations = Collections.emptyList();
-        }
         this.annotations = annotations;
         setAsParentNodeOf(this.annotations);
     }

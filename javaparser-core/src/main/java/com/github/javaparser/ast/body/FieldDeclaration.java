@@ -43,7 +43,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
 
     private Type type;
 
-    private List<VariableDeclarator> variables = Collections.emptyList();
+    private List<VariableDeclarator> variables;
 
     public FieldDeclaration() {
     }
@@ -101,6 +101,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     }
 
     public List<VariableDeclarator> getVariables() {
+        variables = ensureNotNull(variables);
         return variables;
     }
 
@@ -114,7 +115,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     }
 
     public void setVariables(List<VariableDeclarator> variables) {
-        this.variables = ensureNotNull(variables);
+        this.variables = variables;
 		setAsParentNodeOf(this.variables);
     }
 

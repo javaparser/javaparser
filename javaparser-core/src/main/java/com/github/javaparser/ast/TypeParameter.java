@@ -26,6 +26,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,9 +48,9 @@ public final class TypeParameter extends Node implements NamedNode {
 
 	private String name;
 
-    private List<AnnotationExpr> annotations = Collections.emptyList();
+    private List<AnnotationExpr> annotations;
 
-	private List<ClassOrInterfaceType> typeBound = Collections.emptyList();
+	private List<ClassOrInterfaceType> typeBound;
 
 	public TypeParameter() {
 	}
@@ -98,7 +99,8 @@ public final class TypeParameter extends Node implements NamedNode {
 	 * @return list of types that this paramente extends or <code>null</code>
 	 */
 	public List<ClassOrInterfaceType> getTypeBound() {
-		return typeBound;
+		typeBound = ensureNotNull(typeBound);
+        return typeBound;
 	}
 
 	/**
@@ -118,15 +120,16 @@ public final class TypeParameter extends Node implements NamedNode {
 	 *            the typeBound to set
 	 */
 	public void setTypeBound(final List<ClassOrInterfaceType> typeBound) {
-		this.typeBound = ensureNotNull(typeBound);
+		this.typeBound = typeBound;
 		setAsParentNodeOf(typeBound);
 	}
 
     public List<AnnotationExpr> getAnnotations() {
+        annotations = ensureNotNull(annotations);
         return annotations;
     }
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = ensureNotNull(annotations);
+        this.annotations = annotations;
     }
 }

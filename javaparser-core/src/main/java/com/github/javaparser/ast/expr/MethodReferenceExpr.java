@@ -44,7 +44,7 @@ public class MethodReferenceExpr extends Expression {
 
     private Expression scope;
 
-    private List<TypeParameter> typeParameters = Collections.emptyList();
+    private List<TypeParameter> typeParameters;
 
     private String identifier;
 
@@ -82,11 +82,12 @@ public class MethodReferenceExpr extends Expression {
     }
 
     public List<TypeParameter> getTypeParameters() {
+        typeParameters = ensureNotNull(typeParameters);
         return typeParameters;
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
-        this.typeParameters = ensureNotNull(typeParameters);
+        this.typeParameters = typeParameters;
         setAsParentNodeOf(this.typeParameters);
     }
 

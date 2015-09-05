@@ -39,7 +39,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 
 	private int modifiers;
 
-	private List<BodyDeclaration> members = Collections.emptyList();
+	private List<BodyDeclaration> members;
 
 	public TypeDeclaration() {
 	}
@@ -69,7 +69,8 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	public final List<BodyDeclaration> getMembers() {
-		return members;
+		members = ensureNotNull(members);
+        return members;
 	}
 
 	/**
@@ -87,7 +88,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	public void setMembers(List<BodyDeclaration> members) {
-		this.members = ensureNotNull(members);
+		this.members = members;
 		setAsParentNodeOf(this.members);
 	}
 

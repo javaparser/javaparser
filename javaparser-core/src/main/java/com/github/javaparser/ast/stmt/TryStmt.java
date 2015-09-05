@@ -35,11 +35,11 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public final class TryStmt extends Statement {
 	
-	private List<VariableDeclarationExpr> resources = Collections.emptyList();
+	private List<VariableDeclarationExpr> resources;
 
 	private BlockStmt tryBlock;
 
-	private List<CatchClause> catchs = Collections.emptyList();
+	private List<CatchClause> catchs;
 
 	private BlockStmt finallyBlock;
 
@@ -74,7 +74,8 @@ public final class TryStmt extends Statement {
 	}
 
 	public List<CatchClause> getCatchs() {
-		return catchs;
+		catchs = ensureNotNull(catchs);
+        return catchs;
 	}
 
 	public BlockStmt getFinallyBlock() {
@@ -86,11 +87,12 @@ public final class TryStmt extends Statement {
 	}
 	
 	public List<VariableDeclarationExpr> getResources() {
-		return resources;
+		resources = ensureNotNull(resources);
+        return resources;
 	}
 
 	public void setCatchs(final List<CatchClause> catchs) {
-		this.catchs = ensureNotNull(catchs);
+		this.catchs = catchs;
 		setAsParentNodeOf(this.catchs);
 	}
 
@@ -105,7 +107,7 @@ public final class TryStmt extends Statement {
 	}
 	
 	public void setResources(List<VariableDeclarationExpr> resources) {
-		this.resources = ensureNotNull(resources);
+		this.resources = resources;
 		setAsParentNodeOf(this.resources);
 	}
 }

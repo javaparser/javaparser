@@ -37,7 +37,7 @@ public final class FieldAccessExpr extends Expression {
 
 	private Expression scope;
 
-	private List<Type> typeArgs = Collections.emptyList();
+	private List<Type> typeArgs;
 
 	private NameExpr field;
 
@@ -78,7 +78,8 @@ public final class FieldAccessExpr extends Expression {
 	}
 
 	public List<Type> getTypeArgs() {
-		return typeArgs;
+		typeArgs = ensureNotNull(typeArgs);
+        return typeArgs;
 	}
 
 	public void setField(final String field) {
@@ -95,7 +96,7 @@ public final class FieldAccessExpr extends Expression {
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = ensureNotNull(typeArgs);
+		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
 	}
 }

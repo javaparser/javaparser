@@ -42,12 +42,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 
 	private boolean interface_;
 
-	private List<TypeParameter> typeParameters = Collections.emptyList();
+	private List<TypeParameter> typeParameters;
 
 	// Can contain more than one item if this is an interface
-	private List<ClassOrInterfaceType> extendsList = Collections.emptyList();
+	private List<ClassOrInterfaceType> extendsList;
 
-	private List<ClassOrInterfaceType> implementsList = Collections.emptyList();
+	private List<ClassOrInterfaceType> implementsList;
 
 	public ClassOrInterfaceDeclaration() {
 	}
@@ -89,15 +89,18 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 	}
 
 	public List<ClassOrInterfaceType> getExtends() {
-		return extendsList;
+		extendsList = ensureNotNull(extendsList);
+        return extendsList;
 	}
 
 	public List<ClassOrInterfaceType> getImplements() {
-		return implementsList;
+		implementsList = ensureNotNull(implementsList);
+        return implementsList;
 	}
 
 	public List<TypeParameter> getTypeParameters() {
-		return typeParameters;
+		typeParameters = ensureNotNull(typeParameters);
+        return typeParameters;
 	}
 
     public boolean isInterface() {
@@ -110,7 +113,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
      *                    in the future, so please avoid passing null
      */
 	public void setExtends(final List<ClassOrInterfaceType> extendsList) {
-		this.extendsList = ensureNotNull(extendsList);
+		this.extendsList = extendsList;
 		setAsParentNodeOf(this.extendsList);
 	}
 
@@ -120,7 +123,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
      *                       in the future, so please avoid passing null
      */
 	public void setImplements(final List<ClassOrInterfaceType> implementsList) {
-		this.implementsList = ensureNotNull(implementsList);
+		this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
 	}
 
@@ -134,7 +137,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
      *                       in the future, so please avoid passing null
      */
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
-		this.typeParameters = ensureNotNull(typeParameters);
+		this.typeParameters = typeParameters;
 		setAsParentNodeOf(this.typeParameters);
 	}
 

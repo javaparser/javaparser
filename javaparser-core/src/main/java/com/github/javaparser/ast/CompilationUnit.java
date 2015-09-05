@@ -31,6 +31,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,9 +56,9 @@ public final class CompilationUnit extends Node {
 
     private PackageDeclaration pakage;
 
-    private List<ImportDeclaration> imports = Collections.emptyList();
+    private List<ImportDeclaration> imports;
 
-    private List<TypeDeclaration> types = Collections.emptyList();
+    private List<TypeDeclaration> types;
 
     public CompilationUnit() {
     }
@@ -108,6 +109,7 @@ public final class CompilationUnit extends Node {
      * @return the list of imports or <code>null</code> if there is no import
      */
     public List<ImportDeclaration> getImports() {
+        imports = ensureNotNull(imports);
         return imports;
     }
 
@@ -133,6 +135,7 @@ public final class CompilationUnit extends Node {
      * @see EnumDeclaration
      */
     public List<TypeDeclaration> getTypes() {
+        types = ensureNotNull(types);
         return types;
     }
 
@@ -154,7 +157,7 @@ public final class CompilationUnit extends Node {
      *            the list of imports
      */
     public void setImports(List<ImportDeclaration> imports) {
-        this.imports = ensureNotNull(imports);
+        this.imports = imports;
 		setAsParentNodeOf(this.imports);
     }
 
@@ -177,7 +180,7 @@ public final class CompilationUnit extends Node {
      *            the lis of types
      */
     public void setTypes(List<TypeDeclaration> types) {
-        this.types = ensureNotNull(types);
+        this.types = types;
 		setAsParentNodeOf(this.types);
     }
 }

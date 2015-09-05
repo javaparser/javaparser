@@ -33,7 +33,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
 public abstract class BaseParameter extends Node {
     private int modifiers;
 
-    private List<AnnotationExpr> annotations = Collections.emptyList();
+    private List<AnnotationExpr> annotations;
     
     private VariableDeclaratorId id;
     
@@ -66,6 +66,7 @@ public abstract class BaseParameter extends Node {
      * @return the list returned could be immutable (in that case it will be empty)
      */
     public List<AnnotationExpr> getAnnotations() {
+        annotations = ensureNotNull(annotations);
         return annotations;
     }
 
@@ -88,7 +89,7 @@ public abstract class BaseParameter extends Node {
      *                    in the future, so please avoid passing null
      */
     public void setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = ensureNotNull(annotations);
+        this.annotations = annotations;
         setAsParentNodeOf(this.annotations);
     }
 

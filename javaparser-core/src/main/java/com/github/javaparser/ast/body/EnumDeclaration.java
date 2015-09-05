@@ -38,9 +38,9 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public final class EnumDeclaration extends TypeDeclaration implements DocumentableNode {
 
-    private List<ClassOrInterfaceType> implementsList = Collections.emptyList();
+    private List<ClassOrInterfaceType> implementsList;
 
-    private List<EnumConstantDeclaration> entries = Collections.emptyList();
+    private List<EnumConstantDeclaration> entries;
 
     public EnumDeclaration() {
     }
@@ -73,10 +73,12 @@ public final class EnumDeclaration extends TypeDeclaration implements Documentab
     }
 
     public List<EnumConstantDeclaration> getEntries() {
+        entries = ensureNotNull(entries);
         return entries;
     }
 
     public List<ClassOrInterfaceType> getImplements() {
+        implementsList = ensureNotNull(implementsList);
         return implementsList;
     }
 

@@ -41,9 +41,9 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
 
     private String name;
 
-    private List<Expression> args = Collections.emptyList();
+    private List<Expression> args;
 
-    private List<BodyDeclaration> classBody = Collections.emptyList();
+    private List<BodyDeclaration> classBody;
 
     public EnumConstantDeclaration() {
     }
@@ -77,10 +77,12 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
     }
 
     public List<Expression> getArgs() {
+        args = ensureNotNull(args);
         return args;
     }
 
     public List<BodyDeclaration> getClassBody() {
+        classBody = ensureNotNull(classBody);
         return classBody;
     }
 
@@ -89,12 +91,12 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
     }
 
     public void setArgs(List<Expression> args) {
-        this.args = ensureNotNull(args);
+        this.args = args;
 		setAsParentNodeOf(this.args);
     }
 
     public void setClassBody(List<BodyDeclaration> classBody) {
-        this.classBody = ensureNotNull(classBody);
+        this.classBody = classBody;
 		setAsParentNodeOf(this.classBody);
     }
 

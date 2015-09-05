@@ -39,7 +39,7 @@ public final class ReferenceType extends Type {
 
 	private int arrayCount;
 
-    private List<List<AnnotationExpr>> arraysAnnotations = Collections.emptyList();
+    private List<List<AnnotationExpr>> arraysAnnotations;
 
     public ReferenceType() {
 	}
@@ -116,6 +116,7 @@ public final class ReferenceType extends Type {
 	 * If a certain array modifier has no annotation the corresponding entry of arraysAnnotations will be null</p>
 	 */
     public List<List<AnnotationExpr>> getArraysAnnotations() {
+        arraysAnnotations = ensureNotNull(arraysAnnotations);
         return arraysAnnotations;
     }
 
@@ -123,6 +124,6 @@ public final class ReferenceType extends Type {
 	 * For a description of the arrayAnnotations field refer to {@link #getArraysAnnotations()}
 	 */
     public void setArraysAnnotations(List<List<AnnotationExpr>> arraysAnnotations) {
-		this.arraysAnnotations = ensureNotNull(arraysAnnotations);
+		this.arraysAnnotations = arraysAnnotations;
     }
 }

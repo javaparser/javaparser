@@ -37,7 +37,7 @@ public final class SwitchEntryStmt extends Statement {
 
 	private Expression label;
 
-	private List<Statement> stmts = Collections.emptyList();
+	private List<Statement> stmts;
 
 	public SwitchEntryStmt() {
 	}
@@ -70,7 +70,8 @@ public final class SwitchEntryStmt extends Statement {
 	}
 
 	public List<Statement> getStmts() {
-		return stmts;
+		stmts = ensureNotNull(stmts);
+        return stmts;
 	}
 
 	public void setLabel(final Expression label) {
@@ -79,7 +80,7 @@ public final class SwitchEntryStmt extends Statement {
 	}
 
 	public void setStmts(final List<Statement> stmts) {
-		this.stmts = ensureNotNull(stmts);
+		this.stmts = stmts;
 		setAsParentNodeOf(this.stmts);
 	}
 }

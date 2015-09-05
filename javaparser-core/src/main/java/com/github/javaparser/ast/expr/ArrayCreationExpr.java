@@ -41,9 +41,9 @@ public final class ArrayCreationExpr extends Expression {
 
     private ArrayInitializerExpr initializer;
 
-    private List<Expression> dimensions = Collections.emptyList();
+    private List<Expression> dimensions;
 
-    private List<List<AnnotationExpr>> arraysAnnotations = Collections.emptyList();
+    private List<List<AnnotationExpr>> arraysAnnotations;
 
     public ArrayCreationExpr() {
     }
@@ -93,6 +93,7 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public List<Expression> getDimensions() {
+        dimensions = ensureNotNull(dimensions);
         return dimensions;
     }
 
@@ -109,7 +110,7 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public void setDimensions(List<Expression> dimensions) {
-        this.dimensions = ensureNotNull(dimensions);
+        this.dimensions = dimensions;
 		setAsParentNodeOf(this.dimensions);
     }
 
@@ -124,11 +125,12 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public List<List<AnnotationExpr>> getArraysAnnotations() {
+        arraysAnnotations = ensureNotNull(arraysAnnotations);
         return arraysAnnotations;
     }
 
     public void setArraysAnnotations(
             List<List<AnnotationExpr>> arraysAnnotations) {
-        this.arraysAnnotations = ensureNotNull(arraysAnnotations);
+        this.arraysAnnotations = arraysAnnotations;
     }
 }

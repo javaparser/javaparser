@@ -46,17 +46,17 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	private int modifiers;
 
-	private List<TypeParameter> typeParameters = Collections.emptyList();
+	private List<TypeParameter> typeParameters;
 
 	private Type type;
 
 	private NameExpr name;
 
-	private List<Parameter> parameters = Collections.emptyList();
+	private List<Parameter> parameters;
 
 	private int arrayCount;
 
-	private List<NameExpr> throws_ = Collections.emptyList();
+	private List<NameExpr> throws_;
 
 	private BlockStmt body;
 
@@ -143,11 +143,13 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     }
 
 	public List<Parameter> getParameters() {
-		return parameters;
+		parameters = ensureNotNull(parameters);
+        return parameters;
 	}
 
 	public List<NameExpr> getThrows() {
-		return throws_;
+		throws_ = ensureNotNull(throws_);
+        return throws_;
 	}
 
 	public Type getType() {
@@ -155,7 +157,8 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	}
 
 	public List<TypeParameter> getTypeParameters() {
-		return typeParameters;
+		typeParameters = ensureNotNull(typeParameters);
+        return typeParameters;
 	}
 
 	public void setArrayCount(final int arrayCount) {
@@ -180,12 +183,12 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     }
 
     public void setParameters(final List<Parameter> parameters) {
-		this.parameters = ensureNotNull(parameters);
+		this.parameters = parameters;
 		setAsParentNodeOf(this.parameters);
 	}
 
 	public void setThrows(final List<NameExpr> throws_) {
-		this.throws_ = ensureNotNull(throws_);
+		this.throws_ = throws_;
 		setAsParentNodeOf(this.throws_);
 	}
 
@@ -195,7 +198,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	}
 
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
-		this.typeParameters = ensureNotNull(typeParameters);
+		this.typeParameters = typeParameters;
 		setAsParentNodeOf(typeParameters);
 	}
 

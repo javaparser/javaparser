@@ -39,7 +39,7 @@ public final class ClassOrInterfaceType extends Type {
 
     private String name;
 
-	private List<Type> typeArgs = Collections.emptyList();
+	private List<Type> typeArgs;
 
 	public ClassOrInterfaceType() {
 	}
@@ -78,9 +78,7 @@ public final class ClassOrInterfaceType extends Type {
 	}
 
 	public List<Type> getTypeArgs() {
-        if (typeArgs == null) {
-            typeArgs = new ArrayList<Type>();
-        }
+        typeArgs = ensureNotNull(typeArgs);
 		return typeArgs;
 	}
 
@@ -89,7 +87,7 @@ public final class ClassOrInterfaceType extends Type {
 	}
 
 	public PrimitiveType toUnboxedType() throws UnsupportedOperationException {
-		if(!isBoxedType()) {
+		if (!isBoxedType()) {
             throw new UnsupportedOperationException(name + " isn't a boxed type.");
         }
 		return new PrimitiveType(PrimitiveType.unboxMap.get(name));
@@ -105,7 +103,7 @@ public final class ClassOrInterfaceType extends Type {
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = ensureNotNull(typeArgs);
+		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
 	}
 

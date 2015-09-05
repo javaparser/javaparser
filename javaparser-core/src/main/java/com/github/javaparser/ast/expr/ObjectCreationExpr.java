@@ -41,9 +41,9 @@ public final class ObjectCreationExpr extends Expression {
 
 	private ClassOrInterfaceType type;
 
-	private List<Type> typeArgs = Collections.emptyList();
+	private List<Type> typeArgs;
 
-	private List<Expression> args = Collections.emptyList();
+	private List<Expression> args;
 
     // This can be null, to indicate there is no body
     private List<BodyDeclaration> anonymousClassBody;
@@ -93,18 +93,17 @@ public final class ObjectCreationExpr extends Expression {
 	}
 
 	public List<Type> getTypeArgs() {
-		return typeArgs;
+		typeArgs = ensureNotNull(typeArgs);
+        return typeArgs;
 	}
 
 	public void setAnonymousClassBody(final List<BodyDeclaration> anonymousClassBody) {
-		this.anonymousClassBody =anonymousClassBody;
-        if (this.anonymousClassBody != null) {
-            setAsParentNodeOf(this.anonymousClassBody);
-        }
+		this.anonymousClassBody = anonymousClassBody;
+        setAsParentNodeOf(this.anonymousClassBody);
 	}
 
 	public void setArgs(final List<Expression> args) {
-		this.args = ensureNotNull(args);
+		this.args = args;
 		setAsParentNodeOf(this.args);
 	}
 
@@ -119,7 +118,7 @@ public final class ObjectCreationExpr extends Expression {
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = ensureNotNull(typeArgs);
+		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
 	}
 }

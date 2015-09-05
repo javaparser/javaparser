@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.internal.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +35,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public abstract class BodyDeclaration extends Node implements AnnotableNode {
 
-    private List<AnnotationExpr> annotations = Collections.emptyList();
+    private List<AnnotationExpr> annotations;
 
     public BodyDeclaration() {
     }
@@ -49,6 +50,7 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
     }
 
     public final List<AnnotationExpr> getAnnotations() {
+        annotations = Utils.ensureNotNull(annotations);
         return annotations;
     }
 
@@ -58,7 +60,7 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
      *                    in the future, so please avoid passing null
      */
     public final void setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = ensureNotNull(annotations);
+        this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
     }
 }

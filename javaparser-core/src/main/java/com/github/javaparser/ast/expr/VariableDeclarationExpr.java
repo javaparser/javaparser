@@ -39,7 +39,7 @@ public final class VariableDeclarationExpr extends Expression {
 
 	private int modifiers;
 
-	private List<AnnotationExpr> annotations = Collections.emptyList();
+	private List<AnnotationExpr> annotations;
 
 	private Type type;
 
@@ -78,7 +78,8 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public List<AnnotationExpr> getAnnotations() {
-		return annotations;
+		annotations = ensureNotNull(annotations);
+        return annotations;
 	}
 
 	/**
@@ -96,11 +97,12 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public List<VariableDeclarator> getVars() {
-		return vars;
+		vars = ensureNotNull(vars);
+        return vars;
 	}
 
 	public void setAnnotations(final List<AnnotationExpr> annotations) {
-		this.annotations = ensureNotNull(annotations);
+		this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
 	}
 
@@ -114,7 +116,7 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public void setVars(final List<VariableDeclarator> vars) {
-		this.vars = ensureNotNull(vars);
+		this.vars = vars;
 		setAsParentNodeOf(this.vars);
 	}
 }

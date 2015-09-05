@@ -32,7 +32,7 @@ import java.util.List;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 public class MultiTypeParameter extends BaseParameter {
-    private List<Type> types = Collections.emptyList();
+    private List<Type> types;
 	
     public MultiTypeParameter() {}
 
@@ -57,10 +57,12 @@ public class MultiTypeParameter extends BaseParameter {
     }
 
     public List<Type> getTypes() {
+        types = ensureNotNull(types);
         return types;
     }
 
     public void setTypes(List<Type> types) {
-        this.types = ensureNotNull(types);
+        this.types = types;
+        setAsParentNodeOf(types);
     }
 }

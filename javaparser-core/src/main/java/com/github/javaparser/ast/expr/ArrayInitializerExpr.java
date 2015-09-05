@@ -34,7 +34,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
  */
 public final class ArrayInitializerExpr extends Expression {
 
-    private List<Expression> values = Collections.emptyList();
+    private List<Expression> values;
 
     public ArrayInitializerExpr() {
     }
@@ -59,11 +59,12 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     public List<Expression> getValues() {
+        values = ensureNotNull(values);
         return values;
     }
 
     public void setValues(List<Expression> values) {
-        this.values = ensureNotNull(values);
+        this.values = values;
 		setAsParentNodeOf(this.values);
     }
 }

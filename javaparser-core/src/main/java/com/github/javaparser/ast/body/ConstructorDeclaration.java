@@ -45,13 +45,13 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     private int modifiers;
 
-    private List<TypeParameter> typeParameters = Collections.emptyList();
+    private List<TypeParameter> typeParameters;
 
     private NameExpr name;
 
-    private List<Parameter> parameters = Collections.emptyList();
+    private List<Parameter> parameters;
 
-    private List<NameExpr> throws_ = Collections.emptyList();
+    private List<NameExpr> throws_;
 
     private BlockStmt block;
 
@@ -119,14 +119,17 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public List<Parameter> getParameters() {
+        parameters = ensureNotNull(parameters);
         return parameters;
     }
 
     public List<NameExpr> getThrows() {
+        throws_ = ensureNotNull(throws_);
         return throws_;
     }
 
     public List<TypeParameter> getTypeParameters() {
+        typeParameters = ensureNotNull(typeParameters);
         return typeParameters;
     }
 
@@ -153,12 +156,12 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public void setThrows(List<NameExpr> throws_) {
-        this.throws_ = ensureNotNull(throws_);
+        this.throws_ = throws_;
 		setAsParentNodeOf(this.throws_);
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
-        this.typeParameters = ensureNotNull(typeParameters);
+        this.typeParameters = typeParameters;
 		setAsParentNodeOf(this.typeParameters);
     }
 

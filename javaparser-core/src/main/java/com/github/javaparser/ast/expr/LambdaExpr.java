@@ -40,7 +40,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public class LambdaExpr extends Expression {
 
-	private List<Parameter> parameters = Collections.emptyList();
+	private List<Parameter> parameters;
 
 	private boolean parametersEnclosed;
 
@@ -60,11 +60,12 @@ public class LambdaExpr extends Expression {
 	}
 
 	public List<Parameter> getParameters() {
-		return parameters;
+		parameters = ensureNotNull(parameters);
+        return parameters;
 	}
 
 	public void setParameters(List<Parameter> parameters) {
-		this.parameters = ensureNotNull(parameters);
+		this.parameters = parameters;
 		setAsParentNodeOf(this.parameters);
 	}
 

@@ -35,11 +35,11 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public final class ForStmt extends Statement {
 
-	private List<Expression> init = Collections.emptyList();
+	private List<Expression> init;
 
 	private Expression compare;
 
-	private List<Expression> update = Collections.emptyList();
+	private List<Expression> update;
 
 	private Statement body;
 
@@ -84,11 +84,13 @@ public final class ForStmt extends Statement {
 	}
 
 	public List<Expression> getInit() {
-		return init;
+		init = ensureNotNull(init);
+        return init;
 	}
 
 	public List<Expression> getUpdate() {
-		return update;
+		update = ensureNotNull(update);
+        return update;
 	}
 
 	public void setBody(final Statement body) {
@@ -102,12 +104,12 @@ public final class ForStmt extends Statement {
 	}
 
 	public void setInit(final List<Expression> init) {
-		this.init = ensureNotNull(init);
+		this.init = init;
 		setAsParentNodeOf(this.init);
 	}
 
 	public void setUpdate(final List<Expression> update) {
-		this.update = ensureNotNull(update);
+		this.update = update;
 		setAsParentNodeOf(this.update);
 	}
 }

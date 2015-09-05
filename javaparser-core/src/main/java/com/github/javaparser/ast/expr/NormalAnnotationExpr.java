@@ -34,7 +34,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public final class NormalAnnotationExpr extends AnnotationExpr {
 
-	private List<MemberValuePair> pairs = Collections.emptyList();
+	private List<MemberValuePair> pairs;
 
 	public NormalAnnotationExpr() {
 	}
@@ -60,11 +60,12 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 	}
 
 	public List<MemberValuePair> getPairs() {
-		return pairs;
+		pairs = ensureNotNull(pairs);
+        return pairs;
 	}
 
 	public void setPairs(final List<MemberValuePair> pairs) {
-		this.pairs = ensureNotNull(pairs);
+		this.pairs = pairs;
 		setAsParentNodeOf(this.pairs);
 	}
 }

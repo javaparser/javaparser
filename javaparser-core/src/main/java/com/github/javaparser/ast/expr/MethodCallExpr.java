@@ -37,11 +37,11 @@ public final class MethodCallExpr extends Expression {
 
 	private Expression scope;
 
-	private List<Type> typeArgs = Collections.emptyList();
+	private List<Type> typeArgs;
 
 	private NameExpr name;
 
-	private List<Expression> args = Collections.emptyList();
+	private List<Expression> args;
 
 	public MethodCallExpr() {
 	}
@@ -75,7 +75,8 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public List<Expression> getArgs() {
-		return args;
+		args = ensureNotNull(args);
+        return args;
 	}
 
 	public String getName() {
@@ -91,11 +92,12 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public List<Type> getTypeArgs() {
-		return typeArgs;
+		typeArgs = ensureNotNull(typeArgs);
+        return typeArgs;
 	}
 
 	public void setArgs(final List<Expression> args) {
-		this.args = ensureNotNull(args);
+		this.args = args;
 		setAsParentNodeOf(this.args);
 	}
 
@@ -113,7 +115,7 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = ensureNotNull(typeArgs);
+		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
 	}
 }

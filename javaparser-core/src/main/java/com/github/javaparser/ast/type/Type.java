@@ -34,7 +34,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
  */
 public abstract class Type extends Node {
 
-    private List<AnnotationExpr> annotations = Collections.emptyList();
+    private List<AnnotationExpr> annotations;
 
     public Type() {
     }
@@ -53,11 +53,12 @@ public abstract class Type extends Node {
     }
 
     public List<AnnotationExpr> getAnnotations() {
+        annotations = ensureNotNull(annotations);
         return annotations;
     }
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = ensureNotNull(annotations);
+        this.annotations = annotations;
     }
 
 }

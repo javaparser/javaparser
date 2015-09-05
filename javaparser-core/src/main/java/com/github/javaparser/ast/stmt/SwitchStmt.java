@@ -37,7 +37,7 @@ public final class SwitchStmt extends Statement {
 
 	private Expression selector;
 
-	private List<SwitchEntryStmt> entries = Collections.emptyList();
+	private List<SwitchEntryStmt> entries;
 
 	public SwitchStmt() {
 	}
@@ -67,7 +67,8 @@ public final class SwitchStmt extends Statement {
 	}
 
 	public List<SwitchEntryStmt> getEntries() {
-		return entries;
+		entries = ensureNotNull(entries);
+        return entries;
 	}
 
 	public Expression getSelector() {
@@ -75,7 +76,7 @@ public final class SwitchStmt extends Statement {
 	}
 
 	public void setEntries(final List<SwitchEntryStmt> entries) {
-		this.entries = ensureNotNull(entries);
+		this.entries = entries;
 		setAsParentNodeOf(this.entries);
 	}
 
