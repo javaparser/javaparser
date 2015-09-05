@@ -78,7 +78,7 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public List<AnnotationExpr> getAnnotations() {
-		annotations = ensureNotNull(annotations);
+        annotations = ensureNotNull(annotations);
         return annotations;
 	}
 
@@ -97,12 +97,12 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public List<VariableDeclarator> getVars() {
-		vars = ensureNotNull(vars);
+        vars = ensureNotNull(vars);
         return vars;
 	}
 
 	public void setAnnotations(final List<AnnotationExpr> annotations) {
-		this.annotations = annotations;
+        this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
 	}
 

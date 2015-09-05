@@ -25,7 +25,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
@@ -74,7 +73,7 @@ public final class TryStmt extends Statement {
 	}
 
 	public List<CatchClause> getCatchs() {
-		catchs = ensureNotNull(catchs);
+        catchs = ensureNotNull(catchs);
         return catchs;
 	}
 
@@ -87,7 +86,7 @@ public final class TryStmt extends Statement {
 	}
 	
 	public List<VariableDeclarationExpr> getResources() {
-		resources = ensureNotNull(resources);
+        resources = ensureNotNull(resources);
         return resources;
 	}
 

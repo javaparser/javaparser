@@ -27,7 +27,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
@@ -76,6 +75,9 @@ public final class ObjectCreationExpr extends Expression {
 		v.visit(this, arg);
 	}
 
+    /**
+     * This can be null, to indicate there is no body
+     */
 	public List<BodyDeclaration> getAnonymousClassBody() {
 		return anonymousClassBody;
 	}

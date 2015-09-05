@@ -21,22 +21,19 @@
  
 package com.github.javaparser.ast.expr;
 
-
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
- * Lambda expressions. 
- * @author Raquel Pau
+ * Lambda expression.
  *
+ * @author Raquel Pau
  */
 public class LambdaExpr extends Expression {
 
@@ -60,7 +57,7 @@ public class LambdaExpr extends Expression {
 	}
 
 	public List<Parameter> getParameters() {
-		parameters = ensureNotNull(parameters);
+        parameters = ensureNotNull(parameters);
         return parameters;
 	}
 

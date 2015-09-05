@@ -24,7 +24,6 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
@@ -60,7 +59,7 @@ public final class BlockStmt extends Statement {
 	}
 
 	public List<Statement> getStmts() {
-		stmts = ensureNotNull(stmts);
+        stmts = ensureNotNull(stmts);
         return stmts;
 	}
 

@@ -26,10 +26,9 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Collections;
 import java.util.List;
 
-import static com.github.javaparser.ast.internal.Utils.*;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 public class MultiTypeParameter extends BaseParameter {
     private List<Type> types;

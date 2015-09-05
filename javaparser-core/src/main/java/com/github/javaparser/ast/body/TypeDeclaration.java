@@ -69,7 +69,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	public final List<BodyDeclaration> getMembers() {
-		members = ensureNotNull(members);
+        members = ensureNotNull(members);
         return members;
 	}
 

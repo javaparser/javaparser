@@ -26,7 +26,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
@@ -76,7 +75,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public List<Expression> getArgs() {
-		args = ensureNotNull(args);
+        args = ensureNotNull(args);
         return args;
 	}
 
@@ -85,7 +84,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public List<Type> getTypeArgs() {
-		typeArgs = ensureNotNull(typeArgs);
+        typeArgs = ensureNotNull(typeArgs);
         return typeArgs;
 	}
 

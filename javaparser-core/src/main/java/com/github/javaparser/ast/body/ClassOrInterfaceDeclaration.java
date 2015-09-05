@@ -29,11 +29,9 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static com.github.javaparser.ast.internal.Utils.*;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -89,12 +87,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 	}
 
 	public List<ClassOrInterfaceType> getExtends() {
-		extendsList = ensureNotNull(extendsList);
+        extendsList = ensureNotNull(extendsList);
         return extendsList;
 	}
 
 	public List<ClassOrInterfaceType> getImplements() {
-		implementsList = ensureNotNull(implementsList);
+        implementsList = ensureNotNull(implementsList);
         return implementsList;
 	}
 

@@ -33,11 +33,9 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 
-import static com.github.javaparser.ast.internal.Utils.*;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -143,12 +141,12 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     }
 
 	public List<Parameter> getParameters() {
-		parameters = ensureNotNull(parameters);
+        parameters = ensureNotNull(parameters);
         return parameters;
 	}
 
 	public List<NameExpr> getThrows() {
-		throws_ = ensureNotNull(throws_);
+        throws_ = ensureNotNull(throws_);
         return throws_;
 	}
 
@@ -157,7 +155,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	}
 
 	public List<TypeParameter> getTypeParameters() {
-		typeParameters = ensureNotNull(typeParameters);
+        typeParameters = ensureNotNull(typeParameters);
         return typeParameters;
 	}
 

@@ -24,7 +24,6 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
@@ -60,7 +59,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 	}
 
 	public List<MemberValuePair> getPairs() {
-		pairs = ensureNotNull(pairs);
+        pairs = ensureNotNull(pairs);
         return pairs;
 	}
 

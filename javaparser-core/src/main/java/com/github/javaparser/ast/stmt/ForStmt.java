@@ -25,7 +25,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
@@ -84,12 +83,12 @@ public final class ForStmt extends Statement {
 	}
 
 	public List<Expression> getInit() {
-		init = ensureNotNull(init);
+        init = ensureNotNull(init);
         return init;
 	}
 
 	public List<Expression> getUpdate() {
-		update = ensureNotNull(update);
+        update = ensureNotNull(update);
         return update;
 	}
 

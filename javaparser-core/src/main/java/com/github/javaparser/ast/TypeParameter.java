@@ -26,8 +26,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
@@ -99,7 +97,7 @@ public final class TypeParameter extends Node implements NamedNode {
 	 * @return list of types that this paramente extends or <code>null</code>
 	 */
 	public List<ClassOrInterfaceType> getTypeBound() {
-		typeBound = ensureNotNull(typeBound);
+        typeBound = ensureNotNull(typeBound);
         return typeBound;
 	}
 

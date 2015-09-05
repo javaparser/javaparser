@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -157,7 +156,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     public void setThrows(List<NameExpr> throws_) {
         this.throws_ = throws_;
-		setAsParentNodeOf(this.throws_);
+        setAsParentNodeOf(this.throws_);
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {

@@ -24,8 +24,6 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
