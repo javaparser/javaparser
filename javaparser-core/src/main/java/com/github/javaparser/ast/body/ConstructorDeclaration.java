@@ -22,7 +22,6 @@
 package com.github.javaparser.ast.body;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
@@ -34,6 +33,8 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -117,20 +118,17 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public List<Parameter> getParameters() {
-        if (parameters == null) {
-            parameters = new ArrayList<Parameter>();
-        }
+        parameters = ensureNotNull(parameters);
         return parameters;
     }
 
     public List<NameExpr> getThrows() {
-        if (throws_ == null) {
-            throws_ = new ArrayList<NameExpr>();
-        }
+        throws_ = ensureNotNull(throws_);
         return throws_;
     }
 
     public List<TypeParameter> getTypeParameters() {
+        typeParameters = ensureNotNull(typeParameters);
         return typeParameters;
     }
 
@@ -163,7 +161,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
-        setAsParentNodeOf(this.typeParameters);
+		setAsParentNodeOf(this.typeParameters);
     }
 
     /**

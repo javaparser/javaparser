@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -74,10 +76,12 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
     }
 
     public List<Expression> getArgs() {
+        args = ensureNotNull(args);
         return args;
     }
 
     public List<BodyDeclaration> getClassBody() {
+        classBody = ensureNotNull(classBody);
         return classBody;
     }
 

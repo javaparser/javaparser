@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -42,7 +44,8 @@ public final class ObjectCreationExpr extends Expression {
 
 	private List<Expression> args;
 
-	private List<BodyDeclaration> anonymousClassBody;
+    // This can be null, to indicate there is no body
+    private List<BodyDeclaration> anonymousClassBody;
 
 	public ObjectCreationExpr() {
 	}
@@ -72,6 +75,9 @@ public final class ObjectCreationExpr extends Expression {
 		v.visit(this, arg);
 	}
 
+    /**
+     * This can be null, to indicate there is no body
+     */
 	public List<BodyDeclaration> getAnonymousClassBody() {
 		return anonymousClassBody;
 	}
@@ -89,12 +95,13 @@ public final class ObjectCreationExpr extends Expression {
 	}
 
 	public List<Type> getTypeArgs() {
-		return typeArgs;
+		typeArgs = ensureNotNull(typeArgs);
+        return typeArgs;
 	}
 
 	public void setAnonymousClassBody(final List<BodyDeclaration> anonymousClassBody) {
 		this.anonymousClassBody = anonymousClassBody;
-		setAsParentNodeOf(this.anonymousClassBody);
+        setAsParentNodeOf(this.anonymousClassBody);
 	}
 
 	public void setArgs(final List<Expression> args) {

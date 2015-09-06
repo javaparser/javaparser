@@ -27,7 +27,10 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Collections;
 import java.util.List;
+
+import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -75,7 +78,8 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public List<AnnotationExpr> getAnnotations() {
-		return annotations;
+        annotations = ensureNotNull(annotations);
+        return annotations;
 	}
 
 	/**
@@ -93,11 +97,12 @@ public final class VariableDeclarationExpr extends Expression {
 	}
 
 	public List<VariableDeclarator> getVars() {
-		return vars;
+        vars = ensureNotNull(vars);
+        return vars;
 	}
 
 	public void setAnnotations(final List<AnnotationExpr> annotations) {
-		this.annotations = annotations;
+        this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
 	}
 

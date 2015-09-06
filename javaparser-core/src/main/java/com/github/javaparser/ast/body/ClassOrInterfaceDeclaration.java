@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -85,26 +87,39 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 	}
 
 	public List<ClassOrInterfaceType> getExtends() {
-		return extendsList;
+        extendsList = ensureNotNull(extendsList);
+        return extendsList;
 	}
 
 	public List<ClassOrInterfaceType> getImplements() {
-		return implementsList;
+        implementsList = ensureNotNull(implementsList);
+        return implementsList;
 	}
 
 	public List<TypeParameter> getTypeParameters() {
-		return typeParameters;
+		typeParameters = ensureNotNull(typeParameters);
+        return typeParameters;
 	}
 
     public boolean isInterface() {
 		return interface_;
 	}
 
+    /**
+     * 
+     * @param extendsList a null value is currently treated as an empty list. This behavior could change
+     *                    in the future, so please avoid passing null
+     */
 	public void setExtends(final List<ClassOrInterfaceType> extendsList) {
 		this.extendsList = extendsList;
 		setAsParentNodeOf(this.extendsList);
 	}
 
+    /**
+     * 
+     * @param implementsList a null value is currently treated as an empty list. This behavior could change
+     *                       in the future, so please avoid passing null
+     */
 	public void setImplements(final List<ClassOrInterfaceType> implementsList) {
 		this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
@@ -114,6 +129,11 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration implement
 		this.interface_ = interface_;
 	}
 
+    /**
+     *
+     * @param typeParameters a null value is currently treated as an empty list. This behavior could change
+     *                       in the future, so please avoid passing null
+     */
 	public void setTypeParameters(final List<TypeParameter> typeParameters) {
 		this.typeParameters = typeParameters;
 		setAsParentNodeOf(this.typeParameters);

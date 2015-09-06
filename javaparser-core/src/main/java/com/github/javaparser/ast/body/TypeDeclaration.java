@@ -25,7 +25,10 @@ import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
+import java.util.Collections;
 import java.util.List;
+
+import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -66,7 +69,8 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	public final List<BodyDeclaration> getMembers() {
-		return members;
+        members = ensureNotNull(members);
+        return members;
 	}
 
 	/**

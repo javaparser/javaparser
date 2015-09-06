@@ -34,7 +34,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
-import java.util.ArrayList;
+
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -140,17 +141,13 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     }
 
 	public List<Parameter> getParameters() {
-        if (parameters == null) {
-            parameters = new ArrayList<Parameter>();
-        }
-		return parameters;
+        parameters = ensureNotNull(parameters);
+        return parameters;
 	}
 
 	public List<NameExpr> getThrows() {
-        if (throws_ == null) {
-            throws_ = new ArrayList<NameExpr>();
-        }
-		return throws_;
+        throws_ = ensureNotNull(throws_);
+        return throws_;
 	}
 
 	public Type getType() {
@@ -158,7 +155,8 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	}
 
 	public List<TypeParameter> getTypeParameters() {
-		return typeParameters;
+        typeParameters = ensureNotNull(typeParameters);
+        return typeParameters;
 	}
 
 	public void setArrayCount(final int arrayCount) {

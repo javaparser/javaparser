@@ -30,6 +30,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -70,10 +72,12 @@ public final class EnumDeclaration extends TypeDeclaration implements Documentab
     }
 
     public List<EnumConstantDeclaration> getEntries() {
+        entries = ensureNotNull(entries);
         return entries;
     }
 
     public List<ClassOrInterfaceType> getImplements() {
+        implementsList = ensureNotNull(implementsList);
         return implementsList;
     }
 

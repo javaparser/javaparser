@@ -23,9 +23,12 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.internal.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -82,6 +85,7 @@ public final class PackageDeclaration extends Node {
      * @return list of annotations or <code>null</code>
      */
     public List<AnnotationExpr> getAnnotations() {
+        annotations = Utils.ensureNotNull(annotations);
         return annotations;
     }
 

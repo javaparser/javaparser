@@ -26,6 +26,8 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 public abstract class BaseParameter extends Node {
     private int modifiers;
 
@@ -58,7 +60,11 @@ public abstract class BaseParameter extends Node {
         setId(id);
 	}
 
+    /**
+     * @return the list returned could be immutable (in that case it will be empty)
+     */
     public List<AnnotationExpr> getAnnotations() {
+        annotations = ensureNotNull(annotations);
         return annotations;
     }
 
@@ -76,6 +82,10 @@ public abstract class BaseParameter extends Node {
         return modifiers;
     }
 
+    /**
+     * @param annotations a null value is currently treated as an empty list. This behavior could change
+     *                    in the future, so please avoid passing null
+     */
     public void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
         setAsParentNodeOf(this.annotations);

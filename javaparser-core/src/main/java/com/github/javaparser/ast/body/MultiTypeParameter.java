@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
 public class MultiTypeParameter extends BaseParameter {
     private List<Type> types;
 	
@@ -54,10 +56,12 @@ public class MultiTypeParameter extends BaseParameter {
     }
 
     public List<Type> getTypes() {
+        types = ensureNotNull(types);
         return types;
     }
 
     public void setTypes(List<Type> types) {
         this.types = types;
+        setAsParentNodeOf(types);
     }
 }

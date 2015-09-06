@@ -48,6 +48,8 @@ import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * This class helps to construct new nodes.
  * 
@@ -168,7 +170,7 @@ public final class ASTHelper {
      */
     public static void addParameter(MethodDeclaration method, Parameter parameter) {
         List<Parameter> parameters = method.getParameters();
-        if (parameters == null) {
+        if (isNullOrEmpty(parameters)) {
             parameters = new ArrayList<Parameter>();
             method.setParameters(parameters);
         }
@@ -186,7 +188,7 @@ public final class ASTHelper {
      */
     public static void addArgument(MethodCallExpr call, Expression arg) {
         List<Expression> args = call.getArgs();
-        if (args == null) {
+        if (isNullOrEmpty(args)) {
             args = new ArrayList<Expression>();
             call.setArgs(args);
         }
@@ -204,7 +206,7 @@ public final class ASTHelper {
      */
     public static void addTypeDeclaration(CompilationUnit cu, TypeDeclaration type) {
         List<TypeDeclaration> types = cu.getTypes();
-        if (types == null) {
+        if (isNullOrEmpty(types)) {
             types = new ArrayList<TypeDeclaration>();
             cu.setTypes(types);
         }
@@ -247,7 +249,7 @@ public final class ASTHelper {
      */
     public static void addStmt(BlockStmt block, Statement stmt) {
         List<Statement> stmts = block.getStmts();
-        if (stmts == null) {
+        if (isNullOrEmpty(stmts)) {
             stmts = new ArrayList<Statement>();
             block.setStmts(stmts);
         }
@@ -276,7 +278,7 @@ public final class ASTHelper {
      */
     public static void addMember(TypeDeclaration type, BodyDeclaration decl) {
         List<BodyDeclaration> members = type.getMembers();
-        if (members == null) {
+        if (isNullOrEmpty(members)) {
             members = new ArrayList<BodyDeclaration>();
             type.setMembers(members);
         }

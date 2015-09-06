@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -64,7 +66,8 @@ public final class SwitchStmt extends Statement {
 	}
 
 	public List<SwitchEntryStmt> getEntries() {
-		return entries;
+        entries = ensureNotNull(entries);
+        return entries;
 	}
 
 	public Expression getSelector() {

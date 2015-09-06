@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * These are some examples:
@@ -79,6 +81,7 @@ public class MethodReferenceExpr extends Expression {
     }
 
     public List<TypeParameter> getTypeParameters() {
+        typeParameters = ensureNotNull(typeParameters);
         return typeParameters;
     }
 

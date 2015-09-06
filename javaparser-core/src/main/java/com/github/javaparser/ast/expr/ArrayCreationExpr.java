@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -90,6 +92,7 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public List<Expression> getDimensions() {
+        dimensions = ensureNotNull(dimensions);
         return dimensions;
     }
 
@@ -121,6 +124,7 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public List<List<AnnotationExpr>> getArraysAnnotations() {
+        arraysAnnotations = ensureNotNull(arraysAnnotations);
         return arraysAnnotations;
     }
 

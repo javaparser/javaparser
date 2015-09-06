@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -98,6 +100,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     }
 
     public List<VariableDeclarator> getVariables() {
+        variables = ensureNotNull(variables);
         return variables;
     }
 

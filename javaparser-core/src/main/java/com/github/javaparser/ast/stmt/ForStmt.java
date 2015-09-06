@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -81,11 +83,13 @@ public final class ForStmt extends Statement {
 	}
 
 	public List<Expression> getInit() {
-		return init;
+        init = ensureNotNull(init);
+        return init;
 	}
 
 	public List<Expression> getUpdate() {
-		return update;
+        update = ensureNotNull(update);
+        return update;
 	}
 
 	public void setBody(final Statement body) {

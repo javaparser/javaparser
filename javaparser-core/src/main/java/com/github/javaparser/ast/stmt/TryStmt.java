@@ -27,6 +27,8 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -71,7 +73,8 @@ public final class TryStmt extends Statement {
 	}
 
 	public List<CatchClause> getCatchs() {
-		return catchs;
+        catchs = ensureNotNull(catchs);
+        return catchs;
 	}
 
 	public BlockStmt getFinallyBlock() {
@@ -83,7 +86,8 @@ public final class TryStmt extends Statement {
 	}
 	
 	public List<VariableDeclarationExpr> getResources() {
-		return resources;
+        resources = ensureNotNull(resources);
+        return resources;
 	}
 
 	public void setCatchs(final List<CatchClause> catchs) {

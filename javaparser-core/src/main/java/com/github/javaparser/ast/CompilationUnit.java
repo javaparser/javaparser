@@ -33,6 +33,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * <p>
  * This class represents the entire compilation unit. Each java file denotes a
@@ -105,6 +107,7 @@ public final class CompilationUnit extends Node {
      * @return the list of imports or <code>null</code> if there is no import
      */
     public List<ImportDeclaration> getImports() {
+        imports = ensureNotNull(imports);
         return imports;
     }
 
@@ -130,6 +133,7 @@ public final class CompilationUnit extends Node {
      * @see EnumDeclaration
      */
     public List<TypeDeclaration> getTypes() {
+        types = ensureNotNull(types);
         return types;
     }
 

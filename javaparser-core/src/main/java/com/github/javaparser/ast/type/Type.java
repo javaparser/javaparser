@@ -26,6 +26,8 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -50,6 +52,7 @@ public abstract class Type extends Node {
     }
 
     public List<AnnotationExpr> getAnnotations() {
+        annotations = ensureNotNull(annotations);
         return annotations;
     }
 

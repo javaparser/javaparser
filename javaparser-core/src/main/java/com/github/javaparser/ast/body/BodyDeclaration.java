@@ -23,8 +23,8 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.internal.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,12 +47,15 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
     }
 
     public final List<AnnotationExpr> getAnnotations() {
-        if (annotations==null){
-            annotations = new ArrayList<AnnotationExpr>();
-        }
+        annotations = Utils.ensureNotNull(annotations);
         return annotations;
     }
 
+    /**
+     *
+     * @param annotations a null value is currently treated as an empty list. This behavior could change
+     *                    in the future, so please avoid passing null
+     */
     public final void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);

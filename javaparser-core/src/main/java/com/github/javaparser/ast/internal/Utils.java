@@ -21,18 +21,17 @@
 
 package com.github.javaparser.ast.internal;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Federico Tomassetti
- * @since 2.0.1
+ * @since 3.0.0
  */
 public class Utils {
-
     public static <T> List<T> ensureNotNull(List<T> list) {
-        return list == null ? Collections.<T>emptyList() : list;
+        return list == null ? new ArrayList<T>() : list;
     }
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {

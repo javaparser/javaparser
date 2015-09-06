@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -50,20 +52,18 @@ public final class ClassOrInterfaceType extends Type {
     }
 
     public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                                final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
+            final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
         super(beginLine, beginColumn, endLine, endColumn);
         setScope(scope);
         setName(name);
         setTypeArgs(typeArgs);
     }
 
-    @Override
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
-    @Override
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -76,6 +76,7 @@ public final class ClassOrInterfaceType extends Type {
     }
 
     public List<Type> getTypeArgs() {
+        typeArgs = ensureNotNull(typeArgs);
         return typeArgs;
     }
 
@@ -84,7 +85,9 @@ public final class ClassOrInterfaceType extends Type {
     }
 
     public PrimitiveType toUnboxedType() throws UnsupportedOperationException {
-        if (!isBoxedType()) throw new UnsupportedOperationException(name + " isn't a boxed type.");
+        if (!isBoxedType()) {
+            throw new UnsupportedOperationException(name + " isn't a boxed type.");
+        }
         return new PrimitiveType(PrimitiveType.unboxMap.get(name));
     }
 
@@ -101,4 +104,5 @@ public final class ClassOrInterfaceType extends Type {
         this.typeArgs = typeArgs;
         setAsParentNodeOf(this.typeArgs);
     }
+
 }

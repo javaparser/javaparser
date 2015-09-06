@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.internal.Utils.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -113,6 +115,7 @@ public final class ReferenceType extends Type {
 	 * If a certain array modifier has no annotation the corresponding entry of arraysAnnotations will be null</p>
 	 */
     public List<List<AnnotationExpr>> getArraysAnnotations() {
+        arraysAnnotations = ensureNotNull(arraysAnnotations);
         return arraysAnnotations;
     }
 
