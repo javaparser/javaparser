@@ -85,7 +85,7 @@ import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
  * 
  * @author Julio Vilmar Gesser
  */
-public final class DumpVisitor implements VoidVisitor<Object> {
+public class DumpVisitor implements VoidVisitor<Object> {
 
     private boolean printComments;
 
@@ -97,7 +97,13 @@ public final class DumpVisitor implements VoidVisitor<Object> {
         this.printComments = printComments;
     }
 
-	private static class SourcePrinter {
+	protected static class SourcePrinter {
+		
+		private final String indentation;
+
+		protected SourcePrinter(final String indentation) {
+			this.indentation = indentation;
+		}
 
 		private int level = 0;
 
@@ -115,7 +121,7 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 
 		private void makeIndent() {
 			for (int i = 0; i < level; i++) {
-				buf.append("    ");
+				buf.append(indentation);
 			}
 		}
 
@@ -146,7 +152,11 @@ public final class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	private final SourcePrinter printer = new SourcePrinter();
+	private final SourcePrinter printer = createSourcePrinter();
+	
+	protected SourcePrinter createSourcePrinter() {
+		return new SourcePrinter("    ");
+	}
 
 	public String getSource() {
 		return printer.getSource();
