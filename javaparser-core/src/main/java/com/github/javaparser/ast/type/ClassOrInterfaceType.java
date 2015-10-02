@@ -100,6 +100,10 @@ public final class ClassOrInterfaceType extends Type {
         setAsParentNodeOf(this.scope);
     }
 
+    /**
+     * Allows you to set the generic arguments
+     * @param typeArgs The list of types of the generics
+     */
     public void setTypeArgs(final List<Type> typeArgs) {
         this.typeArgs = typeArgs;
         setAsParentNodeOf(this.typeArgs);

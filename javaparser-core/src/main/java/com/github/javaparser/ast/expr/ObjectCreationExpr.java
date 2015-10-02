@@ -32,6 +32,12 @@ import java.util.List;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
+ * Defines constructor call expression.
+ * Example:
+ * <code>
+ *     new Object()
+ * </code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ObjectCreationExpr extends Expression {
@@ -50,6 +56,12 @@ public final class ObjectCreationExpr extends Expression {
 	public ObjectCreationExpr() {
 	}
 
+	/**
+	 * Defines a call to a constructor.
+	 * @param scope may be null
+	 * @param type this is the class that the constructor is being called for.
+	 * @param args Any arguments to pass to the constructor
+	 */
 	public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final List<Expression> args) {
 		setScope(scope);
 		setType(type);

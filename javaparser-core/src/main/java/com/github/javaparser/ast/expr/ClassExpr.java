@@ -26,6 +26,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * Defines an expression that accesses the class of a type.
+ * Example:
+ * <code>
+ *     Object.class
+ * </code>
  * @author Julio Vilmar Gesser
  */
 public final class ClassExpr extends Expression {
