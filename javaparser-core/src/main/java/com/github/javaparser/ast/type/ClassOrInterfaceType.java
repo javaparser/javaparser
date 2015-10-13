@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -31,7 +32,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type {
+public final class ClassOrInterfaceType extends Type implements NamedNode {
 
     private ClassOrInterfaceType scope;
 
@@ -67,6 +68,7 @@ public final class ClassOrInterfaceType extends Type {
         v.visit(this, arg);
     }
 
+    @Override
     public String getName() {
         return name;
     }
