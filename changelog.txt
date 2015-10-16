@@ -1,0 +1,7 @@
+Version 2.3.0
+-------------
+
+* ClassOrInterfaceType implements NamedNode
+* DumpVisitor can now be extended
+* Improved documentation
+* AST: lists are now lazy initialized
