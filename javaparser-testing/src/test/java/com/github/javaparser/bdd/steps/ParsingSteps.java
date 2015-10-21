@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.ASTHelper;
@@ -60,6 +60,16 @@ public class ParsingSteps {
             throw new RuntimeException("Exactly one ArrayCreationExpr expected");
         }
         state.put("selectedNode", arrayCreationExprs.get(0));
+    }
+
+    @When("I take the PackageDeclaration")
+    public void iTakeThePackageDeclaration() {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        List<PackageDeclaration> packages = ASTHelper.getNodesByType(compilationUnit, PackageDeclaration.class);
+        if (packages.size() != 1) {
+            throw new RuntimeException("Exactly one ArrayCreationExpr expected");
+        }
+        state.put("selectedNode", packages.get(0));
     }
 
     /*
@@ -231,7 +241,7 @@ public class ParsingSteps {
         ExistenceOfParentNodeVerifier parentVerifier = new ExistenceOfParentNodeVerifier();
         parentVerifier.verify(compilationUnit);
     }
-    
+
     @Then("ThenExpr in the conditional expression of the statement $statementPosition in method $methodPosition in class $classPosition is LambdaExpr")
     public void thenLambdaInConditionalExpressionInMethodInClassIsParentOfContainedParameter(int statementPosition, int methodPosition, int classPosition) {
     	Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
@@ -270,4 +280,9 @@ public class ParsingSteps {
         // if the code is not parsed then exceptions are thrown before reaching this step
     }
 
+    @Then("the package name is $package")
+    public void thenThePackageNameIs(String expected) {
+        PackageDeclaration node = (PackageDeclaration) state.get("selectedNode");
+        assertEquals(expected, node.getName().getName());
+    }
 }

@@ -280,7 +280,6 @@ Then the begin column is 17
 Then the end line is 2
 Then the end column is 29
 
-
 Scenario: simple cast on lambda expression can be parsed
 
 Given a CompilationUnit
@@ -338,3 +337,13 @@ import foo.b;
 class A {
 }
 Then no errors are reported
+
+
+Scenario: Full package name should be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+package com.github.javaparser.bdd;
+class C {}
+When I take the PackageDeclaration
+Then the package name is com.github.javaparser.bdd
