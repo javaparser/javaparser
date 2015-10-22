@@ -283,6 +283,6 @@ public class ParsingSteps {
     @Then("the package name is $package")
     public void thenThePackageNameIs(String expected) {
         PackageDeclaration node = (PackageDeclaration) state.get("selectedNode");
-        assertEquals(expected, node.getName().getName());
+        assertEquals(expected, node.getName().toString());
     }
 }
