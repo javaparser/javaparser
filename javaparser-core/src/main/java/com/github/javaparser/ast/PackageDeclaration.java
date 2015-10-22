@@ -90,12 +90,19 @@ public final class PackageDeclaration extends Node {
     }
 
     /**
-     * Return the name of the package.
-     * 
+     * Return the name expression of the package.
+     *
      * @return the name of the package
      */
     public NameExpr getName() {
         return name;
+    }
+
+    /**
+     * Get full package name.
+     */
+    public String getPackageName() {
+        return name.toString();
     }
 
     /**
