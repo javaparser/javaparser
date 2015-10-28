@@ -1230,7 +1230,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print("enum ");
 		printer.print(n.getName());
 
-		if (n.getImplements() != null) {
+		if (!n.getImplements().isEmpty()) {
 			printer.print(" implements ");
 			for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext();) {
 				final ClassOrInterfaceType c = i.next();
@@ -1275,7 +1275,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			printArguments(n.getArgs(), arg);
 		}
 
-		if (n.getClassBody() != null) {
+		if (!n.getClassBody().isEmpty()) {
 			printer.printLn(" {");
 			printer.indent();
 			printMembers(n.getClassBody(), arg);
@@ -1596,7 +1596,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
         }
 
         printer.print("::");
-        if (n.getTypeParameters() != null) {
+        if (!n.getTypeParameters().isEmpty()) {
             printer.print("<");
             for (Iterator<TypeParameter> i = n.getTypeParameters().iterator(); i
                     .hasNext();) {
