@@ -88,11 +88,6 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
-    public Context getContext() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }

@@ -50,6 +50,10 @@ public interface TypeUsage {
         return false;
     }
 
+    default boolean isEnum() {
+        return false;
+    }
+
     ///
     /// Misc
     ///
@@ -76,12 +80,6 @@ public interface TypeUsage {
         }
         return sb.toString();
     }
-
-    /* Represent the position of the reference, it is used when solving symbols
-     * because a reference to a class A could be related to different classes depending on the position
-     * of the reference
-     */
-    Context getContext();
 
     SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
@@ -141,10 +139,6 @@ public interface TypeUsage {
     String getQualifiedName();
 
     String prettyPrint();
-
-    default boolean isEnum() {
-        return false;
-    }
 
     default List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         return Collections.emptyList();
