@@ -205,3 +205,75 @@ When the class is parsed by the comment parser
 Then the total number of comments is 2
 Then Javadoc comment 1 is "comment1"
 Then Javadoc comment 2 is "comment2"
+
+Scenario: Double slash in string does not mess up comments parsing
+Given the class:
+public class b {
+
+    public void m1() {
+        String s = "\\";
+    }
+
+    /**
+     * Comment
+    */
+    public void m2() {
+        return;
+    }
+}
+When the class is parsed by the comment parser
+Then the total number of comments is 1
+
+Scenario: Triple slash in string does not mess up comments parsing
+Given the class:
+public class b {
+
+    public void m1() {
+        String s = "\\\" // still in string";
+    }
+
+    /**
+     * Comment
+    */
+    public void m2() {
+        return;
+    }
+}
+When the class is parsed by the comment parser
+Then the total number of comments is 1
+
+Scenario: Four slashes in string does not mess up comments parsing
+Given the class:
+public class b {
+
+    public void m1() {
+        String s = "\\\\" // out of the string";
+    }
+
+    /**
+     * Comment
+    */
+    public void m2() {
+        return;
+    }
+}
+When the class is parsed by the comment parser
+Then the total number of comments is 2
+
+Scenario: Five slashes in string does not mess up comments parsing
+Given the class:
+public class b {
+
+    public void m1() {
+        String s = "\\\\\" // still in string";
+    }
+
+    /**
+     * Comment
+    */
+    public void m2() {
+        return;
+    }
+}
+When the class is parsed by the comment parser
+Then the total number of comments is 1
