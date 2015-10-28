@@ -39,6 +39,8 @@ public class CommentsParser {
     }
 
     private static final int COLUMNS_PER_TAB = 4;
+    // a char with no special meaning (i.e., it is not a slash)
+    private static final char INNOCUOS_CHAR = 'z';
 
     public CommentsCollection parse(final String source) throws IOException, UnsupportedEncodingException {
         InputStream in = new ByteArrayInputStream(source.getBytes(Charset.defaultCharset()));
@@ -51,7 +53,7 @@ public class CommentsParser {
         CommentsCollection comments = new CommentsCollection();
         int r;
 
-        Deque prevTwoChars = new LinkedList<Character>(Arrays.asList('z','z'));
+        Deque prevTwoChars = new LinkedList<Character>(Arrays.asList(INNOCUOS_CHAR, INNOCUOS_CHAR));
 
         State state = State.CODE;
         LineComment currentLineComment = null;
@@ -159,8 +161,19 @@ public class CommentsParser {
                 default:
                     currCol+=1;
             }
-            prevTwoChars.remove();
-            prevTwoChars.add(c);
+            // ok we have two slashes in a row inside a string
+            // we want to replace them with... anything else, to not confuse
+            // the parser
+            if (state==State.IN_STRING && prevTwoChars.peekLast().equals('\\') && c == '\\') {
+                while (!prevTwoChars.isEmpty()) {
+                    prevTwoChars.remove();
+                }
+                prevTwoChars.add(INNOCUOS_CHAR);
+                prevTwoChars.add(INNOCUOS_CHAR);
+            } else {
+                prevTwoChars.remove();
+                prevTwoChars.add(c);
+            }
         }
 
         if (state==State.IN_LINE_COMMENT){
