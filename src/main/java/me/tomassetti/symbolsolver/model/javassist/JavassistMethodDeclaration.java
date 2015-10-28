@@ -11,8 +11,8 @@ import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.util.Arrays;
 import java.util.Collections;

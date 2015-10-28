@@ -10,10 +10,10 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
-import me.tomassetti.symbolsolver.model.usages.WildcardUsage;
+import me.tomassetti.symbolsolver.model.typesystem.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.WildcardUsage;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -101,7 +101,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             return;
         }
         if (!formalParamType.getQualifiedName().equals(actualParamType.getQualifiedName())){
-            List<TypeUsageOfTypeDeclaration> ancestors = actualParamType.getAllAncestors(typeSolver);
+            List<ReferenceTypeUsage> ancestors = actualParamType.getAllAncestors(typeSolver);
             final String formalParamTypeQName = formalParamType.getQualifiedName();
             List<TypeUsage> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
             if (correspondingFormalType.size() == 0) {

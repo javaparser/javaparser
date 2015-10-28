@@ -3,8 +3,8 @@ package me.tomassetti.symbolsolver.model;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.util.List;
 import java.util.Optional;

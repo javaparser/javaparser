@@ -15,8 +15,8 @@ import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -140,9 +140,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
-        List<TypeUsageOfTypeDeclaration> ancestorsOfOther = other.getAllAncestors(typeSolver);
-        ancestorsOfOther.add(new TypeUsageOfTypeDeclaration(other));
-        for (TypeUsageOfTypeDeclaration ancestorOfOther : ancestorsOfOther) {
+        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors(typeSolver);
+        ancestorsOfOther.add(new ReferenceTypeUsage(other));
+        for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;
             }
@@ -325,16 +325,16 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
-        List<TypeUsageOfTypeDeclaration> ancestors = new ArrayList<>();
+    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
+        List<ReferenceTypeUsage> ancestors = new ArrayList<>();
         ClassDeclaration superclass = getSuperClass(typeSolver);
         if (superclass != null) {
-            ancestors.add(new TypeUsageOfTypeDeclaration(superclass));
+            ancestors.add(new ReferenceTypeUsage(superclass));
             ancestors.addAll(superclass.getAllAncestors(typeSolver));
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()){
-                TypeUsageOfTypeDeclaration ancestor = toTypeUsage(implemented, typeSolver);
+                ReferenceTypeUsage ancestor = toTypeUsage(implemented, typeSolver);
                 ancestors.add(ancestor);
                 ancestors.addAll(ancestor.getAllAncestors(typeSolver));
             }
@@ -342,16 +342,16 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         return ancestors;
     }
 
-    private TypeUsageOfTypeDeclaration toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver){
+    private ReferenceTypeUsage toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver){
         SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver);
         if (!ancestor.isSolved()) {
             throw new UnsolvedSymbolException(type.getName());
         }
         if (type.getTypeArgs() != null) {
             List<TypeUsage> typeParams = type.getTypeArgs().stream().map((t)->toTypeUsage(t, typeSolver)).collect(Collectors.toList());
-            return new TypeUsageOfTypeDeclaration(ancestor.getCorrespondingDeclaration(), typeParams);
+            return new ReferenceTypeUsage(ancestor.getCorrespondingDeclaration(), typeParams);
         } else {
-            return new TypeUsageOfTypeDeclaration(ancestor.getCorrespondingDeclaration());
+            return new ReferenceTypeUsage(ancestor.getCorrespondingDeclaration());
         }
     }
 

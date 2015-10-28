@@ -5,7 +5,7 @@ import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.usages.*;
+import me.tomassetti.symbolsolver.model.typesystem.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -148,7 +148,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public TypeUsage getUsage(Node node) {
         
-        return new TypeUsageOfTypeDeclaration(this);
+        return new ReferenceTypeUsage(this);
     }
 
     @Override
@@ -223,8 +223,8 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         if (typeUsage.getTypeName().equals(getQualifiedName())){
             return true;
         }
-        if (typeUsage instanceof TypeUsageOfTypeDeclaration){
-            TypeUsageOfTypeDeclaration otherTypeDeclaration = (TypeUsageOfTypeDeclaration)typeUsage;
+        if (typeUsage instanceof ReferenceTypeUsage){
+            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage)typeUsage;
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
         }
 
@@ -243,7 +243,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
                 return new ReflectionFieldDeclaration(field);
             }
         }
-        for (TypeUsageOfTypeDeclaration ancestor : getAllAncestors(typeSolver)) {
+        for (ReferenceTypeUsage ancestor : getAllAncestors(typeSolver)) {
             if (ancestor.getTypeDeclaration().hasField(name, typeSolver)) {
                 return ancestor.getTypeDeclaration().getField(name, typeSolver);
             }

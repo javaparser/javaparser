@@ -11,19 +11,10 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.AbstractTest;
-import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.javaparser.contexts.EnumDeclarationContext;
-import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
-
-import java.lang.reflect.Method;
 
 import static org.junit.Assert.assertEquals;
 

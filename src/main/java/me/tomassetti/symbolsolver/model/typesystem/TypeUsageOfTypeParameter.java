@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.usages;
+package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
@@ -85,11 +85,6 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     @Override
     public String getTypeName() {
         return typeParameter.getName();
-    }
-
-    @Override
-    public TypeUsage getBaseType() {
-        throw new UnsupportedOperationException();
     }
 
     @Override

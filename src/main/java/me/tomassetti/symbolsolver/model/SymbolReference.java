@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.model;
 
 import me.tomassetti.symbolsolver.model.declarations.Declaration;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,34 +1,22 @@
-package me.tomassetti.symbolsolver.model.usages;
+package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by federico on 02/08/15.
+ * Created by federico on 21/08/15.
  */
-public class LambdaTypeUsagePlaceholder implements TypeUsage {
+public class VoidTypeUsage implements TypeUsage {
+    public static final TypeUsage INSTANCE = new VoidTypeUsage();
 
-    private int pos;
-    private SymbolReference<MethodDeclaration> method;
+    private VoidTypeUsage() {
 
-    public LambdaTypeUsagePlaceholder(int pos) {
-        this.pos = pos;
-    }
-
-    @Override
-    public boolean isArray() {
-        return false;
-    }
-
-    @Override
-    public boolean isPrimitive() {
-        return false;
     }
 
     @Override
@@ -37,18 +25,8 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     }
 
     @Override
-    public boolean isReferenceType() {
-        return false;
-    }
-
-    @Override
     public String getTypeName() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public TypeUsage getBaseType() {
-        throw new UnsupportedOperationException();
+        return "void";
     }
 
     @Override
@@ -63,16 +41,7 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
     @Override
     public List<TypeUsage> parameters() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isTypeVariable() {
-        return false;
-    }
-
-    public void setMethod(SymbolReference<MethodDeclaration> method) {
-        this.method = method;
+        return Collections.emptyList();
     }
 
     @Override
@@ -87,6 +56,6 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
     @Override
     public String prettyPrint() {
-        throw new UnsupportedOperationException();
+        return "void";
     }
 }

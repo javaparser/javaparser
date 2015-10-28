@@ -9,8 +9,8 @@ import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.Collections;
 import java.util.List;
@@ -88,7 +88,7 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     }
 
     @Override
-    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

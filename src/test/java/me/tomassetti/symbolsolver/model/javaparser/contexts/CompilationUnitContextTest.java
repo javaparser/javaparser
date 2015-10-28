@@ -11,7 +11,7 @@ import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JarTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.usages.*;
+import me.tomassetti.symbolsolver.model.typesystem.*;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import static org.junit.Assert.*;

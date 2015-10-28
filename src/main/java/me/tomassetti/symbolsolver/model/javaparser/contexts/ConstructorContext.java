@@ -10,8 +10,8 @@ import me.tomassetti.symbolsolver.model.Value;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeParameter;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeParameter;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsageOfTypeParameter;
 
 import java.util.List;
 import java.util.Optional;

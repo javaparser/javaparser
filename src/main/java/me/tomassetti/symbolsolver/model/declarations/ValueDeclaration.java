@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 
 /**

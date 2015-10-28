@@ -5,7 +5,7 @@ import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.usages.*;
+import me.tomassetti.symbolsolver.model.typesystem.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -63,7 +63,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     @Override
     public TypeUsage getUsage(Node node) {
         
-        return new TypeUsageOfTypeDeclaration(this);
+        return new ReferenceTypeUsage(this);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
                 // Parameters not specified, so default to Object
                 typeParameterValues = new ArrayList<>();
                 for (int i = 0; i < getTypeParameters().size(); i++) {
-                    typeParameterValues.add(new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class)));
+                    typeParameterValues.add(new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class)));
                 }
             }
         }
@@ -160,8 +160,8 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
         if (typeUsage.getTypeName().equals(getQualifiedName())){
             return true;
         }
-        if (typeUsage instanceof TypeUsageOfTypeDeclaration){
-            TypeUsageOfTypeDeclaration otherTypeDeclaration = (TypeUsageOfTypeDeclaration)typeUsage;
+        if (typeUsage instanceof ReferenceTypeUsage){
+            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage)typeUsage;
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
         }
 
@@ -180,7 +180,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
                 return new ReflectionFieldDeclaration(field);
             }
         }
-        for (TypeUsageOfTypeDeclaration ancestor : getAllAncestors(typeSolver)) {
+        for (ReferenceTypeUsage ancestor : getAllAncestors(typeSolver)) {
             if (ancestor.getTypeDeclaration().hasField(name, typeSolver)) {
                 return ancestor.getTypeDeclaration().getField(name, typeSolver);
             }
@@ -222,15 +222,15 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
-        List<TypeUsageOfTypeDeclaration> ancestors = new LinkedList<>();
+    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
+        List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (clazz.getSuperclass() != null) {
-            TypeUsageOfTypeDeclaration superclass = new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(clazz.getSuperclass()));
+            ReferenceTypeUsage superclass = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(clazz.getSuperclass()));
             ancestors.add(superclass);
             ancestors.addAll(superclass.getAllAncestors(typeSolver));
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
-            TypeUsageOfTypeDeclaration interfazeDecl = new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(interfaze));
+            ReferenceTypeUsage interfazeDecl = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(interfaze));
             ancestors.add(interfazeDecl);
             ancestors.addAll(interfazeDecl.getAllAncestors(typeSolver));
         }

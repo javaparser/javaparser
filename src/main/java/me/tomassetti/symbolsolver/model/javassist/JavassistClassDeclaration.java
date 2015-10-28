@@ -10,10 +10,10 @@ import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javassist.contexts.JavassistMethodContext;
-import me.tomassetti.symbolsolver.model.usages.LambdaTypeUsagePlaceholder;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.LambdaTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.model.typesystem.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 
 import java.util.*;
@@ -176,7 +176,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 
@@ -223,7 +223,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
     @Override
     public TypeUsage getUsage(Node node) {
-        return new TypeUsageOfTypeDeclaration(this);
+        return new ReferenceTypeUsage(this);
     }
 
     @Override

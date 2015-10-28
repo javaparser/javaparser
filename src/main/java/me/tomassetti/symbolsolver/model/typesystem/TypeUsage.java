@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.usages;
+package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -18,6 +18,10 @@ import java.util.Optional;
  */
 public interface TypeUsage {
 
+    ///
+    /// Relation with other types
+    ///
+
     default boolean isArray() {
         return false;
     }
@@ -30,15 +34,27 @@ public interface TypeUsage {
         return false;
     }
 
-    Optional<TypeUsage> parameterByName(String name);
-
     /**
-     * Class, interface and enum are reference-type
-     * @return
+     * Can this be seen as a ReferenceTypeUsage?
+     * In other words: is this a reference to a class, an interface or an enum?
      */
     default boolean isReferenceType() {
         return false;
     }
+
+    default boolean isVoid() {
+        return false;
+    }
+
+    default boolean isTypeVariable() {
+        return false;
+    }
+
+    ///
+    /// Misc
+    ///
+
+    Optional<TypeUsage> parameterByName(String name);
 
     String getTypeName();
 
@@ -61,8 +77,6 @@ public interface TypeUsage {
         return sb.toString();
     }
 
-    TypeUsage getBaseType();
-
     /* Represent the position of the reference, it is used when solving symbols
      * because a reference to a class A could be related to different classes depending on the position
      * of the reference
@@ -75,10 +89,6 @@ public interface TypeUsage {
     }
 
     List<TypeUsage> parameters();
-
-    default boolean isTypeVariable() {
-        return false;
-    }
 
     default Optional<Value> getField(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
@@ -136,7 +146,7 @@ public interface TypeUsage {
         return false;
     }
 
-    default List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+    default List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         return Collections.emptyList();
     }
 }

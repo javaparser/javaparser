@@ -2,10 +2,10 @@ package me.tomassetti.symbolsolver.model.javassist;
 
 import javassist.CtClass;
 import javassist.NotFoundException;
-import me.tomassetti.symbolsolver.model.usages.ArrayTypeUsage;
-import me.tomassetti.symbolsolver.model.usages.PrimitiveTypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 /**
  * Created by federico on 20/08/15.
@@ -19,7 +19,7 @@ public class JavassistFactory {
             } else if (ctClazz.isPrimitive()) {
                 return PrimitiveTypeUsage.byName(ctClazz.getName());
             } else {
-                return new TypeUsageOfTypeDeclaration(new JavassistClassDeclaration(ctClazz));
+                return new ReferenceTypeUsage(new JavassistClassDeclaration(ctClazz));
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);

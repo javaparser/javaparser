@@ -1,58 +1,47 @@
-package me.tomassetti.symbolsolver.model.usages;
+package me.tomassetti.symbolsolver.model.typesystem;
 
-import com.github.javaparser.ast.type.WildcardType;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by federico on 23/08/15.
+ * Created by federico on 02/08/15.
  */
-public class WildcardUsage implements TypeUsage {
+public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
-    private WildcardType type;
+    private int pos;
+    private SymbolReference<MethodDeclaration> method;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        WildcardUsage that = (WildcardUsage) o;
-
-        if (!type.equals(that.type)) return false;
-
-        return true;
+    public LambdaTypeUsagePlaceholder(int pos) {
+        this.pos = pos;
     }
 
     @Override
-    public int hashCode() {
-        return type.hashCode();
+    public boolean isArray() {
+        return false;
     }
 
-    public WildcardUsage(WildcardType type) {
-        if (type == null) {
-            throw new NullPointerException();
-        }
-        this.type = type;
+    @Override
+    public boolean isPrimitive() {
+        return false;
     }
 
     @Override
     public Optional<TypeUsage> parameterByName(String name) {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isReferenceType() {
+        return false;
     }
 
     @Override
     public String getTypeName() {
-        return type.toStringWithoutComments();
-    }
-
-    @Override
-    public TypeUsage getBaseType() {
         throw new UnsupportedOperationException();
     }
 
@@ -68,7 +57,16 @@ public class WildcardUsage implements TypeUsage {
 
     @Override
     public List<TypeUsage> parameters() {
-        return Collections.emptyList();
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isTypeVariable() {
+        return false;
+    }
+
+    public void setMethod(SymbolReference<MethodDeclaration> method) {
+        this.method = method;
     }
 
     @Override
@@ -78,11 +76,11 @@ public class WildcardUsage implements TypeUsage {
 
     @Override
     public String getQualifiedName() {
-        return getTypeName();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String prettyPrint() {
-        return getTypeName();
+        throw new UnsupportedOperationException();
     }
 }

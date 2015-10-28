@@ -2,19 +2,13 @@ package me.tomassetti.symbolsolver.model.javaparser.contexts;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.AbstractTest;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.Value;
 import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
-import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.usages.*;
 import org.junit.Test;
 
 import java.util.Optional;

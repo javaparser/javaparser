@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.usages;
+package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
@@ -9,9 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by federico on 21/08/15.
- */
 public class ArrayTypeUsage implements TypeUsage {
     @Override
     public boolean equals(Object o) {
@@ -51,7 +48,6 @@ public class ArrayTypeUsage implements TypeUsage {
         return baseType.getTypeName()+"[]";
     }
 
-    @Override
     public TypeUsage getBaseType() {
         return baseType;
     }

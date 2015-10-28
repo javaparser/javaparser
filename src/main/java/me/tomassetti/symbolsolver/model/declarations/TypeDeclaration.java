@@ -4,9 +4,9 @@ import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +47,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     boolean hasField(String name, TypeSolver typeSolver);
 
     default boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
-        return isAssignableBy(new TypeUsageOfTypeDeclaration(other), typeSolver);
+        return isAssignableBy(new ReferenceTypeUsage(other), typeSolver);
     }
 
     SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver);
@@ -60,7 +60,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
      */
     SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
 
-    List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver);
+    List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver);
 
     default boolean isClass() {
         return false;

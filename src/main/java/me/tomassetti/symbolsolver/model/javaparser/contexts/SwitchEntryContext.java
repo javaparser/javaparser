@@ -7,8 +7,8 @@ import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.List;
 
@@ -27,8 +27,8 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
         SwitchStmt switchStmt = (SwitchStmt) wrappedNode.getParentNode();
         TypeUsage type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
         if (type.isEnum()) {
-            if (type instanceof TypeUsageOfTypeDeclaration) {
-                TypeUsageOfTypeDeclaration typeUsageOfTypeDeclaration = (TypeUsageOfTypeDeclaration)type;
+            if (type instanceof ReferenceTypeUsage) {
+                ReferenceTypeUsage typeUsageOfTypeDeclaration = (ReferenceTypeUsage)type;
                 if (typeUsageOfTypeDeclaration.getTypeDeclaration().hasField(name, typeSolver)) {
                     return SymbolReference.solved(typeUsageOfTypeDeclaration.getTypeDeclaration().getField(name, typeSolver));
                 }

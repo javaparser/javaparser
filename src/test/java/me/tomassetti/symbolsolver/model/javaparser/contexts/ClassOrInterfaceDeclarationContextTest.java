@@ -16,7 +16,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.usages.*;
+import me.tomassetti.symbolsolver.model.typesystem.*;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -345,7 +345,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
-        TypeUsage stringType = new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(String.class));
+        TypeUsage stringType = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class));
 
         SymbolReference<MethodDeclaration> ref = context.solveMethod("foo4", ImmutableList.of(stringType), new JreTypeSolver());
         assertEquals(true, ref.isSolved());
@@ -418,7 +418,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration);
 
-        TypeUsage stringType = new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(String.class));
+        TypeUsage stringType = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class));
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo4", ImmutableList.of(stringType), new JreTypeSolver());
         assertEquals(true, ref.isPresent());

@@ -14,8 +14,8 @@ import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassD
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserMethodDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserTypeParameter;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeParameter;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsageOfTypeParameter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.usages;
+package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * Created by federico on 31/07/15.
  */
-public class TypeUsageOfTypeDeclaration implements TypeUsage {
+public class ReferenceTypeUsage implements TypeUsage {
 
     private TypeDeclaration typeDeclaration;
     private List<TypeUsage> typeParameters;
@@ -26,7 +26,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TypeUsageOfTypeDeclaration that = (TypeUsageOfTypeDeclaration) o;
+        ReferenceTypeUsage that = (ReferenceTypeUsage) o;
 
         if (!typeDeclaration.equals(that.typeDeclaration)) return false;
         if (!typeParameters.equals(that.typeParameters)) return false;
@@ -52,7 +52,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         }
     }
 
-    public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration) {
+    public ReferenceTypeUsage(TypeDeclaration typeDeclaration) {
         this(typeDeclaration, deriveParams(typeDeclaration));
         if (this.typeDeclaration.isTypeVariable()) {
             throw new IllegalArgumentException();
@@ -68,7 +68,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         return typeDeclaration.isEnum();
     }
 
-    public TypeUsageOfTypeDeclaration(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters) {
+    public ReferenceTypeUsage(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters) {
         this.typeDeclaration = typeDeclaration;
         this.typeParameters = typeParameters;
         if (this.typeDeclaration.isTypeVariable()) {
@@ -120,7 +120,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
             // type parameters not specified, default to Object
             typeParameters = new ArrayList<>();
             for (int i=0;i<typeDeclaration.getTypeParameters().size();i++){
-                typeParameters.add(new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(Object.class)));
+                typeParameters.add(new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class)));
             }
         }
         int i =  0;
@@ -191,7 +191,7 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     public TypeUsage replaceParam(int i, TypeUsage replaced) {
         ArrayList<TypeUsage> typeParametersCorrected = new ArrayList<>(typeParameters);
         typeParametersCorrected.set(i, replaced);
-        return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParametersCorrected);
+        return new ReferenceTypeUsage(typeDeclaration, typeParametersCorrected);
     }
 
     @Override
@@ -200,12 +200,12 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         if (typeParameters.equals(newParams)) {
             return this;
         } else {
-            return new TypeUsageOfTypeDeclaration(typeDeclaration, newParams);
+            return new ReferenceTypeUsage(typeDeclaration, newParams);
         }
     }
 
     @Override
-    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         return typeDeclaration.getAllAncestors(typeSolver);
     }
 
@@ -234,11 +234,6 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
     @Override
     public String getTypeName() {
         return typeDeclaration.getQualifiedName();
-    }
-
-    @Override
-    public TypeUsage getBaseType() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -285,8 +280,8 @@ public class TypeUsageOfTypeDeclaration implements TypeUsage {
         }
         if (other instanceof LambdaTypeUsagePlaceholder) {
             return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
-        } else if (other instanceof TypeUsageOfTypeDeclaration) {
-            TypeUsageOfTypeDeclaration otherTUOTD = (TypeUsageOfTypeDeclaration) other;
+        } else if (other instanceof ReferenceTypeUsage) {
+            ReferenceTypeUsage otherTUOTD = (ReferenceTypeUsage) other;
             return typeDeclaration.isAssignableBy(otherTUOTD.typeDeclaration, typeSolver);
 
         } else if (other.isTypeVariable()) {

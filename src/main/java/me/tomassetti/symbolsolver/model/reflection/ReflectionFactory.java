@@ -4,7 +4,7 @@ package me.tomassetti.symbolsolver.model.reflection;
 
 
 
-import me.tomassetti.symbolsolver.model.usages.*;
+import me.tomassetti.symbolsolver.model.typesystem.*;
 
 
 import java.lang.reflect.GenericArrayType;
@@ -26,9 +26,9 @@ public class ReflectionFactory {
                 return PrimitiveTypeUsage.byName(clazz.getName());
             }
         } else if (clazz.isInterface()) {
-            return new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(clazz));
+            return new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(clazz));
         } else {
-            return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(clazz));
+            return new ReferenceTypeUsage(new ReflectionClassDeclaration(clazz));
         }
     }
 
@@ -53,9 +53,9 @@ public class ReflectionFactory {
             } else if (c.isArray()) {
                 return new ArrayTypeUsage(typeUsageFor(c.getComponentType()));
             } else if (c.isInterface()) {
-                return new TypeUsageOfTypeDeclaration(new ReflectionInterfaceDeclaration(c));
+                return new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(c));
             } else {
-                return new TypeUsageOfTypeDeclaration(new ReflectionClassDeclaration(c));
+                return new ReferenceTypeUsage(new ReflectionClassDeclaration(c));
             }
         } else if (type instanceof GenericArrayType){
             GenericArrayType genericArrayType = (GenericArrayType)type;

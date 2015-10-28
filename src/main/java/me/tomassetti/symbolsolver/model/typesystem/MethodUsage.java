@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.usages;
+package me.tomassetti.symbolsolver.model.typesystem;
 
 
 import me.tomassetti.symbolsolver.model.TypeSolver;

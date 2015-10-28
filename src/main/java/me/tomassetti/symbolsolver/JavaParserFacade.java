@@ -14,7 +14,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.*;
 import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.usages.*;
+import me.tomassetti.symbolsolver.model.typesystem.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
 
@@ -219,7 +219,7 @@ public class JavaParserFacade {
         } else if (node instanceof CharLiteralExpr) {
             return PrimitiveTypeUsage.CHAR;
         } else if (node instanceof StringLiteralExpr) {
-            return new TypeUsageOfTypeDeclaration(new JreTypeSolver().solveType("java.lang.String"));
+            return new ReferenceTypeUsage(new JreTypeSolver().solveType("java.lang.String"));
         } else if (node instanceof UnaryExpr) {
             UnaryExpr unaryExpr = (UnaryExpr)node;
             switch (unaryExpr.getOperator()) {
@@ -272,7 +272,7 @@ public class JavaParserFacade {
             AssignExpr assignExpr = (AssignExpr) node;
             return getTypeConcrete(assignExpr.getTarget(), solveLambdas);
         } else if (node instanceof ThisExpr) {
-            return new TypeUsageOfTypeDeclaration(getTypeDeclaration(findContainingTypeDecl(node)));
+            return new ReferenceTypeUsage(getTypeDeclaration(findContainingTypeDecl(node)));
         } else if (node instanceof ConditionalExpr) {
             ConditionalExpr conditionalExpr = (ConditionalExpr)node;
             return getTypeConcrete(conditionalExpr.getThenExpr(), solveLambdas);
@@ -341,7 +341,7 @@ public class JavaParserFacade {
                     return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
                 }
             } else {
-                return new TypeUsageOfTypeDeclaration(typeDeclaration, typeParameters);
+                return new ReferenceTypeUsage(typeDeclaration, typeParameters);
             }
         } else if (type instanceof PrimitiveType) {
             return PrimitiveTypeUsage.byName(((PrimitiveType) type).getType().name());
@@ -421,7 +421,7 @@ public class JavaParserFacade {
         // TODO consider static methods
         if (node instanceof ClassOrInterfaceDeclaration) {
             JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)node);
-            return new TypeUsageOfTypeDeclaration(classDeclaration);
+            return new ReferenceTypeUsage(classDeclaration);
         } else {
             return getTypeOfThisIn(node.getParentNode());
         }
@@ -436,7 +436,7 @@ public class JavaParserFacade {
                 return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
             }
         } else {
-            return new TypeUsageOfTypeDeclaration(typeDeclaration);
+            return new ReferenceTypeUsage(typeDeclaration);
         }
     }
 

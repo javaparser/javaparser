@@ -10,10 +10,10 @@ import me.tomassetti.symbolsolver.model.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.usages.ArrayTypeUsage;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -201,7 +201,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
 
         @Override
         public TypeUsage getReturnType(TypeSolver typeSolver) {
-            return new ArrayTypeUsage(new TypeUsageOfTypeDeclaration(JavaParserEnumDeclaration.this));
+            return new ArrayTypeUsage(new ReferenceTypeUsage(JavaParserEnumDeclaration.this));
         }
 
         @Override
@@ -296,7 +296,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.model.TypeSolver;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -44,13 +44,13 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
     }
 
     @Override
-    default List<TypeUsageOfTypeDeclaration> getAllAncestors(TypeSolver typeSolver) {
-        List<TypeUsageOfTypeDeclaration> ancestors = new LinkedList<>();
+    default List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
+        List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (getSuperClass(typeSolver) != null) {
-            ancestors.add(new TypeUsageOfTypeDeclaration(getSuperClass(typeSolver)));
+            ancestors.add(new ReferenceTypeUsage(getSuperClass(typeSolver)));
             ancestors.addAll(getSuperClass(typeSolver).getAllAncestors(typeSolver));
         }
-        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new TypeUsageOfTypeDeclaration(i)).collect(Collectors.<TypeUsageOfTypeDeclaration>toList()));
+        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i)).collect(Collectors.<ReferenceTypeUsage>toList()));
         return ancestors;
     }
 

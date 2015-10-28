@@ -7,8 +7,8 @@ import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
-import me.tomassetti.symbolsolver.model.usages.TypeUsageOfTypeDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 /**
  * Created by federico on 04/08/15.
@@ -35,7 +35,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     public TypeUsage getType(TypeSolver typeSolver) {
         if (enumConstantDeclaration != null) {
             com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration)enumConstantDeclaration.getParentNode();
-            return new TypeUsageOfTypeDeclaration(new JavaParserEnumDeclaration(enumDeclaration));
+            return new ReferenceTypeUsage(new JavaParserEnumDeclaration(enumDeclaration));
         } else {
             return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), fieldDeclaration);
         }

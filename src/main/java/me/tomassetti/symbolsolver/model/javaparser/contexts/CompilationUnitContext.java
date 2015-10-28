@@ -10,7 +10,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.model.javaparser.declarations.JavaParserInterfaceDeclaration;
-import me.tomassetti.symbolsolver.model.usages.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.util.List;
 

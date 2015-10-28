@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.usages;
+package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.model.Context;
@@ -62,11 +62,6 @@ public class PrimitiveTypeUsage implements TypeUsage {
     @Override
     public String getTypeName() {
         return name;
-    }
-
-    @Override
-    public TypeUsage getBaseType() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
