@@ -21,6 +21,10 @@ public class ReferenceTypeUsage implements TypeUsage {
     private TypeDeclaration typeDeclaration;
     private List<TypeUsage> typeParameters;
 
+    public ReferenceTypeUsage asReferenceTypeUsage() {
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,7 +67,6 @@ public class ReferenceTypeUsage implements TypeUsage {
         return typeDeclaration.getTypeParameters().stream().map((tp)->new TypeUsageOfTypeParameter(tp)).collect(Collectors.toList());
     }
 
-    @Override
     public boolean isEnum() {
         return typeDeclaration.isEnum();
     }

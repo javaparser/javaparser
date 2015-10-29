@@ -22,14 +22,23 @@ public interface TypeUsage {
     /// Relation with other types
     ///
 
+    /**
+     * Does this type represent an array?
+     */
     default boolean isArray() {
         return false;
     }
 
+    /**
+     * Is this a primitive type?
+     */
     default boolean isPrimitive() {
         return false;
     }
 
+    /**
+     * Is this the null type?
+     */
     default boolean isNull() {
         return false;
     }
@@ -57,15 +66,13 @@ public interface TypeUsage {
         return false;
     }
 
-    // TODO move it to ReferenceTypeUsage
-    @Deprecated
-    default boolean isEnum() {
-        return false;
-    }
-
     ///
     /// Downcasting
     ///
+
+    default ReferenceTypeUsage asReferenceTypeUsage() {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
 
     default TypeParameter asTypeParameter() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());

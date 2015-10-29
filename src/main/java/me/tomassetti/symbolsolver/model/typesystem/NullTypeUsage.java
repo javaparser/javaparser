@@ -1,16 +1,14 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Created by federico on 17/08/15.
+ * This is a virtual type used to represent null values.
  */
 public class NullTypeUsage implements TypeUsage {
 
