@@ -50,13 +50,13 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         Optional<TypeUsage> c = context.solveGenericType("C", new DummyTypeSolver());
 
         assertEquals(true, a.isPresent());
-        assertEquals("A", a.get().getTypeName());
+        assertEquals("A", a.get().describe());
         assertEquals(true, a.get().isTypeVariable());
         assertEquals(true, b.isPresent());
-        assertEquals("B", b.get().getTypeName());
+        assertEquals("B", b.get().describe());
         assertEquals(true, b.get().isTypeVariable());
         assertEquals(true, c.isPresent());
-        assertEquals("C", c.get().getTypeName());
+        assertEquals("C", c.get().describe());
         assertEquals(true, c.get().isTypeVariable());
     }
 
@@ -79,7 +79,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("i", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getTypeName());
+        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).describe());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("j", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("long", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getTypeName());
+        assertEquals("long", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).describe());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("k", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("boolean", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getTypeName());
+        assertEquals("boolean", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).describe());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("m", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("char", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getTypeName());
+        assertEquals("char", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).describe());
     }
 
     @Test
@@ -133,7 +133,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         Optional<Value> ref = context.solveSymbolAsValue("i", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("int", ref.get().getUsage().getTypeName());
+        assertEquals("int", ref.get().getUsage().describe());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         Optional<Value> ref = context.solveSymbolAsValue("j", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("long", ref.get().getUsage().getTypeName());
+        assertEquals("long", ref.get().getUsage().describe());
     }
 
     @Test
@@ -155,7 +155,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         Optional<Value> ref = context.solveSymbolAsValue("k", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("boolean", ref.get().getUsage().getTypeName());
+        assertEquals("boolean", ref.get().getUsage().describe());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
 
         Optional<Value> ref = context.solveSymbolAsValue("m", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("char", ref.get().getUsage().getTypeName());
+        assertEquals("char", ref.get().getUsage().describe());
     }
 
     @Test

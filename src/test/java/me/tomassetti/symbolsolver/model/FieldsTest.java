@@ -25,7 +25,7 @@ public class FieldsTest extends AbstractTest{
         Expression expression = returnStmt.getExpr();
 
         TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
-        assertEquals("java.lang.String", ref.getTypeName());
+        assertEquals("java.lang.String", ref.describe());
     }
 
 

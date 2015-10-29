@@ -42,7 +42,7 @@ public class MethodResolutionLogic {
 
     private static TypeUsage replaceTypeParam(TypeUsage typeUsage, TypeParameter tp, TypeSolver typeSolver){
         if (typeUsage.isTypeVariable()) {
-            if (typeUsage.getTypeName().equals(tp.getName())) {
+            if (typeUsage.describe().equals(tp.getName())) {
                 List<TypeParameter.Bound> bounds = tp.getBounds(typeSolver);
                 if (bounds.size() > 1) {
                     throw new UnsupportedOperationException();

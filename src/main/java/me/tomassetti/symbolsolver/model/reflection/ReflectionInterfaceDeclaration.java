@@ -157,7 +157,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
         if (typeUsage.isPrimitive()){
             return false;
         }
-        if (typeUsage.getTypeName().equals(getQualifiedName())){
+        if (typeUsage.describe().equals(getQualifiedName())){
             return true;
         }
         if (typeUsage instanceof ReferenceTypeUsage){

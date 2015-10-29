@@ -36,7 +36,7 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     }
 
     @Override
-    public String getTypeName() {
+    public String describe() {
         throw new UnsupportedOperationException();
     }
 

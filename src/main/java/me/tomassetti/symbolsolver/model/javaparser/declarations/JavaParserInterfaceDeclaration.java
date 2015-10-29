@@ -142,7 +142,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
             return true;
         }
         if (typeUsage.isReferenceType()){
-            TypeDeclaration other = typeSolver.solveType(typeUsage.getTypeName());
+            TypeDeclaration other = typeSolver.solveType(typeUsage.describe());
             return isAssignableBy(other, typeSolver);
         } else {
             throw new UnsupportedOperationException();

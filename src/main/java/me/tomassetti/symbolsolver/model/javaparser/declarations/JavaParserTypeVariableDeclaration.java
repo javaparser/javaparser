@@ -56,7 +56,7 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
         if (typeUsage.isTypeVariable()) {
-            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + typeUsage.getTypeName());
+            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + typeUsage.describe());
         } else {
             throw new UnsupportedOperationException("Is this type variable declaration assignable by " + typeUsage);
         }

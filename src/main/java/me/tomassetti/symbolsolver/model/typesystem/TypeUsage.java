@@ -82,11 +82,13 @@ public interface TypeUsage {
     /// Naming
     ///
 
-    String getTypeName();
+    String describe();
 
-    default String getTypeNameWithParams() {
+    // There should be just describe
+    @Deprecated
+    default String describeWithParams() {
         StringBuffer sb = new StringBuffer();
-        sb.append(getTypeName());
+        sb.append(describe());
         if (parameters().size() > 0){
             sb.append("<");
             boolean first = true;
@@ -96,7 +98,7 @@ public interface TypeUsage {
                 } else {
                     sb.append(", ");
                 }
-                sb.append(param.getTypeNameWithParams());
+                sb.append(param.describeWithParams());
             }
             sb.append(">");
         }
@@ -132,11 +134,11 @@ public interface TypeUsage {
 
     default TypeUsage solveGenericTypes(Context context, TypeSolver typeSolver) {
         if (isTypeVariable()) {
-            Optional<TypeUsage> solved = context.solveGenericType(getTypeName(), typeSolver);
+            Optional<TypeUsage> solved = context.solveGenericType(describe(), typeSolver);
             if (solved.isPresent()) {
                 return solved.get();
             } else {
-                throw new UnsolvedSymbolException(context, getTypeName());
+                throw new UnsolvedSymbolException(context, describe());
             }
         } else {
             TypeUsage result = this;

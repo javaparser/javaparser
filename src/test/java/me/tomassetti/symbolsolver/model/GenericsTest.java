@@ -38,7 +38,7 @@ public class GenericsTest extends AbstractTest{
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
         assertEquals(1, typeUsage.parameters().size());
-        assertEquals("java.lang.String", typeUsage.parameters().get(0).getTypeName());
+        assertEquals("java.lang.String", typeUsage.parameters().get(0).describe());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class GenericsTest extends AbstractTest{
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
         assertEquals(1, typeUsage.parameters().size());
-        assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", typeUsage.parameters().get(0).getTypeName());
+        assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", typeUsage.parameters().get(0).describe());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class GenericsTest extends AbstractTest{
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
         assertEquals(1, typeUsage.parameters().size());
-        assertEquals("java.lang.Integer", typeUsage.parameters().get(0).getTypeName());
+        assertEquals("java.lang.Integer", typeUsage.parameters().get(0).describe());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class GenericsTest extends AbstractTest{
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
         assertEquals(true, typeUsage.isTypeVariable());
-        assertEquals("A", typeUsage.getTypeName());
+        assertEquals("A", typeUsage.describe());
     }
 
     @Test
@@ -110,11 +110,11 @@ public class GenericsTest extends AbstractTest{
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.util.List", typeUsage.getTypeName());
+        assertEquals("java.util.List", typeUsage.describe());
         assertEquals(1, typeUsage.parameters().size());
         TypeUsage typeParam = typeUsage.parameters().get(0);
         assertEquals(true, typeParam.isTypeVariable());
-        assertEquals("A", typeParam.getTypeName());
+        assertEquals("A", typeParam.describe());
     }
 
     @Test
@@ -129,7 +129,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.lang.String", typeUsage.getTypeName());
+        assertEquals("java.lang.String", typeUsage.describe());
     }
 
     //PRIMA UN TEST CHE DICA CHE IL TIPO DEL CAMPO AS e' LIST<A> NON LIST<E>
@@ -143,10 +143,10 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(field);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.util.List", typeUsage.getTypeName());
+        assertEquals("java.util.List", typeUsage.describe());
         assertEquals(1, typeUsage.parameters().size());
         assertEquals(true, typeUsage.parameters().get(0).isTypeVariable());
-        assertEquals("A", typeUsage.parameters().get(0).getTypeName());
+        assertEquals("A", typeUsage.parameters().get(0).describe());
     }
 
     @Test
@@ -161,10 +161,10 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.util.List", typeUsage.getTypeName());
+        assertEquals("java.util.List", typeUsage.describe());
         assertEquals(1, typeUsage.parameters().size());
         assertEquals(false, typeUsage.parameters().get(0).isTypeVariable());
-        assertEquals("java.lang.String", typeUsage.parameters().get(0).getTypeName());
+        assertEquals("java.lang.String", typeUsage.parameters().get(0).describe());
     }
 
     @Test
@@ -178,7 +178,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("Comment", typeUsage.getTypeName());
+        assertEquals("Comment", typeUsage.describe());
     }
 
     @Test
@@ -192,7 +192,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("AnnotationExpr", typeUsage.getTypeName());
+        assertEquals("AnnotationExpr", typeUsage.describe());
     }
 
     @Test
@@ -205,7 +205,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(call);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("void", typeUsage.getTypeName());
+        assertEquals("void", typeUsage.describe());
     }
 
     @Test
@@ -222,7 +222,7 @@ public class GenericsTest extends AbstractTest{
         System.out.println(typeUsage);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.lang.Class<N>", typeUsage.getTypeNameWithParams());
+        assertEquals("java.lang.Class<N>", typeUsage.describeWithParams());
     }
 
     @Test
@@ -235,7 +235,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
 
         assertEquals(true, typeUsage.isTypeVariable());
-        assertEquals("N", typeUsage.getTypeNameWithParams());
+        assertEquals("N", typeUsage.describeWithParams());
     }
 
     @Test
@@ -248,7 +248,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(thisExpr);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("TypeParamOnReturnType", typeUsage.getTypeNameWithParams());
+        assertEquals("TypeParamOnReturnType", typeUsage.describeWithParams());
     }
 
     @Test
@@ -261,7 +261,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(n1);
 
         assertEquals(true, typeUsage.isTypeVariable());
-        assertEquals("T", typeUsage.getTypeNameWithParams());
+        assertEquals("T", typeUsage.describeWithParams());
     }
 
     @Test
@@ -274,7 +274,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(call);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.lang.Boolean", typeUsage.getTypeNameWithParams());
+        assertEquals("java.lang.Boolean", typeUsage.describeWithParams());
     }
 
     @Test
@@ -287,6 +287,6 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("boolean", typeUsage.getTypeNameWithParams());
+        assertEquals("boolean", typeUsage.describeWithParams());
     }
 }

@@ -20,7 +20,7 @@ public class VoidTypeUsage implements TypeUsage {
     }
 
     @Override
-    public String getTypeName() {
+    public String describe() {
         return "void";
     }
 

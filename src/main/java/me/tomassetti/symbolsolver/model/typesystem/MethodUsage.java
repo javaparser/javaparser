@@ -98,7 +98,7 @@ public class MethodUsage {
 
     private static TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
         if (typeToBeExamined.isTypeVariable()){
-            if (typeToBeExamined.getTypeName().equals(name)) {
+            if (typeToBeExamined.describe().equals(name)) {
                 return newValue;
             } else {
                 return typeToBeExamined;

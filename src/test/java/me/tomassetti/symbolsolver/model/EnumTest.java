@@ -38,7 +38,7 @@ public class EnumTest extends AbstractTest {
         MethodCallExpr call = Navigator.findMethodCall(clazz, "put");
 
         TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(call);
-        assertEquals("MyClass.Primitive", ref.getTypeName());
+        assertEquals("MyClass.Primitive", ref.describe());
     }
 
 }

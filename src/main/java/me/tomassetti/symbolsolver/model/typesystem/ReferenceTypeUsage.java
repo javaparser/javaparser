@@ -223,7 +223,7 @@ public class ReferenceTypeUsage implements TypeUsage {
     }
 
     @Override
-    public String getTypeName() {
+    public String describe() {
         return typeDeclaration.getQualifiedName();
     }
 
@@ -261,7 +261,7 @@ public class ReferenceTypeUsage implements TypeUsage {
             if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
                 return true;
             } else {
-                return isCorrespondingBoxingType(other.getTypeName());
+                return isCorrespondingBoxingType(other.describe());
             }
         }
         if (other instanceof LambdaTypeUsagePlaceholder) {
@@ -294,6 +294,6 @@ public class ReferenceTypeUsage implements TypeUsage {
 
     @Override
     public String prettyPrint() {
-        return getTypeNameWithParams();
+        return describeWithParams();
     }
 }

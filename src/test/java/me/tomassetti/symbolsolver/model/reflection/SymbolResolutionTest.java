@@ -31,7 +31,7 @@ public class SymbolResolutionTest extends AbstractTest {
 
         TypeSolver typeSolver = new JreTypeSolver();
         TypeUsage ref = JavaParserFacade.get(typeSolver).getType(field);
-        assertEquals("int", ref.getTypeName());
+        assertEquals("int", ref.describe());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class SymbolResolutionTest extends AbstractTest {
 
         TypeSolver typeSolver = new JreTypeSolver();
         TypeUsage ref = JavaParserFacade.get(typeSolver).getType(field.getInit());
-        assertEquals("int", ref.getTypeName());
+        assertEquals("int", ref.describe());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class SymbolResolutionTest extends AbstractTest {
 
         TypeSolver typeSolver = new JreTypeSolver();
         TypeUsage ref = JavaParserFacade.get(typeSolver).getType(expression);
-        assertEquals("java.lang.String", ref.getTypeName());
+        assertEquals("java.lang.String", ref.describe());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class SymbolResolutionTest extends AbstractTest {
 
         TypeSolver typeSolver = new JreTypeSolver();
         TypeUsage ref = JavaParserFacade.get(typeSolver).getType(expression);
-        assertEquals("java.lang.String", ref.getTypeName());
+        assertEquals("java.lang.String", ref.describe());
     }
 
 }

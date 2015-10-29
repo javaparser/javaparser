@@ -1,14 +1,12 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by federico on 18/08/15.
@@ -55,7 +53,7 @@ public class PrimitiveTypeUsage implements TypeUsage {
     }
 
     @Override
-    public String getTypeName() {
+    public String describe() {
         return name;
     }
 
@@ -77,7 +75,7 @@ public class PrimitiveTypeUsage implements TypeUsage {
     public static TypeUsage byName(String name) {
         name = name.toLowerCase();
         for (PrimitiveTypeUsage ptu : ALL) {
-            if (ptu.getTypeName().equals(name)) {
+            if (ptu.describe().equals(name)) {
                 return ptu;
             }
         }

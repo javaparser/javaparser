@@ -1,14 +1,12 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.github.javaparser.ast.type.WildcardType;
-import me.tomassetti.symbolsolver.model.Context;
 import me.tomassetti.symbolsolver.model.SymbolReference;
 import me.tomassetti.symbolsolver.model.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by federico on 23/08/15.
@@ -42,7 +40,7 @@ public class WildcardUsage implements TypeUsage {
     }
 
     @Override
-    public String getTypeName() {
+    public String describe() {
         return type.toStringWithoutComments();
     }
 
@@ -63,11 +61,11 @@ public class WildcardUsage implements TypeUsage {
 
     @Override
     public String getQualifiedName() {
-        return getTypeName();
+        return describe();
     }
 
     @Override
     public String prettyPrint() {
-        return getTypeName();
+        return describe();
     }
 }

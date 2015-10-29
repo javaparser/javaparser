@@ -37,8 +37,8 @@ public class ArrayTypeUsage implements TypeUsage {
     }
 
     @Override
-    public String getTypeName() {
-        return baseType.getTypeName()+"[]";
+    public String describe() {
+        return baseType.describe()+"[]";
     }
 
     public TypeUsage getBaseType() {

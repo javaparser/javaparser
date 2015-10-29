@@ -220,7 +220,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         if (typeUsage.isPrimitive()){
             return false;
         }
-        if (typeUsage.getTypeName().equals(getQualifiedName())){
+        if (typeUsage.describe().equals(getQualifiedName())){
             return true;
         }
         if (typeUsage instanceof ReferenceTypeUsage){

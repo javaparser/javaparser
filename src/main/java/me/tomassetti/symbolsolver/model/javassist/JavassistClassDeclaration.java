@@ -241,7 +241,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         }
 
         // TODO look into generics
-        if (typeUsage.getTypeName().equals(this.getQualifiedName())){
+        if (typeUsage.describe().equals(this.getQualifiedName())){
             return true;
         }
         try {

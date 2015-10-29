@@ -78,7 +78,7 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
-    public String getTypeName() {
+    public String describe() {
         return typeParameter.getName();
     }
 
@@ -105,7 +105,7 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     @Override
     public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
         if (other.isTypeVariable()) {
-            return getTypeName().equals(other.getTypeName());
+            return describe().equals(other.describe());
         } else {
             return false;
         }
@@ -113,7 +113,7 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
 
     @Override
     public String getQualifiedName() {
-        return getTypeName();
+        return describe();
     }
 
     @Override

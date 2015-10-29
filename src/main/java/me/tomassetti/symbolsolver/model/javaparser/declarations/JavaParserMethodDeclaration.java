@@ -94,7 +94,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             return;
         }
         if (formalParamType.isTypeVariable()) {
-            determinedTypeParameters.put(formalParamType.getTypeName(), actualParamType);
+            determinedTypeParameters.put(formalParamType.describe(), actualParamType);
             return;
         }
         if (formalParamType instanceof WildcardUsage) {
