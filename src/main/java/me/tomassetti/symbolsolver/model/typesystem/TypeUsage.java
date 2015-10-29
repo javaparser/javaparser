@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Reference to a type. A TypeRef could be a primitive type or a reference type (enum, class, interface).
- * In the later case it could take type parameters (other TypeRefs). It could also be a TypeVariable, like in:
+ * A usage of a type. It could be a primitive type or a reference type (enum, class, interface).
+ * In the later case it could take type parameters (other TypeUsages). It could also be a TypeVariable, like in:
  *
  * class A<B> { }
  *
@@ -64,7 +64,15 @@ public interface TypeUsage {
     }
 
     ///
-    /// Misc
+    /// Downcasting
+    ///
+
+    default TypeParameter asTypeParameter() {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
+    ///
+    /// Naming
     ///
 
     String getTypeName();
@@ -88,20 +96,13 @@ public interface TypeUsage {
         return sb.toString();
     }
 
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
-    }
+    String getQualifiedName();
 
-    List<TypeUsage> parameters();
+    String prettyPrint();
 
-    default Optional<Value> getField(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
-    }
-
-    default TypeParameter asTypeParameter() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
-    }
+    ///
+    /// TypeParameters
+    ///
 
     /**
      * Create a copy of the value with the type parameter changed.
@@ -141,12 +142,33 @@ public interface TypeUsage {
         }
     }
 
+    List<TypeUsage> parameters();
+
+    ///
+    /// Methods
+    ///
+
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
+    ///
+    /// Fields
+    ///
+
+    default Optional<Value> getField(String name, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
+    ///
+    /// Relation with other types
+    ///
+
     boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver);
 
-    String getQualifiedName();
-
-    String prettyPrint();
-
+    // Move to ReferenceTypeUsage
+    @Deprecated
     default List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         return Collections.emptyList();
     }
