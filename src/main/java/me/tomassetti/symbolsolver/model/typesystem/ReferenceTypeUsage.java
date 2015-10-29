@@ -224,7 +224,22 @@ public class ReferenceTypeUsage implements TypeUsage {
 
     @Override
     public String describe() {
-        return typeDeclaration.getQualifiedName();
+        StringBuffer sb = new StringBuffer();
+        sb.append(typeDeclaration.getQualifiedName());
+        if (parameters().size() > 0){
+            sb.append("<");
+            boolean first = true;
+            for (TypeUsage param : parameters()) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(", ");
+                }
+                sb.append(param.describe());
+            }
+            sb.append(">");
+        }
+        return sb.toString();
     }
 
     @Override
@@ -294,6 +309,6 @@ public class ReferenceTypeUsage implements TypeUsage {
 
     @Override
     public String prettyPrint() {
-        return describeWithParams();
+        return describe();
     }
 }

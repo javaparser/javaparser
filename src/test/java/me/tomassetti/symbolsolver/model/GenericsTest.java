@@ -110,7 +110,7 @@ public class GenericsTest extends AbstractTest{
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.util.List", typeUsage.describe());
+        assertEquals("java.util.List<A>", typeUsage.describe());
         assertEquals(1, typeUsage.parameters().size());
         TypeUsage typeParam = typeUsage.parameters().get(0);
         assertEquals(true, typeParam.isTypeVariable());
@@ -143,7 +143,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(field);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.util.List", typeUsage.describe());
+        assertEquals("java.util.List<A>", typeUsage.describe());
         assertEquals(1, typeUsage.parameters().size());
         assertEquals(true, typeUsage.parameters().get(0).isTypeVariable());
         assertEquals("A", typeUsage.parameters().get(0).describe());
@@ -161,7 +161,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.util.List", typeUsage.describe());
+        assertEquals("java.util.List<java.lang.String>", typeUsage.describe());
         assertEquals(1, typeUsage.parameters().size());
         assertEquals(false, typeUsage.parameters().get(0).isTypeVariable());
         assertEquals("java.lang.String", typeUsage.parameters().get(0).describe());
@@ -222,7 +222,7 @@ public class GenericsTest extends AbstractTest{
         System.out.println(typeUsage);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.lang.Class<N>", typeUsage.describeWithParams());
+        assertEquals("java.lang.Class<N>", typeUsage.describe());
     }
 
     @Test
@@ -235,7 +235,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
 
         assertEquals(true, typeUsage.isTypeVariable());
-        assertEquals("N", typeUsage.describeWithParams());
+        assertEquals("N", typeUsage.describe());
     }
 
     @Test
@@ -248,7 +248,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(thisExpr);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("TypeParamOnReturnType", typeUsage.describeWithParams());
+        assertEquals("TypeParamOnReturnType", typeUsage.describe());
     }
 
     @Test
@@ -261,7 +261,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(n1);
 
         assertEquals(true, typeUsage.isTypeVariable());
-        assertEquals("T", typeUsage.describeWithParams());
+        assertEquals("T", typeUsage.describe());
     }
 
     @Test
@@ -274,7 +274,7 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(call);
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("java.lang.Boolean", typeUsage.describeWithParams());
+        assertEquals("java.lang.Boolean", typeUsage.describe());
     }
 
     @Test
@@ -287,6 +287,6 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
 
         assertEquals(false, typeUsage.isTypeVariable());
-        assertEquals("boolean", typeUsage.describeWithParams());
+        assertEquals("boolean", typeUsage.describe());
     }
 }

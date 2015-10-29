@@ -64,7 +64,7 @@ public class StatementContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
         assertTrue(ref.isSolved());
-        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType(typeSolver).describeWithParams());
+        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType(typeSolver).describe());
 
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
         assertEquals("add", methodUsage.getName());
@@ -81,7 +81,7 @@ public class StatementContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
         assertTrue(ref.isSolved());
-        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType(typeSolver).describeWithParams());
+        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType(typeSolver).describe());
 
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
         assertEquals("add", methodUsage.getName());

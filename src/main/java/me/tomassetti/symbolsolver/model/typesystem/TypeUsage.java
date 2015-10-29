@@ -84,27 +84,6 @@ public interface TypeUsage {
 
     String describe();
 
-    // There should be just describe
-    @Deprecated
-    default String describeWithParams() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(describe());
-        if (parameters().size() > 0){
-            sb.append("<");
-            boolean first = true;
-            for (TypeUsage param : parameters()) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append(", ");
-                }
-                sb.append(param.describeWithParams());
-            }
-            sb.append(">");
-        }
-        return sb.toString();
-    }
-
     String getQualifiedName();
 
     String prettyPrint();

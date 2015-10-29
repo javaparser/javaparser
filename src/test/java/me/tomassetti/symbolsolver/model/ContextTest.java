@@ -235,7 +235,7 @@ public class ContextTest {
         TypeSolver typeSolver = new JreTypeSolver();
         TypeUsage ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
 
-        assertEquals("java.util.stream.Stream", ref.describe());
+        assertEquals("java.util.stream.Stream<java.lang.String>", ref.describe());
         assertEquals(1, ref.parameters().size());
         assertEquals("java.lang.String", ref.parameters().get(0).describe());
     }
@@ -280,7 +280,7 @@ public class ContextTest {
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
         assertEquals("getTypes", methodUsage.getName());
-        assertEquals("java.util.List", methodUsage.returnType().describe());
+        assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", methodUsage.returnType().describe());
         assertEquals(1, methodUsage.returnType().parameters().size());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().parameters().get(0).describe());
     }
@@ -296,7 +296,7 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetTypes);
 
-        assertEquals("java.util.List", filterUsage.returnType().describe());
+        assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
         assertEquals(1, filterUsage.returnType().parameters().size());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", filterUsage.returnType().parameters().get(0).describe());
     }
@@ -312,7 +312,7 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToStream);
 
-        assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describeWithParams());
+        assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
     }
 
     @Test
@@ -326,7 +326,7 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToFilter);
 
-        assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describeWithParams());
+        assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
     }
 
     @Test
@@ -341,7 +341,7 @@ public class ContextTest {
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         TypeUsage typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
 
-        assertEquals("java.util.function.Predicate<com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.describeWithParams());
+        assertEquals("java.util.function.Predicate<com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.describe());
     }
 
     @Test
