@@ -31,11 +31,6 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     }
 
     @Override
-    public Optional<TypeUsage> parameterByName(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isReferenceType() {
         return false;
     }

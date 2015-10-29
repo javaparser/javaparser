@@ -20,11 +20,6 @@ public class VoidTypeUsage implements TypeUsage {
     }
 
     @Override
-    public Optional<TypeUsage> parameterByName(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String getTypeName() {
         return "void";
     }

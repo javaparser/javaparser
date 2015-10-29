@@ -87,18 +87,6 @@ public class ReferenceTypeUsage implements TypeUsage {
     }
 
     @Override
-    public Optional<TypeUsage> parameterByName(String name) {
-        int i=0;
-        for (TypeParameter tp : typeDeclaration.getTypeParameters()) {
-            if (tp.getName().equals(name)) {
-                return Optional.of(typeParameters.get(i));
-            }
-            i++;
-        }
-        return Optional.empty();
-    }
-
-    @Override
     public boolean isReferenceType() {
         return true;
     }

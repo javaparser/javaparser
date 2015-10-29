@@ -42,11 +42,6 @@ public class WildcardUsage implements TypeUsage {
     }
 
     @Override
-    public Optional<TypeUsage> parameterByName(String name) {
-        return Optional.empty();
-    }
-
-    @Override
     public String getTypeName() {
         return type.toStringWithoutComments();
     }

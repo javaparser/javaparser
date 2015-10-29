@@ -73,11 +73,6 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
-    public Optional<TypeUsage> parameterByName(String name) {
-        return Optional.empty();
-    }
-
-    @Override
     public boolean isReferenceType() {
         return false;
     }

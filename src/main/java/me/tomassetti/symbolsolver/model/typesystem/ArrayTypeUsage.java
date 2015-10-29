@@ -39,11 +39,6 @@ public class ArrayTypeUsage implements TypeUsage {
     }
 
     @Override
-    public Optional<TypeUsage> parameterByName(String name) {
-        return Optional.empty();
-    }
-
-    @Override
     public String getTypeName() {
         return baseType.getTypeName()+"[]";
     }

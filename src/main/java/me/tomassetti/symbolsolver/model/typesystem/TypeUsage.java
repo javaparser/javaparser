@@ -67,8 +67,6 @@ public interface TypeUsage {
     /// Misc
     ///
 
-    Optional<TypeUsage> parameterByName(String name);
-
     String getTypeName();
 
     default String getTypeNameWithParams() {
