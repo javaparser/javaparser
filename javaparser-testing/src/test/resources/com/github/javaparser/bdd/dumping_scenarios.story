@@ -57,6 +57,7 @@ class A {
 }
 
 
+
 Scenario: Dumping orphan comments in empty method (issue 192)
 Given the class:
 public class StepImplementation {
