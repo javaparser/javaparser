@@ -35,6 +35,13 @@ public interface TypeUsage {
     }
 
     /**
+     * Is this a non primitive value?
+     */
+    default boolean isReference() {
+        return isReferenceType() || isArray() || isTypeVariable() || isNull();
+    }
+
+    /**
      * Can this be seen as a ReferenceTypeUsage?
      * In other words: is this a reference to a class, an interface or an enum?
      */
@@ -50,6 +57,8 @@ public interface TypeUsage {
         return false;
     }
 
+    // TODO move it to ReferenceTypeUsage
+    @Deprecated
     default boolean isEnum() {
         return false;
     }

@@ -380,32 +380,6 @@ public class JavaParserFacade {
         return methodUsage.get();
     }
 
-    
-
-    public static TypeUsage replaceParams(TypeUsage typeToReplace, TypeUsage typeOfScope) {
-        if (typeToReplace.isTypeVariable()) {
-            Optional<TypeUsage> replacement = typeOfScope.parameterByName(typeToReplace.getTypeName());
-            if (replacement.isPresent()) {
-                return replacement.get();
-            } else {
-                return typeToReplace;
-            }
-        } else {
-            for (int i=0;i<typeToReplace.parameters().size();i++){
-                TypeUsage typeUsage = typeToReplace.parameters().get(i);
-                TypeUsage replaced = replaceParams(typeUsage, typeOfScope);
-                if (replaced != typeUsage) {
-                    typeToReplace = typeToReplace.replaceParam(i, replaced);
-                }
-            }
-            return typeToReplace;
-        }
-    }
-
-    public MethodUsage convertToUsage(MethodDeclaration methodDeclaration, Context context) {
-        return new MethodUsage(methodDeclaration, typeSolver);
-    }
-
     public TypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration){
         if (classOrInterfaceDeclaration.isInterface()) {
             return new JavaParserInterfaceDeclaration(classOrInterfaceDeclaration);
@@ -424,19 +398,6 @@ public class JavaParserFacade {
             return new ReferenceTypeUsage(classDeclaration);
         } else {
             return getTypeOfThisIn(node.getParentNode());
-        }
-    }
-
-    public TypeUsage convertToUsage(TypeDeclaration typeDeclaration) {
-        if (typeDeclaration.isTypeVariable()) {
-            if (typeDeclaration instanceof JavaParserTypeParameter) {
-                return new TypeUsageOfTypeParameter((JavaParserTypeParameter)typeDeclaration);
-            } else {
-                JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) typeDeclaration;
-                return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
-            }
-        } else {
-            return new ReferenceTypeUsage(typeDeclaration);
         }
     }
 
