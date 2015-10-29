@@ -307,8 +307,4 @@ public class ReferenceTypeUsage implements TypeUsage {
         return typeDeclaration.getQualifiedName();
     }
 
-    @Override
-    public String prettyPrint() {
-        return describe();
-    }
 }

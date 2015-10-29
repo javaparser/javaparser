@@ -39,7 +39,7 @@ public class NullTypeUsage implements TypeUsage {
 
     @Override
     public String describe() {
-        throw new UnsupportedOperationException();
+        return "null";
     }
 
     @Override
@@ -64,11 +64,6 @@ public class NullTypeUsage implements TypeUsage {
 
     @Override
     public String getQualifiedName() {
-        return "null";
-    }
-
-    @Override
-    public String prettyPrint() {
         return "null";
     }
 }

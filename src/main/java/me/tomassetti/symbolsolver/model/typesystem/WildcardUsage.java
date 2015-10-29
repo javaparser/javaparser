@@ -63,9 +63,4 @@ public class WildcardUsage implements TypeUsage {
     public String getQualifiedName() {
         return describe();
     }
-
-    @Override
-    public String prettyPrint() {
-        return describe();
-    }
 }

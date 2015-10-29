@@ -43,9 +43,4 @@ public class VoidTypeUsage implements TypeUsage {
     public String getQualifiedName() {
         throw new UnsupportedOperationException();
     }
-
-    @Override
-    public String prettyPrint() {
-        return "void";
-    }
 }

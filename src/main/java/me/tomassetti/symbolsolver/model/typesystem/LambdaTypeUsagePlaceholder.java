@@ -68,9 +68,4 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     public String getQualifiedName() {
         throw new UnsupportedOperationException();
     }
-
-    @Override
-    public String prettyPrint() {
-        throw new UnsupportedOperationException();
-    }
 }

@@ -115,9 +115,4 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     public String getQualifiedName() {
         return describe();
     }
-
-    @Override
-    public String prettyPrint() {
-        return typeParameter.getName();
-    }
 }

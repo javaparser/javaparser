@@ -86,8 +86,6 @@ public interface TypeUsage {
 
     String getQualifiedName();
 
-    String prettyPrint();
-
     ///
     /// TypeParameters
     ///

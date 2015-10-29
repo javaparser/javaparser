@@ -69,8 +69,4 @@ public class ArrayTypeUsage implements TypeUsage {
         return baseType.getQualifiedName() + "[]";
     }
 
-    @Override
-    public String prettyPrint() {
-        return baseType.prettyPrint()+"[]";
-    }
 }

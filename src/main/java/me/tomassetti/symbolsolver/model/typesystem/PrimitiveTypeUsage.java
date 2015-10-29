@@ -96,8 +96,4 @@ public class PrimitiveTypeUsage implements TypeUsage {
         return name;
     }
 
-    @Override
-    public String prettyPrint() {
-        return name;
-    }
 }
