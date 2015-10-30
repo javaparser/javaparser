@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.resolution.*;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,7 +91,6 @@ public interface TypeUsage {
     /// TypeParameters
     ///
 
-    @Deprecated
     default TypeUsage replaceParam(String name, TypeUsage replaced) {
         return this;
     }
@@ -103,7 +102,6 @@ public interface TypeUsage {
     /// Methods
     ///
 
-    @Deprecated
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }

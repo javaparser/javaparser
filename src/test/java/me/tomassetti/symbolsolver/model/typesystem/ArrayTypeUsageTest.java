@@ -84,6 +84,13 @@ public class ArrayTypeUsageTest {
     }
 
     @Test
+    public void testAsArrayTypeUsage() {
+        assertTrue(arrayOfBooleans == arrayOfBooleans.asArrayTypeUsage());
+        assertTrue(arrayOfStrings == arrayOfStrings.asArrayTypeUsage());
+        assertTrue(arrayOfListOfA == arrayOfListOfA.asArrayTypeUsage());
+    }
+
+    @Test
     public void testAsDescribe() {
         assertEquals("boolean[]", arrayOfBooleans.describe());
         assertEquals("java.lang.String[]", arrayOfStrings.describe());
