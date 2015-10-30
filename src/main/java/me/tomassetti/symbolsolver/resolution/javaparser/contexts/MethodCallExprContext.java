@@ -30,7 +30,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             throw new UnsupportedOperationException(name);
         }
         TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-        return typeOfScope.solveGenericType(name);
+        return typeOfScope.asReferenceTypeUsage().solveGenericType(name);
     }
 
     @Override

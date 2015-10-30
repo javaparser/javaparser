@@ -87,16 +87,6 @@ public interface TypeUsage {
     /// TypeParameters
     ///
 
-    /**
-     * Create a copy of the value with the type parameter changed.
-     * @param i
-     * @param replaced
-     * @return
-     */
-    default TypeUsage replaceParam(int i, TypeUsage replaced) {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
-    }
-
     default TypeUsage replaceParam(String name, TypeUsage replaced) {
         //throw new UnsupportedOperationException(this.getClass().getCanonicalName());
         return this;
@@ -118,7 +108,7 @@ public interface TypeUsage {
             TypeUsage result = this;
             int i=0;
             for (TypeUsage tp : this.parameters()) {
-                result = result.replaceParam(i, tp.solveGenericTypes(context, typeSolver));
+                result = result.asReferenceTypeUsage().replaceParam(i, tp.solveGenericTypes(context, typeSolver));
                 i++;
             }
             return result;

@@ -153,7 +153,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             TypeUsage replaced = replaceTypeParams(typeUsage.parameters().get(i), typeSolver, context);
             // Identity comparison on purpose
             if (replaced != typeUsage.parameters().get(i)) {
-                typeUsage = typeUsage.replaceParam(i, replaced);
+                typeUsage = typeUsage.asReferenceTypeUsage().replaceParam(i, replaced);
             }
         }
 

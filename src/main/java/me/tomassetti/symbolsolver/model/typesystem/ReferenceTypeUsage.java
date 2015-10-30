@@ -178,7 +178,12 @@ public class ReferenceTypeUsage implements TypeUsage {
         return Optional.empty();
     }
 
-    @Override
+    /**
+     * Create a copy of the value with the type parameter changed.
+     * @param i
+     * @param replaced
+     * @return
+     */
     public TypeUsage replaceParam(int i, TypeUsage replaced) {
         ArrayList<TypeUsage> typeParametersCorrected = new ArrayList<>(typeParameters);
         typeParametersCorrected.set(i, replaced);
@@ -214,7 +219,7 @@ public class ReferenceTypeUsage implements TypeUsage {
             TypeUsage replaced = replaceTypeParams(typeUsage.parameters().get(i));
             // Identity comparison on purpose
             if (replaced != typeUsage.parameters().get(i)) {
-                typeUsage = typeUsage.replaceParam(i, replaced);
+                typeUsage = typeUsage.asReferenceTypeUsage().replaceParam(i, replaced);
             }
         }
 

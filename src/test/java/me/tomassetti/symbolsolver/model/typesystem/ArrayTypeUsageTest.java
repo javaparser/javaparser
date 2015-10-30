@@ -59,4 +59,20 @@ public class ArrayTypeUsageTest {
         assertEquals(false, arrayOfStrings.isTypeVariable());
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testAsReferenceTypeUsage() {
+        arrayOfBooleans.asReferenceTypeUsage();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testAsTypeParameter() {
+        arrayOfBooleans.asTypeParameter();
+    }
+
+    @Test
+    public void testAsDescribe() {
+        assertEquals("boolean[]", arrayOfBooleans.describe());
+        assertEquals("java.lang.String[]", arrayOfStrings.describe());
+    }
+
 }

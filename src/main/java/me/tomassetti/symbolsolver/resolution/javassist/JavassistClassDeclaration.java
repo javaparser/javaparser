@@ -99,7 +99,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
                         List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
                         TypeUsage newReturnType = methodUsage.returnType();
                         for (int i = 0; i < parametersOfReturnType.size(); i++) {
-                            newReturnType = newReturnType.replaceParam(i, parametersOfReturnType.get(i));
+                            newReturnType = newReturnType.asReferenceTypeUsage().replaceParam(i, parametersOfReturnType.get(i));
                         }
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
                     }

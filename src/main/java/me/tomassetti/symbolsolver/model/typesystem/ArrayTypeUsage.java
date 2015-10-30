@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ArrayTypeUsage implements TypeUsage {
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
