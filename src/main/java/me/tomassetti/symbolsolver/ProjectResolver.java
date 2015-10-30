@@ -15,9 +15,9 @@ import com.github.javaparser.ParseException;
 
 
 
-import me.tomassetti.symbolsolver.model.typesolvers.CombinedTypeSolver;
-import me.tomassetti.symbolsolver.model.typesolvers.JavaParserTypeSolver;
-import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
+import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 
 
 import java.io.File;

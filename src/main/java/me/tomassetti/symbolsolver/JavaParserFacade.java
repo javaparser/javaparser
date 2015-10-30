@@ -8,15 +8,15 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.ReferenceType;
-import me.tomassetti.symbolsolver.model.*;
+import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.javaparser.declarations.*;
-import me.tomassetti.symbolsolver.model.typesolvers.JreTypeSolver;
+import me.tomassetti.symbolsolver.resolution.javaparser.declarations.*;
+import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
-import me.tomassetti.symbolsolver.model.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.javaparser.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 
 
 import java.util.*;

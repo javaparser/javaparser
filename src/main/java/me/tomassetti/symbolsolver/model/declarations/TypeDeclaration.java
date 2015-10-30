@@ -1,9 +1,9 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import com.github.javaparser.ast.Node;
-import me.tomassetti.symbolsolver.model.Context;
-import me.tomassetti.symbolsolver.model.SymbolReference;
-import me.tomassetti.symbolsolver.model.TypeSolver;
+import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
@@ -34,6 +34,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
      * @param node
      * @return
      */
+    @Deprecated
     TypeUsage getUsage(Node node);
 
     boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver);
