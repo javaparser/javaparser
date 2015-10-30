@@ -1,16 +1,10 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
-import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by federico on 18/08/15.
- */
 public class PrimitiveTypeUsage implements TypeUsage {
 
     private String name;

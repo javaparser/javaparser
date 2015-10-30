@@ -1,6 +1,5 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
