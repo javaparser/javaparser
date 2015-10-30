@@ -84,6 +84,7 @@ public interface TypeUsage {
 
     String describe();
 
+    @Deprecated
     String getQualifiedName();
 
     ///

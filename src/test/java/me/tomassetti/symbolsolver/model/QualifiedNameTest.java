@@ -27,7 +27,7 @@ public class QualifiedNameTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.util.Scanner", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).getQualifiedName());
+        assertEquals("java.util.Scanner", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).asReferenceTypeUsage().getQualifiedName());
     }
 
 }

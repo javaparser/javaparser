@@ -69,7 +69,7 @@ public class CompilationUnitContextTest extends AbstractTest {
         typeSolver.add(new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("out", typeSolver);
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class CompilationUnitContextTest extends AbstractTest {
         typeSolver.add(new JarTypeSolver("src/test/resources/junit-4.8.1.jar"));
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("err", typeSolver);
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class CompilationUnitContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("java.lang.System.out", new JreTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test
@@ -180,7 +180,7 @@ public class CompilationUnitContextTest extends AbstractTest {
         assertEquals(true, ref.isSolved());
         assertEquals("assertFalse", ref.getCorrespondingDeclaration().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
-        assertEquals("boolean", ref.getCorrespondingDeclaration().getParam(0).getType(typeSolver).getQualifiedName());
+        assertEquals("boolean", ref.getCorrespondingDeclaration().getParam(0).getType(typeSolver).describe());
         assertEquals(true, ref.getCorrespondingDeclaration().getParam(0).getType(typeSolver).isPrimitive());
     }
 
@@ -197,8 +197,8 @@ public class CompilationUnitContextTest extends AbstractTest {
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
         assertEquals(2, ref.getCorrespondingDeclaration().getNoParams());
-        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(0).getType(typeSolver).getQualifiedName());
-        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(1).getType(typeSolver).getQualifiedName());
+        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(0).getType(typeSolver).asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(1).getType(typeSolver).asReferenceTypeUsage().getQualifiedName());
 
     }
 

@@ -28,7 +28,7 @@ public class EnumTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());
-        assertEquals("SwitchOnEnum.MyEnum", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).getQualifiedName());
+        assertEquals("SwitchOnEnum.MyEnum", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test
