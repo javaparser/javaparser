@@ -39,7 +39,6 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
         return JavaParserFactory.getContext(wrappedNode);
     }
 
-    @Override
     public TypeUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

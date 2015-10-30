@@ -73,7 +73,6 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public TypeUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

@@ -87,7 +87,6 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i]);
     }
 
-    @Override
     public MethodUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

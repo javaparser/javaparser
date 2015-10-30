@@ -145,7 +145,6 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
                 '}';
     }
 
-    @Override
     public TypeUsage getUsage(Node node) {
         
         return new ReferenceTypeUsage(this);

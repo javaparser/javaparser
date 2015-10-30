@@ -56,7 +56,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i));
     }
 
-    @Override
     public MethodUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

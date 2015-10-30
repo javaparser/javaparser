@@ -59,8 +59,6 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         return wrappedNode.hashCode();
     }
 
-    @Override
-
     public TypeUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

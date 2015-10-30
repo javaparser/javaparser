@@ -98,7 +98,6 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         }
     }
 
-    @Override
     public MethodUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

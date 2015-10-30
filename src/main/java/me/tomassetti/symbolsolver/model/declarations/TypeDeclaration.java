@@ -1,6 +1,5 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.resolution.Context;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;

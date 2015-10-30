@@ -34,11 +34,6 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public TypeUsage getUsage(Node node) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String getName() {
         return wrappedNode.getName();
     }
@@ -211,7 +206,6 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
             throw new UnsupportedOperationException();
         }
 
-        @Override
         public MethodUsage getUsage(Node node) {
             throw new UnsupportedOperationException();
         }

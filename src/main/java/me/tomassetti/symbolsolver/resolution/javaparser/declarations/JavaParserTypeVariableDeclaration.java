@@ -48,7 +48,6 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public TypeUsage getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

@@ -60,9 +60,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
                 '}';
     }
 
-    @Override
     public TypeUsage getUsage(Node node) {
-        
         return new ReferenceTypeUsage(this);
     }
 

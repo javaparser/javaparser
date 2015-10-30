@@ -220,8 +220,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
         return MethodResolutionLogic.findMostApplicable(candidates, name, parameterTypes, typeSolver);
     }
-
-    @Override
+    
     public TypeUsage getUsage(Node node) {
         return new ReferenceTypeUsage(this);
     }
