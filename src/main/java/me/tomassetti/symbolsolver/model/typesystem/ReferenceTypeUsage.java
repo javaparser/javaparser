@@ -250,7 +250,6 @@ public class ReferenceTypeUsage implements TypeUsage {
         return typeDeclaration.solveMethod(name, parameterTypes, typeSolver);
     }
 
-    @Override
     public List<TypeUsage> parameters() {
         return typeParameters;
     }

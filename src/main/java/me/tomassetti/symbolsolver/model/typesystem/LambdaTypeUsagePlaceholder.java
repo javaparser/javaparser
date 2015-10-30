@@ -6,9 +6,6 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.List;
 
-/**
- * Created by federico on 02/08/15.
- */
 public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
     private int pos;
@@ -35,11 +32,6 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
     @Override
     public String describe() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<TypeUsage> parameters() {
         throw new UnsupportedOperationException();
     }
 

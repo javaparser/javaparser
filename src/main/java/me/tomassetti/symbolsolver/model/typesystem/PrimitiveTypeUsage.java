@@ -58,11 +58,6 @@ public class PrimitiveTypeUsage implements TypeUsage {
     }
 
     @Override
-    public List<TypeUsage> parameters() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public boolean isTypeVariable() {
         return false;
     }

@@ -37,8 +37,8 @@ public class GenericsTest extends AbstractTest{
         assertEquals(true, symbolReference.get().isField());
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
-        assertEquals(1, typeUsage.parameters().size());
-        assertEquals("java.lang.String", typeUsage.parameters().get(0).describe());
+        assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().size());
+        assertEquals("java.lang.String", typeUsage.asReferenceTypeUsage().parameters().get(0).describe());
     }
 
     @Test
@@ -55,8 +55,8 @@ public class GenericsTest extends AbstractTest{
         assertEquals(true, symbolReference.get().isField());
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
-        assertEquals(1, typeUsage.parameters().size());
-        assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", typeUsage.parameters().get(0).describe());
+        assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().size());
+        assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", typeUsage.asReferenceTypeUsage().parameters().get(0).describe());
     }
 
     @Test
@@ -73,8 +73,8 @@ public class GenericsTest extends AbstractTest{
         assertEquals(true, symbolReference.get().isField());
 
         TypeUsage typeUsage = symbolReference.get().getUsage();
-        assertEquals(1, typeUsage.parameters().size());
-        assertEquals("java.lang.Integer", typeUsage.parameters().get(0).describe());
+        assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().size());
+        assertEquals("java.lang.Integer", typeUsage.asReferenceTypeUsage().parameters().get(0).describe());
     }
 
     @Test
@@ -111,8 +111,8 @@ public class GenericsTest extends AbstractTest{
         TypeUsage typeUsage = symbolReference.get().getUsage();
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.util.List<A>", typeUsage.describe());
-        assertEquals(1, typeUsage.parameters().size());
-        TypeUsage typeParam = typeUsage.parameters().get(0);
+        assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().size());
+        TypeUsage typeParam = typeUsage.asReferenceTypeUsage().parameters().get(0);
         assertEquals(true, typeParam.isTypeVariable());
         assertEquals("A", typeParam.describe());
     }
@@ -144,9 +144,9 @@ public class GenericsTest extends AbstractTest{
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.util.List<A>", typeUsage.describe());
-        assertEquals(1, typeUsage.parameters().size());
-        assertEquals(true, typeUsage.parameters().get(0).isTypeVariable());
-        assertEquals("A", typeUsage.parameters().get(0).describe());
+        assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().size());
+        assertEquals(true, typeUsage.asReferenceTypeUsage().parameters().get(0).isTypeVariable());
+        assertEquals("A", typeUsage.asReferenceTypeUsage().parameters().get(0).describe());
     }
 
     @Test
@@ -162,9 +162,9 @@ public class GenericsTest extends AbstractTest{
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.util.List<java.lang.String>", typeUsage.describe());
-        assertEquals(1, typeUsage.parameters().size());
-        assertEquals(false, typeUsage.parameters().get(0).isTypeVariable());
-        assertEquals("java.lang.String", typeUsage.parameters().get(0).describe());
+        assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().size());
+        assertEquals(false, typeUsage.asReferenceTypeUsage().parameters().get(0).isTypeVariable());
+        assertEquals("java.lang.String", typeUsage.asReferenceTypeUsage().parameters().get(0).describe());
     }
 
     @Test

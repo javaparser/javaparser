@@ -57,11 +57,6 @@ public class ArrayTypeUsage implements TypeUsage {
     }
 
     @Override
-    public List<TypeUsage> parameters() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public TypeUsage replaceParam(String name, TypeUsage replaced) {
         TypeUsage baseTypeReplaced = baseType.replaceParam(name, replaced);
         if (baseTypeReplaced == baseType) {

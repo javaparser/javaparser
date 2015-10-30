@@ -236,8 +236,8 @@ public class ContextTest {
         TypeUsage ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
 
         assertEquals("java.util.stream.Stream<java.lang.String>", ref.describe());
-        assertEquals(1, ref.parameters().size());
-        assertEquals("java.lang.String", ref.parameters().get(0).describe());
+        assertEquals(1, ref.asReferenceTypeUsage().parameters().size());
+        assertEquals("java.lang.String", ref.asReferenceTypeUsage().parameters().get(0).describe());
     }
 
     @Test
@@ -281,8 +281,8 @@ public class ContextTest {
 
         assertEquals("getTypes", methodUsage.getName());
         assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", methodUsage.returnType().describe());
-        assertEquals(1, methodUsage.returnType().parameters().size());
-        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().parameters().get(0).describe());
+        assertEquals(1, methodUsage.returnType().asReferenceTypeUsage().parameters().size());
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().asReferenceTypeUsage().parameters().get(0).describe());
     }
 
     @Test
@@ -297,8 +297,8 @@ public class ContextTest {
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetTypes);
 
         assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
-        assertEquals(1, filterUsage.returnType().parameters().size());
-        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", filterUsage.returnType().parameters().get(0).describe());
+        assertEquals(1, filterUsage.returnType().asReferenceTypeUsage().parameters().size());
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", filterUsage.returnType().asReferenceTypeUsage().parameters().get(0).describe());
     }
 
     @Test

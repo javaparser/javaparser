@@ -95,9 +95,6 @@ public interface TypeUsage {
         return this;
     }
 
-    @Deprecated
-    List<TypeUsage> parameters();
-
     ///
     /// Methods
     ///

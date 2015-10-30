@@ -83,11 +83,6 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
-    public List<TypeUsage> parameters() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public TypeParameter asTypeParameter() {
         return typeParameter;
     }

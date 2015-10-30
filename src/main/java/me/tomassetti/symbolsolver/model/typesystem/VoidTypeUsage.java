@@ -19,11 +19,6 @@ public class VoidTypeUsage implements TypeUsage {
     }
 
     @Override
-    public List<TypeUsage> parameters() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
