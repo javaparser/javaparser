@@ -92,14 +92,17 @@ public interface TypeUsage {
         return this;
     }
 
+    @Deprecated
     List<TypeUsage> parameters();
 
     ///
     /// Methods
     ///
 
+    @Deprecated
     SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
 
+    @Deprecated
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
@@ -108,6 +111,7 @@ public interface TypeUsage {
     /// Fields
     ///
 
+    @Deprecated
     default Optional<Value> getField(String name, TypeSolver typeSolver) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }

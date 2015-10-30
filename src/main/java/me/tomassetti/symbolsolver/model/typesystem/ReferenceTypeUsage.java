@@ -166,7 +166,6 @@ public class ReferenceTypeUsage implements TypeUsage {
         }
     }
 
-    @Override
     public Optional<TypeUsage> solveGenericType(String name) {
         int i=0;
         for (TypeParameter tp :typeDeclaration.getTypeParameters()){
