@@ -21,6 +21,18 @@ import java.util.jar.JarFile;
  */
 public class JarTypeSolver implements TypeSolver {
 
+    private TypeSolver parent;
+
+    @Override
+    public TypeSolver getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(TypeSolver parent) {
+        this.parent = parent;
+    }
+
     /*
     (defrecord ClasspathElement [resource path contentAsStreamThunk])
 
@@ -112,7 +124,7 @@ public class JarTypeSolver implements TypeSolver {
     public SymbolReference<TypeDeclaration> tryToSolveType(String name) {
         try {
             if (classpathElements.containsKey(name)) {
-                return SymbolReference.solved(new JavassistClassDeclaration(classpathElements.get(name).toCtClass()));
+                return SymbolReference.solved(new JavassistClassDeclaration(classpathElements.get(name).toCtClass(), getRoot()));
             } else {
                 return SymbolReference.unsolved(TypeDeclaration.class);
             }

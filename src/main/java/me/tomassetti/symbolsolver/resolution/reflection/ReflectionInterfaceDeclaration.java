@@ -23,13 +23,20 @@ import java.util.function.Predicate;
 public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
 
     private Class<?> clazz;
+    private TypeSolver typeSolver;
 
-    public ReflectionInterfaceDeclaration(Class<?> clazz) {
+    public ReflectionInterfaceDeclaration(Class<?> clazz, TypeSolver typeSolver) {
         if (!clazz.isInterface()) {
             throw new IllegalArgumentException();
         }
 
         this.clazz = clazz;
+        this.typeSolver = typeSolver;
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
     }
 
     @Override
@@ -47,7 +54,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
             if (method.isBridge() || method.isSynthetic()) continue;
-            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
+            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
         }
         return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
@@ -61,7 +68,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     public TypeUsage getUsage(Node node) {
-        return new ReferenceTypeUsage(this);
+        return new ReferenceTypeUsage(this, typeSolver);
     }
 
     @Override
@@ -96,14 +103,14 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
                 // Parameters not specified, so default to Object
                 typeParameterValues = new ArrayList<>();
                 for (int i = 0; i < getTypeParameters().size(); i++) {
-                    typeParameterValues.add(new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class)));
+                    typeParameterValues.add(new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
                 }
             }
         }
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
             if (method.getName().equals(name) && !method.isBridge() && !method.isSynthetic()) {
-                MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
+                MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
                 MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
                 int i = 0;
                 for (TypeParameter tp : getTypeParameters()) {
@@ -127,12 +134,12 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
             return true;
         }
         if (this.clazz.getSuperclass() != null) {
-            if (new ReflectionInterfaceDeclaration(clazz.getSuperclass()).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other, typeSolver)){
                 return true;
             }
         }
         for (Class interfaze : clazz.getInterfaces()){
-            if (new ReflectionInterfaceDeclaration(interfaze).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other, typeSolver)){
                 return true;
             }
         }
@@ -146,6 +153,32 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
+        if (typeUsage instanceof NullTypeUsage) {
+            return true;
+        }
+        if (typeUsage instanceof LambdaTypeUsagePlaceholder) {
+            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
+                    getQualifiedName().equals(Function.class.getCanonicalName());
+        }
+        if (typeUsage.isArray()) {
+            return false;
+        }
+        if (typeUsage.isPrimitive()){
+            return false;
+        }
+        if (typeUsage.describe().equals(getQualifiedName())){
+            return true;
+        }
+        if (typeUsage instanceof ReferenceTypeUsage){
+            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage)typeUsage;
+            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
         if (typeUsage instanceof NullTypeUsage) {
             return true;
         }
@@ -227,12 +260,12 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (clazz.getSuperclass() != null) {
-            ReferenceTypeUsage superclass = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(clazz.getSuperclass()));
+            ReferenceTypeUsage superclass = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
             ancestors.add(superclass);
             ancestors.addAll(superclass.getAllAncestors(typeSolver));
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
-            ReferenceTypeUsage interfazeDecl = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(interfaze));
+            ReferenceTypeUsage interfazeDecl = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(interfaze, typeSolver), typeSolver);
             ancestors.add(interfazeDecl);
             ancestors.addAll(interfazeDecl.getAllAncestors(typeSolver));
         }
@@ -258,7 +291,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     public List<InterfaceDeclaration> getInterfacesExtended(TypeSolver typeSolver) {
         List<InterfaceDeclaration> res = new ArrayList<>();
         for (Class i : clazz.getInterfaces()) {
-            res.add(new ReflectionInterfaceDeclaration(i));
+            res.add(new ReflectionInterfaceDeclaration(i, typeSolver));
         }
         return res;
     }

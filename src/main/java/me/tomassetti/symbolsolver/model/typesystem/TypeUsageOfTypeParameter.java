@@ -59,17 +59,6 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
-        for (TypeParameter.Bound bound : typeParameter.getBounds(typeSolver)) {
-            Optional<MethodUsage> methodUsage = bound.getType().solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext);
-            if (methodUsage.isPresent()) {
-                return methodUsage;
-            }
-        }
-        return Optional.empty();
-    }
-
-    @Override
     public boolean isReferenceType() {
         return false;
     }
@@ -91,6 +80,15 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
 
     @Override
     public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
+        if (other.isTypeVariable()) {
+            return describe().equals(other.describe());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage other) {
         if (other.isTypeVariable()) {
             return describe().equals(other.describe());
         } else {

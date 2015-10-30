@@ -35,7 +35,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     public TypeUsage getType(TypeSolver typeSolver) {
         if (enumConstantDeclaration != null) {
             com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration)enumConstantDeclaration.getParentNode();
-            return new ReferenceTypeUsage(new JavaParserEnumDeclaration(enumDeclaration));
+            return new ReferenceTypeUsage(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
         } else {
             return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), fieldDeclaration);
         }

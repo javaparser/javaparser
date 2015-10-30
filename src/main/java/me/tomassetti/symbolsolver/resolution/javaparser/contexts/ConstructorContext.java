@@ -22,8 +22,8 @@ import java.util.Optional;
 public class ConstructorContext extends AbstractJavaParserContext<ConstructorDeclaration> {
 
 
-    public ConstructorContext(ConstructorDeclaration wrappedNode) {
-        super(wrappedNode);
+    public ConstructorContext(ConstructorDeclaration wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
     public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)){
-                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp)));
+                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return super.solveGenericType(name, typeSolver);
@@ -69,7 +69,7 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
         if (wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
                 if (tp.getName().equals(name)) {
-                    return SymbolReference.solved(new JavaParserTypeParameter(tp));
+                    return SymbolReference.solved(new JavaParserTypeParameter(tp, typeSolver));
                 }
             }
         }

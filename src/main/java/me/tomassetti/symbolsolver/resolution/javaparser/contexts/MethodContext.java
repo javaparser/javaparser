@@ -19,8 +19,8 @@ import java.util.Optional;
 public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> {
 
 
-    public MethodContext(MethodDeclaration wrappedNode) {
-        super(wrappedNode);
+    public MethodContext(MethodDeclaration wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
     public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)){
-                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp)));
+                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return super.solveGenericType(name, typeSolver);
@@ -67,7 +67,7 @@ public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> 
         if (wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
                 if (tp.getName().equals(name)) {
-                    return SymbolReference.solved(new JavaParserTypeParameter(tp));
+                    return SymbolReference.solved(new JavaParserTypeParameter(tp, typeSolver));
                 }
             }
         }

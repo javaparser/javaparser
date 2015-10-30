@@ -3,12 +3,11 @@ package me.tomassetti.symbolsolver.resolution.javaparser.contexts;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
-import me.tomassetti.symbolsolver.resolution.AbstractTest;
-import me.tomassetti.symbolsolver.resolution.Context;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.Value;
+import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.resolution.typesolvers.DummyTypeSolver;
+import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -21,11 +20,18 @@ import static org.junit.Assert.assertFalse;
  */
 public class EnumDeclarationContextTest extends AbstractTest {
 
+    private TypeSolver typeSolver;
+
+    @Before
+    public void setup() {
+        typeSolver = new JreTypeSolver();
+    }
+
     @Test
     public void solveSymbolReferringToDeclaredInstanceField() throws ParseException {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
-        Context context = new EnumDeclarationContext(enumDeclaration);
+        Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("i", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
@@ -36,7 +42,7 @@ public class EnumDeclarationContextTest extends AbstractTest {
     public void solveSymbolReferringToDeclaredStaticField() throws ParseException {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
-        Context context = new EnumDeclarationContext(enumDeclaration);
+        Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("j", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
@@ -47,7 +53,7 @@ public class EnumDeclarationContextTest extends AbstractTest {
     public void solveSymbolReferringToValue() throws ParseException {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
-        Context context = new EnumDeclarationContext(enumDeclaration);
+        Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("E1", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
@@ -58,7 +64,7 @@ public class EnumDeclarationContextTest extends AbstractTest {
     public void solveSymbolAsValueReferringToDeclaredInstanceField() throws ParseException {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
-        Context context = new EnumDeclarationContext(enumDeclaration);
+        Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         Optional<Value> ref = context.solveSymbolAsValue("i", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
@@ -69,7 +75,7 @@ public class EnumDeclarationContextTest extends AbstractTest {
     public void solveSymbolAsValueReferringToDeclaredStaticField() throws ParseException {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
-        Context context = new EnumDeclarationContext(enumDeclaration);
+        Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         Optional<Value> ref = context.solveSymbolAsValue("j", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
@@ -80,7 +86,7 @@ public class EnumDeclarationContextTest extends AbstractTest {
     public void solveSymbolAsValueReferringToValue() throws ParseException {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
-        Context context = new EnumDeclarationContext(enumDeclaration);
+        Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         Optional<Value> ref = context.solveSymbolAsValue("E1", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());

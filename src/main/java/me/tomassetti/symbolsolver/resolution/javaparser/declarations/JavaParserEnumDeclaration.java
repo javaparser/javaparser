@@ -22,15 +22,23 @@ import java.util.Optional;
 
 public class JavaParserEnumDeclaration implements EnumDeclaration {
 
-    public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode) {
+    private TypeSolver typeSolver;
+
+    @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+    }
+
+    public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
     }
 
     private com.github.javaparser.ast.body.EnumDeclaration wrappedNode;
 
     @Override
     public Context getContext() {
-        return JavaParserFactory.getContext(wrappedNode);
+        return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
 
     @Override
@@ -137,6 +145,15 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
+        if (typeUsage.isNull()) {
+            return true;
+        }
+        return typeUsage.isReferenceType() && typeUsage.asReferenceTypeUsage().getQualifiedName().equals(getQualifiedName());
+    }
+
+
+    @Override
     public boolean isTypeVariable() {
         return false;
     }
@@ -193,7 +210,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
 
         @Override
         public TypeUsage getReturnType(TypeSolver typeSolver) {
-            return new ArrayTypeUsage(new ReferenceTypeUsage(JavaParserEnumDeclaration.this));
+            return new ArrayTypeUsage(new ReferenceTypeUsage(JavaParserEnumDeclaration.this, typeSolver));
         }
 
         @Override

@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
-    public ForStatementContext(ForStmt wrappedNode) {
-        super(wrappedNode);
+    public ForStatementContext(ForStmt wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override

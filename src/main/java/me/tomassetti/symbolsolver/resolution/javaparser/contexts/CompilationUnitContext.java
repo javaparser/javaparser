@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class CompilationUnitContext extends AbstractJavaParserContext<CompilationUnit> {
 
-    public CompilationUnitContext(CompilationUnit wrappedNode) {
-        super(wrappedNode);
+    public CompilationUnitContext(CompilationUnit wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override
@@ -102,9 +102,9 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (type.getName().equals(name)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
                         if (((ClassOrInterfaceDeclaration) type).isInterface()) {
-                            return SymbolReference.solved(new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) type));
+                            return SymbolReference.solved(new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) type, typeSolver));
                         } else {
-                            return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) type));
+                            return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) type, typeSolver));
                         }
                     } else {
                         throw new UnsupportedOperationException();

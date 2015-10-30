@@ -75,4 +75,13 @@ public class PrimitiveTypeUsage implements TypeUsage {
         }
     }
 
+    @Override
+    public boolean isAssignableBy(TypeUsage other) {
+        if (other instanceof PrimitiveTypeUsage) {
+            return name.equals(((PrimitiveTypeUsage) other).name);
+        } else {
+            return false;
+        }
+    }
+
 }

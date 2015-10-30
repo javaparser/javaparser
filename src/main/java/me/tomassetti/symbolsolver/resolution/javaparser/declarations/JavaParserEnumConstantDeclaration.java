@@ -20,7 +20,7 @@ public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
     @Override
     public TypeUsage getType(TypeSolver typeSolver) {
-        return new ReferenceTypeUsage(new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode()));
+        return new ReferenceTypeUsage(new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode(), typeSolver), typeSolver);
     }
 
     @Override

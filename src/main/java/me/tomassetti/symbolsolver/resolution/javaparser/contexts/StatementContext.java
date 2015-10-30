@@ -20,8 +20,8 @@ import java.util.Optional;
  */
 public class StatementContext<N extends Statement> extends AbstractJavaParserContext<N> {
 
-    public StatementContext(N wrappedNode) {
-        super(wrappedNode);
+    public StatementContext(N wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
 
         // if nothing is found we should ask the parent context
-        return JavaParserFactory.getContext(stmt.getParentNode()).solveSymbol(name, typeSolver);
+        return JavaParserFactory.getContext(stmt.getParentNode(), typeSolver).solveSymbol(name, typeSolver);
     }
 
     @Override

@@ -71,8 +71,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         return Optional.empty();
     }
 
-    public LambdaExprContext(LambdaExpr wrappedNode) {
-        super(wrappedNode);
+    public LambdaExprContext(LambdaExpr wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override

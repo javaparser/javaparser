@@ -7,10 +7,19 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by federico on 30/07/15.
- */
 public class DummyTypeSolver implements TypeSolver {
+
+    private TypeSolver parent;
+
+    @Override
+    public TypeSolver getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(TypeSolver parent) {
+        this.parent = parent;
+    }
 
     private Map<String, TypeDeclaration> declarationMap = new HashMap<>();
 

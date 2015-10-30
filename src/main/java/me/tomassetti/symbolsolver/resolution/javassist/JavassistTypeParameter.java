@@ -14,6 +14,7 @@ public class JavassistTypeParameter implements TypeParameter {
 
     private SignatureAttribute.TypeParameter wrapped;
     private boolean declaredOnClass;
+    private TypeSolver typeSolver;
 
     @Override
     public String toString() {
@@ -22,9 +23,10 @@ public class JavassistTypeParameter implements TypeParameter {
                 +'}';
     }
 
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, boolean declaredOnClass) {
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, boolean declaredOnClass, TypeSolver typeSolver) {
         this.wrapped = wrapped;
         this.declaredOnClass = declaredOnClass;
+        this.typeSolver = typeSolver;
     }
 
     @Override

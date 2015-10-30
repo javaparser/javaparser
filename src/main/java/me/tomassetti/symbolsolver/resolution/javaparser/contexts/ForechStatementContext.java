@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class ForechStatementContext extends AbstractJavaParserContext<ForeachStmt> {
 
-    public ForechStatementContext(ForeachStmt wrappedNode) {
-        super(wrappedNode);
+    public ForechStatementContext(ForeachStmt wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override

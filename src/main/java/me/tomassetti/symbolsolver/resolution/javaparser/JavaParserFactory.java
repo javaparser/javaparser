@@ -18,35 +18,35 @@ import me.tomassetti.symbolsolver.resolution.javaparser.declarators.VariableSymb
  */
 public class JavaParserFactory {
 
-    public static Context getContext(Node node){
+    public static Context getContext(Node node, TypeSolver typeSolver){
         if (node == null) {
             return null;
         } else if (node instanceof CompilationUnit) {
-            return new CompilationUnitContext((CompilationUnit)node);
+            return new CompilationUnitContext((CompilationUnit)node, typeSolver);
         } else if (node instanceof ForeachStmt) {
-            return new ForechStatementContext((ForeachStmt)node);
+            return new ForechStatementContext((ForeachStmt)node, typeSolver);
         } else if (node instanceof ForStmt) {
-            return new ForStatementContext((ForStmt)node);
+            return new ForStatementContext((ForStmt)node, typeSolver);
         } else if (node instanceof LambdaExpr){
-            return new LambdaExprContext((LambdaExpr) node);
+            return new LambdaExprContext((LambdaExpr) node, typeSolver);
         } else if (node instanceof MethodDeclaration) {
-            return new MethodContext((MethodDeclaration)node);
+            return new MethodContext((MethodDeclaration)node, typeSolver);
         } else if (node instanceof ConstructorDeclaration) {
-            return new ConstructorContext((ConstructorDeclaration)node);
+            return new ConstructorContext((ConstructorDeclaration)node, typeSolver);
         } else if (node instanceof ClassOrInterfaceDeclaration) {
-            return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration)node);
+            return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration)node, typeSolver);
         } else if (node instanceof MethodCallExpr) {
-            return new MethodCallExprContext((MethodCallExpr)node);
+            return new MethodCallExprContext((MethodCallExpr)node, typeSolver);
         } else if (node instanceof EnumDeclaration) {
-            return new EnumDeclarationContext((EnumDeclaration)node);
+            return new EnumDeclarationContext((EnumDeclaration)node, typeSolver);
         } else if (node instanceof FieldAccessExpr) {
-            return new FieldAccessContext((FieldAccessExpr) node);
+            return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
         } else if (node instanceof SwitchEntryStmt) {
-            return new SwitchEntryContext((SwitchEntryStmt) node);
+            return new SwitchEntryContext((SwitchEntryStmt) node, typeSolver);
         } else if (node instanceof Statement) {
-            return new StatementContext((Statement) node);
+            return new StatementContext((Statement) node, typeSolver);
         } else {
-            return getContext(node.getParentNode());
+            return getContext(node.getParentNode(), typeSolver);
         }
     }
 

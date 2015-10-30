@@ -25,8 +25,16 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
 
     private com.github.javaparser.ast.TypeParameter wrappedNode;
 
-    public JavaParserTypeParameter(com.github.javaparser.ast.TypeParameter wrappedNode) {
+    @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+    }
+
+    private TypeSolver typeSolver;
+
+    public JavaParserTypeParameter(com.github.javaparser.ast.TypeParameter wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -79,6 +87,11 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
         throw new UnsupportedOperationException();
     }
 

@@ -10,10 +10,23 @@ import java.util.List;
 
 public class CombinedTypeSolver implements TypeSolver {
 
+    private TypeSolver parent;
+
+    @Override
+    public TypeSolver getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(TypeSolver parent) {
+        this.parent = parent;
+    }
+
     private List<TypeSolver> elements = new ArrayList<>();
 
     public void add(TypeSolver typeSolver){
         this.elements.add(typeSolver);
+        typeSolver.setParent(this);
     }
 
     @Override

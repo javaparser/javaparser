@@ -52,4 +52,8 @@ public class NullTypeUsage implements TypeUsage {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean isAssignableBy(TypeUsage other) {
+        throw new UnsupportedOperationException();
+    }
 }

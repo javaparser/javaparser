@@ -84,7 +84,7 @@ public class JavaParserFacade {
             }
             i++;
         }
-        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr).solveMethod(methodCallExpr.getName(), params, typeSolver);
+        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName(), params, typeSolver);
         for (LambdaTypeUsagePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -175,7 +175,7 @@ public class JavaParserFacade {
                 if (solveLambdas) {
                     TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver);
                     // We need to replace the type variables
-                    result = solveGenericTypes(result, JavaParserFactory.getContext(node), typeSolver);
+                    result = solveGenericTypes(result, JavaParserFactory.getContext(node, typeSolver), typeSolver);
                     return result;
                 } else {
                     return refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver);
@@ -213,7 +213,7 @@ public class JavaParserFacade {
                 // Sure, it was not found as value because maybe it is a type and this is a static access
                 if (fieldAccessExpr.getScope() instanceof NameExpr){
                     NameExpr staticValue = (NameExpr)fieldAccessExpr.getScope();
-                    SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr).solveType(staticValue.toString(), typeSolver);
+                    SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr, typeSolver).solveType(staticValue.toString(), typeSolver);
                     if (!typeAccessedStatically.isSolved()) {
                         throw e;
                     } else {
@@ -240,7 +240,7 @@ public class JavaParserFacade {
         } else if (node instanceof CharLiteralExpr) {
             return PrimitiveTypeUsage.CHAR;
         } else if (node instanceof StringLiteralExpr) {
-            return new ReferenceTypeUsage(new JreTypeSolver().solveType("java.lang.String"));
+            return new ReferenceTypeUsage(new JreTypeSolver().solveType("java.lang.String"), typeSolver);
         } else if (node instanceof UnaryExpr) {
             UnaryExpr unaryExpr = (UnaryExpr)node;
             switch (unaryExpr.getOperator()) {
@@ -280,7 +280,7 @@ public class JavaParserFacade {
             }
         } else if (node instanceof VariableDeclarationExpr) {
             VariableDeclarationExpr expr = (VariableDeclarationExpr)node;
-            return convertToUsage(expr.getType(), JavaParserFactory.getContext(node));
+            return convertToUsage(expr.getType(), JavaParserFactory.getContext(node, typeSolver));
         } else if (node instanceof InstanceOfExpr) {
             return PrimitiveTypeUsage.BOOLEAN;
         } else if (node instanceof EnclosedExpr) {
@@ -288,18 +288,18 @@ public class JavaParserFacade {
             return getTypeConcrete(enclosedExpr.getInner(), solveLambdas);
         } else if (node instanceof CastExpr) {
             CastExpr enclosedExpr = (CastExpr)node;
-            return convertToUsage(enclosedExpr.getType(), JavaParserFactory.getContext(node));
+            return convertToUsage(enclosedExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
         } else if (node instanceof AssignExpr) {
             AssignExpr assignExpr = (AssignExpr) node;
             return getTypeConcrete(assignExpr.getTarget(), solveLambdas);
         } else if (node instanceof ThisExpr) {
-            return new ReferenceTypeUsage(getTypeDeclaration(findContainingTypeDecl(node)));
+            return new ReferenceTypeUsage(getTypeDeclaration(findContainingTypeDecl(node)), typeSolver);
         } else if (node instanceof ConditionalExpr) {
             ConditionalExpr conditionalExpr = (ConditionalExpr)node;
             return getTypeConcrete(conditionalExpr.getThenExpr(), solveLambdas);
         } else if (node instanceof ArrayCreationExpr) {
             ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)node;
-            return convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node));
+            return convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
@@ -321,7 +321,7 @@ public class JavaParserFacade {
         if (type instanceof UnknownType){
             throw new IllegalArgumentException("Unknown type");
         }
-        return convertToUsage(type, JavaParserFactory.getContext(context));
+        return convertToUsage(type, JavaParserFactory.getContext(context, typeSolver));
     }
 
     // This is an hack around an issue in JavaParser
@@ -362,7 +362,7 @@ public class JavaParserFacade {
                     return new TypeUsageOfTypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
                 }
             } else {
-                return new ReferenceTypeUsage(typeDeclaration, typeParameters);
+                return new ReferenceTypeUsage(typeDeclaration, typeParameters, typeSolver);
             }
         } else if (type instanceof PrimitiveType) {
             return PrimitiveTypeUsage.byName(((PrimitiveType) type).getType().name());
@@ -378,7 +378,7 @@ public class JavaParserFacade {
     
 
     public TypeUsage convert(Type type, Node node) {
-        return convert(type, JavaParserFactory.getContext(node));
+        return convert(type, JavaParserFactory.getContext(node, typeSolver));
     }
 
     public TypeUsage convert(Type type, Context context) {
@@ -392,7 +392,7 @@ public class JavaParserFacade {
                 params.add(getType(param, false));
             }
         }
-        Context context = JavaParserFactory.getContext(call);
+        Context context = JavaParserFactory.getContext(call, typeSolver);
         Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName(), params, typeSolver);
         if (!methodUsage.isPresent()) {
             throw new RuntimeException("Method" +
@@ -403,9 +403,9 @@ public class JavaParserFacade {
 
     public TypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration){
         if (classOrInterfaceDeclaration.isInterface()) {
-            return new JavaParserInterfaceDeclaration(classOrInterfaceDeclaration);
+            return new JavaParserInterfaceDeclaration(classOrInterfaceDeclaration, typeSolver);
         } else {
-            return new JavaParserClassDeclaration(classOrInterfaceDeclaration);
+            return new JavaParserClassDeclaration(classOrInterfaceDeclaration, typeSolver);
         }
     }
 
@@ -415,8 +415,8 @@ public class JavaParserFacade {
     public TypeUsage getTypeOfThisIn(Node node) {
         // TODO consider static methods
         if (node instanceof ClassOrInterfaceDeclaration) {
-            JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)node);
-            return new ReferenceTypeUsage(classDeclaration);
+            JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)node, typeSolver);
+            return new ReferenceTypeUsage(classDeclaration, typeSolver);
         } else {
             return getTypeOfThisIn(node.getParentNode());
         }
@@ -426,7 +426,7 @@ public class JavaParserFacade {
         if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
             return getTypeDeclaration((ClassOrInterfaceDeclaration)typeDeclaration);
         } else if (typeDeclaration instanceof EnumDeclaration){
-            return new JavaParserEnumDeclaration((EnumDeclaration)typeDeclaration);
+            return new JavaParserEnumDeclaration((EnumDeclaration)typeDeclaration, typeSolver);
         } else {
             throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
         }

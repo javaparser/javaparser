@@ -49,7 +49,7 @@ public class MethodResolutionLogic {
                 } else if (bounds.size() == 1){
                     return bounds.get(0).getType();
                 } else {
-                    return new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class));
+                    return new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
                 }
             }
         }

@@ -106,10 +106,10 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
             VariableDeclarator variableDeclarator = (VariableDeclarator)wrappedNode;
             if (wrappedNode.getParentNode() instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr)variableDeclarator.getParentNode();
-                return JavaParserFacade.get(typeSolver).convert(variableDeclarationExpr.getType(), JavaParserFactory.getContext(wrappedNode));
+                return JavaParserFacade.get(typeSolver).convert(variableDeclarationExpr.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
             } else if (wrappedNode.getParentNode() instanceof FieldDeclaration) {
                 FieldDeclaration fieldDeclaration = (FieldDeclaration)variableDeclarator.getParentNode();
-                return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), JavaParserFactory.getContext(wrappedNode));
+                return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
             } else {
                 throw new UnsupportedOperationException(wrappedNode.getParentNode().getClass().getCanonicalName());
             }

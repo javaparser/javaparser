@@ -49,6 +49,6 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public TypeUsage getType(TypeSolver typeSolver) {
-        return ReflectionFactory.typeUsageFor(genericType);
+        return ReflectionFactory.typeUsageFor(genericType, typeSolver);
     }
 }

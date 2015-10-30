@@ -24,15 +24,17 @@ import java.util.stream.Collectors;
 public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     private com.github.javaparser.ast.body.MethodDeclaration wrappedNode;
+    private TypeSolver typeSolver;
 
-    public JavaParserMethodDeclaration(com.github.javaparser.ast.body.MethodDeclaration wrappedNode) {
+    public JavaParserMethodDeclaration(com.github.javaparser.ast.body.MethodDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
     }
 
     @Override
     public TypeDeclaration declaringType() {
         if (wrappedNode.getParentNode() instanceof ClassOrInterfaceDeclaration) {
-            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)wrappedNode.getParentNode());
+            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)wrappedNode.getParentNode(), typeSolver);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -62,10 +64,10 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes) {
-        TypeUsage returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode).getReturnType(typeSolver), typeSolver, context);
+        TypeUsage returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getReturnType(typeSolver), typeSolver, context);
         List<TypeUsage> params = new ArrayList<>();
         for (int i=0;i<wrappedNode.getParameters().size();i++){
-            TypeUsage replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode).getParam(i).getType(typeSolver), typeSolver, context);
+            TypeUsage replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getParam(i).getType(typeSolver), typeSolver, context);
             params.add(replaced);
         }
 
@@ -82,7 +84,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             returnType = returnType.replaceParam(determinedParam, determinedTypeParameters.get(determinedParam));
         }
 
-        return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode), params, returnType);
+        return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);
     }
 
     private void determineTypeParameters(Map<String, TypeUsage> determinedTypeParameters, TypeUsage formalParamType, TypeUsage actualParamType, TypeSolver typeSolver){
@@ -123,7 +125,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public Context getContext() {
-        return JavaParserFactory.getContext(wrappedNode);
+        return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
 
     private Optional<TypeUsage> typeParamByName(String name, TypeSolver typeSolver, Context context){
@@ -194,6 +196,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         if (this.wrappedNode.getTypeParameters() == null) {
             return Collections.emptyList();
         }
-        return this.wrappedNode.getTypeParameters().stream().map((astTp)->new JavaParserTypeParameter(astTp)).collect(Collectors.toList());
+        return this.wrappedNode.getTypeParameters().stream().map((astTp)->new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }
 }

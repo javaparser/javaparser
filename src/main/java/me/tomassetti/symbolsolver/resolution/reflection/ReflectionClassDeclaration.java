@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class ReflectionClassDeclaration implements ClassDeclaration {
 
     private Class<?> clazz;
+    private TypeSolver typeSolver;
 
     @Override
     public boolean equals(Object o) {
@@ -38,7 +39,8 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         return clazz.hashCode();
     }
 
-    public ReflectionClassDeclaration(Class<?> clazz) {
+    public ReflectionClassDeclaration(Class<?> clazz, TypeSolver typeSolver) {
+        this.typeSolver = typeSolver;
         if (clazz.isInterface()) {
             throw new IllegalArgumentException();
         }
@@ -115,7 +117,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
-            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
+            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
         }
         ClassDeclaration superClass = getSuperClass(typeSolver);
@@ -143,7 +145,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
     public TypeUsage getUsage(Node node) {
         
-        return new ReferenceTypeUsage(this);
+        return new ReferenceTypeUsage(this, typeSolver);
     }
 
     @Override
@@ -151,7 +153,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
-            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method);
+            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
             for (int i=0;i<getTypeParameters().size();i++){
                 String nameToReplace = getTypeParameters().get(i).getName();
@@ -187,12 +189,12 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             return true;
         }
         if (this.clazz.getSuperclass() != null) {
-            if (new ReflectionClassDeclaration(clazz.getSuperclass()).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other, typeSolver)){
                 return true;
             }
         }
         for (Class interfaze : clazz.getInterfaces()){
-            if (new ReflectionInterfaceDeclaration(interfaze).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other, typeSolver)){
                 return true;
             }
         }
@@ -202,6 +204,32 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
+        if (typeUsage instanceof NullTypeUsage) {
+            return true;
+        }
+        if (typeUsage instanceof LambdaTypeUsagePlaceholder) {
+            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
+                    getQualifiedName().equals(Function.class.getCanonicalName());
+        }
+        if (typeUsage.isArray()) {
+            return false;
+        }
+        if (typeUsage.isPrimitive()){
+            return false;
+        }
+        if (typeUsage.describe().equals(getQualifiedName())){
+            return true;
+        }
+        if (typeUsage instanceof ReferenceTypeUsage){
+            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage)typeUsage;
+            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
         if (typeUsage instanceof NullTypeUsage) {
             return true;
         }
@@ -300,6 +328,11 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+    }
+
+    @Override
     public String getName() {
         return clazz.getSimpleName();
     }
@@ -334,14 +367,14 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         if (clazz.getSuperclass() == null) {
             return null;
         }
-        return new ReflectionClassDeclaration(clazz.getSuperclass());
+        return new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver);
     }
 
     @Override
     public List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver) {
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
         for (Class i : clazz.getInterfaces()) {
-            interfaces.add(new ReflectionInterfaceDeclaration(i));
+            interfaces.add(new ReflectionInterfaceDeclaration(i, typeSolver));
         }
         return interfaces;
     }

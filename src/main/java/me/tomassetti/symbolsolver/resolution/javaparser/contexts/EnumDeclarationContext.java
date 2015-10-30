@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclaration> {
 
-    public EnumDeclarationContext(EnumDeclaration wrappedNode) {
-        super(wrappedNode);
+    public EnumDeclarationContext(EnumDeclaration wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
     @Override
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)){
-            return SymbolReference.solved(new JavaParserEnumDeclaration(this.wrappedNode));
+            return SymbolReference.solved(new JavaParserEnumDeclaration(this.wrappedNode, typeSolver));
         }
 
         // Internal classes
@@ -62,7 +62,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
                 com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
                 if (internalType.getName().equals(name)) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) internalType));
+                        return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) internalType, typeSolver));
                     } else {
                         throw new UnsupportedOperationException();
                     }
@@ -80,7 +80,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
                 com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration)member;
                 if (method.getName().equals(name)) {
-                    candidateMethods.add(new JavaParserMethodDeclaration(method));
+                    candidateMethods.add(new JavaParserMethodDeclaration(method, typeSolver));
                 }
             }
         }

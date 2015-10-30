@@ -49,4 +49,8 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean isAssignableBy(TypeUsage other) {
+        throw new UnsupportedOperationException();
+    }
 }

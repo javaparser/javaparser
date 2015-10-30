@@ -21,9 +21,16 @@ import java.util.List;
 public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
 
     private TypeParameter wrappedNode;
+    private TypeSolver typeSolver;
 
-    public JavaParserTypeVariableDeclaration(TypeParameter wrappedNode) {
+    public JavaParserTypeVariableDeclaration(TypeParameter wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
     }
 
     @Override
@@ -54,6 +61,15 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
+        if (typeUsage.isTypeVariable()) {
+            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + typeUsage.describe());
+        } else {
+            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + typeUsage);
+        }
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
         if (typeUsage.isTypeVariable()) {
             throw new UnsupportedOperationException("Is this type variable declaration assignable by " + typeUsage.describe());
         } else {
@@ -132,6 +148,6 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     }
 
     public me.tomassetti.symbolsolver.resolution.TypeParameter asTypeParameter() {
-        return new JavaParserTypeParameter(this.wrappedNode);
+        return new JavaParserTypeParameter(this.wrappedNode, typeSolver);
     }
 }

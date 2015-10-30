@@ -66,13 +66,13 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
     @Override
     public TypeDeclaration declaringType() {
-        return new JavassistClassDeclaration(ctMethod.getDeclaringClass());
+        return new JavassistClassDeclaration(ctMethod.getDeclaringClass(), typeSolver);
     }
 
     @Override
     public TypeUsage getReturnType(TypeSolver typeSolver) {
         try {
-            return JavassistFactory.typeUsageFor(ctMethod.getReturnType());
+            return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -92,7 +92,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     @Override
     public ParameterDeclaration getParam(int i) {
         try {
-            return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i]);
+            return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver);
         } catch (NotFoundException e){
             throw new RuntimeException(e);
         }
@@ -119,7 +119,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
                 return Collections.emptyList();
             }
             SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
-            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp)->new JavassistTypeParameter(jasTp, false)).collect(Collectors.toList());
+            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp)->new JavassistTypeParameter(jasTp, false, typeSolver)).collect(Collectors.toList());
         } catch (BadBytecode badBytecode) {
             throw new RuntimeException(badBytecode);
         }

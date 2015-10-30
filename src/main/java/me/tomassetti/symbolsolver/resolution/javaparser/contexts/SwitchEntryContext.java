@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStmt> {
 
-    public SwitchEntryContext(SwitchEntryStmt wrappedNode) {
-        super(wrappedNode);
+    public SwitchEntryContext(SwitchEntryStmt wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
 

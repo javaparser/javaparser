@@ -22,18 +22,18 @@ import java.util.Optional;
  */
 public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExpr> {
 
-    public FieldAccessContext(FieldAccessExpr wrappedNode) {
-        super(wrappedNode);
+    public FieldAccessContext(FieldAccessExpr wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveSymbol(name, typeSolver);
+        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveSymbol(name, typeSolver);
     }
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        return JavaParserFactory.getContext(wrappedNode.getParentNode()).solveType(name, typeSolver);
+        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveType(name, typeSolver);
     }
 
     @Override

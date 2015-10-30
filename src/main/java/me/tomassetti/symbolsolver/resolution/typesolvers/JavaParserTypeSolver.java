@@ -24,6 +24,18 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     private File srcDir;
 
+    private TypeSolver parent;
+
+    @Override
+    public TypeSolver getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(TypeSolver parent) {
+        this.parent = parent;
+    }
+
     public JavaParserTypeSolver(File srcDir) {
         this.srcDir = srcDir;
     }

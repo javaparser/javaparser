@@ -26,8 +26,8 @@ import java.util.Optional;
  */
 public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContext<ClassOrInterfaceDeclaration> {
 
-    public ClassOrInterfaceDeclarationContext(ClassOrInterfaceDeclaration wrappedNode) {
-        super(wrappedNode);
+    public ClassOrInterfaceDeclarationContext(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)) {
-                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp)));
+                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return getParent().solveGenericType(name, typeSolver);
@@ -115,9 +115,9 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     private TypeDeclaration getDeclaration() {
         if (this.wrappedNode.isInterface()){
-            return new JavaParserInterfaceDeclaration(this.wrappedNode);
+            return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver);
         } else {
-            return new JavaParserClassDeclaration(this.wrappedNode);
+            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver);
         }
     }
 
@@ -128,7 +128,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
                 com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration)member;
                 if (method.getName().equals(name)) {
-                    candidateMethods.add(new JavaParserMethodDeclaration(method));
+                    candidateMethods.add(new JavaParserMethodDeclaration(method, typeSolver));
                 }
             }
         }

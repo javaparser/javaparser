@@ -73,7 +73,7 @@ public class ReflectionTypeParameter implements TypeParameter {
 
     @Override
     public List<Bound> getBounds(TypeSolver typeSolver) {
-        return Arrays.stream(typeVariable.getBounds()).map((refB)->Bound.extendsBound(ReflectionFactory.typeUsageFor(refB))).collect(Collectors.toList());
+        return Arrays.stream(typeVariable.getBounds()).map((refB)->Bound.extendsBound(ReflectionFactory.typeUsageFor(refB, typeSolver))).collect(Collectors.toList());
     }
 
     @Override

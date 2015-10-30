@@ -23,12 +23,14 @@ import java.util.stream.Collectors;
 public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     private Method method;
+    private TypeSolver typeSolver;
 
-    public ReflectionMethodDeclaration(Method method) {
+    public ReflectionMethodDeclaration(Method method, TypeSolver typeSolver) {
         this.method = method;
         if (method.isSynthetic() || method.isBridge()) {
             throw new IllegalArgumentException();
         }
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -66,15 +68,15 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     @Override
     public TypeDeclaration declaringType() {
         if (method.getDeclaringClass().isInterface()) {
-            return new ReflectionInterfaceDeclaration(method.getDeclaringClass());
+            return new ReflectionInterfaceDeclaration(method.getDeclaringClass(), typeSolver);
         } else {
-            return new ReflectionClassDeclaration(method.getDeclaringClass());
+            return new ReflectionClassDeclaration(method.getDeclaringClass(), typeSolver);
         }
     }
 
     @Override
     public TypeUsage getReturnType(TypeSolver typeSolver) {
-        return ReflectionFactory.typeUsageFor(method.getGenericReturnType());
+        return ReflectionFactory.typeUsageFor(method.getGenericReturnType(), typeSolver);
     }
 
     @Override
@@ -98,7 +100,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes) {
-        return new MethodUsage(new ReflectionMethodDeclaration(method), typeSolver);
+        return new MethodUsage(new ReflectionMethodDeclaration(method, typeSolver), typeSolver);
     }
 
     @Override

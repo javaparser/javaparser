@@ -17,6 +17,7 @@ import java.util.Optional;
 public abstract class AbstractJavaParserContext<N extends Node> implements Context {
 
     protected N wrappedNode;
+    protected TypeSolver typeSolver;
 
     @Override
     public boolean equals(Object o) {
@@ -45,11 +46,12 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         }
     }
 
-    public AbstractJavaParserContext(N wrappedNode) {
+    public AbstractJavaParserContext(N wrappedNode, TypeSolver typeSolver) {
         if (wrappedNode ==  null) {
             throw new NullPointerException();
         }
         this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
     }
 
     protected static final SymbolReference<ValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name){
@@ -83,10 +85,10 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 }
             }
             if (found) {
-                return JavaParserFactory.getContext(wrappedNode.getParentNode().getParentNode());
+                return JavaParserFactory.getContext(wrappedNode.getParentNode().getParentNode(), typeSolver);
             }
         }
-        return JavaParserFactory.getContext(wrappedNode.getParentNode());
+        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver);
     }
 
 }

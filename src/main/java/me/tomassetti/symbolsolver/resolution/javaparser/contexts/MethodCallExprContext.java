@@ -3,6 +3,8 @@ package me.tomassetti.symbolsolver.resolution.javaparser.contexts;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsageOfTypeParameter;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -20,8 +22,8 @@ import java.util.Optional;
  */
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
-    public MethodCallExprContext(MethodCallExpr wrappedNode) {
-        super(wrappedNode);
+    public MethodCallExprContext(MethodCallExpr wrappedNode, TypeSolver typeSolver) {
+        super(wrappedNode, typeSolver);
     }
 
     @Override
@@ -33,13 +35,51 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         return typeOfScope.asReferenceTypeUsage().solveGenericType(name);
     }
 
+    private Optional<MethodUsage> solveMethodAsUsage(ReferenceTypeUsage refType, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+        Optional<MethodUsage> ref = refType.getTypeDeclaration().solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, refType.parameters());
+        if (ref.isPresent()) {
+            MethodUsage methodUsage = ref.get();
+            TypeUsage returnType = refType.replaceTypeParams(methodUsage.returnType());
+            if (returnType != methodUsage.returnType()){
+                methodUsage = methodUsage.replaceReturnType(returnType);
+            }
+            for (int i=0;i<methodUsage.getParamTypes().size();i++){
+                TypeUsage replaced = refType.replaceTypeParams(methodUsage.getParamTypes().get(i));
+                methodUsage = methodUsage.replaceParamType(i, replaced);
+            }
+            return Optional.of(methodUsage);
+        } else {
+            return ref;
+        }
+    }
+
+    private Optional<MethodUsage> solveMethodAsUsage(TypeUsageOfTypeParameter tp, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+        for (TypeParameter.Bound bound : tp.asTypeParameter().getBounds(typeSolver)) {
+            Optional<MethodUsage> methodUsage = solveMethodAsUsage(bound.getType(), name, parameterTypes, typeSolver, invokationContext);
+            if (methodUsage.isPresent()) {
+                return methodUsage;
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<MethodUsage> solveMethodAsUsage(TypeUsage typeUsage, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+        if (typeUsage instanceof ReferenceTypeUsage) {
+            return solveMethodAsUsage((ReferenceTypeUsage)typeUsage, name, parameterTypes, typeSolver, invokationContext);
+        } else if (typeUsage instanceof TypeUsageOfTypeParameter) {
+            return solveMethodAsUsage((TypeUsageOfTypeParameter)typeUsage, name, parameterTypes, typeSolver, invokationContext);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         // TODO consider call of static methods
         if (wrappedNode.getScope() != null) {
             try {
                 TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-                return typeOfScope.solveMethodAsUsage(name, parameterTypes, typeSolver, this);
+                return solveMethodAsUsage(typeOfScope, name, parameterTypes, typeSolver, this);
             } catch (UnsolvedSymbolException e){
                 // ok, maybe it was instead a static access, so let's look for a type
                 if (wrappedNode.getScope() instanceof NameExpr){

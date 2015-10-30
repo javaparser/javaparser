@@ -28,18 +28,22 @@ import java.util.stream.Collectors;
  */
 public class JavaParserClassDeclaration implements ClassDeclaration {
 
-    public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode) {
+    private TypeSolver typeSolver;
+
+    public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode,
+                                      TypeSolver typeSolver) {
         if (wrappedNode.isInterface()) {
             throw new IllegalArgumentException("Interface given");
         }
         this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
     }
 
     private com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode;
 
     @Override
     public Context getContext() {
-        return JavaParserFactory.getContext(wrappedNode);
+        return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
 
     @Override
@@ -137,9 +141,21 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors(typeSolver);
+        ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
+        for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
+            if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
         List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors(typeSolver);
-        ancestorsOfOther.add(new ReferenceTypeUsage(other));
+        ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
         for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;
@@ -184,6 +200,19 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         if (typeUsage.isReferenceType()){
             TypeDeclaration other = typeSolver.solveType(typeUsage.describe());
             return isAssignableBy(other, typeSolver);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
+        if (typeUsage.isNull()) {
+            return true;
+        }
+        if (typeUsage.isReferenceType()){
+            TypeDeclaration other = typeSolver.solveType(typeUsage.describe());
+            return isAssignableBy(other);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -283,7 +312,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         if (this.wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
                 if (typeParameter.getName().equals(name)) {
-                    return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter));
+                    return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter, typeSolver));
                 }
             }
         }
@@ -295,17 +324,17 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
                 String prefix = internalType.getName() + ".";
                 if (internalType.getName().equals(name)) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType));
+                        return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
                     } else if (internalType instanceof EnumDeclaration) {
-                        return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType));
+                        return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver));
                     } else {
                         throw new UnsupportedOperationException();
                     }
                 } else if (name.startsWith(prefix) && name.length() > prefix.length()) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType).solveType(name.substring(prefix.length()), typeSolver);
+                        return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
                     } else if (internalType instanceof EnumDeclaration) {
-                        return new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType).solveType(name.substring(prefix.length()), typeSolver);
+                        return new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
                     } else {
                         throw new UnsupportedOperationException();
                     }
@@ -315,7 +344,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
         String prefix = wrappedNode.getName() + ".";
         if (name.startsWith(prefix) && name.length() > prefix.length()){
-            return new JavaParserClassDeclaration(this.wrappedNode).solveType(name.substring(prefix.length()), typeSolver);
+            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
         }
 
         //return SymbolReference.unsolved(TypeDeclaration.class);
@@ -327,7 +356,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
         ClassDeclaration superclass = getSuperClass(typeSolver);
         if (superclass != null) {
-            ancestors.add(new ReferenceTypeUsage(superclass));
+            ancestors.add(new ReferenceTypeUsage(superclass, typeSolver));
             ancestors.addAll(superclass.getAllAncestors(typeSolver));
         }
         if (wrappedNode.getImplements() != null) {
@@ -347,9 +376,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         }
         if (type.getTypeArgs() != null) {
             List<TypeUsage> typeParams = type.getTypeArgs().stream().map((t)->toTypeUsage(t, typeSolver)).collect(Collectors.toList());
-            return new ReferenceTypeUsage(ancestor.getCorrespondingDeclaration(), typeParams);
+            return new ReferenceTypeUsage(ancestor.getCorrespondingDeclaration(), typeParams, typeSolver);
         } else {
-            return new ReferenceTypeUsage(ancestor.getCorrespondingDeclaration());
+            return new ReferenceTypeUsage(ancestor.getCorrespondingDeclaration(), typeSolver);
         }
     }
 
@@ -363,7 +392,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             return Collections.emptyList();
         } else {
             return this.wrappedNode.getTypeParameters().stream().map(
-                    (tp) -> new JavaParserTypeParameter(tp)
+                    (tp) -> new JavaParserTypeParameter(tp, typeSolver)
             ).collect(Collectors.toList());
         }
     }

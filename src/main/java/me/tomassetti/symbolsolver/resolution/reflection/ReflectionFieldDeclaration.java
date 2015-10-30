@@ -21,7 +21,7 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
     @Override
     public TypeUsage getType(TypeSolver typeSolver) {
         // TODO consider interfaces, enums, primitive types, arrays
-        return ReflectionFactory.typeUsageFor(field.getType());
+        return ReflectionFactory.typeUsageFor(field.getType(), typeSolver);
     }
 
     @Override

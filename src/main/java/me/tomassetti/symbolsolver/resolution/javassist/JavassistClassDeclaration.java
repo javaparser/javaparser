@@ -27,12 +27,19 @@ import java.util.stream.Collectors;
 public class JavassistClassDeclaration implements ClassDeclaration {
 
     private CtClass ctClass;
+    private TypeSolver typeSolver;
 
-    public JavassistClassDeclaration(CtClass ctClass) {
+    @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+    }
+
+    public JavassistClassDeclaration(CtClass ctClass, TypeSolver typeSolver) {
         if (ctClass == null) {
             throw new IllegalArgumentException();
         }
         this.ctClass = ctClass;
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -113,7 +120,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, null);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, null);
                 if (ref.isPresent()) {
                     return ref;
                 }
@@ -124,7 +131,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, null);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze, typeSolver).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, null);
                 if (ref.isPresent()) {
                     return ref;
                 }
@@ -147,7 +154,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                SymbolReference<? extends ValueDeclaration> ref = new JavassistClassDeclaration(superClass).solveSymbol(name, typeSolver);
+                SymbolReference<? extends ValueDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveSymbol(name, typeSolver);
                 if (ref.isSolved()) {
                     return ref;
                 }
@@ -158,7 +165,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<? extends ValueDeclaration> ref = new JavassistClassDeclaration(interfaze).solveSymbol(name, typeSolver);
+                SymbolReference<? extends ValueDeclaration> ref = new JavassistClassDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
                 if (ref.isSolved()) {
                     return ref;
                 }
@@ -198,7 +205,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass).solveMethod(name, parameterTypes, typeSolver);
+                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, parameterTypes, typeSolver);
                 if (ref.isSolved()) {
                     candidates.add(ref.getCorrespondingDeclaration());
                 }
@@ -209,7 +216,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(interfaze).solveMethod(name, parameterTypes, typeSolver);
+                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(interfaze, typeSolver).solveMethod(name, parameterTypes, typeSolver);
                 if (ref.isSolved()) {
                     candidates.add(ref.getCorrespondingDeclaration());
                 }
@@ -222,7 +229,42 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     public TypeUsage getUsage(Node node) {
-        return new ReferenceTypeUsage(this);
+        return new ReferenceTypeUsage(this, typeSolver);
+    }
+
+    @Override
+    public boolean isAssignableBy(TypeUsage typeUsage) {
+        if (typeUsage.isNull()) {
+            return true;
+        }
+
+        if (typeUsage instanceof LambdaTypeUsagePlaceholder){
+            if (ctClass.getName().equals(Predicate.class.getCanonicalName()) || ctClass.getName().equals(Function.class.getCanonicalName())){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        // TODO look into generics
+        if (typeUsage.describe().equals(this.getQualifiedName())){
+            return true;
+        }
+        try {
+            if (this.ctClass.getSuperclass() != null) {
+                if (new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(typeUsage, typeSolver)){
+                    return true;
+                }
+            }
+            for (CtClass interfaze : ctClass.getInterfaces()) {
+                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(typeUsage, typeSolver)){
+                    return true;
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 
     @Override
@@ -245,12 +287,12 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         }
         try {
             if (this.ctClass.getSuperclass() != null) {
-                if (new JavassistClassDeclaration(this.ctClass.getSuperclass()).isAssignableBy(typeUsage, typeSolver)){
+                if (new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(typeUsage, typeSolver)){
                     return true;
                 }
             }
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                if (new JavassistClassDeclaration(interfaze).isAssignableBy(typeUsage, typeSolver)){
+                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(typeUsage, typeSolver)){
                     return true;
                 }
             }
@@ -311,7 +353,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
             if (ctClass.getSuperclass() == null) {
                 throw new UnsupportedOperationException();
             }
-            return new JavassistClassDeclaration(ctClass.getSuperclass()).asClass();
+            return new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver).asClass();
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -339,7 +381,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         } else {
             try {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp)->new JavassistTypeParameter(tp, true)).collect(Collectors.toList());
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp)->new JavassistTypeParameter(tp, true, typeSolver)).collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);
             }
