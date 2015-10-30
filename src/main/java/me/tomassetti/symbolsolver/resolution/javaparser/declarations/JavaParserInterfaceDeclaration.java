@@ -100,7 +100,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
-        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors(typeSolver);
+        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
         for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
@@ -112,7 +112,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors(typeSolver);
+        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
         for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
@@ -299,7 +299,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
         if (wrappedNode.getExtends() != null) {
             for (ClassOrInterfaceType extended : wrappedNode.getExtends()){
@@ -308,7 +308,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
                     throw new UnsolvedSymbolException(extended.getName());
                 }
                 ancestors.add(new ReferenceTypeUsage(superclass.getCorrespondingDeclaration(), typeSolver));
-                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors(typeSolver));
+                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors());
             }
         }
         if (wrappedNode.getImplements() != null) {
@@ -318,7 +318,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
                     throw new UnsolvedSymbolException(implemented.getName());
                 }
                 ancestors.add(new ReferenceTypeUsage(superclass.getCorrespondingDeclaration(), typeSolver));
-                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors(typeSolver));
+                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors());
             }
         }
         return ancestors;

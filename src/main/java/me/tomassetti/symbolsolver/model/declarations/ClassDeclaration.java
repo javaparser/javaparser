@@ -43,15 +43,4 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
         return interfaces;
     }
 
-    @Override
-    default List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
-        List<ReferenceTypeUsage> ancestors = new LinkedList<>();
-        if (getSuperClass(typeSolver) != null) {
-            ancestors.add(new ReferenceTypeUsage(getSuperClass(typeSolver), typeSolver));
-            ancestors.addAll(getSuperClass(typeSolver).getAllAncestors(typeSolver));
-        }
-        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
-        return ancestors;
-    }
-
 }

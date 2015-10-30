@@ -183,10 +183,15 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+    public List<ReferenceTypeUsage> getAllAncestors() {
+        List<ReferenceTypeUsage> ancestors = new LinkedList<>();
+        if (getSuperClass(typeSolver) != null) {
+            ancestors.add(new ReferenceTypeUsage(getSuperClass(typeSolver), typeSolver));
+            ancestors.addAll(getSuperClass(typeSolver).getAllAncestors());
+        }
+        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
+        return ancestors;
     }
-
     @Override
     public Context getContext() {
         throw new UnsupportedOperationException();

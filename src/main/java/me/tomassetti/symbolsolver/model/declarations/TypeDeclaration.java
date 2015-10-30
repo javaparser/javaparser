@@ -57,7 +57,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
      */
     SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
 
-    List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver);
+    List<ReferenceTypeUsage> getAllAncestors();
 
     default boolean isClass() {
         return false;

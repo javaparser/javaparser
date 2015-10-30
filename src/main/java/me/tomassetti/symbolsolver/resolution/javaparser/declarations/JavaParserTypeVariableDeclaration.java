@@ -103,7 +103,7 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors() {
         throw new UnsupportedOperationException();
     }
 

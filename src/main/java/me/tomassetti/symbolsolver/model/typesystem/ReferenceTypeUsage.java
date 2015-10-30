@@ -182,8 +182,8 @@ public class ReferenceTypeUsage implements TypeUsage {
         }
     }
 
-    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
-        return typeDeclaration.getAllAncestors(typeSolver);
+    public List<ReferenceTypeUsage> getAllAncestors() {
+        return typeDeclaration.getAllAncestors();
     }
 
     public TypeUsage replaceTypeParams(TypeUsage typeUsage){

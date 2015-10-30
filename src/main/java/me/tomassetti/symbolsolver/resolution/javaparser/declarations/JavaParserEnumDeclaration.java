@@ -304,7 +304,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors() {
         throw new UnsupportedOperationException();
     }
 

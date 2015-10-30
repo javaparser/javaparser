@@ -23,6 +23,17 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     private TypeSolver typeSolver;
 
     @Override
+    public List<ReferenceTypeUsage> getAllAncestors() {
+        List<ReferenceTypeUsage> ancestors = new LinkedList<>();
+        if (getSuperClass(typeSolver) != null) {
+            ancestors.add(new ReferenceTypeUsage(getSuperClass(typeSolver), typeSolver));
+            ancestors.addAll(getSuperClass(typeSolver).getAllAncestors());
+        }
+        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
+        return ancestors;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -266,7 +277,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
                 return new ReflectionFieldDeclaration(field);
             }
         }
-        for (ReferenceTypeUsage ancestor : getAllAncestors(typeSolver)) {
+        for (ReferenceTypeUsage ancestor : getAllAncestors()) {
             if (ancestor.getTypeDeclaration().hasField(name, typeSolver)) {
                 return ancestor.getTypeDeclaration().getField(name, typeSolver);
             }

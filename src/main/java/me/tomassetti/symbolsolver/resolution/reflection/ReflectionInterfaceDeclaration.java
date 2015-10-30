@@ -215,7 +215,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
                 return new ReflectionFieldDeclaration(field);
             }
         }
-        for (ReferenceTypeUsage ancestor : getAllAncestors(typeSolver)) {
+        for (ReferenceTypeUsage ancestor : getAllAncestors()) {
             if (ancestor.getTypeDeclaration().hasField(name, typeSolver)) {
                 return ancestor.getTypeDeclaration().getField(name, typeSolver);
             }
@@ -257,17 +257,17 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (clazz.getSuperclass() != null) {
             ReferenceTypeUsage superclass = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
             ancestors.add(superclass);
-            ancestors.addAll(superclass.getAllAncestors(typeSolver));
+            ancestors.addAll(superclass.getAllAncestors());
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
             ReferenceTypeUsage interfazeDecl = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(interfaze, typeSolver), typeSolver);
             ancestors.add(interfazeDecl);
-            ancestors.addAll(interfazeDecl.getAllAncestors(typeSolver));
+            ancestors.addAll(interfazeDecl.getAllAncestors());
         }
         return ancestors;
     }

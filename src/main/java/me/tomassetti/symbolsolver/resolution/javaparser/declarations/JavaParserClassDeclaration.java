@@ -20,6 +20,7 @@ import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -142,7 +143,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors(typeSolver);
+        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
         for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
@@ -154,7 +155,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
-        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors(typeSolver);
+        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
         for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
@@ -352,18 +353,18 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
+    public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
         ClassDeclaration superclass = getSuperClass(typeSolver);
         if (superclass != null) {
             ancestors.add(new ReferenceTypeUsage(superclass, typeSolver));
-            ancestors.addAll(superclass.getAllAncestors(typeSolver));
+            ancestors.addAll(superclass.getAllAncestors());
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()){
                 ReferenceTypeUsage ancestor = toTypeUsage(implemented, typeSolver);
                 ancestors.add(ancestor);
-                ancestors.addAll(ancestor.getAllAncestors(typeSolver));
+                ancestors.addAll(ancestor.getAllAncestors());
             }
         }
         return ancestors;
