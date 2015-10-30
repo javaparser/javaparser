@@ -13,10 +13,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 31/07/15.
- */
 public class ReferenceTypeUsage implements TypeUsage {
+
+    public static final ReferenceTypeUsage OBJECT = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class));
+    public static final ReferenceTypeUsage STRING = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class));
 
     private TypeDeclaration typeDeclaration;
     private List<TypeUsage> typeParameters;
@@ -96,7 +96,7 @@ public class ReferenceTypeUsage implements TypeUsage {
 
     @Override
     public String toString() {
-        return "TypeUsageOfTypeDeclaration{" +
+        return "ReferenceTypeUsage{" +
                 "declaration=" + typeDeclaration +
                 ", typeParameters=" + typeParameters +
                 '}';

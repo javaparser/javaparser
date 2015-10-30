@@ -17,9 +17,6 @@ import java.util.function.Predicate;
 
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 02/08/15.
- */
 public class ReflectionClassDeclaration implements ClassDeclaration {
 
     private Class<?> clazz;
@@ -31,7 +28,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
         ReflectionClassDeclaration that = (ReflectionClassDeclaration) o;
 
-        if (!clazz.equals(that.clazz)) return false;
+        if (!clazz.getCanonicalName().equals(that.clazz.getCanonicalName())) return false;
 
         return true;
     }
@@ -49,7 +46,6 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             throw new IllegalArgumentException();
         }
         if (clazz.isArray()) {
-
             throw new IllegalArgumentException();
         }
         this.clazz = clazz;

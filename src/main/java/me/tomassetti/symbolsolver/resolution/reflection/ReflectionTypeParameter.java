@@ -21,6 +21,37 @@ public class ReflectionTypeParameter implements TypeParameter {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TypeParameter)) return false;
+
+        TypeParameter that = (TypeParameter) o;
+
+        if (!getName().equals(that.getName())) {
+            return false;
+        }
+        if (declaredOnClass() != that.declaredOnClass()) {
+            return false;
+        }
+        if (declaredOnMethod() != that.declaredOnMethod()) {
+            return false;
+        }
+        // TODO
+        //if (declaredOnClass && !getQNameOfDeclaringClass().equals(that.getQNameOfDeclaringClass())) {
+        //    return false;
+        //}
+        // TODO check bounds
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = typeVariable.hashCode();
+        result = 31 * result + (declaredOnClass ? 1 : 0);
+        return result;
+    }
+
+    @Override
     public String getName() {
         return typeVariable.getName();
     }
@@ -32,7 +63,7 @@ public class ReflectionTypeParameter implements TypeParameter {
 
     @Override
     public boolean declaredOnMethod() {
-        throw new UnsupportedOperationException();
+        return !declaredOnClass;
     }
 
     @Override

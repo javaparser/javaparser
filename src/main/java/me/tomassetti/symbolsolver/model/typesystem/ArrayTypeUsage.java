@@ -1,8 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +17,18 @@ public class ArrayTypeUsage implements TypeUsage {
         if (!baseType.equals(that.baseType)) return false;
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ArrayTypeUsage{" +
+                "baseType=" + baseType +
+                '}';
+    }
+
+    @Override
+    public ArrayTypeUsage asArrayTypeUsage() {
+        return this;
     }
 
     @Override
@@ -42,13 +52,23 @@ public class ArrayTypeUsage implements TypeUsage {
         return baseType.describe()+"[]";
     }
 
-    public TypeUsage getBaseType() {
+    public TypeUsage getComponentType() {
         return baseType;
     }
 
     @Override
     public List<TypeUsage> parameters() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public TypeUsage replaceParam(String name, TypeUsage replaced) {
+        TypeUsage baseTypeReplaced = baseType.replaceParam(name, replaced);
+        if (baseTypeReplaced == baseType) {
+            return this;
+        } else {
+            return new ArrayTypeUsage(baseTypeReplaced);
+        }
     }
 
     @Override

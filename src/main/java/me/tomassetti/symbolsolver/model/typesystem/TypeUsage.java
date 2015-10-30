@@ -69,6 +69,10 @@ public interface TypeUsage {
     /// Downcasting
     ///
 
+    default ArrayTypeUsage asArrayTypeUsage() {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
     default ReferenceTypeUsage asReferenceTypeUsage() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
@@ -87,8 +91,8 @@ public interface TypeUsage {
     /// TypeParameters
     ///
 
+    @Deprecated
     default TypeUsage replaceParam(String name, TypeUsage replaced) {
-        //throw new UnsupportedOperationException(this.getClass().getCanonicalName());
         return this;
     }
 

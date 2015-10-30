@@ -67,11 +67,15 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof ReflectionInterfaceDeclaration)) return false;
 
         ReflectionInterfaceDeclaration that = (ReflectionInterfaceDeclaration) o;
 
-        if (!clazz.equals(that.clazz)) return false;
+        if (!clazz.getCanonicalName().equals(that.clazz.getCanonicalName())) return false;
+
+        if (!getTypeParameters().equals(that.getTypeParameters())) {
+            return false;
+        }
 
         return true;
     }

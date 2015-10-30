@@ -6,6 +6,40 @@ import java.util.List;
 
 public interface TypeParameter {
 
+    public static TypeParameter onClass(final String name, String classQName, List<Bound> bounds) {
+        return new TypeParameter() {
+            @Override
+            public String getName() {
+                return name;
+            }
+
+            @Override
+            public boolean declaredOnClass() {
+                return true;
+            }
+
+            @Override
+            public boolean declaredOnMethod() {
+                return false;
+            }
+
+            @Override
+            public String getQNameOfDeclaringClass() {
+                return classQName;
+            }
+
+            @Override
+            public List<Bound> getBounds(TypeSolver typeSolver) {
+                return bounds;
+            }
+
+            @Override
+            public String toString() {
+                return "TypeParameter onClass " + name;
+            }
+        };
+    }
+
     public class Bound {
         private boolean extendsBound;
         private TypeUsage type;
