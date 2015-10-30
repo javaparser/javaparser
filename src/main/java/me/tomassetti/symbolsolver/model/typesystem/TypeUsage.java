@@ -92,29 +92,6 @@ public interface TypeUsage {
         return this;
     }
 
-    default Optional<TypeUsage> solveGenericType(String name) {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
-    }
-
-    default TypeUsage solveGenericTypes(Context context, TypeSolver typeSolver) {
-        if (isTypeVariable()) {
-            Optional<TypeUsage> solved = context.solveGenericType(describe(), typeSolver);
-            if (solved.isPresent()) {
-                return solved.get();
-            } else {
-                throw new UnsolvedSymbolException(context, describe());
-            }
-        } else {
-            TypeUsage result = this;
-            int i=0;
-            for (TypeUsage tp : this.parameters()) {
-                result = result.asReferenceTypeUsage().replaceParam(i, tp.solveGenericTypes(context, typeSolver));
-                i++;
-            }
-            return result;
-        }
-    }
-
     List<TypeUsage> parameters();
 
     ///

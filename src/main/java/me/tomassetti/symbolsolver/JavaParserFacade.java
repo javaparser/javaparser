@@ -118,6 +118,25 @@ public class JavaParserFacade {
         }
     }
 
+    private static TypeUsage solveGenericTypes(TypeUsage typeUsage, Context context, TypeSolver typeSolver) {
+        if (typeUsage.isTypeVariable()) {
+            Optional<TypeUsage> solved = context.solveGenericType(typeUsage.describe(), typeSolver);
+            if (solved.isPresent()) {
+                return solved.get();
+            } else {
+                throw new UnsolvedSymbolException(context, typeUsage.describe());
+            }
+        } else {
+            TypeUsage result = typeUsage;
+            int i=0;
+            for (TypeUsage tp : typeUsage.parameters()) {
+                result = result.asReferenceTypeUsage().replaceParam(i, solveGenericTypes(tp, context, typeSolver));
+                i++;
+            }
+            return result;
+        }
+    }
+
     /**
      * Should return more like a TypeApplication: a TypeDeclaration and possible parameters or array modifiers.
      * @return
@@ -154,7 +173,7 @@ public class JavaParserFacade {
                 if (solveLambdas) {
                     TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver);
                     // We need to replace the type variables
-                    result = result.solveGenericTypes(JavaParserFactory.getContext(node), typeSolver);
+                    result = solveGenericTypes(result, JavaParserFactory.getContext(node), typeSolver);
                     return result;
                 } else {
                     return refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver);
