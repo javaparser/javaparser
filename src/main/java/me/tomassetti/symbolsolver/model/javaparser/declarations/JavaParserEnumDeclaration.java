@@ -20,9 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by federico on 30/07/15.
- */
 public class JavaParserEnumDeclaration implements EnumDeclaration {
 
     public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode) {
@@ -141,7 +138,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
         if (typeUsage.isNull()) {
             return true;
         }
-        return typeUsage.getQualifiedName().equals(getQualifiedName());
+        return typeUsage.isReferenceType() && typeUsage.asReferenceTypeUsage().getQualifiedName().equals(getQualifiedName());
     }
 
     @Override
