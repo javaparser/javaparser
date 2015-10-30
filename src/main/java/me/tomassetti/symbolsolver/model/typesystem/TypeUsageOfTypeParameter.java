@@ -111,8 +111,4 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
         }
     }
 
-    @Override
-    public String getQualifiedName() {
-        return describe();
-    }
 }

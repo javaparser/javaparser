@@ -91,9 +91,4 @@ public class PrimitiveTypeUsage implements TypeUsage {
         }
     }
 
-    @Override
-    public String getQualifiedName() {
-        return name;
-    }
-
 }

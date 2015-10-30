@@ -100,9 +100,10 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         if (formalParamType instanceof WildcardUsage) {
             return;
         }
-        if (!formalParamType.getQualifiedName().equals(actualParamType.getQualifiedName())){
-            List<ReferenceTypeUsage> ancestors = actualParamType.getAllAncestors(typeSolver);
-            final String formalParamTypeQName = formalParamType.getQualifiedName();
+        if (formalParamType.isReferenceType() && actualParamType.isReferenceType()
+                && !formalParamType.asReferenceTypeUsage().getQualifiedName().equals(actualParamType.asReferenceTypeUsage().getQualifiedName())){
+            List<ReferenceTypeUsage> ancestors = actualParamType.asReferenceTypeUsage().getAllAncestors(typeSolver);
+            final String formalParamTypeQName = formalParamType.asReferenceTypeUsage().getQualifiedName();
             List<TypeUsage> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
             if (correspondingFormalType.size() == 0) {
                 throw new IllegalArgumentException();

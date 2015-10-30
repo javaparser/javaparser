@@ -64,10 +64,4 @@ public class ArrayTypeUsage implements TypeUsage {
         }
     }
 
-    @Deprecated
-    @Override
-    public String getQualifiedName() {
-        return baseType.getQualifiedName() + "[]";
-    }
-
 }

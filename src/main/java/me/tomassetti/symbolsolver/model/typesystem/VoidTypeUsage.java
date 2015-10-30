@@ -39,8 +39,4 @@ public class VoidTypeUsage implements TypeUsage {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public String getQualifiedName() {
-        throw new UnsupportedOperationException();
-    }
 }

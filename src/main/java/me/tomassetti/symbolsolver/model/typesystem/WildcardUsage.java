@@ -59,8 +59,4 @@ public class WildcardUsage implements TypeUsage {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public String getQualifiedName() {
-        return describe();
-    }
 }

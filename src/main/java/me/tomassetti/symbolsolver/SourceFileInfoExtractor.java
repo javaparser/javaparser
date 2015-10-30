@@ -106,6 +106,7 @@ public class SourceFileInfoExtractor {
                 } catch (RuntimeException re){
                     ko++;
                     err.println(re.getMessage());
+                    throw re;
                 }
             }
         }

@@ -302,7 +302,6 @@ public class ReferenceTypeUsage implements TypeUsage {
         }
     }
 
-    @Override
     public String getQualifiedName() {
         return typeDeclaration.getQualifiedName();
     }
