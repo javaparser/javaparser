@@ -213,11 +213,13 @@ public class ReferenceTypeUsage implements TypeUsage {
             }
         }
 
-        for (int i=0; i<typeUsage.parameters().size(); i++) {
-            TypeUsage replaced = replaceTypeParams(typeUsage.parameters().get(i));
-            // Identity comparison on purpose
-            if (replaced != typeUsage.parameters().get(i)) {
-                typeUsage = typeUsage.asReferenceTypeUsage().replaceParam(i, replaced);
+        if (typeUsage.isReferenceType()) {
+            for (int i = 0; i < typeUsage.asReferenceTypeUsage().parameters().size(); i++) {
+                TypeUsage replaced = replaceTypeParams(typeUsage.asReferenceTypeUsage().parameters().get(i));
+                // Identity comparison on purpose
+                if (replaced != typeUsage.asReferenceTypeUsage().parameters().get(i)) {
+                    typeUsage = typeUsage.asReferenceTypeUsage().replaceParam(i, replaced);
+                }
             }
         }
 

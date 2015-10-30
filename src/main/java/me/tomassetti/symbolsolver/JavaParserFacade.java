@@ -129,9 +129,11 @@ public class JavaParserFacade {
         } else {
             TypeUsage result = typeUsage;
             int i=0;
-            for (TypeUsage tp : typeUsage.parameters()) {
-                result = result.asReferenceTypeUsage().replaceParam(i, solveGenericTypes(tp, context, typeSolver));
-                i++;
+            if (result.isReferenceType()) {
+                for (TypeUsage tp : typeUsage.asReferenceTypeUsage().parameters()) {
+                    result = result.asReferenceTypeUsage().replaceParam(i, solveGenericTypes(tp, context, typeSolver));
+                    i++;
+                }
             }
             return result;
         }

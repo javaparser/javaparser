@@ -109,13 +109,15 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             }
             actualParamType = correspondingFormalType.get(0);
         }
-        List<TypeUsage> formalTypeParams = formalParamType.parameters();
-        List<TypeUsage> actualTypeParams = actualParamType.parameters();
-        if (formalTypeParams.size() != actualTypeParams.size()) {
-            throw new UnsupportedOperationException();
-        }
-        for (int i=0;i<formalTypeParams.size();i++){
-            determineTypeParameters(determinedTypeParameters, formalTypeParams.get(i), actualTypeParams.get(i), typeSolver);
+        if (formalParamType.isReferenceType() && actualParamType.isReferenceType()) {
+            List<TypeUsage> formalTypeParams = formalParamType.asReferenceTypeUsage().parameters();
+            List<TypeUsage> actualTypeParams = actualParamType.asReferenceTypeUsage().parameters();
+            if (formalTypeParams.size() != actualTypeParams.size()) {
+                throw new UnsupportedOperationException();
+            }
+            for (int i = 0; i < formalTypeParams.size(); i++) {
+                determineTypeParameters(determinedTypeParameters, formalTypeParams.get(i), actualTypeParams.get(i), typeSolver);
+            }
         }
     }
 
@@ -149,11 +151,13 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             }
         }
 
-        for (int i=0; i<typeUsage.parameters().size(); i++) {
-            TypeUsage replaced = replaceTypeParams(typeUsage.parameters().get(i), typeSolver, context);
-            // Identity comparison on purpose
-            if (replaced != typeUsage.parameters().get(i)) {
-                typeUsage = typeUsage.asReferenceTypeUsage().replaceParam(i, replaced);
+        if (typeUsage.isReferenceType()) {
+            for (int i = 0; i < typeUsage.asReferenceTypeUsage().parameters().size(); i++) {
+                TypeUsage replaced = replaceTypeParams(typeUsage.asReferenceTypeUsage().parameters().get(i), typeSolver, context);
+                // Identity comparison on purpose
+                if (replaced != typeUsage.asReferenceTypeUsage().parameters().get(i)) {
+                    typeUsage = typeUsage.asReferenceTypeUsage().replaceParam(i, replaced);
+                }
             }
         }
 
