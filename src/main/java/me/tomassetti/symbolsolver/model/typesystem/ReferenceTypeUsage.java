@@ -123,8 +123,7 @@ public class ReferenceTypeUsage implements TypeUsage {
         }
         return Optional.empty();
     }
-
-    @Override
+    
     public Optional<Value> getField(String name, TypeSolver typeSolver) {
         if (!typeDeclaration.hasField(name, typeSolver)){
             return Optional.empty();

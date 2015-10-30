@@ -108,15 +108,6 @@ public interface TypeUsage {
     }
 
     ///
-    /// Fields
-    ///
-
-    @Deprecated
-    default Optional<Value> getField(String name, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
-    }
-
-    ///
     /// Relation with other types
     ///
 
