@@ -45,11 +45,6 @@ public class WildcardUsage implements TypeUsage {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<TypeUsage> parameters() {
         return Collections.emptyList();
     }

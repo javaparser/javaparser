@@ -86,10 +86,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope() != null) {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-            return typeOfScope.solveMethod(name, parameterTypes, typeSolver);
+            return typeOfScope.asReferenceTypeUsage().solveMethod(name, parameterTypes, typeSolver);
         } else {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-            return typeOfScope.solveMethod(name, parameterTypes, typeSolver);
+            return typeOfScope.asReferenceTypeUsage().solveMethod(name, parameterTypes, typeSolver);
         }
     }
 }

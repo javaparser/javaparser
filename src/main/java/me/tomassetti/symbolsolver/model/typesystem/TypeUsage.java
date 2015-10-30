@@ -100,9 +100,6 @@ public interface TypeUsage {
     ///
 
     @Deprecated
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
-
-    @Deprecated
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }

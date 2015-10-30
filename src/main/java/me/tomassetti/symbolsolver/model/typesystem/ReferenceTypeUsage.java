@@ -244,7 +244,6 @@ public class ReferenceTypeUsage implements TypeUsage {
         return sb.toString();
     }
 
-    @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         return typeDeclaration.solveMethod(name, parameterTypes, typeSolver);
     }
