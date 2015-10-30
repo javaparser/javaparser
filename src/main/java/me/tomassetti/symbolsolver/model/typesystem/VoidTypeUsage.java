@@ -9,14 +9,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by federico on 21/08/15.
- */
 public class VoidTypeUsage implements TypeUsage {
     public static final TypeUsage INSTANCE = new VoidTypeUsage();
 
     private VoidTypeUsage() {
-
     }
 
     @Override

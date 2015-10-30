@@ -151,9 +151,4 @@ public interface TypeUsage {
 
     boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver);
 
-    // Move to ReferenceTypeUsage
-    @Deprecated
-    default List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
-        return Collections.emptyList();
-    }
 }

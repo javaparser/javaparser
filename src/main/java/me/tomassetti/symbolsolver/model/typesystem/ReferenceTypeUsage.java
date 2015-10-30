@@ -195,7 +195,6 @@ public class ReferenceTypeUsage implements TypeUsage {
         }
     }
 
-    @Override
     public List<ReferenceTypeUsage> getAllAncestors(TypeSolver typeSolver) {
         return typeDeclaration.getAllAncestors(typeSolver);
     }
