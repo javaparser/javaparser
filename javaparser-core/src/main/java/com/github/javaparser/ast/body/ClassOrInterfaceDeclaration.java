@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -36,7 +35,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceDeclaration extends TypeDeclaration implements DocumentableNode {
+public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 
 	private boolean interface_;
 

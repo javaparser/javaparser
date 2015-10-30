@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -32,7 +31,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationDeclaration extends TypeDeclaration implements DocumentableNode {
+public final class AnnotationDeclaration extends TypeDeclaration {
 
     public AnnotationDeclaration() {
     }

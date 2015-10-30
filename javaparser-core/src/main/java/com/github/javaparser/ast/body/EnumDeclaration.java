@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -35,7 +34,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration implements DocumentableNode {
+public final class EnumDeclaration extends TypeDeclaration {
 
     private List<ClassOrInterfaceType> implementsList;
 
