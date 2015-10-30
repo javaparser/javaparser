@@ -19,11 +19,6 @@ public class VoidTypeUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage other) {
         throw new UnsupportedOperationException();
     }

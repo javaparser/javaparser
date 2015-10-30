@@ -253,33 +253,6 @@ public class ReferenceTypeUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
-        if (other instanceof NullTypeUsage){
-            return !this.isPrimitive();
-        }
-        // consider boxing
-        if (other.isPrimitive()) {
-            if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
-                return true;
-            } else {
-                return isCorrespondingBoxingType(other.describe());
-            }
-        }
-        if (other instanceof LambdaTypeUsagePlaceholder) {
-            return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
-        } else if (other instanceof ReferenceTypeUsage) {
-            ReferenceTypeUsage otherTUOTD = (ReferenceTypeUsage) other;
-            return typeDeclaration.isAssignableBy(otherTUOTD.typeDeclaration, typeSolver);
-
-        } else if (other.isTypeVariable()) {
-            // TODO look bounds...
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage other) {
         if (other instanceof NullTypeUsage){
             return !this.isPrimitive();

@@ -26,13 +26,13 @@ public class MethodResolutionLogic {
         }
         for (int i=0; i<method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParam(i).getType(typeSolver);
-            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(paramTypes.get(i), typeSolver);
+            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(paramTypes.get(i));
             if (!isAssignableWithoutSubstitution) {
                 for (TypeParameter tp : method.getTypeParameters()) {
                     expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                 }
 
-                if (!expectedType.isAssignableBy(paramTypes.get(i), typeSolver)) {
+                if (!expectedType.isAssignableBy(paramTypes.get(i))) {
                     return false;
                 }
             }
@@ -66,7 +66,7 @@ public class MethodResolutionLogic {
             return false;
         }
         for (int i=0; i<method.getNoParams(); i++) {
-            if (!method.getParamType(i, typeSolver).isAssignableBy(paramTypes.get(i), typeSolver)){
+            if (!method.getParamType(i, typeSolver).isAssignableBy(paramTypes.get(i))){
                 return false;
             }
         }
@@ -114,11 +114,11 @@ public class MethodResolutionLogic {
             TypeUsage tdA = methodA.getParam(i).getType(typeSolver);
             TypeUsage tdB = methodB.getParam(i).getType(typeSolver);
             // B is more specific
-            if (tdB.isAssignableBy(tdA, typeSolver) && !tdA.isAssignableBy(tdB, typeSolver)) {
+            if (tdB.isAssignableBy(tdA) && !tdA.isAssignableBy(tdB)) {
                 oneMoreSpecificFound = true;
             }
             // A is more specific
-            if (tdA.isAssignableBy(tdB, typeSolver) && !tdB.isAssignableBy(tdA, typeSolver)) {
+            if (tdA.isAssignableBy(tdB) && !tdB.isAssignableBy(tdA)) {
                 return false;
             }
         }
@@ -131,8 +131,8 @@ public class MethodResolutionLogic {
             TypeUsage tdA = methodA.getParamType(i, typeSolver);
             TypeUsage tdB = methodB.getParamType(i, typeSolver);
 
-            boolean aIsAssignableByB = tdA.isAssignableBy(tdB, typeSolver);
-            boolean bIsAssignableByA = tdB.isAssignableBy(tdA, typeSolver);
+            boolean aIsAssignableByB = tdA.isAssignableBy(tdB);
+            boolean bIsAssignableByA = tdB.isAssignableBy(tdA);
 
             // B is more specific
             if (bIsAssignableByA && !aIsAssignableByB) {

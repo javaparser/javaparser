@@ -1,18 +1,27 @@
 package me.tomassetti.symbolsolver.resolution.javaparser;
 
 import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 public class UnsolvedSymbolException extends RuntimeException {
 
     private String context;
     private String name;
+    private TypeSolver typeSolver;
 
     @Override
     public String toString() {
         return "UnsolvedSymbolException{" +
-                "context=" + context +
+                "context='" + context + '\'' +
                 ", name='" + name + '\'' +
+                ", typeSolver=" + typeSolver +
                 '}';
+    }
+
+    public UnsolvedSymbolException(String name, TypeSolver typeSolver) {
+        super("Unsolved symbol : "+name+ " using typesolver " + typeSolver);
+        this.typeSolver = typeSolver;
+        this.name = name;
     }
 
     public UnsolvedSymbolException(Context context, String name) {

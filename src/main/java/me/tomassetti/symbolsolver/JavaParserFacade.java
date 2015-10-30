@@ -43,7 +43,7 @@ public class JavaParserFacade {
     }
 
     private JavaParserFacade(TypeSolver typeSolver) {
-        this.typeSolver = typeSolver;
+        this.typeSolver = typeSolver.getRoot();
         this.symbolSolver = new SymbolSolver(typeSolver);
     }
 

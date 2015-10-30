@@ -4,8 +4,6 @@ import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
-import java.util.List;
-
 public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
     private int pos;
@@ -42,11 +40,6 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
     public void setMethod(SymbolReference<MethodDeclaration> method) {
         this.method = method;
-    }
-
-    @Override
-    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -95,9 +95,6 @@ public interface TypeUsage {
     /// Relation with other types
     ///
 
-    @Deprecated
-    boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver);
-
     boolean isAssignableBy(TypeUsage other);
 
 }

@@ -41,9 +41,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     boolean hasField(String name, TypeSolver typeSolver);
 
-    boolean isAssignableBy(TypeDeclaration other); /*{
-        return isAssignableBy(new ReferenceTypeUsage(other));
-    }*/
+    boolean isAssignableBy(TypeDeclaration other);
 
     default boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
         return isAssignableBy(new ReferenceTypeUsage(other, typeSolver), typeSolver);

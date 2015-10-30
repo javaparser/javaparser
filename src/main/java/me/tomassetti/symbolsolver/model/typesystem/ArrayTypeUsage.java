@@ -2,9 +2,6 @@ package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
-import java.util.Collections;
-import java.util.List;
-
 public class ArrayTypeUsage implements TypeUsage {
 
     @Override
@@ -63,15 +60,6 @@ public class ArrayTypeUsage implements TypeUsage {
             return this;
         } else {
             return new ArrayTypeUsage(baseTypeReplaced);
-        }
-    }
-
-    @Override
-    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
-        if (other instanceof ArrayTypeUsage) {
-            return baseType.isAssignableBy(((ArrayTypeUsage) other).baseType, typeSolver);
-        } else {
-            return false;
         }
     }
 

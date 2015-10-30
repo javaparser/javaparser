@@ -79,15 +79,6 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
-        if (other.isTypeVariable()) {
-            return describe().equals(other.describe());
-        } else {
-            return false;
-        }
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage other) {
         if (other.isTypeVariable()) {
             return describe().equals(other.describe());

@@ -67,15 +67,6 @@ public class PrimitiveTypeUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other, TypeSolver typeSolver) {
-        if (other instanceof PrimitiveTypeUsage) {
-            return name.equals(((PrimitiveTypeUsage) other).name);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage other) {
         if (other instanceof PrimitiveTypeUsage) {
             return name.equals(((PrimitiveTypeUsage) other).name);

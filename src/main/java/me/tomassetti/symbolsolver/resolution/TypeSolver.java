@@ -24,7 +24,7 @@ public interface TypeSolver {
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
         } else {
-            throw new UnsolvedSymbolException(name);
+            throw new UnsolvedSymbolException(name, this);
         }
     }
 

@@ -100,7 +100,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     @Override
     public ClassDeclaration getSuperClass(TypeSolver typeSolver) {
         if (wrappedNode.getExtends() == null || wrappedNode.getExtends().isEmpty()) {
-            return typeSolver.solveType("java.lang.Object").asType().asClass();
+            return typeSolver.getRoot().solveType("java.lang.Object").asType().asClass();
         } else {
             SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
             if (!ref.isSolved()) {
@@ -370,7 +370,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     private ReferenceTypeUsage toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver){
-        SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver);
+        SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());
         if (!ancestor.isSolved()) {
             throw new UnsolvedSymbolException(type.getName());
         }
