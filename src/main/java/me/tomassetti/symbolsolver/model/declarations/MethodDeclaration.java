@@ -28,6 +28,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
      * Create the MethodUsage corresponding to this declaration with all generic types solved in the given
      * context.
      */
+    @Deprecated
     MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes);
 
     Context getContext();

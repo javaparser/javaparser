@@ -24,6 +24,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return getContext().solveMethod(name, parameterTypes, typeSolver);
     }
 
+    @Deprecated
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
