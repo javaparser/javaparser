@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
@@ -133,7 +134,27 @@ public class ArrayTypeUsageTest {
 
     @Test
     public void testIsAssignableBy() {
-        //assertEquals(true, arrayOfBooleans.isAssignableBy(arrayOfBooleans, ));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(OBJECT));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(STRING));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(PrimitiveTypeUsage.BOOLEAN));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(VoidTypeUsage.INSTANCE));
+
+        assertEquals(true, arrayOfBooleans.isAssignableBy(arrayOfBooleans));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(arrayOfStrings));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(arrayOfListOfA));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(arrayOfListOfStrings));
+        assertEquals(false, arrayOfStrings.isAssignableBy(arrayOfBooleans));
+        assertEquals(true, arrayOfStrings.isAssignableBy(arrayOfStrings));
+        assertEquals(false, arrayOfStrings.isAssignableBy(arrayOfListOfA));
+        assertEquals(false, arrayOfStrings.isAssignableBy(arrayOfListOfStrings));
+        assertEquals(false, arrayOfListOfA.isAssignableBy(arrayOfBooleans));
+        assertEquals(false, arrayOfListOfA.isAssignableBy(arrayOfStrings));
+        assertEquals(true, arrayOfListOfA.isAssignableBy(arrayOfListOfA));
+        assertEquals(false, arrayOfListOfA.isAssignableBy(arrayOfListOfStrings));
+        assertEquals(false, arrayOfListOfStrings.isAssignableBy(arrayOfBooleans));
+        assertEquals(false, arrayOfListOfStrings.isAssignableBy(arrayOfStrings));
+        assertEquals(false, arrayOfListOfStrings.isAssignableBy(arrayOfListOfA));
+        assertEquals(true, arrayOfListOfStrings.isAssignableBy(arrayOfListOfStrings));
     }
 
 }

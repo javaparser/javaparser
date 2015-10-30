@@ -281,8 +281,22 @@ public class ReferenceTypeUsage implements TypeUsage {
 
     private boolean isCorrespondingBoxingType(String typeName) {
         switch (typeName) {
+            case "boolean":
+                return getQualifiedName().equals(Boolean.class.getCanonicalName());
             case "char":
                 return getQualifiedName().equals(Character.class.getCanonicalName());
+            case "byte":
+                return getQualifiedName().equals(Byte.class.getCanonicalName());
+            case "short":
+                return getQualifiedName().equals(Short.class.getCanonicalName());
+            case "int":
+                return getQualifiedName().equals(Integer.class.getCanonicalName());
+            case "long":
+                return getQualifiedName().equals(Long.class.getCanonicalName());
+            case "float":
+                return getQualifiedName().equals(Float.class.getCanonicalName());
+            case "double":
+                return getQualifiedName().equals(Double.class.getCanonicalName());
             default:
                 throw new UnsupportedOperationException(typeName);
         }
