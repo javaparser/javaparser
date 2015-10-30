@@ -194,19 +194,6 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
-        if (typeUsage.isNull()) {
-            return true;
-        }
-        if (typeUsage.isReferenceType()){
-            TypeDeclaration other = typeSolver.solveType(typeUsage.describe());
-            return isAssignableBy(other, typeSolver);
-        } else {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage typeUsage) {
         if (typeUsage.isNull()) {
             return true;

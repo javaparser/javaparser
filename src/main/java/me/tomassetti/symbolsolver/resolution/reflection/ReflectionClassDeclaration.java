@@ -214,32 +214,6 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
-        if (typeUsage instanceof NullTypeUsage) {
-            return true;
-        }
-        if (typeUsage instanceof LambdaTypeUsagePlaceholder) {
-            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
-                    getQualifiedName().equals(Function.class.getCanonicalName());
-        }
-        if (typeUsage.isArray()) {
-            return false;
-        }
-        if (typeUsage.isPrimitive()){
-            return false;
-        }
-        if (typeUsage.describe().equals(getQualifiedName())){
-            return true;
-        }
-        if (typeUsage instanceof ReferenceTypeUsage){
-            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage)typeUsage;
-            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
-        }
-
-        return false;
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage typeUsage) {
         if (typeUsage instanceof NullTypeUsage) {
             return true;

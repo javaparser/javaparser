@@ -257,47 +257,12 @@ public class JavassistClassDeclaration implements ClassDeclaration {
         }
         try {
             if (this.ctClass.getSuperclass() != null) {
-                if (new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(typeUsage, typeSolver)){
+                if (new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(typeUsage)){
                     return true;
                 }
             }
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(typeUsage, typeSolver)){
-                    return true;
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
-        if (typeUsage.isNull()) {
-            return true;
-        }
-
-        if (typeUsage instanceof LambdaTypeUsagePlaceholder){
-            if (ctClass.getName().equals(Predicate.class.getCanonicalName()) || ctClass.getName().equals(Function.class.getCanonicalName())){
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        // TODO look into generics
-        if (typeUsage.describe().equals(this.getQualifiedName())){
-            return true;
-        }
-        try {
-            if (this.ctClass.getSuperclass() != null) {
-                if (new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(typeUsage, typeSolver)){
-                    return true;
-                }
-            }
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(typeUsage, typeSolver)){
+                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(typeUsage)){
                     return true;
                 }
             }

@@ -137,14 +137,6 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
-        if (typeUsage.isNull()) {
-            return true;
-        }
-        return typeUsage.isReferenceType() && typeUsage.asReferenceTypeUsage().getQualifiedName().equals(getQualifiedName());
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage typeUsage) {
         if (typeUsage.isNull()) {
             return true;

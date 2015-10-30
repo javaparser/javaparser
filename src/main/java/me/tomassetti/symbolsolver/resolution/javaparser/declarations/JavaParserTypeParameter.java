@@ -86,11 +86,6 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isAssignableBy(TypeUsage typeUsage) {
         throw new UnsupportedOperationException();
     }
