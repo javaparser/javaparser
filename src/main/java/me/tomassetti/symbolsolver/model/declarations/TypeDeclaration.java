@@ -29,14 +29,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
 
-    /**
-     * Get how the type is used in the given context.
-     * @param node
-     * @return
-     */
-    @Deprecated
-    TypeUsage getUsage(Node node);
-
     boolean isAssignableBy(TypeUsage typeUsage, TypeSolver typeSolver);
 
     default boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
