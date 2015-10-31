@@ -99,18 +99,6 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
-        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
-        ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
-        for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
-            if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public boolean isAssignableBy(TypeDeclaration other) {
         List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
@@ -157,7 +145,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
         }
         if (typeUsage.isReferenceType()){
             TypeDeclaration other = typeSolver.solveType(typeUsage.describe());
-            return isAssignableBy(other, typeSolver);
+            return isAssignableBy(other);
         } else {
             throw new UnsupportedOperationException();
         }

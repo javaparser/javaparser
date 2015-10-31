@@ -32,7 +32,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     boolean isAssignableBy(TypeUsage typeUsage);
 
     default boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
-        return other.isAssignableBy(this, typeSolver);
+        return other.isAssignableBy(this);
     }
 
     FieldDeclaration getField(String name, TypeSolver typeSolver);
@@ -41,9 +41,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     boolean isAssignableBy(TypeDeclaration other);
 
-    default boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
-        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
-    }
 
     SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver);
 

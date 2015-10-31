@@ -153,18 +153,6 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         return false;
     }
 
-    @Override
-    public boolean isAssignableBy(TypeDeclaration other, TypeSolver typeSolver) {
-        List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
-        ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
-        for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
-            if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private String containerName(String base, Node container) {
         if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
             String b = containerName(base, container.getParentNode());
