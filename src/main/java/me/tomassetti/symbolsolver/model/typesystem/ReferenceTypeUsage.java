@@ -266,9 +266,13 @@ public class ReferenceTypeUsage implements TypeUsage {
         if (other instanceof LambdaArgumentTypeUsagePlaceholder) {
             return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
         } else if (other instanceof ReferenceTypeUsage) {
-            ReferenceTypeUsage otherTUOTD = (ReferenceTypeUsage) other;
-            return typeDeclaration.isAssignableBy(otherTUOTD.typeDeclaration);
-
+            ReferenceTypeUsage otherRef = (ReferenceTypeUsage) other;
+            if (typeDeclaration.isAssignableBy(otherRef.typeDeclaration)) {
+                // TODO look bounds...
+                return true;
+            } else {
+                return false;
+            }
         } else if (other.isTypeVariable()) {
             // TODO look bounds...
             return true;

@@ -68,11 +68,11 @@
   Line 326) this.parentNode != null ==> boolean
   Line 327) this.parentNode.childrenNodes.add(this) ==> boolean
   Line 332) childNodes != null ==> boolean
-  Line 333) Iterator<? extends Node> it = childNodes.iterator() ==> java.util.Iterator<? extends Node>
-  Line 333) childNodes.iterator() ==> java.util.Iterator<? extends Node>
+  Line 333) Iterator<? extends Node> it = childNodes.iterator() ==> java.util.Iterator<? extends com.github.javaparser.ast.Node>
+  Line 333) childNodes.iterator() ==> java.util.Iterator<? extends com.github.javaparser.ast.Node>
   Line 334) it.hasNext() ==> boolean
   Line 335) Node current = it.next() ==> com.github.javaparser.ast.Node
-  Line 335) it.next() ==> ? extends Node
+  Line 335) it.next() ==> ? extends com.github.javaparser.ast.Node
   Line 336) current.setParentNode(this) ==> void
   Line 342) childNode != null ==> boolean
   Line 343) childNode.setParentNode(this) ==> void

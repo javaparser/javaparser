@@ -366,7 +366,16 @@ public class JavaParserFacade {
         } else if (type instanceof PrimitiveType) {
             return PrimitiveTypeUsage.byName(((PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
-            return new WildcardUsage((WildcardType)type);
+            WildcardType wildcardType = (WildcardType)type;
+            if (wildcardType.getExtends() != null && wildcardType.getSuper() == null) {
+                return WildcardUsage.extendsBound((ReferenceTypeUsage) convertToUsage(wildcardType.getExtends(), context));
+            } else if (wildcardType.getExtends() == null && wildcardType.getSuper() != null) {
+                return WildcardUsage.extendsBound((ReferenceTypeUsage) convertToUsage(wildcardType.getSuper(), context));
+            } else if (wildcardType.getExtends() == null && wildcardType.getSuper() == null) {
+                return WildcardUsage.UNBOUNDED;
+            } else {
+                throw new UnsupportedOperationException();
+            }
         } else if (type instanceof VoidType) {
             return VoidTypeUsage.INSTANCE;
         } else {
