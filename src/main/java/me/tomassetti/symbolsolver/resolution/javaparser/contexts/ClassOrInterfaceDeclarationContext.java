@@ -121,8 +121,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
     }
 
-    @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public List<MethodDeclaration> methodsByName(String name) {
         List<MethodDeclaration> candidateMethods = new ArrayList<>();
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
@@ -132,6 +131,12 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                 }
             }
         }
+        return candidateMethods;
+    }
+
+    @Override
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+        List<MethodDeclaration> candidateMethods = methodsByName(name);
 
         if (this.wrappedNode.getExtends() != null && !this.wrappedNode.getExtends().isEmpty()) {
             if (this.wrappedNode.getExtends().size() > 1) {

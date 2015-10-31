@@ -1,9 +1,11 @@
 package me.tomassetti.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -11,15 +13,22 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.google.common.collect.ImmutableList;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.resolution.javaparser.contexts.ClassOrInterfaceDeclarationContext;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class GenericsTest extends AbstractTest{
 
@@ -196,6 +205,91 @@ public class GenericsTest extends AbstractTest{
     }
 
     @Test
+    public void genericsInheritance() throws ParseException {
+        CompilationUnit cu = parseSample("MethodTypeParams");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VoidVisitorAdapter");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "visit");
+        MethodCallExpr call = Navigator.findMethodCall(method, "accept");
+        Expression thisRef = call.getArgs().get(0);
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        TypeUsage voidVisitorAdapterOfA = javaParserFacade.getType(thisRef);
+        List<ReferenceTypeUsage> allAncestors = voidVisitorAdapterOfA.asReferenceTypeUsage().getAllAncestors();
+        assertEquals(2, allAncestors.size());
+    }
+
+    // Used to debug methodTypeParams
+    @Test
+    public void methodTypeParamsPrep() throws ParseException {
+        CompilationUnit cu = parseSample("MethodTypeParams");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VoidVisitorAdapter");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "visit");
+        MethodCallExpr call = Navigator.findMethodCall(method, "accept");
+        Expression thisRef = call.getArgs().get(0);
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        TypeUsage typeUsage = javaParserFacade.getType(thisRef);
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("VoidVisitorAdapter<A>", typeUsage.describe());
+
+        Expression arg = call.getArgs().get(1);
+
+        typeUsage = javaParserFacade.getType(arg);
+
+        assertEquals(true, typeUsage.isTypeVariable());
+        assertEquals("A", typeUsage.describe());
+
+        Expression javadoc = call.getScope();
+        typeUsage = javaParserFacade.getType(javadoc);
+
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("JavadocComment", typeUsage.describe());
+
+        Context context = JavaParserFactory.getContext(call, typeSolver);
+        List<TypeUsage> params = ImmutableList.of(javaParserFacade.getType(thisRef), javaParserFacade.getType(arg));
+
+        ReferenceTypeUsage javadocType = javaParserFacade.getType(javadoc).asReferenceTypeUsage();
+
+        me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = javadocType.getTypeDeclaration();
+
+        context = typeDeclaration.getContext();
+        List<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> methods = ((ClassOrInterfaceDeclarationContext)context).methodsByName("accept");
+        me.tomassetti.symbolsolver.model.declarations.MethodDeclaration m;
+        if (methods.get(0).getParam(0).getType(typeSolver).asReferenceTypeUsage().getQualifiedName().equals("VoidVisitor")) {
+            m = methods.get(0);
+        } else {
+            m = methods.get(1);
+        }
+
+        // FIXME fra gli antenati di VoidVisitorAdapter<A> non si trova VisitorAdapter<A>
+
+
+        assertTrue(MethodResolutionLogic.isApplicable(m, "accept", params, typeSolver));
+
+
+        // SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = MethodResolutionLogic.findMostApplicable(
+        //methods, "accept", params, typeSolver);
+
+        // SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = context.solveMethod("accept", params, typeSolver);
+
+        // SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = typeDeclaration.solveMethod("accept", params, typeSolver);
+
+        //SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = javadocType.solveMethod("accept", params, typeSolver);
+
+        //SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = context.solveMethod(
+        //        "accept", params, typeSolver);
+        //assertTrue(res.isSolved());
+
+
+        //assertTrue(JavaParserFacade.get(new JreTypeSolver()).solve(call).isSolved());
+    }
+
+    @Test
     public void methodTypeParams() throws ParseException {
         CompilationUnit cu = parseSample("MethodTypeParams");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VoidVisitorAdapter");
@@ -276,6 +370,26 @@ public class GenericsTest extends AbstractTest{
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.lang.Boolean", typeUsage.describe());
+    }
+
+    @Test
+    public void typeParamOnReturnTypePrep() throws ParseException {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        MethodCallExpr returnStmtExpr = (MethodCallExpr)returnStmt.getExpr();
+        javaParserFacade.getType(returnStmtExpr.getScope());
+
+        //MethodUsage ref = javaParserFacade.solveMethodAsUsage( returnStmtExpr);
+//        TypeUsage typeUsage = javaParserFacade.getType(returnStmtExpr);
+
+ //       assertEquals(false, typeUsage.isTypeVariable());
+ //       assertEquals("boolean", typeUsage.describe());
     }
 
     @Test

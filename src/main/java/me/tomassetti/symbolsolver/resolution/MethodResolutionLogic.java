@@ -26,13 +26,14 @@ public class MethodResolutionLogic {
         }
         for (int i=0; i<method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParam(i).getType(typeSolver);
-            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(paramTypes.get(i));
+            TypeUsage actualType = paramTypes.get(i);
+            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType);
             if (!isAssignableWithoutSubstitution) {
                 for (TypeParameter tp : method.getTypeParameters()) {
                     expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                 }
 
-                if (!expectedType.isAssignableBy(paramTypes.get(i))) {
+                if (!expectedType.isAssignableBy(actualType)) {
                     return false;
                 }
             }

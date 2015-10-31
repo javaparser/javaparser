@@ -20,7 +20,7 @@ public class TypeParameterUsage implements TypeUsage {
 
         TypeParameterUsage that = (TypeParameterUsage) o;
 
-        if (!typeParameter.equals(that.typeParameter)) return false;
+        if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
 
         return true;
     }

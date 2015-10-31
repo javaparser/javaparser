@@ -25,6 +25,26 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
 
     private com.github.javaparser.ast.TypeParameter wrappedNode;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JavaParserTypeParameter)) return false;
+
+        JavaParserTypeParameter that = (JavaParserTypeParameter) o;
+
+        if (wrappedNode != null ? !wrappedNode.equals(that.wrappedNode) : that.wrappedNode != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = wrappedNode != null ? wrappedNode.hashCode() : 0;
+        result = 31 * result + (typeSolver != null ? typeSolver.hashCode() : 0);
+        return result;
+    }
+
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));

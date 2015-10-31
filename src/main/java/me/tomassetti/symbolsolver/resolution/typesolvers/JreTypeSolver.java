@@ -7,9 +7,6 @@ import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.reflection.ReflectionInterfaceDeclaration;
 
-/**
- * Created by federico on 01/08/15.
- */
 public class JreTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
