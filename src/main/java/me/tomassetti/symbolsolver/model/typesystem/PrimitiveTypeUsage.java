@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.util.List;
 
@@ -9,14 +8,14 @@ public class PrimitiveTypeUsage implements TypeUsage {
 
     private String name;
 
-    public static final PrimitiveTypeUsage INT = new PrimitiveTypeUsage("int");
-    public static final PrimitiveTypeUsage CHAR = new PrimitiveTypeUsage("char");
-    public static final PrimitiveTypeUsage LONG = new PrimitiveTypeUsage("long");
-    public static final PrimitiveTypeUsage BOOLEAN = new PrimitiveTypeUsage("boolean");
-    public static final PrimitiveTypeUsage FLOAT = new PrimitiveTypeUsage("float");
-    public static final PrimitiveTypeUsage DOUBLE = new PrimitiveTypeUsage("double");
-    public static final PrimitiveTypeUsage SHORT = new PrimitiveTypeUsage("short");
-    public static final PrimitiveTypeUsage BYTE = new PrimitiveTypeUsage("byte");
+    public static final PrimitiveTypeUsage BYTE = new PrimitiveTypeUsage("byte", Byte.class.getCanonicalName(), ImmutableList.of());
+    public static final PrimitiveTypeUsage SHORT = new PrimitiveTypeUsage("short", Short.class.getCanonicalName(), ImmutableList.of(BYTE));
+    public static final PrimitiveTypeUsage INT = new PrimitiveTypeUsage("int", Integer.class.getCanonicalName(), ImmutableList.of(BYTE, SHORT));
+    public static final PrimitiveTypeUsage LONG = new PrimitiveTypeUsage("long", Long.class.getCanonicalName(), ImmutableList.of(BYTE, SHORT, INT));
+    public static final PrimitiveTypeUsage CHAR = new PrimitiveTypeUsage("char", Character.class.getCanonicalName(), ImmutableList.of());
+    public static final PrimitiveTypeUsage BOOLEAN = new PrimitiveTypeUsage("boolean", Boolean.class.getCanonicalName(), ImmutableList.of());
+    public static final PrimitiveTypeUsage FLOAT = new PrimitiveTypeUsage("float", Float.class.getCanonicalName(), ImmutableList.of());
+    public static final PrimitiveTypeUsage DOUBLE = new PrimitiveTypeUsage("double", Double.class.getCanonicalName(), ImmutableList.of(FLOAT));
 
     @Override
     public String toString() {
@@ -25,10 +24,19 @@ public class PrimitiveTypeUsage implements TypeUsage {
                 '}';
     }
 
+    public PrimitiveTypeUsage asPrimitive() {
+        return this;
+    }
+
     public static final List<PrimitiveTypeUsage> ALL = ImmutableList.of(INT, BOOLEAN, LONG, CHAR, FLOAT, DOUBLE, SHORT, BYTE);
 
-    private PrimitiveTypeUsage(String name) {
+    private String boxTypeQName;
+    private List<PrimitiveTypeUsage> promotionTypes;
+
+    private PrimitiveTypeUsage(String name, String boxTypeQName, List<PrimitiveTypeUsage> promotionTypes) {
         this.name = name;
+        this.boxTypeQName = boxTypeQName;
+        this.promotionTypes = promotionTypes;
     }
 
     @Override
@@ -68,8 +76,18 @@ public class PrimitiveTypeUsage implements TypeUsage {
 
     @Override
     public boolean isAssignableBy(TypeUsage other) {
-        if (other instanceof PrimitiveTypeUsage) {
-            return name.equals(((PrimitiveTypeUsage) other).name);
+        if (other.isPrimitive()) {
+            return this == other || promotionTypes.contains(other);
+        } else if (other.isReferenceType()) {
+          if (other.asReferenceTypeUsage().getQualifiedName().equals(boxTypeQName)) {
+              return true;
+          }
+          for (PrimitiveTypeUsage promotion : promotionTypes) {
+              if (other.asReferenceTypeUsage().getQualifiedName().equals(promotion.boxTypeQName)) {
+                  return true;
+              }
+          }
+          return false;
         } else {
             return false;
         }

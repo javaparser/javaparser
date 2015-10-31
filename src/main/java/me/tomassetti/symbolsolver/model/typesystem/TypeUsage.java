@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 /**
  * A usage of a type. It could be a primitive type or a reference type (enum, class, interface).
@@ -74,6 +73,10 @@ public interface TypeUsage {
     }
 
     default TypeParameter asTypeParameter() {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
+    default PrimitiveTypeUsage asPrimitive() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
