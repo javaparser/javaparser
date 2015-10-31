@@ -9,17 +9,13 @@ import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ReferenceTypeUsageTest {
 
-    private ArrayTypeUsage arrayOfBooleans;
-    private ArrayTypeUsage arrayOfStrings;
     private ReferenceTypeUsage listOfA;
     private ReferenceTypeUsage listOfStrings;
     private ReferenceTypeUsage linkedListOfString;
@@ -35,17 +31,24 @@ public class ReferenceTypeUsageTest {
         typeSolver = new JreTypeSolver();
         object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         string = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        arrayOfBooleans = new ArrayTypeUsage(PrimitiveTypeUsage.BOOLEAN);
-        arrayOfStrings = new ArrayTypeUsage(string);
         listOfA = new ReferenceTypeUsage(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver);
         listOfStrings = new ReferenceTypeUsage(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
-        /*listOfWildcardExtendingString = new ReferenceTypeUsage(
+        linkedListOfString = new ReferenceTypeUsage(
+                new ReflectionClassDeclaration(LinkedList.class, typeSolver),
+                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
+        collectionOfString = new ReferenceTypeUsage(
+                new ReflectionInterfaceDeclaration(Collection.class, typeSolver),
+                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
+        listOfWildcardExtendsString = new ReferenceTypeUsage(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new WildcardUsage()new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);*/
+                ImmutableList.of(WildcardUsage.extendsBound(string)), typeSolver);
+        listOfWildcardSuperString = new ReferenceTypeUsage(
+                new ReflectionInterfaceDeclaration(List.class, typeSolver),
+                ImmutableList.of(WildcardUsage.superBound(string)), typeSolver);
     }
 
     @Test
@@ -139,7 +142,7 @@ public class ReferenceTypeUsageTest {
     }
 
     @Test
-    public void testIsAssignableBy() {
+    public void testIsAssignableBySimple() {
         assertEquals(true, object.isAssignableBy(string));
         assertEquals(false, string.isAssignableBy(object));
         assertEquals(false, listOfStrings.isAssignableBy(listOfA));
@@ -154,14 +157,20 @@ public class ReferenceTypeUsageTest {
         assertEquals(true, string.isAssignableBy(NullTypeUsage.INSTANCE));
         assertEquals(true, listOfStrings.isAssignableBy(NullTypeUsage.INSTANCE));
         assertEquals(true, listOfA.isAssignableBy(NullTypeUsage.INSTANCE));
+    }
 
+    @Test
+    public void testIsAssignableByGenerics() {
         assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
         assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
         assertEquals(true,  listOfWildcardExtendsString.isAssignableBy(listOfStrings));
         assertEquals(false, listOfWildcardExtendsString.isAssignableBy(listOfWildcardSuperString));
         assertEquals(true,  listOfWildcardSuperString.isAssignableBy(listOfStrings));
         assertEquals(false, listOfWildcardSuperString.isAssignableBy(listOfWildcardExtendsString));
+    }
 
+    @Test
+    public void testIsAssignableByGenericsInheritance() {
         assertEquals(true, collectionOfString.isAssignableBy(collectionOfString));
         assertEquals(true, collectionOfString.isAssignableBy(listOfStrings));
         assertEquals(true, collectionOfString.isAssignableBy(linkedListOfString));
@@ -173,7 +182,14 @@ public class ReferenceTypeUsageTest {
         assertEquals(false, linkedListOfString.isAssignableBy(collectionOfString));
         assertEquals(false, linkedListOfString.isAssignableBy(listOfStrings));
         assertEquals(true, linkedListOfString.isAssignableBy(linkedListOfString));
+    }
 
+    @Test
+    public void testGetAllAncestorsConsideringTypeParameters() {
+        assertTrue(linkedListOfString.getAllAncestors().contains(object));
+        assertTrue(linkedListOfString.getAllAncestors().contains(listOfStrings));
+        assertTrue(linkedListOfString.getAllAncestors().contains(collectionOfString));
+        assertFalse(linkedListOfString.getAllAncestors().contains(listOfA));
     }
 
 }

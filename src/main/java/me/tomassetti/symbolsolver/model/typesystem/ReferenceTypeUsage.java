@@ -181,6 +181,7 @@ public class ReferenceTypeUsage implements TypeUsage {
     }
 
     public List<ReferenceTypeUsage> getAllAncestors() {
+        // TODO replace type parameters
         return typeDeclaration.getAllAncestors();
     }
 
@@ -267,12 +268,15 @@ public class ReferenceTypeUsage implements TypeUsage {
             return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
         } else if (other instanceof ReferenceTypeUsage) {
             ReferenceTypeUsage otherRef = (ReferenceTypeUsage) other;
-            if (typeDeclaration.isAssignableBy(otherRef.typeDeclaration)) {
-                // TODO look bounds...
+            if (this.equals(otherRef)) {
                 return true;
-            } else {
-                return false;
             }
+            for (ReferenceTypeUsage otherAncestor : otherRef.getAllAncestors()) {
+                if (otherAncestor.equals(this)) {
+                    return true;
+                }
+            }
+            return false;
         } else if (other.isTypeVariable()) {
             // TODO look bounds...
             return true;
