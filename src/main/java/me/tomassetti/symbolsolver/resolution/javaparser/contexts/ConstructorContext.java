@@ -11,7 +11,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserTypeParameter;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsageOfTypeParameter;
+import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
     public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)){
-                return Optional.of(new TypeUsageOfTypeParameter(new JavaParserTypeParameter(tp, typeSolver)));
+                return Optional.of(new TypeParameterUsage(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return super.solveGenericType(name, typeSolver);

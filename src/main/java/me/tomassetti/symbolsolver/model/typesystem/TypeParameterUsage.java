@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
 
-public class TypeUsageOfTypeParameter implements TypeUsage {
+public class TypeParameterUsage implements TypeUsage {
 
     private TypeParameter typeParameter;
 
@@ -18,7 +18,7 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TypeUsageOfTypeParameter that = (TypeUsageOfTypeParameter) o;
+        TypeParameterUsage that = (TypeParameterUsage) o;
 
         if (!typeParameter.equals(that.typeParameter)) return false;
 
@@ -30,7 +30,7 @@ public class TypeUsageOfTypeParameter implements TypeUsage {
         return typeParameter.hashCode();
     }
 
-    public TypeUsageOfTypeParameter(TypeParameter typeParameter) {
+    public TypeParameterUsage(TypeParameter typeParameter) {
         this.typeParameter = typeParameter;
     }
 

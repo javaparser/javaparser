@@ -63,7 +63,7 @@ public class ReferenceTypeUsage implements TypeUsage {
     }
 
     private static List<TypeUsage> deriveParams(TypeDeclaration typeDeclaration) {
-        return typeDeclaration.getTypeParameters().stream().map((tp)->new TypeUsageOfTypeParameter(tp)).collect(Collectors.toList());
+        return typeDeclaration.getTypeParameters().stream().map((tp)->new TypeParameterUsage(tp)).collect(Collectors.toList());
     }
 
     public boolean isEnum() {

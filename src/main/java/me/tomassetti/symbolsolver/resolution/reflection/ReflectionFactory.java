@@ -33,7 +33,7 @@ public class ReflectionFactory {
             TypeVariable tv = (TypeVariable) type;
             // TODO the false value is arbitrary...
             me.tomassetti.symbolsolver.resolution.TypeParameter typeParameter = new ReflectionTypeParameter(tv, true);
-            return new TypeUsageOfTypeParameter(typeParameter);
+            return new TypeParameterUsage(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
             // TODO deal with type parameters

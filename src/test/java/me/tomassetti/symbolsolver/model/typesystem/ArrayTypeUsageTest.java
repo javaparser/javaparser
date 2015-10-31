@@ -1,7 +1,5 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
 import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
@@ -10,7 +8,6 @@ import me.tomassetti.symbolsolver.resolution.reflection.ReflectionInterfaceDecla
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.CORBA.*;
 
 import java.lang.Object;
 import java.util.Collections;
@@ -37,7 +34,7 @@ public class ArrayTypeUsageTest {
         arrayOfStrings = new ArrayTypeUsage(STRING);
         arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsage(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeUsageOfTypeParameter(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+                ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
         arrayOfListOfStrings = new ArrayTypeUsage(new ReferenceTypeUsage(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver));

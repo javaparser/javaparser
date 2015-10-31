@@ -5,11 +5,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 public class LambdaTypeUsagePlaceholder implements TypeUsage {
 
-    private int pos;
-    private SymbolReference<MethodDeclaration> method;
-
     public LambdaTypeUsagePlaceholder(int pos) {
-        this.pos = pos;
     }
 
     @Override
@@ -38,7 +34,7 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     }
 
     public void setMethod(SymbolReference<MethodDeclaration> method) {
-        this.method = method;
+
     }
 
     @Override

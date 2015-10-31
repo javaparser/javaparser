@@ -4,7 +4,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsageOfTypeParameter;
+import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -53,7 +53,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
-    private Optional<MethodUsage> solveMethodAsUsage(TypeUsageOfTypeParameter tp, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+    private Optional<MethodUsage> solveMethodAsUsage(TypeParameterUsage tp, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         for (TypeParameter.Bound bound : tp.asTypeParameter().getBounds(typeSolver)) {
             Optional<MethodUsage> methodUsage = solveMethodAsUsage(bound.getType(), name, parameterTypes, typeSolver, invokationContext);
             if (methodUsage.isPresent()) {
@@ -66,8 +66,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(TypeUsage typeUsage, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         if (typeUsage instanceof ReferenceTypeUsage) {
             return solveMethodAsUsage((ReferenceTypeUsage)typeUsage, name, parameterTypes, typeSolver, invokationContext);
-        } else if (typeUsage instanceof TypeUsageOfTypeParameter) {
-            return solveMethodAsUsage((TypeUsageOfTypeParameter)typeUsage, name, parameterTypes, typeSolver, invokationContext);
+        } else if (typeUsage instanceof TypeParameterUsage) {
+            return solveMethodAsUsage((TypeParameterUsage)typeUsage, name, parameterTypes, typeSolver, invokationContext);
         } else {
             throw new UnsupportedOperationException();
         }
