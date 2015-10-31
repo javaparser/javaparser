@@ -151,7 +151,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name, TypeSolver typeSolver) {
+    public FieldDeclaration getField(String name) {
         if (this.wrappedNode.getMembers() != null) {
             for (BodyDeclaration member : this.wrappedNode.getMembers()) {
                 if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
@@ -259,7 +259,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public boolean hasField(String name, TypeSolver typeSolver) {
+    public boolean hasField(String name) {
         if (this.wrappedNode.getMembers() != null) {
             for (BodyDeclaration member : this.wrappedNode.getMembers()) {
                 if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {

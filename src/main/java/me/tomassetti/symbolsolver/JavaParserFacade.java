@@ -219,7 +219,7 @@ public class JavaParserFacade {
                         throw e;
                     } else {
                         // TODO here maybe we have to substitute type parameters
-                        return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField(), typeSolver).getType(typeSolver);
+                        return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField()).getType(typeSolver);
                     }
                 } else {
                     throw e;

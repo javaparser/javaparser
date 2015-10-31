@@ -91,12 +91,12 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name, TypeSolver typeSolver) {
+    public FieldDeclaration getField(String name) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean hasField(String name, TypeSolver typeSolver) {
+    public boolean hasField(String name) {
         return false;
     }
 

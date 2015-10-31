@@ -225,7 +225,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name, TypeSolver typeSolver) {
+    public FieldDeclaration getField(String name) {
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
                 com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
@@ -239,7 +239,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
         ClassDeclaration superclass = this.getSuperClass(typeSolver);
         if (superclass != null) {
-            return superclass.getField(name, typeSolver);
+            return superclass.getField(name);
         } else {
             throw new UnsolvedSymbolException("In class " + this, name);
         }
@@ -254,7 +254,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean hasField(String name, TypeSolver typeSolver) {
+    public boolean hasField(String name) {
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
                 com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
@@ -268,7 +268,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
 
         ClassDeclaration superclass = this.getSuperClass(typeSolver);
         if (superclass != null) {
-            return superclass.hasField(name, typeSolver);
+            return superclass.hasField(name);
         } else {
             return false;
         }

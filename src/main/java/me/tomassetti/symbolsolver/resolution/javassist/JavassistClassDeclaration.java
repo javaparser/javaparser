@@ -278,12 +278,12 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name, TypeSolver typeSolver) {
+    public FieldDeclaration getField(String name) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean hasField(String name, TypeSolver typeSolver) {
+    public boolean hasField(String name) {
         throw new UnsupportedOperationException();
     }
 

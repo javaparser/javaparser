@@ -10,9 +10,6 @@ import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
-/**
- * Created by federico on 04/08/15.
- */
 public class JavaParserFieldDeclaration implements FieldDeclaration {
 
     private VariableDeclarator variableDeclarator;

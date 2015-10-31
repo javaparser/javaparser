@@ -7,9 +7,6 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
-/**
- * Created by federico on 21/08/15.
- */
 public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
     public JavaParserEnumConstantDeclaration(com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode) {

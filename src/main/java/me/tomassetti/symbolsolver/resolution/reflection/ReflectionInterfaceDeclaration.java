@@ -184,15 +184,15 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name, TypeSolver typeSolver) {
+    public FieldDeclaration getField(String name) {
         for (Field field : clazz.getDeclaredFields()) {
             if (field.getName().equals(name)) {
                 return new ReflectionFieldDeclaration(field);
             }
         }
         for (ReferenceTypeUsage ancestor : getAllAncestors()) {
-            if (ancestor.getTypeDeclaration().hasField(name, typeSolver)) {
-                return ancestor.getTypeDeclaration().getField(name, typeSolver);
+            if (ancestor.getTypeDeclaration().hasField(name)) {
+                return ancestor.getTypeDeclaration().getField(name);
             }
         }
         throw new UnsolvedSymbolException("Field in " + this, name);
@@ -248,7 +248,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public boolean hasField(String name, TypeSolver typeSolver) {
+    public boolean hasField(String name) {
         throw new UnsupportedOperationException();
     }
 

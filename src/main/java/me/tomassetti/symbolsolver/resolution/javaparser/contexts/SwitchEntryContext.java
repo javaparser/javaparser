@@ -29,8 +29,8 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
         if (type.isReferenceType() && type.asReferenceTypeUsage().isEnum()) {
             if (type instanceof ReferenceTypeUsage) {
                 ReferenceTypeUsage typeUsageOfTypeDeclaration = (ReferenceTypeUsage)type;
-                if (typeUsageOfTypeDeclaration.getTypeDeclaration().hasField(name, typeSolver)) {
-                    return SymbolReference.solved(typeUsageOfTypeDeclaration.getTypeDeclaration().getField(name, typeSolver));
+                if (typeUsageOfTypeDeclaration.getTypeDeclaration().hasField(name)) {
+                    return SymbolReference.solved(typeUsageOfTypeDeclaration.getTypeDeclaration().getField(name));
                 }
             } else {
                 throw new UnsupportedOperationException();

@@ -246,15 +246,15 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name, TypeSolver typeSolver) {
+    public FieldDeclaration getField(String name) {
         for (Field field : clazz.getDeclaredFields()) {
             if (field.getName().equals(name)) {
                 return new ReflectionFieldDeclaration(field);
             }
         }
         for (ReferenceTypeUsage ancestor : getAllAncestors()) {
-            if (ancestor.getTypeDeclaration().hasField(name, typeSolver)) {
-                return ancestor.getTypeDeclaration().getField(name, typeSolver);
+            if (ancestor.getTypeDeclaration().hasField(name)) {
+                return ancestor.getTypeDeclaration().getField(name);
             }
         }
         throw new UnsolvedSymbolException("Field in " + this, name);
@@ -299,7 +299,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean hasField(String name, TypeSolver typeSolver) {
+    public boolean hasField(String name) {
         for (Field field : clazz.getDeclaredFields()){
             if (field.getName().equals(name)) {
                 return true;
@@ -309,7 +309,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         if (superclass == null) {
             return false;
         } else {
-            return superclass.hasField(name, typeSolver);
+            return superclass.hasField(name);
         }
     }
 
