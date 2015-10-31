@@ -1,12 +1,5 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-
-import java.util.Collections;
-import java.util.List;
-
 /**
  * This is a virtual type used to represent null values.
  */
@@ -14,6 +7,7 @@ public class NullTypeUsage implements TypeUsage {
 
     public static final NullTypeUsage INSTANCE = new NullTypeUsage();
 
+    // Prevent instantiation
     private NullTypeUsage() {
 
     }
@@ -34,7 +28,7 @@ public class NullTypeUsage implements TypeUsage {
 
     @Override
     public boolean isReferenceType() {
-        return true;
+        return false;
     }
 
     @Override
@@ -49,6 +43,6 @@ public class NullTypeUsage implements TypeUsage {
 
     @Override
     public boolean isAssignableBy(TypeUsage other) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("It does not make sense to assign a value to null, it can only be assigned");
     }
 }
