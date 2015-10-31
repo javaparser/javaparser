@@ -96,30 +96,33 @@ public class ReferenceTypeUsageTest {
         assertEquals(false, listOfStrings.isTypeVariable());
     }
 
-/*    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testAsReferenceTypeUsage() {
-        arrayOfBooleans.asReferenceTypeUsage();
+        assertTrue(object == object.asReferenceTypeUsage());
+        assertTrue(string == string.asReferenceTypeUsage());
+        assertTrue(listOfA == listOfA.asReferenceTypeUsage());
+        assertTrue(listOfStrings == listOfStrings.asReferenceTypeUsage());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsTypeParameter() {
-        arrayOfBooleans.asTypeParameter();
+        object.asTypeParameter();
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void testAsArrayTypeUsage() {
-        assertTrue(arrayOfBooleans == arrayOfBooleans.asArrayTypeUsage());
-        assertTrue(arrayOfStrings == arrayOfStrings.asArrayTypeUsage());
-        assertTrue(arrayOfListOfA == arrayOfListOfA.asArrayTypeUsage());
+        object.asArrayTypeUsage();
     }
 
     @Test
     public void testAsDescribe() {
-        assertEquals("boolean[]", arrayOfBooleans.describe());
-        assertEquals("java.lang.String[]", arrayOfStrings.describe());
+        assertEquals("java.lang.Object", object.describe());
+        assertEquals("java.lang.String", string.describe());
+        assertEquals("java.util.List<A>", listOfA.describe());
+        assertEquals("java.util.List<java.lang.String>", listOfStrings.describe());
     }
 
-    @Test
+    /*@Test
     public void testReplaceParam() {
         assertTrue(arrayOfBooleans == arrayOfBooleans.replaceParam("A", object));
         assertTrue(arrayOfStrings == arrayOfStrings.replaceParam("A", object));
