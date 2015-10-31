@@ -1,12 +1,9 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A class declaration.

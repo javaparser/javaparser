@@ -152,7 +152,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+    public boolean canBeAssignedTo(TypeDeclaration other) {
         // TODO consider generic types
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
@@ -160,7 +160,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
         if (this.wrappedNode.getExtends() != null){
             for (ClassOrInterfaceType type : wrappedNode.getExtends()){
                 TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
-                if (ancestor.canBeAssignedTo(other, typeSolver)) {
+                if (ancestor.canBeAssignedTo(other)) {
                     return true;
                 }
             }
@@ -169,7 +169,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
         if (this.wrappedNode.getImplements() != null){
             for (ClassOrInterfaceType type : wrappedNode.getImplements()){
                 TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
-                if (ancestor.canBeAssignedTo(other, typeSolver)) {
+                if (ancestor.canBeAssignedTo(other)) {
                     return true;
                 }
             }

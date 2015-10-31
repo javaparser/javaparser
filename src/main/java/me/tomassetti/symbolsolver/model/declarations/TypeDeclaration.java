@@ -31,7 +31,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     boolean isAssignableBy(TypeUsage typeUsage);
 
-    default boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+    default boolean canBeAssignedTo(TypeDeclaration other) {
         return other.isAssignableBy(this);
     }
 

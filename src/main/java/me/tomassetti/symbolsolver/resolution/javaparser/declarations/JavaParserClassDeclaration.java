@@ -195,14 +195,14 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+    public boolean canBeAssignedTo(TypeDeclaration other) {
         // TODO consider generic types
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
         ClassDeclaration superclass = getSuperClass(typeSolver);
         if (superclass != null) {
-            if (superclass.canBeAssignedTo(other, typeSolver)) {
+            if (superclass.canBeAssignedTo(other)) {
                 return true;
             }
         }
@@ -210,7 +210,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         if (this.wrappedNode.getImplements() != null){
             for (ClassOrInterfaceType type : wrappedNode.getImplements()){
                 TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
-                if (ancestor.canBeAssignedTo(other, typeSolver)) {
+                if (ancestor.canBeAssignedTo(other)) {
                     return true;
                 }
             }

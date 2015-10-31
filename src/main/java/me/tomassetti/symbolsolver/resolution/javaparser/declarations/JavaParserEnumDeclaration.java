@@ -67,7 +67,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+    public boolean canBeAssignedTo(TypeDeclaration other) {
         // Enums cannot be extended
         if (other.getQualifiedName().equals(this.getQualifiedName())) {
             return true;

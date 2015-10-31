@@ -126,7 +126,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
+    public boolean canBeAssignedTo(TypeDeclaration other) {
         if (other instanceof LambdaArgumentTypeUsagePlaceholder) {
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
@@ -135,12 +135,12 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
             return true;
         }
         if (this.clazz.getSuperclass() != null) {
-            if (new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)){
                 return true;
             }
         }
         for (Class interfaze : clazz.getInterfaces()){
-            if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other, typeSolver)){
+            if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other)){
                 return true;
             }
         }
@@ -172,7 +172,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
         }
         if (typeUsage instanceof ReferenceTypeUsage){
             ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage)typeUsage;
-            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this, typeSolver);
+            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this);
         }
 
         return false;
