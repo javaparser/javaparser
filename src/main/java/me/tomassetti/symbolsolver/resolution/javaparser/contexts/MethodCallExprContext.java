@@ -17,9 +17,6 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by federico on 31/07/15.
- */
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
     public MethodCallExprContext(MethodCallExpr wrappedNode, TypeSolver typeSolver) {
@@ -28,7 +25,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
-        if (wrappedNode.getTypeArgs() != null) {
+        if (!wrappedNode.getTypeArgs().isEmpty()) {
             throw new UnsupportedOperationException(name);
         }
         TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
