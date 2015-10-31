@@ -15,9 +15,6 @@ import java.util.stream.Collectors;
 
 public class ReferenceTypeUsage implements TypeUsage {
 
-    //public static final ReferenceTypeUsage OBJECT = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class));
-    //public static final ReferenceTypeUsage STRING = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class));
-
     private TypeDeclaration typeDeclaration;
     private List<TypeUsage> typeParameters;
     private TypeSolver typeSolver;

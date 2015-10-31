@@ -1,7 +1,5 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
-
 public class ArrayTypeUsage implements TypeUsage {
 
     @Override

@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.github.javaparser.ast.type.WildcardType;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 public class WildcardUsage implements TypeUsage {
 

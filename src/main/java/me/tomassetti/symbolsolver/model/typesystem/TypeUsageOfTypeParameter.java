@@ -1,11 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.resolution.Context;
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
-
-import java.util.List;
-import java.util.Optional;
 
 public class TypeUsageOfTypeParameter implements TypeUsage {
 

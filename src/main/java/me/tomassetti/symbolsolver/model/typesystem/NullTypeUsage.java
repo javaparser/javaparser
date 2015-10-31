@@ -7,7 +7,6 @@ public class NullTypeUsage implements TypeUsage {
 
     public static final NullTypeUsage INSTANCE = new NullTypeUsage();
 
-    // Prevent instantiation
     private NullTypeUsage() {
 
     }

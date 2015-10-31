@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 public class LambdaTypeUsagePlaceholder implements TypeUsage {
