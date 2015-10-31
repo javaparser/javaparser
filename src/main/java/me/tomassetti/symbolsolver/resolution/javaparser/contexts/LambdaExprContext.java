@@ -5,7 +5,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;

@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.Context;
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;

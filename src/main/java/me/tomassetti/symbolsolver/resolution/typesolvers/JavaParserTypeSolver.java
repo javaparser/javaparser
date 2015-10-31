@@ -4,7 +4,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 
-import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;

@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.model.typesystem;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 

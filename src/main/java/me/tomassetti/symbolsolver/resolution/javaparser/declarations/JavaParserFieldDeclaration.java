@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;

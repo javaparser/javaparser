@@ -8,7 +8,7 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
-import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 

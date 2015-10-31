@@ -5,6 +5,7 @@ import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.typesystem.*;
 

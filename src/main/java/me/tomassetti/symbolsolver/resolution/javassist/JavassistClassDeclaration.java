@@ -10,7 +10,7 @@ import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.resolution.javassist.contexts.JavassistMethodContext;
-import me.tomassetti.symbolsolver.model.typesystem.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;

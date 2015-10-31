@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 
 import com.github.javaparser.ast.body.Parameter;
-import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 

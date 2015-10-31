@@ -18,6 +18,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 
 
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 import java.io.File;
 import java.io.IOException;

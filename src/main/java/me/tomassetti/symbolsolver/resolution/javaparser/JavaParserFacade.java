@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver;
+package me.tomassetti.symbolsolver.resolution.javaparser;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
@@ -16,8 +16,6 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.*;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 
 
 import java.util.*;

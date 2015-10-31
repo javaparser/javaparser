@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.resolution.javaparser.contexts;
 
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import me.tomassetti.symbolsolver.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.resolution.*;

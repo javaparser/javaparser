@@ -1,5 +1,6 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.resolution.javaparser;
 
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
