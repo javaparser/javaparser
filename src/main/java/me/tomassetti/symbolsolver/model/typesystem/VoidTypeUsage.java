@@ -1,12 +1,5 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-
-import java.util.Collections;
-import java.util.List;
-
 public class VoidTypeUsage implements TypeUsage {
     public static final TypeUsage INSTANCE = new VoidTypeUsage();
 
@@ -21,5 +14,10 @@ public class VoidTypeUsage implements TypeUsage {
     @Override
     public boolean isAssignableBy(TypeUsage other) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isVoid() {
+        return true;
     }
 }
