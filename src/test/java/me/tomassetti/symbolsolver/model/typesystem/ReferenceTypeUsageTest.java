@@ -192,4 +192,146 @@ public class ReferenceTypeUsageTest {
         assertFalse(linkedListOfString.getAllAncestors().contains(listOfA));
     }
 
+    class Foo {
+
+    }
+
+    class Bar extends Foo {
+
+    }
+
+    class Bazzer<A, B, C> {
+
+    }
+
+    class MoreBazzing<A, B> extends Bazzer<B, String, A> {
+
+    }
+
+    @Test
+    public void testGetAllAncestorsConsideringGenericsCases() {
+        ReferenceTypeUsage foo = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
+        ReferenceTypeUsage bar = new ReferenceTypeUsage(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
+
+        //YES MoreBazzing<Foo, Bar> e1 = new MoreBazzing<Foo, Bar>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                    new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                    ImmutableList.of(foo, bar), typeSolver)
+                .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(foo, bar), typeSolver))
+        );
+
+        //YES MoreBazzing<? extends Foo, Bar> e2 = new MoreBazzing<Foo, Bar>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                        ImmutableList.of(WildcardUsage.extendsBound(foo), bar), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(foo, bar), typeSolver))
+        );
+
+        //YES MoreBazzing<Foo, ? extends Bar> e3 = new MoreBazzing<Foo, Bar>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                        ImmutableList.of(foo, WildcardUsage.extendsBound(bar)), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(foo, bar), typeSolver))
+        );
+
+        //YES MoreBazzing<? extends Foo, ? extends Foo> e4 = new MoreBazzing<Foo, Bar>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                        ImmutableList.of(WildcardUsage.extendsBound(foo), WildcardUsage.extendsBound(foo)), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(foo, bar), typeSolver))
+        );
+
+        //YES MoreBazzing<? extends Foo, ? extends Foo> e5 = new MoreBazzing<Bar, Bar>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                        ImmutableList.of(WildcardUsage.extendsBound(foo), WildcardUsage.extendsBound(foo)), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(bar, bar), typeSolver))
+        );
+
+        //YES Bazzer<Object, String, String> e6 = new MoreBazzing<String, Object>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(Bazzer.class, typeSolver),
+                        ImmutableList.of(object, string, string), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(string, object), typeSolver))
+        );
+
+        //YES Bazzer<String,String,String> e7 = new MoreBazzing<String, String>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(Bazzer.class, typeSolver),
+                        ImmutableList.of(string, string, string), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(string, string), typeSolver))
+        );
+
+        //YES Bazzer<Bar,String,Foo> e8 = new MoreBazzing<Foo, Bar>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(Bazzer.class, typeSolver),
+                        ImmutableList.of(bar, string, foo), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(foo, bar), typeSolver))
+        );
+
+        //YES Bazzer<Foo,String,Bar> e9 = new MoreBazzing<Bar, Foo>();
+        assertEquals(true,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(Bazzer.class, typeSolver),
+                        ImmutableList.of(foo, string, bar), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(bar, foo), typeSolver))
+        );
+
+        //NO Bazzer<Bar,String,Foo> n1 = new MoreBazzing<Bar, Foo>();
+        assertEquals(false,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(Bazzer.class, typeSolver),
+                        ImmutableList.of(bar,string,foo), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(bar, foo), typeSolver))
+        );
+
+        //NO Bazzer<Bar,String,Bar> n2 = new MoreBazzing<Bar, Foo>();
+        assertEquals(false,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(Bazzer.class, typeSolver),
+                        ImmutableList.of(bar, string, foo), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(bar, foo), typeSolver))
+        );
+
+        //NO Bazzer<Foo,Object,Bar> n3 = new MoreBazzing<Bar, Foo>();
+        assertEquals(false,
+                new ReferenceTypeUsage(
+                        new ReflectionClassDeclaration(Bazzer.class, typeSolver),
+                        ImmutableList.of(foo, object, bar), typeSolver)
+                        .isAssignableBy(new ReferenceTypeUsage(
+                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                                ImmutableList.of(bar, foo), typeSolver))
+        );
+    }
+
 }
