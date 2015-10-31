@@ -22,6 +22,10 @@ public class ReferenceTypeUsageTest {
     private ArrayTypeUsage arrayOfStrings;
     private ReferenceTypeUsage listOfA;
     private ReferenceTypeUsage listOfStrings;
+    private ReferenceTypeUsage linkedListOfString;
+    private ReferenceTypeUsage collectionOfString;
+    private ReferenceTypeUsage listOfWildcardExtendsString;
+    private ReferenceTypeUsage listOfWildcardSuperString;
     private ReferenceTypeUsage object;
     private ReferenceTypeUsage string;
     private TypeSolver typeSolver;
@@ -39,6 +43,9 @@ public class ReferenceTypeUsageTest {
         listOfStrings = new ReferenceTypeUsage(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
+        /*listOfWildcardExtendingString = new ReferenceTypeUsage(
+                new ReflectionInterfaceDeclaration(List.class, typeSolver),
+                ImmutableList.of(new WildcardUsage()new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);*/
     }
 
     @Test
@@ -123,53 +130,50 @@ public class ReferenceTypeUsageTest {
         assertEquals("java.util.List<java.lang.String>", listOfStrings.describe());
     }
 
-    /*@Test
+    @Test
     public void testReplaceParam() {
-        assertTrue(arrayOfBooleans == arrayOfBooleans.replaceParam("A", object));
-        assertTrue(arrayOfStrings == arrayOfStrings.replaceParam("A", object));
-        assertTrue(arrayOfListOfStrings == arrayOfListOfStrings.replaceParam("A", object));
-        ArrayTypeUsage arrayOfListOfObjects = new ArrayTypeUsage(new ReferenceTypeUsage(
-                new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(object), typeSolver));
-        assertEquals(true, arrayOfListOfA.replaceParam("A", object).isArray());
-        assertEquals(ImmutableList.of(object),
-                arrayOfListOfA.replaceParam("A", object).asArrayTypeUsage().getComponentType()
-                        .asReferenceTypeUsage().parameters());
-        assertEquals(new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                arrayOfListOfA.replaceParam("A", object).asArrayTypeUsage().getComponentType()
-                        .asReferenceTypeUsage().getTypeDeclaration());
-        assertEquals(new ReferenceTypeUsage(
-                new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(object), typeSolver),
-                arrayOfListOfA.replaceParam("A", object).asArrayTypeUsage().getComponentType());
-        assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceParam("A", object));
-        assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceParam("A", string));
-        assertTrue(arrayOfListOfA == arrayOfListOfA.replaceParam("B", object));
+        assertTrue(object == object.replaceParam("A", object));
+        assertTrue(string == string.replaceParam("A", object));
+        assertTrue(listOfStrings == listOfStrings.replaceParam("A", object));
+        assertEquals(listOfStrings, listOfA.replaceParam("A", string));
     }
 
     @Test
     public void testIsAssignableBy() {
-        assertEquals(false, arrayOfBooleans.isAssignableBy(object));
-        assertEquals(false, arrayOfBooleans.isAssignableBy(string));
-        assertEquals(false, arrayOfBooleans.isAssignableBy(PrimitiveTypeUsage.BOOLEAN));
-        assertEquals(false, arrayOfBooleans.isAssignableBy(VoidTypeUsage.INSTANCE));
+        assertEquals(true, object.isAssignableBy(string));
+        assertEquals(false, string.isAssignableBy(object));
+        assertEquals(false, listOfStrings.isAssignableBy(listOfA));
+        assertEquals(false, listOfA.isAssignableBy(listOfStrings));
 
-        assertEquals(true, arrayOfBooleans.isAssignableBy(arrayOfBooleans));
-        assertEquals(false, arrayOfBooleans.isAssignableBy(arrayOfStrings));
-        assertEquals(false, arrayOfBooleans.isAssignableBy(arrayOfListOfA));
-        assertEquals(false, arrayOfBooleans.isAssignableBy(arrayOfListOfStrings));
-        assertEquals(false, arrayOfStrings.isAssignableBy(arrayOfBooleans));
-        assertEquals(true, arrayOfStrings.isAssignableBy(arrayOfStrings));
-        assertEquals(false, arrayOfStrings.isAssignableBy(arrayOfListOfA));
-        assertEquals(false, arrayOfStrings.isAssignableBy(arrayOfListOfStrings));
-        assertEquals(false, arrayOfListOfA.isAssignableBy(arrayOfBooleans));
-        assertEquals(false, arrayOfListOfA.isAssignableBy(arrayOfStrings));
-        assertEquals(true, arrayOfListOfA.isAssignableBy(arrayOfListOfA));
-        assertEquals(false, arrayOfListOfA.isAssignableBy(arrayOfListOfStrings));
-        assertEquals(false, arrayOfListOfStrings.isAssignableBy(arrayOfBooleans));
-        assertEquals(false, arrayOfListOfStrings.isAssignableBy(arrayOfStrings));
-        assertEquals(false, arrayOfListOfStrings.isAssignableBy(arrayOfListOfA));
-        assertEquals(true, arrayOfListOfStrings.isAssignableBy(arrayOfListOfStrings));
-    }*/
+        assertEquals(false, object.isAssignableBy(VoidTypeUsage.INSTANCE));
+        assertEquals(false, string.isAssignableBy(VoidTypeUsage.INSTANCE));
+        assertEquals(false, listOfStrings.isAssignableBy(VoidTypeUsage.INSTANCE));
+        assertEquals(false, listOfA.isAssignableBy(VoidTypeUsage.INSTANCE));
+
+        assertEquals(true, object.isAssignableBy(NullTypeUsage.INSTANCE));
+        assertEquals(true, string.isAssignableBy(NullTypeUsage.INSTANCE));
+        assertEquals(true, listOfStrings.isAssignableBy(NullTypeUsage.INSTANCE));
+        assertEquals(true, listOfA.isAssignableBy(NullTypeUsage.INSTANCE));
+
+        assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
+        assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
+        assertEquals(true,  listOfWildcardExtendsString.isAssignableBy(listOfStrings));
+        assertEquals(false, listOfWildcardExtendsString.isAssignableBy(listOfWildcardSuperString));
+        assertEquals(true,  listOfWildcardSuperString.isAssignableBy(listOfStrings));
+        assertEquals(false, listOfWildcardSuperString.isAssignableBy(listOfWildcardExtendsString));
+
+        assertEquals(true, collectionOfString.isAssignableBy(collectionOfString));
+        assertEquals(true, collectionOfString.isAssignableBy(listOfStrings));
+        assertEquals(true, collectionOfString.isAssignableBy(linkedListOfString));
+
+        assertEquals(false, listOfStrings.isAssignableBy(collectionOfString));
+        assertEquals(true, listOfStrings.isAssignableBy(listOfStrings));
+        assertEquals(true, listOfStrings.isAssignableBy(linkedListOfString));
+
+        assertEquals(false, linkedListOfString.isAssignableBy(collectionOfString));
+        assertEquals(false, linkedListOfString.isAssignableBy(listOfStrings));
+        assertEquals(true, linkedListOfString.isAssignableBy(linkedListOfString));
+
+    }
 
 }
