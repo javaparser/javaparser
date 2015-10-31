@@ -212,6 +212,7 @@ public class ReferenceTypeUsageTest {
     public void testGetAllAncestorsConsideringGenericsCases() {
         ReferenceTypeUsage foo = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
         ReferenceTypeUsage bar = new ReferenceTypeUsage(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
+        ReferenceTypeUsage left, right;
 
         //YES MoreBazzing<Foo, Bar> e1 = new MoreBazzing<Foo, Bar>();
         assertEquals(true,
@@ -254,24 +255,22 @@ public class ReferenceTypeUsageTest {
         );
 
         //YES MoreBazzing<? extends Foo, ? extends Foo> e5 = new MoreBazzing<Bar, Bar>();
-        assertEquals(true,
-                new ReferenceTypeUsage(
-                        new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
-                        ImmutableList.of(WildcardUsage.extendsBound(foo), WildcardUsage.extendsBound(foo)), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
-                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
-                                ImmutableList.of(bar, bar), typeSolver))
-        );
+        left = new ReferenceTypeUsage(
+                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                ImmutableList.of(WildcardUsage.extendsBound(foo), WildcardUsage.extendsBound(foo)), typeSolver);
+        right = new ReferenceTypeUsage(
+                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                ImmutableList.of(bar, bar), typeSolver);
+        assertEquals(true, left.isAssignableBy(right));
 
         //YES Bazzer<Object, String, String> e6 = new MoreBazzing<String, Object>();
-        assertEquals(true,
-                new ReferenceTypeUsage(
-                        new ReflectionClassDeclaration(Bazzer.class, typeSolver),
-                        ImmutableList.of(object, string, string), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
-                                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
-                                ImmutableList.of(string, object), typeSolver))
-        );
+        left = new ReferenceTypeUsage(
+                new ReflectionClassDeclaration(Bazzer.class, typeSolver),
+                ImmutableList.of(object, string, string), typeSolver);
+        right = new ReferenceTypeUsage(
+                new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                ImmutableList.of(string, object), typeSolver);
+        assertEquals(true, left.isAssignableBy(right));
 
         //YES Bazzer<String,String,String> e7 = new MoreBazzing<String, String>();
         assertEquals(true,

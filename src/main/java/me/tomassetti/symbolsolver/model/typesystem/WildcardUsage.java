@@ -63,6 +63,21 @@ public class WildcardUsage implements TypeUsage {
         }
     }
 
+    public boolean isSuper() {
+        return type == BoundType.SUPER;
+    }
+
+    public boolean isExtends() {
+        return type == BoundType.EXTENDS;
+    }
+
+    public ReferenceTypeUsage getBoundedType() {
+        if (boundedType == null) {
+            throw new IllegalStateException();
+        }
+        return boundedType;
+    }
+
     @Override
     public boolean isAssignableBy(TypeUsage other) {
         throw new UnsupportedOperationException();

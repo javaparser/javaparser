@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+import com.github.javaparser.ast.type.WildcardType;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -8,6 +9,7 @@ import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserT
 import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -181,8 +183,11 @@ public class ReferenceTypeUsage implements TypeUsage {
     }
 
     public List<ReferenceTypeUsage> getAllAncestors() {
+        List<ReferenceTypeUsage> ancestors = typeDeclaration.getAllAncestors();
+
+        ancestors = ancestors.stream().map((a)->replaceTypeParams(a).asReferenceTypeUsage()).collect(Collectors.toList());
         // TODO replace type parameters
-        return typeDeclaration.getAllAncestors();
+        return ancestors;
     }
 
     public TypeUsage replaceTypeParams(TypeUsage typeUsage){
@@ -268,11 +273,11 @@ public class ReferenceTypeUsage implements TypeUsage {
             return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
         } else if (other instanceof ReferenceTypeUsage) {
             ReferenceTypeUsage otherRef = (ReferenceTypeUsage) other;
-            if (this.equals(otherRef)) {
+            if (compareConsideringTypeParameters(otherRef)) {
                 return true;
             }
             for (ReferenceTypeUsage otherAncestor : otherRef.getAllAncestors()) {
-                if (otherAncestor.equals(this)) {
+                if (compareConsideringTypeParameters(otherAncestor)) {
                     return true;
                 }
             }
@@ -283,6 +288,37 @@ public class ReferenceTypeUsage implements TypeUsage {
         } else {
             return false;
         }
+    }
+
+    private boolean compareConsideringTypeParameters(ReferenceTypeUsage other) {
+        if (other.equals(this)) {
+            return true;
+        }
+        if (this.getQualifiedName().equals(other.getQualifiedName())){
+            if (this.parameters().size() != other.parameters().size()) {
+                throw new IllegalStateException();
+            }
+            for (int i=0;i<parameters().size();i++) {
+                TypeUsage thisParam = parameters().get(i);
+                TypeUsage otherParam = other.parameters().get(i);
+                if (!thisParam.equals(otherParam)) {
+                    if (thisParam instanceof WildcardUsage) {
+                        WildcardUsage thisParamAsWildcard = (WildcardUsage)thisParam;
+                        if (thisParamAsWildcard.isSuper() && thisParamAsWildcard.getBoundedType().equals(otherParam)) {
+                            // ok
+                        } else if (thisParamAsWildcard.isExtends() && thisParamAsWildcard.getBoundedType().isAssignableBy(otherParam)) {
+                            // ok
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     private boolean isCorrespondingBoxingType(String typeName) {

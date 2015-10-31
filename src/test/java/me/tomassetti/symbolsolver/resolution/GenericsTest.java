@@ -271,7 +271,8 @@ public class GenericsTest extends AbstractTest{
         MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
         MethodCallExpr call = Navigator.findMethodCall(method, "accept");
 
-        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(call);
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
+        TypeUsage typeUsage = javaParserFacade.getType(call);
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.lang.Boolean", typeUsage.describe());

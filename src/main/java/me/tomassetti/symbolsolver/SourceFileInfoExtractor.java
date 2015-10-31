@@ -12,6 +12,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 
@@ -78,7 +79,7 @@ public class SourceFileInfoExtractor {
         TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
         if (typeDeclaration.isClass()) {
             out.println("\n[ Class "+ typeDeclaration.getQualifiedName() + " ]");
-            for (TypeDeclaration sc : typeDeclaration.asClass().getAllSuperClasses(typeSolver)) {
+            for (ReferenceTypeUsage sc : typeDeclaration.asClass().getAllSuperClasses(typeSolver)) {
                 out.println("  superclass: " + sc.getQualifiedName());
             }
             for (TypeDeclaration sc : typeDeclaration.asClass().getAllInterfaces(typeSolver)) {

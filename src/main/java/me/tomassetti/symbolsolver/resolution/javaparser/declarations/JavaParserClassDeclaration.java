@@ -98,15 +98,15 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public ClassDeclaration getSuperClass(TypeSolver typeSolver) {
+    public ReferenceTypeUsage getSuperClass(TypeSolver typeSolver) {
         if (wrappedNode.getExtends() == null || wrappedNode.getExtends().isEmpty()) {
-            return typeSolver.getRoot().solveType("java.lang.Object").asType().asClass();
+            return new ReferenceTypeUsage(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
         } else {
             SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
             }
-            return ref.getCorrespondingDeclaration().asClass();
+            return new ReferenceTypeUsage(ref.getCorrespondingDeclaration().asClass(), typeSolver);
         }
     }
 
@@ -199,7 +199,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
-        ClassDeclaration superclass = getSuperClass(typeSolver);
+        ClassDeclaration superclass = (ClassDeclaration) getSuperClass(typeSolver).getTypeDeclaration();
         if (superclass != null) {
             if (superclass.canBeAssignedTo(other)) {
                 return true;
@@ -236,7 +236,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             }
         }
 
-        ClassDeclaration superclass = this.getSuperClass(typeSolver);
+        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass(typeSolver).getTypeDeclaration();
         if (superclass != null) {
             return superclass.getField(name);
         } else {
@@ -265,7 +265,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             }
         }
 
-        ClassDeclaration superclass = this.getSuperClass(typeSolver);
+        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass(typeSolver).getTypeDeclaration();
         if (superclass != null) {
             return superclass.hasField(name);
         } else {
@@ -329,9 +329,9 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
-        ClassDeclaration superclass = getSuperClass(typeSolver);
+        ReferenceTypeUsage superclass = getSuperClass(typeSolver);
         if (superclass != null) {
-            ancestors.add(new ReferenceTypeUsage(superclass, typeSolver));
+            ancestors.add(superclass);
             ancestors.addAll(superclass.getAllAncestors());
         }
         if (wrappedNode.getImplements() != null) {
