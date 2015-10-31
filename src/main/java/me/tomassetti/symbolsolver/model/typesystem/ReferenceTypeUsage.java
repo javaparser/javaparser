@@ -262,7 +262,7 @@ public class ReferenceTypeUsage implements TypeUsage {
                 return isCorrespondingBoxingType(other.describe());
             }
         }
-        if (other instanceof LambdaTypeUsagePlaceholder) {
+        if (other instanceof LambdaArgumentTypeUsagePlaceholder) {
             return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
         } else if (other instanceof ReferenceTypeUsage) {
             ReferenceTypeUsage otherTUOTD = (ReferenceTypeUsage) other;

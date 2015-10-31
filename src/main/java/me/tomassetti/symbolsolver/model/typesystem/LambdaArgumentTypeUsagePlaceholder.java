@@ -3,9 +3,17 @@ package me.tomassetti.symbolsolver.model.typesystem;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
-public class LambdaTypeUsagePlaceholder implements TypeUsage {
+/**
+ * Placeholder used to represent a lambda argument type while it is being
+ * calculated.
+ */
+public class LambdaArgumentTypeUsagePlaceholder implements TypeUsage {
 
-    public LambdaTypeUsagePlaceholder(int pos) {
+    private int pos;
+    private SymbolReference<MethodDeclaration> method;
+
+    public LambdaArgumentTypeUsagePlaceholder(int pos) {
+        this.pos = pos;
     }
 
     @Override
@@ -34,7 +42,7 @@ public class LambdaTypeUsagePlaceholder implements TypeUsage {
     }
 
     public void setMethod(SymbolReference<MethodDeclaration> method) {
-
+        this.method = method;
     }
 
     @Override

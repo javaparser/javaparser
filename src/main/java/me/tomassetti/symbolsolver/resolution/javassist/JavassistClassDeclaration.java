@@ -10,8 +10,8 @@ import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.resolution.javassist.contexts.JavassistMethodContext;
-import me.tomassetti.symbolsolver.model.typesystem.LambdaTypeUsagePlaceholder;
-import me.tomassetti.symbolsolver.model.typesystem.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
@@ -243,7 +243,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
             return true;
         }
 
-        if (typeUsage instanceof LambdaTypeUsagePlaceholder){
+        if (typeUsage instanceof LambdaArgumentTypeUsagePlaceholder){
             if (ctClass.getName().equals(Predicate.class.getCanonicalName()) || ctClass.getName().equals(Function.class.getCanonicalName())){
                 return true;
             } else {

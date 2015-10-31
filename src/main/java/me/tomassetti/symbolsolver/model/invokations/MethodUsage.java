@@ -1,5 +1,6 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.invokations;
 
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -9,19 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MethodUsage {
-    @Override
-    public String toString() {
-        return "MethodUsage{" +
-                "declaration=" + declaration +
-                ", paramTypes=" + paramTypes +
-                '}';
-    }
-
-    public MethodDeclaration getDeclaration() {
-        return declaration;
-    }
-
     private MethodDeclaration declaration;
+    private List<TypeUsage> paramTypes = new ArrayList<>();
+    private TypeUsage returnType;
 
     public MethodUsage(MethodDeclaration declaration, TypeSolver typeSolver) {
         this.declaration = declaration;
@@ -37,8 +28,30 @@ public class MethodUsage {
         this.returnType = returnType;
     }
 
-    private List<TypeUsage> paramTypes = new ArrayList<>();
-    private TypeUsage returnType;
+    private static TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
+        if (typeToBeExamined.isTypeVariable()){
+            if (typeToBeExamined.describe().equals(name)) {
+                return newValue;
+            } else {
+                return typeToBeExamined;
+            }
+        }
+        int i = 0;
+
+        return typeToBeExamined;
+    }
+
+    @Override
+    public String toString() {
+        return "MethodUsage{" +
+                "declaration=" + declaration +
+                ", paramTypes=" + paramTypes +
+                '}';
+    }
+
+    public MethodDeclaration getDeclaration() {
+        return declaration;
+    }
 
     public String getName() {
         return declaration.getName();
@@ -93,18 +106,5 @@ public class MethodUsage {
         }
         res = res.replaceReturnType(replaceNameParam(name, typeUsage, res.returnType));
         return res;
-    }
-
-    private static TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
-        if (typeToBeExamined.isTypeVariable()){
-            if (typeToBeExamined.describe().equals(name)) {
-                return newValue;
-            } else {
-                return typeToBeExamined;
-            }
-        }
-        int i = 0;
-        
-        return typeToBeExamined;
     }
 }

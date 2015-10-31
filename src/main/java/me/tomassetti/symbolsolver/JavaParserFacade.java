@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.ReferenceType;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -72,11 +73,11 @@ public class JavaParserFacade {
      */
     public SymbolReference<MethodDeclaration> solve(MethodCallExpr methodCallExpr) {
         List<TypeUsage> params = new LinkedList<>();
-        List<LambdaTypeUsagePlaceholder> placeholders = new LinkedList<>();
+        List<LambdaArgumentTypeUsagePlaceholder> placeholders = new LinkedList<>();
         int i = 0;
         for (Expression expression : methodCallExpr.getArgs()) {
             if (expression instanceof LambdaExpr) {
-                LambdaTypeUsagePlaceholder placeholder = new LambdaTypeUsagePlaceholder(i);
+                LambdaArgumentTypeUsagePlaceholder placeholder = new LambdaArgumentTypeUsagePlaceholder(i);
                 params.add(placeholder);
                 placeholders.add(placeholder);
             } else {
@@ -85,7 +86,7 @@ public class JavaParserFacade {
             i++;
         }
         SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName(), params, typeSolver);
-        for (LambdaTypeUsagePlaceholder placeholder : placeholders) {
+        for (LambdaArgumentTypeUsagePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
         return res;

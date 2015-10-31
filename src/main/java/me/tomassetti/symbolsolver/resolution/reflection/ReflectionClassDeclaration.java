@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.resolution.reflection;
 
 import com.github.javaparser.ast.Node;
 
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
@@ -192,7 +193,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
 
     @Override
     public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
-        if (other instanceof LambdaTypeUsagePlaceholder) {
+        if (other instanceof LambdaArgumentTypeUsagePlaceholder) {
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
         }
@@ -218,7 +219,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
         if (typeUsage instanceof NullTypeUsage) {
             return true;
         }
-        if (typeUsage instanceof LambdaTypeUsagePlaceholder) {
+        if (typeUsage instanceof LambdaArgumentTypeUsagePlaceholder) {
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
         }
