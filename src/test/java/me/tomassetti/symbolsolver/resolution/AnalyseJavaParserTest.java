@@ -95,7 +95,7 @@ public class AnalyseJavaParserTest {
     }
 
     @Test
-    public void parseCatchClaus() throws IOException, ParseException {
+    public void parseCatchClause() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/CatchClause");
     }
 

@@ -7,7 +7,9 @@ import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,10 +26,17 @@ public class MethodResolutionLogic {
         if (method.getNoParams() != paramTypes.size()) {
             return false;
         }
+        Map<String, TypeUsage> matchedParameters = new HashMap<>();
         for (int i=0; i<method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParam(i).getType(typeSolver);
             TypeUsage actualType = paramTypes.get(i);
             boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType);
+            if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
+                isAssignableWithoutSubstitution = isAssignableMatchTypeParameters(
+                        expectedType.asReferenceTypeUsage(),
+                        actualType.asReferenceTypeUsage(),
+                        matchedParameters);
+            }
             if (!isAssignableWithoutSubstitution) {
                 for (TypeParameter tp : method.getTypeParameters()) {
                     expectedType = replaceTypeParam(expectedType, tp, typeSolver);
@@ -36,6 +45,54 @@ public class MethodResolutionLogic {
                 if (!expectedType.isAssignableBy(actualType)) {
                     return false;
                 }
+            }
+        }
+        return true;
+    }
+
+    private static boolean isAssignableMatchTypeParameters(ReferenceTypeUsage expected, ReferenceTypeUsage actual,
+                                                           Map<String, TypeUsage> matchedParameters) {
+        if (actual.getQualifiedName().equals(expected.getQualifiedName())) {
+            return isAssignableMatchTypeParametersMatchingQName(expected, actual, matchedParameters);
+        } else {
+            List<ReferenceTypeUsage> ancestors = actual.getAllAncestors();
+            for (ReferenceTypeUsage ancestor : ancestors) {
+                if (isAssignableMatchTypeParametersMatchingQName(expected, ancestor, matchedParameters)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isAssignableMatchTypeParametersMatchingQName(ReferenceTypeUsage expected, ReferenceTypeUsage actual,
+                                                                         Map<String, TypeUsage> matchedParameters) {
+
+        if (!expected.getQualifiedName().equals(actual.getQualifiedName())) {
+            return false;
+        }
+        if (expected.parameters().size() != actual.parameters().size()) {
+            throw new UnsupportedOperationException();
+            //return true;
+        }
+        for (int i=0;i<expected.parameters().size();i++) {
+            TypeUsage expectedParam = expected.parameters().get(i);
+            TypeUsage actualParam = actual.parameters().get(i);
+            if (expectedParam.isTypeVariable()) {
+                String expectedParamName = expectedParam.asTypeParameter().getName();
+                if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
+                    if (matchedParameters.containsKey(expectedParamName)){
+                        throw new UnsupportedOperationException("We should check if they are compatible");
+                    } else {
+                        matchedParameters.put(expectedParamName, actualParam);
+                    }
+                }
+            } else if (expectedParam.isReferenceType()) {
+                if (!expectedParam.equals(actualParam)) {
+                    return false;
+                }
+            } else {
+                throw new UnsupportedOperationException();
             }
         }
         return true;

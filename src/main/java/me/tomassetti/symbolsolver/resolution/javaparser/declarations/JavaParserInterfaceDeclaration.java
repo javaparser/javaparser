@@ -201,7 +201,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
 
     @Override
     public String toString() {
-        return "JavaParserClassDeclaration{" +
+        return "JavaParserInterfaceDeclaration{" +
                 "wrappedNode=" + wrappedNode +
                 '}';
     }

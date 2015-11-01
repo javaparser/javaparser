@@ -17,14 +17,19 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.contexts.ClassOrInterfaceDeclarationContext;
+import me.tomassetti.symbolsolver.resolution.javaparser.contexts.MethodCallExprContext;
+import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -383,7 +388,39 @@ public class GenericsTest extends AbstractTest{
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
         MethodCallExpr returnStmtExpr = (MethodCallExpr)returnStmt.getExpr();
-        javaParserFacade.getType(returnStmtExpr.getScope());
+        MethodCallExpr call = (MethodCallExpr) returnStmtExpr.getScope();
+        TypeParameterUsage typeOfScope = (TypeParameterUsage)javaParserFacade.getType(call.getScope());
+
+        List<TypeUsage> params = new ArrayList<>();
+        if (call.getArgs() != null) {
+            for (Expression param : call.getArgs()) {
+                params.add(javaParserFacade.getType(param, false));
+            }
+        }
+        MethodCallExprContext context = (MethodCallExprContext) JavaParserFactory.getContext(call, typeSolver);
+        assertEquals(1, typeOfScope.asTypeParameter().getBounds(typeSolver).size());
+        TypeUsage bound = typeOfScope.asTypeParameter().getBounds(typeSolver).get(0).getType();
+        JavaParserClassDeclaration node = (JavaParserClassDeclaration) bound.asReferenceTypeUsage().getTypeDeclaration();
+        ClassOrInterfaceDeclarationContext ctx = (ClassOrInterfaceDeclarationContext) node.getContext();
+        List<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> candidateMethods = ctx.methodsByName("accept");
+        assertEquals(1, candidateMethods.size());
+        assertTrue(MethodResolutionLogic.isApplicable(candidateMethods.get(0), "accept", params, typeSolver));
+        SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> methodUsage = MethodResolutionLogic.findMostApplicable(candidateMethods, "accept", params, typeSolver);
+
+        assertTrue(methodUsage.isSolved());
+
+//        Optional<MethodUsage> methodUsage = ctx.solveMethodAsUsage("accept", params, typeSolver);
+
+            //Optional<MethodUsage> methodUsage = node.solveMethodAsUsage("accept", params, typeSolver, context, Collections.emptyList());
+//        Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(bound, "accept", params, typeSolver, context);
+//        Optional<MethodUsage> methodUsage = context.solveMethodAsUsage("accept", params, typeSolver);
+        //assertTrue(methodUsage.isPresent());
+
+//        MethodUsage ref = javaParserFacade.solveMethodAsUsage(call);
+//        TypeUsage type = javaParserFacade.getType(call);
+        //TypeUsage typeOfScope = javaParserFacade.getType(returnStmtExpr.getScope());
+//        MethodUsage methodUsage = javaParserFacade.solveMethodAsUsage(returnStmtExpr);
+//        javaParserFacade.getType(returnStmtExpr.getScope());
 
         //MethodUsage ref = javaParserFacade.solveMethodAsUsage( returnStmtExpr);
 //        TypeUsage typeUsage = javaParserFacade.getType(returnStmtExpr);

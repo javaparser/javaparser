@@ -32,6 +32,14 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public String toString() {
+        return "JavaParserMethodDeclaration{" +
+                "wrappedNode=" + wrappedNode +
+                ", typeSolver=" + typeSolver +
+                '}';
+    }
+
+    @Override
     public TypeDeclaration declaringType() {
         if (wrappedNode.getParentNode() instanceof ClassOrInterfaceDeclaration) {
             return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)wrappedNode.getParentNode(), typeSolver);
