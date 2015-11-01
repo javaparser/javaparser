@@ -255,6 +255,14 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
             ancestors.add(interfazeDecl);
             ancestors.addAll(interfazeDecl.getAllAncestors());
         }
+        for (int i=0;i<ancestors.size();i++){
+            if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
+                ancestors.remove(i);
+                i--;
+            }
+        }
+        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        ancestors.add(object);
         return ancestors;
     }
 

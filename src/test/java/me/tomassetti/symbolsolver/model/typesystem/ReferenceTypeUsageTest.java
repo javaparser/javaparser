@@ -333,4 +333,13 @@ public class ReferenceTypeUsageTest {
         );
     }
 
+    @Test
+    public void charSequenceIsAssignableToObject() {
+        TypeSolver typeSolver = new JreTypeSolver();
+        ReferenceTypeUsage charSequence = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(CharSequence.class, typeSolver), typeSolver);
+        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        assertEquals(false, charSequence.isAssignableBy(object));
+        assertEquals(true, object.isAssignableBy(charSequence));
+    }
+
 }

@@ -30,6 +30,14 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             ancestors.addAll(getSuperClass(typeSolver).getAllAncestors());
         }
         ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
+        for (int i=0;i<ancestors.size();i++){
+            if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
+                ancestors.remove(i);
+                i--;
+            }
+        }
+        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        ancestors.add(object);
         return ancestors;
     }
 

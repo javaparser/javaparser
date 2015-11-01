@@ -1,6 +1,5 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import com.github.javaparser.ast.type.WildcardType;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -9,7 +8,6 @@ import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserT
 import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -187,6 +185,15 @@ public class ReferenceTypeUsage implements TypeUsage {
 
         ancestors = ancestors.stream().map((a)->replaceTypeParams(a).asReferenceTypeUsage()).collect(Collectors.toList());
         // TODO replace type parameters
+
+        for (int i=0;i<ancestors.size();i++){
+            if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
+                ancestors.remove(i);
+                i--;
+            }
+        }
+        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        ancestors.add(object);
         return ancestors;
     }
 
