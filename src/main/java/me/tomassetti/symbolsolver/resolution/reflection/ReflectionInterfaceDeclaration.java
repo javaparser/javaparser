@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created by federico on 02/08/15.
@@ -123,6 +124,15 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
             }
 
         }
+        final List<TypeUsage> finalTypeParameterValues = typeParameterValues;
+        parameterTypes = parameterTypes.stream().map((pt)->{
+            int i=0;
+            for (TypeParameter tp : getTypeParameters()) {
+                pt = pt.replaceParam(tp.getName(), finalTypeParameterValues.get(i));
+                i++;
+            }
+            return pt;
+        }).collect(Collectors.toList());
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);
     }
 

@@ -15,6 +15,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.common.collect.ImmutableList;
+import javassist.compiler.ast.Expr;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
@@ -24,10 +25,12 @@ import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.contexts.ClassOrInterfaceDeclarationContext;
 import me.tomassetti.symbolsolver.resolution.javaparser.contexts.MethodCallExprContext;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.resolution.reflection.ReflectionMethodDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -391,13 +394,66 @@ public class GenericsTest extends AbstractTest{
     }
 
     @Test
+    public void genericCollectionWithWildcardsPrep() throws ParseException {
+        CompilationUnit cu = parseSample("GenericCollection");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        MethodCallExpr call = (MethodCallExpr) returnStmt.getExpr();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        List<TypeUsage> params = new ArrayList<>();
+        if (call.getArgs() != null) {
+            for (Expression param : call.getArgs()) {
+                params.add(javaParserFacade.getType(param, false));
+            }
+        }
+        Context context = JavaParserFactory.getContext(call, typeSolver);
+
+        ReferenceTypeUsage typeOfScope = javaParserFacade.getType(call.getScope()).asReferenceTypeUsage();
+        me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = typeOfScope.getTypeDeclaration();
+        List<TypeUsage> typeParameters = typeOfScope.parameters();
+
+        List<MethodUsage> methods = new ArrayList<>();
+        for (Method m : List.class.getMethods()) {
+            if (m.getName().equals("addAll") && !m.isBridge() && !m.isSynthetic()) {
+                me.tomassetti.symbolsolver.model.declarations.MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(m, typeSolver);
+                MethodUsage mu = new MethodUsage(methodDeclaration, typeSolver);
+                int i = 0;
+                for (TypeParameter tp : typeDeclaration.getTypeParameters()) {
+                    mu = mu.replaceNameParam(tp.getName(), typeParameters.get(i));
+                    i++;
+                }
+                methods.add(mu);
+            }
+
+        }
+
+        assertTrue(MethodResolutionLogic.isApplicable(methods.get(0), "addAll", params, typeSolver));
+        //Optional<MethodUsage> methodUsage = MethodResolutionLogic.findMostApplicableUsage(methods, "addAll", params, typeSolver);
+
+        //Optional<MethodUsage> methodUsage = typeDeclaration.solveMethodAsUsage("addAll", params, typeSolver, context, typeParameters);
+
+        //Optional<MethodUsage> methodUsage = context.solveMethodAsUsage("addAll", params, typeSolver);
+
+        //assertTrue(methodUsage.isPresent());
+
+    }
+
+    @Test
     public void genericCollectionWithWildcards() throws ParseException {
         CompilationUnit cu = parseSample("GenericCollection");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
 
-        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
+        TypeSolver typeSolver = new JreTypeSolver();
+        Expression returnStmtExpr = returnStmt.getExpr();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        TypeUsage typeUsage = javaParserFacade.getType(returnStmtExpr);
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("boolean", typeUsage.describe());

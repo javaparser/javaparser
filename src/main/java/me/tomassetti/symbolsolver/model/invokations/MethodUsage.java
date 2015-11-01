@@ -101,7 +101,8 @@ public class MethodUsage {
         MethodUsage res = this;
         for (int i = 0; i<paramTypes.size(); i++){
             TypeUsage originalParamType = paramTypes.get(i);
-            TypeUsage newParamType = replaceNameParam(name, typeUsage, originalParamType);
+            TypeUsage newParamType = originalParamType.replaceParam(name, typeUsage);
+            //TypeUsage newParamType = replaceNameParam(name, typeUsage, originalParamType);
             res = res.replaceParamType(i, newParamType);
         }
         res = res.replaceReturnType(replaceNameParam(name, typeUsage, res.returnType));

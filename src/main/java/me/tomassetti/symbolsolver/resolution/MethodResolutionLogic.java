@@ -127,7 +127,9 @@ public class MethodResolutionLogic {
             return false;
         }
         for (int i=0; i<method.getNoParams(); i++) {
-            if (!method.getParamType(i, typeSolver).isAssignableBy(paramTypes.get(i))){
+            TypeUsage expectedType = method.getParamType(i, typeSolver);
+            TypeUsage actualType = paramTypes.get(i);
+            if (!expectedType.isAssignableBy(actualType)){
                 return false;
             }
         }

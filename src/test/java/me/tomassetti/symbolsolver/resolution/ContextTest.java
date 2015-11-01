@@ -248,7 +248,8 @@ public class ContextTest {
         NameExpr refToT = Navigator.findNameExpression(method, "t");
 
         TypeSolver typeSolver = new JreTypeSolver();
-        TypeUsage ref = JavaParserFacade.get(typeSolver).getType(refToT);
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        TypeUsage ref = javaParserFacade.getType(refToT);
 
         assertEquals("java.lang.String", ref.describe());
     }
