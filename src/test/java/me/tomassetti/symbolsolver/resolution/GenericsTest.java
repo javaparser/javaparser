@@ -378,62 +378,23 @@ public class GenericsTest extends AbstractTest{
     }
 
     @Test
-    public void typeParamOnReturnTypePrep() throws ParseException {
+    public void typeParamOnReturnType() throws ParseException {
         CompilationUnit cu = parseSample("TypeParamOnReturnType");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
         MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
 
-        TypeSolver typeSolver = new JreTypeSolver();
-        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
 
-        MethodCallExpr returnStmtExpr = (MethodCallExpr)returnStmt.getExpr();
-        MethodCallExpr call = (MethodCallExpr) returnStmtExpr.getScope();
-        TypeParameterUsage typeOfScope = (TypeParameterUsage)javaParserFacade.getType(call.getScope());
-
-        List<TypeUsage> params = new ArrayList<>();
-        if (call.getArgs() != null) {
-            for (Expression param : call.getArgs()) {
-                params.add(javaParserFacade.getType(param, false));
-            }
-        }
-        MethodCallExprContext context = (MethodCallExprContext) JavaParserFactory.getContext(call, typeSolver);
-        assertEquals(1, typeOfScope.asTypeParameter().getBounds(typeSolver).size());
-        TypeUsage bound = typeOfScope.asTypeParameter().getBounds(typeSolver).get(0).getType();
-        JavaParserClassDeclaration node = (JavaParserClassDeclaration) bound.asReferenceTypeUsage().getTypeDeclaration();
-        ClassOrInterfaceDeclarationContext ctx = (ClassOrInterfaceDeclarationContext) node.getContext();
-        List<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> candidateMethods = ctx.methodsByName("accept");
-        assertEquals(1, candidateMethods.size());
-        assertTrue(MethodResolutionLogic.isApplicable(candidateMethods.get(0), "accept", params, typeSolver));
-        SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> methodUsage = MethodResolutionLogic.findMostApplicable(candidateMethods, "accept", params, typeSolver);
-
-        assertTrue(methodUsage.isSolved());
-
-//        Optional<MethodUsage> methodUsage = ctx.solveMethodAsUsage("accept", params, typeSolver);
-
-            //Optional<MethodUsage> methodUsage = node.solveMethodAsUsage("accept", params, typeSolver, context, Collections.emptyList());
-//        Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(bound, "accept", params, typeSolver, context);
-//        Optional<MethodUsage> methodUsage = context.solveMethodAsUsage("accept", params, typeSolver);
-        //assertTrue(methodUsage.isPresent());
-
-//        MethodUsage ref = javaParserFacade.solveMethodAsUsage(call);
-//        TypeUsage type = javaParserFacade.getType(call);
-        //TypeUsage typeOfScope = javaParserFacade.getType(returnStmtExpr.getScope());
-//        MethodUsage methodUsage = javaParserFacade.solveMethodAsUsage(returnStmtExpr);
-//        javaParserFacade.getType(returnStmtExpr.getScope());
-
-        //MethodUsage ref = javaParserFacade.solveMethodAsUsage( returnStmtExpr);
-//        TypeUsage typeUsage = javaParserFacade.getType(returnStmtExpr);
-
- //       assertEquals(false, typeUsage.isTypeVariable());
- //       assertEquals("boolean", typeUsage.describe());
+        assertEquals(false, typeUsage.isTypeVariable());
+        assertEquals("boolean", typeUsage.describe());
     }
 
     @Test
-    public void typeParamOnReturnType() throws ParseException {
-        CompilationUnit cu = parseSample("TypeParamOnReturnType");
-        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+    public void genericCollectionWithWildcards() throws ParseException {
+        CompilationUnit cu = parseSample("GenericCollection");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
 
         TypeUsage typeUsage = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr());
