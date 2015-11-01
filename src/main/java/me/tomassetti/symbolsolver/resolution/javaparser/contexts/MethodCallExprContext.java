@@ -13,6 +13,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 
 import java.util.List;
 import java.util.Optional;
@@ -128,7 +129,15 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope() != null) {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-            return typeOfScope.asReferenceTypeUsage().solveMethod(name, parameterTypes, typeSolver);
+            if (typeOfScope.isWildcard()) {
+                if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
+                    return typeOfScope.asWildcard().getBoundedType().asReferenceTypeUsage().solveMethod(name, parameterTypes, typeSolver);
+                } else {
+                    return new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver).solveMethod(name, parameterTypes, typeSolver);
+                }
+            } else {
+                return typeOfScope.asReferenceTypeUsage().solveMethod(name, parameterTypes, typeSolver);
+            }
         } else {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
             return typeOfScope.asReferenceTypeUsage().solveMethod(name, parameterTypes, typeSolver);

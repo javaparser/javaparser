@@ -1,0 +1,15 @@
+class Node {
+}
+
+class Comment extends Node {
+}
+
+class Foo {
+
+    public Object bar() {
+        Node node;
+        java.util.List<Node> children = new java.util.LinkedList<Node>();
+        java.util.List<Comment> commentsToAttribute;
+        return children.addAll(commentsToAttribute);
+    }
+}

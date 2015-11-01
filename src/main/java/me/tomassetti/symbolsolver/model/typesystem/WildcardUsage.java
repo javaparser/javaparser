@@ -1,14 +1,10 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import com.github.javaparser.ast.type.WildcardType;
-
-import java.util.List;
-
 public class WildcardUsage implements TypeUsage {
 
     //private WildcardType type;
     private BoundType type;
-    private ReferenceTypeUsage boundedType;
+    private TypeUsage boundedType;
 
     public enum BoundType {
         SUPER,
@@ -21,15 +17,19 @@ public class WildcardUsage implements TypeUsage {
 
     public static WildcardUsage UNBOUNDED = new WildcardUsage(null, null);
 
-    public static WildcardUsage superBound(ReferenceTypeUsage typeUsage) {
+    public static WildcardUsage superBound(TypeUsage typeUsage) {
         return new WildcardUsage(BoundType.SUPER, typeUsage);
     }
 
-    public static WildcardUsage extendsBound(ReferenceTypeUsage typeUsage) {
+    public static WildcardUsage extendsBound(TypeUsage typeUsage) {
         return new WildcardUsage(BoundType.EXTENDS, typeUsage);
     }
 
-    private WildcardUsage(BoundType type, ReferenceTypeUsage boundedType) {
+    public WildcardUsage asWildcard() {
+        return this;
+    }
+
+    private WildcardUsage(BoundType type, TypeUsage boundedType) {
         this.type = type;
         this.boundedType = boundedType;
     }
@@ -75,7 +75,7 @@ public class WildcardUsage implements TypeUsage {
         return type == BoundType.EXTENDS;
     }
 
-    public ReferenceTypeUsage getBoundedType() {
+    public TypeUsage getBoundedType() {
         if (boundedType == null) {
             throw new IllegalStateException();
         }
@@ -87,4 +87,16 @@ public class WildcardUsage implements TypeUsage {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public TypeUsage replaceParam(String name, TypeUsage replaced) {
+        if (boundedType == null) {
+            return this;
+        }
+        TypeUsage boundedTypeReplaced = boundedType.replaceParam(name, replaced);
+        if (boundedTypeReplaced != boundedType) {
+            return new WildcardUsage(type, boundedTypeReplaced);
+        } else {
+            return this;
+        }
+    }
 }

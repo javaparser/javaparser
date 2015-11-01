@@ -3,10 +3,7 @@ package me.tomassetti.symbolsolver.resolution.reflection;
 import me.tomassetti.symbolsolver.model.typesystem.*;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 
 /**
  * Created by federico on 02/08/15.
@@ -36,8 +33,13 @@ public class ReflectionFactory {
             return new TypeParameterUsage(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
-            // TODO deal with type parameters
-            return typeUsageFor(pt.getRawType(), typeSolver);
+            ReferenceTypeUsage rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceTypeUsage();
+            int i=0;
+            for (Type actualTypeArgument : pt.getActualTypeArguments()) {
+                rawType = rawType.replaceParam(i, typeUsageFor(actualTypeArgument, typeSolver)).asReferenceTypeUsage();
+                i++;
+            }
+            return rawType;
         } else if (type instanceof Class) {
             Class c = (Class) type;
             if (c.isPrimitive()) {
@@ -53,9 +55,29 @@ public class ReflectionFactory {
             } else {
                 return new ReferenceTypeUsage(new ReflectionClassDeclaration(c, typeSolver), typeSolver);
             }
-        } else if (type instanceof GenericArrayType){
-            GenericArrayType genericArrayType = (GenericArrayType)type;
+        } else if (type instanceof GenericArrayType) {
+            GenericArrayType genericArrayType = (GenericArrayType) type;
             return new ArrayTypeUsage(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
+        } else if (type instanceof WildcardType) {
+            WildcardType wildcardType = (WildcardType)type;
+            if (wildcardType.getLowerBounds().length > 0 && wildcardType.getUpperBounds().length > 0) {
+                if (wildcardType.getUpperBounds().length == 1 && wildcardType.getUpperBounds()[0].getTypeName().equals("java.lang.Object")) {
+                    // ok, it does not matter
+                }
+            }
+            if (wildcardType.getLowerBounds().length > 0) {
+                if (wildcardType.getLowerBounds().length > 1) {
+                    throw new UnsupportedOperationException();
+                }
+                return WildcardUsage.superBound(typeUsageFor(wildcardType.getLowerBounds()[0], typeSolver));
+            }
+            if (wildcardType.getUpperBounds().length > 0) {
+                if (wildcardType.getUpperBounds().length > 1) {
+                    throw new UnsupportedOperationException();
+                }
+                return WildcardUsage.extendsBound(typeUsageFor(wildcardType.getUpperBounds()[0], typeSolver));
+            }
+            return WildcardUsage.UNBOUNDED;
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName()+" "+type);
         }

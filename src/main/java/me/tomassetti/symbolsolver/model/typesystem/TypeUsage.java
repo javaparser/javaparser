@@ -84,6 +84,10 @@ public interface TypeUsage {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
+    default WildcardUsage asWildcard() {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
     ///
     /// Naming
     ///
