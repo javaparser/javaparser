@@ -50,6 +50,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
+    @Override
+    public String toString() {
+        return "MethodCallExprContext{}";
+    }
+
     private Optional<MethodUsage> solveMethodAsUsage(TypeParameterUsage tp, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         for (TypeParameter.Bound bound : tp.asTypeParameter().getBounds(typeSolver)) {
             Optional<MethodUsage> methodUsage = solveMethodAsUsage(bound.getType(), name, parameterTypes, typeSolver, invokationContext);

@@ -60,6 +60,10 @@ public interface TypeUsage {
         return false;
     }
 
+    default boolean isWildcard() {
+        return false;
+    }
+
     ///
     /// Downcasting
     ///

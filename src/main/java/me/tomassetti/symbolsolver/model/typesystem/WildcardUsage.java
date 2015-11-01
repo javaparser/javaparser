@@ -15,6 +15,10 @@ public class WildcardUsage implements TypeUsage {
         EXTENDS
     }
 
+    public boolean isWildcard() {
+        return true;
+    }
+
     public static WildcardUsage UNBOUNDED = new WildcardUsage(null, null);
 
     public static WildcardUsage superBound(ReferenceTypeUsage typeUsage) {

@@ -91,8 +91,11 @@ public class MethodResolutionLogic {
                 if (!expectedParam.equals(actualParam)) {
                     return false;
                 }
+            } else if (expectedParam.isWildcard()) {
+                // TODO verify bounds
+                return true;
             } else {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(expectedParam.describe());
             }
         }
         return true;

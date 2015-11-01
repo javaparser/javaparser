@@ -5,6 +5,7 @@ import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A class declaration.
@@ -27,7 +28,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllAncestors());
         }
-        return superclasses;
+        return superclasses.stream().filter((s)->s.getTypeDeclaration().isClass()).collect(Collectors.toList());
     }
 
     default List<InterfaceDeclaration> getAllInterfaces(TypeSolver typeSolver) {
