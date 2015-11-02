@@ -70,7 +70,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public TypeUsage getReturnType(TypeSolver typeSolver) {
+    public TypeUsage getReturnType() {
         try {
             return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
         } catch (NotFoundException e) {

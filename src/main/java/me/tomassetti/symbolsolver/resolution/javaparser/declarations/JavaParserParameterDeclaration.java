@@ -7,15 +7,14 @@ import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
-/**
- * Created by federico on 02/08/15.
- */
 public class JavaParserParameterDeclaration implements ParameterDeclaration {
 
     private Parameter wrappedNode;
+    private TypeSolver typeSolver;
 
-    public JavaParserParameterDeclaration(Parameter wrappedNode) {
+    public JavaParserParameterDeclaration(Parameter wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeUsage getType(TypeSolver typeSolver) {
+    public TypeUsage getType() {
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
     }
 }

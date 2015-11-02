@@ -172,12 +172,12 @@ public class JavaParserFacade {
                 logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
                 if (solveLambdas) {
-                    TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver);
+                    TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
                     // We need to replace the type variables
                     result = solveGenericTypes(result, JavaParserFactory.getContext(node, typeSolver), typeSolver);
                     return result;
                 } else {
-                    return refMethod.getCorrespondingDeclaration().getParam(pos).getType(typeSolver);
+                    return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
                 }
             } else {
                 throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
@@ -217,7 +217,7 @@ public class JavaParserFacade {
                         throw e;
                     } else {
                         // TODO here maybe we have to substitute type parameters
-                        return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField()).getType(typeSolver);
+                        return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField()).getType();
                     }
                 } else {
                     throw e;

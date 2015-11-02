@@ -3,11 +3,6 @@ package me.tomassetti.symbolsolver.resolution;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
-
-
-/**
- * Created by federico on 04/08/15.
- */
 public class Value {
 
     private TypeUsage typeUsage;
@@ -33,7 +28,7 @@ public class Value {
     }
 
     public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
-        TypeUsage typeUsage = decl.getType(typeSolver);
+        TypeUsage typeUsage = decl.getType();
         return new Value(typeUsage, decl.getName(), decl.isField());
     }
 

@@ -12,9 +12,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-/**
- * Created by federico on 28/07/15.
- */
 public class ClassOrInterfaceDeclarationContext implements Context {
 
     private Class<?> wrapped;
@@ -28,7 +25,7 @@ public class ClassOrInterfaceDeclarationContext implements Context {
     public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : wrapped.getFields()) {
             if (Modifier.isStatic(field.getModifiers()) && field.getName().equals(name)) {
-                return SymbolReference.solved(new ReflectionFieldDeclaration(field));
+                return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
         }
         return SymbolReference.unsolved(ValueDeclaration.class);

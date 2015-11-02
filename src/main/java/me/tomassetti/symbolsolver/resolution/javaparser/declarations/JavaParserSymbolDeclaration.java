@@ -16,10 +16,6 @@ import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
-
-/**
- * Created by federico on 28/07/15.
- */
 public class JavaParserSymbolDeclaration implements ValueDeclaration {
 
     private String name;
@@ -84,7 +80,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public TypeUsage getType(TypeSolver typeSolver) {
+    public TypeUsage getType() {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
             if (wrappedNode.getParentNode() instanceof LambdaExpr) {

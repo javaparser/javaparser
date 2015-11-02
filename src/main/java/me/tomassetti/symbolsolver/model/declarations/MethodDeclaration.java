@@ -18,7 +18,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
      */
     TypeDeclaration declaringType();
 
-    TypeUsage getReturnType(TypeSolver typeSolver);
+    TypeUsage getReturnType();
 
     int getNoParams();
 

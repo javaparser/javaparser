@@ -7,19 +7,18 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.lang.reflect.Field;
 
-/**
- * Created by federico on 19/08/15.
- */
 public class ReflectionFieldDeclaration implements FieldDeclaration {
 
-    public ReflectionFieldDeclaration(Field field) {
+    public ReflectionFieldDeclaration(Field field, TypeSolver typeSolver) {
         this.field = field;
+        this.typeSolver = typeSolver;
     }
 
     private Field field;
+    private TypeSolver typeSolver;
 
     @Override
-    public TypeUsage getType(TypeSolver typeSolver) {
+    public TypeUsage getType() {
         // TODO consider interfaces, enums, primitive types, arrays
         return ReflectionFactory.typeUsageFor(field.getType(), typeSolver);
     }

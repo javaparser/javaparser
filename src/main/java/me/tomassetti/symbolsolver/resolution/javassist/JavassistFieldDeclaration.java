@@ -19,7 +19,7 @@ public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.mod
     private TypeSolver typeSolver;
 
     @Override
-    public TypeUsage getType(TypeSolver typeSolver) {
+    public TypeUsage getType() {
         try {
             return JavassistFactory.typeUsageFor(ctField.getType(), typeSolver);
         } catch (NotFoundException e){

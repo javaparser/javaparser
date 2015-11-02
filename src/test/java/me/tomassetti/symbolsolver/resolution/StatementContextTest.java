@@ -26,7 +26,7 @@ public class StatementContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class StatementContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class StatementContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class StatementContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
         assertTrue(ref.isSolved());
-        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType(typeSolver).describe());
+        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType().describe());
 
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
         assertEquals("add", methodUsage.getName());
@@ -81,7 +81,7 @@ public class StatementContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
         assertTrue(ref.isSolved());
-        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType(typeSolver).describe());
+        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType().describe());
 
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
         assertEquals("add", methodUsage.getName());

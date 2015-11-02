@@ -158,7 +158,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
                     com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
                     for (VariableDeclarator vd : field.getVariables()) {
                         if (vd.getId().getName().equals(name)) {
-                            return new JavaParserFieldDeclaration(vd);
+                            return new JavaParserFieldDeclaration(vd, typeSolver);
                         }
                     }
                 }
@@ -201,7 +201,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
         }
 
         @Override
-        public TypeUsage getReturnType(TypeSolver typeSolver) {
+        public TypeUsage getReturnType() {
             return new ArrayTypeUsage(new ReferenceTypeUsage(JavaParserEnumDeclaration.this, typeSolver));
         }
 

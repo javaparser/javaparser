@@ -15,13 +15,13 @@ public interface InterfaceDeclaration extends TypeDeclaration, TypeParametrized 
         return true;
     }
 
-    List<InterfaceDeclaration> getInterfacesExtended(TypeSolver typeSolver);
+    List<InterfaceDeclaration> getInterfacesExtended();
 
-    default List<InterfaceDeclaration> getAllInterfacesExtended(TypeSolver typeSolver) {
+    default List<InterfaceDeclaration> getAllInterfacesExtended() {
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
-        for (InterfaceDeclaration interfaceDeclaration : getInterfacesExtended(typeSolver)) {
+        for (InterfaceDeclaration interfaceDeclaration : getInterfacesExtended()) {
             interfaces.add(interfaceDeclaration);
-            interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended(typeSolver));
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended());
         }
         return interfaces;
     }

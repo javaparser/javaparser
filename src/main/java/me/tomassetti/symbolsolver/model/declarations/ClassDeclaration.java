@@ -59,7 +59,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
         //ClassDeclaration superClass = getSuperClass(typeSolver);
         for (InterfaceDeclaration interfaceDeclaration : getInterfaces()){
             interfaces.add(interfaceDeclaration);
-            interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended(typeSolver));
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended());
         }
         return interfaces;
     }

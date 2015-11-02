@@ -256,7 +256,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     public FieldDeclaration getField(String name) {
         for (Field field : clazz.getDeclaredFields()) {
             if (field.getName().equals(name)) {
-                return new ReflectionFieldDeclaration(field);
+                return new ReflectionFieldDeclaration(field, typeSolver);
             }
         }
         for (ReferenceTypeUsage ancestor : getAllAncestors()) {
@@ -289,7 +289,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : clazz.getFields()){
             if (field.getName().equals(name)) {
-                return SymbolReference.solved(new ReflectionFieldDeclaration(field));
+                return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
         }
         return SymbolReference.unsolved(ValueDeclaration.class);

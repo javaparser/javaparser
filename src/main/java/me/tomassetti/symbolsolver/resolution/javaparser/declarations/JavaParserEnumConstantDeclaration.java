@@ -9,14 +9,17 @@ import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
-    public JavaParserEnumConstantDeclaration(com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode) {
+    private TypeSolver typeSolver;
+
+    public JavaParserEnumConstantDeclaration(com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
     }
 
     private com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode;
 
     @Override
-    public TypeUsage getType(TypeSolver typeSolver) {
+    public TypeUsage getType() {
         return new ReferenceTypeUsage(new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode(), typeSolver), typeSolver);
     }
 

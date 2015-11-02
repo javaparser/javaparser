@@ -20,9 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 30/07/15.
- */
 public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
 
     private TypeSolver typeSolver;
@@ -78,7 +75,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public List<InterfaceDeclaration> getInterfacesExtended(TypeSolver typeSolver) {
+    public List<InterfaceDeclaration> getInterfacesExtended() {
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
@@ -190,7 +187,7 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
                 com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
                 for (VariableDeclarator vd : field.getVariables()) {
                     if (vd.getId().getName().equals(name)){
-                        return new JavaParserFieldDeclaration(vd);
+                        return new JavaParserFieldDeclaration(vd, typeSolver);
                     }
                 }
             }

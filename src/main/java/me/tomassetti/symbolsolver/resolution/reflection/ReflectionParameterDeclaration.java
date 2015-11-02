@@ -2,22 +2,19 @@ package me.tomassetti.symbolsolver.resolution.reflection;
 
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
-
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-
 
 import java.lang.reflect.Type;
 
-/**
- * Created by federico on 02/08/15.
- */
 public class ReflectionParameterDeclaration implements ParameterDeclaration {
     private Class<?> type;
     private Type genericType;
+    private TypeSolver typeSolver;
 
-    public ReflectionParameterDeclaration(Class<?> type, Type genericType) {
+    public ReflectionParameterDeclaration(Class<?> type, Type genericType, TypeSolver typeSolver) {
         this.type = type;
         this.genericType = genericType;
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -48,7 +45,7 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeUsage getType(TypeSolver typeSolver) {
+    public TypeUsage getType() {
         return ReflectionFactory.typeUsageFor(genericType, typeSolver);
     }
 }

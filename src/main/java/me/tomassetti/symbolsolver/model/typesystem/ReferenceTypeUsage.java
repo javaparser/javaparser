@@ -134,7 +134,7 @@ public class ReferenceTypeUsage implements TypeUsage {
 
 
 
-        TypeUsage typeUsage = typeDeclaration.getField(name).getType(typeSolver);
+        TypeUsage typeUsage = typeDeclaration.getField(name).getType();
         //TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
 
         //ora io dovrei capire che mi ha restituito una variabile che si riferisce alla classe

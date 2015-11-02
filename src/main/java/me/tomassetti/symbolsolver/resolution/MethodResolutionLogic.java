@@ -13,9 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 02/08/15.
- */
 public class MethodResolutionLogic {
 
     public static boolean isApplicable(MethodDeclaration method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
@@ -28,7 +25,7 @@ public class MethodResolutionLogic {
         }
         Map<String, TypeUsage> matchedParameters = new HashMap<>();
         for (int i=0; i<method.getNoParams(); i++) {
-            TypeUsage expectedType = method.getParam(i).getType(typeSolver);
+            TypeUsage expectedType = method.getParam(i).getType();
             TypeUsage actualType = paramTypes.get(i);
             boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType);
             if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
@@ -174,8 +171,8 @@ public class MethodResolutionLogic {
     private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
         for (int i=0; i < methodA.getNoParams(); i++){
-            TypeUsage tdA = methodA.getParam(i).getType(typeSolver);
-            TypeUsage tdB = methodB.getParam(i).getType(typeSolver);
+            TypeUsage tdA = methodA.getParam(i).getType();
+            TypeUsage tdB = methodB.getParam(i).getType();
             // B is more specific
             if (tdB.isAssignableBy(tdA) && !tdA.isAssignableBy(tdB)) {
                 oneMoreSpecificFound = true;

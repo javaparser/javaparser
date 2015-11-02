@@ -35,7 +35,7 @@ public class EnumDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("i", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("int", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).describe());
+        assertEquals("int", ref.getCorrespondingDeclaration().getType().describe());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class EnumDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("j", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("long", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).describe());
+        assertEquals("long", ref.getCorrespondingDeclaration().getType().describe());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class EnumDeclarationContextTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("E1", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("MyEnum", ref.getCorrespondingDeclaration().getType(new DummyTypeSolver()).describe());
+        assertEquals("MyEnum", ref.getCorrespondingDeclaration().getType().describe());
     }
 
     @Test

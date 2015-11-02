@@ -18,9 +18,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 04/08/15.
- */
 public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
 
     private com.github.javaparser.ast.TypeParameter wrappedNode;

@@ -49,7 +49,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public TypeUsage getReturnType(TypeSolver typeSolver) {
+    public TypeUsage getReturnType() {
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), getContext());
     }
 
@@ -63,7 +63,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i));
+        return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i), typeSolver);
     }
 
     public MethodUsage getUsage(Node node) {
@@ -72,10 +72,10 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes) {
-        TypeUsage returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getReturnType(typeSolver), typeSolver, context);
+        TypeUsage returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getReturnType(), typeSolver, context);
         List<TypeUsage> params = new ArrayList<>();
         for (int i=0;i<wrappedNode.getParameters().size();i++){
-            TypeUsage replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getParam(i).getType(typeSolver), typeSolver, context);
+            TypeUsage replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getParam(i).getType(), typeSolver, context);
             params.add(replaced);
         }
 
@@ -83,7 +83,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         // and then we replace them in the return type
         Map<String, TypeUsage> determinedTypeParameters = new HashMap<>();
         for (int i=0; i < getNoParams(); i++) {
-            TypeUsage formalParamType = getParam(i).getType(typeSolver);
+            TypeUsage formalParamType = getParam(i).getType();
             TypeUsage actualParamType = parameterTypes.get(i);
             determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
         }

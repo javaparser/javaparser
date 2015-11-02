@@ -13,9 +13,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by federico on 24/08/15.
- */
 public class QualifiedNameTest extends AbstractTest {
 
     @Test
@@ -27,7 +24,7 @@ public class QualifiedNameTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.util.Scanner", ref.getCorrespondingDeclaration().getType(new JreTypeSolver()).asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.util.Scanner", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
     }
 
 }

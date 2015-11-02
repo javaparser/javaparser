@@ -268,7 +268,7 @@ public class GenericsTest extends AbstractTest{
         context = typeDeclaration.getContext();
         List<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> methods = ((ClassOrInterfaceDeclarationContext)context).methodsByName("accept");
         me.tomassetti.symbolsolver.model.declarations.MethodDeclaration m;
-        if (methods.get(0).getParam(0).getType(typeSolver).asReferenceTypeUsage().getQualifiedName().equals("VoidVisitor")) {
+        if (methods.get(0).getParam(0).getType().asReferenceTypeUsage().getQualifiedName().equals("VoidVisitor")) {
             m = methods.get(0);
         } else {
             m = methods.get(1);
