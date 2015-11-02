@@ -9,12 +9,15 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.InterfaceDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.*;
-import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private TypeSolver typeSolver;
+    private ClassOrInterfaceDeclaration wrappedNode;
 
     public JavaParserInterfaceDeclaration(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
         if (!wrappedNode.isInterface()) {
@@ -32,8 +36,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
-
-    private ClassOrInterfaceDeclaration wrappedNode;
 
     @Override
     public Context getContext() {
@@ -111,7 +113,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     private String containerName(String base, Node container) {
         if (container instanceof ClassOrInterfaceDeclaration) {
             String b = containerName(base, container.getParentNode());
-            String cn = ((ClassOrInterfaceDeclaration)container).getName();
+            String cn = ((ClassOrInterfaceDeclaration) container).getName();
             if (b.isEmpty()) {
                 return cn;
             } else {
@@ -141,7 +143,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         if (typeUsage.isNull()) {
             return true;
         }
-        if (typeUsage.isReferenceType()){
+        if (typeUsage.isReferenceType()) {
             TypeDeclaration other = typeSolver.solveType(typeUsage.describe());
             return isAssignableBy(other);
         } else {
@@ -155,8 +157,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
-        if (this.wrappedNode.getExtends() != null){
-            for (ClassOrInterfaceType type : wrappedNode.getExtends()){
+        if (this.wrappedNode.getExtends() != null) {
+            for (ClassOrInterfaceType type : wrappedNode.getExtends()) {
                 TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
@@ -164,8 +166,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             }
         }
 
-        if (this.wrappedNode.getImplements() != null){
-            for (ClassOrInterfaceType type : wrappedNode.getImplements()){
+        if (this.wrappedNode.getImplements() != null) {
+            for (ClassOrInterfaceType type : wrappedNode.getImplements()) {
                 TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
@@ -184,10 +186,10 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public FieldDeclaration getField(String name) {
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
+            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
                 for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)){
+                    if (vd.getId().getName().equals(name)) {
                         return new JavaParserFieldDeclaration(vd, typeSolver);
                     }
                 }
@@ -207,10 +209,10 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public boolean hasField(String name) {
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration){
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration)member;
+            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
                 for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)){
+                    if (vd.getId().getName().equals(name)) {
                         return true;
                     }
                 }
@@ -227,7 +229,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        if (this.wrappedNode.getName().equals(name)){
+        if (this.wrappedNode.getName().equals(name)) {
             return SymbolReference.solved(this);
         }
         if (this.wrappedNode.getTypeParameters() != null) {
@@ -239,7 +241,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
 
         // Internal classes
-        for (BodyDeclaration member : this.wrappedNode.getMembers()){
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
                 com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
                 String prefix = internalType.getName() + ".";
@@ -264,7 +266,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
 
         String prefix = wrappedNode.getName() + ".";
-        if (name.startsWith(prefix) && name.length() > prefix.length()){
+        if (name.startsWith(prefix) && name.length() > prefix.length()) {
             return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
         }
 
@@ -275,7 +277,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
         if (wrappedNode.getExtends() != null) {
-            for (ClassOrInterfaceType extended : wrappedNode.getExtends()){
+            for (ClassOrInterfaceType extended : wrappedNode.getExtends()) {
                 SymbolReference<TypeDeclaration> superclass = solveType(extended.getName(), typeSolver);
                 if (!superclass.isSolved()) {
                     throw new UnsolvedSymbolException(extended.getName());
@@ -285,7 +287,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             }
         }
         if (wrappedNode.getImplements() != null) {
-            for (ClassOrInterfaceType implemented : wrappedNode.getImplements()){
+            for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
                 SymbolReference<TypeDeclaration> superclass = solveType(implemented.getName(), typeSolver);
                 if (!superclass.isSolved()) {
                     throw new UnsolvedSymbolException(implemented.getName());

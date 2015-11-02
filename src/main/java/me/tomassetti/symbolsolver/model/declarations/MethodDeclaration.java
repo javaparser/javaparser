@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.resolution.Context;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.Context;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
 
     /**
      * The type in which the method is declared.
+     *
      * @return
      */
     TypeDeclaration declaringType();

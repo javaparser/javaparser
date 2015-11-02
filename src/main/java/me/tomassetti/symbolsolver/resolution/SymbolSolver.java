@@ -5,13 +5,13 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,7 @@ public class SymbolSolver {
 
     private TypeSolver typeSolver;
 
-    public SymbolSolver(TypeSolver typeSolver){
+    public SymbolSolver(TypeSolver typeSolver) {
         if (typeSolver == null) throw new IllegalArgumentException();
 
         this.typeSolver = typeSolver;
@@ -65,7 +65,9 @@ public class SymbolSolver {
     public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Node node) {
         return solveMethod(methodName, params, JavaParserFactory.getContext(node, typeSolver));
     }
-;
+
+    ;
+
     public TypeDeclaration solveType(Type type) {
         if (type instanceof ReferenceType) {
             ReferenceType referenceType = (ReferenceType) type;

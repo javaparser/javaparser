@@ -9,14 +9,13 @@ import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
-import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.resolution.javassist.contexts.JavassistMethodContext;
-import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-
+import me.tomassetti.symbolsolver.resolution.*;
+import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.resolution.javassist.contexts.JavassistMethodContext;
 
 import java.util.*;
 import java.util.function.Function;
@@ -28,6 +27,14 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     private CtClass ctClass;
     private TypeSolver typeSolver;
 
+    public JavassistClassDeclaration(CtClass ctClass, TypeSolver typeSolver) {
+        if (ctClass == null) {
+            throw new IllegalArgumentException();
+        }
+        this.ctClass = ctClass;
+        this.typeSolver = typeSolver;
+    }
+
     @Override
     protected TypeSolver typeSolver() {
         return typeSolver;
@@ -36,14 +43,6 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
-    }
-
-    public JavassistClassDeclaration(CtClass ctClass, TypeSolver typeSolver) {
-        if (ctClass == null) {
-            throw new IllegalArgumentException();
-        }
-        this.ctClass = ctClass;
-        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -77,13 +76,13 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                 throw new IllegalArgumentException();
             }
             signature = signature.substring(0, signature.length() - 1);
-            if (signature.contains(",")){
+            if (signature.contains(",")) {
                 throw new UnsupportedOperationException();
             }
-            if (signature.contains("<")){
+            if (signature.contains("<")) {
                 throw new UnsupportedOperationException(originalSignature);
             }
-            if (signature.contains(">")){
+            if (signature.contains(">")) {
                 throw new UnsupportedOperationException();
             }
             List<TypeUsage> typeUsages = new ArrayList<>();
@@ -101,7 +100,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         // TODO avoid bridge and synthetic methods
         for (CtMethod method : ctClass.getDeclaredMethods()) {
-            if (method.getName().equals(name)){
+            if (method.getName().equals(name)) {
                 // TODO check parameters
                 MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver), typeSolver);
                 try {
@@ -115,7 +114,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
                     }
                     return Optional.of(methodUsage);
-                } catch (BadBytecode e){
+                } catch (BadBytecode e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -150,7 +149,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
-            if (field.getName().equals(name)){
+            if (field.getName().equals(name)) {
                 return SymbolReference.solved(new JavassistFieldDeclaration(field, typeSolver));
             }
         }
@@ -193,9 +192,10 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             ancestors.add(getSuperClass());
             ancestors.addAll(getSuperClass().getAllAncestors());
         }
-        ancestors.addAll(getAllInterfaces().stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
+        ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
         return ancestors;
     }
+
     @Override
     public Context getContext() {
         throw new UnsupportedOperationException();
@@ -206,7 +206,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             // TODO avoid bridge and synthetic methods
-            if (method.getName().equals(name)){
+            if (method.getName().equals(name)) {
                 candidates.add(new JavassistMethodDeclaration(method, typeSolver));
             }
         }
@@ -247,8 +247,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             return true;
         }
 
-        if (typeUsage instanceof LambdaArgumentTypeUsagePlaceholder){
-            if (ctClass.getName().equals(Predicate.class.getCanonicalName()) || ctClass.getName().equals(Function.class.getCanonicalName())){
+        if (typeUsage instanceof LambdaArgumentTypeUsagePlaceholder) {
+            if (ctClass.getName().equals(Predicate.class.getCanonicalName()) || ctClass.getName().equals(Function.class.getCanonicalName())) {
                 return true;
             } else {
                 return false;
@@ -256,17 +256,17 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
 
         // TODO look into generics
-        if (typeUsage.describe().equals(this.getQualifiedName())){
+        if (typeUsage.describe().equals(this.getQualifiedName())) {
             return true;
         }
         try {
             if (this.ctClass.getSuperclass() != null) {
-                if (new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(typeUsage)){
+                if (new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(typeUsage)) {
                     return true;
                 }
             }
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(typeUsage)){
+                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(typeUsage)) {
                     return true;
                 }
             }
@@ -355,7 +355,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         } else {
             try {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp)->new JavassistTypeParameter(tp, true, typeSolver)).collect(Collectors.toList());
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, typeSolver)).collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);
             }

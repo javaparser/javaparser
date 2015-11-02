@@ -5,12 +5,13 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.QualifiedNameExpr;
-import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserInterfaceDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.util.List;
 
@@ -22,6 +23,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     public CompilationUnitContext(CompilationUnit wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
+    }
+
+    private static boolean isQualifiedName(String name) {
+        return name.contains(".");
     }
 
     @Override
@@ -77,7 +82,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
-    private String getType(String qName){
+    private String getType(String qName) {
         int index = qName.lastIndexOf('.');
         if (index == -1) {
             throw new UnsupportedOperationException();
@@ -86,7 +91,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         return typeName;
     }
 
-    private String getMember(String qName){
+    private String getMember(String qName) {
         int index = qName.lastIndexOf('.');
         if (index == -1) {
             throw new UnsupportedOperationException();
@@ -149,7 +154,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         // Look in the java.lang package
-        SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType("java.lang."+name);
+        SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
         if (ref.isSolved()) {
             return ref;
         }
@@ -160,10 +165,6 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         } else {
             return SymbolReference.unsolved(me.tomassetti.symbolsolver.model.declarations.TypeDeclaration.class);
         }
-    }
-
-    private static boolean isQualifiedName(String name) {
-        return name.contains(".");
     }
 
     @Override

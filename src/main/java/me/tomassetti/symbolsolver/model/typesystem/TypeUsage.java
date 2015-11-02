@@ -5,9 +5,9 @@ import me.tomassetti.symbolsolver.resolution.TypeParameter;
 /**
  * A usage of a type. It could be a primitive type or a reference type (enum, class, interface).
  * In the later case it could take type parameters (other TypeUsages). It could also be a TypeVariable, like in:
- *
+ * <p/>
  * class A<B> { }
- *
+ * <p/>
  * where B is a TypeVariable. It could also be Wildcard Type, possibly with constraints.
  */
 public interface TypeUsage {

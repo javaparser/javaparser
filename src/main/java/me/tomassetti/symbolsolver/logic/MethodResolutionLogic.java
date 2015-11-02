@@ -2,13 +2,13 @@ package me.tomassetti.symbolsolver.logic;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public class MethodResolutionLogic {
             return false;
         }
         Map<String, TypeUsage> matchedParameters = new HashMap<>();
-        for (int i=0; i<method.getNoParams(); i++) {
+        for (int i = 0; i < method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParam(i).getType();
             TypeUsage actualType = paramTypes.get(i);
             boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType);
@@ -66,7 +66,7 @@ public class MethodResolutionLogic {
     }
 
     private static boolean isAssignableMatchTypeParametersMatchingQName(ReferenceTypeUsage expected, ReferenceTypeUsage actual,
-                                                                         Map<String, TypeUsage> matchedParameters) {
+                                                                        Map<String, TypeUsage> matchedParameters) {
 
         if (!expected.getQualifiedName().equals(actual.getQualifiedName())) {
             return false;
@@ -75,13 +75,13 @@ public class MethodResolutionLogic {
             throw new UnsupportedOperationException();
             //return true;
         }
-        for (int i=0;i<expected.parameters().size();i++) {
+        for (int i = 0; i < expected.parameters().size(); i++) {
             TypeUsage expectedParam = expected.parameters().get(i);
             TypeUsage actualParam = actual.parameters().get(i);
             if (expectedParam.isTypeVariable()) {
                 String expectedParamName = expectedParam.asTypeParameter().getName();
                 if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
-                    if (matchedParameters.containsKey(expectedParamName)){
+                    if (matchedParameters.containsKey(expectedParamName)) {
                         throw new UnsupportedOperationException("We should check if they are compatible");
                     } else {
                         matchedParameters.put(expectedParamName, actualParam);
@@ -101,13 +101,13 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    private static TypeUsage replaceTypeParam(TypeUsage typeUsage, TypeParameter tp, TypeSolver typeSolver){
+    private static TypeUsage replaceTypeParam(TypeUsage typeUsage, TypeParameter tp, TypeSolver typeSolver) {
         if (typeUsage.isTypeVariable()) {
             if (typeUsage.describe().equals(tp.getName())) {
                 List<TypeParameter.Bound> bounds = tp.getBounds(typeSolver);
                 if (bounds.size() > 1) {
                     throw new UnsupportedOperationException();
-                } else if (bounds.size() == 1){
+                } else if (bounds.size() == 1) {
                     return bounds.get(0).getType();
                 } else {
                     return new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
@@ -126,10 +126,10 @@ public class MethodResolutionLogic {
         if (method.getNoParams() != paramTypes.size()) {
             return false;
         }
-        for (int i=0; i<method.getNoParams(); i++) {
+        for (int i = 0; i < method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParamType(i, typeSolver);
             TypeUsage actualType = paramTypes.get(i);
-            if (!expectedType.isAssignableBy(actualType)){
+            if (!expectedType.isAssignableBy(actualType)) {
                 return false;
             }
         }
@@ -137,14 +137,13 @@ public class MethodResolutionLogic {
     }
 
     /**
-     *
-     * @param methods we expect the methods to be ordered such that inherited methods are later in the list
+     * @param methods    we expect the methods to be ordered such that inherited methods are later in the list
      * @param name
      * @param paramTypes
      * @param typeSolver
      * @return
      */
-    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver){
+    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
         List<MethodDeclaration> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, paramTypes, typeSolver)).collect(Collectors.toList());
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
@@ -153,7 +152,7 @@ public class MethodResolutionLogic {
             return SymbolReference.solved(applicableMethods.get(0));
         } else {
             MethodDeclaration winningCandidate = applicableMethods.get(0);
-            for (int i=1; i<applicableMethods.size(); i++) {
+            for (int i = 1; i < applicableMethods.size(); i++) {
                 MethodDeclaration other = applicableMethods.get(i);
                 if (isMoreSpecific(winningCandidate, other, typeSolver)) {
                     // nothing to do
@@ -161,7 +160,7 @@ public class MethodResolutionLogic {
                     winningCandidate = other;
                 } else {
                     if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
-                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: "+winningCandidate+", "+other);
+                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
                     } else {
                         // we expect the methods to be ordered such that inherited methods are later in the list
                     }
@@ -173,7 +172,7 @@ public class MethodResolutionLogic {
 
     private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
-        for (int i=0; i < methodA.getNoParams(); i++){
+        for (int i = 0; i < methodA.getNoParams(); i++) {
             TypeUsage tdA = methodA.getParam(i).getType();
             TypeUsage tdB = methodB.getParam(i).getType();
             // B is more specific
@@ -190,7 +189,7 @@ public class MethodResolutionLogic {
 
     private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
-        for (int i=0; i < methodA.getNoParams(); i++){
+        for (int i = 0; i < methodA.getNoParams(); i++) {
             TypeUsage tdA = methodA.getParamType(i, typeSolver);
             TypeUsage tdB = methodB.getParamType(i, typeSolver);
 
@@ -218,7 +217,7 @@ public class MethodResolutionLogic {
             return Optional.of(applicableMethods.get(0));
         } else {
             MethodUsage winningCandidate = applicableMethods.get(0);
-            for (int i=1; i<applicableMethods.size(); i++) {
+            for (int i = 1; i < applicableMethods.size(); i++) {
                 MethodUsage other = applicableMethods.get(i);
                 if (isMoreSpecific(winningCandidate, other, typeSolver)) {
                     // nothing to do
@@ -246,7 +245,7 @@ public class MethodResolutionLogic {
         if (winningCandidate.getNoParams() != other.getNoParams()) {
             return false;
         }
-        for (int i=0;i<winningCandidate.getNoParams();i++) {
+        for (int i = 0; i < winningCandidate.getNoParams(); i++) {
             if (!winningCandidate.getParamTypes().get(i).equals(other.getParamTypes().get(i))) {
                 return false;
             }

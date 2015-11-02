@@ -3,15 +3,11 @@ package me.tomassetti.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-
-
-
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +21,10 @@ public class JavaParserTypeSolver implements TypeSolver {
     private File srcDir;
 
     private TypeSolver parent;
+
+    public JavaParserTypeSolver(File srcDir) {
+        this.srcDir = srcDir;
+    }
 
     @Override
     public String toString() {
@@ -44,11 +44,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         this.parent = parent;
     }
 
-    public JavaParserTypeSolver(File srcDir) {
-        this.srcDir = srcDir;
-    }
-
-    private String simpleName(String name){
+    private String simpleName(String name) {
         int index = name.lastIndexOf('.');
         if (index == -1) {
             return name;
@@ -62,7 +58,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         // TODO support internal classes
         // TODO support enums
         // TODO support interfaces
-        File srcFile = new File(srcDir.getAbsolutePath() +"/"+ name.replaceAll("\\.", "/") + ".java");
+        File srcFile = new File(srcDir.getAbsolutePath() + "/" + name.replaceAll("\\.", "/") + ".java");
         if (srcFile.exists()) {
             try {
                 CompilationUnit compilationUnit = JavaParser.parse(srcFile);

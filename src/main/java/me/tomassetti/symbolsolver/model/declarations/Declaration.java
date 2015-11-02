@@ -7,7 +7,6 @@ public interface Declaration {
 
     /**
      * Anonymous classes do not have a name, for example.
-
      */
     default boolean hasName() {
         return true;

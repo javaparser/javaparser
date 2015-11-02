@@ -2,13 +2,13 @@ package me.tomassetti.symbolsolver.resolution.javaparser.contexts;
 
 import com.github.javaparser.ast.stmt.SwitchEntryStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
         TypeUsage type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
         if (type.isReferenceType() && type.asReferenceTypeUsage().isEnum()) {
             if (type instanceof ReferenceTypeUsage) {
-                ReferenceTypeUsage typeUsageOfTypeDeclaration = (ReferenceTypeUsage)type;
+                ReferenceTypeUsage typeUsageOfTypeDeclaration = (ReferenceTypeUsage) type;
                 if (typeUsageOfTypeDeclaration.getTypeDeclaration().hasField(name)) {
                     return SymbolReference.solved(typeUsageOfTypeDeclaration.getTypeDeclaration().getField(name));
                 }

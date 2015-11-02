@@ -1,8 +1,12 @@
 package me.tomassetti.symbolsolver.resolution.javaparser;
 
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.*;
 import me.tomassetti.symbolsolver.resolution.Context;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
@@ -18,27 +22,27 @@ import me.tomassetti.symbolsolver.resolution.javaparser.declarators.VariableSymb
  */
 public class JavaParserFactory {
 
-    public static Context getContext(Node node, TypeSolver typeSolver){
+    public static Context getContext(Node node, TypeSolver typeSolver) {
         if (node == null) {
             return null;
         } else if (node instanceof CompilationUnit) {
-            return new CompilationUnitContext((CompilationUnit)node, typeSolver);
+            return new CompilationUnitContext((CompilationUnit) node, typeSolver);
         } else if (node instanceof ForeachStmt) {
-            return new ForechStatementContext((ForeachStmt)node, typeSolver);
+            return new ForechStatementContext((ForeachStmt) node, typeSolver);
         } else if (node instanceof ForStmt) {
-            return new ForStatementContext((ForStmt)node, typeSolver);
-        } else if (node instanceof LambdaExpr){
+            return new ForStatementContext((ForStmt) node, typeSolver);
+        } else if (node instanceof LambdaExpr) {
             return new LambdaExprContext((LambdaExpr) node, typeSolver);
         } else if (node instanceof MethodDeclaration) {
-            return new MethodContext((MethodDeclaration)node, typeSolver);
+            return new MethodContext((MethodDeclaration) node, typeSolver);
         } else if (node instanceof ConstructorDeclaration) {
-            return new ConstructorContext((ConstructorDeclaration)node, typeSolver);
+            return new ConstructorContext((ConstructorDeclaration) node, typeSolver);
         } else if (node instanceof ClassOrInterfaceDeclaration) {
-            return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration)node, typeSolver);
+            return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration) node, typeSolver);
         } else if (node instanceof MethodCallExpr) {
-            return new MethodCallExprContext((MethodCallExpr)node, typeSolver);
+            return new MethodCallExprContext((MethodCallExpr) node, typeSolver);
         } else if (node instanceof EnumDeclaration) {
-            return new EnumDeclarationContext((EnumDeclaration)node, typeSolver);
+            return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
         } else if (node instanceof FieldAccessExpr) {
             return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
         } else if (node instanceof SwitchEntryStmt) {
@@ -50,7 +54,7 @@ public class JavaParserFactory {
         }
     }
 
-    public static SymbolDeclarator getSymbolDeclarator(Node node, TypeSolver typeSolver){
+    public static SymbolDeclarator getSymbolDeclarator(Node node, TypeSolver typeSolver) {
         if (node instanceof FieldDeclaration) {
             return new FieldSymbolDeclarator((FieldDeclaration) node, typeSolver);
         } else if (node instanceof Parameter) {
@@ -65,7 +69,7 @@ public class JavaParserFactory {
         } else if (node instanceof IfStmt) {
             return new NoSimboyDeclarator(node, typeSolver);
         } else if (node instanceof ForeachStmt) {
-            ForeachStmt foreachStmt = (ForeachStmt)node;
+            ForeachStmt foreachStmt = (ForeachStmt) node;
             return new VariableSymbolDeclarator((VariableDeclarationExpr) (foreachStmt.getVariable()), typeSolver);
         } else {
             return new NoSimboyDeclarator(node, typeSolver);

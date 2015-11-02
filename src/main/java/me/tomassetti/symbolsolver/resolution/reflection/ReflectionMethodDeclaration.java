@@ -1,20 +1,18 @@
 package me.tomassetti.symbolsolver.resolution.reflection;
 
 import com.github.javaparser.ast.Node;
-import me.tomassetti.symbolsolver.resolution.Context;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.lang.reflect.Method;
-
 import java.util.Arrays;
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 /**
@@ -95,11 +93,11 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public List<TypeParameter> getTypeParameters() {
-        return Arrays.stream(method.getTypeParameters()).map((refTp)->new ReflectionTypeParameter(refTp, false)).collect(Collectors.toList());
+        return Arrays.stream(method.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false)).collect(Collectors.toList());
     }
 
     @Override
-    public MethodUsage resolveTypeVariables(Context context,  List<TypeUsage> parameterTypes) {
+    public MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes) {
         return new MethodUsage(new ReflectionMethodDeclaration(method, typeSolver), typeSolver);
     }
 

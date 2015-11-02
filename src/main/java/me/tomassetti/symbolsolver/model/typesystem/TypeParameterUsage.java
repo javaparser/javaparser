@@ -6,6 +6,10 @@ public class TypeParameterUsage implements TypeUsage {
 
     private TypeParameter typeParameter;
 
+    public TypeParameterUsage(TypeParameter typeParameter) {
+        this.typeParameter = typeParameter;
+    }
+
     @Override
     public String toString() {
         return "TypeUsageOfTypeParameter{" +
@@ -28,10 +32,6 @@ public class TypeParameterUsage implements TypeUsage {
     @Override
     public int hashCode() {
         return typeParameter.hashCode();
-    }
-
-    public TypeParameterUsage(TypeParameter typeParameter) {
-        this.typeParameter = typeParameter;
     }
 
     @Override

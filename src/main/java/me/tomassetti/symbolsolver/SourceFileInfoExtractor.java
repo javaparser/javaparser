@@ -7,25 +7,19 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-
-
-
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-
-
 
 
 /**
@@ -38,12 +32,13 @@ public class SourceFileInfoExtractor {
     private int ok = 0;
     private int ko = 0;
     private int unsupported = 0;
+    private boolean printFileName = true;
+    private PrintStream out = System.out;
+    private PrintStream err = System.err;
 
     public void setPrintFileName(boolean printFileName) {
         this.printFileName = printFileName;
     }
-
-    private boolean printFileName = true;
 
     public void clear() {
         ok = 0;
@@ -72,13 +67,10 @@ public class SourceFileInfoExtractor {
         return ko;
     }
 
-    private PrintStream out = System.out;
-    private PrintStream err = System.err;
-
     private void solveTypeDecl(ClassOrInterfaceDeclaration node) {
         TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
         if (typeDeclaration.isClass()) {
-            out.println("\n[ Class "+ typeDeclaration.getQualifiedName() + " ]");
+            out.println("\n[ Class " + typeDeclaration.getQualifiedName() + " ]");
             for (ReferenceTypeUsage sc : typeDeclaration.asClass().getAllSuperClasses()) {
                 out.println("  superclass: " + sc.getQualifiedName());
             }
@@ -90,36 +82,36 @@ public class SourceFileInfoExtractor {
 
     private void solve(Node node) {
         if (node instanceof ClassOrInterfaceDeclaration) {
-            solveTypeDecl((ClassOrInterfaceDeclaration)node);
+            solveTypeDecl((ClassOrInterfaceDeclaration) node);
         } else if (node instanceof Expression) {
             if ((node.getParentNode() instanceof ImportDeclaration) || (node.getParentNode() instanceof Expression)
                     || (node.getParentNode() instanceof MethodDeclaration)
                     || (node.getParentNode() instanceof PackageDeclaration)) {
                 // skip
-            } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)){
+            } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)) {
                 try {
                     TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
                     out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.describe());
                     ok++;
-                } catch (UnsupportedOperationException upe){
+                } catch (UnsupportedOperationException upe) {
                     unsupported++;
                     err.println(upe.getMessage());
                     throw upe;
-                } catch (RuntimeException re){
+                } catch (RuntimeException re) {
                     ko++;
                     err.println(re.getMessage());
                     throw re;
                 }
             }
         }
-        for (Node child : node.getChildrenNodes()){
+        for (Node child : node.getChildrenNodes()) {
             solve(child);
         }
     }
 
     public void solve(File file) throws IOException, ParseException {
         if (file.isDirectory()) {
-            for (File f : file.listFiles()){
+            for (File f : file.listFiles()) {
                 solve(f);
             }
         } else {

@@ -15,6 +15,11 @@ public class Value {
         this.field = field;
     }
 
+    public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
+        TypeUsage typeUsage = decl.getType();
+        return new Value(typeUsage, decl.getName(), decl.isField());
+    }
+
     public String getName() {
         return name;
     }
@@ -25,11 +30,6 @@ public class Value {
 
     public TypeUsage getUsage() {
         return typeUsage;
-    }
-
-    public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
-        TypeUsage typeUsage = decl.getType();
-        return new Value(typeUsage, decl.getName(), decl.isField());
     }
 
 }

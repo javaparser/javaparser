@@ -4,10 +4,15 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
-import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.resolution.Value;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedTypeException;
@@ -15,8 +20,6 @@ import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserC
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserMethodDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserTypeParameter;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         if (typeSolver == null) throw new IllegalArgumentException();
 
         // first among declared fields
-        for (BodyDeclaration member : wrappedNode.getMembers()){
+        for (BodyDeclaration member : wrappedNode.getMembers()) {
             if (member instanceof FieldDeclaration) {
                 SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
                 SymbolReference ref = solveWith(symbolDeclarator, name);
@@ -47,7 +50,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then among inherited fields
-        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && wrappedNode.getExtends().size() > 0){
+        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && wrappedNode.getExtends().size() > 0) {
             String superClassName = wrappedNode.getExtends().get(0).getName();
             SymbolReference<TypeDeclaration> superClass = solveType(superClassName, typeSolver);
             if (!superClass.isSolved()) {
@@ -68,7 +71,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         if (typeSolver == null) throw new IllegalArgumentException();
 
         // first among declared fields
-        for (BodyDeclaration member : wrappedNode.getMembers()){
+        for (BodyDeclaration member : wrappedNode.getMembers()) {
             if (member instanceof FieldDeclaration) {
                 SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
                 Optional<Value> ref = solveWithAsValue(symbolDeclarator, name, typeSolver);
@@ -79,7 +82,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then among inherited fields
-        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && wrappedNode.getExtends().size() > 0){
+        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && wrappedNode.getExtends().size() > 0) {
             String superClassName = wrappedNode.getExtends().get(0).getName();
             SymbolReference<TypeDeclaration> superClass = solveType(superClassName, typeSolver);
             if (!superClass.isSolved()) {
@@ -115,7 +118,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     private TypeDeclaration getDeclaration() {
-        if (this.wrappedNode.isInterface()){
+        if (this.wrappedNode.isInterface()) {
             return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver);
         } else {
             return new JavaParserClassDeclaration(this.wrappedNode, typeSolver);
@@ -126,7 +129,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         List<MethodDeclaration> candidateMethods = new ArrayList<>();
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration)member;
+                com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration) member;
                 if (method.getName().equals(name)) {
                     candidateMethods.add(new JavaParserMethodDeclaration(method, typeSolver));
                 }

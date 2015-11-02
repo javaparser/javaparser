@@ -5,7 +5,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 
@@ -24,7 +23,7 @@ public final class Navigator {
         if (cu.getTypes() == null) {
             return Optional.empty();
         }
-        return cu.getTypes().stream().filter((t)->t.getName().equals(name)).findFirst();
+        return cu.getTypes().stream().filter((t) -> t.getName().equals(name)).findFirst();
     }
 
     public static ClassOrInterfaceDeclaration demandClass(CompilationUnit cu, String name) {
@@ -40,7 +39,7 @@ public final class Navigator {
         if (!res.isPresent()) {
             throw new IllegalStateException("No type found");
         }
-        if (!(res.get() instanceof EnumDeclaration)){
+        if (!(res.get() instanceof EnumDeclaration)) {
             throw new IllegalStateException("Type is not an enum");
         }
         return (EnumDeclaration) res.get();
@@ -50,8 +49,8 @@ public final class Navigator {
         MethodDeclaration found = null;
         for (BodyDeclaration bd : cd.getMembers()) {
             if (bd instanceof MethodDeclaration) {
-                MethodDeclaration md = (MethodDeclaration)bd;
-                if (md.getName().equals(name)){
+                MethodDeclaration md = (MethodDeclaration) bd;
+                if (md.getName().equals(name)) {
                     if (found != null) {
                         throw new IllegalStateException("Ambiguous getName");
                     }
@@ -113,7 +112,7 @@ public final class Navigator {
 
     public static VariableDeclarator demandVariableDeclaration(Node node, String name) {
         if (node instanceof VariableDeclarator) {
-            VariableDeclarator variableDeclarator = (VariableDeclarator)node;
+            VariableDeclarator variableDeclarator = (VariableDeclarator) node;
             if (variableDeclarator.getId().getName().equals(name)) {
                 return variableDeclarator;
             }
@@ -132,10 +131,10 @@ public final class Navigator {
         if (!res.isPresent()) {
             throw new IllegalStateException("No type named '" + name + "'found");
         }
-        if (!(res.get() instanceof ClassOrInterfaceDeclaration)){
-            throw new IllegalStateException("Type is not a class or an interface, it is "+res.get().getClass().getCanonicalName());
+        if (!(res.get() instanceof ClassOrInterfaceDeclaration)) {
+            throw new IllegalStateException("Type is not a class or an interface, it is " + res.get().getClass().getCanonicalName());
         }
-        ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration)res.get();
+        ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration) res.get();
         return cd;
     }
 
@@ -150,9 +149,9 @@ public final class Navigator {
 
     private static SwitchStmt findSwitchHelper(Node node) {
         if (node instanceof SwitchStmt) {
-            return (SwitchStmt)node;
+            return (SwitchStmt) node;
         }
-        for (Node child : node.getChildrenNodes()){
+        for (Node child : node.getChildrenNodes()) {
             SwitchStmt resChild = findSwitchHelper(child);
             if (resChild != null) {
                 return resChild;
@@ -165,7 +164,7 @@ public final class Navigator {
         if (clazz.isInstance(node)) {
             return clazz.cast(node);
         }
-        for (Node child : node.getChildrenNodes()){
+        for (Node child : node.getChildrenNodes()) {
             N resChild = findNodeOfGivenClasshHelper(child, clazz);
             if (resChild != null) {
                 return resChild;
@@ -174,7 +173,7 @@ public final class Navigator {
         return null;
     }
 
-    public static<N> N findNodeOfGivenClass(Node node, Class<N> clazz) {
+    public static <N> N findNodeOfGivenClass(Node node, Class<N> clazz) {
         N res = findNodeOfGivenClasshHelper(node, clazz);
         if (res == null) {
             throw new IllegalArgumentException();

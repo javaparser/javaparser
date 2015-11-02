@@ -16,17 +16,17 @@ public class JavassistTypeParameter implements TypeParameter {
     private boolean declaredOnClass;
     private TypeSolver typeSolver;
 
-    @Override
-    public String toString() {
-        return "JavassistTypeParameter{" +
-                wrapped.getName()
-                +'}';
-    }
-
     public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, boolean declaredOnClass, TypeSolver typeSolver) {
         this.wrapped = wrapped;
         this.declaredOnClass = declaredOnClass;
         this.typeSolver = typeSolver;
+    }
+
+    @Override
+    public String toString() {
+        return "JavassistTypeParameter{" +
+                wrapped.getName()
+                + '}';
     }
 
     @Override

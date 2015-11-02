@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.resolution.javaparser;
 
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 
 /**
  * Placeholder used to represent a lambda argument type while it is being

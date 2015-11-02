@@ -34,7 +34,7 @@ public class ReflectionFactory {
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
             ReferenceTypeUsage rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceTypeUsage();
-            int i=0;
+            int i = 0;
             for (Type actualTypeArgument : pt.getActualTypeArguments()) {
                 rawType = rawType.replaceParam(i, typeUsageFor(actualTypeArgument, typeSolver)).asReferenceTypeUsage();
                 i++;
@@ -59,7 +59,7 @@ public class ReflectionFactory {
             GenericArrayType genericArrayType = (GenericArrayType) type;
             return new ArrayTypeUsage(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
         } else if (type instanceof WildcardType) {
-            WildcardType wildcardType = (WildcardType)type;
+            WildcardType wildcardType = (WildcardType) type;
             if (wildcardType.getLowerBounds().length > 0 && wildcardType.getUpperBounds().length > 0) {
                 if (wildcardType.getUpperBounds().length == 1 && wildcardType.getUpperBounds()[0].getTypeName().equals("java.lang.Object")) {
                     // ok, it does not matter
@@ -79,7 +79,7 @@ public class ReflectionFactory {
             }
             return WildcardUsage.UNBOUNDED;
         } else {
-            throw new UnsupportedOperationException(type.getClass().getCanonicalName()+" "+type);
+            throw new UnsupportedOperationException(type.getClass().getCanonicalName() + " " + type);
         }
     }
 }

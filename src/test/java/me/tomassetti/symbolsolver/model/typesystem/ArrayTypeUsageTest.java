@@ -92,6 +92,11 @@ public class ArrayTypeUsageTest {
         arrayOfBooleans.asTypeParameter();
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testAsPrimitive() {
+        arrayOfBooleans.asPrimitive();
+    }
+
     @Test
     public void testAsArrayTypeUsage() {
         assertTrue(arrayOfBooleans == arrayOfBooleans.asArrayTypeUsage());

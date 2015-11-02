@@ -5,32 +5,30 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
-import me.tomassetti.symbolsolver.resolution.Context;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 /**
  * Created by federico on 01/08/15.
  */
 public class JavassistMethodDeclaration implements MethodDeclaration {
+    private CtMethod ctMethod;
+    private TypeSolver typeSolver;
     public JavassistMethodDeclaration(CtMethod ctMethod, TypeSolver typeSolver) {
         this.ctMethod = ctMethod;
         this.typeSolver = typeSolver;
     }
-
-    private CtMethod ctMethod;
-    private TypeSolver typeSolver;
 
     @Override
     public String toString() {
@@ -79,12 +77,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
 
-
     @Override
     public int getNoParams() {
         try {
             return ctMethod.getParameterTypes().length;
-        } catch (NotFoundException e){
+        } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -93,7 +90,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     public ParameterDeclaration getParam(int i) {
         try {
             return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver);
-        } catch (NotFoundException e){
+        } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -119,7 +116,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
                 return Collections.emptyList();
             }
             SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
-            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp)->new JavassistTypeParameter(jasTp, false, typeSolver)).collect(Collectors.toList());
+            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp) -> new JavassistTypeParameter(jasTp, false, typeSolver)).collect(Collectors.toList());
         } catch (BadBytecode badBytecode) {
             throw new RuntimeException(badBytecode);
         }

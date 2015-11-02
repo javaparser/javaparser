@@ -2,17 +2,16 @@ package me.tomassetti.symbolsolver.resolution.javaparser.contexts;
 
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
-import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-
-import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.*;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
+import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 
 import java.util.List;
@@ -38,10 +37,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
             TypeUsage returnType = refType.replaceTypeParams(methodUsage.returnType());
-            if (returnType != methodUsage.returnType()){
+            if (returnType != methodUsage.returnType()) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
             }
-            for (int i=0;i<methodUsage.getParamTypes().size();i++){
+            for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
                 TypeUsage replaced = refType.replaceTypeParams(methodUsage.getParamTypes().get(i));
                 methodUsage = methodUsage.replaceParamType(i, replaced);
             }
@@ -68,9 +67,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     private Optional<MethodUsage> solveMethodAsUsage(TypeUsage typeUsage, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         if (typeUsage instanceof ReferenceTypeUsage) {
-            return solveMethodAsUsage((ReferenceTypeUsage)typeUsage, name, parameterTypes, typeSolver, invokationContext);
+            return solveMethodAsUsage((ReferenceTypeUsage) typeUsage, name, parameterTypes, typeSolver, invokationContext);
         } else if (typeUsage instanceof TypeParameterUsage) {
-            return solveMethodAsUsage((TypeParameterUsage)typeUsage, name, parameterTypes, typeSolver, invokationContext);
+            return solveMethodAsUsage((TypeParameterUsage) typeUsage, name, parameterTypes, typeSolver, invokationContext);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -83,17 +82,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             try {
                 TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
                 return solveMethodAsUsage(typeOfScope, name, parameterTypes, typeSolver, this);
-            } catch (UnsolvedSymbolException e){
+            } catch (UnsolvedSymbolException e) {
                 // ok, maybe it was instead a static access, so let's look for a type
-                if (wrappedNode.getScope() instanceof NameExpr){
-                    String className = ((NameExpr)wrappedNode.getScope()).getName();
+                if (wrappedNode.getScope() instanceof NameExpr) {
+                    String className = ((NameExpr) wrappedNode.getScope()).getName();
                     SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
                     if (ref.isSolved()) {
                         SymbolReference<MethodDeclaration> m = ref.getCorrespondingDeclaration().solveMethod(name, parameterTypes);
                         if (m.isSolved()) {
                             return Optional.of(new MethodUsage(m.getCorrespondingDeclaration(), typeSolver));
                         } else {
-                            throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(), "Method '"+name+"' with parameterTypes "+parameterTypes);
+                            throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(), "Method '" + name + "' with parameterTypes " + parameterTypes);
                         }
                     } else {
                         throw e;
@@ -104,7 +103,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
         } else {
             if (wrappedNode.getParentNode() instanceof MethodCallExpr) {
-                MethodCallExpr parent = (MethodCallExpr)wrappedNode.getParentNode();
+                MethodCallExpr parent = (MethodCallExpr) wrappedNode.getParentNode();
                 if (parent.getScope() == wrappedNode) {
                     return getParent().getParent().solveMethodAsUsage(name, parameterTypes, typeSolver);
                 }

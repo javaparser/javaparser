@@ -2,20 +2,15 @@ package me.tomassetti.symbolsolver.model.typesystem;
 
 public class WildcardUsage implements TypeUsage {
 
+    public static WildcardUsage UNBOUNDED = new WildcardUsage(null, null);
     //private WildcardType type;
     private BoundType type;
     private TypeUsage boundedType;
 
-    public enum BoundType {
-        SUPER,
-        EXTENDS
+    private WildcardUsage(BoundType type, TypeUsage boundedType) {
+        this.type = type;
+        this.boundedType = boundedType;
     }
-
-    public boolean isWildcard() {
-        return true;
-    }
-
-    public static WildcardUsage UNBOUNDED = new WildcardUsage(null, null);
 
     public static WildcardUsage superBound(TypeUsage typeUsage) {
         return new WildcardUsage(BoundType.SUPER, typeUsage);
@@ -25,13 +20,12 @@ public class WildcardUsage implements TypeUsage {
         return new WildcardUsage(BoundType.EXTENDS, typeUsage);
     }
 
-    public WildcardUsage asWildcard() {
-        return this;
+    public boolean isWildcard() {
+        return true;
     }
 
-    private WildcardUsage(BoundType type, TypeUsage boundedType) {
-        this.type = type;
-        this.boundedType = boundedType;
+    public WildcardUsage asWildcard() {
+        return this;
     }
 
     @Override
@@ -98,5 +92,10 @@ public class WildcardUsage implements TypeUsage {
         } else {
             return this;
         }
+    }
+
+    public enum BoundType {
+        SUPER,
+        EXTENDS
     }
 }

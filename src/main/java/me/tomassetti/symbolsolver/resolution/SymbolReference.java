@@ -15,11 +15,15 @@ public class SymbolReference<S extends Declaration> {
     private Optional<? extends S> correspondingDeclaration;
     private Map<String, TypeUsage> typeParametersByName = new HashMap<>();
 
-    public static <S extends Declaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration){
+    private SymbolReference(Optional<? extends S> correspondingDeclaration) {
+        this.correspondingDeclaration = correspondingDeclaration;
+    }
+
+    public static <S extends Declaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration) {
         return new SymbolReference(Optional.of(symbolDeclaration));
     }
 
-    public static <S extends Declaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz){
+    public static <S extends Declaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz) {
         return new SymbolReference(Optional.<S>empty());
     }
 
@@ -30,11 +34,7 @@ public class SymbolReference<S extends Declaration> {
                 '}';
     }
 
-    private SymbolReference(Optional<? extends S> correspondingDeclaration){
-        this.correspondingDeclaration = correspondingDeclaration;
-    }
-
-    public S getCorrespondingDeclaration(){
+    public S getCorrespondingDeclaration() {
         if (!isSolved()) {
             throw new IllegalStateException();
         }

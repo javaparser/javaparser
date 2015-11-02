@@ -1,15 +1,19 @@
 package me.tomassetti.symbolsolver.resolution.reflection;
 
 import com.github.javaparser.ast.Node;
-
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.NullTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.typesystem.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -124,8 +128,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
         }
         final List<TypeUsage> finalTypeParameterValues = typeParameterValues;
-        parameterTypes = parameterTypes.stream().map((pt)->{
-            int i=0;
+        parameterTypes = parameterTypes.stream().map((pt) -> {
+            int i = 0;
             for (TypeParameter tp : getTypeParameters()) {
                 pt = pt.replaceParam(tp.getName(), finalTypeParameterValues.get(i));
                 i++;
@@ -141,16 +145,16 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
         }
-        if (other.getQualifiedName().equals(getQualifiedName())){
+        if (other.getQualifiedName().equals(getQualifiedName())) {
             return true;
         }
         if (this.clazz.getSuperclass() != null) {
-            if (new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)){
+            if (new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)) {
                 return true;
             }
         }
-        for (Class interfaze : clazz.getInterfaces()){
-            if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other)){
+        for (Class interfaze : clazz.getInterfaces()) {
+            if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other)) {
                 return true;
             }
         }
@@ -174,14 +178,14 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         if (typeUsage.isArray()) {
             return false;
         }
-        if (typeUsage.isPrimitive()){
+        if (typeUsage.isPrimitive()) {
             return false;
         }
-        if (typeUsage.describe().equals(getQualifiedName())){
+        if (typeUsage.describe().equals(getQualifiedName())) {
             return true;
         }
-        if (typeUsage instanceof ReferenceTypeUsage){
-            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage)typeUsage;
+        if (typeUsage instanceof ReferenceTypeUsage) {
+            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage) typeUsage;
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this);
         }
 
@@ -228,7 +232,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        for (Field field : clazz.getFields()){
+        for (Field field : clazz.getFields()) {
             if (field.getName().equals(name)) {
                 return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
@@ -254,7 +258,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             ancestors.add(interfazeDecl);
             ancestors.addAll(interfazeDecl.getAllAncestors());
         }
-        for (int i=0;i<ancestors.size();i++){
+        for (int i = 0; i < ancestors.size(); i++) {
             if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
                 ancestors.remove(i);
                 i--;

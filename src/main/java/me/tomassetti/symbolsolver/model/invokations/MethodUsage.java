@@ -1,9 +1,8 @@
 package me.tomassetti.symbolsolver.model.invokations;
 
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class MethodUsage {
 
     public MethodUsage(MethodDeclaration declaration, TypeSolver typeSolver) {
         this.declaration = declaration;
-        for (int i=0;i<declaration.getNoParams();i++){
+        for (int i = 0; i < declaration.getNoParams(); i++) {
             paramTypes.add(declaration.getParam(i).getType());
         }
         returnType = declaration.getReturnType();
@@ -30,7 +29,7 @@ public class MethodUsage {
     }
 
     private static TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
-        if (typeToBeExamined.isTypeVariable()){
+        if (typeToBeExamined.isTypeVariable()) {
             if (typeToBeExamined.describe().equals(name)) {
                 return newValue;
             } else {
@@ -100,7 +99,7 @@ public class MethodUsage {
     public MethodUsage replaceNameParam(String name, TypeUsage typeUsage) {
         // TODO if the method declaration has a type param with that name ignore this call
         MethodUsage res = this;
-        for (int i = 0; i<paramTypes.size(); i++){
+        for (int i = 0; i < paramTypes.size(); i++) {
             TypeUsage originalParamType = paramTypes.get(i);
             TypeUsage newParamType = originalParamType.replaceParam(name, typeUsage);
             //TypeUsage newParamType = replaceNameParam(name, typeUsage, originalParamType);

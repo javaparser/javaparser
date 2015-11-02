@@ -2,13 +2,11 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
-
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
-
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 public class JavaParserFieldDeclaration implements FieldDeclaration {
 
@@ -20,10 +18,10 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     public JavaParserFieldDeclaration(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
-        if (!(variableDeclarator.getParentNode() instanceof com.github.javaparser.ast.body.FieldDeclaration)){
+        if (!(variableDeclarator.getParentNode() instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
             throw new IllegalStateException();
         }
-        this.fieldDeclaration = (com.github.javaparser.ast.body.FieldDeclaration)variableDeclarator.getParentNode();
+        this.fieldDeclaration = (com.github.javaparser.ast.body.FieldDeclaration) variableDeclarator.getParentNode();
     }
 
     public JavaParserFieldDeclaration(EnumConstantDeclaration enumConstantDeclaration) {
@@ -33,7 +31,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     @Override
     public TypeUsage getType() {
         if (enumConstantDeclaration != null) {
-            com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration)enumConstantDeclaration.getParentNode();
+            com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) enumConstantDeclaration.getParentNode();
             return new ReferenceTypeUsage(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
         } else {
             return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), fieldDeclaration);

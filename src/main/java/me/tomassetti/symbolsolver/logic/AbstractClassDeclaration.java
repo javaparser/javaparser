@@ -21,7 +21,7 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllAncestors());
         }
-        for (int i=0;i<superclasses.size();i++){
+        for (int i = 0; i < superclasses.size(); i++) {
             if (superclasses.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
                 superclasses.remove(i);
                 i--;
@@ -30,7 +30,7 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
         TypeDeclaration objectType = typeSolver().solveType(Object.class.getCanonicalName());
         ReferenceTypeUsage objectRef = new ReferenceTypeUsage(objectType, typeSolver());
         superclasses.add(objectRef);
-        return superclasses.stream().filter((s)->s.getTypeDeclaration().isClass()).collect(Collectors.toList());
+        return superclasses.stream().filter((s) -> s.getTypeDeclaration().isClass()).collect(Collectors.toList());
     }
 
     @Override
@@ -38,7 +38,7 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
         // TODO it could specify type parameters: they should appear
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
         //ClassDeclaration superClass = getSuperClass(typeSolver);
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()){
+        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
             interfaces.add(interfaceDeclaration);
             interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended());
         }

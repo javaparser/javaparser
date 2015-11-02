@@ -1,16 +1,17 @@
 package me.tomassetti.symbolsolver.resolution.javaparser.contexts;
 
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
-import me.tomassetti.symbolsolver.resolution.*;
-import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.resolution.javaparser.declarations.*;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
+import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserEnumConstantDeclaration;
+import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserEnumDeclaration;
+import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserMethodDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
         }
 
         // among declared fields
-        for (BodyDeclaration member : wrappedNode.getMembers()){
+        for (BodyDeclaration member : wrappedNode.getMembers()) {
             if (member instanceof FieldDeclaration) {
                 SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
                 SymbolReference ref = solveWith(symbolDeclarator, name);
@@ -50,15 +51,15 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
         // then to parent
         return getParent().solveSymbol(name, typeSolver);
     }
-    
+
     @Override
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        if (this.wrappedNode.getName().equals(name)){
+        if (this.wrappedNode.getName().equals(name)) {
             return SymbolReference.solved(new JavaParserEnumDeclaration(this.wrappedNode, typeSolver));
         }
 
         // Internal classes
-        for (BodyDeclaration member : this.wrappedNode.getMembers()){
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
                 com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
                 if (internalType.getName().equals(name)) {
@@ -79,7 +80,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
         List<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> candidateMethods = new ArrayList<>();
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration)member;
+                com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration) member;
                 if (method.getName().equals(name)) {
                     candidateMethods.add(new JavaParserMethodDeclaration(method, typeSolver));
                 }

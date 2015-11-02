@@ -1,11 +1,11 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.Context;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +46,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     /**
      * Try to solve a symbol just in the declaration, it does not delegate to the container.
+     *
      * @param substring
      * @param typeSolver
      * @return
@@ -66,7 +67,9 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return false;
     }
 
-    default boolean isTypeVariable() { return false; }
+    default boolean isTypeVariable() {
+        return false;
+    }
 
     @Override
     default boolean isType() {

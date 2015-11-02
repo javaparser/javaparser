@@ -11,5 +11,6 @@ import java.util.List;
 public interface SymbolDeclarator {
 
     public List<ValueDeclaration> getSymbolDeclarations();
+
     public List<MethodDeclaration> getMethodDeclarations();
 }

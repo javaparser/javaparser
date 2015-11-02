@@ -7,14 +7,17 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
-import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -24,18 +27,17 @@ import java.util.Optional;
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
 
     private TypeSolver typeSolver;
-
-    @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
-    }
+    private com.github.javaparser.ast.body.EnumDeclaration wrappedNode;
 
     public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
 
-    private com.github.javaparser.ast.body.EnumDeclaration wrappedNode;
+    @Override
+    public boolean isAssignableBy(TypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+    }
 
     @Override
     public Context getContext() {
@@ -112,7 +114,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     private String containerName(String base, Node container) {
         if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
             String b = containerName(base, container.getParentNode());
-            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)container).getName();
+            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
             if (b.isEmpty()) {
                 return cn;
             } else {
@@ -174,7 +176,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
             }
         }
 
-        throw new UnsolvedSymbolException("Field "+name);
+        throw new UnsolvedSymbolException("Field " + name);
     }
 
     @Override
@@ -197,53 +199,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     @Override
     protected TypeSolver typeSolver() {
         return typeSolver;
-    }
-
-    private class ValuesMethod implements MethodDeclaration {
-
-        @Override
-        public TypeDeclaration declaringType() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public TypeUsage getReturnType() {
-            return new ArrayTypeUsage(new ReferenceTypeUsage(JavaParserEnumDeclaration.this, typeSolver));
-        }
-
-        @Override
-        public int getNoParams() {
-            return 0;
-        }
-
-        @Override
-        public ParameterDeclaration getParam(int i) {
-            throw new UnsupportedOperationException();
-        }
-
-        public MethodUsage getUsage(Node node) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes) {
-            return new MethodUsage(this, typeSolver);
-        }
-
-        @Override
-        public Context getContext() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public String getName() {
-            return "values";
-        }
-
-        @Override
-        public List<TypeParameter> getTypeParameters() {
-            return Collections.emptyList();
-        }
     }
 
     @Override
@@ -309,5 +264,52 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     @Override
     public List<TypeParameter> getTypeParameters() {
         return Collections.emptyList();
+    }
+
+    private class ValuesMethod implements MethodDeclaration {
+
+        @Override
+        public TypeDeclaration declaringType() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public TypeUsage getReturnType() {
+            return new ArrayTypeUsage(new ReferenceTypeUsage(JavaParserEnumDeclaration.this, typeSolver));
+        }
+
+        @Override
+        public int getNoParams() {
+            return 0;
+        }
+
+        @Override
+        public ParameterDeclaration getParam(int i) {
+            throw new UnsupportedOperationException();
+        }
+
+        public MethodUsage getUsage(Node node) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes) {
+            return new MethodUsage(this, typeSolver);
+        }
+
+        @Override
+        public Context getContext() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getName() {
+            return "values";
+        }
+
+        @Override
+        public List<TypeParameter> getTypeParameters() {
+            return Collections.emptyList();
+        }
     }
 }

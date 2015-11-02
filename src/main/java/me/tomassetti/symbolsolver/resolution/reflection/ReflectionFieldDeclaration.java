@@ -1,21 +1,19 @@
 package me.tomassetti.symbolsolver.resolution.reflection;
 
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
-
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.lang.reflect.Field;
 
 public class ReflectionFieldDeclaration implements FieldDeclaration {
 
+    private Field field;
+    private TypeSolver typeSolver;
     public ReflectionFieldDeclaration(Field field, TypeSolver typeSolver) {
         this.field = field;
         this.typeSolver = typeSolver;
     }
-
-    private Field field;
-    private TypeSolver typeSolver;
 
     @Override
     public TypeUsage getType() {

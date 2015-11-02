@@ -9,11 +9,10 @@ import me.tomassetti.symbolsolver.resolution.TypeSolver;
  */
 public abstract class AbstractSymbolDeclarator<N extends Node> implements SymbolDeclarator {
 
+    protected N wrappedNode;
+    protected TypeSolver typeSolver;
     public AbstractSymbolDeclarator(N wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
-
-    protected N wrappedNode;
-    protected TypeSolver typeSolver;
 }

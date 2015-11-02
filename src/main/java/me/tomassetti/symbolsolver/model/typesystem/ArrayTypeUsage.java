@@ -2,6 +2,12 @@ package me.tomassetti.symbolsolver.model.typesystem;
 
 public class ArrayTypeUsage implements TypeUsage {
 
+    private TypeUsage baseType;
+
+    public ArrayTypeUsage(TypeUsage baseType) {
+        this.baseType = baseType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -31,12 +37,6 @@ public class ArrayTypeUsage implements TypeUsage {
         return baseType.hashCode();
     }
 
-    private TypeUsage baseType;
-
-    public ArrayTypeUsage(TypeUsage baseType) {
-        this.baseType = baseType;
-    }
-
     @Override
     public boolean isArray() {
         return true;
@@ -44,7 +44,7 @@ public class ArrayTypeUsage implements TypeUsage {
 
     @Override
     public String describe() {
-        return baseType.describe()+"[]";
+        return baseType.describe() + "[]";
     }
 
     public TypeUsage getComponentType() {

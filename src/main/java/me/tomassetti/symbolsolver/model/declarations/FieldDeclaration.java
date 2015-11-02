@@ -14,5 +14,5 @@ public interface FieldDeclaration extends ValueDeclaration {
     default FieldDeclaration asField() {
         return this;
     }
-    
+
 }

@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.resolution.typesolvers;
 
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,7 @@ import java.util.Map;
 public class DummyTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
+    private Map<String, TypeDeclaration> declarationMap = new HashMap<>();
 
     @Override
     public TypeSolver getParent() {
@@ -21,9 +22,7 @@ public class DummyTypeSolver implements TypeSolver {
         this.parent = parent;
     }
 
-    private Map<String, TypeDeclaration> declarationMap = new HashMap<>();
-
-    public void addDeclaration(String name, TypeDeclaration typeDeclaration){
+    public void addDeclaration(String name, TypeDeclaration typeDeclaration) {
         this.declarationMap.put(name, typeDeclaration);
     }
 
