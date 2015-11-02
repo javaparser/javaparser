@@ -24,19 +24,19 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
      * Note that only the Object class should not have a superclass and therefore
      * return null.
      */
-    ReferenceTypeUsage getSuperClass(TypeSolver typeSolvers);
+    ReferenceTypeUsage getSuperClass();
 
     /**
      * Return all the interfaces implemented directly by this class.
      * It does not include the interfaces implemented by superclasses or extended
      * by the interfaces implemented.
      */
-    List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver);
+    List<InterfaceDeclaration> getInterfaces();
 
     default List<ReferenceTypeUsage> getAllSuperClasses(TypeSolver typeSolver) {
         // TODO it could specify type parameters: they should appear
         List<ReferenceTypeUsage> superclasses = new ArrayList<>();
-        ReferenceTypeUsage superClass = getSuperClass(typeSolver);
+        ReferenceTypeUsage superClass = getSuperClass();
         if (superClass != null) {
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllAncestors());
@@ -57,7 +57,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
         // TODO it could specify type parameters: they should appear
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
         //ClassDeclaration superClass = getSuperClass(typeSolver);
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces(typeSolver)){
+        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()){
             interfaces.add(interfaceDeclaration);
             interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended(typeSolver));
         }

@@ -23,9 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 30/07/15.
- */
 public class JavaParserClassDeclaration implements ClassDeclaration {
 
     private TypeSolver typeSolver;
@@ -98,7 +95,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeUsage getSuperClass(TypeSolver typeSolver) {
+    public ReferenceTypeUsage getSuperClass() {
         if (wrappedNode.getExtends() == null || wrappedNode.getExtends().isEmpty()) {
             return new ReferenceTypeUsage(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
         } else {
@@ -111,7 +108,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver) {
+    public List<InterfaceDeclaration> getInterfaces() {
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
@@ -199,7 +196,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
-        ClassDeclaration superclass = (ClassDeclaration) getSuperClass(typeSolver).getTypeDeclaration();
+        ClassDeclaration superclass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
         if (superclass != null) {
             if (superclass.canBeAssignedTo(other)) {
                 return true;
@@ -236,7 +233,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             }
         }
 
-        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass(typeSolver).getTypeDeclaration();
+        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
         if (superclass != null) {
             return superclass.getField(name);
         } else {
@@ -265,7 +262,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
             }
         }
 
-        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass(typeSolver).getTypeDeclaration();
+        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
         if (superclass != null) {
             return superclass.hasField(name);
         } else {
@@ -329,7 +326,7 @@ public class JavaParserClassDeclaration implements ClassDeclaration {
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
-        ReferenceTypeUsage superclass = getSuperClass(typeSolver);
+        ReferenceTypeUsage superclass = getSuperClass();
         if (superclass != null) {
             ancestors.add(superclass);
             ancestors.addAll(superclass.getAllAncestors());

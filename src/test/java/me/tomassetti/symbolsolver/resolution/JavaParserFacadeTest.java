@@ -12,9 +12,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by federico on 22/08/15.
- */
+
 public class JavaParserFacadeTest extends AbstractTest {
 
     @Test
@@ -22,7 +20,7 @@ public class JavaParserFacadeTest extends AbstractTest {
         CompilationUnit cu = parseSample("Generics");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         TypeDeclaration typeDeclaration = JavaParserFacade.get(new JreTypeSolver()).getTypeDeclaration(clazz);
-        ReferenceTypeUsage superclass = typeDeclaration.asClass().getSuperClass(new JreTypeSolver());
+        ReferenceTypeUsage superclass = typeDeclaration.asClass().getSuperClass();
         assertEquals(Object.class.getCanonicalName(), superclass.getQualifiedName());
     }
 }

@@ -24,10 +24,10 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
-        if (getSuperClass(typeSolver) != null) {
-            ReferenceTypeUsage superClass = getSuperClass(typeSolver);
+        if (getSuperClass() != null) {
+            ReferenceTypeUsage superClass = getSuperClass();
             ancestors.add(superClass);
-            ancestors.addAll(getSuperClass(typeSolver).getAllAncestors());
+            ancestors.addAll(getSuperClass().getAllAncestors());
         }
         ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
         for (int i=0;i<ancestors.size();i++){
@@ -139,14 +139,14 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
         }
-        if (getSuperClass(typeSolver) != null) {
-            ClassDeclaration superClass = (ClassDeclaration)getSuperClass(typeSolver).getTypeDeclaration();
+        if (getSuperClass() != null) {
+            ClassDeclaration superClass = (ClassDeclaration)getSuperClass().getTypeDeclaration();
             SymbolReference<MethodDeclaration> ref = superClass.solveMethod(name, parameterTypes, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces(typeSolver)) {
+        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
             SymbolReference<MethodDeclaration> ref = interfaceDeclaration.solveMethod(name, parameterTypes, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
@@ -181,14 +181,14 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             }
             methods.add(methodUsage);
         }
-        if (getSuperClass(typeSolver) != null) {
-            ClassDeclaration superClass = (ClassDeclaration)getSuperClass(typeSolver).getTypeDeclaration();
+        if (getSuperClass() != null) {
+            ClassDeclaration superClass = (ClassDeclaration)getSuperClass().getTypeDeclaration();
             Optional<MethodUsage> ref = superClass.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
         }
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces(typeSolver)) {
+        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
             Optional<MethodUsage> ref = interfaceDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
@@ -312,7 +312,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
                 return true;
             }
         }
-        ReferenceTypeUsage superclass = getSuperClass(typeSolver);
+        ReferenceTypeUsage superclass = getSuperClass();
         if (superclass == null) {
             return false;
         } else {
@@ -356,7 +356,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeUsage getSuperClass(TypeSolver typeSolvers) {
+    public ReferenceTypeUsage getSuperClass() {
         if (clazz.getGenericSuperclass() == null) {
             return null;
         }
@@ -366,13 +366,13 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             List<TypeUsage> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                     .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                     .collect(Collectors.toList());
-            return new ReferenceTypeUsage(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolvers);
+            return new ReferenceTypeUsage(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver);
         }
-        return new ReferenceTypeUsage(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolvers);
+        return new ReferenceTypeUsage(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
     }
 
     @Override
-    public List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver) {
+    public List<InterfaceDeclaration> getInterfaces() {
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
         // TODO use genericInterfaces
         for (Class i : clazz.getInterfaces()) {

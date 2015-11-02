@@ -185,9 +185,9 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
-        if (getSuperClass(typeSolver) != null) {
-            ancestors.add(getSuperClass(typeSolver));
-            ancestors.addAll(getSuperClass(typeSolver).getAllAncestors());
+        if (getSuperClass() != null) {
+            ancestors.add(getSuperClass());
+            ancestors.addAll(getSuperClass().getAllAncestors());
         }
         ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
         return ancestors;
@@ -318,7 +318,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeUsage getSuperClass(TypeSolver typeSolvers) {
+    public ReferenceTypeUsage getSuperClass() {
         try {
             if (ctClass.getSuperclass() == null) {
                 throw new UnsupportedOperationException();
@@ -330,7 +330,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
     }
 
     @Override
-    public List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver) {
+    public List<InterfaceDeclaration> getInterfaces() {
         throw new UnsupportedOperationException();
     }
 

@@ -8,9 +8,7 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
-/**
- * Created by federico on 20/08/15.
- */
+
 public class JavassistFactory {
 
     public static TypeUsage typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {
