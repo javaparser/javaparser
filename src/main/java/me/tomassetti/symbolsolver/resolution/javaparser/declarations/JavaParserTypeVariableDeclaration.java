@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.TypeParameter;
+import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.Context;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
@@ -15,10 +16,7 @@ import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by federico on 04/08/15.
- */
-public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
+public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     private TypeParameter wrappedNode;
     private TypeSolver typeSolver;
@@ -51,8 +49,13 @@ public class JavaParserTypeVariableDeclaration implements TypeDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected TypeSolver typeSolver() {
+        return typeSolver;
     }
 
     public TypeUsage getUsage(Node node) {

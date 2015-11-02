@@ -175,7 +175,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         if (importDecl.getName() instanceof QualifiedNameExpr) {
                             String qName = importDecl.getName().toString();
                             me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(qName);
-                            SymbolReference<MethodDeclaration> method = ref.solveMethod(name, parameterTypes, typeSolver);
+                            SymbolReference<MethodDeclaration> method = ref.solveMethod(name, parameterTypes);
                             if (method.isSolved()) {
                                 return method;
                             }
@@ -188,7 +188,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                             if (qName.equals(name) || qName.endsWith("." + name)) {
                                 String typeName = getType(qName);
                                 me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
-                                SymbolReference<MethodDeclaration> method = ref.solveMethod(name, parameterTypes, typeSolver);
+                                SymbolReference<MethodDeclaration> method = ref.solveMethod(name, parameterTypes);
                                 if (method.isSolved()) {
                                     return method;
                                 }

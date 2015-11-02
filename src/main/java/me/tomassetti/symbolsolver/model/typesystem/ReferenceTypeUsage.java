@@ -245,7 +245,7 @@ public class ReferenceTypeUsage implements TypeUsage {
     }
 
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        return typeDeclaration.solveMethod(name, parameterTypes, typeSolver);
+        return typeDeclaration.solveMethod(name, parameterTypes);
     }
 
     public List<TypeUsage> parameters() {

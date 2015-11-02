@@ -31,5 +31,6 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
     @Deprecated
     MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes);
 
+    @Deprecated
     Context getContext();
 }

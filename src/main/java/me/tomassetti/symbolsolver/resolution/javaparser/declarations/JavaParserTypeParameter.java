@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.Context;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
@@ -18,10 +19,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
+public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameter {
 
     private com.github.javaparser.ast.TypeParameter wrappedNode;
-
 
     @Override
     public boolean equals(Object o) {
@@ -140,5 +140,10 @@ public class JavaParserTypeParameter implements TypeParameter, TypeDeclaration {
     @Override
     public List<TypeParameter> getTypeParameters() {
         return Collections.emptyList();
+    }
+
+    @Override
+    protected TypeSolver typeSolver() {
+        return typeSolver;
     }
 }

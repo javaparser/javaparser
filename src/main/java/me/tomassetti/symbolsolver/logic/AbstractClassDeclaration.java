@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractClassDeclaration implements ClassDeclaration {
+public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration implements ClassDeclaration {
 
     @Override
     public final List<ReferenceTypeUsage> getAllSuperClasses() {

@@ -139,7 +139,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
@@ -148,13 +148,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration)getSuperClass().getTypeDeclaration();
-            SymbolReference<MethodDeclaration> ref = superClass.solveMethod(name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> ref = superClass.solveMethod(name, parameterTypes);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
         for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
-            SymbolReference<MethodDeclaration> ref = interfaceDeclaration.solveMethod(name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> ref = interfaceDeclaration.solveMethod(name, parameterTypes);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }

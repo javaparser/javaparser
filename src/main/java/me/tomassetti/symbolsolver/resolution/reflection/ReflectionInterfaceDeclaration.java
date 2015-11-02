@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.resolution.reflection;
 
 import com.github.javaparser.ast.Node;
 
+import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.resolution.*;
@@ -21,10 +22,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 02/08/15.
- */
-public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
+public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private Class<?> clazz;
     private TypeSolver typeSolver;
@@ -54,7 +52,7 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
             if (method.isBridge() || method.isSynthetic()) continue;
@@ -303,5 +301,10 @@ public class ReflectionInterfaceDeclaration implements InterfaceDeclaration {
             params.add(new ReflectionTypeParameter(tv, true));
         }
         return params;
+    }
+
+    @Override
+    protected TypeSolver typeSolver() {
+        return typeSolver;
     }
 }

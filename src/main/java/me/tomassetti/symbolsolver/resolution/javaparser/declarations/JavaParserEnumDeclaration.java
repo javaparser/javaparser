@@ -6,6 +6,7 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
@@ -20,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class JavaParserEnumDeclaration implements EnumDeclaration {
+public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
 
     private TypeSolver typeSolver;
 
@@ -193,6 +194,11 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
         return wrappedNode.hashCode();
     }
 
+    @Override
+    protected TypeSolver typeSolver() {
+        return typeSolver;
+    }
+
     private class ValuesMethod implements MethodDeclaration {
 
         @Override
@@ -241,7 +247,7 @@ public class JavaParserEnumDeclaration implements EnumDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
         if (name.equals("values") && parameterTypes.size() == 0) {
             return SymbolReference.solved(new ValuesMethod());
         }

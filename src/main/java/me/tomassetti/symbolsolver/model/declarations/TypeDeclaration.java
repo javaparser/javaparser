@@ -18,11 +18,11 @@ import java.util.Optional;
  */
 public interface TypeDeclaration extends Declaration, TypeParametrized {
     String getQualifiedName();
+
+    @Deprecated
     Context getContext();
 
-    default SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        return getContext().solveMethod(name, parameterTypes, typeSolver);
-    }
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes);
 
     @Deprecated
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {

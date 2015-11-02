@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
@@ -20,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
+public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private TypeSolver typeSolver;
 
@@ -305,5 +306,10 @@ public class JavaParserInterfaceDeclaration implements InterfaceDeclaration {
                     (tp) -> new JavaParserTypeParameter(tp, typeSolver)
             ).collect(Collectors.toList());
         }
+    }
+
+    @Override
+    protected TypeSolver typeSolver() {
+        return typeSolver;
     }
 }
