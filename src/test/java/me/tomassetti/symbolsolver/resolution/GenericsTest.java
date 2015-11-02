@@ -1,11 +1,9 @@
 package me.tomassetti.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -13,26 +11,17 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.common.collect.ImmutableList;
-import javassist.compiler.ast.Expr;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.contexts.ClassOrInterfaceDeclarationContext;
-import me.tomassetti.symbolsolver.resolution.javaparser.contexts.MethodCallExprContext;
-import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserClassDeclaration;
-import me.tomassetti.symbolsolver.resolution.reflection.ReflectionMethodDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

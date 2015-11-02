@@ -1,7 +1,10 @@
-package me.tomassetti.symbolsolver.resolution;
+package me.tomassetti.symbolsolver.logic;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;

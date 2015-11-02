@@ -79,10 +79,10 @@ public class SourceFileInfoExtractor {
         TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
         if (typeDeclaration.isClass()) {
             out.println("\n[ Class "+ typeDeclaration.getQualifiedName() + " ]");
-            for (ReferenceTypeUsage sc : typeDeclaration.asClass().getAllSuperClasses(typeSolver)) {
+            for (ReferenceTypeUsage sc : typeDeclaration.asClass().getAllSuperClasses()) {
                 out.println("  superclass: " + sc.getQualifiedName());
             }
-            for (TypeDeclaration sc : typeDeclaration.asClass().getAllInterfaces(typeSolver)) {
+            for (TypeDeclaration sc : typeDeclaration.asClass().getAllInterfaces()) {
                 out.println("  interface: " + sc.getQualifiedName());
             }
         }

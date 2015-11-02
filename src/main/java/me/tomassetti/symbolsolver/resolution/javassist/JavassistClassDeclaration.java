@@ -7,6 +7,8 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
+import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
+import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.resolution.javassist.contexts.JavassistMethodContext;
@@ -21,13 +23,15 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 01/08/15.
- */
-public class JavassistClassDeclaration implements ClassDeclaration {
+public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
+
+    @Override
+    protected TypeSolver typeSolver() {
+        return typeSolver;
+    }
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
@@ -189,7 +193,7 @@ public class JavassistClassDeclaration implements ClassDeclaration {
             ancestors.add(getSuperClass());
             ancestors.addAll(getSuperClass().getAllAncestors());
         }
-        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
+        ancestors.addAll(getAllInterfaces().stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
         return ancestors;
     }
     @Override

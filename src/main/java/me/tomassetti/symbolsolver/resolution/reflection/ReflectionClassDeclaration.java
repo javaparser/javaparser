@@ -2,6 +2,8 @@ package me.tomassetti.symbolsolver.resolution.reflection;
 
 import com.github.javaparser.ast.Node;
 
+import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
+import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
@@ -16,10 +18,15 @@ import java.util.function.Predicate;
 
 import java.util.stream.Collectors;
 
-public class ReflectionClassDeclaration implements ClassDeclaration {
+public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     private Class<?> clazz;
     private TypeSolver typeSolver;
+
+    @Override
+    protected TypeSolver typeSolver() {
+        return typeSolver;
+    }
 
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
@@ -29,7 +36,7 @@ public class ReflectionClassDeclaration implements ClassDeclaration {
             ancestors.add(superClass);
             ancestors.addAll(getSuperClass().getAllAncestors());
         }
-        ancestors.addAll(getAllInterfaces(typeSolver).stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
+        ancestors.addAll(getAllInterfaces().stream().map((i)->new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
         for (int i=0;i<ancestors.size();i++){
             if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
                 ancestors.remove(i);

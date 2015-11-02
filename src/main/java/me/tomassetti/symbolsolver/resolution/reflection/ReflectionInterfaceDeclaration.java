@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.resolution.reflection;
 
 import com.github.javaparser.ast.Node;
 
+import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.model.declarations.*;
