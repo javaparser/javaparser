@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.resolution.reflection;
+package me.tomassetti.symbolsolver.reflectionmodel;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;

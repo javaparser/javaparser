@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.resolution.reflection;
+package me.tomassetti.symbolsolver.resolution.reflectionmodel;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;

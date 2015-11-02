@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.resolution.reflection;
+package me.tomassetti.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
