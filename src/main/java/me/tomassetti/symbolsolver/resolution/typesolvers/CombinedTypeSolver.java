@@ -17,6 +17,12 @@ public class CombinedTypeSolver implements TypeSolver {
         return parent;
     }
 
+    public CombinedTypeSolver(TypeSolver... elements) {
+        for (TypeSolver el : elements) {
+            add(el);
+        }
+    }
+
     @Override
     public void setParent(TypeSolver parent) {
         this.parent = parent;

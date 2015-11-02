@@ -2,14 +2,13 @@ package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * A class declaration.
+ * Declaration of a Class (not an interface or an enum).
  */
 public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
 
@@ -19,6 +18,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
     }
 
     ReferenceTypeUsage getSuperClass(TypeSolver typeSolvers);
+
     List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver);
 
     default List<ReferenceTypeUsage> getAllSuperClasses(TypeSolver typeSolver) {
@@ -35,8 +35,9 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
                 i--;
             }
         }
-        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        superclasses.add(object);
+        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ReferenceTypeUsage objectRef = new ReferenceTypeUsage(objectType, typeSolver);
+        superclasses.add(objectRef);
         return superclasses.stream().filter((s)->s.getTypeDeclaration().isClass()).collect(Collectors.toList());
     }
 

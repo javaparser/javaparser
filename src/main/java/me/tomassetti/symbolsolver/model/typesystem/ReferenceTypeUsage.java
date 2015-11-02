@@ -5,7 +5,6 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserTypeVariableDeclaration;
-import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +104,8 @@ public class ReferenceTypeUsage implements TypeUsage {
 
     private Optional<TypeUsage> typeParamByName(String name){
         List<TypeUsage> typeParameters = this.typeParameters;
+        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ReferenceTypeUsage objectRef = new ReferenceTypeUsage(objectType, typeSolver);
         if (typeDeclaration.getTypeParameters().size() != typeParameters.size()){
             if (typeParameters.size() > 0) {
                 throw new UnsupportedOperationException();
@@ -112,7 +113,7 @@ public class ReferenceTypeUsage implements TypeUsage {
             // type parameters not specified, default to Object
             typeParameters = new ArrayList<>();
             for (int i=0;i<typeDeclaration.getTypeParameters().size();i++){
-                typeParameters.add(new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
+                typeParameters.add(objectRef);
             }
         }
         int i =  0;
@@ -183,6 +184,9 @@ public class ReferenceTypeUsage implements TypeUsage {
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = typeDeclaration.getAllAncestors();
 
+        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ReferenceTypeUsage objectRef = new ReferenceTypeUsage(objectType, typeSolver);
+
         ancestors = ancestors.stream().map((a)->replaceTypeParams(a).asReferenceTypeUsage()).collect(Collectors.toList());
         // TODO replace type parameters
 
@@ -192,8 +196,7 @@ public class ReferenceTypeUsage implements TypeUsage {
                 i--;
             }
         }
-        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        ancestors.add(object);
+        ancestors.add(objectRef);
         return ancestors;
     }
 
