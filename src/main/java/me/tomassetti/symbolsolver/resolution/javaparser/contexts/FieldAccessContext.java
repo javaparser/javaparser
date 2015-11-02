@@ -47,7 +47,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         if (wrappedNode.getFieldExpr().toString().equals(name)) {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             if (typeOfScope.isReferenceType()) {
-                return typeOfScope.asReferenceTypeUsage().getField(name, typeSolver);
+                return typeOfScope.asReferenceTypeUsage().getField(name);
             } else {
                 return Optional.empty();
             }

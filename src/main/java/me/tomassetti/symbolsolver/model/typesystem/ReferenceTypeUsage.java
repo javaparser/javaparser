@@ -126,7 +126,7 @@ public class ReferenceTypeUsage implements TypeUsage {
         return Optional.empty();
     }
     
-    public Optional<Value> getField(String name, TypeSolver typeSolver) {
+    public Optional<Value> getField(String name) {
         if (!typeDeclaration.hasField(name)){
             return Optional.empty();
         }
@@ -244,7 +244,7 @@ public class ReferenceTypeUsage implements TypeUsage {
         return sb.toString();
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
         return typeDeclaration.solveMethod(name, parameterTypes);
     }
 
