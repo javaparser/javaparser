@@ -13,6 +13,11 @@ import java.util.stream.Collectors;
 public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration implements ClassDeclaration {
 
     @Override
+    public boolean hasName() {
+        return getQualifiedName() != null;
+    }
+
+    @Override
     public final List<ReferenceTypeUsage> getAllSuperClasses() {
         // TODO it could specify type parameters: they should appear
         List<ReferenceTypeUsage> superclasses = new ArrayList<>();

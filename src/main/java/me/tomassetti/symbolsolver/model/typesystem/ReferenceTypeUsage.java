@@ -5,7 +5,6 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.resolution.Value;
 import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserTypeVariableDeclaration;
 
@@ -69,22 +68,22 @@ public class ReferenceTypeUsage implements TypeUsage {
         return result;
     }
 
-    public TypeDeclaration getTypeDeclaration() {
+    public final TypeDeclaration getTypeDeclaration() {
         return typeDeclaration;
     }
 
     @Override
-    public boolean isArray() {
+    public final boolean isArray() {
         return false;
     }
 
     @Override
-    public boolean isPrimitive() {
+    public final boolean isPrimitive() {
         return false;
     }
 
     @Override
-    public boolean isReferenceType() {
+    public final boolean isReferenceType() {
         return true;
     }
 
@@ -120,6 +119,10 @@ public class ReferenceTypeUsage implements TypeUsage {
         return Optional.empty();
     }
 
+    /**
+     * The type of the field could be different from the one in the corresponding FieldDeclaration because
+     * type variables would be solved.
+     */
     public Optional<TypeUsage> getFieldType(String name) {
         if (!typeDeclaration.hasField(name)) {
             return Optional.empty();
@@ -129,7 +132,11 @@ public class ReferenceTypeUsage implements TypeUsage {
         return Optional.of(typeUsage);
     }
 
-    public Optional<TypeUsage> solveGenericType(String name) {
+    /**
+     * Get the type associated with the type parameter with the given name.
+     * It returns Optional.empty unless the type declaration declares a type parameter with the given name.
+     */
+    public Optional<TypeUsage> getGenericParameterByName(String name) {
         int i = 0;
         for (TypeParameter tp : typeDeclaration.getTypeParameters()) {
             if (tp.getName().equals(name)) {
@@ -142,11 +149,8 @@ public class ReferenceTypeUsage implements TypeUsage {
 
     /**
      * Create a copy of the value with the type parameter changed.
-     *
-     * @param i
-     * @param replaced
-     * @return
      */
+    @Deprecated
     public TypeUsage replaceParam(int i, TypeUsage replaced) {
         ArrayList<TypeUsage> typeParametersCorrected = new ArrayList<>(typeParameters);
         typeParametersCorrected.set(i, replaced);
@@ -163,6 +167,19 @@ public class ReferenceTypeUsage implements TypeUsage {
         }
     }
 
+    /**
+     * Return all ancestors, that means all superclasses and interfaces.
+     * This list should always include Object (unless this is a reference to Object).
+     * The type parameters should be expressed in terms of this type parameters.
+     *
+     * For example, given:
+     *
+     * class Foo<A, B> {}
+     * class Bar<C> extends Foo<C, String> {}
+     *
+     * a call to getAllAncestors on a reference to Bar having type parameter Boolean should include
+     * Foo<Boolean, String>.
+     */
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = typeDeclaration.getAllAncestors();
 
@@ -209,7 +226,11 @@ public class ReferenceTypeUsage implements TypeUsage {
     @Override
     public String describe() {
         StringBuffer sb = new StringBuffer();
-        sb.append(typeDeclaration.getQualifiedName());
+        if (hasName()) {
+            sb.append(typeDeclaration.getQualifiedName());
+        } else {
+            sb.append("<anonymous class>");
+        }
         if (parameters().size() > 0) {
             sb.append("<");
             boolean first = true;
@@ -280,6 +301,10 @@ public class ReferenceTypeUsage implements TypeUsage {
         } else {
             return false;
         }
+    }
+
+    public boolean hasName() {
+        return typeDeclaration.hasName();
     }
 
     private boolean compareConsideringTypeParameters(ReferenceTypeUsage other) {

@@ -3,8 +3,8 @@ package me.tomassetti.symbolsolver.model.typesystem;
 import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
-import me.tomassetti.symbolsolver.resolution.reflection.ReflectionInterfaceDeclaration;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
@@ -349,6 +349,52 @@ public class ReferenceTypeUsageTest {
         ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         assertEquals(false, charSequence.isAssignableBy(object));
         assertEquals(true, object.isAssignableBy(charSequence));
+    }
+
+    @Test
+    public void testGetFieldTypeExisting() {
+        class Foo<A> {
+            List<A> elements;
+        }
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        ReferenceTypeUsage ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
+
+        assertEquals(true, ref.getFieldType("elements").isPresent());
+        assertEquals(true, ref.getFieldType("elements").get().isReferenceType());
+        assertEquals(List.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().getQualifiedName());
+        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().size());
+        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).isTypeVariable());
+        assertEquals("A", ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
+
+        ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver),
+                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)),
+                typeSolver);
+
+        assertEquals(true, ref.getFieldType("elements").isPresent());
+        assertEquals(true, ref.getFieldType("elements").get().isReferenceType());
+        assertEquals(List.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().getQualifiedName());
+        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().size());
+        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).isReferenceType());
+        assertEquals(String.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).asReferenceTypeUsage().getQualifiedName());
+    }
+
+    @Test
+    public void testGetFieldTypeUnexisting() {
+        class Foo<A> {
+            List<A> elements;
+        }
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        ReferenceTypeUsage ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
+
+        assertEquals(false, ref.getFieldType("bar").isPresent());
+
+        ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver),
+                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)),
+                typeSolver);
+
+        assertEquals(false, ref.getFieldType("bar").isPresent());
     }
 
 }

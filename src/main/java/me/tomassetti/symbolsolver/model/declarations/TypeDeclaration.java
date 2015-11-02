@@ -35,12 +35,22 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
         return other.isAssignableBy(this);
     }
 
+    /**
+     * Note that the type of the field should be expressed using the type variables of this particular type.
+     * Consider for example:
+     *
+     * class Foo<E> { E field; }
+     *
+     * class Bar extends Foo<String> { }
+     *
+     * When calling getField("field") on Foo I should get a FieldDeclaration with type E, while calling it on
+     * Bar I should get a FieldDeclaration with type String.
+     */
     FieldDeclaration getField(String name);
 
     boolean hasField(String name);
 
     boolean isAssignableBy(TypeDeclaration other);
-
 
     SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver);
 

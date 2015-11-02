@@ -12,7 +12,7 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.resolution.reflection.ReflectionClassDeclaration;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +29,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             throw new UnsupportedOperationException(name);
         }
         TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-        return typeOfScope.asReferenceTypeUsage().solveGenericType(name);
+        return typeOfScope.asReferenceTypeUsage().getGenericParameterByName(name);
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(ReferenceTypeUsage refType, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {

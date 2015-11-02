@@ -18,9 +18,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by federico on 21/08/15.
- */
 public class SymbolResolutionTest extends AbstractTest {
 
     @Test

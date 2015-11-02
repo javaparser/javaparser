@@ -27,6 +27,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     private TypeSolver typeSolver;
 
     public ReflectionClassDeclaration(Class<?> clazz, TypeSolver typeSolver) {
+        if (clazz == null) {
+            throw new IllegalArgumentException();
+        }
         this.typeSolver = typeSolver;
         if (clazz.isInterface()) {
             throw new IllegalArgumentException();
@@ -55,7 +58,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
         for (int i = 0; i < ancestors.size(); i++) {
-            if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
+            ReferenceTypeUsage ancestor = ancestors.get(i);
+            if (ancestor.hasName() && ancestor.getQualifiedName().equals(Object.class.getCanonicalName())) {
                 ancestors.remove(i);
                 i--;
             }
@@ -222,7 +226,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         for (ReferenceTypeUsage ancestor : getAllAncestors()) {
             if (ancestor.getTypeDeclaration().hasField(name)) {
-                return ancestor.getTypeDeclaration().getField(name);
+                return ancestor.getTypeDeclaration().getField(name).replaceType(ancestor.getFieldType(name).get());
             }
         }
         throw new UnsolvedSymbolException("Field in " + this, name);
