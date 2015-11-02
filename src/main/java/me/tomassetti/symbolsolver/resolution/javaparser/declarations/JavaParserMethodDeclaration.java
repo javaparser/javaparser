@@ -71,7 +71,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes) {
+    public MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes) {
         TypeUsage returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getReturnType(), typeSolver, context);
         List<TypeUsage> params = new ArrayList<>();
         for (int i=0;i<wrappedNode.getParameters().size();i++){

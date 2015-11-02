@@ -13,6 +13,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+// TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
+//      and to get the Object type declaration
 public class ReferenceTypeUsage implements TypeUsage {
 
     private TypeDeclaration typeDeclaration;

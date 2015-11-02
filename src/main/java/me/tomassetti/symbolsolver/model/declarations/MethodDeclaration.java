@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.resolution.Context;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
@@ -29,7 +28,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
      * context.
      */
     @Deprecated
-    MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes);
+    MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes);
 
     @Deprecated
     Context getContext();

@@ -99,7 +99,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public MethodUsage resolveTypeVariables(Context context, TypeSolver typeSolver, List<TypeUsage> parameterTypes) {
+    public MethodUsage resolveTypeVariables(Context context,  List<TypeUsage> parameterTypes) {
         return new MethodUsage(new ReflectionMethodDeclaration(method, typeSolver), typeSolver);
     }
 
