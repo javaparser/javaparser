@@ -15,9 +15,6 @@ import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by federico on 31/07/15.
- */
 public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExpr> {
 
     public FieldAccessContext(FieldAccessExpr wrappedNode, TypeSolver typeSolver) {
@@ -45,7 +42,12 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         if (wrappedNode.getFieldExpr().toString().equals(name)) {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             if (typeOfScope.isReferenceType()) {
-                return typeOfScope.asReferenceTypeUsage().getField(name);
+                Optional<TypeUsage> typeUsage = typeOfScope.asReferenceTypeUsage().getFieldType(name);
+                if (typeUsage.isPresent()) {
+                    return Optional.of(new Value(typeUsage.get(), name, true));
+                } else {
+                    return Optional.empty();
+                }
             } else {
                 return Optional.empty();
             }

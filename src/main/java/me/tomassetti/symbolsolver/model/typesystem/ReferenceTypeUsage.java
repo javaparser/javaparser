@@ -73,17 +73,6 @@ public class ReferenceTypeUsage implements TypeUsage {
         return typeDeclaration;
     }
 
-    public void setTypeDeclaration(TypeDeclaration typeDeclaration) {
-        this.typeDeclaration = typeDeclaration;
-        if (this.typeDeclaration.isTypeVariable()) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public boolean isEnum() {
-        return typeDeclaration.isEnum();
-    }
-
     @Override
     public boolean isArray() {
         return false;
@@ -131,25 +120,13 @@ public class ReferenceTypeUsage implements TypeUsage {
         return Optional.empty();
     }
 
-    public Optional<Value> getField(String name) {
+    public Optional<TypeUsage> getFieldType(String name) {
         if (!typeDeclaration.hasField(name)) {
             return Optional.empty();
         }
-        //Qui succede che getField avrebbe il tipo E. Devo vedere se io ho tipi da sostituire.
-
-
         TypeUsage typeUsage = typeDeclaration.getField(name).getType();
-        //TypeUsage typeUsage = new TypeUsageOfTypeDeclaration(typeOfField);
-
-        //ora io dovrei capire che mi ha restituito una variabile che si riferisce alla classe
-        //rappresentata da THIS. Per capirlo potremmo associare piu' info alle TypeVariable,
-        //mettendo dove sono state dichiarate
-
-
-        // Mi pare risolviamo nel punto sbagliato, dovrebbe essere
         typeUsage = replaceTypeParams(typeUsage);
-
-        return Optional.of(new Value(typeUsage, name, true));
+        return Optional.of(typeUsage);
     }
 
     public Optional<TypeUsage> solveGenericType(String name) {

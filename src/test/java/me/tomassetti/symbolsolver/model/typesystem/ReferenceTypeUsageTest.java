@@ -52,6 +52,15 @@ public class ReferenceTypeUsageTest {
     }
 
     @Test
+    public void testDerivationOfTypeParameters() {
+        JreTypeSolver typeSolver = new JreTypeSolver();
+        ReferenceTypeUsage ref1 = new ReferenceTypeUsage(typeSolver.solveType(LinkedList.class.getCanonicalName()), typeSolver);
+        assertEquals(1, ref1.parameters().size());
+        assertEquals(true, ref1.parameters().get(0).isTypeVariable());
+        assertEquals("E", ref1.parameters().get(0).asTypeParameter().getName());
+    }
+
+    @Test
     public void testIsArray() {
         assertEquals(false, object.isArray());
         assertEquals(false, string.isArray());

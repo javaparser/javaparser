@@ -12,9 +12,7 @@ import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 import java.util.List;
 
-/**
- * Created by federico on 24/08/15.
- */
+
 public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStmt> {
 
     public SwitchEntryContext(SwitchEntryStmt wrappedNode, TypeSolver typeSolver) {
@@ -26,7 +24,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         SwitchStmt switchStmt = (SwitchStmt) wrappedNode.getParentNode();
         TypeUsage type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
-        if (type.isReferenceType() && type.asReferenceTypeUsage().isEnum()) {
+        if (type.isReferenceType() && type.asReferenceTypeUsage().getTypeDeclaration().isEnum()) {
             if (type instanceof ReferenceTypeUsage) {
                 ReferenceTypeUsage typeUsageOfTypeDeclaration = (ReferenceTypeUsage) type;
                 if (typeUsageOfTypeDeclaration.getTypeDeclaration().hasField(name)) {
