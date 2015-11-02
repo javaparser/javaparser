@@ -17,8 +17,20 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
         return true;
     }
 
+    /**
+     * This is a ReferenceTypeUsage because it could contain type parameters.
+     * For example: class A extends B<Integer, String>.
+     *
+     * Note that only the Object class should not have a superclass and therefore
+     * return null.
+     */
     ReferenceTypeUsage getSuperClass(TypeSolver typeSolvers);
 
+    /**
+     * Return all the interfaces implemented directly by this class.
+     * It does not include the interfaces implemented by superclasses or extended
+     * by the interfaces implemented.
+     */
     List<InterfaceDeclaration> getInterfaces(TypeSolver typeSolver);
 
     default List<ReferenceTypeUsage> getAllSuperClasses(TypeSolver typeSolver) {
