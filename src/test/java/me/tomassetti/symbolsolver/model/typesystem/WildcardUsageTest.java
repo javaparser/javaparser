@@ -25,21 +25,33 @@ public class WildcardUsageTest {
     private TypeSolver typeSolver;
     private ReferenceTypeUsage foo;
     private ReferenceTypeUsage bar;
+    private ReferenceTypeUsage string;
     private WildcardUsage unbounded = WildcardUsage.UNBOUNDED;
     private WildcardUsage superFoo;
     private WildcardUsage superBar;
     private WildcardUsage extendsFoo;
     private WildcardUsage extendsBar;
+    private WildcardUsage superA;
+    private WildcardUsage extendsA;
+    private WildcardUsage superString;
+    private WildcardUsage extendsString;
+    private TypeParameterUsage a;
 
     @Before
     public void setup() {
         typeSolver = new JreTypeSolver();
         foo = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
         bar = new ReferenceTypeUsage(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
+        string = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         superFoo = WildcardUsage.superBound(foo);
         superBar = WildcardUsage.superBound(bar);
         extendsFoo = WildcardUsage.extendsBound(foo);
         extendsBar = WildcardUsage.extendsBound(bar);
+        a = new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()));
+        superA = WildcardUsage.superBound(a);
+        extendsA = WildcardUsage.extendsBound(a);
+        superString = WildcardUsage.superBound(string);
+        extendsString = WildcardUsage.extendsBound(string);
     }
 
     @Test
@@ -151,15 +163,18 @@ public class WildcardUsageTest {
         assertEquals("? extends me.tomassetti.symbolsolver.model.typesystem.WildcardUsageTest.Bar", extendsBar.describe());
     }
 
-    /*@Test
+    @Test
     public void testReplaceParam() {
-        assertTrue(object == object.replaceParam("A", object));
-        assertTrue(string == string.replaceParam("A", object));
-        assertTrue(listOfStrings == listOfStrings.replaceParam("A", object));
-        assertEquals(listOfStrings, listOfA.replaceParam("A", string));
+        assertTrue(unbounded == unbounded.replaceParam("A", string));
+        assertTrue(superFoo == superFoo.replaceParam("A", string));
+        assertTrue(extendsFoo == extendsFoo.replaceParam("A", string));
+        assertEquals(superString, superA.replaceParam("A", string));
+        assertEquals(extendsString, extendsA.replaceParam("A", string));
+        assertTrue(superA == superA.replaceParam("B", string));
+        assertTrue(extendsA == extendsA.replaceParam("B", string));
     }
 
-    @Test
+    /*@Test
     public void testIsAssignableBySimple() {
         assertEquals(true, object.isAssignableBy(string));
         assertEquals(false, string.isAssignableBy(object));
