@@ -1,15 +1,29 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+/**
+ * A wildcard can be:
+ * - unbounded (?)
+ * - have a lower bound (? super Number)
+ * - have an upper bound (? extends Number)
+ * It is not possible to have both a lower and an upper bound at the same time.
+ */
 public class WildcardUsage implements TypeUsage {
 
     public static WildcardUsage UNBOUNDED = new WildcardUsage(null, null);
-    //private WildcardType type;
     private BoundType type;
     private TypeUsage boundedType;
 
     private WildcardUsage(BoundType type, TypeUsage boundedType) {
         this.type = type;
         this.boundedType = boundedType;
+    }
+
+    @Override
+    public String toString() {
+        return "WildcardUsage{" +
+                "type=" + type +
+                ", boundedType=" + boundedType +
+                '}';
     }
 
     public static WildcardUsage superBound(TypeUsage typeUsage) {
@@ -26,6 +40,11 @@ public class WildcardUsage implements TypeUsage {
 
     public WildcardUsage asWildcard() {
         return this;
+    }
+
+    @Override
+    public boolean isReference() {
+        return true;
     }
 
     @Override
