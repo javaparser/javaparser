@@ -113,33 +113,45 @@ public class WildcardUsageTest {
         assertEquals(true, extendsBar.isWildcard());
     }
 
-    /*@Test
+    @Test(expected = UnsupportedOperationException.class)
+    public void testAsArrayTypeUsage() {
+        unbounded.asArrayTypeUsage();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
     public void testAsReferenceTypeUsage() {
-        assertTrue(object == object.asReferenceTypeUsage());
-        assertTrue(string == string.asReferenceTypeUsage());
-        assertTrue(listOfA == listOfA.asReferenceTypeUsage());
-        assertTrue(listOfStrings == listOfStrings.asReferenceTypeUsage());
+        unbounded.asReferenceTypeUsage();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsTypeParameter() {
-        object.asTypeParameter();
+        unbounded.asTypeParameter();
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testAsArrayTypeUsage() {
-        object.asArrayTypeUsage();
+    public void testAsPrimitive() {
+        unbounded.asPrimitive();
+    }
+
+    @Test
+    public void testAsWildcard() {
+        assertTrue(unbounded == unbounded.asWildcard());
+        assertTrue(superFoo == superFoo.asWildcard());
+        assertTrue(superBar == superBar.asWildcard());
+        assertTrue(extendsFoo == extendsFoo.asWildcard());
+        assertTrue(extendsBar == extendsBar.asWildcard());
     }
 
     @Test
     public void testAsDescribe() {
-        assertEquals("java.lang.Object", object.describe());
-        assertEquals("java.lang.String", string.describe());
-        assertEquals("java.util.List<A>", listOfA.describe());
-        assertEquals("java.util.List<java.lang.String>", listOfStrings.describe());
+        assertEquals("?", unbounded.describe());
+        assertEquals("? super me.tomassetti.symbolsolver.model.typesystem.WildcardUsageTest.Foo", superFoo.describe());
+        assertEquals("? super me.tomassetti.symbolsolver.model.typesystem.WildcardUsageTest.Bar", superBar.describe());
+        assertEquals("? extends me.tomassetti.symbolsolver.model.typesystem.WildcardUsageTest.Foo", extendsFoo.describe());
+        assertEquals("? extends me.tomassetti.symbolsolver.model.typesystem.WildcardUsageTest.Bar", extendsBar.describe());
     }
 
-    @Test
+    /*@Test
     public void testReplaceParam() {
         assertTrue(object == object.replaceParam("A", object));
         assertTrue(string == string.replaceParam("A", object));
