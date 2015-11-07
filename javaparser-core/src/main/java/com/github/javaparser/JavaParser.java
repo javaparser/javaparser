@@ -440,7 +440,17 @@ public final class JavaParser {
         return b.getBeginLine()>(a.getEndLine()+1);
     }
 
-    private static void insertComments(CompilationUnit cu, String code) throws IOException {
+    /**
+     * Parses the comments in the Java code contained in the String and attaches
+     * them to nodes of the CompilationUnit.
+     *
+     * @param cu
+     *            the CompilationUnit to attach the comments to
+     * @param code
+     *            Java source code
+     * @throws IOException
+     */
+    public static void insertComments(CompilationUnit cu, String code) throws IOException {
         CommentsParser commentsParser = new CommentsParser();
         CommentsCollection allComments = commentsParser.parse(code);
 
