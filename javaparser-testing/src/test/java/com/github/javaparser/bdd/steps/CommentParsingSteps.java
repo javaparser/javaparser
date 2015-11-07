@@ -79,13 +79,13 @@ public class CommentParsingSteps {
 
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
-        compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+        compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes())).getNode();
     }
 
     @Then("the Java parser cannot parse it because of lexical errors")
     public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
         try {
-            compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+            compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes())).getNode();
             fail("Lexical error expected");
         } catch (TokenMgrError e) {
             // ok

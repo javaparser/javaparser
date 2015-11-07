@@ -102,12 +102,12 @@ public class ManipulationSteps {
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseBlock")
     public void whenIsTheStringIsParsedByTheJavaParser(String value) throws ParseException {
-        blockStmt = JavaParser.parseBlock(value);
+        blockStmt = JavaParser.parseBlock(value).getNode();
     }
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseStatement")
     public void whenIsTheStringIsParsedByTheJavaParserUsingParseStatement(String value) throws ParseException {
-        statement= JavaParser.parseStatement(value);
+        statement= JavaParser.parseStatement(value).getNode();
     }
 
     @When("the List of VariableDeclarations are set as the resources on TryStmt")
