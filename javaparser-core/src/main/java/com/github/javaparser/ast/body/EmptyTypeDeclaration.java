@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -29,7 +28,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EmptyTypeDeclaration extends TypeDeclaration implements DocumentableNode {
+public final class EmptyTypeDeclaration extends TypeDeclaration {
 
     public EmptyTypeDeclaration() {
         super(null, 0, null, null);

@@ -55,3 +55,68 @@ class A {
          */
     }
 }
+
+
+Scenario: Dumping orphan comments in empty method (issue 192)
+Given the class:
+public class StepImplementation {
+    @Step("A step")
+    public void contextStep() {
+        // Foo bar
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class StepImplementation {
+
+    @Step("A step")
+    public void contextStep() {
+    // Foo bar
+    }
+}
+
+
+Scenario: Dumping orphan comments in for loop (issue 192)
+Given the class:
+public class StepImplementation {
+    public void contextStep() {
+        for (int i = 0; i < 5; i++) {
+            // foo bar
+        }
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class StepImplementation {
+
+    public void contextStep() {
+        for (int i = 0; i < 5; i++) {
+        // foo bar
+        }
+    }
+}
+
+
+Scenario: Dumping orphan and attributed comments in for loop (issue 192)
+Given the class:
+public class StepImplementation {
+public void contextStep() {
+        for (int i = 0; i < 5; i++) {
+            // foo bar
+            System.out.println();
+            // another foo bar
+        }
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class StepImplementation {
+
+    public void contextStep() {
+        for (int i = 0; i < 5; i++) {
+            // foo bar
+            System.out.println();
+        // another foo bar
+        }
+    }
+}
