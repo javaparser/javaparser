@@ -74,23 +74,23 @@ public class SharedSteps {
 
     @When("the following source is parsed:$classSrc")
     public void whenTheFollowingSourceIsParsed(String classSrc) throws ParseException {
-        state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())).getNode());
+        state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
     }
 
     @When("the following source is parsed (trimming space):$classSrc")
     public void whenTheFollowingSourceIsParsedTrimmingSpace(String classSrc) throws ParseException {
-        state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.trim().getBytes())).getNode());
+        state.put("cu1", JavaParser.parse(new ByteArrayInputStream(classSrc.trim().getBytes())));
     }
 
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
     public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException {
-        state.put("cu2", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())).getNode());
+        state.put("cu2", JavaParser.parse(new ByteArrayInputStream(classSrc.getBytes())));
     }
 
     @When("the \"$fileName\" is parsed")
     public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException, URISyntaxException {
         URL url = getClass().getResource("../samples/" + fileName);
-        CompilationUnit compilationUnit = JavaParser.parse(new File(url.toURI())).getNode();
+        CompilationUnit compilationUnit = JavaParser.parse(new File(url.toURI()));
         state.put("cu1", compilationUnit);
     }
 

@@ -49,7 +49,7 @@ public class DumpingSteps {
 
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
-        compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes())).getNode();
+        compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
     }
 
     @Then("it is dumped to:$dumpSrc")
