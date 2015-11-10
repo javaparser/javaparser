@@ -120,3 +120,15 @@ public class StepImplementation {
         }
     }
 }
+
+
+Scenario: An empty Enum is dumped correctly
+Given the compilation unit:
+package test; enum XYZ {}
+When the class is parsed by the Java parser
+Then it is dumped to:
+package test;
+
+enum XYZ {
+
+}
