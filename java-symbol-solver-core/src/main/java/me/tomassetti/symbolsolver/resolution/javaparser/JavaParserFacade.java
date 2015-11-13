@@ -3,8 +3,11 @@ package me.tomassetti.symbolsolver.resolution.javaparser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.*;
+import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.logic.FunctionalInterfaceLogic;
+import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -61,6 +64,18 @@ public class JavaParserFacade {
                 return solved.get();
             } else {
                 throw new UnsolvedSymbolException(context, typeUsage.describe());
+            }
+        } else if (typeUsage.isWildcard()) {
+            if (typeUsage.asWildcard().isExtends() || typeUsage.asWildcard().isSuper()) {
+                WildcardUsage wildcardUsage = typeUsage.asWildcard();
+                TypeUsage boundResolved = solveGenericTypes(wildcardUsage.getBoundedType(), context, typeSolver);
+                if (wildcardUsage.isExtends()) {
+                    return WildcardUsage.extendsBound(boundResolved);
+                } else {
+                    return WildcardUsage.superBound(boundResolved);
+                }
+            } else {
+                return typeUsage;
             }
         } else {
             TypeUsage result = typeUsage;
@@ -170,7 +185,8 @@ public class JavaParserFacade {
                 if (solveLambdas) {
                     TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
                     // We need to replace the type variables
-                    result = solveGenericTypes(result, JavaParserFactory.getContext(node, typeSolver), typeSolver);
+                    Context ctx = JavaParserFactory.getContext(node, typeSolver);
+                    result = solveGenericTypes(result, ctx, typeSolver);
 
                     //We should find out which is the functional method (e.g., apply) and replace the params of the
                     //solveLambdas with it, to derive so the values. We should also consider the value returned by the
@@ -179,9 +195,19 @@ public class JavaParserFacade {
                     if (functionalMethod.isPresent()) {
                         LambdaExpr lambdaExpr = (LambdaExpr)node;
 
-                        //for (lambdaExpr.getParameters())
-                        // TODO invoke GenericTypeInferenceLogic and the use results
-                        throw new UnsupportedOperationException();
+                        List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
+                        if (lambdaExpr.getBody() instanceof ExpressionStmt) {
+                            ExpressionStmt expressionStmt = (ExpressionStmt)lambdaExpr.getBody();
+                            TypeUsage actualType = getType (expressionStmt.getExpression());
+                            TypeUsage formalType = functionalMethod.get().returnType();
+                            formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
+                            Map<String, TypeUsage> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+                            for (String typeName : inferredTypes.keySet()) {
+                                result = result.replaceParam(typeName, inferredTypes.get(typeName));
+                            }
+                        } else {
+                            throw new UnsupportedOperationException();
+                        }
                     }
 
                     return result;

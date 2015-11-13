@@ -5,6 +5,8 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import javaslang.Tuple2;
+import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
@@ -16,7 +18,9 @@ import me.tomassetti.symbolsolver.model.resolution.Value;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
@@ -51,7 +55,19 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         int pos = pos(parentNode, wrappedNode);
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage((MethodCallExpr) parentNode);
         TypeUsage lambda = methodUsage.getParamTypes().get(pos);
-        return Optional.of(lambda.asReferenceTypeUsage().parameters().get(0));
+
+        List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
+        for (int i=0;i<methodUsage.getDeclaration().getNoParams();i++){
+            formalActualTypePairs.add(new Tuple2<>(methodUsage.getDeclaration().getParam(i).getType(), methodUsage.getParamType(i, typeSolver)));
+        }
+        Map<String, TypeUsage> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+        if (map.containsKey(name)) {
+            return Optional.of(map.get(name));
+        } else {
+            return Optional.empty();
+        }
+
+        //return Optional.of(lambda.asReferenceTypeUsage().parameters().get(0));
     }
 
     private int pos(MethodCallExpr callExpr, Expression param) {

@@ -27,7 +27,7 @@ public class LambdaTest extends AbstractTest {
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         TypeUsage type = javaParserFacade.getType(expression);
-        assertEquals("java.util.function.Function<? super java.lang.String,? extends java.lang.String>", type.describe());
+        assertEquals("java.util.function.Function<? super java.lang.String, ? extends java.lang.String>", type.describe());
     }
 
     @Test

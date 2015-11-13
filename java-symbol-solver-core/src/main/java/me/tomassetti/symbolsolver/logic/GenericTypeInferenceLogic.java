@@ -30,13 +30,21 @@ public class GenericTypeInferenceLogic {
             map.put(formalType.asTypeParameter().getName(), actualType);
         } else if (formalType.isReferenceType()) {
             ReferenceTypeUsage formalTypeAsReference = formalType.asReferenceTypeUsage();
-            int i=0;
+            int i = 0;
             for (TypeUsage formalTypeParameter : formalTypeAsReference.parameters()) {
                 consider(map, formalTypeParameter, actualType.asReferenceTypeUsage().parameters().get(i));
                 i++;
             }
+        } else if (formalType.isWildcard()) {
+            if (actualType.isWildcard()) {
+                if (actualType.asWildcard().isExtends() && formalType.asWildcard().isExtends()) {
+                    consider(map, formalType.asWildcard().getBoundedType(), actualType.asWildcard().getBoundedType());
+                } else if (actualType.asWildcard().isSuper() && formalType.asWildcard().isSuper()) {
+                    consider(map, formalType.asWildcard().getBoundedType(), actualType.asWildcard().getBoundedType());
+                }
+            }
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(formalType.describe());
         }
     }
 
