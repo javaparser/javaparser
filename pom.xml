@@ -17,6 +17,15 @@
     </license>
   </licenses>
 
+    <developers>
+        <developer>
+            <name>Federico Tomassetti</name>
+            <email>federico@tomassetti.me</email>
+            <url>https://github.com/ftomassetti</url>
+            <id>ftomassetti</id>
+        </developer>
+    </developers>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
