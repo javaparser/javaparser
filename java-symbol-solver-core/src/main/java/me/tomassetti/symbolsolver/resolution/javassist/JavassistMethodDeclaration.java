@@ -112,6 +112,16 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public boolean isPrivate() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isPackageProtected() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<TypeParameter> getTypeParameters() {
         try {
             if (ctMethod.getGenericSignature() == null) {

@@ -315,6 +315,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         @Override
+        public boolean isPrivate() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean isPackageProtected() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public String getName() {
             return "values";
         }

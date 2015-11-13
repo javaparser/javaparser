@@ -139,6 +139,11 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean isPrivate() {
+        throw new UnsupportedOperationException();
+    }
+
     private Optional<TypeUsage> typeParamByName(String name, TypeSolver typeSolver, Context context) {
         int i = 0;
         if (wrappedNode.getTypeParameters() != null) {
@@ -209,4 +214,10 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         }
         return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean isPackageProtected() {
+        throw new UnsupportedOperationException();
+    }
+
 }

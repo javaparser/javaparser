@@ -35,4 +35,8 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
     Context getContext();
 
     boolean isAbstract();
+
+    boolean isPrivate();
+
+    boolean isPackageProtected();
 }

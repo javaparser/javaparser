@@ -29,7 +29,10 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
-        throw new UnsupportedOperationException();
+        return Arrays.stream(clazz.getDeclaredMethods())
+                .filter(m -> !m.isSynthetic() && !m.isBridge())
+                .map(m -> new ReflectionMethodDeclaration(m, typeSolver()))
+                .collect(Collectors.toSet());
     }
 
     public ReflectionClassDeclaration(Class<?> clazz, TypeSolver typeSolver) {

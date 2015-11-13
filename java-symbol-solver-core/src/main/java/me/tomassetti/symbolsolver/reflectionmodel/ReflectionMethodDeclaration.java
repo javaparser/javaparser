@@ -12,7 +12,6 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,4 +108,15 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     public boolean isAbstract() {
         return ModifierSet.isAbstract(method.getModifiers());
     }
+
+    @Override
+    public boolean isPrivate() {
+        return ModifierSet.isPrivate(method.getModifiers());
+    }
+
+    @Override
+    public boolean isPackageProtected() {
+        return !ModifierSet.isPrivate(method.getModifiers()) && !ModifierSet.isProtected(method.getModifiers()) && !ModifierSet.isPublic(method.getModifiers());
+    }
+
 }

@@ -270,6 +270,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(clazz.getDeclaredMethods())
+                .filter(m -> !m.isSynthetic() && !m.isBridge())
                 .map(m -> new ReflectionMethodDeclaration(m, typeSolver()))
                 .collect(Collectors.toSet());
     }
