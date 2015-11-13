@@ -33,4 +33,6 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
 
     @Deprecated
     Context getContext();
+
+    boolean isAbstract();
 }

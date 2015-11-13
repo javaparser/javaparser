@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
 
@@ -38,6 +39,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
+    }
+
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -300,6 +306,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         @Override
         public Context getContext() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean isAbstract() {
             throw new UnsupportedOperationException();
         }
 

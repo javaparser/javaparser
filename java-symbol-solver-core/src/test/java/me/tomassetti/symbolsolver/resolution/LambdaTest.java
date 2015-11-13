@@ -30,7 +30,6 @@ public class LambdaTest extends AbstractTest {
         assertEquals("java.util.function.Function<? super java.lang.String,? extends java.lang.String>", type.describe());
     }
 
-
     @Test
     public void lambdaMap() throws ParseException {
         CompilationUnit cu = parseSample("Lambda");

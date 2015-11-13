@@ -9,6 +9,7 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * A declaration of a type. It could be a primitive type, an enum, a class, an interface or a type variable.
@@ -64,6 +65,10 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
 
     List<ReferenceTypeUsage> getAllAncestors();
+
+    Set<MethodDeclaration> getDeclaredMethods();
+
+    Set<MethodUsage> getAllMethods();
 
     default boolean isClass() {
         return false;

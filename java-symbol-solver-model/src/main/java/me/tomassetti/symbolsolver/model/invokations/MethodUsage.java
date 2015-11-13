@@ -108,4 +108,5 @@ public class MethodUsage {
         res = res.replaceReturnType(replaceNameParam(name, typeUsage, res.returnType));
         return res;
     }
+
 }

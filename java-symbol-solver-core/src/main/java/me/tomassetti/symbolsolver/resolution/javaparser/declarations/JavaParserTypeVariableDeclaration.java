@@ -15,6 +15,7 @@ import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
@@ -99,6 +100,11 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        return Collections.emptySet();
     }
 
     @Override

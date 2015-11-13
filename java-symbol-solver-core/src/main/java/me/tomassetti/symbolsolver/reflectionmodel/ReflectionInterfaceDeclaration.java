@@ -19,10 +19,7 @@ import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -268,6 +265,13 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         ReferenceTypeUsageImpl object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         ancestors.add(object);
         return ancestors;
+    }
+
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        return Arrays.stream(clazz.getDeclaredMethods())
+                .map(m -> new ReflectionMethodDeclaration(m, typeSolver()))
+                .collect(Collectors.toSet());
     }
 
     @Override

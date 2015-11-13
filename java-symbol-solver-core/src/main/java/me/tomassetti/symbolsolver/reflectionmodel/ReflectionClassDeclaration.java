@@ -27,6 +27,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     private Class<?> clazz;
     private TypeSolver typeSolver;
 
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        throw new UnsupportedOperationException();
+    }
+
     public ReflectionClassDeclaration(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz == null) {
             throw new IllegalArgumentException();

@@ -107,6 +107,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public boolean isAbstract() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<TypeParameter> getTypeParameters() {
         try {
             if (ctMethod.getGenericSignature() == null) {

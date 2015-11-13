@@ -170,6 +170,15 @@ public class JavaParserFacade {
                     TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
                     // We need to replace the type variables
                     result = solveGenericTypes(result, JavaParserFactory.getContext(node, typeSolver), typeSolver);
+
+                    //We should find out which is the functional method (e.g., apply) and replace the params of the
+                    //solveLambdas with it, to derive so the values. We should also consider the value returned by the
+                    //lambdas
+                    Optional<MethodUsage> functionalMethod = getFunctionalMethod(result);
+                    if (functionalMethod.isPresent()) {
+                        throw new UnsupportedOperationException();
+                    }
+
                     return result;
                 } else {
                     return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
@@ -296,6 +305,20 @@ public class JavaParserFacade {
             return convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+        }
+    }
+
+    private Optional<MethodUsage> getFunctionalMethod(TypeUsage type) {
+        if (type.isReferenceType() && type.asReferenceTypeUsage().getTypeDeclaration().isInterface()) {
+            //We need to find all abstract methods
+            Set<MethodUsage> methods = type.asReferenceTypeUsage().getTypeDeclaration().getAllMethods().stream().filter(m -> m.getDeclaration().isAbstract()).collect(Collectors.toSet());
+            if (methods.size() == 1) {
+                return Optional.of(methods.iterator().next());
+            } else {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
         }
     }
 

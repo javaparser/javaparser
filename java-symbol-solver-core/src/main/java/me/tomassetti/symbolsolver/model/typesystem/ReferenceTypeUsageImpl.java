@@ -1,12 +1,16 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserTypeVariableDeclaration;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -81,6 +85,17 @@ public class ReferenceTypeUsageImpl extends ReferenceTypeUsage {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Set<MethodUsage> getDeclaredMethods() {
+        // TODO replace variables
+        Set<MethodUsage> methods = new HashSet<>();
+        for (MethodDeclaration methodDeclaration : getTypeDeclaration().getDeclaredMethods()) {
+            MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+            methods.add(methodUsage);
+        }
+        return methods;
     }
 
 

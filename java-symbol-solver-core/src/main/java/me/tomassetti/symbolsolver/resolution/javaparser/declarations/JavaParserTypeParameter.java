@@ -5,6 +5,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.Context;
@@ -18,6 +19,7 @@ import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameter {
@@ -28,6 +30,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     public JavaParserTypeParameter(com.github.javaparser.ast.TypeParameter wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
+    }
+
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        return Collections.emptySet();
     }
 
     @Override

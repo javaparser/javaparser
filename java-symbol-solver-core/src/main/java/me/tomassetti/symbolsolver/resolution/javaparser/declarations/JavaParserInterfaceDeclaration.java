@@ -9,10 +9,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.InterfaceDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
@@ -27,6 +24,7 @@ import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
@@ -40,6 +38,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
+    }
+
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

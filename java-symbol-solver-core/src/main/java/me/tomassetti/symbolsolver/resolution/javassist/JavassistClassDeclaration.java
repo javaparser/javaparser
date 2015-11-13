@@ -32,6 +32,11 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     private CtClass ctClass;
     private TypeSolver typeSolver;
 
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        throw new UnsupportedOperationException();
+    }
+
     public JavassistClassDeclaration(CtClass ctClass, TypeSolver typeSolver) {
         if (ctClass == null) {
             throw new IllegalArgumentException();

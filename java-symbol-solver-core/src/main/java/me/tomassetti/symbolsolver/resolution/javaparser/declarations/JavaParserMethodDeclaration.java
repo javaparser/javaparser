@@ -134,6 +134,11 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
 
+    @Override
+    public boolean isAbstract() {
+        throw new UnsupportedOperationException();
+    }
+
     private Optional<TypeUsage> typeParamByName(String name, TypeSolver typeSolver, Context context) {
         int i = 0;
         if (wrappedNode.getTypeParameters() != null) {

@@ -26,6 +26,7 @@ import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class JavaParserClassDeclaration extends AbstractClassDeclaration {
@@ -343,6 +344,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
             }
         }
         return ancestors;
+    }
+
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        throw new UnsupportedOperationException();
     }
 
     private ReferenceTypeUsageImpl toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
