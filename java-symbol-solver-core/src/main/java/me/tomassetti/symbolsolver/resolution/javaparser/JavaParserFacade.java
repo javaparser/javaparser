@@ -177,6 +177,10 @@ public class JavaParserFacade {
                     //lambdas
                     Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
                     if (functionalMethod.isPresent()) {
+                        LambdaExpr lambdaExpr = (LambdaExpr)node;
+
+                        //for (lambdaExpr.getParameters())
+                        // TODO invoke GenericTypeInferenceLogic and the use results
                         throw new UnsupportedOperationException();
                     }
 
