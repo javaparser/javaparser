@@ -1,4 +1,4 @@
-package someproject.me.tomassetti;
+package me.tomassetti;
 
 public class Person {
 

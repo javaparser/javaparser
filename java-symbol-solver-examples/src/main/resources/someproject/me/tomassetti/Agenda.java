@@ -1,4 +1,4 @@
-package someproject.me.tomassetti;
+package me.tomassetti;
 
 import java.util.ArrayList;
 import java.util.List;

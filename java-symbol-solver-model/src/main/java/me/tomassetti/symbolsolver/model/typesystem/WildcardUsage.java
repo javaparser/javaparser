@@ -97,7 +97,16 @@ public class WildcardUsage implements TypeUsage {
 
     @Override
     public boolean isAssignableBy(TypeUsage other) {
-        throw new UnsupportedOperationException();
+        if (boundedType == null) {
+            //return other.isReferenceType() && other.asReferenceTypeUsage().getQualifiedName().equals(Object.class.getCanonicalName());
+            return false;
+        } else if (type == BoundType.SUPER) {
+            return boundedType.isAssignableBy(other);
+        } else if (type == BoundType.EXTENDS) {
+            return false;
+        } else {
+            throw new RuntimeException();
+        }
     }
 
     @Override
