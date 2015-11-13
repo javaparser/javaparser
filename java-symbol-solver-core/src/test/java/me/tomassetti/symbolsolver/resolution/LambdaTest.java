@@ -6,19 +6,30 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class LambdaTest extends AbstractTest {
+
+    @Test
+    public void lambdaMapParameter() throws ParseException {
+        CompilationUnit cu = parseSample("Lambda");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr();
+        Expression expression = methodCallExpr.getArgs().get(0);
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
+        TypeUsage type = javaParserFacade.getType(expression);
+        assertEquals("java.util.function.Function<? super java.lang.String,? extends java.lang.String>", type.describe());
+    }
+
 
     @Test
     public void lambdaMap() throws ParseException {
@@ -28,7 +39,8 @@ public class LambdaTest extends AbstractTest {
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
         Expression expression = returnStmt.getExpr();
 
-        TypeUsage type = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
+        TypeUsage type = javaParserFacade.getType(expression);
         assertEquals("java.util.stream.Stream<java.lang.String>", type.describe());
     }
 
