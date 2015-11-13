@@ -70,6 +70,14 @@ public class ReferenceTypeUsageImpl extends ReferenceTypeUsage {
         } else if (other.isTypeVariable()) {
             // TODO look bounds...
             return true;
+        } else if (other.isWildcard()) {
+            if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+                return true;
+            } else if (other.asWildcard().isExtends()) {
+                return isAssignableBy(other.asWildcard().getBoundedType());
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -20,6 +21,7 @@ public class WildcardUsageTest {
     private TypeSolver typeSolver;
     private ReferenceTypeUsageImpl foo;
     private ReferenceTypeUsageImpl bar;
+    private ReferenceTypeUsageImpl object;
     private ReferenceTypeUsageImpl string;
     private WildcardUsage unbounded = WildcardUsage.UNBOUNDED;
     private WildcardUsage superFoo;
@@ -37,6 +39,7 @@ public class WildcardUsageTest {
         typeSolver = new JreTypeSolver();
         foo = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
         bar = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
+        object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         string = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         superFoo = WildcardUsage.superBound(foo);
         superBar = WildcardUsage.superBound(bar);
@@ -169,25 +172,18 @@ public class WildcardUsageTest {
         assertTrue(extendsA == extendsA.replaceParam("B", string));
     }
 
-    /*@Test
+    @Test
     public void testIsAssignableBySimple() {
-        assertEquals(true, object.isAssignableBy(string));
-        assertEquals(false, string.isAssignableBy(object));
-        assertEquals(false, listOfStrings.isAssignableBy(listOfA));
-        assertEquals(false, listOfA.isAssignableBy(listOfStrings));
-
-        assertEquals(false, object.isAssignableBy(VoidTypeUsage.INSTANCE));
-        assertEquals(false, string.isAssignableBy(VoidTypeUsage.INSTANCE));
-        assertEquals(false, listOfStrings.isAssignableBy(VoidTypeUsage.INSTANCE));
-        assertEquals(false, listOfA.isAssignableBy(VoidTypeUsage.INSTANCE));
-
-        assertEquals(true, object.isAssignableBy(NullTypeUsage.INSTANCE));
-        assertEquals(true, string.isAssignableBy(NullTypeUsage.INSTANCE));
-        assertEquals(true, listOfStrings.isAssignableBy(NullTypeUsage.INSTANCE));
-        assertEquals(true, listOfA.isAssignableBy(NullTypeUsage.INSTANCE));
+        assertEquals(false, unbounded.isAssignableBy(object));
+        assertEquals(true, object.isAssignableBy(unbounded));
+        assertEquals(false, string.isAssignableBy(unbounded));
+        assertEquals(true, superFoo.isAssignableBy(foo));
+        assertEquals(false, foo.isAssignableBy(superFoo));
+        assertEquals(false, extendsFoo.isAssignableBy(foo));
+        assertEquals(true, foo.isAssignableBy(extendsFoo));
     }
 
-    @Test
+    /*@Test
     public void testIsAssignableByGenerics() {
         assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
         assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
