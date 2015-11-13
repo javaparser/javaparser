@@ -61,7 +61,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
     @Override
     public TypeDeclaration declaringType() {
-        return new JavassistClassDeclaration(ctMethod.getDeclaringClass(), typeSolver);
+        if (ctMethod.getDeclaringClass().isInterface()) {
+            return new JavassistInterfaceDeclaration(ctMethod.getDeclaringClass(), typeSolver);
+        } else {
+            return new JavassistClassDeclaration(ctMethod.getDeclaringClass(), typeSolver);
+        }
     }
 
     @Override

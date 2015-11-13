@@ -38,6 +38,11 @@ public class LambdaTest extends AbstractTest {
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
         Expression expression = returnStmt.getExpr();
 
+        //R viene erroneamente instanziato come dichiarato su classe: e' vero che Function dichiara R ma questo
+        // e' R del metodo, non della classe
+        //E poi non viene risolto quando potrebbe esserlo. Lo si dovrebbe sostituire inferendolo dal valore di ritorno
+        //della lambda
+
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         TypeUsage type = javaParserFacade.getType(expression);
         assertEquals("java.util.stream.Stream<java.lang.String>", type.describe());

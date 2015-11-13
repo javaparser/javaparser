@@ -17,7 +17,11 @@ public class JavassistFactory {
             } else if (ctClazz.isPrimitive()) {
                 return PrimitiveTypeUsage.byName(ctClazz.getName());
             } else {
-                return new ReferenceTypeUsageImpl(new JavassistClassDeclaration(ctClazz, typeSolver), typeSolver);
+                if (ctClazz.isInterface()) {
+                    return new ReferenceTypeUsageImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver), typeSolver);
+                } else {
+                    return new ReferenceTypeUsageImpl(new JavassistClassDeclaration(ctClazz, typeSolver), typeSolver);
+                }
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
