@@ -15,6 +15,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.Value;
+
 public class StatementContextTest extends AbstractTest {
 
     @Test

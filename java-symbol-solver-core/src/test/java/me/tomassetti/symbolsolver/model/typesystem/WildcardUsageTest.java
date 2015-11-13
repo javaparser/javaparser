@@ -1,18 +1,13 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -23,9 +18,9 @@ public class WildcardUsageTest {
     class Bar extends Foo { }
 
     private TypeSolver typeSolver;
-    private ReferenceTypeUsage foo;
-    private ReferenceTypeUsage bar;
-    private ReferenceTypeUsage string;
+    private ReferenceTypeUsageImpl foo;
+    private ReferenceTypeUsageImpl bar;
+    private ReferenceTypeUsageImpl string;
     private WildcardUsage unbounded = WildcardUsage.UNBOUNDED;
     private WildcardUsage superFoo;
     private WildcardUsage superBar;
@@ -40,9 +35,9 @@ public class WildcardUsageTest {
     @Before
     public void setup() {
         typeSolver = new JreTypeSolver();
-        foo = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
-        bar = new ReferenceTypeUsage(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
-        string = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        foo = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
+        bar = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
+        string = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         superFoo = WildcardUsage.superBound(foo);
         superBar = WildcardUsage.superBound(bar);
         extendsFoo = WildcardUsage.extendsBound(foo);

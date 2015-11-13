@@ -8,6 +8,10 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.*;
@@ -138,7 +142,7 @@ public class JavaParserFacade {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
             logger.finest("getType on name expr " + node);
-            Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
+            Optional<me.tomassetti.symbolsolver.model.resolution.Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
             if (!value.isPresent()) {
                 throw new UnsolvedSymbolException("FOO Solving " + node, nameExpr.getName());
             } else {
@@ -193,7 +197,7 @@ public class JavaParserFacade {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
             // We should understand if this is a static access
             try {
-                Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
+                Optional<me.tomassetti.symbolsolver.model.resolution.Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
                 if (value.isPresent()) {
                     return value.get().getUsage();
                 } else {
@@ -230,7 +234,7 @@ public class JavaParserFacade {
         } else if (node instanceof CharLiteralExpr) {
             return PrimitiveTypeUsage.CHAR;
         } else if (node instanceof StringLiteralExpr) {
-            return new ReferenceTypeUsage(new JreTypeSolver().solveType("java.lang.String"), typeSolver);
+            return new ReferenceTypeUsageImpl(new JreTypeSolver().solveType("java.lang.String"), typeSolver);
         } else if (node instanceof UnaryExpr) {
             UnaryExpr unaryExpr = (UnaryExpr) node;
             switch (unaryExpr.getOperator()) {
@@ -283,7 +287,7 @@ public class JavaParserFacade {
             AssignExpr assignExpr = (AssignExpr) node;
             return getTypeConcrete(assignExpr.getTarget(), solveLambdas);
         } else if (node instanceof ThisExpr) {
-            return new ReferenceTypeUsage(getTypeDeclaration(findContainingTypeDecl(node)), typeSolver);
+            return new ReferenceTypeUsageImpl(getTypeDeclaration(findContainingTypeDecl(node)), typeSolver);
         } else if (node instanceof ConditionalExpr) {
             ConditionalExpr conditionalExpr = (ConditionalExpr) node;
             return getTypeConcrete(conditionalExpr.getThenExpr(), solveLambdas);
@@ -352,16 +356,16 @@ public class JavaParserFacade {
                     return new TypeParameterUsage(javaParserTypeVariableDeclaration.asTypeParameter());
                 }
             } else {
-                return new ReferenceTypeUsage(typeDeclaration, typeParameters, typeSolver);
+                return new ReferenceTypeUsageImpl(typeDeclaration, typeParameters, typeSolver);
             }
         } else if (type instanceof PrimitiveType) {
             return PrimitiveTypeUsage.byName(((PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
             if (wildcardType.getExtends() != null && wildcardType.getSuper() == null) {
-                return WildcardUsage.extendsBound((ReferenceTypeUsage) convertToUsage(wildcardType.getExtends(), context));
+                return WildcardUsage.extendsBound((ReferenceTypeUsageImpl) convertToUsage(wildcardType.getExtends(), context));
             } else if (wildcardType.getExtends() == null && wildcardType.getSuper() != null) {
-                return WildcardUsage.extendsBound((ReferenceTypeUsage) convertToUsage(wildcardType.getSuper(), context));
+                return WildcardUsage.extendsBound((ReferenceTypeUsageImpl) convertToUsage(wildcardType.getSuper(), context));
             } else if (wildcardType.getExtends() == null && wildcardType.getSuper() == null) {
                 return WildcardUsage.UNBOUNDED;
             } else {
@@ -414,7 +418,7 @@ public class JavaParserFacade {
         // TODO consider static methods
         if (node instanceof ClassOrInterfaceDeclaration) {
             JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-            return new ReferenceTypeUsage(classDeclaration, typeSolver);
+            return new ReferenceTypeUsageImpl(classDeclaration, typeSolver);
         } else {
             return getTypeOfThisIn(node.getParentNode());
         }

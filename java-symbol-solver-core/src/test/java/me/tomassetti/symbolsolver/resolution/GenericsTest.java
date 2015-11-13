@@ -14,6 +14,7 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
@@ -21,6 +22,11 @@ import me.tomassetti.symbolsolver.resolution.javaparser.contexts.ClassOrInterfac
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
+
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.Value;
 
 import java.util.List;
 import java.util.Optional;

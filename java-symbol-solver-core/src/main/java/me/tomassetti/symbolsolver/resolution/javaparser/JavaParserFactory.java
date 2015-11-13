@@ -8,18 +8,15 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.*;
-import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.contexts.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarators.FieldSymbolDeclarator;
-import me.tomassetti.symbolsolver.resolution.javaparser.declarators.NoSimboyDeclarator;
+import me.tomassetti.symbolsolver.resolution.javaparser.declarators.NoSimbolDeclarator;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarators.ParameterSymbolDeclarator;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarators.VariableSymbolDeclarator;
 
-/**
- * Created by federico on 28/07/15.
- */
 public class JavaParserFactory {
 
     public static Context getContext(Node node, TypeSolver typeSolver) {
@@ -64,15 +61,15 @@ public class JavaParserFactory {
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
                 return new VariableSymbolDeclarator((VariableDeclarationExpr) (expressionStmt.getExpression()), typeSolver);
             } else {
-                return new NoSimboyDeclarator(node, typeSolver);
+                return new NoSimbolDeclarator(node, typeSolver);
             }
         } else if (node instanceof IfStmt) {
-            return new NoSimboyDeclarator(node, typeSolver);
+            return new NoSimbolDeclarator(node, typeSolver);
         } else if (node instanceof ForeachStmt) {
             ForeachStmt foreachStmt = (ForeachStmt) node;
             return new VariableSymbolDeclarator((VariableDeclarationExpr) (foreachStmt.getVariable()), typeSolver);
         } else {
-            return new NoSimboyDeclarator(node, typeSolver);
+            return new NoSimbolDeclarator(node, typeSolver);
         }
     }
 

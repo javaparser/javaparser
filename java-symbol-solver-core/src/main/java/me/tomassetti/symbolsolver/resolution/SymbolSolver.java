@@ -8,7 +8,11 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.Value;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
@@ -16,9 +20,6 @@ import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by federico on 28/07/15.
- */
 public class SymbolSolver {
 
     private TypeSolver typeSolver;
@@ -105,7 +106,7 @@ public class SymbolSolver {
             return genericType.get();
         }
         TypeDeclaration typeDeclaration = typeSolver.solveType(name);
-        ReferenceTypeUsage typeUsage = new ReferenceTypeUsage(typeDeclaration, typeSolver);
+        ReferenceTypeUsageImpl typeUsage = new ReferenceTypeUsageImpl(typeDeclaration, typeSolver);
         return typeUsage;
     }
 }

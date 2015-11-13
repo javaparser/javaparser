@@ -4,16 +4,13 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserSymbolDeclaration;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by federico on 28/07/15.
- */
 public class FieldSymbolDeclarator extends AbstractSymbolDeclarator<FieldDeclaration> {
 
 

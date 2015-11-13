@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -16,37 +16,37 @@ import static org.junit.Assert.*;
 
 public class ReferenceTypeUsageTest {
 
-    private ReferenceTypeUsage listOfA;
-    private ReferenceTypeUsage listOfStrings;
-    private ReferenceTypeUsage linkedListOfString;
-    private ReferenceTypeUsage collectionOfString;
-    private ReferenceTypeUsage listOfWildcardExtendsString;
-    private ReferenceTypeUsage listOfWildcardSuperString;
-    private ReferenceTypeUsage object;
-    private ReferenceTypeUsage string;
+    private ReferenceTypeUsageImpl listOfA;
+    private ReferenceTypeUsageImpl listOfStrings;
+    private ReferenceTypeUsageImpl linkedListOfString;
+    private ReferenceTypeUsageImpl collectionOfString;
+    private ReferenceTypeUsageImpl listOfWildcardExtendsString;
+    private ReferenceTypeUsageImpl listOfWildcardSuperString;
+    private ReferenceTypeUsageImpl object;
+    private ReferenceTypeUsageImpl string;
     private TypeSolver typeSolver;
 
     @Before
     public void setup() {
         typeSolver = new JreTypeSolver();
-        object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        string = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        listOfA = new ReferenceTypeUsage(
+        object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        string = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        listOfA = new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver);
-        listOfStrings = new ReferenceTypeUsage(
+        listOfStrings = new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
-        linkedListOfString = new ReferenceTypeUsage(
+                ImmutableList.of(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
+        linkedListOfString = new ReferenceTypeUsageImpl(
                 new ReflectionClassDeclaration(LinkedList.class, typeSolver),
-                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
-        collectionOfString = new ReferenceTypeUsage(
+                ImmutableList.of(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
+        collectionOfString = new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(Collection.class, typeSolver),
-                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
-        listOfWildcardExtendsString = new ReferenceTypeUsage(
+                ImmutableList.of(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
+        listOfWildcardExtendsString = new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(WildcardUsage.extendsBound(string)), typeSolver);
-        listOfWildcardSuperString = new ReferenceTypeUsage(
+        listOfWildcardSuperString = new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(WildcardUsage.superBound(string)), typeSolver);
     }
@@ -54,7 +54,7 @@ public class ReferenceTypeUsageTest {
     @Test
     public void testDerivationOfTypeParameters() {
         JreTypeSolver typeSolver = new JreTypeSolver();
-        ReferenceTypeUsage ref1 = new ReferenceTypeUsage(typeSolver.solveType(LinkedList.class.getCanonicalName()), typeSolver);
+        ReferenceTypeUsageImpl ref1 = new ReferenceTypeUsageImpl(typeSolver.solveType(LinkedList.class.getCanonicalName()), typeSolver);
         assertEquals(1, ref1.parameters().size());
         assertEquals(true, ref1.parameters().get(0).isTypeVariable());
         assertEquals("E", ref1.parameters().get(0).asTypeParameter().getName());
@@ -219,124 +219,124 @@ public class ReferenceTypeUsageTest {
 
     @Test
     public void testGetAllAncestorsConsideringGenericsCases() {
-        ReferenceTypeUsage foo = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
-        ReferenceTypeUsage bar = new ReferenceTypeUsage(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
-        ReferenceTypeUsage left, right;
+        ReferenceTypeUsageImpl foo = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
+        ReferenceTypeUsageImpl bar = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
+        ReferenceTypeUsageImpl left, right;
 
         //YES MoreBazzing<Foo, Bar> e1 = new MoreBazzing<Foo, Bar>();
         assertEquals(true,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                     new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                     ImmutableList.of(foo, bar), typeSolver)
-                .isAssignableBy(new ReferenceTypeUsage(
+                .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
         );
 
         //YES MoreBazzing<? extends Foo, Bar> e2 = new MoreBazzing<Foo, Bar>();
         assertEquals(true,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                         ImmutableList.of(WildcardUsage.extendsBound(foo), bar), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
         );
 
         //YES MoreBazzing<Foo, ? extends Bar> e3 = new MoreBazzing<Foo, Bar>();
         assertEquals(true,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                         ImmutableList.of(foo, WildcardUsage.extendsBound(bar)), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
         );
 
         //YES MoreBazzing<? extends Foo, ? extends Foo> e4 = new MoreBazzing<Foo, Bar>();
         assertEquals(true,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                         ImmutableList.of(WildcardUsage.extendsBound(foo), WildcardUsage.extendsBound(foo)), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
         );
 
         //YES MoreBazzing<? extends Foo, ? extends Foo> e5 = new MoreBazzing<Bar, Bar>();
-        left = new ReferenceTypeUsage(
+        left = new ReferenceTypeUsageImpl(
                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                 ImmutableList.of(WildcardUsage.extendsBound(foo), WildcardUsage.extendsBound(foo)), typeSolver);
-        right = new ReferenceTypeUsage(
+        right = new ReferenceTypeUsageImpl(
                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                 ImmutableList.of(bar, bar), typeSolver);
         assertEquals(true, left.isAssignableBy(right));
 
         //YES Bazzer<Object, String, String> e6 = new MoreBazzing<String, Object>();
-        left = new ReferenceTypeUsage(
+        left = new ReferenceTypeUsageImpl(
                 new ReflectionClassDeclaration(Bazzer.class, typeSolver),
                 ImmutableList.of(object, string, string), typeSolver);
-        right = new ReferenceTypeUsage(
+        right = new ReferenceTypeUsageImpl(
                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                 ImmutableList.of(string, object), typeSolver);
         assertEquals(true, left.isAssignableBy(right));
 
         //YES Bazzer<String,String,String> e7 = new MoreBazzing<String, String>();
         assertEquals(true,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(Bazzer.class, typeSolver),
                         ImmutableList.of(string, string, string), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(string, string), typeSolver))
         );
 
         //YES Bazzer<Bar,String,Foo> e8 = new MoreBazzing<Foo, Bar>();
         assertEquals(true,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(Bazzer.class, typeSolver),
                         ImmutableList.of(bar, string, foo), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
         );
 
         //YES Bazzer<Foo,String,Bar> e9 = new MoreBazzing<Bar, Foo>();
         assertEquals(true,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(Bazzer.class, typeSolver),
                         ImmutableList.of(foo, string, bar), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(bar, foo), typeSolver))
         );
 
         //NO Bazzer<Bar,String,Foo> n1 = new MoreBazzing<Bar, Foo>();
         assertEquals(false,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(Bazzer.class, typeSolver),
                         ImmutableList.of(bar,string,foo), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(bar, foo), typeSolver))
         );
 
         //NO Bazzer<Bar,String,Bar> n2 = new MoreBazzing<Bar, Foo>();
         assertEquals(false,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(Bazzer.class, typeSolver),
                         ImmutableList.of(bar, string, foo), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(bar, foo), typeSolver))
         );
 
         //NO Bazzer<Foo,Object,Bar> n3 = new MoreBazzing<Bar, Foo>();
         assertEquals(false,
-                new ReferenceTypeUsage(
+                new ReferenceTypeUsageImpl(
                         new ReflectionClassDeclaration(Bazzer.class, typeSolver),
                         ImmutableList.of(foo, object, bar), typeSolver)
-                        .isAssignableBy(new ReferenceTypeUsage(
+                        .isAssignableBy(new ReferenceTypeUsageImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(bar, foo), typeSolver))
         );
@@ -345,8 +345,8 @@ public class ReferenceTypeUsageTest {
     @Test
     public void charSequenceIsAssignableToObject() {
         TypeSolver typeSolver = new JreTypeSolver();
-        ReferenceTypeUsage charSequence = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(CharSequence.class, typeSolver), typeSolver);
-        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        ReferenceTypeUsageImpl charSequence = new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(CharSequence.class, typeSolver), typeSolver);
+        ReferenceTypeUsageImpl object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         assertEquals(false, charSequence.isAssignableBy(object));
         assertEquals(true, object.isAssignableBy(charSequence));
     }
@@ -358,7 +358,7 @@ public class ReferenceTypeUsageTest {
         }
 
         TypeSolver typeSolver = new JreTypeSolver();
-        ReferenceTypeUsage ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
+        ReferenceTypeUsageImpl ref = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
 
         assertEquals(true, ref.getFieldType("elements").isPresent());
         assertEquals(true, ref.getFieldType("elements").get().isReferenceType());
@@ -367,8 +367,8 @@ public class ReferenceTypeUsageTest {
         assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).isTypeVariable());
         assertEquals("A", ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
 
-        ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver),
-                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)),
+        ref = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Foo.class, typeSolver),
+                ImmutableList.of(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)),
                 typeSolver);
 
         assertEquals(true, ref.getFieldType("elements").isPresent());
@@ -386,12 +386,12 @@ public class ReferenceTypeUsageTest {
         }
 
         TypeSolver typeSolver = new JreTypeSolver();
-        ReferenceTypeUsage ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
+        ReferenceTypeUsageImpl ref = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
 
         assertEquals(false, ref.getFieldType("bar").isPresent());
 
-        ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver),
-                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)),
+        ref = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Foo.class, typeSolver),
+                ImmutableList.of(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)),
                 typeSolver);
 
         assertEquals(false, ref.getFieldType("bar").isPresent());

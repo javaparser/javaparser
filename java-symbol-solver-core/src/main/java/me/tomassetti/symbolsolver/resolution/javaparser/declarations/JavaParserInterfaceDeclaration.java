@@ -13,7 +13,12 @@ import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.InterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
@@ -101,7 +106,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
         List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
-        ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
+        ancestorsOfOther.add(new ReferenceTypeUsageImpl(other, typeSolver));
         for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;
@@ -282,7 +287,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
                 if (!superclass.isSolved()) {
                     throw new UnsolvedSymbolException(extended.getName());
                 }
-                ancestors.add(new ReferenceTypeUsage(superclass.getCorrespondingDeclaration(), typeSolver));
+                ancestors.add(new ReferenceTypeUsageImpl(superclass.getCorrespondingDeclaration(), typeSolver));
                 ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors());
             }
         }
@@ -292,7 +297,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
                 if (!superclass.isSolved()) {
                     throw new UnsolvedSymbolException(implemented.getName());
                 }
-                ancestors.add(new ReferenceTypeUsage(superclass.getCorrespondingDeclaration(), typeSolver));
+                ancestors.add(new ReferenceTypeUsageImpl(superclass.getCorrespondingDeclaration(), typeSolver));
                 ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors());
             }
         }

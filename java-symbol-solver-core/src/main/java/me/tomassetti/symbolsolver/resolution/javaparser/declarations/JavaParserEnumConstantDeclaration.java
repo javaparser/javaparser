@@ -2,9 +2,9 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 
 import com.github.javaparser.ast.body.EnumDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
@@ -18,7 +18,7 @@ public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
     @Override
     public TypeUsage getType() {
-        return new ReferenceTypeUsage(new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode(), typeSolver), typeSolver);
+        return new ReferenceTypeUsageImpl(new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode(), typeSolver), typeSolver);
     }
 
     @Override

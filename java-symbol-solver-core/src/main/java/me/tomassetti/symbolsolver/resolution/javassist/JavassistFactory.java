@@ -4,10 +4,9 @@ import javassist.CtClass;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
-
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 public class JavassistFactory {
 
@@ -18,7 +17,7 @@ public class JavassistFactory {
             } else if (ctClazz.isPrimitive()) {
                 return PrimitiveTypeUsage.byName(ctClazz.getName());
             } else {
-                return new ReferenceTypeUsage(new JavassistClassDeclaration(ctClazz, typeSolver), typeSolver);
+                return new ReferenceTypeUsageImpl(new JavassistClassDeclaration(ctClazz, typeSolver), typeSolver);
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);

@@ -3,10 +3,10 @@ package me.tomassetti.symbolsolver.resolution.javaparser.contexts;
 import com.github.javaparser.ast.body.*;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserEnumConstantDeclaration;
@@ -15,7 +15,6 @@ import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserM
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * @author Federico Tomassetti

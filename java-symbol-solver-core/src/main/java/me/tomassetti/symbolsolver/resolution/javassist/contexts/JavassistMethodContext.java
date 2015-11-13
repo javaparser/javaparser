@@ -6,16 +6,13 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.Context;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by fede on 8/14/15.
- */
 public class JavassistMethodContext implements Context {
 
     private CtMethod wrappedNode;

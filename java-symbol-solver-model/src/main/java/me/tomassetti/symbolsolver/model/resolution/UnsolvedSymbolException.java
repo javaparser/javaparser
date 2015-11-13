@@ -1,7 +1,4 @@
-package me.tomassetti.symbolsolver.resolution.javaparser;
-
-import me.tomassetti.symbolsolver.model.resolution.Context;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+package me.tomassetti.symbolsolver.model.resolution;
 
 public class UnsolvedSymbolException extends RuntimeException {
 

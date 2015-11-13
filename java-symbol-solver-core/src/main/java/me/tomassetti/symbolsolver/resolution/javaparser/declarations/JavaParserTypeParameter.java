@@ -7,12 +7,13 @@ import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.Context;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 import java.util.Collections;
@@ -50,7 +51,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
     }
 
     @Override

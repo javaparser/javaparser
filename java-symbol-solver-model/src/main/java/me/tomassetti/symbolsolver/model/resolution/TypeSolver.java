@@ -1,7 +1,6 @@
-package me.tomassetti.symbolsolver.resolution;
+package me.tomassetti.symbolsolver.model.resolution;
 
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 
 public interface TypeSolver {
 

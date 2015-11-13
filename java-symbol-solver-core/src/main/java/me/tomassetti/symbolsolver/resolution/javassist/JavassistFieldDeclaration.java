@@ -3,11 +3,8 @@ package me.tomassetti.symbolsolver.resolution.javassist;
 import javassist.CtField;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
-/**
- * Created by federico on 01/08/15.
- */
 public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.model.declarations.FieldDeclaration {
     private CtField ctField;
     private TypeSolver typeSolver;

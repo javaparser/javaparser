@@ -11,7 +11,12 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
@@ -94,15 +99,15 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeUsage getSuperClass() {
+    public ReferenceTypeUsageImpl getSuperClass() {
         if (wrappedNode.getExtends() == null || wrappedNode.getExtends().isEmpty()) {
-            return new ReferenceTypeUsage(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
+            return new ReferenceTypeUsageImpl(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
         } else {
             SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
             }
-            return new ReferenceTypeUsage(ref.getCorrespondingDeclaration().asClass(), typeSolver);
+            return new ReferenceTypeUsageImpl(ref.getCorrespondingDeclaration().asClass(), typeSolver);
         }
     }
 
@@ -139,7 +144,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
         List<ReferenceTypeUsage> ancestorsOfOther = other.getAllAncestors();
-        ancestorsOfOther.add(new ReferenceTypeUsage(other, typeSolver));
+        ancestorsOfOther.add(new ReferenceTypeUsageImpl(other, typeSolver));
         for (ReferenceTypeUsage ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;
@@ -325,14 +330,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
-        ReferenceTypeUsage superclass = getSuperClass();
+        ReferenceTypeUsageImpl superclass = getSuperClass();
         if (superclass != null) {
             ancestors.add(superclass);
             ancestors.addAll(superclass.getAllAncestors());
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
-                ReferenceTypeUsage ancestor = toTypeUsage(implemented, typeSolver);
+                ReferenceTypeUsageImpl ancestor = toTypeUsage(implemented, typeSolver);
                 ancestors.add(ancestor);
                 ancestors.addAll(ancestor.getAllAncestors());
             }
@@ -340,16 +345,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return ancestors;
     }
 
-    private ReferenceTypeUsage toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
+    private ReferenceTypeUsageImpl toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
         SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());
         if (!ancestor.isSolved()) {
             throw new UnsolvedSymbolException(type.getName());
         }
         if (type.getTypeArgs() != null) {
             List<TypeUsage> typeParams = type.getTypeArgs().stream().map((t) -> toTypeUsage(t, typeSolver)).collect(Collectors.toList());
-            return new ReferenceTypeUsage(ancestor.getCorrespondingDeclaration(), typeParams, typeSolver);
+            return new ReferenceTypeUsageImpl(ancestor.getCorrespondingDeclaration(), typeParams, typeSolver);
         } else {
-            return new ReferenceTypeUsage(ancestor.getCorrespondingDeclaration(), typeSolver);
+            return new ReferenceTypeUsageImpl(ancestor.getCorrespondingDeclaration(), typeSolver);
         }
     }
 

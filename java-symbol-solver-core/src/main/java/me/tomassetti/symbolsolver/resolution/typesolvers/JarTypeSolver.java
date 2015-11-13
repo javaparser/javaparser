@@ -3,8 +3,8 @@ package me.tomassetti.symbolsolver.resolution.typesolvers;
 import javassist.ClassPool;
 import javassist.CtClass;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.resolution.javassist.JavassistClassDeclaration;
 
@@ -16,9 +16,6 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * Created by federico on 01/08/15.
- */
 public class JarTypeSolver implements TypeSolver {
 
     private TypeSolver parent;

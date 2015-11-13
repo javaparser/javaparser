@@ -7,6 +7,10 @@ import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.Value;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
@@ -14,9 +18,6 @@ import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by federico on 28/07/15.
- */
 public class StatementContext<N extends Statement> extends AbstractJavaParserContext<N> {
 
     public StatementContext(N wrappedNode, TypeSolver typeSolver) {

@@ -3,9 +3,9 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 public class JavaParserFieldDeclaration implements FieldDeclaration {
@@ -32,7 +32,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     public TypeUsage getType() {
         if (enumConstantDeclaration != null) {
             com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) enumConstantDeclaration.getParentNode();
-            return new ReferenceTypeUsage(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
+            return new ReferenceTypeUsageImpl(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
         } else {
             return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), fieldDeclaration);
         }

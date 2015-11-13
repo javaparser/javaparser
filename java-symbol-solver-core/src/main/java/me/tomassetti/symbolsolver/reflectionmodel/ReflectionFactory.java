@@ -1,13 +1,10 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.lang.reflect.*;
 
-/**
- * Created by federico on 02/08/15.
- */
 public class ReflectionFactory {
     public static TypeUsage typeUsageFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
@@ -19,9 +16,9 @@ public class ReflectionFactory {
                 return PrimitiveTypeUsage.byName(clazz.getName());
             }
         } else if (clazz.isInterface()) {
-            return new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(clazz, typeSolver), typeSolver);
+            return new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(clazz, typeSolver), typeSolver);
         } else {
-            return new ReferenceTypeUsage(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
+            return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
         }
     }
 
@@ -29,7 +26,7 @@ public class ReflectionFactory {
         if (type instanceof TypeVariable) {
             TypeVariable tv = (TypeVariable) type;
             // TODO the false value is arbitrary...
-            me.tomassetti.symbolsolver.resolution.TypeParameter typeParameter = new ReflectionTypeParameter(tv, true);
+            me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter = new ReflectionTypeParameter(tv, true);
             return new TypeParameterUsage(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
@@ -51,9 +48,9 @@ public class ReflectionFactory {
             } else if (c.isArray()) {
                 return new ArrayTypeUsage(typeUsageFor(c.getComponentType(), typeSolver));
             } else if (c.isInterface()) {
-                return new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(c, typeSolver), typeSolver);
+                return new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(c, typeSolver), typeSolver);
             } else {
-                return new ReferenceTypeUsage(new ReflectionClassDeclaration(c, typeSolver), typeSolver);
+                return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(c, typeSolver), typeSolver);
             }
         } else if (type instanceof GenericArrayType) {
             GenericArrayType genericArrayType = (GenericArrayType) type;

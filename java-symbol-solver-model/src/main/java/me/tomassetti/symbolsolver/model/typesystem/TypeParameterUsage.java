@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 
 public class TypeParameterUsage implements TypeUsage {
 

@@ -6,18 +6,15 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.resolution.Value;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.Value;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserTypeParameter;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by federico on 28/07/15.
- */
 public class ConstructorContext extends AbstractJavaParserContext<ConstructorDeclaration> {
 
 

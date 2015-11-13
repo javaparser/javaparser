@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarators;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserSymbolDeclaration;
 
 import java.util.Collections;
@@ -11,9 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by federico on 28/07/15.
- */
 public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableDeclarationExpr> {
 
 

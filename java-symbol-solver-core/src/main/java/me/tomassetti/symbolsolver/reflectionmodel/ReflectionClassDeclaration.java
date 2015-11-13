@@ -5,13 +5,14 @@ import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.NullTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.Context;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 
@@ -52,11 +53,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (getSuperClass() != null) {
-            ReferenceTypeUsage superClass = getSuperClass();
+            ReferenceTypeUsageImpl superClass = getSuperClass();
             ancestors.add(superClass);
             ancestors.addAll(getSuperClass().getAllAncestors());
         }
-        ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
+        ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
         for (int i = 0; i < ancestors.size(); i++) {
             ReferenceTypeUsage ancestor = ancestors.get(i);
             if (ancestor.hasName() && ancestor.getQualifiedName().equals(Object.class.getCanonicalName())) {
@@ -64,7 +65,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 i--;
             }
         }
-        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        ReferenceTypeUsageImpl object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         ancestors.add(object);
         return ancestors;
     }
@@ -129,7 +130,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     public TypeUsage getUsage(Node node) {
 
-        return new ReferenceTypeUsage(this, typeSolver);
+        return new ReferenceTypeUsageImpl(this, typeSolver);
     }
 
     @Override
@@ -204,8 +205,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         if (typeUsage.describe().equals(getQualifiedName())) {
             return true;
         }
-        if (typeUsage instanceof ReferenceTypeUsage) {
-            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage) typeUsage;
+        if (typeUsage instanceof ReferenceTypeUsageImpl) {
+            ReferenceTypeUsageImpl otherTypeDeclaration = (ReferenceTypeUsageImpl) typeUsage;
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this);
         }
 
@@ -277,7 +278,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 return true;
             }
         }
-        ReferenceTypeUsage superclass = getSuperClass();
+        ReferenceTypeUsageImpl superclass = getSuperClass();
         if (superclass == null) {
             return false;
         } else {
@@ -287,7 +288,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
     }
 
     @Override
@@ -321,7 +322,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeUsage getSuperClass() {
+    public ReferenceTypeUsageImpl getSuperClass() {
         if (clazz.getGenericSuperclass() == null) {
             return null;
         }
@@ -331,9 +332,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             List<TypeUsage> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                     .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                     .collect(Collectors.toList());
-            return new ReferenceTypeUsage(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver);
+            return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver);
         }
-        return new ReferenceTypeUsage(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
+        return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
     }
 
     @Override

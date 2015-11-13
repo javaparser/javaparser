@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.lang.reflect.Type;
 

@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 
 /**
  * A usage of a type. It could be a primitive type or a reference type (enum, class, interface).

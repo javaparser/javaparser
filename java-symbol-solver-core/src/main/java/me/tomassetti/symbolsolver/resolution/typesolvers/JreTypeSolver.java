@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.resolution.typesolvers;
 
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 

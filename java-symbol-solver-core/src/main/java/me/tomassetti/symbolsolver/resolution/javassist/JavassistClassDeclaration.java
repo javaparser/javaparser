@@ -11,7 +11,12 @@ import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
@@ -42,7 +47,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
     }
 
     @Override
@@ -192,7 +197,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             ancestors.add(getSuperClass());
             ancestors.addAll(getSuperClass().getAllAncestors());
         }
-        ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsage(i, typeSolver)).collect(Collectors.<ReferenceTypeUsage>toList()));
+        ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
         return ancestors;
     }
 
@@ -238,7 +243,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     public TypeUsage getUsage(Node node) {
-        return new ReferenceTypeUsage(this, typeSolver);
+        return new ReferenceTypeUsageImpl(this, typeSolver);
     }
 
     @Override
@@ -322,12 +327,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeUsage getSuperClass() {
+    public ReferenceTypeUsageImpl getSuperClass() {
         try {
             if (ctClass.getSuperclass() == null) {
                 throw new UnsupportedOperationException();
             }
-            return new ReferenceTypeUsage(new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver).asClass(), typeSolver);
+            return new ReferenceTypeUsageImpl(new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver).asClass(), typeSolver);
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }

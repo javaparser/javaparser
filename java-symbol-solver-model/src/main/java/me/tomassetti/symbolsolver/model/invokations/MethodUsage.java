@@ -2,8 +2,8 @@ package me.tomassetti.symbolsolver.model.invokations;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

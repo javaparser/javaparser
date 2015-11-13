@@ -2,8 +2,8 @@ package me.tomassetti.symbolsolver.resolution.javaparser.declarations;
 
 import com.github.javaparser.ast.body.Parameter;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 
 public class JavaParserParameterDeclaration implements ParameterDeclaration {

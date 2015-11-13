@@ -7,18 +7,15 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.QualifiedNameExpr;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserInterfaceDeclaration;
 
 import java.util.List;
 
 
-/**
- * Created by federico on 30/07/15.
- */
 public class CompilationUnitContext extends AbstractJavaParserContext<CompilationUnit> {
 
     public CompilationUnitContext(CompilationUnit wrappedNode, TypeSolver typeSolver) {

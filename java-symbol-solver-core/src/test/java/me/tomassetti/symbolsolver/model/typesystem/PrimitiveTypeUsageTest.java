@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -18,37 +18,37 @@ public class PrimitiveTypeUsageTest {
 
     private ArrayTypeUsage arrayOfBooleans;
     private ArrayTypeUsage arrayOfListOfA;
-    private ReferenceTypeUsage OBJECT;
-    private ReferenceTypeUsage STRING;
+    private ReferenceTypeUsageImpl OBJECT;
+    private ReferenceTypeUsageImpl STRING;
     private TypeSolver typeSolver;
     
-    private ReferenceTypeUsage booleanBox;
-    private ReferenceTypeUsage characterBox;
-    private ReferenceTypeUsage byteBox;
-    private ReferenceTypeUsage shortBox;
-    private ReferenceTypeUsage integerBox;
-    private ReferenceTypeUsage longBox;
-    private ReferenceTypeUsage floatBox;
-    private ReferenceTypeUsage doubleBox;
+    private ReferenceTypeUsageImpl booleanBox;
+    private ReferenceTypeUsageImpl characterBox;
+    private ReferenceTypeUsageImpl byteBox;
+    private ReferenceTypeUsageImpl shortBox;
+    private ReferenceTypeUsageImpl integerBox;
+    private ReferenceTypeUsageImpl longBox;
+    private ReferenceTypeUsageImpl floatBox;
+    private ReferenceTypeUsageImpl doubleBox;
 
     @Before
     public void setup() {
         typeSolver = new JreTypeSolver();
-        OBJECT = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        STRING = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        OBJECT = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        STRING = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         arrayOfBooleans = new ArrayTypeUsage(PrimitiveTypeUsage.BOOLEAN);
-        arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsage(
+        arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
         
-        booleanBox = new ReferenceTypeUsage(new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
-        characterBox = new ReferenceTypeUsage(new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
-        byteBox = new ReferenceTypeUsage(new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
-        shortBox = new ReferenceTypeUsage(new ReflectionClassDeclaration(Short.class, typeSolver), typeSolver);
-        integerBox = new ReferenceTypeUsage(new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
-        longBox = new ReferenceTypeUsage(new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
-        floatBox = new ReferenceTypeUsage(new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
-        doubleBox = new ReferenceTypeUsage(new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
+        booleanBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
+        characterBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
+        byteBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
+        shortBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Short.class, typeSolver), typeSolver);
+        integerBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
+        longBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
+        floatBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
+        doubleBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
         
     }
 

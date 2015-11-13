@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.Context;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -18,17 +18,17 @@ public class VoidTypeUsageTest {
 
     private ArrayTypeUsage arrayOfBooleans;
     private ArrayTypeUsage arrayOfListOfA;
-    private ReferenceTypeUsage OBJECT;
-    private ReferenceTypeUsage STRING;
+    private ReferenceTypeUsageImpl OBJECT;
+    private ReferenceTypeUsageImpl STRING;
     private TypeSolver typeSolver;
 
     @Before
     public void setup() {
         typeSolver = new JreTypeSolver();
-        OBJECT = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        STRING = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        OBJECT = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        STRING = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         arrayOfBooleans = new ArrayTypeUsage(PrimitiveTypeUsage.BOOLEAN);
-        arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsage(
+        arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
     }

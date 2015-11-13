@@ -5,16 +5,13 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForeachStmt;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserSymbolDeclaration;
 
 import java.util.List;
 
-/**
- * Created by federico on 23/08/15.
- */
 public class ForechStatementContext extends AbstractJavaParserContext<ForeachStmt> {
 
     public ForechStatementContext(ForeachStmt wrappedNode, TypeSolver typeSolver) {

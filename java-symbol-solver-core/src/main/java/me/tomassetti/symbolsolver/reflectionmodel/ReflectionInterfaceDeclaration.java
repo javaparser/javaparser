@@ -5,13 +5,14 @@ import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.NullTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.Context;
-import me.tomassetti.symbolsolver.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 
@@ -42,7 +43,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsage(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
     }
 
     @Override
@@ -74,7 +75,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     public TypeUsage getUsage(Node node) {
-        return new ReferenceTypeUsage(this, typeSolver);
+        return new ReferenceTypeUsageImpl(this, typeSolver);
     }
 
     @Override
@@ -109,7 +110,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 // Parameters not specified, so default to Object
                 typeParameterValues = new ArrayList<>();
                 for (int i = 0; i < getTypeParameters().size(); i++) {
-                    typeParameterValues.add(new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
+                    typeParameterValues.add(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
                 }
             }
         }
@@ -184,8 +185,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         if (typeUsage.describe().equals(getQualifiedName())) {
             return true;
         }
-        if (typeUsage instanceof ReferenceTypeUsage) {
-            ReferenceTypeUsage otherTypeDeclaration = (ReferenceTypeUsage) typeUsage;
+        if (typeUsage instanceof ReferenceTypeUsageImpl) {
+            ReferenceTypeUsageImpl otherTypeDeclaration = (ReferenceTypeUsageImpl) typeUsage;
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this);
         }
 
@@ -249,12 +250,12 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     public List<ReferenceTypeUsage> getAllAncestors() {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (clazz.getSuperclass() != null) {
-            ReferenceTypeUsage superclass = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
+            ReferenceTypeUsageImpl superclass = new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
             ancestors.add(superclass);
             ancestors.addAll(superclass.getAllAncestors());
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
-            ReferenceTypeUsage interfazeDecl = new ReferenceTypeUsage(new ReflectionInterfaceDeclaration(interfaze, typeSolver), typeSolver);
+            ReferenceTypeUsageImpl interfazeDecl = new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(interfaze, typeSolver), typeSolver);
             ancestors.add(interfazeDecl);
             ancestors.addAll(interfazeDecl.getAllAncestors());
         }
@@ -264,7 +265,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 i--;
             }
         }
-        ReferenceTypeUsage object = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        ReferenceTypeUsageImpl object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         ancestors.add(object);
         return ancestors;
     }

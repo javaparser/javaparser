@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -21,23 +21,23 @@ public class ArrayTypeUsageTest {
     private ArrayTypeUsage arrayOfStrings;
     private ArrayTypeUsage arrayOfListOfA;
     private ArrayTypeUsage arrayOfListOfStrings;
-    private ReferenceTypeUsage OBJECT;
-    private ReferenceTypeUsage STRING;
+    private ReferenceTypeUsageImpl OBJECT;
+    private ReferenceTypeUsageImpl STRING;
     private TypeSolver typeSolver;
 
     @Before
     public void setup() {
         typeSolver = new JreTypeSolver();
-        OBJECT = new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        STRING = new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        OBJECT = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        STRING = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         arrayOfBooleans = new ArrayTypeUsage(PrimitiveTypeUsage.BOOLEAN);
         arrayOfStrings = new ArrayTypeUsage(STRING);
-        arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsage(
+        arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
-        arrayOfListOfStrings = new ArrayTypeUsage(new ReferenceTypeUsage(
+        arrayOfListOfStrings = new ArrayTypeUsage(new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver));
+                ImmutableList.of(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class ArrayTypeUsageTest {
         assertTrue(arrayOfBooleans == arrayOfBooleans.replaceParam("A", OBJECT));
         assertTrue(arrayOfStrings == arrayOfStrings.replaceParam("A", OBJECT));
         assertTrue(arrayOfListOfStrings == arrayOfListOfStrings.replaceParam("A", OBJECT));
-        ArrayTypeUsage arrayOfListOfObjects = new ArrayTypeUsage(new ReferenceTypeUsage(
+        ArrayTypeUsage arrayOfListOfObjects = new ArrayTypeUsage(new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(OBJECT), typeSolver));
         assertEquals(true, arrayOfListOfA.replaceParam("A", OBJECT).isArray());
@@ -125,7 +125,7 @@ public class ArrayTypeUsageTest {
         assertEquals(new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 arrayOfListOfA.replaceParam("A", OBJECT).asArrayTypeUsage().getComponentType()
                         .asReferenceTypeUsage().getTypeDeclaration());
-        assertEquals(new ReferenceTypeUsage(
+        assertEquals(new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(OBJECT), typeSolver),
                 arrayOfListOfA.replaceParam("A", OBJECT).asArrayTypeUsage().getComponentType());

@@ -1,15 +1,12 @@
 package me.tomassetti.symbolsolver.resolution.javassist;
 
 import javassist.bytecode.SignatureAttribute;
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by federico on 05/08/15.
- */
 public class JavassistTypeParameter implements TypeParameter {
 
     private SignatureAttribute.TypeParameter wrapped;
@@ -50,7 +47,7 @@ public class JavassistTypeParameter implements TypeParameter {
     }
 
     @Override
-    public List<Bound> getBounds(TypeSolver typeSolver) {
+    public List<TypeParameter.Bound> getBounds(TypeSolver typeSolver) {
         List<Bound> bounds = new ArrayList<>();
         if (wrapped.getClassBound() != null) {
             throw new UnsupportedOperationException(wrapped.getClassBound().toString());

@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.resolution.javaparser.declarators;
 
 import com.github.javaparser.ast.Node;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
 
 /**
  * @author Federico Tomassetti

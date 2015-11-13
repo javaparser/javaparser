@@ -6,10 +6,10 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.resolution.*;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
@@ -32,7 +32,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         return typeOfScope.asReferenceTypeUsage().getGenericParameterByName(name);
     }
 
-    private Optional<MethodUsage> solveMethodAsUsage(ReferenceTypeUsage refType, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+    private Optional<MethodUsage> solveMethodAsUsage(ReferenceTypeUsageImpl refType, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
         Optional<MethodUsage> ref = refType.getTypeDeclaration().solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, refType.parameters());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
@@ -66,8 +66,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(TypeUsage typeUsage, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
-        if (typeUsage instanceof ReferenceTypeUsage) {
-            return solveMethodAsUsage((ReferenceTypeUsage) typeUsage, name, parameterTypes, typeSolver, invokationContext);
+        if (typeUsage instanceof ReferenceTypeUsageImpl) {
+            return solveMethodAsUsage((ReferenceTypeUsageImpl) typeUsage, name, parameterTypes, typeSolver, invokationContext);
         } else if (typeUsage instanceof TypeParameterUsage) {
             return solveMethodAsUsage((TypeParameterUsage) typeUsage, name, parameterTypes, typeSolver, invokationContext);
         } else {
@@ -132,7 +132,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
                     return typeOfScope.asWildcard().getBoundedType().asReferenceTypeUsage().solveMethod(name, parameterTypes);
                 } else {
-                    return new ReferenceTypeUsage(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver).solveMethod(name, parameterTypes);
+                    return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver).solveMethod(name, parameterTypes);
                 }
             } else {
                 return typeOfScope.asReferenceTypeUsage().solveMethod(name, parameterTypes);

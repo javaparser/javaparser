@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.resolution.javaparser;
 
-import me.tomassetti.symbolsolver.resolution.Context;
+import me.tomassetti.symbolsolver.model.resolution.Context;
 
 /**
  * Created by federico on 30/07/15.

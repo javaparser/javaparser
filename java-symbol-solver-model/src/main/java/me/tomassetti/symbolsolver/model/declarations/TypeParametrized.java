@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 
 import java.util.List;
 

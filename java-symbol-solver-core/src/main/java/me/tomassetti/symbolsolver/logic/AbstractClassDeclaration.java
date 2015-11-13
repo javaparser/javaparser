@@ -3,8 +3,9 @@ package me.tomassetti.symbolsolver.logic;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.InterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
             }
         }
         TypeDeclaration objectType = typeSolver().solveType(Object.class.getCanonicalName());
-        ReferenceTypeUsage objectRef = new ReferenceTypeUsage(objectType, typeSolver());
+        ReferenceTypeUsage objectRef = new ReferenceTypeUsageImpl(objectType, typeSolver());
         superclasses.add(objectRef);
         return superclasses.stream().filter((s) -> s.getTypeDeclaration().isClass()).collect(Collectors.toList());
     }
