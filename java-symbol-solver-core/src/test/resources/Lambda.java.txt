@@ -1,0 +1,11 @@
+import java.util.List;
+
+public class Agenda {
+
+    private List<String> persons;
+
+    public void lambdaMap(String personName) {
+        return persons.stream().map(p -> p.toLowerCase());
+    }
+
+}
