@@ -44,4 +44,5 @@ public class NullTypeUsage implements TypeUsage {
     public boolean isAssignableBy(TypeUsage other) {
         throw new UnsupportedOperationException("It does not make sense to assign a value to null, it can only be assigned");
     }
+
 }

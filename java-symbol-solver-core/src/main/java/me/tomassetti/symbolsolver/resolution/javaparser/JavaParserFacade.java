@@ -42,7 +42,7 @@ public class JavaParserFacade {
     private static Map<TypeSolver, JavaParserFacade> instances = new HashMap<>();
     private TypeSolver typeSolver;
     private SymbolSolver symbolSolver;
-    private Map<Node, TypeUsage> cacheWithLambadsSolved = new IdentityHashMap<>();
+    private Map<Node, TypeUsage> cacheWithLambdasSolved = new IdentityHashMap<>();
     private Map<Node, TypeUsage> cacheWithoutLambadsSolved = new IdentityHashMap<>();
 
     private JavaParserFacade(TypeSolver typeSolver) {
@@ -115,7 +115,7 @@ public class JavaParserFacade {
                 params.add(placeholder);
                 placeholders.add(placeholder);
             } else {
-                params.add(new JavaParserFacade(typeSolver).getType(expression));
+                params.add(JavaParserFacade.get(typeSolver).getType(expression));
             }
             i++;
         }
@@ -132,20 +132,70 @@ public class JavaParserFacade {
 
     public TypeUsage getType(Node node, boolean solveLambdas) {
         if (solveLambdas) {
-            if (!cacheWithLambadsSolved.containsKey(node)) {
+            if (!cacheWithLambdasSolved.containsKey(node)) {
                 TypeUsage res = getTypeConcrete(node, solveLambdas);
-                cacheWithLambadsSolved.put(node, res);
+
+                cacheWithLambdasSolved.put(node, res);
+
+                boolean secondPassNecessary = false;
+                if (node instanceof MethodCallExpr) {
+                    MethodCallExpr methodCallExpr = (MethodCallExpr)node;
+                    for (Node arg : methodCallExpr.getArgs()) {
+                        if (!cacheWithLambdasSolved.containsKey(arg)) {
+                            getType(arg, true);
+                            secondPassNecessary = true;
+                        }
+                    }
+                }
+                if (secondPassNecessary) {
+                    cacheWithLambdasSolved.remove(node);
+                    cacheWithLambdasSolved.put(node, getType(node, true));
+                }
                 logger.finer("getType on " + node + " -> " + res);
             }
-            return cacheWithLambadsSolved.get(node);
+            return cacheWithLambdasSolved.get(node);
         } else {
-            if (!cacheWithoutLambadsSolved.containsKey(node)) {
-                TypeUsage res = getTypeConcrete(node, solveLambdas);
-                cacheWithoutLambadsSolved.put(node, res);
-                logger.finer("getType on " + node + " (no solveLambdas) -> " + res);
+            Optional<TypeUsage> res = find(cacheWithLambdasSolved, node);
+            if (res.isPresent()) {
+                return res.get();
             }
-            return cacheWithoutLambadsSolved.get(node);
+            res = find(cacheWithoutLambadsSolved, node);
+            if (!res.isPresent()) {
+                TypeUsage resType = getTypeConcrete(node, solveLambdas);
+                cacheWithoutLambadsSolved.put(node, resType);
+                logger.finer("getType on " + node + " (no solveLambdas) -> " + res);
+                return resType;
+            }
+            return res.get();
         }
+    }
+
+    private Optional<TypeUsage> find(Map<Node, TypeUsage> map, Node node) {
+        if (map.containsKey(node)) {
+            return Optional.of(map.get(node));
+        }
+        if (node instanceof LambdaExpr) {
+            return find(map, (LambdaExpr)node);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * For some reasons LambdaExprs are duplicate and the equals method is not implemented correctly.
+     * @param map
+     * @return
+     */
+    private Optional<TypeUsage> find(Map<Node, TypeUsage> map, LambdaExpr lambdaExpr) {
+        for (Node key : map.keySet()) {
+            if (key instanceof LambdaExpr) {
+                LambdaExpr keyLambdaExpr = (LambdaExpr)key;
+                if (keyLambdaExpr.toString().equals(lambdaExpr.toString()) && keyLambdaExpr.getParentNode() == lambdaExpr.getParentNode()) {
+                    return Optional.of(map.get(keyLambdaExpr));
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     /**
@@ -167,7 +217,8 @@ public class JavaParserFacade {
         } else if (node instanceof MethodCallExpr) {
             logger.finest("getType on method call " + node);
             // first solve the method
-            MethodUsage ref = new JavaParserFacade(typeSolver).solveMethodAsUsage((MethodCallExpr) node);
+            JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+            MethodUsage ref = javaParserFacade.solveMethodAsUsage((MethodCallExpr) node);
             logger.finest("getType on method call " + node + " resolved to " + ref);
             logger.finest("getType on method call " + node + " return type is " + ref.returnType());
             return ref.returnType();
@@ -176,7 +227,7 @@ public class JavaParserFacade {
             if (node.getParentNode() instanceof MethodCallExpr) {
                 MethodCallExpr callExpr = (MethodCallExpr) node.getParentNode();
                 int pos = JavaParserSymbolDeclaration.getParamPos(node);
-                SymbolReference<MethodDeclaration> refMethod = new JavaParserFacade(typeSolver).solve(callExpr);
+                SymbolReference<MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr);
                 if (!refMethod.isSolved()) {
                     throw new UnsolvedSymbolException(callExpr.getName());
                 }
@@ -220,10 +271,10 @@ public class JavaParserFacade {
         } else if (node instanceof VariableDeclarator) {
             if (node.getParentNode() instanceof FieldDeclaration) {
                 FieldDeclaration parent = (FieldDeclaration) node.getParentNode();
-                return new JavaParserFacade(typeSolver).convertToUsage(parent.getType(), parent);
+                return JavaParserFacade.get(typeSolver).convertToUsage(parent.getType(), parent);
             } else if (node.getParentNode() instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr parent = (VariableDeclarationExpr) node.getParentNode();
-                return new JavaParserFacade(typeSolver).convertToUsage(parent.getType(), parent);
+                return JavaParserFacade.get(typeSolver).convertToUsage(parent.getType(), parent);
             } else {
                 throw new UnsupportedOperationException(node.getParentNode().getClass().getCanonicalName());
             }
@@ -232,7 +283,7 @@ public class JavaParserFacade {
             if (parameter.getType() instanceof UnknownType) {
                 throw new IllegalStateException("Parameter has unknown type: " + parameter);
             }
-            return new JavaParserFacade(typeSolver).convertToUsage(parameter.getType(), parameter);
+            return JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), parameter);
         } else if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
             // We should understand if this is a static access
@@ -261,7 +312,7 @@ public class JavaParserFacade {
             }
         } else if (node instanceof ObjectCreationExpr) {
             ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) node;
-            TypeUsage typeUsage = new JavaParserFacade(typeSolver).convertToUsage(objectCreationExpr.getType(), node);
+            TypeUsage typeUsage = JavaParserFacade.get(typeSolver).convertToUsage(objectCreationExpr.getType(), node);
             return typeUsage;
         } else if (node instanceof NullLiteralExpr) {
             return NullTypeUsage.INSTANCE;
@@ -431,7 +482,9 @@ public class JavaParserFacade {
         List<TypeUsage> params = new ArrayList<>();
         if (call.getArgs() != null) {
             for (Expression param : call.getArgs()) {
+                //getTypeConcrete(Node node, boolean solveLambdas)
                 params.add(getType(param, false));
+                //params.add(getTypeConcrete(param, false));
             }
         }
         Context context = JavaParserFactory.getContext(call, typeSolver);

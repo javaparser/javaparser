@@ -158,6 +158,9 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
 
     @Override
     public TypeUsage replaceParam(String name, TypeUsage replaced) {
+        if (replaced == null) {
+            throw new IllegalArgumentException();
+        }
         List<TypeUsage> newParams = typeParameters.stream().map((tp) -> tp.replaceParam(name, replaced)).collect(Collectors.toList());
         if (typeParameters.equals(newParams)) {
             return this;

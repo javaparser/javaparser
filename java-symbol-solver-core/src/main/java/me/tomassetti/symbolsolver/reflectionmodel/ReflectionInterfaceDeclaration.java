@@ -1,7 +1,9 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
+import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
+import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
@@ -98,43 +100,29 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
-        if (typeParameterValues.size() != getTypeParameters().size()) {
-            //if (typeParameterValues.size() != 0){
-            //    throw new UnsupportedOperationException("I have solved parameters for " + clazz.getCanonicalName() +". Values given are: "+typeParameterValues);
-            //}
-            // if it is zero we are going to ignore them
-            if (this.getTypeParameters().size() != 0) {
-                // Parameters not specified, so default to Object
-                typeParameterValues = new ArrayList<>();
-                for (int i = 0; i < getTypeParameters().size(); i++) {
-                    typeParameterValues.add(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
-                }
-            }
-        }
-        List<MethodUsage> methods = new ArrayList<>();
-        for (Method method : clazz.getMethods()) {
-            if (method.getName().equals(name) && !method.isBridge() && !method.isSynthetic()) {
-                MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
-                MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
-                int i = 0;
-                for (TypeParameter tp : getTypeParameters()) {
-                    methodUsage = methodUsage.replaceNameParam(tp.getName(), typeParameterValues.get(i));
-                    i++;
-                }
-                methods.add(methodUsage);
-            }
-
-        }
-        final List<TypeUsage> finalTypeParameterValues = typeParameterValues;
-        parameterTypes = parameterTypes.stream().map((pt) -> {
-            int i = 0;
-            for (TypeParameter tp : getTypeParameters()) {
-                pt = pt.replaceParam(tp.getName(), finalTypeParameterValues.get(i));
+        Optional<MethodUsage> res =  ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
+                typeParameterValues, this, clazz);
+        if (res.isPresent()) {
+            // We have to replace method type parameters here
+            List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
+            MethodUsage methodUsage = res.get();
+            int i=0;
+            for (TypeUsage actualType : parameterTypes) {
+                TypeUsage formalType = methodUsage.getDeclaration().getParam(i).getType();
+                formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                 i++;
             }
-            return pt;
-        }).collect(Collectors.toList());
-        return MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);
+            Map<String, TypeUsage> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+            for (String key : map.keySet()) {
+                if (map.get(key) == null) {
+                    throw new IllegalArgumentException();
+                }
+                methodUsage = methodUsage.replaceNameParam(key, map.get(key));
+            }
+            return Optional.of(methodUsage);
+        } else {
+            return res;
+        }
     }
 
     @Override

@@ -25,6 +25,8 @@ public class TypeParameterUsage implements TypeUsage {
         TypeParameterUsage that = (TypeParameterUsage) o;
 
         if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
+        if (typeParameter.declaredOnClass() != that.typeParameter.declaredOnClass()) return false;
+        if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod()) return false;
 
         return true;
     }

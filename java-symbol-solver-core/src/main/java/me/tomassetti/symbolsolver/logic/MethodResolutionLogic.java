@@ -130,6 +130,20 @@ public class MethodResolutionLogic {
         for (int i = 0; i < method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParamType(i, typeSolver);
             TypeUsage actualType = paramTypes.get(i);
+            for (TypeParameter tp : method.getDeclaration().getTypeParameters()) {
+                if (tp.getBounds(typeSolver).size() == 0) {
+                    expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                } else if (tp.getBounds(typeSolver).size() == 1) {
+                    TypeParameter.Bound bound = tp.getBounds(typeSolver).get(0);
+                    if (bound.isExtends()) {
+                        expectedType = expectedType.replaceParam(tp.getName(), bound.getType());
+                    } else {
+                        expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                    }
+                } else {
+                    throw new UnsupportedOperationException();
+                }
+            }
             if (!expectedType.isAssignableBy(actualType)) {
                 return false;
             }

@@ -29,7 +29,7 @@ public class MethodUsage {
     }
 
     private static TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
-        if (typeToBeExamined.isTypeVariable()) {
+        /*if (typeToBeExamined.isTypeVariable()) {
             if (typeToBeExamined.describe().equals(name)) {
                 return newValue;
             } else {
@@ -38,7 +38,8 @@ public class MethodUsage {
         }
         int i = 0;
 
-        return typeToBeExamined;
+        return typeToBeExamined;*/
+        return typeToBeExamined.replaceParam(name, newValue);
     }
 
     @Override
@@ -97,6 +98,9 @@ public class MethodUsage {
     }
 
     public MethodUsage replaceNameParam(String name, TypeUsage typeUsage) {
+        if (typeUsage == null) {
+            throw new IllegalArgumentException();
+        }
         // TODO if the method declaration has a type param with that name ignore this call
         MethodUsage res = this;
         for (int i = 0; i < paramTypes.size(); i++) {

@@ -14,6 +14,12 @@ public class WildcardUsage implements TypeUsage {
     private TypeUsage boundedType;
 
     private WildcardUsage(BoundType type, TypeUsage boundedType) {
+        if (type == null && boundedType != null) {
+            throw new IllegalArgumentException();
+        }
+        if (type != null && boundedType == null) {
+            throw new IllegalArgumentException();
+        }
         this.type = type;
         this.boundedType = boundedType;
     }
@@ -111,10 +117,16 @@ public class WildcardUsage implements TypeUsage {
 
     @Override
     public TypeUsage replaceParam(String name, TypeUsage replaced) {
+        if (replaced == null) {
+            throw new IllegalArgumentException();
+        }
         if (boundedType == null) {
             return this;
         }
         TypeUsage boundedTypeReplaced = boundedType.replaceParam(name, replaced);
+        if (boundedTypeReplaced == null) {
+            throw new RuntimeException();
+        }
         if (boundedTypeReplaced != boundedType) {
             return new WildcardUsage(type, boundedTypeReplaced);
         } else {

@@ -23,6 +23,12 @@ public class GenericTypeInferenceLogic {
     }
 
     private static void consider(Map<String, TypeUsage> map, TypeUsage formalType, TypeUsage actualType) {
+        if (formalType == null) {
+            throw new IllegalArgumentException();
+        }
+        if (actualType == null) {
+            throw new IllegalArgumentException();
+        }
         if (formalType.isTypeVariable()) {
             if (map.containsKey(formalType.asTypeParameter().getName())) {
                 throw new UnsupportedOperationException();
