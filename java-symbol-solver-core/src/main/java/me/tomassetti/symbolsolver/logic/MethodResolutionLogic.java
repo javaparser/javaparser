@@ -9,6 +9,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.WildcardUsage;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 
 import java.util.HashMap;
@@ -129,23 +130,46 @@ public class MethodResolutionLogic {
         }
         for (int i = 0; i < method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParamType(i, typeSolver);
+            TypeUsage expectedTypeWithoutSubstitutions = expectedType;
             TypeUsage actualType = paramTypes.get(i);
             for (TypeParameter tp : method.getDeclaration().getTypeParameters()) {
                 if (tp.getBounds(typeSolver).size() == 0) {
-                    expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                    //expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                    expectedType = expectedType.replaceParam(tp.getName(), WildcardUsage.extendsBound(new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
                 } else if (tp.getBounds(typeSolver).size() == 1) {
                     TypeParameter.Bound bound = tp.getBounds(typeSolver).get(0);
                     if (bound.isExtends()) {
-                        expectedType = expectedType.replaceParam(tp.getName(), bound.getType());
+                        //expectedType = expectedType.replaceParam(tp.getName(), bound.getType());
+                        expectedType = expectedType.replaceParam(tp.getName(), WildcardUsage.extendsBound(bound.getType()));
                     } else {
-                        expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                        //expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                        expectedType = expectedType.replaceParam(tp.getName(), WildcardUsage.superBound(bound.getType()));
+                    }
+                } else {
+                    throw new UnsupportedOperationException();
+                }
+            }
+            TypeUsage expectedType2 = expectedTypeWithoutSubstitutions;
+            for (TypeParameter tp : method.getDeclaration().getTypeParameters()) {
+                if (tp.getBounds(typeSolver).size() == 0) {
+                    expectedType2 = expectedType2.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                } else if (tp.getBounds(typeSolver).size() == 1) {
+                    TypeParameter.Bound bound = tp.getBounds(typeSolver).get(0);
+                    if (bound.isExtends()) {
+                        expectedType2 = expectedType2.replaceParam(tp.getName(), bound.getType());
+                    } else {
+                        expectedType2 = expectedType2.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                     }
                 } else {
                     throw new UnsupportedOperationException();
                 }
             }
             if (!expectedType.isAssignableBy(actualType)) {
-                return false;
+                if (!expectedType2.isAssignableBy(actualType)) {
+                    if (!expectedTypeWithoutSubstitutions.isAssignableBy(actualType)) {
+                        return false;
+                    }
+                }
             }
         }
         return true;

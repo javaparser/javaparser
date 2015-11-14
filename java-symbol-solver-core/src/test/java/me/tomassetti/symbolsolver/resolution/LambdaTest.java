@@ -67,7 +67,7 @@ public class LambdaTest extends AbstractTest {
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         TypeUsage type = javaParserFacade.getType(expression);
-        assertEquals("java.util.stream.Stream<java.lang.String>", type.describe());
+        assertEquals("java.util.List<java.lang.String>", type.describe());
     }
 
 
