@@ -73,7 +73,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public boolean declaredOnMethod() {
-        throw new UnsupportedOperationException();
+        return wrappedNode.getParentNode() instanceof com.github.javaparser.ast.body.MethodDeclaration;
     }
 
     @Override

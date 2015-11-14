@@ -49,6 +49,8 @@ public class GenericTypeInferenceLogic {
                     consider(map, formalType.asWildcard().getBoundedType(), actualType.asWildcard().getBoundedType());
                 }
             }
+        } else if (formalType.isPrimitive()) {
+            // nothing to do
         } else {
             throw new UnsupportedOperationException(formalType.describe());
         }

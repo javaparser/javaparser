@@ -14,10 +14,12 @@ import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import me.tomassetti.symbolsolver.resolution.javassist.contexts.JavassistMethodContext;
 
+import java.sql.Ref;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -199,7 +201,20 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
-        throw new UnsupportedOperationException();
+        List<ReferenceTypeUsage> ancestors = new ArrayList<>();
+        try {
+            for (CtClass interfaze : ctClass.getInterfaces()) {
+                ReferenceTypeUsage superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver()).asReferenceTypeUsage();
+                ancestors.add(superInterfaze);
+                ancestors.addAll(superInterfaze.getAllAncestors());
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        ancestors = ancestors.stream().filter(a -> a.getQualifiedName() != Object.class.getCanonicalName())
+                .collect(Collectors.toList());
+        ancestors.add(new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+        return ancestors;
     }
 
     @Override

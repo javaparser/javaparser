@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.resolution.javassist;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ModifierSet;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -14,6 +15,7 @@ import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -112,12 +114,12 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
     @Override
     public boolean isAbstract() {
-        throw new UnsupportedOperationException();
+        return ModifierSet.isAbstract(ctMethod.getModifiers());
     }
 
     @Override
     public boolean isPrivate() {
-        throw new UnsupportedOperationException();
+        return ModifierSet.isPrivate(ctMethod.getModifiers());
     }
 
     @Override
