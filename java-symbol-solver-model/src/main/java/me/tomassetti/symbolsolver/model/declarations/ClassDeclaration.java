@@ -11,6 +11,9 @@ import java.util.List;
  */
 public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
 
+    /**
+     * This method should always return true.
+     */
     @Override
     default boolean isClass() {
         return true;
@@ -32,8 +35,16 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
      */
     List<InterfaceDeclaration> getInterfaces();
 
+    /**
+     * Get all superclasses, with all the type parameters expressed as functions of the type parameters of this
+     * declaration.
+     */
     List<ReferenceTypeUsage> getAllSuperClasses();
 
+    /**
+     * Get all interfaces, with all the type parameters expressed as functions of the type parameters of this
+     * declaration.
+     */
     List<InterfaceDeclaration> getAllInterfaces();
 
 }

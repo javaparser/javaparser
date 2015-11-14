@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
+import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +13,17 @@ public class ReflectionTypeParameter implements TypeParameter {
 
     private TypeVariable typeVariable;
     private boolean declaredOnClass;
+    private String qNameOfDeclaringClass;
 
     public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass) {
+        GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
+        if (genericDeclaration instanceof Class) {
+            Class clazz = (Class)genericDeclaration;
+            qNameOfDeclaringClass = clazz.getTypeName();
+        } else {
+            System.out.println(genericDeclaration.getClass().getCanonicalName());
+            qNameOfDeclaringClass = null;
+        }
         this.typeVariable = typeVariable;
         this.declaredOnClass = declaredOnClass;
     }
@@ -66,7 +76,11 @@ public class ReflectionTypeParameter implements TypeParameter {
 
     @Override
     public String getQNameOfDeclaringClass() {
-        throw new UnsupportedOperationException();
+        if (qNameOfDeclaringClass == null) {
+            throw new UnsupportedOperationException();
+        } else {
+            return qNameOfDeclaringClass;
+        }
     }
 
     @Override
