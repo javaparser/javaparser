@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
+
+/**
+ * @author Federico Tomassetti
+ */
 public abstract class ReferenceTypeUsage implements TypeUsage {
 
     protected TypeDeclaration typeDeclaration;

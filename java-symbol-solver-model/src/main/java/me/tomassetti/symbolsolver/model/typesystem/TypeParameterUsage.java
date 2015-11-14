@@ -2,6 +2,9 @@ package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class TypeParameterUsage implements TypeUsage {
 
     private TypeParameter typeParameter;

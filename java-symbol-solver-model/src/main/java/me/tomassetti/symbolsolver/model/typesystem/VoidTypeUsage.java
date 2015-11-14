@@ -1,5 +1,8 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class VoidTypeUsage implements TypeUsage {
     public static final TypeUsage INSTANCE = new VoidTypeUsage();
 

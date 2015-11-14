@@ -2,6 +2,9 @@ package me.tomassetti.symbolsolver.model.resolution;
 
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 
+/**
+ * @author Federico Tomassetti
+ */
 public interface TypeSolver {
 
     public default TypeSolver getRoot() {

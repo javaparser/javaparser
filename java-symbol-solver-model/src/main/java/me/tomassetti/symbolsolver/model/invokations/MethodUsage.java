@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class MethodUsage {
     private MethodDeclaration declaration;
     private List<TypeUsage> paramTypes = new ArrayList<>();

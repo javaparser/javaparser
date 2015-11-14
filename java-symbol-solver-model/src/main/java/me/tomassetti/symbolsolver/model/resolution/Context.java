@@ -12,6 +12,8 @@ import java.util.Optional;
 /**
  * Context is very similar to scope.
  * In the context we look for solving symbols.
+ *
+ * @author Federico Tomassetti
  */
 public interface Context {
 

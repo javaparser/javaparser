@@ -6,6 +6,8 @@ package me.tomassetti.symbolsolver.model.typesystem;
  * - have a lower bound (? super Number)
  * - have an upper bound (? extends Number)
  * It is not possible to have both a lower and an upper bound at the same time.
+ *
+ * @author Federico Tomassetti
  */
 public class WildcardUsage implements TypeUsage {
 

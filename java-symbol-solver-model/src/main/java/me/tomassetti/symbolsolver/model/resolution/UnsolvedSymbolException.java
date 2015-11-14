@@ -1,5 +1,8 @@
 package me.tomassetti.symbolsolver.model.resolution;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class UnsolvedSymbolException extends RuntimeException {
 
     private String context;

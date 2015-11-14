@@ -1,5 +1,8 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ArrayTypeUsage implements TypeUsage {
 
     private TypeUsage baseType;

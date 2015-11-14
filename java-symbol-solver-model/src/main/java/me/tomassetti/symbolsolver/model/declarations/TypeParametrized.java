@@ -5,6 +5,8 @@ import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import java.util.List;
 
 /**
+ * An entity which has type parameter.
+ *
  * @author Federico Tomassetti
  */
 public interface TypeParametrized {

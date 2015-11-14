@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * An interface declaration.
+ *
+ * @author Federico Tomassetti
  */
 public interface InterfaceDeclaration extends TypeDeclaration, TypeParametrized {
 

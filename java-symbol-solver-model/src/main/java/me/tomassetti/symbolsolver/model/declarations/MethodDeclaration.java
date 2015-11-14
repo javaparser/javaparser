@@ -7,7 +7,9 @@ import me.tomassetti.symbolsolver.model.resolution.Context;
 import java.util.List;
 
 /**
- * A declaration of a method (either in an interface, a class or an enum).
+ * A declaration of a method (either in an interface, a class, an enum or an annotation).
+ *
+ * @author Federico Tomassetti
  */
 public interface MethodDeclaration extends Declaration, TypeParametrized {
 

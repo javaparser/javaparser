@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class PrimitiveTypeUsage implements TypeUsage {
 
     public static final PrimitiveTypeUsage BYTE = new PrimitiveTypeUsage("byte", Byte.class.getCanonicalName(), ImmutableList.of());

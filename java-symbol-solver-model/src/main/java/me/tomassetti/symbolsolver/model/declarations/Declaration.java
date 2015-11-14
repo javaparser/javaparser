@@ -2,6 +2,8 @@ package me.tomassetti.symbolsolver.model.declarations;
 
 /**
  * A generic declaration.
+ *
+ * @author Federico Tomassetti
  */
 public interface Declaration {
 

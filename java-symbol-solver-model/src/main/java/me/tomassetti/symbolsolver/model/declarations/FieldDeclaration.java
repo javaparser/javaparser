@@ -3,6 +3,8 @@ package me.tomassetti.symbolsolver.model.declarations;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 /**
+ * Declaration of a field.
+ *
  * @author Federico Tomassetti
  */
 public interface FieldDeclaration extends ValueDeclaration {

@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Declaration of a Class (not an interface or an enum).
+ *
+ * @author Federico Tomassetti
  */
 public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
 

@@ -2,6 +2,8 @@ package me.tomassetti.symbolsolver.model.typesystem;
 
 /**
  * This is a virtual type used to represent null values.
+ *
+ * @author Federico Tomassetti
  */
 public class NullTypeUsage implements TypeUsage {
 

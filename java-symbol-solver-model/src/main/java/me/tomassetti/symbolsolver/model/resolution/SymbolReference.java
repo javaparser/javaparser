@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Created by federico on 28/07/15.
+ * @author Federico Tomassetti
  */
 public class SymbolReference<S extends Declaration> {
 

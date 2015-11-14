@@ -3,6 +3,9 @@ package me.tomassetti.symbolsolver.model.resolution;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class Value {
 
     private TypeUsage typeUsage;

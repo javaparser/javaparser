@@ -9,6 +9,8 @@ import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
  * class A<B> { }
  * <p/>
  * where B is a TypeVariable. It could also be Wildcard Type, possibly with constraints.
+ *
+ * @author Federico Tomassetti
  */
 public interface TypeUsage {
 

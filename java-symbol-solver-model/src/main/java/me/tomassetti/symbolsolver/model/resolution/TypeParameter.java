@@ -4,6 +4,9 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public interface TypeParameter {
 
     public static TypeParameter onClass(final String name, String classQName, List<Bound> bounds) {
