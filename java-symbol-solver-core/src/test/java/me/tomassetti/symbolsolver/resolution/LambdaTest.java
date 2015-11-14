@@ -38,10 +38,32 @@ public class LambdaTest extends AbstractTest {
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
         Expression expression = returnStmt.getExpr();
 
-        //R viene erroneamente instanziato come dichiarato su classe: e' vero che Function dichiara R ma questo
-        // e' R del metodo, non della classe
-        //E poi non viene risolto quando potrebbe esserlo. Lo si dovrebbe sostituire inferendolo dal valore di ritorno
-        //della lambda
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
+        TypeUsage type = javaParserFacade.getType(expression);
+        assertEquals("java.util.stream.Stream<java.lang.String>", type.describe());
+    }
+
+    @Test
+    public void lambdaCollectParam() throws ParseException {
+        CompilationUnit cu = parseSample("LambdaCollect");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr();
+        Expression expression = methodCallExpr.getArgs().get(0);
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
+        TypeUsage type = javaParserFacade.getType(expression);
+        assertEquals("java.util.stream.Collector<T, ? extends java.lang.Object, java.util.List<T>>", type.describe());
+    }
+
+    @Test
+    public void lambdaCollect() throws ParseException {
+        CompilationUnit cu = parseSample("LambdaCollect");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expression = returnStmt.getExpr();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         TypeUsage type = javaParserFacade.getType(expression);
