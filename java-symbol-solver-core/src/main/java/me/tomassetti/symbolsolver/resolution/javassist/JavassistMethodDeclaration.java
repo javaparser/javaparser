@@ -92,7 +92,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     @Override
     public ParameterDeclaration getParam(int i) {
         try {
-            return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver);
+            boolean variadic = false;
+            if ((ctMethod.getModifiers() & javassist.Modifier.VARARGS) > 0) {
+                variadic = i == (ctMethod.getParameterTypes().length - 1);
+            }
+            return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic);
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }

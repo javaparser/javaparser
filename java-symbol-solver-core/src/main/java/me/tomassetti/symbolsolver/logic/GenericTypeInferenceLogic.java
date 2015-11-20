@@ -17,6 +17,8 @@ public class GenericTypeInferenceLogic {
             TypeUsage formalType = formalActualTypePair._1;
             TypeUsage actualType = formalActualTypePair._2;
             consider(map, formalType, actualType);
+            // we can infer also in the other direction
+            consider(map, actualType, formalType);
         }
 
         return map;
@@ -31,15 +33,30 @@ public class GenericTypeInferenceLogic {
         }
         if (formalType.isTypeVariable()) {
             if (map.containsKey(formalType.asTypeParameter().getName())) {
-                throw new UnsupportedOperationException();
+                if (!actualType.equals(map.get(formalType.asTypeParameter().getName()))) {
+                    throw new UnsupportedOperationException("Map already contains " + formalType);
+                }
             }
             map.put(formalType.asTypeParameter().getName(), actualType);
         } else if (formalType.isReferenceType()) {
             ReferenceTypeUsage formalTypeAsReference = formalType.asReferenceTypeUsage();
-            int i = 0;
-            for (TypeUsage formalTypeParameter : formalTypeAsReference.parameters()) {
-                consider(map, formalTypeParameter, actualType.asReferenceTypeUsage().parameters().get(i));
-                i++;
+            if (actualType.isReferenceType()) {
+                int i = 0;
+                for (TypeUsage formalTypeParameter : formalTypeAsReference.parameters()) {
+                    if (!actualType.isReferenceType()) {
+                        throw new UnsupportedOperationException(actualType.describe() + " " + formalTypeAsReference.describe());
+                    }
+                    consider(map, formalTypeParameter, actualType.asReferenceTypeUsage().parameters().get(i));
+                    i++;
+                }
+            } else if (actualType.isTypeVariable()) {
+                // nothing to do
+            } else if (actualType.isWildcard()) {
+                // nothing to do
+            } else if (actualType.isPrimitive()) {
+                // nothing to do
+            } else {
+                throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
             }
         } else if (formalType.isWildcard()) {
             if (actualType.isWildcard()) {

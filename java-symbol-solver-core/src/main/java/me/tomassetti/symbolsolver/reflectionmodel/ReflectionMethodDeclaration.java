@@ -82,7 +82,11 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i], typeSolver);
+        boolean variadic = false;
+        if (method.isVarArgs()) {
+            variadic = i == (method.getParameterCount() - 1);
+        }
+        return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i], typeSolver, variadic);
     }
 
     public MethodUsage getUsage(Node node) {

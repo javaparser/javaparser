@@ -10,11 +10,13 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
     private Class<?> type;
     private Type genericType;
     private TypeSolver typeSolver;
+    private boolean variadic;
 
-    public ReflectionParameterDeclaration(Class<?> type, Type genericType, TypeSolver typeSolver) {
+    public ReflectionParameterDeclaration(Class<?> type, Type genericType, TypeSolver typeSolver, boolean variadic) {
         this.type = type;
         this.genericType = genericType;
         this.typeSolver = typeSolver;
+        this.variadic = variadic;
     }
 
     @Override
@@ -37,6 +39,11 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
     @Override
     public boolean isParameter() {
         return true;
+    }
+
+    @Override
+    public boolean isVariadic() {
+        return variadic;
     }
 
     @Override

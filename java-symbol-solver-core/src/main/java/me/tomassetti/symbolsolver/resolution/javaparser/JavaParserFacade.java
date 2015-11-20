@@ -217,8 +217,7 @@ public class JavaParserFacade {
         } else if (node instanceof MethodCallExpr) {
             logger.finest("getType on method call " + node);
             // first solve the method
-            JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-            MethodUsage ref = javaParserFacade.solveMethodAsUsage((MethodCallExpr) node);
+            MethodUsage ref = solveMethodAsUsage((MethodCallExpr) node);
             logger.finest("getType on method call " + node + " resolved to " + ref);
             logger.finest("getType on method call " + node + " return type is " + ref.returnType());
             return ref.returnType();
@@ -384,7 +383,11 @@ public class JavaParserFacade {
             return getTypeConcrete(conditionalExpr.getThenExpr(), solveLambdas);
         } else if (node instanceof ArrayCreationExpr) {
             ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr) node;
-            return convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
+            TypeUsage res = convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
+            for (int i=0; i<arrayCreationExpr.getArrayCount();i++) {
+                res = new ArrayTypeUsage(res);
+            }
+            return res;
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

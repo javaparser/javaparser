@@ -32,6 +32,11 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
+    public boolean isVariadic() {
+        return wrappedNode.isVarArgs();
+    }
+
+    @Override
     public boolean isType() {
         throw new UnsupportedOperationException();
     }

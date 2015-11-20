@@ -108,7 +108,9 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             MethodUsage methodUsage = res.get();
             int i=0;
             for (TypeUsage actualType : parameterTypes) {
-                TypeUsage formalType = methodUsage.getDeclaration().getParam(i).getType();
+                TypeUsage formalType = methodUsage.getParamType(i, typeSolver);
+                // We need to replace the class type parameters (while we derive the method ones)
+
                 formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                 i++;
             }

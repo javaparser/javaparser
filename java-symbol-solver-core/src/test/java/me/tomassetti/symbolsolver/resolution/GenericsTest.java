@@ -28,6 +28,7 @@ import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

@@ -12,6 +12,9 @@ import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.junit.Assert.assertEquals;
 
 public class LambdaTest extends AbstractTest {
@@ -50,6 +53,7 @@ public class LambdaTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
         MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr();
+        // Collectors.toList()
         Expression expression = methodCallExpr.getArgs().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
@@ -67,7 +71,7 @@ public class LambdaTest extends AbstractTest {
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         TypeUsage type = javaParserFacade.getType(expression);
-        assertEquals("java.util.List<java.lang.String>", type.describe());
+        assertEquals("java.util.List<? super java.lang.String>", type.describe());
     }
 
 

@@ -6,25 +6,59 @@ import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.WildcardUsage;
+import me.tomassetti.symbolsolver.model.typesystem.*;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MethodResolutionLogic {
 
+    private static List<TypeUsage> groupVariadicParamValues(List<TypeUsage> paramTypes, int startVariadic, TypeUsage variadicType) {
+        List<TypeUsage> res = new ArrayList<>(paramTypes.subList(0, startVariadic));
+        List<TypeUsage> variadicValues = paramTypes.subList(startVariadic, paramTypes.size());
+        if (variadicValues.size() == 0) {
+            // TODO if there are no variadic values we should default to the bound of the formal type
+            res.add(variadicType);
+        } else {
+            TypeUsage componentType = findCommonType(variadicValues);
+            res.add(new ArrayTypeUsage(componentType));
+        }
+        return res;
+    }
+
+    private static TypeUsage findCommonType(List<TypeUsage> variadicValues) {
+        if (variadicValues.size() == 0) {
+            throw new IllegalArgumentException();
+        }
+        // TODO implement this decently
+        return variadicValues.get(0);
+    }
+
     public static boolean isApplicable(MethodDeclaration method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
+        List<TypeUsage> originalParamTypes = paramTypes;
         if (!method.getName().equals(name)) {
             return false;
         }
-        // TODO Consider varargs
+        if (method.hasVariadicParameter()) {
+            int pos = method.getNoParams() - 1;
+            if (method.getNoParams() == paramTypes.size()) {
+                // check if the last value is directly assignable as an array
+                TypeUsage expectedType = method.getLastParam().getType();
+                TypeUsage actualType = paramTypes.get(pos);
+                if (!expectedType.isAssignableBy(actualType)) {
+                    for (TypeParameter tp : method.getTypeParameters()) {
+                        expectedType = replaceTypeParam(expectedType, tp, typeSolver);
+                    }
+                    if (!expectedType.isAssignableBy(actualType)) {
+                        paramTypes = groupVariadicParamValues(paramTypes, pos, method.getLastParam().getType());
+                    }
+                } // else it is already assignable, nothing to do
+            } else {
+                paramTypes = groupVariadicParamValues(paramTypes, pos, method.getLastParam().getType());
+            }
+        }
+
         if (method.getNoParams() != paramTypes.size()) {
             return false;
         }
@@ -52,7 +86,7 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    private static boolean isAssignableMatchTypeParameters(ReferenceTypeUsage expected, ReferenceTypeUsage actual,
+    public static boolean isAssignableMatchTypeParameters(ReferenceTypeUsage expected, ReferenceTypeUsage actual,
                                                            Map<String, TypeUsage> matchedParameters) {
         if (actual.getQualifiedName().equals(expected.getQualifiedName())) {
             return isAssignableMatchTypeParametersMatchingQName(expected, actual, matchedParameters);
@@ -103,7 +137,7 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    private static TypeUsage replaceTypeParam(TypeUsage typeUsage, TypeParameter tp, TypeSolver typeSolver) {
+    public static TypeUsage replaceTypeParam(TypeUsage typeUsage, TypeParameter tp, TypeSolver typeSolver) {
         if (typeUsage.isTypeVariable()) {
             if (typeUsage.describe().equals(tp.getName())) {
                 List<TypeParameter.Bound> bounds = tp.getBounds(typeSolver);
@@ -115,9 +149,22 @@ public class MethodResolutionLogic {
                     return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
                 }
             }
+            return typeUsage;
+        } else if (typeUsage.isPrimitive()) {
+            return typeUsage;
+        } else if (typeUsage.isArray()) {
+            return new ArrayTypeUsage(replaceTypeParam(typeUsage.asArrayTypeUsage().getComponentType(), tp, typeSolver));
+        } else if (typeUsage.isReferenceType()) {
+            ReferenceTypeUsage result = typeUsage.asReferenceTypeUsage();
+            int i =0;
+            for (TypeUsage typeParam : result.parameters()) {
+                result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceTypeUsage();
+                i++;
+            }
+            return result;
+        } else {
+            throw new UnsupportedOperationException(typeUsage.getClass().getCanonicalName());
         }
-        // TODO consider annidated types
-        return typeUsage;
     }
 
     public static boolean isApplicable(MethodUsage method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {

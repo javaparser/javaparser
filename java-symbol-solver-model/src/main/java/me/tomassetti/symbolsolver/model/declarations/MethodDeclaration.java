@@ -26,6 +26,25 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
 
     ParameterDeclaration getParam(int i);
 
+    default ParameterDeclaration getLastParam() {
+        if (getNoParams() == 0) {
+            throw new UnsupportedOperationException();
+        }
+        return getParam(getNoParams() - 1);
+    }
+
+    /**
+     * Note that when a method has a variadic parameter it should have an array type.
+     * @return
+     */
+    default boolean hasVariadicParameter() {
+        if (getNoParams() == 0) {
+            return false;
+        } else {
+            return getParam(getNoParams() - 1).isVariadic();
+        }
+    }
+
     /**
      * Create the MethodUsage corresponding to this declaration with all generic types solved in the given
      * context.
