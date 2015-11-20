@@ -66,8 +66,8 @@ public class ArrayTypeUsage implements TypeUsage {
 
     @Override
     public boolean isAssignableBy(TypeUsage other) {
-        if (other instanceof ArrayTypeUsage) {
-            return baseType.equals(((ArrayTypeUsage) other).getComponentType());
+        if (other.isArray()) {
+            return baseType.isAssignableBy(other.asArrayTypeUsage().getComponentType());
         } else {
             return false;
         }

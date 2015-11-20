@@ -21,7 +21,7 @@ public class ReflectionTypeParameter implements TypeParameter {
             Class clazz = (Class)genericDeclaration;
             qNameOfDeclaringClass = clazz.getTypeName();
         } else {
-            System.out.println(genericDeclaration.getClass().getCanonicalName());
+            //System.out.println(genericDeclaration.getClass().getCanonicalName());
             qNameOfDeclaringClass = null;
         }
         this.typeVariable = typeVariable;

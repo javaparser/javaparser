@@ -25,8 +25,8 @@ public class ReflectionFactory {
     public static TypeUsage typeUsageFor(Type type, TypeSolver typeSolver) {
         if (type instanceof TypeVariable) {
             TypeVariable tv = (TypeVariable) type;
-            // TODO the false value is arbitrary...
-            me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter = new ReflectionTypeParameter(tv, true);
+            boolean declaredOnClass = ((TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
+            me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter = new ReflectionTypeParameter(tv, declaredOnClass);
             return new TypeParameterUsage(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;

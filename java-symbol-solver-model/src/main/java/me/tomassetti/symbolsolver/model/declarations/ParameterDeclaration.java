@@ -12,4 +12,6 @@ public interface ParameterDeclaration extends ValueDeclaration {
         return true;
     }
 
+    boolean isVariadic();
+
 }

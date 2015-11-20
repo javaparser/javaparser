@@ -8,16 +8,20 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 public class JavassistParameterDeclaration implements ParameterDeclaration {
     private CtClass type;
     private TypeSolver typeSolver;
-    public JavassistParameterDeclaration(CtClass type, TypeSolver typeSolver) {
+    private boolean variadic;
 
+    public JavassistParameterDeclaration(CtClass type, TypeSolver typeSolver, boolean variadic) {
         this.type = type;
         this.typeSolver = typeSolver;
+        this.variadic = variadic;
     }
 
     @Override
     public String toString() {
         return "JavassistParameterDeclaration{" +
                 "type=" + type +
+                ", typeSolver=" + typeSolver +
+                ", variadic=" + variadic +
                 '}';
     }
 
@@ -34,6 +38,11 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
     @Override
     public boolean isParameter() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isVariadic() {
+        return variadic;
     }
 
     @Override
