@@ -4,7 +4,7 @@ import com.github.javaparser.ast.Node;
 import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
-import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;

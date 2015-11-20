@@ -380,6 +380,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
+    protected ReferenceTypeUsage object() {
+        return new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    }
+
+    @Override
     protected TypeSolver typeSolver() {
         return typeSolver;
     }

@@ -8,7 +8,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>java-symbol-solver-core</artifactId>
+  <artifactId>java-symbol-solver-logic</artifactId>
   <packaging>jar</packaging>
 
   <licenses>
@@ -60,11 +60,6 @@
       <dependency>
           <groupId>me.tomassetti</groupId>
           <artifactId>java-symbol-solver-model</artifactId>
-          <version>0.1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-          <groupId>me.tomassetti</groupId>
-          <artifactId>java-symbol-solver-logic</artifactId>
           <version>0.1-SNAPSHOT</version>
       </dependency>
       <dependency>

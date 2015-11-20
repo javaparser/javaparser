@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
-import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeParametrized;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;

@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
-import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;
@@ -26,6 +26,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     private Class<?> clazz;
     private TypeSolver typeSolver;
+
+    @Override
+    protected ReferenceTypeUsage object() {
+        return new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    }
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {

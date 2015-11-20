@@ -8,7 +8,7 @@ import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
-import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;
@@ -31,6 +31,11 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
+
+    @Override
+    protected ReferenceTypeUsage object() {
+        return new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    }
 
     @Override
     public ClassDeclaration asClass() {

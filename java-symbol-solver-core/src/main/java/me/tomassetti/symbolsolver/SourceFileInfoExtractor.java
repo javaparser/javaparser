@@ -13,7 +13,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
@@ -21,7 +20,6 @@ import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-
 
 /**
  * It print information extracted from a source file. It is mainly intended as an example usage of JavaSymbolSolver.

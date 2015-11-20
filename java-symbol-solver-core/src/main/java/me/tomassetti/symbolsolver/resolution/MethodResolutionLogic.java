@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.logic;
+package me.tomassetti.symbolsolver.resolution;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -7,7 +7,6 @@ import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
-import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -146,7 +145,7 @@ public class MethodResolutionLogic {
                 } else if (bounds.size() == 1) {
                     return bounds.get(0).getType();
                 } else {
-                    return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+                    return new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
                 }
             }
             return typeUsage;

@@ -1,7 +1,7 @@
-package me.tomassetti.symbolsolver;
-
+package me.tomassetti.examples;
 
 import com.github.javaparser.ParseException;
+import me.tomassetti.symbolsolver.SourceFileInfoExtractor;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -9,10 +9,6 @@ import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import java.io.File;
 import java.io.IOException;
 
-
-/**
- * Created by federico on 21/08/15.
- */
 public class ProjectResolver {
 
     public static void main(String[] args) throws IOException, ParseException {

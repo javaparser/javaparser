@@ -14,9 +14,6 @@ import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by federico on 26/08/15.
- */
 public class AnalyseJavaParserTest {
 
     private static final File src = new File("src/test/resources/javaparser_src/proper_source");
