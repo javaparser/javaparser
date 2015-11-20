@@ -96,6 +96,16 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     expectedType.asArrayTypeUsage().getComponentType(),
                     actualType.asArrayTypeUsage().getComponentType(),
                     matchedTypeParameters);
+        } else if (expectedType.isReferenceType()) {
+            int i = 0;
+            for (TypeUsage tp : expectedType.asReferenceTypeUsage().parameters()) {
+                matchTypeParameters(tp, actualType.asReferenceTypeUsage().parameters().get(i), matchedTypeParameters);
+                i++;
+            }
+        } else if (expectedType.isPrimitive()) {
+            // nothing to do
+        } else if (expectedType.isWildcard()) {
+            // nothing to do
         } else {
             throw new UnsupportedOperationException(expectedType.getClass().getCanonicalName());
         }

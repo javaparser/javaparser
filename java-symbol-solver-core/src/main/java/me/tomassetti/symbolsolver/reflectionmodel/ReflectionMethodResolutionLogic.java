@@ -1,6 +1,5 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
-import javassist.CtClass;
 import me.tomassetti.symbolsolver.logic.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeParametrized;
@@ -13,7 +12,6 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

@@ -154,8 +154,16 @@ public class MethodResolutionLogic {
             return typeUsage;
         } else if (typeUsage.isArray()) {
             return new ArrayTypeUsage(replaceTypeParam(typeUsage.asArrayTypeUsage().getComponentType(), tp, typeSolver));
+        } else if (typeUsage.isReferenceType()) {
+            ReferenceTypeUsage result = typeUsage.asReferenceTypeUsage();
+            int i =0;
+            for (TypeUsage typeParam : result.parameters()) {
+                result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceTypeUsage();
+                i++;
+            }
+            return result;
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(typeUsage.getClass().getCanonicalName());
         }
     }
 
