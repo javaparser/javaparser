@@ -316,7 +316,7 @@ public class GenericsTest extends AbstractTest{
         Expression scope = call.getScope();
         TypeUsage typeUsage = JavaParserFacade.get(typeSolver).getType(scope);
 
-        System.out.println(typeUsage);
+        //System.out.println(typeUsage);
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("java.lang.Class<N>", typeUsage.describe());
