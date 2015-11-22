@@ -128,8 +128,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         }
     }
 
-    @Override
-    public Context getContext() {
+    private Context getContext() {
         return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
 

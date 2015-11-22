@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 public interface Context {
 
-    public Context getParent();
+    Context getParent();
 
     /* Type resolution */
 
@@ -36,7 +36,7 @@ public interface Context {
 
     /* Symbol resolution */
 
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+    SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         SymbolReference<? extends ValueDeclaration> ref = solveSymbol(name, typeSolver);
@@ -53,13 +53,13 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of parameters.
      */
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
 
     /**
      * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
      * resolved type variables.
      */
-    public default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         SymbolReference<MethodDeclaration> methodSolved = solveMethod(name, parameterTypes, typeSolver);
         if (methodSolved.isSolved()) {
             MethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();

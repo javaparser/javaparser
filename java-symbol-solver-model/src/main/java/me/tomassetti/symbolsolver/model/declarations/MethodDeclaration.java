@@ -50,9 +50,6 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
     @Deprecated
     MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes);
 
-    @Deprecated
-    Context getContext();
-
     boolean isAbstract();
 
     boolean isPrivate();

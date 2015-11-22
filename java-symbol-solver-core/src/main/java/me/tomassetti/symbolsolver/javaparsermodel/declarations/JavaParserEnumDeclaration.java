@@ -305,11 +305,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         @Override
-        public Context getContext() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
         public boolean isAbstract() {
             throw new UnsupportedOperationException();
         }

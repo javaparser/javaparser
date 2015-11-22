@@ -104,11 +104,6 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public Context getContext() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isAbstract() {
         return ModifierSet.isAbstract(method.getModifiers());
     }
