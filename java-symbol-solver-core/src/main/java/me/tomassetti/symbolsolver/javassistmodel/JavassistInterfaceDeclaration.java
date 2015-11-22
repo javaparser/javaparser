@@ -25,6 +25,15 @@ import java.util.stream.Collectors;
 public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private CtClass ctClass;
+
+    @Override
+    public String toString() {
+        return "JavassistInterfaceDeclaration{" +
+                "ctClass=" + ctClass.getName() +
+                ", typeSolver=" + typeSolver +
+                '}';
+    }
+
     private TypeSolver typeSolver;
 
     public JavassistInterfaceDeclaration(CtClass ctClass, TypeSolver typeSolver) {

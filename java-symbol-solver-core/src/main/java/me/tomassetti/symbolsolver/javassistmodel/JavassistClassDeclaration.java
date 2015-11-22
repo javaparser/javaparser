@@ -216,7 +216,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             ancestors.add(getSuperClass());
             ancestors.addAll(getSuperClass().getAllAncestors());
         }
-        ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
+        ancestors.addAll(getAllInterfaces().stream().map(i -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
         return ancestors;
     }
 

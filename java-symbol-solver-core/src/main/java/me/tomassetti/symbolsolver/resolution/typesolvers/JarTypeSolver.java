@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.resolution.typesolvers;
 
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -20,8 +21,15 @@ public class JarTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
+    private ClassPool classPool = new ClassPool(false);
 
     public JarTypeSolver(String pathToJar) throws IOException {
+        try {
+            classPool.appendClassPath(pathToJar);
+            classPool.appendSystemPath();
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
         JarFile jarFile = new JarFile(pathToJar);
         JarEntry entry = null;
         for (Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements(); entry = e.nextElement()) {
@@ -133,7 +141,6 @@ public class JarTypeSolver implements TypeSolver {
 
         CtClass toCtClass() throws IOException {
             InputStream is = jarFile.getInputStream(entry);
-            ClassPool classPool = ClassPool.getDefault();
             CtClass ctClass = classPool.makeClass(is);
             return ctClass;
         }
