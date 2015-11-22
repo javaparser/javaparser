@@ -393,4 +393,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     protected TypeSolver typeSolver() {
         return typeSolver;
     }
+
+	/**
+	 * Returns the JavaParser node associated with this JavaParserClassDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public com.github.javaparser.ast.body.ClassOrInterfaceDeclaration getWrappedNode()
+	{
+		return wrappedNode;
+	}
 }

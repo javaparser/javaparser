@@ -13,3 +13,6 @@ hs_err_pid*
 .idea
 *.iml
 target
+
+# Generated javadoc
+javadoc

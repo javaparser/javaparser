@@ -158,4 +158,14 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     protected TypeSolver typeSolver() {
         return typeSolver;
     }
+
+	/**
+	 * Returns the JavaParser node associated with this JavaParserTypeParameter.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public com.github.javaparser.ast.TypeParameter getWrappedNode()
+	{
+		return wrappedNode;
+	}
 }

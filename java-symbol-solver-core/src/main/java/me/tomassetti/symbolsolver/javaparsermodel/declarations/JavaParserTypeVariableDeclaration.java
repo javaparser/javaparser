@@ -150,4 +150,14 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     public me.tomassetti.symbolsolver.model.resolution.TypeParameter asTypeParameter() {
         return new JavaParserTypeParameter(this.wrappedNode, typeSolver);
     }
+
+	/**
+	 * Returns the JavaParser node associated with this JavaParserTypeVariableDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public TypeParameter getWrappedNode()
+	{
+		return wrappedNode;
+	}
 }

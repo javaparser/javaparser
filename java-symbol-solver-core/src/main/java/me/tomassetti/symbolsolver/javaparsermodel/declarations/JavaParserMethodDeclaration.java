@@ -218,4 +218,13 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         throw new UnsupportedOperationException();
     }
 
+	/**
+	 * Returns the JavaParser node associated with this JavaParserMethodDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public com.github.javaparser.ast.body.MethodDeclaration getWrappedNode()
+	{
+		return wrappedNode;
+	}
 }
