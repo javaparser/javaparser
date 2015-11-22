@@ -41,7 +41,6 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     public final List<InterfaceDeclaration> getAllInterfaces() {
         // TODO it could specify type parameters: they should appear
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
-        //ClassDeclaration superClass = getSuperClass(typeSolver);
         for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
             interfaces.add(interfaceDeclaration);
             interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended());

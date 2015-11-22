@@ -41,6 +41,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+        return getContext().solveMethod(name, parameterTypes, typeSolver());
+    }
+
+    @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         throw new UnsupportedOperationException();
     }
