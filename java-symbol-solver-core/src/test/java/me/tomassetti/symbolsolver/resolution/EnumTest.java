@@ -6,16 +6,13 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.SwitchStmt;
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
-import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.resolution.Value;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

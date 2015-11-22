@@ -8,7 +8,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFacade;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.resolution.AbstractTest;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;

@@ -14,8 +14,8 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.javaparser.JavaParserFactory;
-import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
+import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 
 import java.util.List;
 import java.util.Optional;

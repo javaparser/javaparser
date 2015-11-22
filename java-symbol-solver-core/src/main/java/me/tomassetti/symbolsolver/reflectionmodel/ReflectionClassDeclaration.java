@@ -13,8 +13,8 @@ import me.tomassetti.symbolsolver.model.typesystem.NullTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
-import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 
 import java.lang.reflect.*;
 import java.util.*;

@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.resolution.javaparser.contexts;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.google.common.collect.ImmutableList;
+import me.tomassetti.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
 import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;

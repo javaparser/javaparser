@@ -19,7 +19,7 @@ import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.*;
-import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.javassistmodel.contexts.JavassistMethodContext;
 
 import java.util.*;

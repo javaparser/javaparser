@@ -5,8 +5,8 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.resolution.javaparser.LambdaArgumentTypeUsagePlaceholder;
-import me.tomassetti.symbolsolver.resolution.javaparser.declarations.JavaParserTypeVariableDeclaration;
+import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 
 import java.util.HashSet;
 import java.util.List;
