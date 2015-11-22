@@ -20,6 +20,6 @@ public interface FieldDeclaration extends ValueDeclaration {
     }
 
     default FieldDeclaration replaceType(TypeUsage fieldType) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 }

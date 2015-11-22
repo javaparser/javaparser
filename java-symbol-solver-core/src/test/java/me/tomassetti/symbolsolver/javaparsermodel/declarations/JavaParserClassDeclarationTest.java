@@ -1,9 +1,6 @@
 package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.google.common.collect.ImmutableSet;
-import me.tomassetti.symbolsolver.SourceFileInfoExtractor;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
-import me.tomassetti.symbolsolver.javassistmodel.JavassistClassDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
