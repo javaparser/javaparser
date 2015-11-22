@@ -6,7 +6,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.javaparser.UnsolvedSymbolException;
-import me.tomassetti.symbolsolver.resolution.javassist.JavassistClassDeclaration;
+import me.tomassetti.symbolsolver.javassistmodel.JavassistClassDeclaration;
 
 import java.io.IOException;
 import java.io.InputStream;

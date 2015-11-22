@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.resolution.javassist;
+package me.tomassetti.symbolsolver.javassistmodel;
 
 import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;

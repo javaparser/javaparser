@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.resolution.javassist;
+package me.tomassetti.symbolsolver.javassistmodel;
 
 import javassist.CtField;
 import javassist.NotFoundException;

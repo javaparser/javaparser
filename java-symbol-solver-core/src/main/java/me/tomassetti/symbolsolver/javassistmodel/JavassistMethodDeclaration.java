@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.resolution.javassist;
+package me.tomassetti.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ModifierSet;
@@ -15,7 +15,6 @@ import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
