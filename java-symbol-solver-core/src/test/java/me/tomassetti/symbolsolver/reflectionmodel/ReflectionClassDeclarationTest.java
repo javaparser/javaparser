@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
+import com.google.common.collect.ImmutableSet;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -8,8 +9,9 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -140,5 +142,62 @@ public class ReflectionClassDeclarationTest {
         assertEquals(1, methods.get(6).getNoParams());
         assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
     }
+
+    @Test
+    public void testGetInterfaces() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        // Serializable, Cloneable, List<E>, RandomAccess
+        assertEquals(ImmutableSet.of(Serializable.class.getCanonicalName(),
+                Cloneable.class.getCanonicalName(),
+                List.class.getCanonicalName(),
+                RandomAccess.class.getCanonicalName()),
+                arraylist.getInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testGetAllInterfaces() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        // Serializable, Cloneable, Iterable<E>, Collection<E>, List<E>, RandomAccess
+        assertEquals(ImmutableSet.of(Serializable.class.getCanonicalName(),
+                Cloneable.class.getCanonicalName(),
+                List.class.getCanonicalName(),
+                RandomAccess.class.getCanonicalName(),
+                Collection.class.getCanonicalName(),
+                Iterable.class.getCanonicalName()),
+                arraylist.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testGetAllSuperclasses() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        assertEquals(ImmutableSet.of(Object.class.getCanonicalName(),
+                AbstractCollection.class.getCanonicalName(),
+                AbstractList.class.getCanonicalName()),
+                arraylist.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+        ClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        assertEquals(ImmutableSet.of(Object.class.getCanonicalName()),
+                string.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testGetQualifiedName() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        assertEquals("java.util.ArrayList", arraylist.getQualifiedName());
+        ClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        assertEquals("java.lang.String", string.getQualifiedName());
+    }
+
+    // solveMethod
+    // isAssignableBy
+    // canBeAssignedTo
+    // hasField
+    // solveSymbol
+    // solveType
+    // getDeclaredMethods
+    // getAllMethods
 
 }
