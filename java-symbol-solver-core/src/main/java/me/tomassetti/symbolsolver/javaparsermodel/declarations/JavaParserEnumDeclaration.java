@@ -273,6 +273,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return Collections.emptyList();
     }
 
+	/**
+	 * Returns the JavaParser node associated with this JavaParserEnumDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public com.github.javaparser.ast.body.EnumDeclaration getWrappedNode()
+	{
+		return wrappedNode;
+	}
+
     private class ValuesMethod implements MethodDeclaration {
 
         @Override

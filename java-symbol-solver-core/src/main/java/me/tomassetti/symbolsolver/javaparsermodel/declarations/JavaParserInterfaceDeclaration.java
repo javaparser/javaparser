@@ -327,4 +327,14 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     protected TypeSolver typeSolver() {
         return typeSolver;
     }
+
+	/**
+	 * Returns the JavaParser node associated with this JavaParserInterfaceDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public ClassOrInterfaceDeclaration getWrappedNode()
+	{
+		return wrappedNode;
+	}
 }

@@ -45,4 +45,14 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     public TypeUsage getType() {
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
     }
+
+	/**
+	 * Returns the JavaParser node associated with this JavaParserParameterDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public Parameter getWrappedNode()
+	{
+		return wrappedNode;
+	}
 }
