@@ -141,4 +141,14 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     public TypeUsage getTypeUsage(TypeSolver typeSolver) {
         return JavaParserFacade.get(typeSolver).getType(wrappedNode);
     }*/
+
+	/**
+	 * Returns the JavaParser node associated with this JavaParserSymbolDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public Node getWrappedNode()
+	{
+		return wrappedNode;
+	}
 }

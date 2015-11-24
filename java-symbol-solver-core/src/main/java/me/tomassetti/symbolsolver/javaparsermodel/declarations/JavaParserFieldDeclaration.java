@@ -11,7 +11,7 @@ import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 public class JavaParserFieldDeclaration implements FieldDeclaration {
 
     private VariableDeclarator variableDeclarator;
-    private com.github.javaparser.ast.body.FieldDeclaration fieldDeclaration;
+    private com.github.javaparser.ast.body.FieldDeclaration wrappedNode;
     private EnumConstantDeclaration enumConstantDeclaration;
     private TypeSolver typeSolver;
 
@@ -21,7 +21,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
         if (!(variableDeclarator.getParentNode() instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
             throw new IllegalStateException();
         }
-        this.fieldDeclaration = (com.github.javaparser.ast.body.FieldDeclaration) variableDeclarator.getParentNode();
+        this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) variableDeclarator.getParentNode();
     }
 
     public JavaParserFieldDeclaration(EnumConstantDeclaration enumConstantDeclaration) {
@@ -34,7 +34,7 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
             com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) enumConstantDeclaration.getParentNode();
             return new ReferenceTypeUsageImpl(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
         } else {
-            return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getType(), fieldDeclaration);
+            return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
         }
     }
 
@@ -52,5 +52,14 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
         return true;
     }
 
+	/**
+	 * Returns the JavaParser node associated with this JavaParserFieldDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public com.github.javaparser.ast.body.FieldDeclaration getWrappedNode()
+	{
+		return wrappedNode;
+	}
 
 }

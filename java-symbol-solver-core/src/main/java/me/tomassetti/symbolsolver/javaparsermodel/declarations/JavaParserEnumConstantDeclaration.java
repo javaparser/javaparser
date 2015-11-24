@@ -26,4 +26,14 @@ public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
         return wrappedNode.getName();
     }
 
+	/**
+	 * Returns the JavaParser node associated with this JavaParserEnumConstantDeclaration.
+	 *
+	 * @return A visitable JavaParser node wrapped by this object.
+	 */
+	public com.github.javaparser.ast.body.EnumConstantDeclaration getWrappedNode()
+	{
+		return wrappedNode;
+	}
+
 }
