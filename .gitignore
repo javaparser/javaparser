@@ -16,3 +16,4 @@ target
 
 # Generated javadoc
 javadoc
+.gradle
