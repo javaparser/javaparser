@@ -10,7 +10,7 @@
   <groupId>me.tomassetti</groupId>
   <artifactId>java-symbol-solver-parent</artifactId>
   <packaging>pom</packaging>
-  <version>0.1.2-SNAPSHOT</version>
+  <version>0.1.2</version>
   <name>java-symbol-solver-parent</name>
   <url>https://github.com/ftomassetti/java-symbol-solver</url>
   <description>A Symbol Solver for Java, built on top of JavaParser</description>
@@ -37,7 +37,7 @@
     <connection>scm:git:git://github.com/ftomassetti/java-symbol-solver.git</connection>
     <developerConnection>scm:git:git@github.com:ftomassetti/java-symbol-solver.git</developerConnection>
     <url>https://github.com/ftomassetti/java-symbol-solver.git</url>
-    <tag>HEAD</tag>
+    <tag>java-symbol-solver-parent-0.1.2</tag>
   </scm>
 
   <distributionManagement>
