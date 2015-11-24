@@ -3,11 +3,11 @@
   <parent>
     <groupId>me.tomassetti</groupId>
     <artifactId>java-symbol-solver-parent</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>java-symbol-solver-core</artifactId>
+  <artifactId>java-symbol-solver-logic</artifactId>
   <packaging>jar</packaging>
 
   <licenses>
@@ -59,12 +59,7 @@
       <dependency>
           <groupId>me.tomassetti</groupId>
           <artifactId>java-symbol-solver-model</artifactId>
-          <version>0.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-          <groupId>me.tomassetti</groupId>
-          <artifactId>java-symbol-solver-logic</artifactId>
-          <version>0.1.2-SNAPSHOT</version>
+          <version>0.1.1-SNAPSHOT</version>
       </dependency>
       <dependency>
           <groupId>com.javaslang</groupId>
@@ -72,24 +67,25 @@
           <version>2.0.0-beta</version>
       </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-            <encoding>UTF-8</encoding>
-            <source>1.8</source>
-            <target>1.8</target>
-        </configuration>
-      </plugin>
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-            <additionalparam>-Xdoclint:none</additionalparam>
-        </configuration>
-    </plugin>
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
