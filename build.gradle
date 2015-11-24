@@ -1,53 +1,21 @@
 apply plugin: 'maven'
-apply plugin: 'signing'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.1"
+  }
+}
+
+apply plugin: 'io.codearte.nexus-staging'
 
 allprojects  {
   apply plugin: 'java'
-  apply plugin: 'maven'
 
   group = 'me.tomassetti'
   version = '0.1.3'
-
-  artifacts {
-    archives jar
-  }
-
-
-  uploadArchives {
-    repositories {
-      mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-          authentication(userName: ossrhUsername, password: ossrhPassword)
-        }
-
-        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-          authentication(userName: ossrhUsername, password: ossrhPassword)
-        }
-
-        pom.project {
-          name 'java-symbol-solver'
-          packaging 'jar'
-          // optionally artifactId can be defined here
-          description ''
-
-          scm {
-            connection 'scm:git:git://github.com/ftomassetti/java-symbol-solver.git'
-            developerConnection 'scm:git:git@github.com:ftomassetti/java-symbol-solver.git'
-          }
-
-          licenses {
-            license {
-              name 'The Apache License, Version 2.0'
-              url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            }
-          }
-
-        }
-      }
-    }
-  }
 }
 
 subprojects {
@@ -57,12 +25,96 @@ subprojects {
 
   
   repositories {
-    mavenLocal()
+    mavenCentral()
     
     maven { url "http://repo.maven.apache.org/maven2" }
   }
 
-  
-  
-  
+}
+
+
+if (project.hasProperty('release')) {
+
+  subprojects {
+
+    task javadocJar(type: Jar) {
+      classifier = 'javadoc'
+      from javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+      classifier = 'sources'
+      from sourceSets.main.allSource
+    }
+
+    artifacts {
+      archives javadocJar, sourcesJar
+    }
+  }
+
+  allprojects {
+    apply plugin: 'signing'
+    apply plugin: 'maven'
+
+    // Signature of artifacts
+    signing {
+      sign configurations.archives
+    }
+
+    if (JavaVersion.current().isJava8Compatible()) {
+      allprojects {
+        tasks.withType(Javadoc) {
+          options.addStringOption('Xdoclint:none', '-quiet')
+        }
+      }
+    }
+
+    // OSSRH publication
+    uploadArchives {
+      repositories {
+        mavenDeployer {
+          // POM signature
+          beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+          // Target repository
+          repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            authentication(userName: ossrhUsername, password: ossrhPassword)
+          }
+          pom.project {
+            name project.name
+            description project.description
+            packaging 'jar'
+            url 'https://github.com/ftomassetti/java-symbol-solver'
+
+            scm {
+              connection 'scm:git:https://github.com/ftomassetti/java-symbol-solver.git'
+              developerConnection 'scm:git:git@github.com:ftomassetti/java-symbol-solver.git'
+              url 'https://github.com/ftomassetti/java-symbol-solver.git'
+            }
+
+            licenses {
+              license {
+                name 'The MIT License (MIT)'
+                url 'http://opensource.org/licenses/MIT'
+                distribution 'repo'
+              }
+            }
+
+            developers {
+              developer {
+                id = 'ftomassetti'
+                name = 'Federico Tomassetti'
+                email = 'federico@tomassetti.me'
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}
+
+nexusStaging {
+  username = ossrhUsername
+  password = ossrhPassword
 }
