@@ -1,14 +1,59 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
 allprojects  {
+  apply plugin: 'java'
   apply plugin: 'maven'
 
   group = 'me.tomassetti'
-version = '0.2-SNAPSHOT'
+  version = '0.1.3'
+
+  artifacts {
+    archives jar
+  }
+
+
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+
+        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+
+        pom.project {
+          name 'java-symbol-solver'
+          packaging 'jar'
+          // optionally artifactId can be defined here
+          description ''
+
+          scm {
+            connection 'scm:git:git://github.com/ftomassetti/java-symbol-solver.git'
+            developerConnection 'scm:git:git@github.com:ftomassetti/java-symbol-solver.git'
+          }
+
+          licenses {
+            license {
+              name 'The Apache License, Version 2.0'
+              url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+          }
+
+        }
+      }
+    }
+  }
 }
 
 subprojects {
   apply plugin: 'java'
-  sourceCompatibility = 1.5
-  targetCompatibility = 1.5
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
 
   
   repositories {
