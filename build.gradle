@@ -114,7 +114,17 @@ if (project.hasProperty('release')) {
   }
 }
 
+def v_ossrhUsername="FOO"
+def v_ossrhPassword="FOO"
+
+if (project.hasProperty("ossrhUsername")) {
+  v_ossrhUsername = ossrhUsername
+}
+if (project.hasProperty("ossrhPassword")) {
+  v_ossrhPassword = ossrhPassword
+}
+
 nexusStaging {
-  username = ossrhUsername
-  password = ossrhPassword
+  username = v_ossrhUsername
+  password = v_ossrhPassword
 }
