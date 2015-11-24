@@ -1,0 +1,1 @@
+./gradlew assemble -Prelease uploadArchives
