@@ -281,7 +281,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		List<Parameter> parameters = visit(_n.getParameters(), _arg);
-		List<NameExpr> throws_ = visit(_n.getThrows(), _arg);
+		List<ReferenceType> throws_ = visit(_n.getThrows(), _arg);
 		BlockStmt block = cloneNodes(_n.getBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 

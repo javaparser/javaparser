@@ -29,6 +29,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -54,7 +55,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	private int arrayCount;
 
-	private List<NameExpr> throws_;
+	private List<ReferenceType> throws_;
 
 	private BlockStmt body;
 
@@ -78,7 +79,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	public MethodDeclaration(final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
-			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
+			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt block) {
 		super(annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
@@ -93,7 +94,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
-			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
+			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt block) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
@@ -145,7 +146,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         return parameters;
 	}
 
-	public List<NameExpr> getThrows() {
+	public List<ReferenceType> getThrows() {
         throws_ = ensureNotNull(throws_);
         return throws_;
 	}
@@ -185,7 +186,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(this.parameters);
 	}
 
-	public void setThrows(final List<NameExpr> throws_) {
+	public void setThrows(final List<ReferenceType> throws_) {
 		this.throws_ = throws_;
 		setAsParentNodeOf(this.throws_);
 	}
@@ -276,7 +277,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (NameExpr thr : getThrows()) {
+            for (ReferenceType thr : getThrows()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
