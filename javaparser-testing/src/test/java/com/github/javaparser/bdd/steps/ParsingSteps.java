@@ -264,4 +264,10 @@ public class ParsingSteps {
         assertEquals(column, node.getEndColumn());
     }
 
+    @Then("no errors are reported")
+    public void thenNoErrorsAreReported() {
+        // this is present just for readability in the scenario specification
+        // if the code is not parsed then exceptions are thrown before reaching this step
+    }
+
 }

@@ -267,7 +267,6 @@ public class A{
 }
 Then ThenExpr in the conditional expression of the statement 1 in method 1 in class 1 is LambdaExpr
 
-
 Scenario: Parsing array creation expressions the positions are correct
 
 Given a CompilationUnit
@@ -316,3 +315,26 @@ class A {
     static int a = (Comparator<ChronoLocalDate> & Serializable) 1;
 }
 Then all nodes refer to their parent
+
+
+Scenario: Parsing trailing semicolons at the end of the imports area should work
+
+Given a CompilationUnit
+When the following source is parsed:
+import foo.a;;
+
+class A {
+}
+Then no errors are reported
+
+
+Scenario: Parsing trailing semicolons inside the imports area should work
+
+Given a CompilationUnit
+When the following source is parsed:
+import foo.a;;
+import foo.b;
+
+class A {
+}
+Then no errors are reported

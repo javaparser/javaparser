@@ -27,7 +27,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * <p>
- * This class represents a import declaration. Imports are optional for the
+ * This class represents a import declaration or an empty import declaration. Imports are optional for the
  * {@link CompilationUnit}.
  * </p>
  * The ImportDeclaration is constructed following the syntax:<br>
@@ -36,23 +36,48 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * ImportDeclaration ::= "import" ( "static" )? }{@link NameExpr}{@code ( "." "*" )? ";"
  * }
  * </pre>
+ * An enmpty import declaration is simply a semicolon among the import declarations.
  * @author Julio Vilmar Gesser
  */
 public final class ImportDeclaration extends Node {
 
     private NameExpr name;
-
     private boolean static_;
-
     private boolean asterisk;
+    private boolean isEmptyImportDeclaration;
 
-    public ImportDeclaration() {
+    private ImportDeclaration() {
+        this.isEmptyImportDeclaration = true;
+        static_ = false;
+        asterisk = false;
+    }
+
+    private ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
+        super(beginLine, beginColumn, endLine, endColumn);
+        this.isEmptyImportDeclaration = true;
+        static_ = false;
+        asterisk = false;
+    }
+
+    /**
+     * Create an empty import declaration without specifying its position.
+     */
+    public static ImportDeclaration createEmptyDeclaration(){
+        return new ImportDeclaration();
+    }
+
+    /**
+     * Create an empty import declaration specifying its position.
+     */
+    public static ImportDeclaration createEmptyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn){
+        return new ImportDeclaration(beginLine, beginColumn, endLine, endColumn);
     }
 
     public ImportDeclaration(NameExpr name, boolean isStatic, boolean isAsterisk) {
         setAsterisk(isAsterisk);
         setName(name);
         setStatic(isStatic);
+        this.isEmptyImportDeclaration = false;
     }
 
     public ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, NameExpr name, boolean isStatic, boolean isAsterisk) {
@@ -60,6 +85,14 @@ public final class ImportDeclaration extends Node {
         setAsterisk(isAsterisk);
         setName(name);
         setStatic(isStatic);
+        this.isEmptyImportDeclaration = false;
+    }
+
+    /**
+     * Is this an empty import declaration or a normal import declaration?
+     */
+    public boolean isEmptyImportDeclaration(){
+        return this.isEmptyImportDeclaration;
     }
 
     @Override
@@ -76,8 +109,12 @@ public final class ImportDeclaration extends Node {
      * Retrieves the name of the import.
      * 
      * @return the name of the import
+     * @throws UnsupportedOperationException when invoked on an empty import declaration
      */
     public NameExpr getName() {
+        if (isEmptyImportDeclaration) {
+            throw new UnsupportedOperationException("Empty import declarations have no name");
+        }
         return name;
     }
 
@@ -106,8 +143,12 @@ public final class ImportDeclaration extends Node {
      * 
      * @param asterisk
      *            <code>true</code> if this import is asterisk
+     * @throws UnsupportedOperationException when setting true on an empty import declaration
      */
     public void setAsterisk(boolean asterisk) {
+        if (isEmptyImportDeclaration && asterisk) {
+            throw new UnsupportedOperationException("Empty import cannot have asterisk");
+        }
         this.asterisk = asterisk;
     }
 
@@ -116,8 +157,12 @@ public final class ImportDeclaration extends Node {
      * 
      * @param name
      *            the name to set
+     * @throws UnsupportedOperationException when invoked on an empty import declaration
      */
     public void setName(NameExpr name) {
+        if (isEmptyImportDeclaration) {
+            throw new UnsupportedOperationException("Empty import cannot have name");
+        }
         this.name = name;
         setAsParentNodeOf(this.name);
     }
@@ -127,8 +172,12 @@ public final class ImportDeclaration extends Node {
      * 
      * @param static_
      *            <code>true</code> if this import is static
+     * @throws UnsupportedOperationException when setting true on an empty import declaration
      */
     public void setStatic(boolean static_) {
+        if (isEmptyImportDeclaration && static_) {
+            throw new UnsupportedOperationException("Empty import cannot be static");
+        }
         this.static_ = static_;
     }
 
