@@ -1278,11 +1278,11 @@ public class DumpVisitor implements VoidVisitor<Object> {
 				}
 			}
 		}
-		if (n.getMembers() != null) {
+		if (!n.getMembers().isEmpty()) {
 			printer.printLn(";");
 			printMembers(n.getMembers(), arg);
 		} else {
-			if (n.getEntries() != null) {
+			if (!n.getEntries().isEmpty()) {
 				printer.printLn();
 			}
 		}
