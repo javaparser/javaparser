@@ -304,7 +304,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	@Override
 	public R visit(final CatchClause n, final A arg) {
 		{
-			R result = n.getExcept().accept(this, arg);
+			R result = n.getParam().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1229,8 +1229,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			for (final Type type : n.getTypes()) {
-				R result = type.accept(this, arg);
+			if (n.getType() != null) {
+				R result = n.getType().accept(this, arg);
 				if (result != null) {
 					return result;
 				}
@@ -1271,6 +1271,32 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		}
 		return null;
 	}
+
+    @Override
+    public R visit(final IntersectionType n, final A arg) {
+        {
+            for (ReferenceType element : n.getElements()) {
+                R result = element.accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final UnionType n, final A arg) {
+        {
+            for (ReferenceType element : n.getElements()) {
+                R result = element.accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
 
 	@Override
 	public R visit(final ReturnStmt n, final A arg) {

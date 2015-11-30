@@ -256,7 +256,6 @@ Then method 1 class 1 is a default method
 Then method 2 class 1 is not a default method
 Then all nodes refer to their parent
 
-
 Scenario: A lambda expression inside a conditional expression is parsed by the Java Parser
 
 Given a CompilationUnit
@@ -282,3 +281,38 @@ Then the begin column is 17
 Then the end line is 2
 Then the end column is 29
 
+
+Scenario: simple cast on lambda expression can be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    static final Comparator<ChronoLocalDate> DATE_ORDER =
+        (Comparator<ChronoLocalDate>) (date1, date2) -> {
+            return Long.compare(date1.toEpochDay(), date2.toEpochDay());
+        };
+}
+Then all nodes refer to their parent
+
+
+Scenario: a combined cast on lambda expression can be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    static final Comparator<ChronoLocalDate> DATE_ORDER =
+        (Comparator<ChronoLocalDate> & Serializable) (date1, date2) -> {
+            return Long.compare(date1.toEpochDay(), date2.toEpochDay());
+        };
+}
+Then all nodes refer to their parent
+
+
+Scenario: a combined cast on a literal can be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    static int a = (Comparator<ChronoLocalDate> & Serializable) 1;
+}
+Then all nodes refer to their parent
