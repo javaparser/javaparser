@@ -22,13 +22,18 @@
 package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.ASTHelper;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.TokenMgrError;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +44,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class ParsingSteps {
 
@@ -47,6 +53,18 @@ public class ParsingSteps {
     public ParsingSteps(Map<String, Object> state){
         this.state = state;
     }
+
+    private String sourceUnderTest;
+
+    /*
+     * Given steps
+     */
+
+    @Given("the class:$classSrc")
+    public void givenTheClass(String classSrc) {
+        this.sourceUnderTest = classSrc.trim();
+    }
+
 
     /*
      * When steps
@@ -285,5 +303,15 @@ public class ParsingSteps {
         PackageDeclaration node = (PackageDeclaration) state.get("selectedNode");
         assertEquals(expected, node.getPackageName());
         assertEquals(expected, node.getName().toString());
+    }
+
+    @Then("the Java parser cannot parse it because of lexical errors")
+    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
+        try {
+            JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+            fail("Lexical error expected");
+        } catch (TokenMgrError e) {
+            // ok
+        }
     }
 }

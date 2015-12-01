@@ -133,3 +133,20 @@ package test;
 enum XYZ {
 
 }
+
+
+Scenario: Strings with escaped newlines are parsed correctly
+Given the class:
+class A {
+    public void helloWorld(String greeting, String name) {
+        return "hello\nworld";
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A {
+
+    public void helloWorld(String greeting, String name) {
+        return "hello\nworld";
+    }
+}

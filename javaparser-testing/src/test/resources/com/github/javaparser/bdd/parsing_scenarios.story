@@ -347,3 +347,14 @@ package com.github.javaparser.bdd;
 class C {}
 When I take the PackageDeclaration
 Then the package name is com.github.javaparser.bdd
+
+
+Scenario: Strings with unescaped newlines are NOT parsed correctly
+Given the class:
+class A {
+    public void helloWorld(String greeting, String name) {
+        return "hello
+        world";
+    }
+}
+Then the Java parser cannot parse it because of lexical errors
