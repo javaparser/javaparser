@@ -36,8 +36,8 @@ public class StringLiteralExpr extends LiteralExpr {
 	}
 
 	public StringLiteralExpr(final String value) {
-        if (value.contains("\n") || value.contains("\t")) {
-            throw new IllegalArgumentException("Illegal literal expression: some characters have to be escaped");
+        if (value.contains("\n") || value.contains("\r")) {
+            throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
         }
 		this.value = value;
 	}
