@@ -4,8 +4,8 @@ dependencies {
     compile group: 'com.github.javaparser', name: 'javaparser-core', version:'2.3.0'
     compile group: 'org.javassist', name: 'javassist', version:'3.19.0-GA'
     compile group: 'com.google.guava', name: 'guava', version:'18.0'
-  compile project(':java-symbol-solver-model')
-  compile project(':java-symbol-solver-logic')
+    compile project(':java-symbol-solver-model')
+    compile project(':java-symbol-solver-logic')
     compile group: 'com.javaslang', name: 'javaslang', version:'2.0.0-beta'
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'org.easymock', name: 'easymock', version:'3.3.1'
