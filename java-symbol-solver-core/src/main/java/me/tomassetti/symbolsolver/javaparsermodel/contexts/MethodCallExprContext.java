@@ -33,7 +33,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         return typeOfScope.asReferenceTypeUsage().getGenericParameterByName(name);
     }
 
-    private Optional<MethodUsage> solveMethodAsUsage(ReferenceTypeUsage refType, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
+    private Optional<MethodUsage> solveMethodAsUsage(ReferenceTypeUsage refType, String name,
+                                                     List<TypeUsage> parameterTypes, TypeSolver typeSolver,
+                                                     Context invokationContext) {
         Optional<MethodUsage> ref = refType.getTypeDeclaration().solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, refType.parameters());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();

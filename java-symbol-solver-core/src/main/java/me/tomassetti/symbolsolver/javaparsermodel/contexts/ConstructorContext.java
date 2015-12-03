@@ -61,7 +61,8 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
     }
 
     @Override
-    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(
+            String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
                 if (tp.getName().equals(name)) {
@@ -73,12 +74,8 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
     }
 
     @Override
-    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        /*if (wrappedNode.getName().equals(name)) {
-            // TODO understand if signature is compatible
-            throw new UnsupportedOperationException();
-        }*/
-
+    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(
+            String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         return getParent().solveMethod(name, parameterTypes, typeSolver);
     }
 

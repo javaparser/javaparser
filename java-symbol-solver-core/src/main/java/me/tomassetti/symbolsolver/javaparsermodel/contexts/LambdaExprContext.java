@@ -111,7 +111,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     }
 
     @Override
-    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(
+            String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         return getParent().solveMethod(name, parameterTypes, typeSolver);
     }
 
