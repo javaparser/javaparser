@@ -19,6 +19,7 @@ public interface FieldDeclaration extends ValueDeclaration {
         return this;
     }
 
+    @Deprecated
     default FieldDeclaration replaceType(TypeUsage fieldType) {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }

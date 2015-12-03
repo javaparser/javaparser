@@ -32,16 +32,6 @@ public class MethodUsage {
     }
 
     private static TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
-        /*if (typeToBeExamined.isTypeVariable()) {
-            if (typeToBeExamined.describe().equals(name)) {
-                return newValue;
-            } else {
-                return typeToBeExamined;
-            }
-        }
-        int i = 0;
-
-        return typeToBeExamined;*/
         return typeToBeExamined.replaceParam(name, newValue);
     }
 
@@ -95,8 +85,6 @@ public class MethodUsage {
     }
 
     public TypeUsage getParamType(int i, TypeSolver typeSolver) {
-        //TypeUsage typeUsage = declaration.getParam(i).getType(typeSolver);
-        //return typeUsage;
         return paramTypes.get(i);
     }
 
@@ -109,7 +97,6 @@ public class MethodUsage {
         for (int i = 0; i < paramTypes.size(); i++) {
             TypeUsage originalParamType = paramTypes.get(i);
             TypeUsage newParamType = originalParamType.replaceParam(name, typeUsage);
-            //TypeUsage newParamType = replaceNameParam(name, typeUsage, originalParamType);
             res = res.replaceParamType(i, newParamType);
         }
         res = res.replaceReturnType(replaceNameParam(name, typeUsage, res.returnType));

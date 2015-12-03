@@ -10,7 +10,6 @@ public class NullTypeUsage implements TypeUsage {
     public static final NullTypeUsage INSTANCE = new NullTypeUsage();
 
     private NullTypeUsage() {
-
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface TypeParameter {
 
-    public static TypeParameter onClass(final String name, String classQName, List<Bound> bounds) {
+    static TypeParameter onClass(final String name, String classQName, List<Bound> bounds) {
         return new TypeParameter() {
             @Override
             public String getName() {
@@ -43,17 +43,17 @@ public interface TypeParameter {
         };
     }
 
-    public String getName();
+    String getName();
 
-    public boolean declaredOnClass();
+    boolean declaredOnClass();
 
-    public boolean declaredOnMethod();
+    boolean declaredOnMethod();
 
-    public String getQNameOfDeclaringClass();
+    String getQNameOfDeclaringClass();
 
-    public List<Bound> getBounds(TypeSolver typeSolver);
+    List<Bound> getBounds(TypeSolver typeSolver);
 
-    public class Bound {
+    class Bound {
         private boolean extendsBound;
         private TypeUsage type;
 
