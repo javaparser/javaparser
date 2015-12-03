@@ -32,9 +32,13 @@ public class StringLiteralExpr extends LiteralExpr {
 	protected String value;
 
 	public StringLiteralExpr() {
+        this.value = "";
 	}
 
 	public StringLiteralExpr(final String value) {
+        if (value.contains("\n") || value.contains("\r")) {
+            throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
+        }
 		this.value = value;
 	}
 
