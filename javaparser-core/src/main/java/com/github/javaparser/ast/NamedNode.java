@@ -28,6 +28,7 @@ package com.github.javaparser.ast;
  * 
  * @since 2.0.1 
  */
+@FunctionalInterface
 public interface NamedNode {
     String getName();
 }
