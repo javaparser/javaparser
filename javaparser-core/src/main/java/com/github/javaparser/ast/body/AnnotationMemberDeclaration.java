@@ -95,6 +95,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
         return modifiers;
     }
 
+    @Override
     public String getName() {
         return name;
     }

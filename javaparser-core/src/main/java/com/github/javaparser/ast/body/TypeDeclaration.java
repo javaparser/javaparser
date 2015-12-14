@@ -84,6 +84,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		return modifiers;
 	}
 
+	@Override
 	public final String getName() {
 		return name.getName();
 	}

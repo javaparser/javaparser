@@ -133,6 +133,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		return modifiers;
 	}
 
+	@Override
 	public String getName() {
 		return name.getName();
 	}

@@ -46,6 +46,7 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
     	setAnnotations(annotations);
     }
 
+    @Override
     public final List<AnnotationExpr> getAnnotations() {
         annotations = Utils.ensureNotNull(annotations);
         return annotations;

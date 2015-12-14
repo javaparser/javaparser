@@ -58,6 +58,7 @@ public final class MemberValuePair extends Node implements NamedNode {
 		v.visit(this, arg);
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
