@@ -85,7 +85,7 @@ public final class PositionUtils {
         if (node instanceof AnnotableNode){
             List<AnnotationExpr> annotations = new LinkedList<AnnotationExpr>();
             annotations.addAll(((AnnotableNode) node).getAnnotations());
-            if (annotations.size()==0){
+            if (annotations.isEmpty()){
                 return null;
             }
             sortByBeginPosition(annotations);
