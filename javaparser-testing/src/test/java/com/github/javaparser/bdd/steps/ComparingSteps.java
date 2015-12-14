@@ -21,40 +21,23 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
+import static org.hamcrest.CoreMatchers.*;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
 
 import java.io.StringReader;
-import java.util.List;
 import java.util.Map;
 
-import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
-import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ComparingSteps {
 
     private Map<String, Object> state;
     private CompilationUnit first;
     private CompilationUnit second;
-    private boolean equalsResult;
 
     public ComparingSteps(Map<String, Object> state){
         this.state = state;
@@ -80,7 +63,7 @@ public class ComparingSteps {
 
     @Then("they are equals")
     public void thenTheyAreEquals() {
-        assertEquals("they are equals", first, second);
+        assertThat(first, is(equalTo(second)));
     }
 
 }
