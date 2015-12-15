@@ -53,6 +53,7 @@ public class NameExpr extends Expression implements NamedNode {
 		v.visit(this, arg);
 	}
 
+	@Override
 	public final String getName() {
 		return name;
 	}

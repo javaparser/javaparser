@@ -86,6 +86,7 @@ public final class TypeParameter extends Node implements NamedNode {
 	 * 
 	 * @return the name of the paramenter
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}

@@ -85,6 +85,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
         return classBody;
     }
 
+    @Override
     public String getName() {
         return name;
     }
