@@ -55,6 +55,7 @@ public final class LineComment extends Comment {
         v.visit(this, arg);
     }
 
+    @Override
     public boolean isLineComment()
     {
         return true;

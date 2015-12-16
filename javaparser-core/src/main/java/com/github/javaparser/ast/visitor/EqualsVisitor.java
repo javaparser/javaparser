@@ -712,6 +712,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         return Boolean.TRUE;
     }
 
+	@Override
 	public Boolean visit(VoidType n1, Node arg) {
 		VoidType n2 = (VoidType) arg;
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {

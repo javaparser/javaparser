@@ -1676,7 +1676,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
         List<Node> everything = new LinkedList<Node>();
         everything.addAll(node.getChildrenNodes());
         sortByBeginPosition(everything);
-        if (everything.size()==0) {
+        if (everything.isEmpty()) {
             return;
         }
 

@@ -62,6 +62,7 @@ public final class VariableDeclaratorId extends Node implements NamedNode {
         return arrayCount;
     }
 
+    @Override
     public String getName() {
         return name;
     }
