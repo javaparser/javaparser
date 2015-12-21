@@ -175,11 +175,12 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	}
 
 	public void setName(final String name) {
-		this.name = new NameExpr(name);
+		setNameExpr(new NameExpr(name));
 	}
 
     public void setNameExpr(final NameExpr name) {
         this.name = name;
+	setAsParentNodeOf(this.name);
     }
 
     public void setParameters(final List<Parameter> parameters) {
