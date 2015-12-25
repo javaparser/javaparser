@@ -993,13 +993,13 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printModifiers(n.getModifiers());
 
 		printTypeParameters(n.getTypeParameters(), arg);
-		if (n.getTypeParameters() != null) {
+		if (!n.getTypeParameters().isEmpty()) {
 			printer.print(" ");
 		}
 		printer.print(n.getName());
 
 		printer.print("(");
-		if (n.getParameters() != null) {
+		if (!n.getParameters().isEmpty()) {
 			for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext();) {
 				final Parameter p = i.next();
 				p.accept(this, arg);
