@@ -358,3 +358,43 @@ class A {
     }
 }
 Then the Java parser cannot parse it because of lexical errors
+
+Scenario: Diamond Operator information is exposed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    List<String> args = new ArrayList<>();
+}
+When I take the ObjectCreationExpr
+Then the type's diamond operator flag should be true
+
+Scenario: Diamond Operator can be parsed also with space and comments
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    List<String> args = new ArrayList<  /*hello*/  >();
+}
+When I take the ObjectCreationExpr
+Then the type's diamond operator flag should be true
+
+Scenario: Type Arguments are not specified
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    List args = new ArrayList();
+}
+When I take the ObjectCreationExpr
+Then the type's diamond operator flag should be false
+
+Scenario: Type Arguments are specified
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    Either<Ok, Error> either = new Either<Ok, Error>();
+}
+When I take the ObjectCreationExpr
+Then the type's diamond operator flag should be false

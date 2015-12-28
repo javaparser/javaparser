@@ -426,7 +426,12 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			printer.print(".");
 		}
 		printer.print(n.getName());
-		printTypeArgs(n.getTypeArgs(), arg);
+
+		if (n.isUsingDiamondOperator()) {
+			printer.print("<>");
+		} else {
+			printTypeArgs(n.getTypeArgs(), arg);
+		}
 	}
 
 	@Override public void visit(final TypeParameter n, final Object arg) {

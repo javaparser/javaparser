@@ -137,6 +137,11 @@ final class ASTParser {
 	    }
 	    return ret;
     }
+
+    private TypeArguments createTypeArguments(List<Type> typeArgs) {
+        boolean usesDiamondOperator = typeArgs != null && typeArgs.isEmpty();
+        return usesDiamondOperator ? TypeArguments.withDiamondOperator() : TypeArguments.withArguments(typeArgs);
+    }
     
     static final class GTToken extends Token {
 
@@ -1105,7 +1110,7 @@ TOKEN :
 | < RUNSIGNEDSHIFTASSIGN: ">>>=" >
 | < ELLIPSIS: "..." >
 | < ARROW: "->" >
-| < DOUBLECOLON : "::">
+| < DOUBLECOLON: "::" >
 }
 
 /* >'s need special attention due to generics syntax. */
@@ -1807,6 +1812,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 	ClassOrInterfaceType ret;
 	String name;
 	List typeArgs = null;
+	boolean usesDiamondOperator = false;
 	int line;
 	int column;
 	List annotations = null;
@@ -1815,10 +1821,17 @@ ClassOrInterfaceType ClassOrInterfaceType():
 {
   <IDENTIFIER> {line=token.beginLine; column=token.beginColumn;} { name = token.image; }
   [ LOOKAHEAD(2) typeArgs = TypeArguments() {typeArgs.remove(0);} ]
-  { ret = new ClassOrInterfaceType(line, column, token.endLine, token.endColumn,null, name, typeArgs); }
+  {
+      ret = new ClassOrInterfaceType(line, column, token.endLine, token.endColumn,null, name, createTypeArguments(typeArgs));
+  }
   (
 	  LOOKAHEAD(2) "." (ann = Annotation()   { annotations = add(annotations, ann);})*  <IDENTIFIER> { name = token.image; }
-	  [ LOOKAHEAD(2) typeArgs = TypeArguments() {typeArgs.remove(0);} ] { ret = new ClassOrInterfaceType(line, column, token.endLine, token.endColumn,ret, name, typeArgs); ret.setAnnotations(annotations); annotations = null; }
+	  [ LOOKAHEAD(2) typeArgs = TypeArguments() {typeArgs.remove(0);} ]
+	  {
+	    ret = new ClassOrInterfaceType(line, column, token.endLine, token.endColumn,ret, name, createTypeArguments(typeArgs));
+	    ret.setAnnotations(annotations);
+	    annotations = null;
+      }
   )*
   { return ret; }
 }
@@ -1849,12 +1862,9 @@ List TypeArguments():
 {
    (
      "<" { ret.add(new int[]{token.beginLine, token.beginColumn}); }
-     type = TypeArgument() { ret.add(type); } ( "," type = TypeArgument() { ret.add(type); } )*
+     (type = TypeArgument() { ret.add(type); } ( "," type = TypeArgument() { ret.add(type); } )*)?
      ">"
    )
-   { return ret; }
- |
-   "<>" { ret.add(null); } /*dummy add null since it is always removed*/
    { return ret; }
 }
 
