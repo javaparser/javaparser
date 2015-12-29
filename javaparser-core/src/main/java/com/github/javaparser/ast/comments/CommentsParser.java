@@ -35,7 +35,7 @@ public class CommentsParser {
         IN_LINE_COMMENT,
         IN_BLOCK_COMMENT,
         IN_STRING,
-        IN_CHAR;
+        IN_CHAR
     }
 
     private static final int COLUMNS_PER_TAB = 4;
@@ -105,7 +105,12 @@ public class CommentsParser {
                     }
                     break;
                 case IN_BLOCK_COMMENT:
-                    if (prevTwoChars.peekLast().equals('*') && c=='/' && !prevTwoChars.peekFirst().equals('/')){
+                    // '/*/' is not a valid block comment: it starts the block comment but it does not close it
+                    // However this sequence can be contained inside a comment and in that case it close the comment
+                    // For example:
+                    // /* blah blah /*/
+                    // At the previous line we had a valid block comment
+                    if (prevTwoChars.peekLast().equals('*') && c=='/' && (!prevTwoChars.peekFirst().equals('/') || currentContent.length() > 0)){
 
                         // delete last character
                         String content = currentContent.deleteCharAt(currentContent.toString().length()-1).toString();
