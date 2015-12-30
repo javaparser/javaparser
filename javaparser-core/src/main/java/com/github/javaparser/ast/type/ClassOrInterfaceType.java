@@ -22,12 +22,11 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
-
-import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,7 +37,7 @@ public final class ClassOrInterfaceType extends Type implements NamedNode {
 
     private String name;
 
-    private List<Type> typeArgs;
+    private TypeArguments typeArguments = TypeArguments.EMPTY;
 
     public ClassOrInterfaceType() {
     }
@@ -52,12 +51,22 @@ public final class ClassOrInterfaceType extends Type implements NamedNode {
         setName(name);
     }
 
+    /**
+     *
+     * @deprecated use the other constructor that takes {@link TypeArguments}
+     */
+    @Deprecated
     public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-            final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
+                                final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
+        this(beginLine, beginColumn, endLine, endColumn, scope, name, TypeArguments.withArguments(typeArgs));
+    }
+
+    public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+                                final ClassOrInterfaceType scope, final String name, final TypeArguments typeArguments) {
         super(beginLine, beginColumn, endLine, endColumn);
         setScope(scope);
         setName(name);
-        setTypeArgs(typeArgs);
+        setTypeArguments(typeArguments);
     }
 
     @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -78,8 +87,15 @@ public final class ClassOrInterfaceType extends Type implements NamedNode {
     }
 
     public List<Type> getTypeArgs() {
-        typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
+        return typeArguments.getTypeArguments();
+    }
+
+    public TypeArguments getTypeArguments() {
+        return typeArguments;
+    }
+
+    public boolean isUsingDiamondOperator() {
+        return typeArguments.isUsingDiamondOperator();
     }
 
     public boolean isBoxedType() {
@@ -107,8 +123,11 @@ public final class ClassOrInterfaceType extends Type implements NamedNode {
      * @param typeArgs The list of types of the generics
      */
     public void setTypeArgs(final List<Type> typeArgs) {
-        this.typeArgs = typeArgs;
-        setAsParentNodeOf(this.typeArgs);
+        setTypeArguments(TypeArguments.withArguments(typeArgs));
     }
 
+    public void setTypeArguments(TypeArguments typeArguments) {
+        this.typeArguments = typeArguments;
+        setAsParentNodeOf(this.typeArguments.getTypeArguments());
+    }
 }
