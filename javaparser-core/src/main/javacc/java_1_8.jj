@@ -1812,7 +1812,6 @@ ClassOrInterfaceType ClassOrInterfaceType():
 	ClassOrInterfaceType ret;
 	String name;
 	List typeArgs = null;
-	boolean usesDiamondOperator = false;
 	int line;
 	int column;
 	List annotations = null;
