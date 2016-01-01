@@ -31,6 +31,7 @@ import java.util.List;
  * @author Federico Tomassetti
  * @since July 2014
  */
+@FunctionalInterface
 public interface AnnotableNode {
     public List<AnnotationExpr> getAnnotations();
 }
