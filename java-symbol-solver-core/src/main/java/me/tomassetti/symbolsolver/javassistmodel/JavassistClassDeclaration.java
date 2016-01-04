@@ -54,7 +54,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             throw new IllegalArgumentException();
         }
         if (ctClass.isInterface() || ctClass.isAnnotation() || ctClass.isPrimitive() || ctClass.isEnum()) {
-            throw new IllegalArgumentException(ctClass.toString());
+            throw new IllegalArgumentException("Trying to instantiate a JavassistClassDeclaration with something which is not a class: " + ctClass.toString());
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;

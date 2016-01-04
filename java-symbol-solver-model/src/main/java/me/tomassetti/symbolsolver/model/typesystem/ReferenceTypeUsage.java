@@ -10,6 +10,8 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javaslang.Tuple2;
+
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
 
@@ -335,4 +337,12 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
     }
 
     public abstract Set<MethodUsage> getDeclaredMethods();
+
+    public List<Tuple2<TypeParameter, TypeUsage>> getTypeParametersMap() {
+        List<Tuple2<TypeParameter, TypeUsage>> typeParametersMap = new ArrayList<>();
+        for (int i=0;i<typeDeclaration.getTypeParameters().size(); i++) {
+            typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), parameters().get(i)));
+        }
+        return typeParametersMap;
+    }
 }

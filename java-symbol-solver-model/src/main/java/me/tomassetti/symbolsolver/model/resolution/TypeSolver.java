@@ -7,7 +7,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
  */
 public interface TypeSolver {
 
-    public default TypeSolver getRoot() {
+    default TypeSolver getRoot() {
         if (getParent() == null) {
             return this;
         } else {
@@ -15,13 +15,13 @@ public interface TypeSolver {
         }
     }
 
-    public TypeSolver getParent();
+    TypeSolver getParent();
 
     void setParent(TypeSolver parent);
 
-    public SymbolReference<TypeDeclaration> tryToSolveType(String name);
+    SymbolReference<TypeDeclaration> tryToSolveType(String name);
 
-    public default TypeDeclaration solveType(String name) throws UnsolvedSymbolException {
+    default TypeDeclaration solveType(String name) throws UnsolvedSymbolException {
         SymbolReference<TypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
