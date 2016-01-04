@@ -323,7 +323,9 @@ public class JavaParserFacade {
             return PrimitiveTypeUsage.LONG;
         } else if (node instanceof CharLiteralExpr) {
             return PrimitiveTypeUsage.CHAR;
-        } else if (node instanceof StringLiteralExpr) {
+		} else if (node instanceof DoubleLiteralExpr) {
+			return PrimitiveTypeUsage.DOUBLE;
+		} else if (node instanceof StringLiteralExpr) {
             return new ReferenceTypeUsageImpl(new JreTypeSolver().solveType("java.lang.String"), typeSolver);
         } else if (node instanceof UnaryExpr) {
             UnaryExpr unaryExpr = (UnaryExpr) node;
