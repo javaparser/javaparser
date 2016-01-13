@@ -185,6 +185,14 @@ Given the class:
 class Foo {}
 Then the Java parser cannot parse it because of lexical errors
 
+Scenario: Should recognize /*/ inside a block comment
+
+Given the class:
+/* Foo /*/
+When the class is parsed by the comment parser
+Then the total number of comments is 1
+Then block comment 1 is " Foo /"
+
 Scenario: A Class With Character Literal is processed by the Comments Parser
 Given the class:
 class A {
