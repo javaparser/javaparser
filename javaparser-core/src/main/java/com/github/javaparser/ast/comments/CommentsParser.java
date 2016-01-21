@@ -45,13 +45,54 @@ public class CommentsParser {
         return parse(in, Charset.defaultCharset().name());
     }
 
+    /**
+     * Track the internal state of the parser, remembering the last characters observed.
+     */
+    class ParserState {
+        private Deque prevTwoChars = new LinkedList<Character>();
+
+        /**
+         * Is the last character the one expected?
+         */
+        boolean isLastChar(char expectedChar) {
+            return prevTwoChars.size() >= 1 && prevTwoChars.peekLast().equals(expectedChar);
+        }
+
+        /**
+         * Is the character before the last one the same as expectedChar?
+         */
+        public boolean isSecondToLastChar(char expectedChar) {
+            return prevTwoChars.size() >= 1 && prevTwoChars.peekFirst().equals(expectedChar);
+        }
+
+        /**
+         * Record a new character. It will be the last one. The character that was the last one will
+         * become the second to last one.
+         */
+        public void update(char c) {
+            if (prevTwoChars.size() == 2) {
+                prevTwoChars.remove();
+            }
+            prevTwoChars.add(c);
+        }
+
+        /**
+         * Remove all the characters observed.
+         */
+        public void reset() {
+            while (!prevTwoChars.isEmpty()) {
+                prevTwoChars.removeFirst();
+            }
+        }
+    }
+
     public CommentsCollection parse(final InputStream in, final String charsetName) throws IOException, UnsupportedEncodingException {
         boolean lastWasASlashR = false;
         BufferedReader br = new BufferedReader(new InputStreamReader(in, charsetName));
         CommentsCollection comments = new CommentsCollection();
         int r;
 
-        Deque prevTwoChars = new LinkedList<Character>(Arrays.asList('z','z'));
+        ParserState parserState = new ParserState();
 
         State state = State.CODE;
         LineComment currentLineComment = null;
@@ -73,13 +114,13 @@ public class CommentsParser {
             }
             switch (state) {
                 case CODE:
-                    if (prevTwoChars.peekLast().equals('/') && c == '/') {
+                    if (parserState.isLastChar('/') && c == '/') {
                         currentLineComment = new LineComment();
                         currentLineComment.setBeginLine(currLine);
                         currentLineComment.setBeginColumn(currCol - 1);
                         state = State.IN_LINE_COMMENT;
                         currentContent = new StringBuffer();
-                    } else if (prevTwoChars.peekLast().equals('/') && c == '*') {
+                    } else if (parserState.isLastChar('/') && c == '*') {
                         currentBlockComment = new BlockComment();
                         currentBlockComment.setBeginLine(currLine);
                         currentBlockComment.setBeginColumn(currCol - 1);
@@ -110,7 +151,7 @@ public class CommentsParser {
                     // For example:
                     // /* blah blah /*/
                     // At the previous line we had a valid block comment
-                    if (prevTwoChars.peekLast().equals('*') && c=='/' && (!prevTwoChars.peekFirst().equals('/') || currentContent.length() > 0)){
+                    if (parserState.isLastChar('*') && c=='/' && (!parserState.isSecondToLastChar('/') || currentContent.length() > 0)){
 
                         // delete last character
                         String content = currentContent.deleteCharAt(currentContent.toString().length()-1).toString();
@@ -135,12 +176,12 @@ public class CommentsParser {
                     }
                     break;
                 case IN_STRING:
-                    if (!prevTwoChars.peekLast().equals('\\') && c == '"') {
+                    if (!parserState.isLastChar('\\') && c == '"') {
                         state = State.CODE;
                     }
                     break;
                 case IN_CHAR:
-                    if (!prevTwoChars.peekLast().equals('\\') && c == '\'') {
+                    if (!parserState.isLastChar('\\') && c == '\'') {
                         state = State.CODE;
                     }
                     break;
@@ -159,8 +200,14 @@ public class CommentsParser {
                 default:
                     currCol+=1;
             }
-            prevTwoChars.remove();
-            prevTwoChars.add(c);
+            // ok we have two slashes in a row inside a string
+            // we want to replace them with... anything else, to not confuse
+            // the parser
+            if (state==State.IN_STRING && parserState.isLastChar('\\') && c == '\\') {
+                parserState.reset();
+            } else {
+                parserState.update(c);
+            }
         }
 
         if (state==State.IN_LINE_COMMENT){
