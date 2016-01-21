@@ -97,11 +97,11 @@ public class DumpVisitor implements VoidVisitor<Object> {
         this.printComments = printComments;
     }
 
-	protected static class SourcePrinter {
+	public static class SourcePrinter {
 		
 		private final String indentation;
 
-		protected SourcePrinter(final String indentation) {
+		public SourcePrinter(final String indentation) {
 			this.indentation = indentation;
 		}
 
