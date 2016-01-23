@@ -8,9 +8,9 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import java.util.Collections;
 import java.util.List;
 
-public class NoSimbolDeclarator<N extends Node> extends AbstractSymbolDeclarator<N> {
+public class NoSymbolDeclarator<N extends Node> extends AbstractSymbolDeclarator<N> {
 
-    public NoSimbolDeclarator(N wrappedNode, TypeSolver typeSolver) {
+    public NoSymbolDeclarator(N wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 

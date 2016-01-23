@@ -13,7 +13,7 @@ import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 import me.tomassetti.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
-import me.tomassetti.symbolsolver.javaparsermodel.declarators.NoSimbolDeclarator;
+import me.tomassetti.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import me.tomassetti.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 import me.tomassetti.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
 
@@ -61,15 +61,15 @@ public class JavaParserFactory {
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
                 return new VariableSymbolDeclarator((VariableDeclarationExpr) (expressionStmt.getExpression()), typeSolver);
             } else {
-                return new NoSimbolDeclarator(node, typeSolver);
+                return new NoSymbolDeclarator(node, typeSolver);
             }
         } else if (node instanceof IfStmt) {
-            return new NoSimbolDeclarator(node, typeSolver);
+            return new NoSymbolDeclarator(node, typeSolver);
         } else if (node instanceof ForeachStmt) {
             ForeachStmt foreachStmt = (ForeachStmt) node;
             return new VariableSymbolDeclarator((VariableDeclarationExpr) (foreachStmt.getVariable()), typeSolver);
         } else {
-            return new NoSimbolDeclarator(node, typeSolver);
+            return new NoSymbolDeclarator(node, typeSolver);
         }
     }
 
