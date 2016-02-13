@@ -22,6 +22,7 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.body.AnnotableNode;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -105,11 +106,8 @@ public final class PositionUtils {
     }
 
     private static Node beginNodeWithoutConsideringAnnotations(Node node) {
-        if (node instanceof MethodDeclaration) {
-            MethodDeclaration casted = (MethodDeclaration) node;
-            return casted.getType();
-        } else if (node instanceof FieldDeclaration) {
-            FieldDeclaration casted = (FieldDeclaration) node;
+        if (node instanceof MethodDeclaration || node instanceof FieldDeclaration) {
+            TypedNode casted = (TypedNode) node;
             return casted.getType();
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;

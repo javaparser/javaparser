@@ -21,10 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -41,7 +38,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode {
+public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, TypedNode {
 
 	private int modifiers;
 
@@ -152,6 +149,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         return throws_;
 	}
 
+	@Override
 	public Type getType() {
 		return type;
 	}
@@ -192,6 +190,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(this.throws_);
 	}
 
+	@Override
 	public void setType(final Type type) {
 		this.type = type;
 		setAsParentNodeOf(this.type);

@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
@@ -35,7 +36,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarationExpr extends Expression {
+public final class VariableDeclarationExpr extends Expression implements TypedNode {
 
 	private int modifiers;
 
@@ -92,6 +93,7 @@ public final class VariableDeclarationExpr extends Expression {
 		return modifiers;
 	}
 
+	@Override
 	public Type getType() {
 		return type;
 	}
@@ -110,6 +112,7 @@ public final class VariableDeclarationExpr extends Expression {
 		this.modifiers = modifiers;
 	}
 
+	@Override
 	public void setType(final Type type) {
 		this.type = type;
 		setAsParentNodeOf(this.type);

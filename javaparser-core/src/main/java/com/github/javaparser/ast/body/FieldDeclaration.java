@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.DocumentableNode;
+import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
@@ -36,7 +37,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration implements DocumentableNode {
+public final class FieldDeclaration extends BodyDeclaration implements DocumentableNode, TypedNode {
 
     private int modifiers;
 
@@ -95,6 +96,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
         return modifiers;
     }
 
+    @Override
     public Type getType() {
         return type;
     }
@@ -108,6 +110,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
         this.modifiers = modifiers;
     }
 
+    @Override
     public void setType(Type type) {
         this.type = type;
 		setAsParentNodeOf(this.type);
