@@ -28,7 +28,7 @@ import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;
 
-public abstract class BaseParameter extends Node {
+public abstract class BaseParameter extends Node implements AnnotableNode {
     private int modifiers;
 
     private List<AnnotationExpr> annotations;
