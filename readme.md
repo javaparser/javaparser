@@ -81,6 +81,7 @@ The project now supports parsing Java 1.8 and aims to continue support for featu
 From JavaParser other projects have been derived:
 
 * [Walkmod](http://walkmod.com/): a tool to automatically correct violations of code conventions
+* [jooby spec](http://jooby.org/spec): analyze and exports [jooby routes](http://jooby.org) to [raml](http://raml.org) and [Swagger](http://swagger.io)
 
 ## Credits
 
