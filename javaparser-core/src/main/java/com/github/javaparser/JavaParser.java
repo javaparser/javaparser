@@ -370,7 +370,7 @@ public final class JavaParser {
                     commentsInsideChild.add(c);
                 }
             }
-            commentsToAttribute.removeAll(commentsInsideChild);
+            
             insertCommentsInNode(child,commentsInsideChild);
         }
 
