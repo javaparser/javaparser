@@ -76,7 +76,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	public MethodDeclaration(final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
-			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt block) {
+			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
 		super(annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
@@ -85,13 +85,13 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setParameters(parameters);
 		setArrayCount(arrayCount);
 		setThrows(throws_);
-		setBody(block);
+		setBody(body);
 	}
 
 	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
-			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt block) {
+			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
@@ -100,7 +100,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setParameters(parameters);
 		setArrayCount(arrayCount);
 		setThrows(throws_);
-		setBody(block);
+		setBody(body);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -115,7 +115,6 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		return arrayCount;
 	}
 
-	// FIXME this is called "Block" in the constructor. Pick one.
 	public BlockStmt getBody() {
 		return body;
 	}
