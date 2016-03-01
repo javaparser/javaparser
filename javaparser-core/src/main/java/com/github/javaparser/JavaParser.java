@@ -108,7 +108,13 @@ public final class JavaParser {
         try {
             String code = SourcesHelper.streamToString(in, encoding);
             InputStream in1 = SourcesHelper.stringToStream(code, encoding);
-            CompilationUnit cu = new ASTParser(in1, encoding).CompilationUnit();
+            Provider p;
+            if (encoding == null){
+            	p = new StreamProvider(in1);
+            } else {
+            	p = new StreamProvider(in1, encoding);
+            }
+            CompilationUnit cu = new ASTParser(p).CompilationUnit();
             if (considerComments){
                 insertComments(cu,code);
             }
@@ -182,7 +188,7 @@ public final class JavaParser {
         try {
             String code = SourcesHelper.readerToString(reader);
             Reader reader1 = SourcesHelper.stringToReader(code);
-            CompilationUnit cu = new ASTParser(reader1).CompilationUnit();
+            CompilationUnit cu = new ASTParser(new StreamProvider(reader1)).CompilationUnit();
             if (considerComments){
                 insertComments(cu,code);
             }
@@ -204,9 +210,7 @@ public final class JavaParser {
      */
     public static BlockStmt parseBlock(final String blockStatement)
             throws ParseException {
-        StringReader sr = new StringReader(blockStatement);
-        BlockStmt result = new ASTParser(sr).Block();
-        sr.close();
+        BlockStmt result = new ASTParser(blockStatement).Block();
         return result;
     }
 
@@ -221,9 +225,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static Statement parseStatement(final String statement) throws ParseException {
-        StringReader sr = new StringReader(statement);
-        Statement stmt = new ASTParser(sr).Statement();
-        sr.close();
+        Statement stmt = new ASTParser(statement).Statement();
         return stmt;
     }
 
@@ -239,7 +241,7 @@ public final class JavaParser {
      */
     public static ImportDeclaration parseImport(final String importDeclaration) throws ParseException {
         StringReader sr = new StringReader(importDeclaration);
-        ImportDeclaration id = new ASTParser(sr).ImportDeclaration();
+        ImportDeclaration id = new ASTParser(new StreamProvider(sr)).ImportDeclaration();
         sr.close();
         return id;
     }
@@ -256,7 +258,7 @@ public final class JavaParser {
      */
     public static Expression parseExpression(final String expression) throws ParseException {
         StringReader sr = new StringReader(expression);
-        Expression e = new ASTParser(sr).Expression();
+        Expression e = new ASTParser(new StreamProvider(sr)).Expression();
         sr.close();
         return e;
     }
@@ -273,7 +275,7 @@ public final class JavaParser {
      */
     public static AnnotationExpr parseAnnotation(final String annotation) throws ParseException {
         StringReader sr = new StringReader(annotation);
-        AnnotationExpr ae = new ASTParser(sr).Annotation();
+        AnnotationExpr ae = new ASTParser(new StreamProvider(sr)).Annotation();
         sr.close();
         return ae;
     }
@@ -290,7 +292,7 @@ public final class JavaParser {
      */
     public static BodyDeclaration parseBodyDeclaration(final String body) throws ParseException {
         StringReader sr = new StringReader(body);
-        BodyDeclaration bd = new ASTParser(sr).AnnotationBodyDeclaration();
+        BodyDeclaration bd = new ASTParser(new StreamProvider(sr)).AnnotationBodyDeclaration();
         sr.close();
         return bd;
     }
