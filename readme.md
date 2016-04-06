@@ -20,7 +20,7 @@ The AST records the source code structure, javadoc and comments. It is also poss
 
 ## Dependency Management
 
-The project binaries are available in Maven Central.  Just add the following to your maven configuration or taylor to your own dependency management system.
+The project binaries are available in Maven Central.  Just add the following to your maven configuration or tailor to your own dependency management system.
 
 Current 1.8 Release
 
@@ -28,7 +28,7 @@ Current 1.8 Release
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>2.3.0</version>
+    <version>2.4.0</version>
 </dependency>
 ```
 
