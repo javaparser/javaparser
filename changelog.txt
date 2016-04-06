@@ -12,7 +12,7 @@ Version 2.4.0
 * make TypeDeclaration implements DocumentableNode directly
 * TypedNode interface introduced
 * introduce MultiBoundType
-* refactored IntersectioNType and UnionType
+* refactored IntersectionType and UnionType
 * refactored CatchClause
 * parsing annotations in throws declarations
 * parse orphan semicolons in import statements
