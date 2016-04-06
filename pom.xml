@@ -5,16 +5,10 @@
         <module>javaparser-testing</module>
     </modules>
 
-    <parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
-
 	<groupId>com.github.javaparser</groupId>
 	<artifactId>javaparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>2.3.1-SNAPSHOT</version>
+	<version>2.4.0-SNAPSHOT</version>
 
 	<name>javaparser-parent</name>
 	<url>https://github.com/javaparser</url>
@@ -141,17 +135,14 @@
 		<url>https://github.com/javaparser/javaparser/issues</url>
 	</issueManagement>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshot</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
+	<distributionManagement>
+		<repository>
+			<id>bintray-javaparser-JavaParser</id>
+			<name>javaparser-JavaParser</name>
+			<url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/</url>
+		</repository>
+	</distributionManagement>
+	
 	<build>
 		<plugins>
 			<plugin>
