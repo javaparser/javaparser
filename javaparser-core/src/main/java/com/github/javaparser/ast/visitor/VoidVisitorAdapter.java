@@ -205,31 +205,20 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (n.getJavaDoc() != null) {
 			n.getJavaDoc().accept(this, arg);
 		}
-		if (n.getAnnotations() != null) {
-			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
-			}
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			a.accept(this, arg);
 		}
-		if (n.getTypeParameters() != null) {
-			for (final TypeParameter t : n.getTypeParameters()) {
-				t.accept(this, arg);
-			}
+		for (final TypeParameter t : n.getTypeParameters()) {
+			t.accept(this, arg);
 		}
-		if (n.getExtends() != null) {
-			for (final ClassOrInterfaceType c : n.getExtends()) {
-				c.accept(this, arg);
-			}
+		for (final ClassOrInterfaceType c : n.getExtends()) {
+			c.accept(this, arg);
 		}
-
-		if (n.getImplements() != null) {
-			for (final ClassOrInterfaceType c : n.getImplements()) {
-				c.accept(this, arg);
-			}
+		for (final ClassOrInterfaceType c : n.getImplements()) {
+			c.accept(this, arg);
 		}
-		if (n.getMembers() != null) {
-			for (final BodyDeclaration member : n.getMembers()) {
-				member.accept(this, arg);
-			}
+		for (final BodyDeclaration member : n.getMembers()) {
+			member.accept(this, arg);
 		}
 	}
 
