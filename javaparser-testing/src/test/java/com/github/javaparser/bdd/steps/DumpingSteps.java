@@ -47,6 +47,11 @@ public class DumpingSteps {
         this.sourceUnderTest = classSrc.trim();
     }
 
+    @Given("the compilation unit:$classSrc")
+    public void givenTheCompilationUnit(String classSrc) {
+        this.sourceUnderTest = classSrc.trim();
+    }
+
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
         compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));

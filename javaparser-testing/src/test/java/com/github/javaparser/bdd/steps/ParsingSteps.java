@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,27 +18,49 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.ASTHelper;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.TokenMgrError;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
 
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
+import static java.lang.String.format;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertEquals;
-import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class ParsingSteps {
 
@@ -48,18 +70,35 @@ public class ParsingSteps {
         this.state = state;
     }
 
+    private String sourceUnderTest;
+
+    /*
+     * Given steps
+     */
+
+    @Given("the class:$classSrc")
+    public void givenTheClass(String classSrc) {
+        this.sourceUnderTest = classSrc.trim();
+    }
+
+
     /*
      * When steps
      */
 
     @When("I take the ArrayCreationExpr")
     public void iTakeTheArrayCreationExpr() {
-        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        List<ArrayCreationExpr> arrayCreationExprs = ASTHelper.getNodesByType(compilationUnit, ArrayCreationExpr.class);
-        if (arrayCreationExprs.size() != 1) {
-            throw new RuntimeException("Exactly one ArrayCreationExpr expected");
-        }
-        state.put("selectedNode", arrayCreationExprs.get(0));
+        setSelectedNodeFromCompilationUnit(ArrayCreationExpr.class);
+    }
+
+    @When("I take the PackageDeclaration")
+    public void iTakeThePackageDeclaration() {
+        setSelectedNodeFromCompilationUnit(PackageDeclaration.class);
+    }
+
+    @When("I take the ObjectCreationExpr")
+    public void iTakeTheObjectCreationExpr() throws ClassNotFoundException {
+        setSelectedNodeFromCompilationUnit(ObjectCreationExpr.class);
     }
 
     /*
@@ -231,7 +270,7 @@ public class ParsingSteps {
         ExistenceOfParentNodeVerifier parentVerifier = new ExistenceOfParentNodeVerifier();
         parentVerifier.verify(compilationUnit);
     }
-    
+
     @Then("ThenExpr in the conditional expression of the statement $statementPosition in method $methodPosition in class $classPosition is LambdaExpr")
     public void thenLambdaInConditionalExpressionInMethodInClassIsParentOfContainedParameter(int statementPosition, int methodPosition, int classPosition) {
     	Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
@@ -264,4 +303,41 @@ public class ParsingSteps {
         assertEquals(column, node.getEndColumn());
     }
 
+    @Then("no errors are reported")
+    public void thenNoErrorsAreReported() {
+        // this is present just for readability in the scenario specification
+        // if the code is not parsed then exceptions are thrown before reaching this step
+    }
+
+    @Then("the package name is $package")
+    public void thenThePackageNameIs(String expected) {
+        PackageDeclaration node = (PackageDeclaration) state.get("selectedNode");
+        assertEquals(expected, node.getPackageName());
+        assertEquals(expected, node.getName().toString());
+    }
+
+    @Then("the type's diamond operator flag should be $expectedValue")
+    public void thenTheUsesDiamondOperatorShouldBeBooleanAsString(boolean expectedValue) {
+        ObjectCreationExpr expr = (ObjectCreationExpr) state.get("selectedNode");
+        assertEquals(expectedValue, expr.getType().isUsingDiamondOperator());
+    }
+
+    @Then("the Java parser cannot parse it because of lexical errors")
+    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
+        try {
+            JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+            fail("Lexical error expected");
+        } catch (TokenMgrError e) {
+            // ok
+        }
+    }
+
+    private void setSelectedNodeFromCompilationUnit(Class<? extends Node> nodeType) {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        List<? extends Node> nodes = ASTHelper.getNodesByType(compilationUnit, nodeType);
+        if (nodes.size() != 1) {
+            throw new RuntimeException(format("Exactly one %s expected", nodeType.getSimpleName()));
+        }
+        state.put("selectedNode", nodes.get(0));
+    }
 }

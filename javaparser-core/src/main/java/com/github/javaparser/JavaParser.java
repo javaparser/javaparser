@@ -771,7 +771,7 @@ public final class JavaParser {
         List<Node> children = cu.getChildrenNodes();
         PositionUtils.sortByBeginPosition(children);
 
-        if (cu.getPackage()!=null && (children.size()==0 || PositionUtils.areInOrder(comments.get(0), children.get(0)))){
+        if (cu.getPackage()!=null && (children.isEmpty() || PositionUtils.areInOrder(comments.get(0), children.get(0)))){
             cu.setComment(comments.get(0));
             comments.remove(0);
         }
@@ -812,7 +812,7 @@ public final class JavaParser {
      * It returns the node that were not attributed.
      */
     private static void insertCommentsInNode(Node node, List<Comment> commentsToAttribute){
-        if (commentsToAttribute.size()==0) return;
+        if (commentsToAttribute.isEmpty()) return;
 
         // the comments can:
         // 1) Inside one of the child, then it is the child that have to associate them

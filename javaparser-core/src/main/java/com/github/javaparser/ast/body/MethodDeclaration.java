@@ -21,14 +21,12 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -40,7 +38,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode {
+public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, TypedNode {
 
 	private int modifiers;
 
@@ -54,7 +52,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	private int arrayCount;
 
-	private List<NameExpr> throws_;
+	private List<ReferenceType> throws_;
 
 	private BlockStmt body;
 
@@ -78,7 +76,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 
 	public MethodDeclaration(final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
-			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
+			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
 		super(annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
@@ -87,13 +85,13 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setParameters(parameters);
 		setArrayCount(arrayCount);
 		setThrows(throws_);
-		setBody(block);
+		setBody(body);
 	}
 
 	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
-			final List<Parameter> parameters, final int arrayCount, final List<NameExpr> throws_, final BlockStmt block) {
+			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
 		super(beginLine, beginColumn, endLine, endColumn, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
@@ -102,7 +100,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setParameters(parameters);
 		setArrayCount(arrayCount);
 		setThrows(throws_);
-		setBody(block);
+		setBody(body);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -117,7 +115,6 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		return arrayCount;
 	}
 
-	// FIXME this is called "Block" in the constructor. Pick one.
 	public BlockStmt getBody() {
 		return body;
 	}
@@ -132,6 +129,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		return modifiers;
 	}
 
+	@Override
 	public String getName() {
 		return name.getName();
 	}
@@ -145,11 +143,12 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         return parameters;
 	}
 
-	public List<NameExpr> getThrows() {
+	public List<ReferenceType> getThrows() {
         throws_ = ensureNotNull(throws_);
         return throws_;
 	}
 
+	@Override
 	public Type getType() {
 		return type;
 	}
@@ -185,11 +184,12 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(this.parameters);
 	}
 
-	public void setThrows(final List<NameExpr> throws_) {
+	public void setThrows(final List<ReferenceType> throws_) {
 		this.throws_ = throws_;
 		setAsParentNodeOf(this.throws_);
 	}
 
+	@Override
 	public void setType(final Type type) {
 		this.type = type;
 		setAsParentNodeOf(this.type);
@@ -276,7 +276,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (NameExpr thr : getThrows()) {
+            for (ReferenceType thr : getThrows()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");

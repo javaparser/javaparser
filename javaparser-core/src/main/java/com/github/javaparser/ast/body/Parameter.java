@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -31,7 +32,7 @@ import java.util.List;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends BaseParameter {
+public final class Parameter extends BaseParameter implements TypedNode {
     private Type type;
 
     private boolean isVarArgs;
@@ -65,6 +66,7 @@ public final class Parameter extends BaseParameter {
         v.visit(this, arg);
     }
 
+    @Override
     public Type getType() {
         return type;
     }
@@ -73,6 +75,7 @@ public final class Parameter extends BaseParameter {
         return isVarArgs;
     }
 
+    @Override
     public void setType(Type type) {
         this.type = type;
 		setAsParentNodeOf(this.type);

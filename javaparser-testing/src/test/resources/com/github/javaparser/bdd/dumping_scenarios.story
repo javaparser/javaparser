@@ -57,6 +57,7 @@ class A {
 }
 
 
+
 Scenario: Dumping orphan comments in empty method (issue 192)
 Given the class:
 public class StepImplementation {
@@ -118,5 +119,34 @@ public class StepImplementation {
             System.out.println();
         // another foo bar
         }
+    }
+}
+
+
+Scenario: An empty Enum is dumped correctly
+Given the compilation unit:
+package test; enum XYZ {}
+When the class is parsed by the Java parser
+Then it is dumped to:
+package test;
+
+enum XYZ {
+
+}
+
+
+Scenario: Strings with escaped newlines are parsed correctly
+Given the class:
+class A {
+    public void helloWorld(String greeting, String name) {
+        return "hello\nworld";
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A {
+
+    public void helloWorld(String greeting, String name) {
+        return "hello\nworld";
     }
 }

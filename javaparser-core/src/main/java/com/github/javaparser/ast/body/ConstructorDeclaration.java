@@ -109,6 +109,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         return modifiers;
     }
 
+    @Override
     public String getName() {
         return name == null ? null : name.getName();
     }

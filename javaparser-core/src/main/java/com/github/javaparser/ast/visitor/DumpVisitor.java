@@ -97,11 +97,11 @@ public class DumpVisitor implements VoidVisitor<Object> {
         this.printComments = printComments;
     }
 
-	protected static class SourcePrinter {
+	public static class SourcePrinter {
 		
 		private final String indentation;
 
-		protected SourcePrinter(final String indentation) {
+		public SourcePrinter(final String indentation) {
 			this.indentation = indentation;
 		}
 
@@ -426,7 +426,12 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			printer.print(".");
 		}
 		printer.print(n.getName());
-		printTypeArgs(n.getTypeArgs(), arg);
+
+		if (n.isUsingDiamondOperator()) {
+			printer.print("<>");
+		} else {
+			printTypeArgs(n.getTypeArgs(), arg);
+		}
 	}
 
 	@Override public void visit(final TypeParameter n, final Object arg) {
@@ -510,6 +515,33 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			printer.print("[]");
 		}
 	}
+
+    @Override public void visit(final IntersectionType n, final Object arg) {
+        printJavaComment(n.getComment(), arg);
+        boolean isFirst = true;
+        for (ReferenceType element : n.getElements()) {
+            element.accept(this, arg);
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                printer.print(" & ");
+            }
+        }
+    }
+
+    @Override public void visit(final UnionType n, final Object arg) {
+        printJavaComment(n.getComment(), arg);
+        boolean isFirst = true;
+        for (ReferenceType element : n.getElements()) {
+            element.accept(this, arg);
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                printer.print(" | ");
+            }
+        }
+    }
+
 
 	@Override public void visit(final WildcardType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
@@ -966,13 +998,13 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printModifiers(n.getModifiers());
 
 		printTypeParameters(n.getTypeParameters(), arg);
-		if (n.getTypeParameters() != null) {
+		if (!n.getTypeParameters().isEmpty()) {
 			printer.print(" ");
 		}
 		printer.print(n.getName());
 
 		printer.print("(");
-		if (n.getParameters() != null) {
+		if (!n.getParameters().isEmpty()) {
 			for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext();) {
 				final Parameter p = i.next();
 				p.accept(this, arg);
@@ -1034,8 +1066,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 		if (!isNullOrEmpty(n.getThrows())) {
 			printer.print(" throws ");
-			for (final Iterator<NameExpr> i = n.getThrows().iterator(); i.hasNext();) {
-				final NameExpr name = i.next();
+			for (final Iterator<ReferenceType> i = n.getThrows().iterator(); i.hasNext();) {
+				final ReferenceType name = i.next();
 				name.accept(this, arg);
 				if (i.hasNext()) {
 					printer.print(", ");
@@ -1068,11 +1100,9 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
 
-        Iterator<Type> types = n.getTypes().iterator();
-        types.next().accept(this, arg);
-        while (types.hasNext()) {
-        	printer.print(" | ");
-        	types.next().accept(this, arg);
+        Type type = n.getType();
+        if (type != null) {
+        	type.accept(this, arg);
         }
         
         printer.print(" ");
@@ -1253,11 +1283,11 @@ public class DumpVisitor implements VoidVisitor<Object> {
 				}
 			}
 		}
-		if (n.getMembers() != null) {
+		if (!n.getMembers().isEmpty()) {
 			printer.printLn(";");
 			printMembers(n.getMembers(), arg);
 		} else {
-			if (n.getEntries() != null) {
+			if (!n.getEntries().isEmpty()) {
 				printer.printLn();
 			}
 		}
@@ -1452,7 +1482,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override public void visit(final CatchClause n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print(" catch (");
-		n.getExcept().accept(this, arg);
+		n.getParam().accept(this, arg);
 		printer.print(") ");
 		n.getCatchBlock().accept(this, arg);
 
@@ -1651,7 +1681,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
         List<Node> everything = new LinkedList<Node>();
         everything.addAll(node.getChildrenNodes());
         sortByBeginPosition(everything);
-        if (everything.size()==0) {
+        if (everything.isEmpty()) {
             return;
         }
 

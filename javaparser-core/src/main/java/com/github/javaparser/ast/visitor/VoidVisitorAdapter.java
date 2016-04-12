@@ -187,7 +187,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final CatchClause n, final A arg) {
 		visitComment(n.getComment(), arg);
-		n.getExcept().accept(this, arg);
+		n.getParam().accept(this, arg);
 		n.getCatchBlock().accept(this, arg);
 	}
 
@@ -205,31 +205,20 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (n.getJavaDoc() != null) {
 			n.getJavaDoc().accept(this, arg);
 		}
-		if (n.getAnnotations() != null) {
-			for (final AnnotationExpr a : n.getAnnotations()) {
-				a.accept(this, arg);
-			}
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			a.accept(this, arg);
 		}
-		if (n.getTypeParameters() != null) {
-			for (final TypeParameter t : n.getTypeParameters()) {
-				t.accept(this, arg);
-			}
+		for (final TypeParameter t : n.getTypeParameters()) {
+			t.accept(this, arg);
 		}
-		if (n.getExtends() != null) {
-			for (final ClassOrInterfaceType c : n.getExtends()) {
-				c.accept(this, arg);
-			}
+		for (final ClassOrInterfaceType c : n.getExtends()) {
+			c.accept(this, arg);
 		}
-
-		if (n.getImplements() != null) {
-			for (final ClassOrInterfaceType c : n.getImplements()) {
-				c.accept(this, arg);
-			}
+		for (final ClassOrInterfaceType c : n.getImplements()) {
+			c.accept(this, arg);
 		}
-		if (n.getMembers() != null) {
-			for (final BodyDeclaration member : n.getMembers()) {
-				member.accept(this, arg);
-			}
+		for (final BodyDeclaration member : n.getMembers()) {
+			member.accept(this, arg);
 		}
 	}
 
@@ -559,7 +548,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			}
 		}
 		if (n.getThrows() != null) {
-			for (final NameExpr name : n.getThrows()) {
+			for (final ReferenceType name : n.getThrows()) {
 				name.accept(this, arg);
 			}
 		}
@@ -637,8 +626,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 				a.accept(this, arg);
 			}
 		}
-		for (final Type type : n.getTypes()) {
-			type.accept(this, arg);
+        if (n.getType() != null) {
+			n.getType().accept(this, arg);
 		}
 		n.getId().accept(this, arg);
 	}
@@ -656,6 +645,20 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		visitComment(n.getComment(), arg);
 		n.getType().accept(this, arg);
 	}
+
+    @Override public void visit(final IntersectionType n, final A arg) {
+        visitComment(n.getComment(), arg);
+        for (ReferenceType element : n.getElements()) {
+            element.accept(this, arg);
+        }
+    }
+
+    @Override public void visit(final UnionType n, final A arg) {
+        visitComment(n.getComment(), arg);
+        for (ReferenceType element : n.getElements()) {
+            element.accept(this, arg);
+        }
+    }
 
 	@Override public void visit(final ReturnStmt n, final A arg) {
 		visitComment(n.getComment(), arg);

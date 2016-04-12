@@ -281,7 +281,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
 		List<Parameter> parameters = visit(_n.getParameters(), _arg);
-		List<NameExpr> throws_ = visit(_n.getThrows(), _arg);
+		List<ReferenceType> throws_ = visit(_n.getThrows(), _arg);
 		BlockStmt block = cloneNodes(_n.getBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
@@ -311,13 +311,13 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(MultiTypeParameter _n, Object _arg) {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
-		List<Type> types = visit(_n.getTypes(), _arg);
+		UnionType type = cloneNodes(_n.getType(), _arg);
 		VariableDeclaratorId id = cloneNodes(_n.getId(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		MultiTypeParameter r = new MultiTypeParameter(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				_n.getModifiers(), annotations, types, id
+				_n.getModifiers(), annotations, type, id
 		);
 		r.setComment(comment);
 		return r;
@@ -368,7 +368,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		ClassOrInterfaceType r = new ClassOrInterfaceType(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				scope, _n.getName(), typeArgs
+				scope, _n.getName(), _n.getTypeArguments()
 		);
 		r.setComment(comment);
 		return r;
@@ -406,6 +406,30 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
         r.setComment(comment);
 		return r;
 	}
+
+    @Override
+    public Node visit(IntersectionType _n, Object _arg) {
+        List<ReferenceType> elements = visit(_n.getElements(), _arg);
+
+        IntersectionType r = new IntersectionType(_n.getBeginLine(),
+                _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
+                elements);
+        Comment comment = cloneNodes(_n.getComment(), _arg);
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Node visit(UnionType _n, Object _arg) {
+        List<ReferenceType> elements = visit(_n.getElements(), _arg);
+
+        UnionType r = new UnionType(_n.getBeginLine(),
+                _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
+                elements);
+        Comment comment = cloneNodes(_n.getComment(), _arg);
+        r.setComment(comment);
+        return r;
+    }
 
 	@Override
 	public Node visit(VoidType _n, Object _arg) {
@@ -1138,13 +1162,13 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(CatchClause _n, Object _arg) {
-		MultiTypeParameter except = cloneNodes(_n.getExcept(), _arg);
+		Parameter param = cloneNodes(_n.getParam(), _arg);
 		BlockStmt catchBlock = cloneNodes(_n.getCatchBlock(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		CatchClause r = new CatchClause(
 				_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(),
-				except.getModifiers(), except.getAnnotations(), except.getTypes(), except.getId(), catchBlock
+				param.getModifiers(), param.getAnnotations(), param.getType(), param.getId(), catchBlock
 		);
 		r.setComment(comment);
 		return r;

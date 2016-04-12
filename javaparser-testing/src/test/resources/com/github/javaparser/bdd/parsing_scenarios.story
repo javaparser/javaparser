@@ -256,7 +256,6 @@ Then method 1 class 1 is a default method
 Then method 2 class 1 is not a default method
 Then all nodes refer to their parent
 
-
 Scenario: A lambda expression inside a conditional expression is parsed by the Java Parser
 
 Given a CompilationUnit
@@ -267,7 +266,6 @@ public class A{
 	}
 }
 Then ThenExpr in the conditional expression of the statement 1 in method 1 in class 1 is LambdaExpr
-
 
 Scenario: Parsing array creation expressions the positions are correct
 
@@ -282,3 +280,121 @@ Then the begin column is 17
 Then the end line is 2
 Then the end column is 29
 
+Scenario: simple cast on lambda expression can be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    static final Comparator<ChronoLocalDate> DATE_ORDER =
+        (Comparator<ChronoLocalDate>) (date1, date2) -> {
+            return Long.compare(date1.toEpochDay(), date2.toEpochDay());
+        };
+}
+Then all nodes refer to their parent
+
+
+Scenario: a combined cast on lambda expression can be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    static final Comparator<ChronoLocalDate> DATE_ORDER =
+        (Comparator<ChronoLocalDate> & Serializable) (date1, date2) -> {
+            return Long.compare(date1.toEpochDay(), date2.toEpochDay());
+        };
+}
+Then all nodes refer to their parent
+
+
+Scenario: a combined cast on a literal can be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    static int a = (Comparator<ChronoLocalDate> & Serializable) 1;
+}
+Then all nodes refer to their parent
+
+
+Scenario: Parsing trailing semicolons at the end of the imports area should work
+
+Given a CompilationUnit
+When the following source is parsed:
+import foo.a;;
+
+class A {
+}
+Then no errors are reported
+
+
+Scenario: Parsing trailing semicolons inside the imports area should work
+
+Given a CompilationUnit
+When the following source is parsed:
+import foo.a;;
+import foo.b;
+
+class A {
+}
+Then no errors are reported
+
+
+Scenario: Full package name should be parsed
+
+Given a CompilationUnit
+When the following source is parsed:
+package com.github.javaparser.bdd;
+class C {}
+When I take the PackageDeclaration
+Then the package name is com.github.javaparser.bdd
+
+
+Scenario: Strings with unescaped newlines are NOT parsed correctly
+Given the class:
+class A {
+    public void helloWorld(String greeting, String name) {
+        return "hello
+        world";
+    }
+}
+Then the Java parser cannot parse it because of lexical errors
+
+Scenario: Diamond Operator information is exposed
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    List<String> args = new ArrayList<>();
+}
+When I take the ObjectCreationExpr
+Then the type's diamond operator flag should be true
+
+Scenario: Diamond Operator can be parsed also with space and comments
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    List<String> args = new ArrayList<  /*hello*/  >();
+}
+When I take the ObjectCreationExpr
+Then the type's diamond operator flag should be true
+
+Scenario: Type Arguments are not specified
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    List args = new ArrayList();
+}
+When I take the ObjectCreationExpr
+Then the type's diamond operator flag should be false
+
+Scenario: Type Arguments are specified
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    Either<Ok, Error> either = new Either<Ok, Error>();
+}
+When I take the ObjectCreationExpr
+Then the type's diamond operator flag should be false
