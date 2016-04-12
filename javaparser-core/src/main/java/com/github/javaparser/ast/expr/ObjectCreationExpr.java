@@ -95,6 +95,7 @@ public final class ObjectCreationExpr extends Expression {
 	}
 
 	public List<Expression> getArgs() {
+		args = ensureNotNull(args);
 		return args;
 	}
 
