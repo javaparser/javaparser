@@ -35,13 +35,9 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import org.jbehave.core.annotations.Given;
@@ -165,9 +161,12 @@ public class ParsingSteps {
     @Then("lambda in method call in statement $statementPosition in method $methodPosition in class $classPosition body is \"$expectedBody\"")
     public void thenLambdaInMethodCallInStatementInMethodInClassBody(int statementPosition, int methodPosition, int classPosition,
                                                                      String expectedBody) {
-        Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        LambdaExpr lambdaExpr = (LambdaExpr) statement.getChildrenNodes().get(0).getChildrenNodes().get(1).getChildrenNodes().get(1)
-                .getChildrenNodes().get(1).getChildrenNodes().get(2);
+        ExpressionStmt statement = (ExpressionStmt) getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
+        VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) statement.getExpression();
+        VariableDeclarator variableDeclarator = variableDeclarationExpr.getVars().get(0);
+        MethodCallExpr methodCallExpr = (MethodCallExpr) variableDeclarator.getInit();
+        CastExpr castExpr = (CastExpr) methodCallExpr.getArgs().get(0);
+        LambdaExpr lambdaExpr = (LambdaExpr) castExpr.getExpr();
         assertThat(lambdaExpr.getBody().toString(), is(expectedBody));
     }
 
@@ -212,9 +211,9 @@ public class ParsingSteps {
     @Then("method reference in statement $statementPosition in method $methodPosition in class $classPosition scope is $expectedName")
     public void thenMethodReferenceInStatementInMethodInClassIsScope(int statementPosition, int methodPosition,
                                                                      int classPosition, String expectedName) {
-        Statement statementUnderTest = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        MethodReferenceExpr methodReferenceUnderTest =
-                (MethodReferenceExpr) statementUnderTest.getChildrenNodes().get(0).getChildrenNodes().get(2);
+        ExpressionStmt statementUnderTest = (ExpressionStmt)getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
+        assertEquals(1, ASTHelper.getNodesByType(statementUnderTest, MethodReferenceExpr.class).size());
+        MethodReferenceExpr methodReferenceUnderTest = ASTHelper.getNodesByType(statementUnderTest, MethodReferenceExpr.class).get(0);
         assertThat(methodReferenceUnderTest.getScope().toString(), is(expectedName));
     }
 
@@ -222,8 +221,8 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIdentifierIsCompareByAge(int statementPosition, int methodPosition,
                                                                                       int classPosition, String expectedName) {
         Statement statementUnderTest = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        MethodReferenceExpr methodReferenceUnderTest =
-                (MethodReferenceExpr) statementUnderTest.getChildrenNodes().get(0).getChildrenNodes().get(2);
+        assertEquals(1, ASTHelper.getNodesByType(statementUnderTest, MethodReferenceExpr.class).size());
+        MethodReferenceExpr methodReferenceUnderTest = ASTHelper.getNodesByType(statementUnderTest, MethodReferenceExpr.class).get(0);
         assertThat(methodReferenceUnderTest.getIdentifier(), is(expectedName));
     }
 

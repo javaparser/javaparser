@@ -152,7 +152,7 @@ Then field 1 in class 1 contains annotation 1 value is ""http://someURL.org/""
 Then all nodes refer to their parent
 
 
-Scenario: A class with a Lambdas is parsed by the Java Parser
+Scenario: A class with a Lambda is parsed by the Java Parser
 
 Given a CompilationUnit
 When the following source is parsed:
