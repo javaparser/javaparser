@@ -23,7 +23,7 @@ options {
   LOOKAHEAD=1;
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
-  //COMMON_TOKEN_ACTION=true; // Will not use CommonTokenAction to handle JavaDoc and comments
+  COMMON_TOKEN_ACTION=true; // Using the CommonTokenAction callback to collect tokens for later usage
   //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
   JDK_VERSION = "1.6";
   TOKEN_FACTORY = "ASTParser.GTToken";
@@ -100,6 +100,16 @@ final class ASTParser {
         return ModifierSet.addModifier(modifiers, mod);
     }
 
+    /**
+     * Return the list of tokens that have been encountered while parsing code using
+     * this parser.
+     *
+     * @return a list of tokens
+     */
+    public List<Token> getTokens() {
+        return token_source.getTokens();
+    }
+
     private void throwParseException(Token token, String message) throws ParseException {
         StringBuilder buf = new StringBuilder();
         buf.append(message);
@@ -172,6 +182,19 @@ SKIP :
 | "\n"
 | "\r"
 | "\f"
+}
+
+TOKEN_MGR_DECLS :
+{
+    private List<Token> tokens = new ArrayList<Token>();
+
+    List<Token> getTokens() {
+        return tokens;
+    }
+
+    private void CommonTokenAction(Token token) {
+        tokens.add(token);
+    }
 }
 
 /* COMMENTS */

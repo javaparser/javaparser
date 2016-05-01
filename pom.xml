@@ -72,6 +72,11 @@
 	</developers>
 	<contributors>
 		<contributor>
+			<name>Sebastian Kürten</name>
+			<email>sebastian@topobyte.de</email>
+			<url>https://github.com/sebkur</url>
+		</contributor>
+		<contributor>
 			<name>Junfei Liang</name>
 			<email>fly2best@gmail.com</email>
 			<url>https://github.com/fly2best</url>
