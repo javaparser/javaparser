@@ -788,6 +788,30 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		return n;
 	}
 
+    @Override
+    public Node visit(final IntersectionType n, final A arg) {
+        final List<ReferenceType> elements = n.getElements();
+        if (elements != null) {
+            for (int i = 0; i < elements.size(); i++) {
+                elements.set(i, (ReferenceType) elements.get(i).accept(this, arg));
+            }
+            removeNulls(elements);
+        }
+        return n;
+    }
+
+    @Override
+    public Node visit(final UnionType n, final A arg) {
+        final List<ReferenceType> elements = n.getElements();
+        if (elements != null) {
+            for (int i = 0; i < elements.size(); i++) {
+                elements.set(i, (ReferenceType) elements.get(i).accept(this, arg));
+            }
+            removeNulls(elements);
+        }
+        return n;
+    }
+
 	@Override public Node visit(final ReturnStmt n, final A arg) {
 		if (n.getExpr() != null) {
 			n.setExpr((Expression) n.getExpr().accept(this, arg));
