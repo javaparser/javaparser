@@ -1,26 +1,9 @@
-<!DOCTYPE walkmod PUBLIC "-//WALKMOD//DTD"  "http://www.walkmod.com/dtd/walkmod-1.0.dtd" >
+<!DOCTYPE walkmod PUBLIC "-//WALKMOD//DTD" "http://www.walkmod.com/dtd/walkmod-1.1.dtd">
 <walkmod>
-	<plugins>
-		<plugin groupId="org.walkmod" artifactId="walkmod-maven-plugin"
-			version="[1.1.1,)" />
-		<plugin groupId="org.walkmod" artifactId="walkmod-dead-code-cleaner-plugin"
-			version="[1.0.0, 2.0.0)" />
-	</plugins>
-
-	<conf-providers>
-		<conf-provider type="walkmod:commons:maven"></conf-provider>
-	</conf-providers>
-	<chain name="main-chain">
-		<reader path="src/main/java">
-		</reader>
-		<walker>
-			<transformations>
-				<transformation type="walkmod:commons:unused-declarations-cleaner" />
-			</transformations>
-		</walker>
-		<writer path="src/main/java"
-			type="org.walkmod:walkmod-javalang-plugin:string-writer">
-            <param name="configFile">dev-files/eclipse-formatter.xml</param>
-		</writer>
-    </chain>
+    <modules>
+        <module>java-symbol-solver-model</module>
+        <module>java-symbol-solver-logic</module>
+        <module>java-symbol-solver-core</module>
+        <module>java-symbol-solver-examples</module>
+    </modules>
 </walkmod>
