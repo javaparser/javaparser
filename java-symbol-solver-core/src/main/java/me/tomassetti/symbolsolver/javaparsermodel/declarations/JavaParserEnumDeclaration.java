@@ -210,7 +210,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
-        if (name.equals("values") && parameterTypes.size() == 0) {
+        if (name.equals("values") && parameterTypes.isEmpty()) {
             return SymbolReference.solved(new ValuesMethod());
         }
         // TODO add methods inherited from Enum
@@ -219,7 +219,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
-        if (name.equals("values") && parameterTypes.size() == 0) {
+        if (name.equals("values") && parameterTypes.isEmpty()) {
             return Optional.of(new ValuesMethod().getUsage(null));
         }
         // TODO add methods inherited from Enum

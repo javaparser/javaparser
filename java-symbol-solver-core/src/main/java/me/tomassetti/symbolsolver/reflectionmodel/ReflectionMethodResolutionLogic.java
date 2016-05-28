@@ -27,7 +27,7 @@ class ReflectionMethodResolutionLogic {
             //    throw new UnsupportedOperationException("I have solved parameters for " + clazz.getCanonicalName() +". Values given are: "+typeParameterValues);
             //}
             // if it is zero we are going to ignore them
-            if (typeParametrized.getTypeParameters().size() != 0) {
+            if (!typeParametrized.getTypeParameters().isEmpty()) {
                 // Parameters not specified, so default to Object
                 typeParameterValues = new ArrayList<>();
                 for (int i = 0; i < typeParametrized.getTypeParameters().size(); i++) {

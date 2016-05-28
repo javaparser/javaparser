@@ -103,7 +103,7 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ReferenceTypeUsage objectRef = create(objectType, typeSolver);
         if (typeDeclaration.getTypeParameters().size() != typeParameters.size()) {
-            if (typeParameters.size() > 0) {
+            if (!typeParameters.isEmpty()) {
                 throw new UnsupportedOperationException();
             }
             // type parameters not specified, default to Object
@@ -239,7 +239,7 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         } else {
             sb.append("<anonymous class>");
         }
-        if (parameters().size() > 0) {
+        if (!parameters().isEmpty()) {
             sb.append("<");
             boolean first = true;
             for (TypeUsage param : parameters()) {

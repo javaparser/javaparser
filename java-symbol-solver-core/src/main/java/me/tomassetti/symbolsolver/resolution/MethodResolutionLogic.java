@@ -16,7 +16,7 @@ public class MethodResolutionLogic {
     private static List<TypeUsage> groupVariadicParamValues(List<TypeUsage> paramTypes, int startVariadic, TypeUsage variadicType) {
         List<TypeUsage> res = new ArrayList<>(paramTypes.subList(0, startVariadic));
         List<TypeUsage> variadicValues = paramTypes.subList(startVariadic, paramTypes.size());
-        if (variadicValues.size() == 0) {
+        if (variadicValues.isEmpty()) {
             // TODO if there are no variadic values we should default to the bound of the formal type
             res.add(variadicType);
         } else {
@@ -27,7 +27,7 @@ public class MethodResolutionLogic {
     }
 
     private static TypeUsage findCommonType(List<TypeUsage> variadicValues) {
-        if (variadicValues.size() == 0) {
+        if (variadicValues.isEmpty()) {
             throw new IllegalArgumentException();
         }
         // TODO implement this decently
@@ -179,7 +179,7 @@ public class MethodResolutionLogic {
             TypeUsage expectedTypeWithoutSubstitutions = expectedType;
             TypeUsage actualType = paramTypes.get(i);
             for (TypeParameter tp : method.getDeclaration().getTypeParameters()) {
-                if (tp.getBounds(typeSolver).size() == 0) {
+                if (tp.getBounds(typeSolver).isEmpty()) {
                     //expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                     expectedType = expectedType.replaceParam(tp.getName(), WildcardUsage.extendsBound(new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
                 } else if (tp.getBounds(typeSolver).size() == 1) {
@@ -197,7 +197,7 @@ public class MethodResolutionLogic {
             }
             TypeUsage expectedType2 = expectedTypeWithoutSubstitutions;
             for (TypeParameter tp : method.getDeclaration().getTypeParameters()) {
-                if (tp.getBounds(typeSolver).size() == 0) {
+                if (tp.getBounds(typeSolver).isEmpty()) {
                     expectedType2 = expectedType2.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                 } else if (tp.getBounds(typeSolver).size() == 1) {
                     TypeParameter.Bound bound = tp.getBounds(typeSolver).get(0);

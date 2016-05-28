@@ -111,7 +111,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             List<ReferenceTypeUsage> ancestors = actualParamType.asReferenceTypeUsage().getAllAncestors();
             final String formalParamTypeQName = formalParamType.asReferenceTypeUsage().getQualifiedName();
             List<TypeUsage> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
-            if (correspondingFormalType.size() == 0) {
+            if (correspondingFormalType.isEmpty()) {
                 throw new IllegalArgumentException();
             }
             actualParamType = correspondingFormalType.get(0);
