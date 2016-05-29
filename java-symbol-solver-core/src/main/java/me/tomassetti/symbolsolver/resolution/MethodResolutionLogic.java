@@ -210,12 +210,10 @@ public class MethodResolutionLogic {
                     throw new UnsupportedOperationException();
                 }
             }
-            if (!expectedType.isAssignableBy(actualType)) {
-                if (!expectedType2.isAssignableBy(actualType)) {
-                    if (!expectedTypeWithoutSubstitutions.isAssignableBy(actualType)) {
+            if (!expectedType.isAssignableBy(actualType)
+                    && !expectedType2.isAssignableBy(actualType)
+                    && !expectedTypeWithoutSubstitutions.isAssignableBy(actualType)) {
                         return false;
-                    }
-                }
             }
         }
         return true;
