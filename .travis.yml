@@ -1,5 +1,5 @@
 language: java
-script: ./gradlew check
+script: ./gradlew check --info
 jdk:
   - oraclejdk8
 before_cache:
