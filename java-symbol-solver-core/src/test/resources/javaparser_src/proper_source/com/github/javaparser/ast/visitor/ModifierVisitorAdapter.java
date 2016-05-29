@@ -484,8 +484,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final ExplicitConstructorInvocationStmt n, final A arg) {
-		if (!n.isThis() && n.getExpr() != null) {
-			n.setExpr((Expression) n.getExpr().accept(this, arg));
+		if (!n.isThis()) {
+			if (n.getExpr() != null) {
+				n.setExpr((Expression) n.getExpr().accept(this, arg));
+			}
 		}
 		final List<Type> typeArgs = n.getTypeArgs();
 		if (typeArgs != null) {
