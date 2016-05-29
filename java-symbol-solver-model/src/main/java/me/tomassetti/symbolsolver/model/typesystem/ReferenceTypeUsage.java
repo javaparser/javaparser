@@ -233,7 +233,7 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
 
     @Override
     public String describe() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (hasName()) {
             sb.append(typeDeclaration.getQualifiedName());
         } else {
