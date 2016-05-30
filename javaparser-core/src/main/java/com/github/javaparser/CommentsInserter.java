@@ -140,11 +140,10 @@ public class CommentsInserter
         for (Comment comment : commentsToAttribute) {
             if (comment.isLineComment()) {
                 for (Node child : children) {
-                    if (child.getEndLine() == comment.getBeginLine()) {
-                        if (attributeLineCommentToNodeOrChild(child,
+                    if (child.getEndLine() == comment.getBeginLine()
+                        && attributeLineCommentToNodeOrChild(child,
                                 comment.asLineComment())) {
                             attributedComments.add(comment);
-                        }
                     }
                 }
             }
