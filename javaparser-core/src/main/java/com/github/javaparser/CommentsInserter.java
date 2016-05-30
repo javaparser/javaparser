@@ -92,7 +92,7 @@ public class CommentsInserter
         PositionUtils.sortByBeginPosition(children);
 
         if (cu.getPackage() != null
-                && (children.size() == 0 || PositionUtils.areInOrder(
+                && (children.isEmpty() || PositionUtils.areInOrder(
                         comments.get(0), children.get(0)))) {
             cu.setComment(comments.get(0));
             comments.remove(0);
@@ -107,7 +107,7 @@ public class CommentsInserter
      */
     private void insertCommentsInNode(Node node,
             List<Comment> commentsToAttribute) {
-        if (commentsToAttribute.size() == 0)
+        if (commentsToAttribute.isEmpty())
             return;
 
         // the comments can:
