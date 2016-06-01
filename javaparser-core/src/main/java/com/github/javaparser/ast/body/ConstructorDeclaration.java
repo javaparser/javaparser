@@ -174,7 +174,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     @Override
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows,
                                          boolean includingParameterName) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
             sb.append(accessSpecifier.getCodeRepresenation());
