@@ -29,7 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class BinaryExpr extends Expression {
 
-    public static enum Operator {
+    public enum Operator {
         or, // ||
         and, // &&
         binOr, // |
