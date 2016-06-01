@@ -143,11 +143,12 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public void setName(String name) {
-        this.name = new NameExpr(name);
+        setNameExpr(new NameExpr(name));
     }
 
     public void setNameExpr(NameExpr name) {
         this.name = name;
+	setAsParentNodeOf(this.name);
     }
 
     public void setParameters(List<Parameter> parameters) {

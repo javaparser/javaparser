@@ -70,8 +70,8 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	public final List<BodyDeclaration> getMembers() {
-        members = ensureNotNull(members);
-        return members;
+        	members = ensureNotNull(members);
+        	return members;
 	}
 
 	/**
@@ -99,14 +99,15 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	}
 
 	public final void setName(String name) {
-		this.name = new NameExpr(name);
+		setNameExpr(new NameExpr(name));
 	}
 
-    public final void setNameExpr(NameExpr nameExpr) {
-      this.name = nameExpr;
-    }
+	public final void setNameExpr(NameExpr nameExpr) {
+		this.name = nameExpr;
+		setAsParentNodeOf(this.name);
+	}
 
-    public final NameExpr getNameExpr() {
-      return name;
-    }
+	public final NameExpr getNameExpr() {
+		return name;
+	}
 }

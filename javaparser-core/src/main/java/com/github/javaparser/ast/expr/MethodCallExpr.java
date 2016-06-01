@@ -101,11 +101,12 @@ public final class MethodCallExpr extends Expression {
 	}
 
 	public void setName(final String name) {
-		this.name = new NameExpr(name);
+		setNameExpr(new NameExpr(name));
 	}
 
 	public void setNameExpr(NameExpr name) {
 		this.name = name;
+		setAsParentNodeOf(this.name);
 	}
 
 	public void setScope(final Expression scope) {
