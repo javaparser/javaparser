@@ -704,13 +704,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final ExplicitConstructorInvocationStmt n, final A arg) {
-		if (!n.isThis()) {
-			if (n.getExpr() != null) {
-				{
-					R result = n.getExpr().accept(this, arg);
-					if (result != null) {
-						return result;
-					}
+		if (!n.isThis() && n.getExpr() != null) {
+			{
+				R result = n.getExpr().accept(this, arg);
+				if (result != null) {
+					return result;
 				}
 			}
 		}

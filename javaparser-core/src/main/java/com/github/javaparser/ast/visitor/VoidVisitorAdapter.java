@@ -379,10 +379,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final ExplicitConstructorInvocationStmt n, final A arg) {
 		visitComment(n.getComment(), arg);
-		if (!n.isThis()) {
-			if (n.getExpr() != null) {
-				n.getExpr().accept(this, arg);
-			}
+		if (!n.isThis() && n.getExpr() != null) {
+			n.getExpr().accept(this, arg);
 		}
 		if (n.getTypeArgs() != null) {
 			for (final Type t : n.getTypeArgs()) {
