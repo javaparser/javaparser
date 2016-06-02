@@ -40,7 +40,7 @@ public class TypeArguments {
     }
 
     public List<Type> getTypeArguments() {
-        return unmodifiableList(typeArguments);
+        return typeArguments;
     }
 
     public boolean isUsingDiamondOperator() {
