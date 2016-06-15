@@ -125,7 +125,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			for (final Expression dim : n.getDimensions()) {
 				dim.accept(this, arg);
 			}
-		} else {
+		}
+		if (n.getInitializer() != null) {
 			n.getInitializer().accept(this, arg);
 		}
 	}

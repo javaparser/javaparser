@@ -672,7 +672,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 				printer.print("[]");
 			}
 
-		} else {
+		}
+		if (n.getInitializer() != null) {
 			for (int i = 0; i < n.getArrayCount(); i++) {
 				if (arraysAnnotations != null && i < arraysAnnotations.size()) {
 					List<AnnotationExpr> annotations = arraysAnnotations.get(i);
