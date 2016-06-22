@@ -213,6 +213,22 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
+    public List<FieldDeclaration> getAllFields() {
+        ArrayList<FieldDeclaration> fields = new ArrayList<>();
+        for (BodyDeclaration member : wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                for (VariableDeclarator vd : field.getVariables()) {
+                    fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
+                }
+            }
+        }
+
+        return fields;
+    }
+
+
+    @Override
     public String toString() {
         return "JavaParserInterfaceDeclaration{" +
                 "wrappedNode=" + wrappedNode +

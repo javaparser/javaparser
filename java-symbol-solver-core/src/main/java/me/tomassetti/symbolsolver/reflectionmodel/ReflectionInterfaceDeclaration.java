@@ -199,6 +199,18 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         throw new UnsolvedSymbolException("Field in " + this, name);
     }
 
+    @Override
+    public List<FieldDeclaration> getAllFields() {
+        List<FieldDeclaration> fields = new ArrayList<>();
+        for (Field field : clazz.getDeclaredFields()) {
+            fields.add(new ReflectionFieldDeclaration(field, typeSolver));
+        }
+        for (ReferenceTypeUsage ancestor : getAllAncestors()) {
+            fields.addAll(ancestor.getTypeDeclaration().getAllFields());
+        }
+        return fields;
+    }
+    
     /*@Override
     public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
         if (getQualifiedName().equals(other.getQualifiedName())) {

@@ -315,6 +315,11 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
+    public List<FieldDeclaration> getAllFields() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public String getName() {
         return ctClass.getSimpleName();
     }

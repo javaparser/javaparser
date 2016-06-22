@@ -197,6 +197,11 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
+    public List<FieldDeclaration> getAllFields() {
+        throw new UnsupportedOperationException();
+    }
+    
+    @Override
     public boolean isAssignableBy(TypeDeclaration other) {
         throw new UnsupportedOperationException();
     }

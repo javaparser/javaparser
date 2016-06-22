@@ -17,6 +17,7 @@ import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -127,6 +128,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public boolean hasField(String name) {
         return false;
+    }
+
+    @Override
+    public List<FieldDeclaration> getAllFields() {
+        return new ArrayList<>();
     }
 
     @Override
