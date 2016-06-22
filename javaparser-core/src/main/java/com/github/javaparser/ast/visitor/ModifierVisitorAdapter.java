@@ -183,7 +183,8 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 				}
 				removeNulls(dimensions);
 			}
-		} else {
+		}
+		if (n.getInitializer() != null) {
 			n.setInitializer((ArrayInitializerExpr) n.getInitializer().accept(this, arg));
 		}
 		return n;

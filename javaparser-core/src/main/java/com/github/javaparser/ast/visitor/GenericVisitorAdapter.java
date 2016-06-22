@@ -179,12 +179,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 					}
 				}
 			}
-		} else {
-			{
-				R result = n.getInitializer().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
+		}
+		if (n.getInitializer() != null) {
+			R result = n.getInitializer().accept(this, arg);
+			if (result != null) {
+				return result;
 			}
 		}
 		return null;
