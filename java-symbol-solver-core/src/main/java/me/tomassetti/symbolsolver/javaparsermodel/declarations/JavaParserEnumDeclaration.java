@@ -21,10 +21,7 @@ import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
 
@@ -251,6 +248,29 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         return false;
+    }
+
+    @Override
+    public List<FieldDeclaration> getAllFields() {
+        ArrayList<FieldDeclaration> fields = new ArrayList<>();
+        if (this.wrappedNode.getMembers() != null) {
+            for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+                if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                    com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                    for (VariableDeclarator vd : field.getVariables()) {
+						fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
+                    }
+                }
+            }
+        }
+
+        if (this.wrappedNode.getEntries() != null) {
+            for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
+				fields.add(new JavaParserFieldDeclaration(member));
+            }
+        }
+
+        return fields;
     }
 
     @Override

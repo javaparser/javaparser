@@ -244,6 +244,19 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         throw new UnsolvedSymbolException("Field in " + this, name);
     }
+    
+    @Override
+    public List<FieldDeclaration> getAllFields() {
+        ArrayList<FieldDeclaration> fields = new ArrayList<>();
+        for (Field field : clazz.getDeclaredFields()) {
+            fields.add(new ReflectionFieldDeclaration(field, typeSolver));
+        }
+        for (ReferenceTypeUsage ancestor : getAllAncestors()) {
+            // TODO code in getField is rather complicated. Can this really be this simple?
+            fields.addAll(ancestor.getTypeDeclaration().getAllFields());
+        }
+        return fields;
+    }
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {

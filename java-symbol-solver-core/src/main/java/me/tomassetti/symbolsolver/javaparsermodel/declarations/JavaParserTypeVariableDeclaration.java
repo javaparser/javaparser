@@ -13,6 +13,8 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -87,6 +89,11 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         return false;
     }
 
+    @Override
+    public List<FieldDeclaration> getAllFields() {
+        return new ArrayList<>();
+    }
+    
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
         return SymbolReference.unsolved(ValueDeclaration.class);
