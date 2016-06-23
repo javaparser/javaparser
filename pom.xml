@@ -51,6 +51,32 @@
     </repository>
   </distributionManagement>
 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>atlassian-public</id>
+      <url>https://maven.atlassian.com/repository/public</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jcenter</id>
+      <name>jcenter</name>
+      <url>http://jcenter.bintray.com </url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jfrog-plugins</id>
+      <name>jfrog-plugins-dist</name>
+      <url>http://repo.jfrog.org/artifactory/plugins-releases</url>
+    </pluginRepository>
+  </pluginRepositories>
+
   <build>
     <plugins>
       <plugin>
@@ -59,7 +85,7 @@
         <version>1.0.1</version>
         <configuration>
           <id>bintray-ftomassetti</id>
-          <url>https://api.bintray.com/maven/SUBJECT/maven/ftomassetti</url>
+          <url>https://api.bintray.com/maven/ftomassetti/maven/java-symbol-solver</url>
         </configuration>
         <executions>
           <execution>
