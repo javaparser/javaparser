@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modules>
+    <module>java-symbol-solver-model</module>
+    <module>java-symbol-solver-logic</module>
+    <module>java-symbol-solver-core</module>
+    <module>java-symbol-solver-examples</module>
+  </modules>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>me.tomassetti</groupId>
+  <artifactId>java-symbol-solver-parent</artifactId>
+  <packaging>pom</packaging>
+  <version>0.2-SNAPSHOT</version>
+  <name>java-symbol-solver-parent</name>
+  <url>https://github.com/ftomassetti/java-symbol-solver</url>
+  <description>A Symbol Solver for Java, built on top of JavaParser</description>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Federico Tomassetti</name>
+      <email>federico@tomassetti.me</email>
+      <url>https://github.com/ftomassetti</url>
+      <id>ftomassetti</id>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/ftomassetti/java-symbol-solver.git</connection>
+    <developerConnection>scm:git:git@github.com:ftomassetti/java-symbol-solver.git</developerConnection>
+    <url>https://github.com/ftomassetti/java-symbol-solver.git</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshot</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.devexperts.bintray</groupId>
+        <artifactId>bintray-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <configuration>
+          <id>bintray-ftomassetti</id>
+          <url>https://api.bintray.com/maven/SUBJECT/maven/ftomassetti</url>
+        </configuration>
+        <executions>
+          <execution>
+            <id>bintray-deploy</id>
+            <goals>
+              <goal>deploy</goal>
+              <goal>publish</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
