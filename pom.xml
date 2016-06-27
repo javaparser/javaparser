@@ -5,21 +5,14 @@
     <module>java-symbol-solver-core</module>
     <module>java-symbol-solver-examples</module>
   </modules>
-
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.jcabi</groupId>
-    <artifactId>parent</artifactId>
-    <version>0.44</version>
-  </parent>
   <groupId>me.tomassetti</groupId>
   <artifactId>java-symbol-solver-parent</artifactId>
   <packaging>pom</packaging>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <name>java-symbol-solver-parent</name>
   <url>https://github.com/ftomassetti/java-symbol-solver</url>
   <description>A Symbol Solver for Java, built on top of JavaParser</description>
-
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -28,7 +21,6 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-
   <developers>
     <developer>
       <name>Federico Tomassetti</name>
@@ -37,14 +29,12 @@
       <id>ftomassetti</id>
     </developer>
   </developers>
-
   <scm>
     <connection>scm:git:git://github.com/ftomassetti/java-symbol-solver.git</connection>
     <developerConnection>scm:git:git@github.com:ftomassetti/java-symbol-solver.git</developerConnection>
     <url>https://github.com/ftomassetti/java-symbol-solver.git</url>
     <tag>HEAD</tag>
   </scm>
-
   <distributionManagement>
     <snapshotRepository>
       <id>sonatype-nexus-snapshot</id>
@@ -55,35 +45,24 @@
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>atlassian-public</id>
-      <url>https://maven.atlassian.com/repository/public</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-        <checksumPolicy>warn</checksumPolicy>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-        <checksumPolicy>warn</checksumPolicy>
-      </releases>
-    </pluginRepository>
-    <pluginRepository>
-      <id>jcenter</id>
-      <name>jcenter</name>
-      <url>http://jcenter.bintray.com </url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>jfrog-plugins</id>
-      <name>jfrog-plugins-dist</name>
-      <url>http://repo.jfrog.org/artifactory/plugins-releases</url>
-    </pluginRepository>
-  </pluginRepositories>
-
   <build>
-    
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <additionalparam>-Xdoclint:none</additionalparam>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
-
 </project>
