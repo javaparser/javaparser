@@ -59,7 +59,7 @@
      <dependency>
           <groupId>me.tomassetti</groupId>
           <artifactId>java-symbol-solver-core</artifactId>
-          <version>0.2-SNAPSHOT</version>
+          <version>0.2</version>
      </dependency>
   </dependencies>
   <build>
