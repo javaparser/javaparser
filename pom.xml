@@ -7,6 +7,11 @@
   </modules>
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.jcabi</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.44</version>
+  </parent>
   <groupId>me.tomassetti</groupId>
   <artifactId>java-symbol-solver-parent</artifactId>
   <packaging>pom</packaging>
@@ -78,26 +83,7 @@
   </pluginRepositories>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>com.devexperts.bintray</groupId>
-        <artifactId>bintray-maven-plugin</artifactId>
-        <version>1.0.1</version>
-        <configuration>
-          <id>bintray-ftomassetti</id>
-          <url>https://api.bintray.com/maven/ftomassetti/maven/java-symbol-solver</url>
-        </configuration>
-        <executions>
-          <execution>
-            <id>bintray-deploy</id>
-            <goals>
-              <goal>deploy</goal>
-              <goal>publish</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+    
   </build>
 
 </project>
