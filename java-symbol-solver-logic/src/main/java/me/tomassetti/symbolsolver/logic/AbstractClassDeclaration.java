@@ -26,6 +26,7 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
         if (superClass != null) {
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllAncestors());
+            superclasses.add(object());
         }
         for (int i = 0; i < superclasses.size(); i++) {
             if (superclasses.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
@@ -33,7 +34,6 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
                 i--;
             }
         }
-        superclasses.add(object());
         return superclasses.stream().filter((s) -> s.getTypeDeclaration().isClass()).collect(Collectors.toList());
     }
 
