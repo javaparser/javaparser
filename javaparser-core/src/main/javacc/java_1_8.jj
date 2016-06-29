@@ -27,6 +27,7 @@ options {
   //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
   JDK_VERSION = "1.6";
   TOKEN_FACTORY = "ASTParser.GTToken";
+  JAVA_TEMPLATE_TYPE = "modern";
 }
 
 PARSER_BEGIN(ASTParser)
@@ -58,8 +59,8 @@ import com.github.javaparser.ast.type.*;
  */
 final class ASTParser {
 
-    void reset(InputStream in, String encoding) {
-        ReInit(in, encoding);
+	void reset(InputStream in, String encoding) throws IOException {
+        ReInit(new StreamProvider(in, encoding));
     }
 
     private List add(List list, Object obj) {
