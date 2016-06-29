@@ -172,7 +172,7 @@ public class CommentsParser {
                         }
                         state = State.CODE;
                     } else {
-                        currentContent.append(c=='\r'?'\n':c);
+                        currentContent.append(c == '\r' ? System.getProperty("line.separator") : c);
                     }
                     break;
                 case IN_STRING:
