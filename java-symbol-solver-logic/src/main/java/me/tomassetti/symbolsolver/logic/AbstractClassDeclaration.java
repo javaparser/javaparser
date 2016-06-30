@@ -28,10 +28,15 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
             superclasses.addAll(superClass.getAllAncestors());
             superclasses.add(object());
         }
+        boolean foundObject = false;
         for (int i = 0; i < superclasses.size(); i++) {
             if (superclasses.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
-                superclasses.remove(i);
-                i--;
+                if (foundObject) {
+                    superclasses.remove(i);
+                    i--;
+                } else {
+                    foundObject = true;
+                }
             }
         }
         return superclasses.stream().filter((s) -> s.getTypeDeclaration().isClass()).collect(Collectors.toList());
