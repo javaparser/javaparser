@@ -19,3 +19,6 @@ javadoc
 .gradle
 *.ipr
 *.iws
+build-*
+*.asc
+build
