@@ -69,6 +69,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             ReferenceTypeUsageImpl superClass = getSuperClass();
             ancestors.add(superClass);
             ancestors.addAll(getSuperClass().getAllAncestors());
+            ReferenceTypeUsageImpl object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+            ancestors.add(object);
         }
         ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
         for (int i = 0; i < ancestors.size(); i++) {
@@ -78,8 +80,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 i--;
             }
         }
-        ReferenceTypeUsageImpl object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        ancestors.add(object);
         return ancestors;
     }
 
@@ -252,7 +252,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             fields.add(new ReflectionFieldDeclaration(field, typeSolver));
         }
         for (ReferenceTypeUsage ancestor : getAllAncestors()) {
-            // TODO code in getField is rather complicated. Can this really be this simple?
             fields.addAll(ancestor.getTypeDeclaration().getAllFields());
         }
         return fields;

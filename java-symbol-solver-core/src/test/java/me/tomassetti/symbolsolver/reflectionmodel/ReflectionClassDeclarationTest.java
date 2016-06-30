@@ -1,11 +1,9 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
 import com.google.common.collect.ImmutableSet;
-import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
@@ -199,4 +197,11 @@ public class ReflectionClassDeclarationTest {
     // getDeclaredMethods
     // getAllMethods
 
+    @Test
+    public void testGetAllFields() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        assertEquals(ImmutableSet.of("modCount", "serialVersionUID", "MAX_ARRAY_SIZE", "size", "elementData", "EMPTY_ELEMENTDATA", "DEFAULTCAPACITY_EMPTY_ELEMENTDATA", "DEFAULT_CAPACITY"),
+                arraylist.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
+    }
 }
