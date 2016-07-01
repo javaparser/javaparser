@@ -1,0 +1,11 @@
+class A {
+    String a;
+}
+
+class B extends A {
+    float b;
+}
+
+class C extends B {
+    int c;
+}
