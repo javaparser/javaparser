@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -57,16 +56,4 @@ public final class AnnotationDeclaration extends TypeDeclaration {
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
     }
-
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
-    }
-
-    @Override
-    public JavadocComment getJavaDoc() {
-        return javadocComment;
-    }
-
-    private JavadocComment javadocComment;
 }

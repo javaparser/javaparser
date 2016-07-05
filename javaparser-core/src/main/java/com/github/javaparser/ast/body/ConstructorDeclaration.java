@@ -224,14 +224,10 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
-    }
-
-    @Override
     public JavadocComment getJavaDoc() {
-        return javadocComment;
+        if(getComment() instanceof JavadocComment){
+            return (JavadocComment) getComment();
+        }
+        return null;
     }
-
-    private JavadocComment javadocComment;
 }
