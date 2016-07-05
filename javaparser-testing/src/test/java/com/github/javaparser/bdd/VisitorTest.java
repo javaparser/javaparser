@@ -36,7 +36,7 @@ public class VisitorTest extends BasicJBehaveTest {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        Map<String, Object> state = new HashMap<>();
+        Map<String, Object> state = new HashMap<String, Object>();
         return new InstanceStepsFactory(configuration(),
                 new SharedSteps(state),
                 new VisitorSteps(state));

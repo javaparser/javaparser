@@ -107,7 +107,7 @@ public class VisitorSteps {
     @When("the CompilationUnit is visited by the variable name collector visitor")
     public void whenTheCompilationUnitIsVisitedByTheVariableNameCollectorVisitor() {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        collectedVariableName = new AtomicReference<>("");
+        collectedVariableName = new AtomicReference<String>("");
         collectVariableNameVisitor.visit(compilationUnit, collectedVariableName);
     }
 
