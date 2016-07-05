@@ -93,6 +93,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
      * @see ModifierSet
      * @return modifiers
      */
+    @Override
     public int getModifiers() {
         return modifiers;
     }

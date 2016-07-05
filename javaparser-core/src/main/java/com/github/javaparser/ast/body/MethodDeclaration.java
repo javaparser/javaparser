@@ -125,6 +125,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	 * @see ModifierSet
 	 * @return modifiers
 	 */
+	@Override
 	public int getModifiers() {
 		return modifiers;
 	}

@@ -102,6 +102,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
      * @see ModifierSet
      * @return modifiers
      */
+    @Override
     public int getModifiers() {
         return modifiers;
     }

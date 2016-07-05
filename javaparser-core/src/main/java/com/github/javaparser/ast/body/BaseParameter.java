@@ -79,6 +79,7 @@ public abstract class BaseParameter extends Node implements AnnotableNode, NodeW
      * @see ModifierSet
      * @return modifiers
      */
+    @Override
     public int getModifiers() {
         return modifiers;
     }

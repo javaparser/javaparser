@@ -93,6 +93,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
      * @see ModifierSet
      * @return modifiers
      */
+    @Override
     public int getModifiers() {
         return modifiers;
     }
