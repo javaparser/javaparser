@@ -22,7 +22,7 @@ In the expression `a + 1` a parser (like JavaParser) is not able to tell us to w
 
 ## How can I use it?
 
-Take a look at `JavaParserFacade`. For exaple you can use it to find the type of an expression:
+Take a look at `JavaParserFacade`. For example you can use it to find the type of an expression:
 
 ```java
 Node node = <get this node by parsing source code with JavaParser>
