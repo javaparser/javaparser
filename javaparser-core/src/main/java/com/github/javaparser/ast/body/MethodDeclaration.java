@@ -38,7 +38,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, TypedNode {
+public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, TypedNode, NodeWithModifiers {
 
 	private int modifiers;
 

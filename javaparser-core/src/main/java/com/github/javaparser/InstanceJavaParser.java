@@ -20,14 +20,6 @@
 
 package com.github.javaparser;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.util.List;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -36,40 +28,37 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
+import java.io.*;
+import java.util.List;
+
 /**
  * @author Sebastian Kuerten
  */
-public class InstanceJavaParser
-{
+public class InstanceJavaParser {
 
     private ASTParser astParser;
 
-    public InstanceJavaParser(InputStream input)
-    {
-        astParser = new ASTParser(input);
+    public InstanceJavaParser(InputStream input) throws IOException {
+        astParser = new ASTParser(new StreamProvider(input));
     }
 
-    public InstanceJavaParser(InputStream input, String encoding)
-    {
-        astParser = new ASTParser(input, encoding);
+    public InstanceJavaParser(InputStream input, String encoding) throws IOException {
+        astParser = new ASTParser(new StreamProvider(input, encoding));
     }
 
-    public InstanceJavaParser(File file) throws FileNotFoundException
-    {
+    public InstanceJavaParser(File file) throws IOException {
         InputStream input = new BufferedInputStream(new FileInputStream(file));
-        astParser = new ASTParser(input);
+        astParser = new ASTParser(new StreamProvider(input));
     }
 
     public InstanceJavaParser(File file, String encoding)
-            throws FileNotFoundException
-    {
+            throws IOException {
         InputStream input = new BufferedInputStream(new FileInputStream(file));
-        astParser = new ASTParser(input, encoding);
+        astParser = new ASTParser(new StreamProvider(input, encoding));
     }
 
-    public InstanceJavaParser(Reader reader)
-    {
-        astParser = new ASTParser(reader);
+    public InstanceJavaParser(Reader reader) {
+        astParser = new ASTParser(new StreamProvider(reader));
     }
 
     /**

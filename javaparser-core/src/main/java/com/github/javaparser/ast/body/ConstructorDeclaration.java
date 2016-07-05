@@ -23,10 +23,7 @@ package com.github.javaparser.ast.body;
 
 import java.util.List;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -40,7 +37,7 @@ import static com.github.javaparser.ast.internal.Utils.*;
  * @author Julio Vilmar Gesser
  */
 public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration,
-        NamedNode {
+        NamedNode, NodeWithModifiers {
 
     private int modifiers;
 
