@@ -37,7 +37,7 @@ The only configuration that it requires is part of the `TypeSolver` instance to 
 * `JreTypeSolver`: look for the type using reflection. This is needed because some classes are not available in any other way (for example the `Object` class). However this should be used exclusively for files in the java or javax packages
 * `CombinedTypeSolver`: permits to combine several instances of `TypeSolver`s
 
-In the tests you can find an example of instanting `TypeSolver`s:
+In the tests you can find an example of instantiating `TypeSolver`s:
 
 ```java
 CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
