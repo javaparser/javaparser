@@ -24,7 +24,7 @@ package com.github.javaparser.bdd.steps;
 import com.github.javaparser.ASTHelper;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
-import com.github.javaparser.TokenMgrError;
+import com.github.javaparser.TokenMgrException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -326,7 +326,7 @@ public class ParsingSteps {
         try {
             JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
             fail("Lexical error expected");
-        } catch (TokenMgrError e) {
+        } catch (TokenMgrException e) {
             // ok
         }
     }

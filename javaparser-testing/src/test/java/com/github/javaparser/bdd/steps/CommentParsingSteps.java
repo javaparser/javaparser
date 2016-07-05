@@ -23,7 +23,7 @@ package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
-import com.github.javaparser.TokenMgrError;
+import com.github.javaparser.TokenMgrException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
@@ -87,7 +87,7 @@ public class CommentParsingSteps {
         try {
             compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
             fail("Lexical error expected");
-        } catch (TokenMgrError e) {
+        } catch (TokenMgrException e) {
             // ok
         }
     }
