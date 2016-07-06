@@ -42,7 +42,7 @@ import java.io.StringReader;
  * This class was generated automatically by javacc, do not edit.
  * </p>
  * <p>
- * Parse Java 1.5 source code and creates Abstract Syntax Tree classes.
+ * Parse Java source code and creates Abstract Syntax Tree classes.
  * </p>
  *
  * @author Júlio Vilmar Gesser
