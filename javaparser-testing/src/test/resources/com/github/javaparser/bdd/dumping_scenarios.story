@@ -150,3 +150,24 @@ class A {
         return "hello\nworld";
     }
 }
+
+Scenario: Orphaned comments before an initializer block are not lost (issue 263)
+Given the class:
+public class Test {
+            // one line of comment
+            // another line of comment
+
+            {
+                System.out.println("Hello");
+            }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class Test {
+
+    // one line of comment
+    // another line of comment
+    {
+        System.out.println("Hello");
+    }
+}
