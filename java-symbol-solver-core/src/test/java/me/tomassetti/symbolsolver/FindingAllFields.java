@@ -27,4 +27,15 @@ public class FindingAllFields extends AbstractTest {
         assertEquals(ImmutableSet.of("a", "b", "c"),
                 typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
     }
+
+    @Test
+    public void findAllInheritedFieldsAndGenerics() throws ParseException {
+        CompilationUnit cu = parseSample("AClassWithFieldsAndGenerics");
+        ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
+        TypeDeclaration typeDeclaration = JavaParserFacade.get(new JreTypeSolver()).getTypeDeclaration(classC);
+        assertEquals(3, typeDeclaration.getAllFields().size());
+        assertEquals(ImmutableSet.of("a", "b", "c"),
+                typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
+        assertEquals("java.util.List<T>", typeDeclaration.getField("b").getType().describe());
+    }
 }
