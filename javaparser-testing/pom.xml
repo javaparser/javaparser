@@ -23,8 +23,8 @@
     </licenses>
 
     <properties>
-        <junit.version>4.11</junit.version>
-        <jbehave.version>3.9.3</jbehave.version>
+        <junit.version>4.12</junit.version>
+        <jbehave.version>4.0.5</jbehave.version>
     </properties>
     <build>
         <plugins>
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>jbehave-junit-runner</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 
