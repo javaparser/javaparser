@@ -90,7 +90,7 @@ public class InstanceJavaParser {
     public CompilationUnit parse() throws ParseException {
         try {
             return astParser.CompilationUnit();
-        }finally {
+        } finally {
             closeProvider();
         }
     }
@@ -113,7 +113,7 @@ public class InstanceJavaParser {
     public BlockStmt parseBlock() throws ParseException {
         try{
             return astParser.Block();
-        }finally {
+        } finally {
             closeProvider();
         }
     }
@@ -129,7 +129,7 @@ public class InstanceJavaParser {
     public List<?> parseStatements() throws ParseException {
         try {
             return astParser.Statements();
-        }finally {
+        } finally {
             closeProvider();
         }
     }
@@ -145,7 +145,7 @@ public class InstanceJavaParser {
     public Statement parseStatement() throws ParseException {
         try {
             return astParser.Statement();
-        }finally {
+        } finally {
             closeProvider();
         }
     }

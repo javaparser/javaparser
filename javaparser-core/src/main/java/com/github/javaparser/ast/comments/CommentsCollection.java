@@ -58,7 +58,7 @@ public class CommentsCollection {
 
     public boolean contains(Comment comment){
         for (Comment c : getAll()){
-            // we tollerate a difference of one element in the end column:
+            // we tolerate a difference of one element in the end column:
             // it depends how \r and \n are calculated...
             if ( c.getBeginLine()==comment.getBeginLine() &&
                  c.getBeginColumn()==comment.getBeginColumn() &&

@@ -88,6 +88,9 @@ public class CommentsParser {
         }
     }
 
+    /**
+     * Collects all comments in a piece of Java source.
+     */
     public CommentsCollection parse(final Reader in) throws IOException {
         boolean lastWasASlashR = false;
         BufferedReader br = new BufferedReader(in);

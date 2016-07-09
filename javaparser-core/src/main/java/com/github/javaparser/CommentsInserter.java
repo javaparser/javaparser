@@ -46,9 +46,14 @@ class CommentsInserter {
     CommentsInserter() {
     }
 
-    public void insertComments(CompilationUnit cu, String comments) throws IOException {
+    /**
+     * Adds the comments found in the source code of a compilation unit to that compilation unit.
+     * @param cu an already created compilation unit
+     * @param cuSourceCode the source code of the compilation unit. It will be parsed to find comments.
+     */
+    public void insertComments(CompilationUnit cu, String cuSourceCode) throws IOException {
         CommentsParser commentsParser = new CommentsParser();
-        CommentsCollection allComments = commentsParser.parse(comments);
+        CommentsCollection allComments = commentsParser.parse(cuSourceCode);
 
         insertCommentsInCu(cu, allComments);
     }
