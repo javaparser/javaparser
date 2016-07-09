@@ -70,7 +70,7 @@ public final class TypeParameter extends Node implements NamedNode {
         this(beginLine, beginColumn, endLine, endColumn, name, typeBound);
         setName(name);
         setTypeBound(typeBound);
-        this.annotations = annotations;
+	    setAnnotations(annotations);
     }
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -130,5 +130,6 @@ public final class TypeParameter extends Node implements NamedNode {
 
     public void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
+	    setAsParentNodeOf(this.annotations);
     }
 }

@@ -21,15 +21,18 @@
  
 package com.github.javaparser.ast.body;
 
+import java.util.List;
+
+import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-
-import java.util.List;
-
 import static com.github.javaparser.ast.internal.Utils.*;
 
-public abstract class BaseParameter extends Node implements AnnotableNode, NodeWithModifiers {
+public abstract class BaseParameter
+    extends Node
+    implements AnnotableNode, NamedNode, NodeWithModifiers
+{
     private int modifiers;
 
     private List<AnnotationExpr> annotations;
@@ -71,6 +74,11 @@ public abstract class BaseParameter extends Node implements AnnotableNode, NodeW
 
     public VariableDeclaratorId getId() {
         return id;
+    }
+
+    @Override
+    public String getName() {
+        return getId().getName();
     }
 
     /**
