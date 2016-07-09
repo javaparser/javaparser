@@ -90,6 +90,7 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 	 * @see ModifierSet
 	 * @return modifiers
 	 */
+	@Override
 	public int getModifiers() {
 		return modifiers;
 	}

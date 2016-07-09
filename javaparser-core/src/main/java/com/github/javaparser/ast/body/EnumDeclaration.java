@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -89,16 +88,4 @@ public final class EnumDeclaration extends TypeDeclaration {
         this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
     }
-
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
-    }
-
-    @Override
-    public JavadocComment getJavaDoc() {
-        return javadocComment;
-    }
-
-    private JavadocComment javadocComment;
 }
