@@ -186,6 +186,11 @@ public final class JavaParser {
         return parse(file, null,true);
     }
 
+    public static CompilationUnit parse(final Reader reader)
+            throws ParseException {
+        return parse(reader, true);
+    }
+    
     public static CompilationUnit parse(final Reader reader, boolean considerComments)
             throws ParseException {
         try {
