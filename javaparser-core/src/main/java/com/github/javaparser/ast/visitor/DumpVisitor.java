@@ -533,12 +533,12 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
         boolean isFirst = true;
         for (ReferenceType element : n.getElements()) {
-            element.accept(this, arg);
             if (isFirst) {
                 isFirst = false;
             } else {
                 printer.print(" | ");
             }
+	        element.accept(this, arg);
         }
     }
 
