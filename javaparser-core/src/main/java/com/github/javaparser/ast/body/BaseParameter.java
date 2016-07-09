@@ -87,6 +87,7 @@ public abstract class BaseParameter
      * @see ModifierSet
      * @return modifiers
      */
+    @Override
     public int getModifiers() {
         return modifiers;
     }

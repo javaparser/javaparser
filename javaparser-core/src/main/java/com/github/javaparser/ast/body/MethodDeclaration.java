@@ -125,6 +125,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	 * @see ModifierSet
 	 * @return modifiers
 	 */
+	@Override
 	public int getModifiers() {
 		return modifiers;
 	}
@@ -290,15 +291,11 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
         return sb.toString();
     }
 
-    @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
-    }
-
-    @Override
-    public JavadocComment getJavaDoc() {
-        return javadocComment;
-    }
-
-    private JavadocComment javadocComment;
+	@Override
+	public JavadocComment getJavaDoc() {
+		if(getComment() instanceof JavadocComment){
+			return (JavadocComment) getComment();
+		}
+		return null;
+	}
 }

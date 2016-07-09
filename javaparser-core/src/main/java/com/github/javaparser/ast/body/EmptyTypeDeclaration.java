@@ -44,17 +44,7 @@ public final class EmptyTypeDeclaration extends TypeDeclaration {
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
-    }
-
-    @Override
-    public JavadocComment getJavaDoc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
