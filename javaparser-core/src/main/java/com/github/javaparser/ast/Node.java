@@ -21,12 +21,15 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.visitor.*;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.visitor.*;
+import static com.github.javaparser.Position.pos;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -38,14 +41,8 @@ import com.github.javaparser.ast.visitor.*;
  * @author Julio Vilmar Gesser
  */
 public abstract class Node implements Cloneable {
-
-    private int beginLine;
-
-    private int beginColumn;
-
-    private int endLine;
-
-    private int endColumn;
+    private Position begin;
+    private Position end;
 
     private Node parentNode;
 
@@ -60,15 +57,24 @@ public abstract class Node implements Cloneable {
     private Comment comment;
 
     public Node() {
+        begin = new Position(0, 0);
+        end = new Position(0, 0);
     }
 
+    /**
+     * @deprecated prefer using Position objects.
+     */
+    @Deprecated
     public Node(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-        this.beginLine = beginLine;
-        this.beginColumn = beginColumn;
-        this.endLine = endLine;
-        this.endColumn = endColumn;
+        begin = new Position(beginLine, beginColumn);
+        end = new Position(endLine, endColumn);
     }
 
+    public Node(Position begin, Position end) {
+        this.begin = begin;
+        this.end = end;
+    }
+    
     /**
      * Accept method for visitor support.
      * 
@@ -100,18 +106,22 @@ public abstract class Node implements Cloneable {
      * Return the begin column of this node.
      * 
      * @return the begin column of this node
+     * @deprecated prefer using Position objects.
      */
+    @Deprecated
     public final int getBeginColumn() {
-        return beginColumn;
+        return begin.getColumn();
     }
 
     /**
      * Return the begin line of this node.
      * 
      * @return the begin line of this node
+     * @deprecated prefer using Position objects.
      */
+    @Deprecated
     public final int getBeginLine() {
-        return beginLine;
+        return begin.getLine();
     }
 
     /**
@@ -136,18 +146,22 @@ public abstract class Node implements Cloneable {
      * Return the end column of this node.
      * 
      * @return the end column of this node
+     * @deprecated prefer using Position objects.
      */
+    @Deprecated
     public final int getEndColumn() {
-        return endColumn;
+        return end.getColumn();
     }
 
     /**
      * Return the end line of this node.
      * 
      * @return the end line of this node
+     * @deprecated prefer using Position objects.
      */
+    @Deprecated
     public final int getEndLine() {
-        return endLine;
+        return end.getLine();
     }
 
     /**
@@ -155,9 +169,11 @@ public abstract class Node implements Cloneable {
      * 
      * @param beginColumn
      *            the begin column of this node
+     * @deprecated prefer using Position objects.
      */
+    @Deprecated
     public final void setBeginColumn(final int beginColumn) {
-        this.beginColumn = beginColumn;
+        begin = begin.withColumn(beginColumn);
     }
 
     /**
@@ -165,9 +181,39 @@ public abstract class Node implements Cloneable {
      * 
      * @param beginLine
      *            the begin line of this node
+     * @deprecated prefer using Position objects.
      */
+    @Deprecated
     public final void setBeginLine(final int beginLine) {
-        this.beginLine = beginLine;
+        begin = begin.withLine(beginLine);
+    }
+
+    /**
+     * The begin position of this node in the source file.
+     */
+    public Position getBegin() {
+        return begin;
+    }
+
+    /**
+     * The end position of this node in the source file.
+     */
+    public Position getEnd() {
+        return end;
+    }
+
+    /**
+     * Sets the begin position of this node in the source file.
+     */
+    public void setBegin(Position begin) {
+        this.begin = begin;
+    }
+
+    /**
+     * Sets the end position of this node in the source file.
+     */
+    public void setEnd(Position end) {
+        this.end = end;
     }
 
     /**
@@ -203,9 +249,11 @@ public abstract class Node implements Cloneable {
      * 
      * @param endColumn
      *            the end column of this node
+     * @deprecated prefer using Position objects.
      */
+    @Deprecated
     public final void setEndColumn(final int endColumn) {
-        this.endColumn = endColumn;
+        end = end.withColumn(endColumn);
     }
 
     /**
@@ -213,9 +261,11 @@ public abstract class Node implements Cloneable {
      * 
      * @param endLine
      *            the end line of this node
+     * @deprecated prefer using Position objects.
      */
+    @Deprecated
     public final void setEndLine(final int endLine) {
-        this.endLine = endLine;
+        end = end.withLine(endLine);
     }
 
     /**
@@ -263,11 +313,7 @@ public abstract class Node implements Cloneable {
     }
 
     public boolean contains(Node other) {
-        if (getBeginLine() > other.getBeginLine()) return false;
-        if (getBeginLine() == other.getBeginLine() && getBeginColumn() > other.getBeginColumn()) return false;
-        if (getEndLine() < other.getEndLine()) return false;
-        if (getEndLine() == other.getEndLine() && getEndColumn() < other.getEndColumn()) return false;
-        return true;
+        return begin.isBefore(other.begin) && end.isAfter(other.end);
     }
 
     public void addOrphanComment(Comment comment) {
@@ -347,26 +393,27 @@ public abstract class Node implements Cloneable {
     public static final int ABSOLUTE_BEGIN_LINE = -1;
     public static final int ABSOLUTE_END_LINE = -2;
 
+    /**
+     * @deprecated prefer using Position objects.
+     */
+    @Deprecated
     public boolean isPositionedAfter(int line, int column) {
-        if (line == ABSOLUTE_BEGIN_LINE) return true;
-        if (getBeginLine() > line) {
-            return true;
-        } else if (getBeginLine() == line) {
-            return getBeginColumn() > column;
-        } else {
-            return false;
-        }
+        return begin.isAfter(pos(line, column));
     }
 
+    public boolean isPositionedAfter(Position position) {
+        return begin.isAfter(position);
+    }
+    /**
+     * @deprecated prefer using Position objects.
+     */
+    @Deprecated
     public boolean isPositionedBefore(int line, int column) {
-        if (line == ABSOLUTE_END_LINE) return true;
-        if (getEndLine() < line) {
-            return true;
-        } else if (getEndLine() == line) {
-            return getEndColumn() < column;
-        } else {
-            return false;
-        }
+        return end.isBefore(pos(line, column));
+    }
+
+    public boolean isPositionedBefore(Position position) {
+        return end.isBefore(position);
     }
 
     public boolean hasComment()

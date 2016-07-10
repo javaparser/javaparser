@@ -18,36 +18,78 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
 
-public class Position {
-    private int line;
-    private int column;
+/**
+ * A position in a source file. Lines and columns start counting at 1.
+ */
+public class Position implements Comparable<Position> {
+    private final int line;
+    private final int column;
 
-    public static final Position ABSOLUTE_START = new Position(Node.ABSOLUTE_BEGIN_LINE,-1);
-    public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE,-1);
+    public static final Position ABSOLUTE_START = new Position(Node.ABSOLUTE_BEGIN_LINE, -1);
+    public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE, -1);
 
-    public static Position beginOf(Node node){
-        return new Position(node.getBeginLine(),node.getBeginColumn());
-    }
-
-    public static Position endOf(Node node){
-        return new Position(node.getEndLine(),node.getEndColumn());
-    }
-
-    public Position(int line, int column){
+    public Position(int line, int column) {
         this.line = line;
         this.column = column;
     }
 
-    public int getLine(){
+    /**
+     * Convenient factory method.
+     */
+    public static Position pos(int line, int column) {
+        return new Position(line, column);
+    }
+
+    public int getLine() {
         return this.line;
     }
 
-    public int getColumn(){
+    public int getColumn() {
         return this.column;
+    }
+
+    public Position withColumn(int column) {
+        return new Position(line, column);
+    }
+
+    public Position withLine(int line) {
+        return new Position(line, column);
+    }
+
+    public boolean isAfter(Position position) {
+        if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
+        if (line > position.line) {
+            return true;
+        } else if (line == position.line) {
+            return column > position.column;
+        }
+        return false;
+
+    }
+
+    public boolean isBefore(Position position) {
+        if (position.line == Node.ABSOLUTE_END_LINE) return true;
+        if (line < position.line) {
+            return true;
+        } else if (line == position.line) {
+            return column < position.column;
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(Position o) {
+        if (isBefore(o)) {
+            return -1;
+        }
+        if (isAfter(o)) {
+            return 1;
+        }
+        return 0;
     }
 }
