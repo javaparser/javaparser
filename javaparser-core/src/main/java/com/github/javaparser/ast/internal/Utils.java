@@ -27,7 +27,6 @@ import java.util.List;
 
 /**
  * @author Federico Tomassetti
- * @since 3.0.0
  */
 public class Utils {
     public static <T> List<T> ensureNotNull(List<T> list) {

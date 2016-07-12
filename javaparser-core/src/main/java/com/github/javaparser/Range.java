@@ -12,6 +12,12 @@ public class Range {
     public final Position end;
 
     public Range(Position begin, Position end) {
+        if (begin == null) {
+            throw new IllegalArgumentException("begin can't be null");
+        }
+        if (end == null) {
+            throw new IllegalArgumentException("end can't be null");
+        }
         this.begin = begin;
         this.end = end;
     }
@@ -49,11 +55,11 @@ public class Range {
     }
 
     public Range withBegin(Position begin) {
-        return range(begin, end);
+        return range(begin, this.end);
     }
 
     public Range withEnd(Position end) {
-        return range(begin, end);
+        return range(this.begin, end);
     }
 
     public boolean contains(Range other) {
@@ -66,5 +72,24 @@ public class Range {
 
     public boolean isAfter(Position position) {
         return begin.isAfter(position);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Range range = (Range) o;
+
+        if (begin != null ? !begin.equals(range.begin) : range.begin != null) return false;
+        return end != null ? end.equals(range.end) : range.end == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = begin != null ? begin.hashCode() : 0;
+        result = 31 * result + (end != null ? end.hashCode() : 0);
+        return result;
     }
 }
