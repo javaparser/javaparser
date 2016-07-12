@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast;
 
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -27,7 +27,10 @@ import com.github.javaparser.ast.comments.JavadocComment;
  * Node which can be documented through a Javadoc comment.
  */
 public interface DocumentableNode {
-
-    public JavadocComment getJavaDoc();
-    public void setJavaDoc(JavadocComment javadocComment);
+    /**
+     * Gets the JavaDoc for this node. You can set the JavaDoc by calling setComment with a JavadocComment.
+     *
+     * @return The JavaDoc for this node if it exists, null if it doesn't.
+     */
+    JavadocComment getJavaDoc();
 }

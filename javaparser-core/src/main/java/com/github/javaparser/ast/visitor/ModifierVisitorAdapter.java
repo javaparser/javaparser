@@ -21,10 +21,10 @@
  
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.ast.comments.BlockComment;
+import java.util.List;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
@@ -40,13 +40,15 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ArrayAccessExpr;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
@@ -106,10 +108,15 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.*;
-
-import java.util.LinkedList;
-import java.util.List;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.IntersectionType;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.type.WildcardType;
 
 /**
  * This visitor adapter can be used to save time when some specific nodes needs
@@ -129,9 +136,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final AnnotationDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -150,9 +154,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final AnnotationMemberDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -212,14 +213,32 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final AssignExpr n, final A arg) {
-		n.setTarget((Expression) n.getTarget().accept(this, arg));
-		n.setValue((Expression) n.getValue().accept(this, arg));
+		final Expression target = (Expression) n.getTarget().accept(this, arg);
+		if (target == null) {
+			return null;
+		}
+		n.setTarget(null);
+
+		final Expression value = (Expression) n.getValue().accept(this, arg);
+		if (value == null) {
+			return null;
+		}
+		n.setValue(value);
+
 		return n;
 	}
 
 	@Override public Node visit(final BinaryExpr n, final A arg) {
-		n.setLeft((Expression) n.getLeft().accept(this, arg));
-		n.setRight((Expression) n.getRight().accept(this, arg));
+		final Expression left = (Expression) n.getLeft().accept(this, arg);
+		final Expression right = (Expression) n.getRight().accept(this, arg);
+		if (left == null) {
+			return right;
+		}
+		if (right == null) {
+			return left;
+		}
+		n.setLeft(left);
+		n.setRight(right);
 		return n;
 	}
 
@@ -243,8 +262,16 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final CastExpr n, final A arg) {
-		n.setType((Type) n.getType().accept(this, arg));
-		n.setExpr((Expression) n.getExpr().accept(this, arg));
+		final Type type = (Type) n.getType().accept(this, arg);
+		final Expression expr = (Expression) n.getExpr().accept(this, arg);
+		if (type == null) {
+			return expr;
+		}
+		if (expr == null) {
+			return null;
+		}
+		n.setType(type);
+		n.setExpr(expr);
 		return n;
 	}
 
@@ -265,9 +292,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final ClassOrInterfaceDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -349,9 +373,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final ConstructorDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -373,10 +394,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(parameters);
 		}
-		final List<NameExpr> throwz = n.getThrows();
+		final List<ReferenceType> throwz = n.getThrows();
 		if (throwz != null) {
 			for (int i = 0; i < throwz.size(); i++) {
-				throwz.set(i, (NameExpr) throwz.get(i).accept(this, arg));
+				throwz.set(i, (ReferenceType) throwz.get(i).accept(this, arg));
 			}
 			removeNulls(throwz);
 		}
@@ -389,8 +410,18 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final DoStmt n, final A arg) {
-		n.setBody((Statement) n.getBody().accept(this, arg));
-		n.setCondition((Expression) n.getCondition().accept(this, arg));
+		final Statement body = (Statement) n.getBody().accept(this, arg);
+		if (body == null) {
+			return null;
+		}
+		n.setBody(body);
+
+		final Expression condition = (Expression) n.getCondition().accept(this, arg);
+		if (condition == null) {
+			return null;
+		}
+		n.setCondition(condition);
+
 		return n;
 	}
 
@@ -399,9 +430,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final EmptyMemberDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		return n;
 	}
 
@@ -410,9 +438,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final EmptyTypeDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		return n;
 	}
 
@@ -422,9 +447,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final EnumConstantDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -450,9 +472,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final EnumDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -506,19 +525,24 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final ExpressionStmt n, final A arg) {
-		n.setExpression((Expression) n.getExpression().accept(this, arg));
+		final Expression expr = (Expression) n.getExpression().accept(this, arg);
+		if (expr == null) {
+			return null;
+		}
+		n.setExpression(expr);
 		return n;
 	}
 
 	@Override public Node visit(final FieldAccessExpr n, final A arg) {
-		n.setScope((Expression) n.getScope().accept(this, arg));
+		final Expression scope = (Expression) n.getScope().accept(this, arg);
+		if (scope == null) {
+			return null;
+		}
+		n.setScope(scope);
 		return n;
 	}
 
 	@Override public Node visit(final FieldDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -565,8 +589,20 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final IfStmt n, final A arg) {
-		n.setCondition((Expression) n.getCondition().accept(this, arg));
-		n.setThenStmt((Statement) n.getThenStmt().accept(this, arg));
+		final Expression condition = (Expression)
+			n.getCondition().accept(this, arg);
+		if (condition == null) {
+			return null;
+		}
+		n.setCondition(condition);
+		final Statement thenStmt = (Statement) n.getThenStmt().accept(this, arg);
+		if (thenStmt == null) {
+			// Remove the entire statement if the then-clause was removed.
+			// DumpVisitor, used for toString, has no null check for the
+			// then-clause.
+			return null;
+		}
+		n.setThenStmt(thenStmt);
 		if (n.getElseStmt() != null) {
 			n.setElseStmt((Statement) n.getElseStmt().accept(this, arg));
 		}
@@ -579,9 +615,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final InitializerDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		n.setBlock((BlockStmt) n.getBlock().accept(this, arg));
 		return n;
 	}
@@ -649,9 +682,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final MethodDeclaration n, final A arg) {
-		if (n.getJavaDoc() != null) {
-			n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg));
-		}
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -928,17 +958,37 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(annotations);
 		}
-		n.setType((Type) n.getType().accept(this, arg));
-		final List<VariableDeclarator> vars = n.getVars();
-		for (int i = 0; i < vars.size(); i++) {
-			vars.set(i, (VariableDeclarator) vars.get(i).accept(this, arg));
+
+		final Type type = (Type) n.getType().accept(this, arg);
+		if (type == null) {
+			return null;
 		}
-		removeNulls(vars);
+		n.setType(type);
+
+		final List<VariableDeclarator> vars = n.getVars();
+		for (int i = 0; i < vars.size();) {
+			final VariableDeclarator decl = (VariableDeclarator)
+				vars.get(i).accept(this, arg);
+			if (decl == null) {
+				vars.remove(i);
+			} else {
+				vars.set(i++, decl);
+			}
+		}
+		if (vars.isEmpty()) {
+			return null;
+		}
+
 		return n;
 	}
 
 	@Override public Node visit(final VariableDeclarator n, final A arg) {
-		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
+		final VariableDeclaratorId id = (VariableDeclaratorId)
+			n.getId().accept(this, arg);
+		if (id == null) {
+			return null;
+		}
+		n.setId(id);
 		if (n.getInit() != null) {
 			n.setInit((Expression) n.getInit().accept(this, arg));
 		}

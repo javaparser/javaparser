@@ -93,6 +93,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
      * @see ModifierSet
      * @return modifiers
      */
+    @Override
     public int getModifiers() {
         return modifiers;
     }
@@ -123,14 +124,10 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     }
 
     @Override
-    public void setJavaDoc(JavadocComment javadocComment) {
-        this.javadocComment = javadocComment;
-    }
-
-    @Override
     public JavadocComment getJavaDoc() {
-        return javadocComment;
+        if(getComment() instanceof JavadocComment){
+            return (JavadocComment) getComment();
+        }
+        return null;
     }
-
-    private JavadocComment javadocComment;
 }

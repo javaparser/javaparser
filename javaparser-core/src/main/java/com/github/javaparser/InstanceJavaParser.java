@@ -32,33 +32,41 @@ import java.io.*;
 import java.util.List;
 
 /**
+ * A thin wrapper around ASTParser with a few convenience methods for parsing CompilationUnits, Blocks, Statements, etc.
+ * 
  * @author Sebastian Kuerten
  */
 public class InstanceJavaParser {
+    private final ASTParser astParser;
+    private final Provider provider;
 
-    private ASTParser astParser;
-
-    public InstanceJavaParser(InputStream input) throws IOException {
-        astParser = new ASTParser(new StreamProvider(input));
-    }
-
-    public InstanceJavaParser(InputStream input, String encoding) throws IOException {
-        astParser = new ASTParser(new StreamProvider(input, encoding));
-    }
-
-    public InstanceJavaParser(File file) throws IOException {
-        InputStream input = new BufferedInputStream(new FileInputStream(file));
-        astParser = new ASTParser(new StreamProvider(input));
-    }
-
-    public InstanceJavaParser(File file, String encoding)
-            throws IOException {
-        InputStream input = new BufferedInputStream(new FileInputStream(file));
-        astParser = new ASTParser(new StreamProvider(input, encoding));
+    public InstanceJavaParser(Provider provider) {
+        this.provider=provider;
+        astParser = new ASTParser(provider);
     }
 
     public InstanceJavaParser(Reader reader) {
-        astParser = new ASTParser(new StreamProvider(reader));
+        this(new StreamProvider(reader));
+    }
+
+    public InstanceJavaParser(InputStream input) throws IOException {
+        this(new StreamProvider(input));
+    }
+
+    public InstanceJavaParser(InputStream input, String encoding) throws IOException {
+        this(new StreamProvider(input, encoding));
+    }
+
+    public InstanceJavaParser(File file) throws IOException {
+        this(new FileInputStream(file));
+    }
+
+    public InstanceJavaParser(File file, String encoding) throws IOException {
+        this(new FileInputStream(file), encoding);
+    }
+    
+    public InstanceJavaParser(String source) {
+        this(new StringReader(source));
     }
 
     /**
@@ -80,7 +88,19 @@ public class InstanceJavaParser {
      *             if the source code has parser errors
      */
     public CompilationUnit parse() throws ParseException {
-        return astParser.CompilationUnit();
+        try {
+            return astParser.CompilationUnit();
+        } finally {
+            closeProvider();
+        }
+    }
+
+    private void closeProvider() {
+        try {
+            provider.close();
+        } catch (IOException e) {
+            // Since we're done parsing and have our result, we don't care about any errors.
+        }
     }
 
     /**
@@ -91,7 +111,11 @@ public class InstanceJavaParser {
      *             if the source code has parser errors
      */
     public BlockStmt parseBlock() throws ParseException {
-        return astParser.Block();
+        try{
+            return astParser.Block();
+        } finally {
+            closeProvider();
+        }
     }
 
     /**
@@ -103,7 +127,11 @@ public class InstanceJavaParser {
      *             if the source code has parser errors
      */
     public List<?> parseStatements() throws ParseException {
-        return astParser.Statements();
+        try {
+            return astParser.Statements();
+        } finally {
+            closeProvider();
+        }
     }
 
     /**
@@ -115,7 +143,11 @@ public class InstanceJavaParser {
      *             if the source code has parser errors
      */
     public Statement parseStatement() throws ParseException {
-        return astParser.Statement();
+        try {
+            return astParser.Statement();
+        } finally {
+            closeProvider();
+        }
     }
 
     /**
@@ -127,7 +159,11 @@ public class InstanceJavaParser {
      *             if the source code has parser errors
      */
     public ImportDeclaration parseImport() throws ParseException {
-        return astParser.ImportDeclaration();
+        try {
+            return astParser.ImportDeclaration();
+        } finally {
+            closeProvider();
+        }
     }
 
     /**
@@ -139,7 +175,11 @@ public class InstanceJavaParser {
      *             if the source code has parser errors
      */
     public Expression parseExpression() throws ParseException {
-        return astParser.Expression();
+        try {
+            return astParser.Expression();
+        } finally {
+            closeProvider();
+        }
     }
 
     /**
@@ -151,7 +191,11 @@ public class InstanceJavaParser {
      *             if the source code has parser errors
      */
     public AnnotationExpr parseAnnotation() throws ParseException {
-        return astParser.Annotation();
+        try {
+            return astParser.Annotation();
+        } finally {
+            closeProvider();
+        }
     }
 
     /**
@@ -163,7 +207,11 @@ public class InstanceJavaParser {
      *             if the source code has parser errors
      */
     public BodyDeclaration parseBodyDeclaration() throws ParseException {
-        return astParser.AnnotationBodyDeclaration();
+        try {
+            return astParser.AnnotationBodyDeclaration();
+        } finally {
+            closeProvider();
+        }
     }
 
     /**
@@ -179,7 +227,10 @@ public class InstanceJavaParser {
      */
     public BodyDeclaration parseClassOrInterfaceBodyDeclaration(
             boolean isInterface) throws ParseException {
-        return astParser.ClassOrInterfaceBodyDeclaration(isInterface);
+        try {
+            return astParser.ClassOrInterfaceBodyDeclaration(isInterface);
+        } finally {
+            closeProvider();
+        }
     }
-
 }
