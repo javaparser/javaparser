@@ -21,8 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -41,8 +44,16 @@ public final class ArrayAccessExpr extends Expression {
         setIndex(index);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ArrayAccessExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression name, Expression index) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, index);
+    }
+    
+    public ArrayAccessExpr(Range range, Expression name, Expression index) {
+        super(range);
         setName(name);
         setIndex(index);
     }

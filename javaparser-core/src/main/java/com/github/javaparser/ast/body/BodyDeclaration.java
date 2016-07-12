@@ -21,11 +21,14 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.internal.Utils;
 
 import java.util.List;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -41,8 +44,16 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
     	setAnnotations(annotations);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public BodyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations);
+    }
+
+    public BodyDeclaration(Range range, List<AnnotationExpr> annotations) {
+        super(range);
     	setAnnotations(annotations);
     }
 

@@ -21,6 +21,10 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
+
+import static com.github.javaparser.Position.pos;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -30,9 +34,17 @@ public abstract class AnnotationExpr extends Expression {
 
 	public AnnotationExpr() {}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public AnnotationExpr(int beginLine, int beginColumn, int endLine,
-			int endColumn) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	                      int endColumn) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
+	}
+	
+	public AnnotationExpr(Range range) {
+		super(range);
 	}
 
 	public NameExpr getName() {

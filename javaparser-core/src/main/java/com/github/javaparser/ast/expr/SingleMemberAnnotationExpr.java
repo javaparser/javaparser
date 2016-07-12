@@ -21,8 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -39,9 +42,17 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 		setMemberValue(memberValue);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public SingleMemberAnnotationExpr(final int beginLine, final int beginColumn, final int endLine,
-			final int endColumn, final NameExpr name, final Expression memberValue) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	                                  final int endColumn, final NameExpr name, final Expression memberValue) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, memberValue);
+	}
+	
+	public SingleMemberAnnotationExpr(final Range range, final NameExpr name, final Expression memberValue) {
+		super(range);
 		setName(name);
 		setMemberValue(memberValue);
 	}

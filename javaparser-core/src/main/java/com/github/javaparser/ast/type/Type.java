@@ -21,11 +21,14 @@
  
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -42,15 +45,20 @@ public abstract class Type extends Node {
         this.annotations = annotation;
     }
 
-    public Type(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public Type(Range range) {
+        super(range);
+    }
+    
+    @Deprecated
+    public Type(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations);
     }
 
-    public Type(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
-        super(beginLine, beginColumn, endLine, endColumn);
+    public Type(Range range, List<AnnotationExpr> annotations) {
+        super(range);
         this.annotations = annotations;
     }
-
+    
     public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;

@@ -27,11 +27,15 @@ import com.github.javaparser.ast.Node;
  * A position in a source file. Lines and columns start counting at 1.
  */
 public class Position implements Comparable<Position> {
-    private final int line;
-    private final int column;
+    public final int line;
+    public final int column;
 
     public static final Position ABSOLUTE_START = new Position(Node.ABSOLUTE_BEGIN_LINE, -1);
     public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE, -1);
+    
+    /** The first position in the file */
+    public static final Position HOME = new Position(1, 1);
+    public static final Position UNKNOWN= new Position(0, 0);
 
     public Position(int line, int column) {
         this.line = line;

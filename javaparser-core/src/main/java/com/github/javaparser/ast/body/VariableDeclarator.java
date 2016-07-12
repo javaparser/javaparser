@@ -21,10 +21,13 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -53,8 +56,16 @@ public final class VariableDeclarator extends Node {
     	setInit(init);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public VariableDeclarator(int beginLine, int beginColumn, int endLine, int endColumn, VariableDeclaratorId id, Expression init) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), id, init);
+    }
+    
+    public VariableDeclarator(Range range, VariableDeclaratorId id, Expression init) {
+        super(range);
         setId(id);
         setInit(init);
     }

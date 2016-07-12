@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
@@ -29,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 public class MultiTypeParameter extends BaseParameter {
@@ -41,8 +43,16 @@ public class MultiTypeParameter extends BaseParameter {
         this.type = type;
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
-        super(beginLine, beginColumn, endLine, endColumn, modifiers, annotations, id);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, id);
+    }
+    
+    public MultiTypeParameter(Range range, int modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
+        super(range, modifiers, annotations, id);
         this.type = type;
 	}
 

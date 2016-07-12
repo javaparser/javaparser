@@ -21,11 +21,13 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
@@ -42,8 +44,16 @@ public final class ArrayInitializerExpr extends Expression {
        setValues(values);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ArrayInitializerExpr(int beginLine, int beginColumn, int endLine, int endColumn, List<Expression> values) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), values);
+    }
+    
+    public ArrayInitializerExpr(Range range, List<Expression> values) {
+        super(range);
         setValues(values);
     }
 

@@ -21,10 +21,13 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -35,8 +38,16 @@ public final class EmptyMemberDeclaration extends BodyDeclaration implements Doc
         super(null);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public EmptyMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn, null);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
+    }
+    
+    public EmptyMemberDeclaration(Range range) {
+        super(range, null);
     }
 
     @Override

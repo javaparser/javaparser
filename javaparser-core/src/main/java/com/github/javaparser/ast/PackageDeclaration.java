@@ -21,15 +21,16 @@
  
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.internal.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * <p>
@@ -62,8 +63,16 @@ public final class PackageDeclaration extends Node {
         setName(name);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public PackageDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, NameExpr name) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, name);
+    }
+    
+    public PackageDeclaration(Range range, List<AnnotationExpr> annotations, NameExpr name) {
+        super(range);
         setAnnotations(annotations);
         setName(name);
     }

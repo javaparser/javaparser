@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import java.util.List;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -31,6 +32,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -70,10 +72,20 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         setBlock(block);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters, name, parameters, throws_, block);
+    }
+    
+    public ConstructorDeclaration(Range range, int modifiers,
+                                  List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
+                                  List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
+        super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);

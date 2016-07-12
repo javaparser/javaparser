@@ -21,12 +21,15 @@
  
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -46,10 +49,19 @@ public final class SwitchEntryStmt extends Statement {
 		setStmts(stmts);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public SwitchEntryStmt(final int beginLine, final int beginColumn,
-			final int endLine, final int endColumn, final Expression label,
-			final List<Statement> stmts) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	                       final int endLine, final int endColumn, final Expression label,
+	                       final List<Statement> stmts) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), label, stmts);
+	}
+
+	public SwitchEntryStmt(Range range, final Expression label,
+	                       final List<Statement> stmts) {
+		super(range);
 		setLabel(label);
 		setStmts(stmts);
 	}

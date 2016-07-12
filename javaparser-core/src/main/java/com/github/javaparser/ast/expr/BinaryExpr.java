@@ -21,8 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -66,8 +69,16 @@ public final class BinaryExpr extends Expression {
     	setOperator(op);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public BinaryExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression left, Expression right, Operator op) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), left, right, op);
+    }
+    
+    public BinaryExpr(Range range, Expression left, Expression right, Operator op) {
+        super(range);
     	setLeft(left);
     	setRight(right);
     	setOperator(op);

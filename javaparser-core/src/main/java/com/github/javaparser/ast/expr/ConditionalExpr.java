@@ -21,8 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -44,8 +47,16 @@ public final class ConditionalExpr extends Expression {
         setElseExpr(elseExpr);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ConditionalExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression condition, Expression thenExpr, Expression elseExpr) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), condition, thenExpr, elseExpr);
+    }
+    
+    public ConditionalExpr(Range range, Expression condition, Expression thenExpr, Expression elseExpr) {
+        super(range);
         setCondition(condition);
         setThenExpr(thenExpr);
         setElseExpr(elseExpr);

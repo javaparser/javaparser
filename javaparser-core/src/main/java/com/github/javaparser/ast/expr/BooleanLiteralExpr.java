@@ -21,8 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,8 +41,16 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     	setValue(value);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public BooleanLiteralExpr(int beginLine, int beginColumn, int endLine, int endColumn, boolean value) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), value);
+    }
+    
+    public BooleanLiteralExpr(Range range, boolean value) {
+        super(range);
         setValue(value);
     }
 

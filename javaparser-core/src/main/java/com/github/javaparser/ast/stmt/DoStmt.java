@@ -21,9 +21,13 @@
  
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -42,9 +46,17 @@ public final class DoStmt extends Statement {
 		setCondition(condition);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public DoStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Statement body, final Expression condition) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	              final Statement body, final Expression condition) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), body, condition);
+	}
+
+	public DoStmt(Range range, final Statement body, final Expression condition) {
+		super(range);
 		setBody(body);
 		setCondition(condition);
 	}

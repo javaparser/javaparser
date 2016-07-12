@@ -53,6 +53,8 @@ import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import static com.github.javaparser.Range.*;
+import static com.github.javaparser.Position.*;
 
 /**
  * <p>This class was generated automatically by javacc, do not edit.</p>
@@ -1180,7 +1182,7 @@ CompilationUnit CompilationUnit():
     in = EmptyImportDeclaration() { if(line==-1){line = in.getBeginLine(); column = in.getBeginColumn();} imports = add(imports, in); } )*
   ( tn = TypeDeclaration() { if(line==-1){line = tn.getBeginLine(); column = tn.getBeginColumn();} types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
-  { return new CompilationUnit(line == -1 ? 0 : line, column, token.endLine, token.endColumn,pakage, imports, types); }
+  { return new CompilationUnit(line == -1 ? Range.UNKNOWN : range(line, column, token.endLine, token.endColumn),pakage, imports, types); }
 }
 
 ImportDeclaration EmptyImportDeclaration():
@@ -1190,7 +1192,7 @@ ImportDeclaration EmptyImportDeclaration():
 }
 {
     ";"
-    { return ImportDeclaration.createEmptyDeclaration(line, column, token.endLine, token.endColumn); }
+    { return ImportDeclaration.createEmptyDeclaration(range(line, column, token.endLine, token.endColumn)); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -1204,7 +1206,7 @@ PackageDeclaration PackageDeclaration():
 {
 ( ann = Annotation() { annotations = add(annotations, ann); } )*
   "package" {line=token.beginLine; column=token.beginColumn;}  name = Name() ";"
-  { return new PackageDeclaration(line, column, token.endLine, token.endColumn,annotations, name); }
+  { return new PackageDeclaration(range(line, column, token.endLine, token.endColumn),annotations, name); }
 }
 
 ImportDeclaration ImportDeclaration():
@@ -1217,7 +1219,7 @@ ImportDeclaration ImportDeclaration():
 }
 {
   "import" {line=token.beginLine; column=token.beginColumn;} [ "static" { isStatic = true; } ] name = Name() [ "." "*" { isAsterisk = true; } ] ";"
-  { return new ImportDeclaration(line, column, token.endLine, token.endColumn,name, isStatic, isAsterisk); }
+  { return new ImportDeclaration(range(line, column, token.endLine, token.endColumn),name, isStatic, isAsterisk); }
 }
 
 /*
@@ -1280,7 +1282,7 @@ TypeDeclaration TypeDeclaration():
 {
   {  }
   (
-    ";" { ret = new EmptyTypeDeclaration(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
+    ";" { ret = new EmptyTypeDeclaration(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn)); }
   |
     modifier = Modifiers()
     (
@@ -1314,7 +1316,7 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(Modifier modifier):
   [ impList = ImplementsList(isInterface) ]
   members = ClassOrInterfaceBody(isInterface)
 
-  { ClassOrInterfaceDeclaration tmp = new ClassOrInterfaceDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, isInterface, null, typePar, extList, impList, members);
+  { ClassOrInterfaceDeclaration tmp = new ClassOrInterfaceDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, isInterface, null, typePar, extList, impList, members);
     tmp.setNameExpr(name);
     return tmp;
   }
@@ -1380,7 +1382,7 @@ EnumDeclaration EnumDeclaration(Modifier modifier):
   "}"
 
   {
-      EnumDeclaration tmp = new EnumDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, null, impList, entries, members);
+      EnumDeclaration tmp = new EnumDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, null, impList, entries, members);
       tmp.setNameExpr(name);
       return tmp;
   }
@@ -1404,7 +1406,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
   <IDENTIFIER> { name = token.image; if(line==-1){line=token.beginLine; column=token.beginColumn;} } 
   [ args = Arguments() ] [ classBody = ClassOrInterfaceBody(false) ]
   { 
-      EnumConstantDeclaration tmp = new EnumConstantDeclaration(line, column, token.endLine, token.endColumn, annotations, name, args, classBody);  
+      EnumConstantDeclaration tmp = new EnumConstantDeclaration(range(line, column, token.endLine, token.endColumn), annotations, name, args, classBody);  
        
       return tmp;
   }
@@ -1436,7 +1438,7 @@ TypeParameter TypeParameter():
 }
 {
    <IDENTIFIER> { name = token.image; line=token.beginLine; column=token.beginColumn;} [ typeBound = TypeBound() ]
-   { return new TypeParameter(line, column, token.endLine, token.endColumn,name, typeBound); }
+   { return new TypeParameter(range(line, column, token.endLine, token.endColumn),name, typeBound); }
 }
 
 List TypeBound():
@@ -1526,7 +1528,7 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	    }
 	  }
 	|
-	  ";" { ret = new EmptyMemberDeclaration(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
+	  ";" { ret = new EmptyMemberDeclaration(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn)); }
   )
   { return ret; }
 }
@@ -1547,7 +1549,7 @@ FieldDeclaration FieldDeclaration(Modifier modifier):
   	int line = modifier.beginLine;
   	int column = modifier.beginColumn;
   	if (line == -1) { line=type.getBeginLine(); column=type.getBeginColumn(); }
-  	return new FieldDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, variables);
+  	return new FieldDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, type, variables);
   }
 }
 
@@ -1558,7 +1560,7 @@ VariableDeclarator VariableDeclarator():
 }
 {
   id = VariableDeclaratorId() [ "=" init = VariableInitializer() ]
-  { return new  VariableDeclarator(id.getBeginLine(), id.getBeginColumn(), token.endLine, token.endColumn, id, init); }
+  { return new  VariableDeclarator(range(id.getBeginLine(), id.getBeginColumn(), token.endLine, token.endColumn), id, init); }
 }
 
 VariableDeclaratorId VariableDeclaratorId():
@@ -1570,7 +1572,7 @@ VariableDeclaratorId VariableDeclaratorId():
 }
 {
   <IDENTIFIER> { name = token.image; line=token.beginLine; column=token.beginColumn;}  ( "[" "]" { arrayCount++; } )*
-  { return new VariableDeclaratorId(line, column, token.endLine, token.endColumn,name, arrayCount); }
+  { return new VariableDeclaratorId(range(line, column, token.endLine, token.endColumn),name, arrayCount); }
 }
 
 Expression VariableInitializer():
@@ -1595,7 +1597,7 @@ ArrayInitializerExpr ArrayInitializer():
 }
 {
   "{" {line=token.beginLine; column=token.beginColumn;} [ val = VariableInitializer() { values = add(values, val); } ( LOOKAHEAD(2) "," val = VariableInitializer() { values = add(values, val); } )* ] [ "," ] "}"
-  { return new ArrayInitializerExpr(line, column, token.endLine, token.endColumn,values); }
+  { return new ArrayInitializerExpr(range(line, column, token.endLine, token.endColumn),values); }
 }
 
 MethodDeclaration MethodDeclaration(Modifier modifier):
@@ -1620,7 +1622,7 @@ MethodDeclaration MethodDeclaration(Modifier modifier):
     ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
   { 
-      MethodDeclaration tmp = new MethodDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, typeParameters, type, null, parameters, arrayCount, throws_, block);
+      MethodDeclaration tmp = new MethodDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, typeParameters, type, null, parameters, arrayCount, throws_, block);
       tmp.setNameExpr(name);
       return tmp;
   }
@@ -1693,7 +1695,7 @@ Parameter FormalParameter():
     int line = modifier.beginLine;
     int column = modifier.beginColumn;
     if(line==-1){ line=type.getBeginLine(); column=type.getBeginColumn(); }
-    return new Parameter(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, isVarArg, id);
+    return new Parameter(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, type, isVarArg, id);
   }
 }
 
@@ -1725,7 +1727,7 @@ ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
   	if (exConsInv != null) {
   		stmts = add(0, stmts, exConsInv);
   	}
-  	ConstructorDeclaration tmp = new ConstructorDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, typeParameters, null, parameters, throws_, new BlockStmt(bbLine, bbColumn, token.endLine, token.endColumn, stmts));
+  	ConstructorDeclaration tmp = new ConstructorDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, typeParameters, null, parameters, throws_, new BlockStmt(range(bbLine, bbColumn, token.endLine, token.endColumn), stmts));
     tmp.setNameExpr(name);
     return tmp;
   }
@@ -1756,7 +1758,7 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	  <SUPER> {if (line == -1) {line=token.beginLine; column=token.beginColumn;}}
 	  args = Arguments() ";"
   )
-  { return new ExplicitConstructorInvocationStmt(line, column, token.endLine, token.endColumn,typeArgs, isThis, expr, args); }
+  { return new ExplicitConstructorInvocationStmt(range(line, column, token.endLine, token.endColumn),typeArgs, isThis, expr, args); }
 }
 
 List Statements():
@@ -1778,7 +1780,7 @@ InitializerDeclaration InitializerDeclaration():
 }
 {
   [ "static" { isStatic = true; line=token.beginLine; column=token.beginColumn;} ] block = Block() {if(line==-1){line=block.getBeginLine(); column=block.getBeginColumn();}}
-  { return new InitializerDeclaration(line, column, token.endLine, token.endColumn, isStatic, block); }
+  { return new InitializerDeclaration(range(line, column, token.endLine, token.endColumn), isStatic, block); }
 }
 
 
@@ -1813,7 +1815,7 @@ ReferenceType ReferenceType():
   |
    type = ClassOrInterfaceType()  ( LOOKAHEAD(2) (ann = Annotation()   { annotations = add(annotations, ann);  })* "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )*
   )
-  { return new ReferenceType(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type, arrayCount, null, accum); }
+  { return new ReferenceType(range(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn), type, arrayCount, null, accum); }
 }
 
 IntersectionType IntersectionType():
@@ -1828,7 +1830,7 @@ IntersectionType IntersectionType():
         line=elementType.getBeginLine(); column=elementType.getBeginColumn();
         elements = add(elements, elementType); }
     "&" (elementType=ReferenceType() { elements = add(elements, elementType); } )+
-    { return new IntersectionType(line, column, token.endLine, token.endColumn, elements); }
+    { return new IntersectionType(range(line, column, token.endLine, token.endColumn), elements); }
 }
 
 ClassOrInterfaceType ClassOrInterfaceType():
@@ -1845,13 +1847,13 @@ ClassOrInterfaceType ClassOrInterfaceType():
   <IDENTIFIER> {line=token.beginLine; column=token.beginColumn;} { name = token.image; }
   [ LOOKAHEAD(2) typeArgs = TypeArguments() {typeArgs.remove(0);} ]
   {
-      ret = new ClassOrInterfaceType(line, column, token.endLine, token.endColumn,null, name, createTypeArguments(typeArgs));
+      ret = new ClassOrInterfaceType(range(line, column, token.endLine, token.endColumn),null, name, createTypeArguments(typeArgs));
   }
   (
 	  LOOKAHEAD(2) "." (ann = Annotation()   { annotations = add(annotations, ann);})*  <IDENTIFIER> { name = token.image; }
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() {typeArgs.remove(0);} ]
 	  {
-	    ret = new ClassOrInterfaceType(line, column, token.endLine, token.endColumn,ret, name, createTypeArguments(typeArgs));
+	    ret = new ClassOrInterfaceType(range(line, column, token.endLine, token.endColumn),ret, name, createTypeArguments(typeArgs));
 	    ret.setAnnotations(annotations);
 	    annotations = null;
       }
@@ -1930,7 +1932,7 @@ WildcardType Wildcard():
 		}
    ]
    { 
-     return new WildcardType(line, column, token.endLine, token.endColumn,ext, sup);
+     return new WildcardType(range(line, column, token.endLine, token.endColumn),ext, sup);
    }
 }
 
@@ -1940,21 +1942,21 @@ PrimitiveType PrimitiveType():
 }
 {
 (
-  "boolean" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Boolean); }
+  "boolean" { ret = new PrimitiveType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), PrimitiveType.Primitive.Boolean); }
 |
-  "char" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Char); }
+  "char" { ret = new PrimitiveType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), PrimitiveType.Primitive.Char); }
 |
-  "byte" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Byte); }
+  "byte" { ret = new PrimitiveType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), PrimitiveType.Primitive.Byte); }
 |
-  "short" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Short); }
+  "short" { ret = new PrimitiveType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), PrimitiveType.Primitive.Short); }
 |
-  "int" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Int); }
+  "int" { ret = new PrimitiveType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), PrimitiveType.Primitive.Int); }
 |
-  "long" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Long); }
+  "long" { ret = new PrimitiveType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), PrimitiveType.Primitive.Long); }
 |
-  "float" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Float); }
+  "float" { ret = new PrimitiveType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), PrimitiveType.Primitive.Float); }
 |
-  "double" { ret = new PrimitiveType(token.beginLine, token.beginColumn, token.endLine, token.endColumn, PrimitiveType.Primitive.Double); }
+  "double" { ret = new PrimitiveType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), PrimitiveType.Primitive.Double); }
 )
 { return ret; }
 }
@@ -1965,7 +1967,7 @@ Type ResultType():
 }
 {
   (
-	  "void" { ret = new VoidType(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
+	  "void" { ret = new VoidType(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn)); }
 	|
 	  ret = Type()
   )
@@ -1981,8 +1983,8 @@ NameExpr Name():
 	NameExpr ret;
 }
 {
-  <IDENTIFIER> { ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image); }
-  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, token.image); } )*
+  <IDENTIFIER> { ret = new NameExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image); }
+  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, token.image); } )*
   { return ret; }
 }
 
@@ -2004,7 +2006,7 @@ NameExpr SimpleName():
     NameExpr ret;
 }
 {
-  <IDENTIFIER> { ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image); }
+  <IDENTIFIER> { ret = new NameExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image); }
   { return ret; }
 }
 
@@ -2049,7 +2051,7 @@ Expression Expression():
   [
     (
        LOOKAHEAD(2)
-    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, value, op); }
+    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, value, op); }
   |
    "->" lambdaBody = LambdaBody()
    {
@@ -2071,7 +2073,7 @@ Expression Expression():
    }
  |  "::"  [typeArgs = TypeParameters() {typeArgs.remove(0);} ] (<IDENTIFIER> | "new")
  {
-   ret = new MethodReferenceExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, token.image);
+   ret = new MethodReferenceExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, typeArgs, token.image);
  }
    )
   ]
@@ -2109,7 +2111,7 @@ Expression ConditionalExpression():
 }
 {
   ret = ConditionalOrExpression()
-  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, left, right); } ]
+  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, left, right); } ]
   { return ret; }
 }
 
@@ -2119,7 +2121,7 @@ Expression ConditionalOrExpression():
 	Expression right;
 }
 {
-  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.or); } )*
+  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.or); } )*
   { return ret; }
 }
 
@@ -2129,7 +2131,7 @@ Expression ConditionalAndExpression():
 	Expression right;
 }
 {
-  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.and); } )*
+  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.and); } )*
   { return ret; }
 }
 
@@ -2139,7 +2141,7 @@ Expression InclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.binOr); } )*
+  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.binOr); } )*
   { return ret; }
 }
 
@@ -2149,7 +2151,7 @@ Expression ExclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.xor); } )*
+  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.xor); } )*
   { return ret; }
 }
 
@@ -2159,7 +2161,7 @@ Expression AndExpression():
 	Expression right;
 }
 {
-  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, BinaryExpr.Operator.binAnd); } )*
+  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.binAnd); } )*
   { return ret; }
 }
 
@@ -2174,7 +2176,7 @@ Expression EqualityExpression():
   (
     ( "==" { op = BinaryExpr.Operator.equals; } |
       "!=" { op = BinaryExpr.Operator.notEquals; }
-    ) right = InstanceOfExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
+    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2185,7 +2187,7 @@ Expression InstanceOfExpression():
 	Type type;
 }
 {
-  ret = RelationalExpression() [ "instanceof" type = Type() { ret = new InstanceOfExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, type); } ]
+  ret = RelationalExpression() [ "instanceof" type = Type() { ret = new InstanceOfExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, type); } ]
   { return ret; }
 }
 
@@ -2202,7 +2204,7 @@ Expression RelationalExpression():
   	  ">"  { op = BinaryExpr.Operator.greater; } |
   	  "<=" { op = BinaryExpr.Operator.lessEquals; } |
   	  ">=" { op = BinaryExpr.Operator.greaterEquals; }
-  	) right = ShiftExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
+  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2219,7 +2221,7 @@ Expression ShiftExpression():
   	( "<<"             { op = BinaryExpr.Operator.lShift; } |
   	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.rSignedShift; } |
   	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.rUnsignedShift; }
-  	) right = AdditiveExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
+  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2235,7 +2237,7 @@ Expression AdditiveExpression():
   (
   	( "+" { op = BinaryExpr.Operator.plus; } |
   	  "-" { op = BinaryExpr.Operator.minus; }
-  	) right = MultiplicativeExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
+  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2252,7 +2254,7 @@ Expression MultiplicativeExpression():
   	( "*" { op = BinaryExpr.Operator.times; } |
   	  "/" { op = BinaryExpr.Operator.divide; } |
   	  "%" { op = BinaryExpr.Operator.remainder; }
-  	) right = UnaryExpression() { ret = new BinaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, right, op); }
+  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2276,14 +2278,14 @@ Expression UnaryExpression():
 	  {
 	  	 if(op == UnaryExpr.Operator.negative) {
 	  	 	if (ret instanceof IntegerLiteralExpr && ((IntegerLiteralExpr)ret).isMinValue()) {
-	  	 		ret = new IntegerLiteralMinValueExpr(line, column, token.endLine, token.endColumn);
+	  	 		ret = new IntegerLiteralMinValueExpr(range(line, column, token.endLine, token.endColumn));
 	  	 	} else if (ret instanceof LongLiteralExpr && ((LongLiteralExpr)ret).isMinValue()) {
-	  	 		ret = new LongLiteralMinValueExpr(line, column, token.endLine, token.endColumn);
+	  	 		ret = new LongLiteralMinValueExpr(range(line, column, token.endLine, token.endColumn));
 	  	 	} else {
-	  	 		ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, op);
+	  	 		ret = new UnaryExpr(range(line, column, token.endLine, token.endColumn),ret, op);
 	  	 	}
 	  	 } else {
-	  	 	ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, op);
+	  	 	ret = new UnaryExpr(range(line, column, token.endLine, token.endColumn),ret, op);
 	  	 }
 	  }
 	|
@@ -2299,7 +2301,7 @@ Expression PreIncrementExpression():
 	int column;
 }
 {
-  "++" {line=token.beginLine; column=token.beginColumn;} ret = UnaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, UnaryExpr.Operator.preIncrement); }
+  "++" {line=token.beginLine; column=token.beginColumn;} ret = UnaryExpression() { ret = new UnaryExpr(range(line, column, token.endLine, token.endColumn),ret, UnaryExpr.Operator.preIncrement); }
   { return ret; }
 }
 
@@ -2310,7 +2312,7 @@ Expression PreDecrementExpression():
 	int column;
 }
 {
-  "--" {line=token.beginLine; column=token.beginColumn;} ret = UnaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, UnaryExpr.Operator.preDecrement); }
+  "--" {line=token.beginLine; column=token.beginColumn;} ret = UnaryExpression() { ret = new UnaryExpr(range(line, column, token.endLine, token.endColumn),ret, UnaryExpr.Operator.preDecrement); }
   { return ret; }
 }
 
@@ -2325,7 +2327,7 @@ Expression UnaryExpressionNotPlusMinus():
   (
 	  ( "~" { op = UnaryExpr.Operator.inverse; line=token.beginLine; column=token.beginColumn;} |
 	    "!" { op = UnaryExpr.Operator.not;     line=token.beginLine; column=token.beginColumn;}
-	  ) ret = UnaryExpression() { ret = new UnaryExpr(line, column, token.endLine, token.endColumn,ret, op); }
+	  ) ret = UnaryExpression() { ret = new UnaryExpr(range(line, column, token.endLine, token.endColumn),ret, op); }
 	|
 	  LOOKAHEAD( CastExpression() )
 	  ret = CastExpression()
@@ -2346,7 +2348,7 @@ Expression PostfixExpression():
   	LOOKAHEAD(2)
     ( "++" { op = UnaryExpr.Operator.posIncrement; } |
       "--" { op = UnaryExpr.Operator.posDecrement; }
-    ) { ret = new UnaryExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, op); }
+    ) { ret = new UnaryExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, op); }
   ]
   { return ret; }
 }
@@ -2368,7 +2370,7 @@ Expression CastExpression():
    (ann = Annotation()   { annotations = add(annotations, ann);})*
   (
   	  LOOKAHEAD(2)
-  	  type = PrimitiveType() ")" ret = UnaryExpression() { type.setAnnotations(annotations); ret = new CastExpr(line, column, token.endLine, token.endColumn, type, ret); }
+  	  type = PrimitiveType() ")" ret = UnaryExpression() { type.setAnnotations(annotations); ret = new CastExpr(range(line, column, token.endLine, token.endColumn), type, ret); }
   	|
   	  type = ReferenceType() { typesOfMultiCast = add(typesOfMultiCast, type); type.setAnnotations(annotations); }
   	  ( "&" type = ReferenceType() {
@@ -2377,9 +2379,9 @@ Expression CastExpression():
   	  )*
   	  ")" ret = UnaryExpressionNotPlusMinus() {
   	    if (typesOfMultiCast.size() > 1) {
-  	        type = new IntersectionType(line, column, token.endLine, token.endColumn, typesOfMultiCast);
+  	        type = new IntersectionType(range(line, column, token.endLine, token.endColumn), typesOfMultiCast);
   	    }
-  	    ret = new CastExpr(line, column, token.endLine, token.endColumn, type, ret);
+  	    ret = new CastExpr(range(line, column, token.endLine, token.endColumn), type, ret);
   	  }
  )
   { return ret; }
@@ -2425,9 +2427,9 @@ Expression PrimaryPrefix():
   (
 	  ret = Literal()
 	|
-	  "this" { ret = new ThisExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, null); }
+	  "this" { ret = new ThisExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
 	|
-	  "super" { ret = new SuperExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, null); }
+	  "super" { ret = new SuperExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
 	  (
 	     "."
 	  [ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
@@ -2435,11 +2437,11 @@ Expression PrimaryPrefix():
 	  [ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			MethodCallExpr m = new MethodCallExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, null, args);
+	  			MethodCallExpr m = new MethodCallExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, typeArgs, null, args);
 				m.setNameExpr(name);
 				ret = m;
 			} else {
-	  			FieldAccessExpr f = new FieldAccessExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, null, null);
+	  			FieldAccessExpr f = new FieldAccessExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, null, null);
 				f.setFieldExpr(name);
 				ret = f;
 			}
@@ -2447,9 +2449,9 @@ Expression PrimaryPrefix():
 	 |
 		"::" [typeArgs = TypeParameters() { typeArgs.remove(0); }] (<IDENTIFIER> | "new")
 		{
-		  ret = new MethodReferenceExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, token.image);
+		  ret = new MethodReferenceExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, typeArgs, token.image);
 		}
-     |   args = Arguments() {new MethodCallExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, null, args);}
+     |   args = Arguments() {new MethodCallExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, typeArgs, null, args);}
 	  )
 	|
 
@@ -2461,7 +2463,7 @@ Expression PrimaryPrefix():
 	  	]
 	  	")"
 	  	{
-	  		   if(!isLambda) { ret = new EnclosedExpr(line, column, token.endLine, token.endColumn,ret);}
+	  		   if(!isLambda) { ret = new EnclosedExpr(range(line, column, token.endLine, token.endColumn),ret);}
 	  		   else{
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
@@ -2472,7 +2474,7 @@ Expression PrimaryPrefix():
 
 	  		  		}
 	  		  		args = add(0, args, p);
-	  		  		ret = new LambdaExpr(p.getBeginLine(), p.getBeginColumn(), token.endLine, token.endColumn, args, null, true);
+	  		  		ret = new LambdaExpr(range(p.getBeginLine(), p.getBeginColumn(), token.endLine, token.endColumn), args, null, true);
 	  		 	}
 
 	  		 }
@@ -2480,13 +2482,13 @@ Expression PrimaryPrefix():
 	  ret = AllocationExpression(null)
 	|
 	  LOOKAHEAD( ResultType() "." "class" )
-	  type = ResultType()  "." "class" { ret = new ClassExpr(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn, type); }
+	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getBeginLine(), type.getBeginColumn(), token.endLine, token.endColumn), type); }
 
 	| LOOKAHEAD (ResultType() "::" )
 	  type = ResultType() "::" [typeArgs = TypeParameters() { typeArgs.remove(0); }] (<IDENTIFIER> | "new")
 		{
 		  ret = new TypeExpr(type.getBeginLine(), type.getBeginColumn(), type.getEndLine(), type.getEndColumn(), type);
-		  ret = new MethodReferenceExpr(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn, ret, typeArgs, token.image);
+		  ret = new MethodReferenceExpr(range(ret.getBeginLine(), ret.getBeginColumn(), token.endLine, token.endColumn), ret, typeArgs, token.image);
 		}
 
 	|
@@ -2494,7 +2496,7 @@ Expression PrimaryPrefix():
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
 	  		if (hasArgs) {
-	  			MethodCallExpr m = new MethodCallExpr(line, column, token.endLine, token.endColumn, null, null, null, args);
+	  			MethodCallExpr m = new MethodCallExpr(range(line, column, token.endLine, token.endColumn), null, null, null, args);
 				m.setNameExpr(name);
 				ret = m;
 			} else {
@@ -2514,7 +2516,7 @@ Expression PrimarySuffix(Expression scope):
   	LOOKAHEAD(2)
 	ret = PrimarySuffixWithoutSuper(scope)
 	|
-  	"." "super" { ret = new SuperExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope); }
+  	"." "super" { ret = new SuperExpr(range(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn), scope); }
   )
   { return ret; }
 }
@@ -2531,7 +2533,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
   (
   	"."
   	(
-		"this" { ret = new ThisExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope); }
+		"this" { ret = new ThisExpr(range(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn), scope); }
 	  |
 	  	ret = AllocationExpression(scope)
 	  |
@@ -2541,18 +2543,18 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			MethodCallExpr m = new MethodCallExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, typeArgs, null, args);
+	  			MethodCallExpr m = new MethodCallExpr(range(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn), scope, typeArgs, null, args);
 				m.setNameExpr(name);
 				ret = m;
 			} else {
-	  			FieldAccessExpr f =  new FieldAccessExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, typeArgs, null);
+	  			FieldAccessExpr f =  new FieldAccessExpr(range(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn), scope, typeArgs, null);
 				f.setFieldExpr(name);
 				ret = f;
 			}
 	  	}
 	)
 	|
-	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn, scope, ret); }
+	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(range(scope.getBeginLine(), scope.getBeginColumn(), token.endLine, token.endColumn), scope, ret); }
   )
   { return ret; }
 }
@@ -2564,23 +2566,23 @@ Expression Literal():
 {
   (
 	  <INTEGER_LITERAL> {
-	  		ret = new IntegerLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image);
+	  		ret = new IntegerLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image);
 	  }
 	|
 	  <LONG_LITERAL> {
-	  		ret = new LongLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image);
+	  		ret = new LongLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image);
 	  }
 	|
 	  <FLOATING_POINT_LITERAL> {
-	  		ret = new DoubleLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image);
+	  		ret = new DoubleLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image);
 	  }
 	|
 	  <CHARACTER_LITERAL> {
-	  	ret = new CharLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image.substring(1, token.image.length()-1));
+	  	ret = new CharLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image.substring(1, token.image.length()-1));
 	  }
 	|
 	  <STRING_LITERAL> {
-	  	ret = new StringLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image.substring(1, token.image.length()-1));
+	  	ret = new StringLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image.substring(1, token.image.length()-1));
 	  }
 	|
 	  ret = BooleanLiteral()
@@ -2596,9 +2598,9 @@ Expression BooleanLiteral():
 }
 {
   (
-	  "true" { ret = new BooleanLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, true); }
+	  "true" { ret = new BooleanLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), true); }
 	|
-	  "false" { ret = new BooleanLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, false); }
+	  "false" { ret = new BooleanLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), false); }
   )
   { return ret; }
 }
@@ -2607,7 +2609,7 @@ Expression NullLiteral():
 {}
 {
   "null"
-  { return new NullLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
+  { return new NullLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn)); }
 }
 
 List Arguments():
@@ -2651,7 +2653,7 @@ Expression AllocationExpression(Expression scope):
 	  type = PrimitiveType() {type.setAnnotations(annotations); }
 	  arr = ArrayDimsAndInits()
 	  {
-	    arrayExpr = new ArrayCreationExpr(line, column, token.endLine, token.endColumn, type, null, 0);
+	    arrayExpr = new ArrayCreationExpr(range(line, column, token.endLine, token.endColumn), type, null, 0);
 	    arrayExpr.setArraysAnnotations((List)arr[2]);
 	  	if (arr[0] instanceof Integer) {
 	  	    arrayExpr.setArrayCount(((Integer)arr[0]).intValue());
@@ -2667,7 +2669,7 @@ Expression AllocationExpression(Expression scope):
 	  type = ClassOrInterfaceType()
 
       (
-	      arr = ArrayDimsAndInits() {type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(line, column, token.endLine, token.endColumn, type, null, 0);	  }
+	      arr = ArrayDimsAndInits() {type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(range(line, column, token.endLine, token.endColumn), type, null, 0);	  }
 		  {
 		    arrayExpr.setArraysAnnotations((List)arr[2]);
 		  	if (arr[0] instanceof Integer) {
@@ -2681,7 +2683,7 @@ Expression AllocationExpression(Expression scope):
 		  }
 	  |
 	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-	      { type.setAnnotations(annotations); ret = new ObjectCreationExpr(line, column, token.endLine, token.endColumn, scope, (ClassOrInterfaceType) type, typeArgs, args, anonymousBody); }
+	      { type.setAnnotations(annotations); ret = new ObjectCreationExpr(range(line, column, token.endLine, token.endColumn), scope, (ClassOrInterfaceType) type, typeArgs, args, anonymousBody); }
       )
   )
   { return ret; }
@@ -2768,7 +2770,7 @@ AssertStmt AssertStatement():
 }
 {
   "assert" {line=token.beginLine; column=token.beginColumn;} check = Expression() [ ":" msg = Expression() ] ";"
-  { return new AssertStmt(line, column, token.endLine, token.endColumn,check, msg);  }
+  { return new AssertStmt(range(line, column, token.endLine, token.endColumn),check, msg);  }
 }
 
 LabeledStmt LabeledStatement():
@@ -2780,7 +2782,7 @@ LabeledStmt LabeledStatement():
 }
 {
   <IDENTIFIER> {line=token.beginLine; column=token.beginColumn;} { label = token.image; } ":" stmt = Statement()
-  { return new LabeledStmt(line, column, token.endLine, token.endColumn,label, stmt); }
+  { return new LabeledStmt(range(line, column, token.endLine, token.endColumn),label, stmt); }
 }
 
 BlockStmt Block():
@@ -2793,7 +2795,7 @@ BlockStmt Block():
   "{" {beginLine=token.beginLine; beginColumn=token.beginColumn;}
   	stmts = Statements()
   "}"
-  { return new BlockStmt(beginLine, beginColumn, token.endLine, token.endColumn, stmts); }
+  { return new BlockStmt(range(beginLine, beginColumn, token.endLine, token.endColumn), stmts); }
 }
 
 /*
@@ -2811,11 +2813,11 @@ Statement BlockStatement():
 	  LOOKAHEAD( Modifiers() ("class" | "interface") )
   	  {  }
 	  modifier = Modifiers()
-	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new TypeDeclarationStmt(typeDecl.getBeginLine(), typeDecl.getBeginColumn(), token.endLine, token.endColumn, typeDecl); }
+	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new TypeDeclarationStmt(range(typeDecl.getBeginLine(), typeDecl.getBeginColumn(), token.endLine, token.endColumn), typeDecl); }
 	|
   	  LOOKAHEAD(VariableDeclarationExpression() )
 	  expr = VariableDeclarationExpression() ";"
-	  { ret = new ExpressionStmt(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr); } 
+	  { ret = new ExpressionStmt(range(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn), expr); } 
     |
 	  ret = Statement()
   )
@@ -2835,7 +2837,7 @@ VariableDeclarationExpr VariableDeclarationExpression():
     int line = modifier.beginLine;
     int column = modifier.beginColumn;
     if(line==-1) {line=type.getBeginLine(); column=type.getBeginColumn(); }
-    return new VariableDeclarationExpr(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, vars);
+    return new VariableDeclarationExpr(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, type, vars);
   }
 }
 
@@ -2843,7 +2845,7 @@ EmptyStmt EmptyStatement():
 {}
 {
   ";"
-  { return new EmptyStmt(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
+  { return new EmptyStmt(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn)); }
 }
 
 Statement LambdaBody():
@@ -2855,7 +2857,7 @@ Statement LambdaBody():
   (
   	expr = Expression()
   	{
-  	  n = new ExpressionStmt(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr);
+  	  n = new ExpressionStmt(range(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn), expr);
   	}
  	|  n = Block()
   )
@@ -2890,12 +2892,12 @@ ExpressionStmt StatementExpression():
 	|
 	  expr = PrimaryExpression()
 	  [
-	    "++" { expr = new UnaryExpr(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr, UnaryExpr.Operator.posIncrement);  }
+	    "++" { expr = new UnaryExpr(range(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn), expr, UnaryExpr.Operator.posIncrement);  }
 	  |
-	    "--" { expr = new UnaryExpr(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr, UnaryExpr.Operator.posDecrement);  }
+	    "--" { expr = new UnaryExpr(range(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn), expr, UnaryExpr.Operator.posDecrement);  }
 	  |
-	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr, value, op); }
-	  | "::"  [typeArgs = TypeParameters() { typeArgs.remove(0); } ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr, typeArgs, token.image); 	  }
+	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn), expr, value, op); }
+	  | "::"  [typeArgs = TypeParameters() { typeArgs.remove(0); } ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn), expr, typeArgs, token.image); 	  }
 
 	 |
 	   "->" lambdaBody = LambdaBody()
@@ -2913,7 +2915,7 @@ ExpressionStmt StatementExpression():
 	  ]
   )
   ";"
-  { return new ExpressionStmt(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn, expr); }
+  { return new ExpressionStmt(range(expr.getBeginLine(), expr.getBeginColumn(), token.endLine, token.endColumn), expr); }
 }
 
 SwitchStmt SwitchStatement():
@@ -2929,7 +2931,7 @@ SwitchStmt SwitchStatement():
     ( entry = SwitchEntry() { entries = add(entries, entry); } )*
   "}"
 
-  { return new SwitchStmt(line, column, token.endLine, token.endColumn,selector, entries); }
+  { return new SwitchStmt(range(line, column, token.endLine, token.endColumn),selector, entries); }
 }
 
 SwitchEntryStmt SwitchEntry():
@@ -2947,7 +2949,7 @@ SwitchEntryStmt SwitchEntry():
   )
   ":" stmts = Statements()
 
-  { return new SwitchEntryStmt(line, column, token.endLine, token.endColumn,label, stmts); }
+  { return new SwitchEntryStmt(range(line, column, token.endLine, token.endColumn),label, stmts); }
 }
 
 IfStmt IfStatement():
@@ -2968,7 +2970,7 @@ IfStmt IfStatement():
 {
   "if" {line=token.beginLine; column=token.beginColumn;} "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
   { 
-      IfStmt tmp = new IfStmt(line, column, token.endLine, token.endColumn,condition, thenStmt, elseStmt);
+      IfStmt tmp = new IfStmt(range(line, column, token.endLine, token.endColumn),condition, thenStmt, elseStmt);
       
       thenStmt.setComment(thenCmmt);
       if (elseStmt != null)
@@ -2986,7 +2988,7 @@ WhileStmt WhileStatement():
 }
 {
   "while" {line=token.beginLine; column=token.beginColumn;} "(" condition = Expression() ")" body = Statement()
-  { return new WhileStmt(line, column, token.endLine, token.endColumn,condition, body); }
+  { return new WhileStmt(range(line, column, token.endLine, token.endColumn),condition, body); }
 }
 
 DoStmt DoStatement():
@@ -2998,7 +3000,7 @@ DoStmt DoStatement():
 }
 {
   "do" {line=token.beginLine; column=token.beginColumn;} body = Statement() "while" "(" condition = Expression() ")" ";"
-  { return new DoStmt(line, column, token.endLine, token.endColumn,body, condition); }
+  { return new DoStmt(range(line, column, token.endLine, token.endColumn),body, condition); }
 }
 
 Statement ForStatement():
@@ -3026,9 +3028,9 @@ Statement ForStatement():
 
   {
   	if (varExpr != null) {
-  		return new ForeachStmt(line, column, token.endLine, token.endColumn,varExpr, expr, body);
+  		return new ForeachStmt(range(line, column, token.endLine, token.endColumn),varExpr, expr, body);
   	}
-	return new ForStmt(line, column, token.endLine, token.endColumn,init, expr, update, body);
+	return new ForStmt(range(line, column, token.endLine, token.endColumn),init, expr, update, body);
   }
 }
 
@@ -3076,7 +3078,7 @@ BreakStmt BreakStatement():
 }
 {
   "break" {line=token.beginLine; column=token.beginColumn;} [ <IDENTIFIER> { id = token.image; } ] ";"
-  { return new BreakStmt(line, column, token.endLine, token.endColumn,id); }
+  { return new BreakStmt(range(line, column, token.endLine, token.endColumn),id); }
 }
 
 ContinueStmt ContinueStatement():
@@ -3087,7 +3089,7 @@ ContinueStmt ContinueStatement():
 }
 {
   "continue" {line=token.beginLine; column=token.beginColumn;} [ <IDENTIFIER> { id = token.image; } ] ";"
-  { return new ContinueStmt(line, column, token.endLine, token.endColumn,id); }
+  { return new ContinueStmt(range(line, column, token.endLine, token.endColumn),id); }
 }
 
 ReturnStmt ReturnStatement():
@@ -3098,7 +3100,7 @@ ReturnStmt ReturnStatement():
 }
 {
   "return" {line=token.beginLine; column=token.beginColumn;} [ expr = Expression() ] ";"
-  { return new ReturnStmt(line, column, token.endLine, token.endColumn,expr); }
+  { return new ReturnStmt(range(line, column, token.endLine, token.endColumn),expr); }
 }
 
 ThrowStmt ThrowStatement():
@@ -3109,7 +3111,7 @@ ThrowStmt ThrowStatement():
 }
 {
   "throw" {line=token.beginLine; column=token.beginColumn;} expr = Expression() ";"
-  { return new ThrowStmt(line, column, token.endLine, token.endColumn,expr); }
+  { return new ThrowStmt(range(line, column, token.endLine, token.endColumn),expr); }
 }
 
 SynchronizedStmt SynchronizedStatement():
@@ -3121,7 +3123,7 @@ SynchronizedStmt SynchronizedStatement():
 }
 {
   "synchronized" {line=token.beginLine; column=token.beginColumn;} "(" expr = Expression() ")" block = Block()
-  { return new SynchronizedStmt(line, column, token.endLine, token.endColumn,expr, block); }
+  { return new SynchronizedStmt(range(line, column, token.endLine, token.endColumn),expr, block); }
 }
 
 TryStmt TryStatement():
@@ -3167,14 +3169,14 @@ TryStmt TryStatement():
   			   } else {
   			        type = (Type)exceptTypes.get(0);
   			   }
-  			   catchs = add(catchs, new CatchClause(cLine, cColumn, token.endLine, token.endColumn, exceptModifier.modifiers, exceptModifier.annotations, type, exceptId, catchBlock));
+  			   catchs = add(catchs, new CatchClause(range(cLine, cColumn, token.endLine, token.endColumn), exceptModifier.modifiers, exceptModifier.annotations, type, exceptId, catchBlock));
   			   exceptTypes = new LinkedList(); }
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|
   		"finally" finallyBlock = Block()
   )
-  { return new TryStmt(line, column, token.endLine, token.endColumn, resources, tryBlock, catchs, finallyBlock); }
+  { return new TryStmt(range(line, column, token.endLine, token.endColumn), resources, tryBlock, catchs, finallyBlock); }
 }
 
 
@@ -3253,7 +3255,7 @@ NormalAnnotationExpr NormalAnnotation():
 }
 {
    "@" {line=token.beginLine; column=token.beginColumn;} name = Name() "(" [ pairs = MemberValuePairs() ] ")"
-   { return new NormalAnnotationExpr(line, column, token.endLine, token.endColumn,name, pairs); }
+   { return new NormalAnnotationExpr(range(line, column, token.endLine, token.endColumn),name, pairs); }
 }
 
 MarkerAnnotationExpr MarkerAnnotation():
@@ -3264,7 +3266,7 @@ MarkerAnnotationExpr MarkerAnnotation():
 }
 {
   "@" {line=token.beginLine; column=token.beginColumn;} name = Name()
-  { return new MarkerAnnotationExpr(line, column, token.endLine, token.endColumn,name); }
+  { return new MarkerAnnotationExpr(range(line, column, token.endLine, token.endColumn),name); }
 }
 
 SingleMemberAnnotationExpr SingleMemberAnnotation():
@@ -3276,7 +3278,7 @@ SingleMemberAnnotationExpr SingleMemberAnnotation():
 }
 {
   "@" {line=token.beginLine; column=token.beginColumn;} name = Name() "(" memberVal = MemberValue() ")"
-  { return new SingleMemberAnnotationExpr(line, column, token.endLine, token.endColumn,name, memberVal); }
+  { return new SingleMemberAnnotationExpr(range(line, column, token.endLine, token.endColumn),name, memberVal); }
 }
 
 List MemberValuePairs():
@@ -3298,7 +3300,7 @@ MemberValuePair MemberValuePair():
 }
 {
     <IDENTIFIER> { name = token.image; line=token.beginLine; column=token.beginColumn;} "=" value = MemberValue()
-    { return new MemberValuePair(line, column, token.endLine, token.endColumn,name, value); }
+    { return new MemberValuePair(range(line, column, token.endLine, token.endColumn),name, value); }
 }
 
 Expression MemberValue():
@@ -3327,7 +3329,7 @@ Expression  MemberValueArrayInitializer():
   "{" {line=token.beginLine; column=token.beginColumn;}
   (	member = MemberValue() { ret.add(member); } ( LOOKAHEAD(2) "," member = MemberValue() { ret.add(member); } )*  )? [ "," ]
   "}"
-  { return new ArrayInitializerExpr(line, column, token.endLine, token.endColumn,ret); }
+  { return new ArrayInitializerExpr(range(line, column, token.endLine, token.endColumn),ret); }
 }
 
 
@@ -3345,7 +3347,7 @@ AnnotationDeclaration AnnotationTypeDeclaration(Modifier modifier):
   "interface" name = Name() members = AnnotationTypeBody()
 
   { 
-      AnnotationDeclaration tmp = new AnnotationDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, null, members);
+      AnnotationDeclaration tmp = new AnnotationDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, null, members);
       tmp.setNameExpr(name);
       return tmp;
   }
@@ -3370,7 +3372,7 @@ BodyDeclaration AnnotationBodyDeclaration():
 {
   {  }
   (
-	";" { ret = new EmptyTypeDeclaration(token.beginLine, token.beginColumn, token.endLine, token.endColumn); }
+	";" { ret = new EmptyTypeDeclaration(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn)); }
   |
     modifier = Modifiers()
     (
@@ -3402,7 +3404,7 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(Modifier modifier):
     int line = modifier.beginLine;
     int column = modifier.beginColumn;
     { if (line == -1) {line=type.getBeginLine(); column=type.getBeginColumn();} }
-    return new AnnotationMemberDeclaration(line, column, token.endLine, token.endColumn, modifier.modifiers, modifier.annotations, type, name, defaultVal);
+    return new AnnotationMemberDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, type, name, defaultVal);
   }
 }
 
