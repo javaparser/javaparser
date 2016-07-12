@@ -518,7 +518,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		if (n.getThrows() != null) {
-			for (final NameExpr name : n.getThrows()) {
+			for (final ReferenceType name : n.getThrows()) {
 				{
 					R result = name.accept(this, arg);
 					if (result != null) {
