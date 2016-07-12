@@ -123,8 +123,7 @@ public final class ASTHelper {
     public static FieldDeclaration createFieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
         List<VariableDeclarator> variables = new ArrayList<VariableDeclarator>();
         variables.add(variable);
-        FieldDeclaration ret = new FieldDeclaration(modifiers, type, variables);
-        return ret;
+        return new FieldDeclaration(modifiers, type, variables);
     }
 
     /**

@@ -150,3 +150,23 @@ class A {
         return "hello\nworld";
     }
 }
+
+Scenario: A multi-catch is printed correctly
+Given the class:
+class A {
+    public void a() {
+        try {
+        } catch (IndexOutOfBoundException | IOException e) { 
+        } 
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A {
+
+    public void a() {
+        try {
+        } catch (IndexOutOfBoundException | IOException e) {
+        }
+    }
+}

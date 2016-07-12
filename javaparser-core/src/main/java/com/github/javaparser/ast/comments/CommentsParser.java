@@ -22,7 +22,6 @@
 package com.github.javaparser.ast.comments;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -40,16 +39,19 @@ public class CommentsParser {
 
     private static final int COLUMNS_PER_TAB = 4;
 
-    public CommentsCollection parse(final String source) throws IOException, UnsupportedEncodingException {
-        InputStream in = new ByteArrayInputStream(source.getBytes(Charset.defaultCharset()));
-        return parse(in, Charset.defaultCharset().name());
+    public CommentsCollection parse(final String source) throws IOException {
+        return parse(new StringReader(source));
+    }
+
+    public CommentsCollection parse(final InputStream in, final String charsetName) throws IOException {
+        return parse(new InputStreamReader(in, charsetName));
     }
 
     /**
      * Track the internal state of the parser, remembering the last characters observed.
      */
-    class ParserState {
-        private Deque prevTwoChars = new LinkedList<Character>();
+    private static class ParserState {
+        private Deque<Character> prevTwoChars = new LinkedList<Character>();
 
         /**
          * Is the last character the one expected?
@@ -86,9 +88,12 @@ public class CommentsParser {
         }
     }
 
-    public CommentsCollection parse(final InputStream in, final String charsetName) throws IOException, UnsupportedEncodingException {
+    /**
+     * Collects all comments in a piece of Java source.
+     */
+    public CommentsCollection parse(final Reader in) throws IOException {
         boolean lastWasASlashR = false;
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, charsetName));
+        BufferedReader br = new BufferedReader(in);
         CommentsCollection comments = new CommentsCollection();
         int r;
 

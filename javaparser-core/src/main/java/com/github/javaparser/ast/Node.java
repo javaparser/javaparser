@@ -282,8 +282,8 @@ public abstract class Node implements Cloneable {
      * For example, comments at the end of methods (immediately before the parenthesis)
      * or at the end of CompilationUnit are orphan comments.
      *
-     * When more than one comments preceed a statement, the one immediately preceeding it
-     * it is associated with the statements, while the others are "orphan".
+     * When more than one comment preceeds a statement, the one immediately preceding it
+     * it is associated with the statements, while the others are orphans.
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments() {
