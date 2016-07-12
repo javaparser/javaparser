@@ -446,8 +446,6 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     void doTest(final Node node) {
-        final String parsed = node.toString();
-
         assertThat(node.getBeginLine(), is(greaterThanOrEqualTo(0)));
         assertThat(node.getBeginColumn(), is(greaterThanOrEqualTo(0)));
         assertThat(node.getEndLine(), is(greaterThanOrEqualTo(0)));
