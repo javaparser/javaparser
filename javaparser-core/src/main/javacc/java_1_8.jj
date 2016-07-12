@@ -1711,11 +1711,13 @@ ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
 	int bbColumn = 0;
 	int beLine = 0;
 	int beColumn = 0;
+	Type throwType;
 }
 {
   [ typeParameters = TypeParameters() { int[] lineCol=(int[])typeParameters.remove(0); if(line==-1){ line=lineCol[0]; column=lineCol[1];} } ]
   // Modifiers matched in the caller
-  name = SimpleName() { if(line==-1){line=token.beginLine; column=token.beginColumn;}} parameters = FormalParameters() [ "throws" throws_ = NameList() ]
+  name = SimpleName() { if(line==-1){line=token.beginLine; column=token.beginColumn;}} parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+  ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   "{" { bbLine=token.beginLine; bbColumn=token.beginColumn; }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
     stmts = Statements()
