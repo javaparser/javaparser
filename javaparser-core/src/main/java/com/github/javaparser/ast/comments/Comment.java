@@ -91,7 +91,7 @@ public abstract class Comment extends Node {
     {
         if (commentedNode==null)
         {
-            this.commentedNode = commentedNode;
+            this.commentedNode = null;
             return;
         }
         if (commentedNode==this)

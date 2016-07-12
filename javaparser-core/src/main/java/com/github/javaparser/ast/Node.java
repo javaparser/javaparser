@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -266,8 +265,7 @@ public abstract class Node implements Cloneable {
         if (getBeginLine() > other.getBeginLine()) return false;
         if (getBeginLine() == other.getBeginLine() && getBeginColumn() > other.getBeginColumn()) return false;
         if (getEndLine() < other.getEndLine()) return false;
-        if (getEndLine() == other.getEndLine() && getEndColumn() < other.getEndColumn()) return false;
-        return true;
+        return !(getEndLine() == other.getEndLine() && getEndColumn() < other.getEndColumn());
     }
 
     public void addOrphanComment(Comment comment) {
@@ -330,9 +328,7 @@ public abstract class Node implements Cloneable {
 
     protected void setAsParentNodeOf(List<? extends Node> childNodes) {
         if (childNodes != null) {
-            Iterator<? extends Node> it = childNodes.iterator();
-            while (it.hasNext()) {
-                Node current = it.next();
+            for (Node current : childNodes) {
                 current.setParentNode(this);
             }
         }
@@ -369,8 +365,7 @@ public abstract class Node implements Cloneable {
         }
     }
 
-    public boolean hasComment()
-    {
+    public boolean hasComment() {
         return comment != null;
     }
 }

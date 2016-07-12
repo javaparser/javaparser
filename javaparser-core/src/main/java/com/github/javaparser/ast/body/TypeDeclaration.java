@@ -28,7 +28,6 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.*;

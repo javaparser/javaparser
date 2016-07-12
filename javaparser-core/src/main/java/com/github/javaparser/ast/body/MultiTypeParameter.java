@@ -22,14 +22,11 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
-
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 public class MultiTypeParameter extends BaseParameter {
     private UnionType type;

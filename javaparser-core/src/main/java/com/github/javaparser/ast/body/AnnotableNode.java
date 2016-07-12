@@ -32,5 +32,5 @@ import java.util.List;
  * @since July 2014
  */
 public interface AnnotableNode {
-    public List<AnnotationExpr> getAnnotations();
+    List<AnnotationExpr> getAnnotations();
 }

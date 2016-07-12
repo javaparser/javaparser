@@ -29,19 +29,13 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 
 import java.io.StringReader;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class ComparingSteps {
 
-    private Map<String, Object> state;
     private CompilationUnit first;
     private CompilationUnit second;
-
-    public ComparingSteps(Map<String, Object> state){
-        this.state = state;
-    }
 
     /*
      * Given steps

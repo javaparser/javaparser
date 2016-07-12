@@ -1181,11 +1181,9 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		Statement body = cloneNodes(_n.getBody(), _arg);
 
-		LambdaExpr r = new LambdaExpr(_n.getBeginLine(), _n.getBeginColumn(),
+		return new LambdaExpr(_n.getBeginLine(), _n.getBeginColumn(),
 				_n.getEndLine(), _n.getEndColumn(), lambdaParameters, body,
 				_n.isParametersEnclosed());
-
-		return r;
 	}
 
 	@Override
@@ -1194,10 +1192,9 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<TypeParameter> typeParams = visit(_n.getTypeParameters(), arg);
 		Expression scope = cloneNodes(_n.getScope(), arg);
 
-		MethodReferenceExpr r = new MethodReferenceExpr(_n.getBeginLine(),
+		return new MethodReferenceExpr(_n.getBeginLine(),
 				_n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope,
 				typeParams, _n.getIdentifier());
-		return r;
 	}
 
 	@Override
@@ -1205,10 +1202,8 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		Type t = cloneNodes(n.getType(), arg);
 
-		TypeExpr r = new TypeExpr(n.getBeginLine(), n.getBeginColumn(),
+		return new TypeExpr(n.getBeginLine(), n.getBeginColumn(),
 				n.getEndLine(), n.getEndColumn(), t);
-
-		return r;
 	}
 
     public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {

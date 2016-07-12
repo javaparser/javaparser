@@ -1587,8 +1587,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
 
         List<Parameter> parameters = n.getParameters();
-		boolean printPar = false;
-		printPar = n.isParametersEnclosed();
+		boolean printPar = n.isParametersEnclosed();
 
 		if (printPar) {
 			printer.print("(");
