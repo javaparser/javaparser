@@ -132,6 +132,7 @@ public final class PositionUtils {
             if (bl>contained.getBeginLine()) return false;
             if (bl==contained.getBeginLine() && bc>contained.getBeginColumn()) return false;
             if (container.getEndLine()<contained.getEndLine()) return false;
+            // TODO < or <= ?
             return !(container.getEndLine() == contained.getEndLine() && container.getEndColumn() < contained.getEndColumn());
         }
         return true;
