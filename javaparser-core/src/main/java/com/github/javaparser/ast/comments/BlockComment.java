@@ -21,8 +21,11 @@
  
 package com.github.javaparser.ast.comments;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * <p>
@@ -42,8 +45,16 @@ public final class BlockComment extends Comment {
         super(content);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public BlockComment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        super(beginLine, beginColumn, endLine, endColumn, content);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), content);
+    }
+    
+    public BlockComment(Range range, String content) {
+        super(range, content);
     }
 
     @Override

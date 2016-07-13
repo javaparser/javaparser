@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -29,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
@@ -64,12 +66,23 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 		setImplements(implementsList);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public ClassOrInterfaceDeclaration(final int beginLine, final int beginColumn, final int endLine,
 			final int endColumn, final int modifiers,
 			final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, isInterface, name, typeParameters, extendsList, implementsList, members);
+	}
+	
+	public ClassOrInterfaceDeclaration(Range range, final int modifiers,
+			final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
+			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
+			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
+		super(range, annotations, modifiers, name, members);
 		setInterface(isInterface);
 		setTypeParameters(typeParameters);
 		setExtends(extendsList);

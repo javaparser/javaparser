@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -28,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -55,8 +57,16 @@ public final class ArrayCreationExpr extends Expression implements TypedNode {
         setDimensions(null);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, int arrayCount, ArrayInitializerExpr initializer) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount, initializer);
+    }
+    
+    public ArrayCreationExpr(Range range, Type type, int arrayCount, ArrayInitializerExpr initializer) {
+        super(range);
         setType(type);
         setArrayCount(arrayCount);
         setInitializer(initializer);
@@ -70,8 +80,16 @@ public final class ArrayCreationExpr extends Expression implements TypedNode {
         setInitializer(null);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, List<Expression> dimensions, int arrayCount) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, dimensions, arrayCount);
+    }
+    
+    public ArrayCreationExpr(Range range, Type type, List<Expression> dimensions, int arrayCount) {
+        super(range);
         setType(type);
         setArrayCount(arrayCount);
         setDimensions(dimensions);

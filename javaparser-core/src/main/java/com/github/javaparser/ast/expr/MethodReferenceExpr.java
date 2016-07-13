@@ -21,12 +21,14 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -50,11 +52,19 @@ public class MethodReferenceExpr extends Expression {
     public MethodReferenceExpr() {
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public MethodReferenceExpr(int beginLine, int beginColumn, int endLine,
                                int endColumn, Expression scope,
                                List<TypeParameter> typeParameters, String identifier) {
-
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, typeParameters, identifier);
+    }
+    
+    public MethodReferenceExpr(Range range, Expression scope,
+                               List<TypeParameter> typeParameters, String identifier) {
+        super(range);
         setIdentifier(identifier);
         setScope(scope);
         setTypeParameters(typeParameters);

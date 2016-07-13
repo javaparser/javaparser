@@ -21,9 +21,13 @@
  
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * <p>
@@ -52,8 +56,16 @@ public final class ImportDeclaration extends Node {
         asterisk = false;
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     private ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
+    }
+    
+    private ImportDeclaration(Range range) {
+        super(range);
         this.isEmptyImportDeclaration = true;
         static_ = false;
         asterisk = false;
@@ -68,9 +80,18 @@ public final class ImportDeclaration extends Node {
 
     /**
      * Create an empty import declaration specifying its position.
+     * @deprecated prefer using Range objects.
      */
+    @Deprecated
     public static ImportDeclaration createEmptyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn){
         return new ImportDeclaration(beginLine, beginColumn, endLine, endColumn);
+    }
+
+    /**
+     * Create an empty import declaration specifying its position.
+     */
+    public static ImportDeclaration createEmptyDeclaration(Range range){
+        return new ImportDeclaration(range);
     }
 
     public ImportDeclaration(NameExpr name, boolean isStatic, boolean isAsterisk) {
@@ -80,8 +101,16 @@ public final class ImportDeclaration extends Node {
         this.isEmptyImportDeclaration = false;
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, NameExpr name, boolean isStatic, boolean isAsterisk) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, isStatic, isAsterisk);
+    }
+
+    public ImportDeclaration(Range range, NameExpr name, boolean isStatic, boolean isAsterisk) {
+        super(range);
         setAsterisk(isAsterisk);
         setName(name);
         setStatic(isStatic);

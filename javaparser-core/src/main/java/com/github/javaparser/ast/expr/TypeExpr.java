@@ -21,10 +21,13 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
@@ -37,8 +40,16 @@ public class TypeExpr extends Expression implements TypedNode {
 
     public TypeExpr(){}
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public TypeExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type);
+    }
+    
+    public TypeExpr(Range range, Type type) {
+        super(range);
         setType(type);
     }
 

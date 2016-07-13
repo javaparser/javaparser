@@ -21,17 +21,18 @@
  
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -50,11 +51,21 @@ public final class CatchClause extends Node {
         setCatchBlock(catchBlock);
     }
 
-    public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-    	    final int exceptModifier, final List<AnnotationExpr> exceptAnnotations, final Type exceptTypes,
-    	    final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
-        super(beginLine, beginColumn, endLine, endColumn);
-        setParam(new Parameter(beginLine, beginColumn, endLine, endColumn, exceptModifier, exceptAnnotations, exceptTypes, false, exceptId));
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
+	public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+	                   final int exceptModifier, final List<AnnotationExpr> exceptAnnotations, final Type exceptTypes,
+	                   final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), exceptModifier, exceptAnnotations, exceptTypes, exceptId, catchBlock);
+	}
+	
+    public CatchClause(final Range range,
+                       final int exceptModifier, final List<AnnotationExpr> exceptAnnotations, final Type exceptTypes,
+                       final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
+        super(range);
+        setParam(new Parameter(range, exceptModifier, exceptAnnotations, exceptTypes, false, exceptId));
         setCatchBlock(catchBlock);
     }
 

@@ -21,8 +21,11 @@
  
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -45,9 +48,18 @@ public final class WildcardType extends Type {
 		setSuper(sup);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public WildcardType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final ReferenceType ext, final ReferenceType sup) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), ext, sup);
+	}
+	
+	public WildcardType(final Range range,
+			final ReferenceType ext, final ReferenceType sup) {
+		super(range);
 		setExtends(ext);
 		setSuper(sup);
 	}

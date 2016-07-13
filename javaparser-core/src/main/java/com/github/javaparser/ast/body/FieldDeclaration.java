@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypedNode;
@@ -33,6 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -70,8 +72,16 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     	setVariables(variables);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, variables);
+    }
+    
+    public FieldDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+        super(range, annotations);
         setModifiers(modifiers);
     	setType(type);
     	setVariables(variables);

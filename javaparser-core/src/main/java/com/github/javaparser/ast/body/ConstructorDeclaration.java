@@ -23,14 +23,17 @@ package com.github.javaparser.ast.body;
 
 import java.util.List;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -47,7 +50,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     private List<Parameter> parameters;
 
-    private List<NameExpr> throws_;
+    private List<ReferenceType> throws_;
 
     private BlockStmt block;
 
@@ -60,7 +63,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     }
 
     public ConstructorDeclaration(int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters,
-                                  String name, List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
+                                  String name, List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         super(annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -70,10 +73,20 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         setBlock(block);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
-                                  List<Parameter> parameters, List<NameExpr> throws_, BlockStmt block) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+                                  List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters, name, parameters, throws_, block);
+    }
+
+    public ConstructorDeclaration(Range range, int modifiers,
+                                  List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
+                                  List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
+        super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
@@ -121,7 +134,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         return parameters;
     }
 
-    public List<NameExpr> getThrows() {
+    public List<ReferenceType> getThrows() {
         throws_ = ensureNotNull(throws_);
         return throws_;
     }
@@ -154,7 +167,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         setAsParentNodeOf(this.parameters);
     }
 
-    public void setThrows(List<NameExpr> throws_) {
+    public void setThrows(List<ReferenceType> throws_) {
         this.throws_ = throws_;
         setAsParentNodeOf(this.throws_);
     }
@@ -198,7 +211,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (NameExpr thr : getThrows()) {
+            for (ReferenceType thr : getThrows()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");

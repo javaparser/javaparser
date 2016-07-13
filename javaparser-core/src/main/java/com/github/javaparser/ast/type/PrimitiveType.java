@@ -23,8 +23,11 @@ package com.github.javaparser.ast.type;
 
 import java.util.HashMap;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -47,7 +50,7 @@ public final class PrimitiveType extends Type {
 			return new ClassOrInterfaceType(nameOfBoxedType);
 		}
 
-		private Primitive(String nameOfBoxedType) {
+		Primitive(String nameOfBoxedType) {
 			this.nameOfBoxedType = nameOfBoxedType;
 		}
 	}
@@ -68,9 +71,17 @@ public final class PrimitiveType extends Type {
 		this.type = type;
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public PrimitiveType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Primitive type) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type);
+	}
+	
+	public PrimitiveType(Range range, final Primitive type) {
+		super(range);
 		this.type = type;
 	}
 

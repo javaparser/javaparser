@@ -145,7 +145,7 @@ class CommentsInserter {
         for (Comment comment : commentsToAttribute) {
             if (comment.isLineComment()) {
                 for (Node child : children) {
-                    if (child.getEndLine() == comment.getBeginLine()
+                    if (child.getEnd().line == comment.getBegin().line
                         && attributeLineCommentToNodeOrChild(child,
                                 comment.asLineComment())) {
                             attributedComments.add(comment);
@@ -196,7 +196,7 @@ class CommentsInserter {
             LineComment lineComment) {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
-        if (node.getBeginLine() == lineComment.getBeginLine()
+        if (node.getBegin().line == lineComment.getBegin().line
                 && !node.hasComment()) {
             node.setComment(lineComment);
             return true;
@@ -222,8 +222,8 @@ class CommentsInserter {
         if (!PositionUtils.areInOrder(a, b)) {
             return thereAreLinesBetween(b, a);
         }
-        int endOfA = a.getEndLine();
-        return b.getBeginLine() > (endOfA + 1);
+        int endOfA = a.getEnd().line;
+        return b.getBegin().line > (endOfA + 1);
     }
 
 }

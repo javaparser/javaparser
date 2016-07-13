@@ -60,10 +60,10 @@ public class CommentsCollection {
         for (Comment c : getAll()){
             // we tolerate a difference of one element in the end column:
             // it depends how \r and \n are calculated...
-            if ( c.getBeginLine()==comment.getBeginLine() &&
-                 c.getBeginColumn()==comment.getBeginColumn() &&
-                 c.getEndLine()==comment.getEndLine() &&
-                 Math.abs(c.getEndColumn()-comment.getEndColumn())<2 ){
+            if ( c.getBegin().line==comment.getBegin().line &&
+                 c.getBegin().column==comment.getBegin().column &&
+                 c.getEnd().line==comment.getEnd().line &&
+                 Math.abs(c.getEnd().column-comment.getEnd().column)<2 ){
                 return true;
             }
         }

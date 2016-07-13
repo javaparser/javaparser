@@ -24,14 +24,13 @@ package com.github.javaparser.bdd.steps;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.visitor.DumpVisitor;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -39,7 +38,6 @@ import static org.junit.Assert.assertThat;
 public class DumpingSteps {
 
     private CompilationUnit compilationUnit;
-    private CommentsCollection commentsCollection;
     private String sourceUnderTest;
 
     @Given("the class:$classSrc")
@@ -54,7 +52,7 @@ public class DumpingSteps {
 
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
-        compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+        compilationUnit = JavaParser.parse(new StringReader(sourceUnderTest), true);
     }
 
     @Then("it is dumped to:$dumpSrc")

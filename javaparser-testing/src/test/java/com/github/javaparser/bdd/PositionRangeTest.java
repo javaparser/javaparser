@@ -21,7 +21,7 @@
  
 package com.github.javaparser.bdd;
 
-import com.github.javaparser.bdd.steps.ComparingSteps;
+import com.github.javaparser.bdd.steps.PositionRangeSteps;
 import com.github.javaparser.bdd.steps.SharedSteps;
 import de.codecentric.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(JUnitReportingRunner.class)
-public class ComparingTest extends BasicJBehaveTest {
+public class PositionRangeTest extends BasicJBehaveTest {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
@@ -40,11 +40,11 @@ public class ComparingTest extends BasicJBehaveTest {
 
         return new InstanceStepsFactory(configuration(),
                 new SharedSteps(state),
-                new ComparingSteps());
+                new PositionRangeSteps());
     }
 
-    public ComparingTest() {
-        super("**/bdd/comparing*.story");
+    public PositionRangeTest() {
+        super("**/bdd/position_range*.story");
     }
 }
 

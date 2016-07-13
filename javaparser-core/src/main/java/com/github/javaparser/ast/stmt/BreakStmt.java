@@ -21,8 +21,12 @@
  
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,8 +42,16 @@ public final class BreakStmt extends Statement {
 		this.id = id;
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public BreakStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn, final String id) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), id);
+	}
+	
+	public BreakStmt(final Range range, final String id) {
+		super(range);
 		this.id = id;
 	}
 
