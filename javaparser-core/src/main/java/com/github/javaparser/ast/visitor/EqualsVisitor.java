@@ -1475,7 +1475,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         if (!nodeEquals(n1.getScope(), n2.getScope())) {
             return false;
         }
-        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters())) {
+	    if (!nodesEquals(n1.getTypeArguments().getTypeArguments(), n2.getTypeArguments().getTypeArguments())) {
             return false;
         }
         if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
