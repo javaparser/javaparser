@@ -37,7 +37,7 @@ public enum AccessSpecifier {
 
     private String codeRepresenation;
 
-    private AccessSpecifier(String codeRepresentation) {
+    AccessSpecifier(String codeRepresentation) {
         this.codeRepresenation = codeRepresentation;
     }
 

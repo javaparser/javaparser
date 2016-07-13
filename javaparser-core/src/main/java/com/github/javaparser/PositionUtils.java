@@ -74,9 +74,9 @@ public final class PositionUtils {
             }
         }
 
-        int signLine = signum( a.getBeginLine() - b.getBeginLine() );
+        int signLine = signum( a.getBegin().line - b.getBegin().line );
         if (signLine == 0) {
-            return signum(a.getBeginColumn() - b.getBeginColumn());
+            return signum(a.getBegin().column - b.getBegin().column);
         } else {
             return signLine;
         }
@@ -97,12 +97,12 @@ public final class PositionUtils {
     }
 
     private static int beginLineWithoutConsideringAnnotation(Node node) {
-        return beginNodeWithoutConsideringAnnotations(node).getBeginLine();
+        return beginNodeWithoutConsideringAnnotations(node).getBegin().line;
     }
 
 
     private static int beginColumnWithoutConsideringAnnotation(Node node) {
-        return beginNodeWithoutConsideringAnnotations(node).getBeginColumn();
+        return beginNodeWithoutConsideringAnnotations(node).getBegin().column;
     }
 
     private static Node beginNodeWithoutConsideringAnnotations(Node node) {
@@ -129,11 +129,11 @@ public final class PositionUtils {
         if (container instanceof AnnotableNode){
             int bl = beginLineWithoutConsideringAnnotation(container);
             int bc = beginColumnWithoutConsideringAnnotation(container);
-            if (bl>contained.getBeginLine()) return false;
-            if (bl==contained.getBeginLine() && bc>contained.getBeginColumn()) return false;
-            if (container.getEndLine()<contained.getEndLine()) return false;
-            if (container.getEndLine()==contained.getEndLine() && container.getEndColumn()<contained.getEndColumn()) return false;
-            return true;
+            if (bl>contained.getBegin().line) return false;
+            if (bl==contained.getBegin().line && bc>contained.getBegin().column) return false;
+            if (container.getEnd().line<contained.getEnd().line) return false;
+            // TODO < or <= ?
+            return !(container.getEnd().line == contained.getEnd().line && container.getEnd().column < contained.getEnd().column);
         }
         return true;
     }

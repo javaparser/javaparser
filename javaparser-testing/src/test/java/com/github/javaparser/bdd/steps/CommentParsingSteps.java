@@ -38,15 +38,15 @@ import org.jbehave.core.annotations.*;
 import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 
+import static com.github.javaparser.Range.range;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -79,13 +79,13 @@ public class CommentParsingSteps {
 
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
-        compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+        compilationUnit = JavaParser.parse(new StringReader(sourceUnderTest), true);
     }
 
     @Then("the Java parser cannot parse it because of lexical errors")
     public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
         try {
-            compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+            compilationUnit = JavaParser.parse(new StringReader(sourceUnderTest), true);
             fail("Lexical error expected");
         } catch (TokenMgrException e) {
             // ok
@@ -125,10 +125,10 @@ public class CommentParsingSteps {
             Comment expectedLineComment = toComment(exampleRow, new LineComment());
             Comment lineCommentUnderTest = commentsCollection.getLineComments().get(index);
 
-            assertThat(lineCommentUnderTest.getBeginLine(), is(expectedLineComment.getBeginLine()));
-            assertThat(lineCommentUnderTest.getBeginColumn(), is(expectedLineComment.getBeginColumn()));
-            assertThat(lineCommentUnderTest.getEndLine(), is(expectedLineComment.getEndLine()));
-            assertThat(lineCommentUnderTest.getEndColumn(), is(expectedLineComment.getEndColumn()));
+            assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
+            assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));
+            assertThat(lineCommentUnderTest.getEnd().line, is(expectedLineComment.getEnd().line));
+            assertThat(lineCommentUnderTest.getEnd().column, is(expectedLineComment.getEnd().column));
             index ++;
         }
     }
@@ -140,10 +140,10 @@ public class CommentParsingSteps {
             Comment expectedLineComment = toComment(exampleRow, new BlockComment());
             Comment lineCommentUnderTest = commentsCollection.getBlockComments().get(index);
 
-            assertThat(lineCommentUnderTest.getBeginLine(), is(expectedLineComment.getBeginLine()));
-            assertThat(lineCommentUnderTest.getBeginColumn(), is(expectedLineComment.getBeginColumn()));
-            assertThat(lineCommentUnderTest.getEndLine(), is(expectedLineComment.getEndLine()));
-            assertThat(lineCommentUnderTest.getEndColumn(), is(expectedLineComment.getEndColumn()));
+            assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
+            assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));
+            assertThat(lineCommentUnderTest.getEnd().line, is(expectedLineComment.getEnd().line));
+            assertThat(lineCommentUnderTest.getEnd().column, is(expectedLineComment.getEnd().column));
             index ++;
         }
     }
@@ -155,10 +155,10 @@ public class CommentParsingSteps {
             Comment expectedLineComment = toComment(exampleRow, new BlockComment());
             Comment lineCommentUnderTest = commentsCollection.getJavadocComments().get(index);
 
-            assertThat(lineCommentUnderTest.getBeginLine(), is(expectedLineComment.getBeginLine()));
-            assertThat(lineCommentUnderTest.getBeginColumn(), is(expectedLineComment.getBeginColumn()));
-            assertThat(lineCommentUnderTest.getEndLine(), is(expectedLineComment.getEndLine()));
-            assertThat(lineCommentUnderTest.getEndColumn(), is(expectedLineComment.getEndColumn()));
+            assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
+            assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));
+            assertThat(lineCommentUnderTest.getEnd().line, is(expectedLineComment.getEnd().line));
+            assertThat(lineCommentUnderTest.getEnd().column, is(expectedLineComment.getEnd().column));
             index ++;
         }
     }
@@ -389,10 +389,10 @@ public class CommentParsingSteps {
     }
 
     private Comment toComment(Parameters row, Comment comment) {
-        comment.setBeginLine(Integer.parseInt(row.values().get("beginLine")));
-        comment.setBeginColumn(Integer.parseInt(row.values().get("beginColumn")));
-        comment.setEndLine(Integer.parseInt(row.values().get("endLine")));
-        comment.setEndColumn(Integer.parseInt(row.values().get("endColumn")));
+        comment.setRange(range(Integer.parseInt(row.values().get("beginLine")),
+                Integer.parseInt(row.values().get("beginColumn")),
+                Integer.parseInt(row.values().get("endLine")),
+                Integer.parseInt(row.values().get("endColumn"))));
         return comment;
     }
 }

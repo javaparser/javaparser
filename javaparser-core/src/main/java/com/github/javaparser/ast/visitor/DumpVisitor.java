@@ -1588,9 +1588,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(LambdaExpr n, Object arg) {
         printJavaComment(n.getComment(), arg);
 
-        List<Parameter> parameters = n.getParameters();
-		boolean printPar = false;
-		printPar = n.isParametersEnclosed();
+		final List<Parameter> parameters = n.getParameters();
+		final boolean printPar = n.isParametersEnclosed();
 
 		if (printPar) {
 			printer.print("(");
@@ -1609,7 +1608,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 
 		printer.print(" -> ");
-		Statement body = n.getBody();
+		final Statement body = n.getBody();
 		if (body instanceof ExpressionStmt) {
 			// Print the expression directly
 			((ExpressionStmt) body).getExpression().accept(this, arg);

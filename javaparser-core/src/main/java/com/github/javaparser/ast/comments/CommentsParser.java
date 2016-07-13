@@ -24,6 +24,9 @@ package com.github.javaparser.ast.comments;
 import java.io.*;
 import java.util.*;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.Range.range;
+
 /**
  * This parser cares exclusively about comments.
  */
@@ -121,14 +124,12 @@ public class CommentsParser {
                 case CODE:
                     if (parserState.isLastChar('/') && c == '/') {
                         currentLineComment = new LineComment();
-                        currentLineComment.setBeginLine(currLine);
-                        currentLineComment.setBeginColumn(currCol - 1);
+                        currentLineComment.setBegin(pos(currLine, currCol - 1));
                         state = State.IN_LINE_COMMENT;
                         currentContent = new StringBuilder();
                     } else if (parserState.isLastChar('/') && c == '*') {
                         currentBlockComment = new BlockComment();
-                        currentBlockComment.setBeginLine(currLine);
-                        currentBlockComment.setBeginColumn(currCol - 1);
+                        currentBlockComment.setBegin(pos(currLine, currCol - 1));
                         state = State.IN_BLOCK_COMMENT;
                         currentContent = new StringBuilder();
                     } else if (c == '"') {
@@ -142,8 +143,7 @@ public class CommentsParser {
                 case IN_LINE_COMMENT:
                     if (c=='\n' || c=='\r'){
                         currentLineComment.setContent(currentContent.toString());
-                        currentLineComment.setEndLine(currLine);
-                        currentLineComment.setEndColumn(currCol);
+                        currentLineComment.setEnd(pos(currLine, currCol));
                         comments.addComment(currentLineComment);
                         state = State.CODE;
                     } else {
@@ -164,15 +164,11 @@ public class CommentsParser {
                         if (content.startsWith("*")){
                             JavadocComment javadocComment = new JavadocComment();
                             javadocComment.setContent(content.substring(1));
-                            javadocComment.setBeginLine(currentBlockComment.getBeginLine());
-                            javadocComment.setBeginColumn(currentBlockComment.getBeginColumn());
-                            javadocComment.setEndLine(currLine);
-                            javadocComment.setEndColumn(currCol+1);
+                            javadocComment.setRange(range(pos(currentBlockComment.getBegin().line, currentBlockComment.getBegin().column), pos(currLine, currCol+1)));
                             comments.addComment(javadocComment);
                         } else {
                             currentBlockComment.setContent(content);
-                            currentBlockComment.setEndLine(currLine);
-                            currentBlockComment.setEndColumn(currCol+1);
+                            currentBlockComment.setEnd(pos(currLine, currCol+1));
                             comments.addComment(currentBlockComment);
                         }
                         state = State.CODE;
@@ -217,8 +213,7 @@ public class CommentsParser {
 
         if (state==State.IN_LINE_COMMENT){
             currentLineComment.setContent(currentContent.toString());
-            currentLineComment.setEndLine(currLine);
-            currentLineComment.setEndColumn(currCol);
+            currentLineComment.setEnd(pos(currLine, currCol));
             comments.addComment(currentLineComment);
         }
 

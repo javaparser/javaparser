@@ -21,9 +21,12 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -34,8 +37,16 @@ public final class EmptyTypeDeclaration extends TypeDeclaration {
         super(null, 0, null, null);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public EmptyTypeDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        super(beginLine, beginColumn, endLine, endColumn, null, 0, null, null);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
+    }
+
+    public EmptyTypeDeclaration(Range range) {
+        super(range, null, 0, null, null);
     }
 
     @Override

@@ -21,8 +21,12 @@
  
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -41,9 +45,17 @@ public final class LabeledStmt extends Statement {
 		setStmt(stmt);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public LabeledStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final String label, final Statement stmt) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	                   final String label, final Statement stmt) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), label, stmt);
+	}
+	
+	public LabeledStmt(Range range, final String label, final Statement stmt) {
+		super(range);
 		setLabel(label);
 		setStmt(stmt);
 	}
