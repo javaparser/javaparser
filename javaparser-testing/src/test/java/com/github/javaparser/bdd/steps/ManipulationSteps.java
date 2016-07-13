@@ -33,7 +33,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.jbehave.core.annotations.Alias;
@@ -263,7 +262,7 @@ public class ManipulationSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameters().get(parameterPosition -1);
-        assertThat((PrimitiveType)parameter.getType(), is(ASTHelper.INT_TYPE));
+        assertThat(parameter.getType(), is(ASTHelper.INT_TYPE));
         assertThat(parameter.getId().getName(), is(expectedName));
     }
 

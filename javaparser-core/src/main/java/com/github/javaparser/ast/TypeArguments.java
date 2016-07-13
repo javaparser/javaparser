@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
-import static java.util.Collections.unmodifiableList;
 
 public class TypeArguments {
     public static final TypeArguments EMPTY = withArguments(Collections.<Type>emptyList());

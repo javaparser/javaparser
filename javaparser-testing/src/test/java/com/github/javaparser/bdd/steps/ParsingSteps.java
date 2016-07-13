@@ -44,7 +44,7 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
 
@@ -324,7 +324,7 @@ public class ParsingSteps {
     @Then("the Java parser cannot parse it because of lexical errors")
     public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
         try {
-            JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+            JavaParser.parse(new StringReader(sourceUnderTest), true);
             fail("Lexical error expected");
         } catch (TokenMgrException e) {
             // ok

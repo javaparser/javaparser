@@ -2707,9 +2707,9 @@ Object[] ArrayDimsAndInits():
   (ann = Annotation()   { annotations = add(annotations, ann);  })*
   (
 	  LOOKAHEAD(2)
-	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); annotations=null; inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) (ann = Annotation()   { annotations = add(annotations, ann);  })* "[" "]" { i++; } )* {  accum = add(accum, annotations); annotations=null; ret[0] = inits; ret[1] = new Integer(i); }
+	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); annotations=null; inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) (ann = Annotation()   { annotations = add(annotations, ann);  })* "[" "]" { i++; } )* {  accum = add(accum, annotations); annotations=null; ret[0] = inits; ret[1] = Integer.valueOf(i); }
 	|
-	  ( "[" "]" { i++; } )+ expr = ArrayInitializer() { accum = add(accum, annotations);annotations=null;  ret[0] = new Integer(i); ret[1] = expr; }
+	  ( "[" "]" { i++; } )+ expr = ArrayInitializer() { accum = add(accum, annotations);annotations=null;  ret[0] = Integer.valueOf(i); ret[1] = expr; }
   )
   { ret[2]=accum; return ret; }
 }

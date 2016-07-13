@@ -27,8 +27,6 @@ import com.github.javaparser.ast.internal.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
