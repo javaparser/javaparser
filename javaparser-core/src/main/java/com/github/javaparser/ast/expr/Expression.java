@@ -21,7 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -31,8 +35,16 @@ public abstract class Expression extends Node {
 	public Expression() {
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public Expression(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
+	}
+	
+	public Expression(Range range) {
+		super(range);
 	}
 
 }

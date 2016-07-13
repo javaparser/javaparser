@@ -21,6 +21,10 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
+
+import static com.github.javaparser.Position.pos;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -29,7 +33,15 @@ public abstract class LiteralExpr extends Expression {
 	public LiteralExpr() {
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public LiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
+	}
+	
+	public LiteralExpr(Range range) {
+		super(range);
 	}
 }

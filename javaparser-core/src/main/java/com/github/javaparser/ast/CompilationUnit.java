@@ -21,19 +21,18 @@
  
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.ast.internal.Utils.*;
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
  * <p>
@@ -67,8 +66,16 @@ public final class CompilationUnit extends Node {
         setTypes(types);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public CompilationUnit(int beginLine, int beginColumn, int endLine, int endColumn, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), pakage, imports, types);
+    }
+    
+    public CompilationUnit(Range range, PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
+        super(range);
         setPackage(pakage);
         setImports(imports);
         setTypes(types);

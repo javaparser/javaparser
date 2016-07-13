@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.NodeWithModifiers;
@@ -28,9 +29,9 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
-import java.util.Collections;
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -61,11 +62,21 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		setMembers(members);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
 			int endColumn, List<AnnotationExpr> annotations,
 			int modifiers, String name,
 			List<BodyDeclaration> members) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, modifiers, name, members);
+	}
+	
+	public TypeDeclaration(Range range, List<AnnotationExpr> annotations,
+			int modifiers, String name,
+			List<BodyDeclaration> members) {
+		super(range, annotations);
 		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);

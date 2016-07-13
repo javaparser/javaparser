@@ -23,10 +23,13 @@ package com.github.javaparser.ast.body;
 
 import java.util.List;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 public abstract class BaseParameter
@@ -57,8 +60,16 @@ public abstract class BaseParameter
         setId(id);
 	}
 
-	public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
-	    super(beginLine, beginColumn, endLine, endColumn);
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
+    public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, id);
+    }
+
+    public BaseParameter(final Range range, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+	    super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);

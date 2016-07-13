@@ -21,9 +21,13 @@
  
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -39,9 +43,17 @@ public final class ThrowStmt extends Statement {
 		setExpr(expr);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public ThrowStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Expression expr) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	                 final Expression expr) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), expr);
+	}
+
+	public ThrowStmt(Range range, final Expression expr) {
+		super(range);
 		setExpr(expr);
 	}
 
