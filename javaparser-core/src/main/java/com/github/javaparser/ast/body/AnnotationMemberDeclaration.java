@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.NodeWithModifiers;
@@ -33,6 +34,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -65,8 +68,16 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
         setDefaultValue(defaultValue);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, name, defaultValue);
+    }
+
+    public AnnotationMemberDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+        super(range, annotations);
         setModifiers(modifiers);
         setType(type);
         setName(name);

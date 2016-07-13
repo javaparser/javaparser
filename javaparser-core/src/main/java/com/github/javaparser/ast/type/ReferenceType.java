@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -28,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -53,9 +55,17 @@ public final class ReferenceType extends Type implements TypedNode {
 		setArrayCount(arrayCount);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public ReferenceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final Type type, final int arrayCount) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount);
+	}
+	
+	public ReferenceType(final Range range, final Type type, final int arrayCount) {
+		super(range);
 		setType(type);
 		setArrayCount(arrayCount);
 	}
@@ -64,7 +74,13 @@ public final class ReferenceType extends Type implements TypedNode {
                          int endColumn, Type type, int arrayCount,
                          List<AnnotationExpr> annotations,
                          List<List<AnnotationExpr>> arraysAnnotations) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+	    this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount, annotations, arraysAnnotations);
+    }
+	
+    public ReferenceType(Range range, Type type, int arrayCount,
+                         List<AnnotationExpr> annotations,
+                         List<List<AnnotationExpr>> arraysAnnotations) {
+        super(range, annotations);
         setType(type);
         setArrayCount(arrayCount);
         this.arraysAnnotations = arraysAnnotations;

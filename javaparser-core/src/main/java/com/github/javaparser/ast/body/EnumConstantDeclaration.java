@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -31,6 +32,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
@@ -58,8 +60,16 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
         setClassBody(classBody);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, name, args, classBody);
+    }
+    
+    public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+        super(range, annotations);
         setName(name);
         setArgs(args);
         setClassBody(classBody);

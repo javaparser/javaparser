@@ -21,12 +21,15 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -58,12 +61,20 @@ public final class ClassOrInterfaceType extends Type implements NamedNode {
     @Deprecated
     public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
                                 final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
-        this(beginLine, beginColumn, endLine, endColumn, scope, name, TypeArguments.withArguments(typeArgs));
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, name, TypeArguments.withArguments(typeArgs));
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                                final ClassOrInterfaceType scope, final String name, final TypeArguments typeArguments) {
-        super(beginLine, beginColumn, endLine, endColumn);
+                                final ClassOrInterfaceType scope, final String name, final TypeArguments typeArgs) {
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, name, typeArgs);
+    }
+
+    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final TypeArguments typeArguments) {
+        super(range);
         setScope(scope);
         setName(name);
         setTypeArguments(typeArguments);

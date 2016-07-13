@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -28,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
@@ -58,9 +60,17 @@ public final class TypeParameter extends Node implements NamedNode {
 		setTypeBound(typeBound);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public TypeParameter(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final String name, final List<ClassOrInterfaceType> typeBound) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	                     final String name, final List<ClassOrInterfaceType> typeBound) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, typeBound);
+	}
+	
+	public TypeParameter(Range range, final String name, final List<ClassOrInterfaceType> typeBound) {
+		super(range);
 		setName(name);
 		setTypeBound(typeBound);
 	}

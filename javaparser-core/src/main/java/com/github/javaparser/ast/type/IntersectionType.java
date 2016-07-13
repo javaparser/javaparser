@@ -1,9 +1,13 @@
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -21,9 +25,17 @@ public class IntersectionType extends Type {
 
     private List<ReferenceType> elements;
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public IntersectionType(int beginLine, int beginColumn, int endLine,
                             int endColumn, List<ReferenceType> elements) {
-        super(beginLine, beginColumn, endLine, endColumn);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), elements);
+    }
+
+    public IntersectionType(Range range, List<ReferenceType> elements) {
+        super(range);
         setElements(elements);
     }
 

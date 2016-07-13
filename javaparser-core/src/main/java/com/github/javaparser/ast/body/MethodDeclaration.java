@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -33,6 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
@@ -88,11 +90,22 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setBody(body);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final int modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters, type, name, parameters, arrayCount, throws_, body);
+	}
+	
+	public MethodDeclaration(Range range,
+			final int modifiers, final List<AnnotationExpr> annotations,
+			final List<TypeParameter> typeParameters, final Type type, final String name,
+			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
+		super(range, annotations);
 		setModifiers(modifiers);
 		setTypeParameters(typeParameters);
 		setType(type);

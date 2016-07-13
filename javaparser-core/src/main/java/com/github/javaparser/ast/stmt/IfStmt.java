@@ -21,9 +21,13 @@
  
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -45,9 +49,18 @@ public final class IfStmt extends Statement {
 		setElseStmt(elseStmt);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public IfStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Expression condition, final Statement thenStmt, final Statement elseStmt) {
-		super(beginLine, beginColumn, endLine, endColumn);
+	              final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), condition, thenStmt, elseStmt);
+	}
+
+	public IfStmt(Range range,
+	              final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+		super(range);
 		setCondition(condition);
 		setThenStmt(thenStmt);
 		setElseStmt(elseStmt);

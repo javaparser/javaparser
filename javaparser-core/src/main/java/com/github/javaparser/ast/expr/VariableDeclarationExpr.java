@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.body.ModifierSet;
@@ -31,6 +32,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -60,10 +62,20 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 		setVars(vars);
 	}
 
+	/**
+	 * @deprecated prefer using Range objects.
+	 */
+	@Deprecated
 	public VariableDeclarationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
 			final List<VariableDeclarator> vars) {
-		super(beginLine, beginColumn, endLine, endColumn);
+		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, vars);
+	}
+	
+	public VariableDeclarationExpr(final Range range,
+			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
+			final List<VariableDeclarator> vars) {
+		super(range);
 		setModifiers(modifiers);
 		setAnnotations(annotations);
 		setType(type);

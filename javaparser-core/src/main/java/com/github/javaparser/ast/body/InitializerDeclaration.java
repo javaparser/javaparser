@@ -21,11 +21,14 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -45,8 +48,16 @@ public final class InitializerDeclaration extends BodyDeclaration implements Doc
         setBlock(block);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public InitializerDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, boolean isStatic, BlockStmt block) {
-        super(beginLine, beginColumn, endLine, endColumn, null);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), isStatic, block);
+    }
+    
+    public InitializerDeclaration(Range range, boolean isStatic, BlockStmt block) {
+        super(range, null);
         setStatic(isStatic);
         setBlock(block);
     }

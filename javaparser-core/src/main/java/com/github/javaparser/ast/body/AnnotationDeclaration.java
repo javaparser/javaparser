@@ -21,11 +21,14 @@
  
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
+
+import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -43,8 +46,16 @@ public final class AnnotationDeclaration extends TypeDeclaration {
         super(annotations, modifiers, name, members);
     }
 
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
     public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
-        super(beginLine, beginColumn, endLine, endColumn, annotations, modifiers, name, members);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, members);
+    }
+    
+    public AnnotationDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+        super(range, annotations, modifiers, name, members);
     }
 
     @Override
