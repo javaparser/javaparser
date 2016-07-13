@@ -38,15 +38,14 @@ import org.jbehave.core.annotations.*;
 import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -79,13 +78,13 @@ public class CommentParsingSteps {
 
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
-        compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+        compilationUnit = JavaParser.parse(new StringReader(sourceUnderTest), true);
     }
 
     @Then("the Java parser cannot parse it because of lexical errors")
     public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
         try {
-            compilationUnit = JavaParser.parse(new ByteArrayInputStream(sourceUnderTest.getBytes()));
+            compilationUnit = JavaParser.parse(new StringReader(sourceUnderTest), true);
             fail("Lexical error expected");
         } catch (TokenMgrException e) {
             // ok

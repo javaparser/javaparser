@@ -40,7 +40,7 @@ public class ComparingTest extends BasicJBehaveTest {
 
         return new InstanceStepsFactory(configuration(),
                 new SharedSteps(state),
-                new ComparingSteps(state));
+                new ComparingSteps());
     }
 
     public ComparingTest() {

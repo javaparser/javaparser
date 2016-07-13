@@ -33,7 +33,7 @@ public class IntersectionType extends Type {
                             int endColumn, List<ReferenceType> elements) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), elements);
     }
-    
+
     public IntersectionType(Range range, List<ReferenceType> elements) {
         super(range);
         setElements(elements);

@@ -71,7 +71,7 @@ public abstract class Node implements Cloneable {
     public Node(Range range) {
         this.range = range;
     }
-    
+
     /**
      * Accept method for visitor support.
      * 
@@ -373,9 +373,7 @@ public abstract class Node implements Cloneable {
 
     protected void setAsParentNodeOf(List<? extends Node> childNodes) {
         if (childNodes != null) {
-            Iterator<? extends Node> it = childNodes.iterator();
-            while (it.hasNext()) {
-                Node current = it.next();
+            for (Node current : childNodes) {
                 current.setParentNode(this);
             }
         }
@@ -413,8 +411,7 @@ public abstract class Node implements Cloneable {
         return range.isBefore(position);
     }
 
-    public boolean hasComment()
-    {
+    public boolean hasComment() {
         return comment != null;
     }
 }

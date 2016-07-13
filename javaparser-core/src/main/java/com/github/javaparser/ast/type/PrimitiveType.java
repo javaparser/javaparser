@@ -50,7 +50,7 @@ public final class PrimitiveType extends Type {
 			return new ClassOrInterfaceType(nameOfBoxedType);
 		}
 
-		private Primitive(String nameOfBoxedType) {
+		Primitive(String nameOfBoxedType) {
 			this.nameOfBoxedType = nameOfBoxedType;
 		}
 	}

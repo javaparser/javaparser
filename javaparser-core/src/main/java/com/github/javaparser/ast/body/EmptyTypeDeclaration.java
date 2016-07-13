@@ -44,7 +44,7 @@ public final class EmptyTypeDeclaration extends TypeDeclaration {
     public EmptyTypeDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
     }
-    
+
     public EmptyTypeDeclaration(Range range) {
         super(range, null, 0, null, null);
     }

@@ -83,10 +83,8 @@ public abstract class Comment extends Node {
         return false;
     }
 
-    public LineComment asLineComment()
-    {
-        if (isLineComment())
-        {
+    public LineComment asLineComment() {
+        if (isLineComment()) {
             return (LineComment) this;
         } else {
             throw new UnsupportedOperationException("Not a line comment");
@@ -100,17 +98,14 @@ public abstract class Comment extends Node {
 
     public void setCommentedNode(Node commentedNode)
     {
-        if (commentedNode==null)
-        {
-            this.commentedNode = commentedNode;
+        if (commentedNode==null) {
+            this.commentedNode = null;
             return;
         }
-        if (commentedNode==this)
-        {
+        if (commentedNode==this) {
             throw new IllegalArgumentException();
         }
-        if (commentedNode instanceof Comment)
-        {
+        if (commentedNode instanceof Comment) {
             throw new IllegalArgumentException();
         }
         this.commentedNode = commentedNode;
