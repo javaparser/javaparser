@@ -281,25 +281,25 @@ public class ParsingSteps {
     @Then("the begin line is $line")
     public void thenTheBeginLineIs(int line) {
         Node node = (Node) state.get("selectedNode");
-        assertEquals(line, node.getBeginLine());
+        assertEquals(line, node.getBegin().line);
     }
 
     @Then("the begin column is $column")
     public void thenTheBeginColumnIs(int column) {
         Node node = (Node) state.get("selectedNode");
-        assertEquals(column, node.getBeginColumn());
+        assertEquals(column, node.getBegin().column);
     }
 
     @Then("the end line is $line")
     public void thenTheEndLineIs(int line) {
         Node node = (Node) state.get("selectedNode");
-        assertEquals(line, node.getEndLine());
+        assertEquals(line, node.getEnd().line);
     }
 
     @Then("the end column is $column")
     public void thenTheEndColumnIs(int column) {
         Node node = (Node) state.get("selectedNode");
-        assertEquals(column, node.getEndColumn());
+        assertEquals(column, node.getEnd().column);
     }
 
     @Then("no errors are reported")

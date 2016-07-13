@@ -209,7 +209,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-        if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
+        if (!objEquals(n1.getBegin().line, n2.getBegin().line)) {
       		return false;
       	}
 
@@ -223,7 +223,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-        if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
+        if (!objEquals(n1.getBegin().line, n2.getBegin().line)) {
       			return false;
       	}
 

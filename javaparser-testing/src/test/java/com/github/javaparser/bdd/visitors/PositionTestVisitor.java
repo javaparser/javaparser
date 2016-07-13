@@ -446,15 +446,15 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     void doTest(final Node node) {
-        assertThat(node.getBeginLine(), is(greaterThanOrEqualTo(0)));
-        assertThat(node.getBeginColumn(), is(greaterThanOrEqualTo(0)));
-        assertThat(node.getEndLine(), is(greaterThanOrEqualTo(0)));
-        assertThat(node.getEndColumn(), is(greaterThanOrEqualTo(0)));
+        assertThat(node.getBegin().line, is(greaterThanOrEqualTo(0)));
+        assertThat(node.getBegin().column, is(greaterThanOrEqualTo(0)));
+        assertThat(node.getEnd().line, is(greaterThanOrEqualTo(0)));
+        assertThat(node.getEnd().column, is(greaterThanOrEqualTo(0)));
 
-        if (node.getBeginLine() == node.getEndLine()) {
-            assertThat(node.getBeginColumn(), is(lessThanOrEqualTo(node.getEndColumn())));
+        if (node.getBegin().line == node.getEnd().line) {
+            assertThat(node.getBegin().column, is(lessThanOrEqualTo(node.getEnd().column)));
         } else {
-            assertThat(node.getBeginLine(), is(lessThanOrEqualTo(node.getEndLine())));
+            assertThat(node.getBegin().line, is(lessThanOrEqualTo(node.getEnd().line)));
         }
         numberOfNodesVisited++;
     }

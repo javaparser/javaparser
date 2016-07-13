@@ -182,7 +182,7 @@ public abstract class Node implements Cloneable {
      */
     @Deprecated
     public final void setBeginLine(final int beginLine) {
-        range=range.withBeginLine(beginLine);
+        range = range.withBeginLine(beginLine);
     }
 
     /**
@@ -211,6 +211,20 @@ public abstract class Node implements Cloneable {
      */
     public void setEnd(Position end) {
         range=range.withEnd(end);
+    }
+
+	/**
+     * @return the range of characters in the source code that this node covers.
+     */
+    public Range getRange() {
+        return range;
+    }
+
+    /**
+     * @param range the range of characters in the source code that this node covers.
+     */
+    public void setRange(Range range) {
+        this.range = range;
     }
 
     /**
