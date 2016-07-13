@@ -326,6 +326,26 @@ class A {
 }
 Then no errors are reported
 
+Scenario: Classes that are thrown from a method can be annotated
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    void a() throws @Abc X {
+    }
+}
+Then no errors are reported
+
+Scenario: Classes that are thrown from a constructor can be annotated
+
+Given a CompilationUnit
+When the following source is parsed:
+class A {
+    A() throws @Abc X {
+    }
+}
+Then no errors are reported
+
 
 Scenario: Parsing trailing semicolons inside the imports area should work
 
