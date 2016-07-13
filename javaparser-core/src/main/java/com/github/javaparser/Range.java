@@ -22,14 +22,6 @@ public class Range {
         this.end = end;
     }
 
-    public Position getBegin() {
-        return begin;
-    }
-
-    public Position getEnd() {
-        return end;
-    }
-
     public static Range range(Position begin, Position end) {
         return new Range(begin, end);
     }
@@ -81,15 +73,17 @@ public class Range {
 
         Range range = (Range) o;
 
-        if (begin != null ? !begin.equals(range.begin) : range.begin != null) return false;
-        return end != null ? end.equals(range.end) : range.end == null;
+        return begin.equals(range.begin) && end.equals(range.end);
 
     }
 
     @Override
     public int hashCode() {
-        int result = begin != null ? begin.hashCode() : 0;
-        result = 31 * result + (end != null ? end.hashCode() : 0);
-        return result;
+        return 31 * begin.hashCode() + end.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return begin+"-"+end;
     }
 }

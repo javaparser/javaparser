@@ -27,95 +27,93 @@ import com.github.javaparser.ast.Node;
  * A position in a source file. Lines and columns start counting at 1.
  */
 public class Position implements Comparable<Position> {
-    public final int line;
-    public final int column;
+	public final int line;
+	public final int column;
 
-    public static final Position ABSOLUTE_START = new Position(Node.ABSOLUTE_BEGIN_LINE, -1);
-    public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE, -1);
-    
-    /** The first position in the file */
-    public static final Position HOME = new Position(1, 1);
-    public static final Position UNKNOWN= new Position(0, 0);
+	public static final Position ABSOLUTE_START = new Position(Node.ABSOLUTE_BEGIN_LINE, -1);
+	public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE, -1);
 
-    public Position(int line, int column) {
-        if (line < Node.ABSOLUTE_END_LINE) {
-            throw new IllegalArgumentException("Can't position at line " + line);
-        }
-        if (column < -1) {
-            throw new IllegalArgumentException("Can't position at column " + column);
-        }
-        this.line = line;
-        this.column = column;
-    }
+	/**
+	 * The first position in the file
+	 */
+	public static final Position HOME = new Position(1, 1);
+	public static final Position UNKNOWN = new Position(0, 0);
 
-    /**
-     * Convenient factory method.
-     */
-    public static Position pos(int line, int column) {
-        return new Position(line, column);
-    }
+	public Position(int line, int column) {
+		if (line < Node.ABSOLUTE_END_LINE) {
+			throw new IllegalArgumentException("Can't position at line " + line);
+		}
+		if (column < -1) {
+			throw new IllegalArgumentException("Can't position at column " + column);
+		}
+		this.line = line;
+		this.column = column;
+	}
 
-    public int getLine() {
-        return this.line;
-    }
+	/**
+	 * Convenient factory method.
+	 */
+	public static Position pos(int line, int column) {
+		return new Position(line, column);
+	}
 
-    public int getColumn() {
-        return this.column;
-    }
+	public Position withColumn(int column) {
+		return new Position(this.line, column);
+	}
 
-    public Position withColumn(int column) {
-        return new Position(this.line, column);
-    }
+	public Position withLine(int line) {
+		return new Position(line, this.column);
+	}
 
-    public Position withLine(int line) {
-        return new Position(line, this.column);
-    }
+	public boolean isAfter(Position position) {
+		if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
+		if (line > position.line) {
+			return true;
+		} else if (line == position.line) {
+			return column > position.column;
+		}
+		return false;
 
-    public boolean isAfter(Position position) {
-        if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
-        if (line > position.line) {
-            return true;
-        } else if (line == position.line) {
-            return column > position.column;
-        }
-        return false;
+	}
 
-    }
+	public boolean isBefore(Position position) {
+		if (position.line == Node.ABSOLUTE_END_LINE) return true;
+		if (line < position.line) {
+			return true;
+		} else if (line == position.line) {
+			return column < position.column;
+		}
+		return false;
+	}
 
-    public boolean isBefore(Position position) {
-        if (position.line == Node.ABSOLUTE_END_LINE) return true;
-        if (line < position.line) {
-            return true;
-        } else if (line == position.line) {
-            return column < position.column;
-        }
-        return false;
-    }
+	@Override
+	public int compareTo(Position o) {
+		if (isBefore(o)) {
+			return -1;
+		}
+		if (isAfter(o)) {
+			return 1;
+		}
+		return 0;
+	}
 
-    @Override
-    public int compareTo(Position o) {
-        if (isBefore(o)) {
-            return -1;
-        }
-        if (isAfter(o)) {
-            return 1;
-        }
-        return 0;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+		Position position = (Position) o;
 
-        Position position = (Position) o;
+		return line == position.line && column == position.column;
+	}
 
-        return line == position.line && column == position.column;
+	@Override
+	public int hashCode() {
+		return 31 * line + column;
+	}
 
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * line + column;
-    }
+	@Override
+	public String toString() {
+		return "(line " + line + ",col " + column + ")";
+	}
 }
