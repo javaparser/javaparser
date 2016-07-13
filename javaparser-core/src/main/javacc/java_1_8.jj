@@ -2426,34 +2426,32 @@ Expression PrimaryPrefix():
   (
 	  ret = Literal()
 	|
-	  "this" { ret = new ThisExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
+	  <THIS> { ret = new ThisExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
 	|
-	  "super" { ret = new SuperExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
+	  <SUPER> { ret = new SuperExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
 	  (
-	     "."
-	  [ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
-	  name = SimpleName()
-	  [ args = Arguments() {hasArgs=true;} ]
-	  	{
-			if (hasArgs) {
-	  			MethodCallExpr m = new MethodCallExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, typeArgs, null, args);
-				m.setNameExpr(name);
-				ret = m;
-			} else {
-	  			FieldAccessExpr f = new FieldAccessExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, null, null);
-				f.setFieldExpr(name);
-				ret = f;
+		    "."
+		    [ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
+		    name = SimpleName()
+		    [ args = Arguments() {hasArgs=true;} ]
+		    {
+				if (hasArgs) {
+		            MethodCallExpr m = new MethodCallExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, typeArgs, null, args);
+					m.setNameExpr(name);
+					ret = m;
+				} else {
+		            FieldAccessExpr f = new FieldAccessExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, null, null);
+					f.setFieldExpr(name);
+					ret = f;
+				}
+		    }
+		|
+			"::" [typeArgs = TypeParameters() { typeArgs.remove(0); }] (<IDENTIFIER> | "new")
+			{
+			  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs, token.image);
 			}
-	  	}
-	 |
-		"::" [typeArgs = TypeParameters() { typeArgs.remove(0); }] (<IDENTIFIER> | "new")
-		{
-		  ret = new MethodReferenceExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, typeArgs, token.image);
-		}
-     |   args = Arguments() {new MethodCallExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, typeArgs, null, args);}
 	  )
 	|
-
 	  "(" {line=token.beginLine; column=token.beginColumn;}
 	  	[
 	  	( LOOKAHEAD(FormalParameter()) p = FormalParameter() { isLambda = true;} [args = FormalLambdaParameters()]
