@@ -21,16 +21,22 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.Position;
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.visitor.*;
+import static com.github.javaparser.Position.pos;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.DumpVisitor;
+import com.github.javaparser.ast.visitor.EqualsVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -203,17 +209,17 @@ public abstract class Node implements Cloneable {
      * Sets the begin position of this node in the source file.
      */
     public void setBegin(Position begin) {
-        range=range.withBegin(begin);
+        range = range.withBegin(begin);
     }
 
     /**
      * Sets the end position of this node in the source file.
      */
     public void setEnd(Position end) {
-        range=range.withEnd(end);
+        range = range.withEnd(end);
     }
 
-	/**
+    /**
      * @return the range of characters in the source code that this node covers.
      */
     public Range getRange() {
@@ -236,14 +242,40 @@ public abstract class Node implements Cloneable {
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
-        if (this.comment != null)
-        {
+        if (this.comment != null) {
             this.comment.setCommentedNode(null);
         }
         this.comment = comment;
         if (comment != null) {
             this.comment.setCommentedNode(this);
         }
+    }
+
+    /**
+     * Use this to store additional information to this node.
+     *
+     * @param comment to be set
+     */
+    public final void setJavaDocComment(String comment) {
+        setComment(new JavadocComment(comment));
+    }
+
+    /**
+     * Use this to store additional information to this node.
+     *
+     * @param comment to be set
+     */
+    public final void setLineComment(String comment) {
+        setComment(new LineComment(comment));
+    }
+
+    /**
+     * Use this to store additional information to this node.
+     *
+     * @param comment to be set
+     */
+    public final void setBlockComment(String comment) {
+        setComment(new BlockComment(comment));
     }
 
     /**
@@ -319,6 +351,17 @@ public abstract class Node implements Cloneable {
         return parentNode;
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T getParentNodeOfType(Class<T> classType) {
+        Node parent = parentNode;
+        while (parent != null) {
+            if (parent.getClass().equals(classType))
+                return (T) parent;
+            parent = parent.parentNode;
+        }
+        return null;
+    }
+
     public List<Node> getChildrenNodes() {
         return childrenNodes;
     }
@@ -341,6 +384,7 @@ public abstract class Node implements Cloneable {
      *
      * When more than one comment preceeds a statement, the one immediately preceding it
      * it is associated with the statements, while the others are orphans.
+     * 
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments() {
@@ -351,6 +395,7 @@ public abstract class Node implements Cloneable {
      * This is the list of Comment which are contained in the Node either because
      * they are properly associated to one of its children or because they are floating
      * around inside the Node
+     * 
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments() {
@@ -413,6 +458,7 @@ public abstract class Node implements Cloneable {
     public boolean isPositionedAfter(Position position) {
         return range.isAfter(position);
     }
+
     /**
      * @deprecated prefer using Range objects.
      */

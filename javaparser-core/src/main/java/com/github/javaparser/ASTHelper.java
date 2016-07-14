@@ -21,6 +21,11 @@
  
 package com.github.javaparser;
 
+import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -40,15 +45,10 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.PrimitiveType.Primitive;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * This class helps to construct new nodes.
@@ -202,7 +202,9 @@ public final class ASTHelper {
      *            compilation unit
      * @param type
      *            type declaration
+     * @deprecated use {@link CompilationUnit#addClass(String)} kind of methods
      */
+    @Deprecated
     public static void addTypeDeclaration(CompilationUnit cu, TypeDeclaration type) {
         List<TypeDeclaration> types = cu.getTypes();
         if (isNullOrEmpty(types)) {

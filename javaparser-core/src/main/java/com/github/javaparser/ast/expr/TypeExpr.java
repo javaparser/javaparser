@@ -21,20 +21,20 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
  * @author Raquel Pau
  *
  */
-public class TypeExpr extends Expression implements TypedNode {
+public class TypeExpr extends Expression implements TypedNode<TypeExpr> {
 
     private Type type;
 
@@ -69,9 +69,10 @@ public class TypeExpr extends Expression implements TypedNode {
     }
 
     @Override
-    public void setType(Type type) {
+    public TypeExpr setType(Type type) {
         this.type = type;
         setAsParentNodeOf(this.type);
+        return this;
     }
 
 

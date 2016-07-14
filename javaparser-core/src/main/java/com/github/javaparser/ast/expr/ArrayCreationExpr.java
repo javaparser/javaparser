@@ -21,21 +21,21 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ArrayCreationExpr extends Expression implements TypedNode {
+public final class ArrayCreationExpr extends Expression implements TypedNode<ArrayCreationExpr> {
 
     private Type type;
 
@@ -139,9 +139,10 @@ public final class ArrayCreationExpr extends Expression implements TypedNode {
     }
 
     @Override
-    public void setType(Type type) {
+    public ArrayCreationExpr setType(Type type) {
         this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
     }
 
     public List<List<AnnotationExpr>> getArraysAnnotations() {

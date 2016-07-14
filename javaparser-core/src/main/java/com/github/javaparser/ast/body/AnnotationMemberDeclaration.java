@@ -21,6 +21,10 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
@@ -33,14 +37,11 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode, TypedNode, NodeWithModifiers {
+public final class AnnotationMemberDeclaration extends BodyDeclaration
+        implements DocumentableNode, NamedNode, TypedNode<AnnotationMemberDeclaration>, NodeWithModifiers {
 
     private int modifiers;
 
@@ -133,9 +134,10 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
     }
 
     @Override
-    public void setType(Type type) {
+    public AnnotationMemberDeclaration setType(Type type) {
         this.type = type;
         setAsParentNodeOf(type);
+        return this;
     }
 
     @Override

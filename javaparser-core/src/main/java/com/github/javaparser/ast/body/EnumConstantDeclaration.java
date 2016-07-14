@@ -21,6 +21,12 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.List;
+
+import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
@@ -29,11 +35,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -120,5 +121,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
             return (JavadocComment) getComment();
         }
         return null;
+    }
+
+    public EnumConstantDeclaration addArgument(String valueExpr) {
+        getArgs().add(ASTHelper.createNameExpr(valueExpr));
+        return this;
     }
 }

@@ -21,6 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypedNode;
@@ -30,15 +35,11 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarationExpr extends Expression implements TypedNode, NodeWithModifiers {
+public final class VariableDeclarationExpr extends Expression
+        implements TypedNode<VariableDeclarationExpr>, NodeWithModifiers {
 
 	private int modifiers;
 
@@ -126,9 +127,10 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 	}
 
 	@Override
-	public void setType(final Type type) {
+    public VariableDeclarationExpr setType(final Type type) {
 		this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
 	}
 
 	public void setVars(final List<VariableDeclarator> vars) {

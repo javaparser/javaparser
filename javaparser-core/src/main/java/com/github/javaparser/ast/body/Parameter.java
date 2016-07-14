@@ -21,6 +21,10 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -28,14 +32,10 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends BaseParameter implements TypedNode {
+public final class Parameter extends BaseParameter implements TypedNode<Parameter> {
     private Type type;
 
     private boolean isVarArgs;
@@ -87,9 +87,10 @@ public final class Parameter extends BaseParameter implements TypedNode {
     }
 
     @Override
-    public void setType(Type type) {
+    public Parameter setType(Type type) {
         this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
     }
 
     public void setVarArgs(boolean isVarArgs) {

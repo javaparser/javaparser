@@ -21,21 +21,21 @@
  
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ReferenceType extends Type implements TypedNode {
+public final class ReferenceType extends Type implements TypedNode<ReferenceType> {
 
 	private Type type;
 
@@ -108,9 +108,10 @@ public final class ReferenceType extends Type implements TypedNode {
 	}
 
 	@Override
-	public void setType(final Type type) {
+    public ReferenceType setType(final Type type) {
 		this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
 	}
 
 	/**
