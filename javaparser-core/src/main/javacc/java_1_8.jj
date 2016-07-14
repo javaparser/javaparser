@@ -25,7 +25,7 @@ options {
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true; // Using the CommonTokenAction callback to collect tokens for later usage
   //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
-  JDK_VERSION = "1.6";
+  JDK_VERSION = "1.8";
   TOKEN_FACTORY = "ASTParser.GTToken";
   JAVA_TEMPLATE_TYPE = "modern";
 }
