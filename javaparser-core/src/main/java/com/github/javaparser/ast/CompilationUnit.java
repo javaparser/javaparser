@@ -27,6 +27,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 import java.util.List;
 
 import com.github.javaparser.ASTHelper;
+import com.github.javaparser.ClassUtils;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -228,38 +229,15 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(Class<?> clazz) {
+        if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.equals(String.class))
+            return this;
+        // TODO check for arrays
         return addImport(clazz.getName());
     }
 
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
-     * shorthand for {@link #addImport(String, boolean, boolean)} with name,false,false<br>
      * <b>This method check if no import with the same name is already in the list</b>
-     * 
-     * @param clazz the class to import
-     * @return this, the {@link CompilationUnit}
-     */
-    public CompilationUnit addImportWithoutDuplicates(Class<?> clazz) {
-        return addImportWithoutDuplicates(clazz.getName());
-    }
-
-    /**
-     * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
-     * shorthand for {@link #addImport(String, boolean, boolean)} with name,false,false<br>
-     * <b>This method check if no import with the same name is already in the list</b>
-     * 
-     * @param name the import name
-     * @return this, the {@link CompilationUnit}
-     */
-    public CompilationUnit addImportWithoutDuplicates(final String name) {
-        if (getImports().stream().anyMatch(i -> i.getName().getName().equals(name)))
-            return this;
-        else
-            return addImport(name, false, false);
-    }
-
-    /**
-     * Add an import to the list of {@link ImportDeclaration} of this compilation unit
      * 
      * @param name the import name
      * @param isStatic
@@ -267,11 +245,15 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
-        ImportDeclaration importDeclaration = new ImportDeclaration(ASTHelper.createNameExpr(name), isStatic,
-                isAsterisk);
-        getImports().add(importDeclaration);
-        importDeclaration.setParentNode(this);
-        return this;
+        if (getImports().stream().anyMatch(i -> i.getName().getName().equals(name)))
+            return this;
+        else {
+            ImportDeclaration importDeclaration = new ImportDeclaration(ASTHelper.createNameExpr(name), isStatic,
+                    isAsterisk);
+            getImports().add(importDeclaration);
+            importDeclaration.setParentNode(this);
+            return this;
+        }
     }
 
     /**

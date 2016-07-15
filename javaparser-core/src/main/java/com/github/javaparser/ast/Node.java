@@ -52,8 +52,8 @@ public abstract class Node implements Cloneable {
 
     private Node parentNode;
 
-    private List<Node> childrenNodes = new LinkedList<Node>();
-    private List<Comment> orphanComments = new LinkedList<Comment>();
+    private List<Node> childrenNodes = new LinkedList<>();
+    private List<Comment> orphanComments = new LinkedList<>();
 
     /**
      * This attribute can store additional information from semantic analysis.
@@ -399,7 +399,7 @@ public abstract class Node implements Cloneable {
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments() {
-        List<Comment> comments = new LinkedList<Comment>();
+        List<Comment> comments = new LinkedList<>();
         comments.addAll(getOrphanComments());
 
         for (Node child : getChildrenNodes()) {
@@ -473,5 +473,12 @@ public abstract class Node implements Cloneable {
 
     public boolean hasComment() {
         return comment != null;
+    }
+
+    public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
+        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
+        if (parentNode != null) {
+            parentNode.addImport(clazz);
+        }
     }
 }

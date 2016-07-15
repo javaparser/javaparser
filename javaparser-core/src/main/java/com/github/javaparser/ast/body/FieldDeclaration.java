@@ -30,7 +30,6 @@ import java.util.List;
 
 import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypedNode;
@@ -181,10 +180,7 @@ public final class FieldDeclaration extends BodyDeclaration
      * @return the {@link NormalAnnotationExpr} added
      */
     public NormalAnnotationExpr addAnnotation(Class<? extends Annotation> clazz) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImportWithoutDuplicates(clazz);
-        }
+        tryAddImportToParentCompilationUnit(clazz);
         return addAnnotation(clazz.getSimpleName());
     }
 
@@ -209,10 +205,7 @@ public final class FieldDeclaration extends BodyDeclaration
      * @return this
      */
     public FieldDeclaration addMarkerAnnotation(Class<? extends Annotation> clazz) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImportWithoutDuplicates(clazz);
-        }
+        tryAddImportToParentCompilationUnit(clazz);
         return addMarkerAnnotation(clazz.getSimpleName());
     }
 
@@ -237,10 +230,7 @@ public final class FieldDeclaration extends BodyDeclaration
      * @return this
      */
     public FieldDeclaration addSingleMemberAnnotation(Class<? extends Annotation> clazz, String value) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImportWithoutDuplicates(clazz);
-        }
+        tryAddImportToParentCompilationUnit(clazz);
         return addSingleMemberAnnotation(clazz.getSimpleName(), value);
     }
 

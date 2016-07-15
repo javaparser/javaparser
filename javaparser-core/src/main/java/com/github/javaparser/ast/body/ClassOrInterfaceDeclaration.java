@@ -28,10 +28,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.github.javaparser.ASTHelper;
-import com.github.javaparser.ClassUtils;
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
@@ -177,10 +174,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
      * @return this, the {@link ClassOrInterfaceDeclaration}
      */
     public ClassOrInterfaceDeclaration addExtends(Class<?> clazz) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImportWithoutDuplicates(clazz);
-        }
+        tryAddImportToParentCompilationUnit(clazz);
         return addExtends(clazz.getSimpleName());
     }
 
@@ -217,10 +211,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
      * @return this, the {@link ClassOrInterfaceDeclaration}
      */
     public ClassOrInterfaceDeclaration addImplements(Class<?> clazz) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImportWithoutDuplicates(clazz);
-        }
+        tryAddImportToParentCompilationUnit(clazz);
         return addImplements(clazz.getSimpleName());
     }
 
@@ -245,10 +236,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
      * @return the {@link NormalAnnotationExpr} added
      */
     public NormalAnnotationExpr addAnnotation(Class<? extends Annotation> clazz) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImportWithoutDuplicates(clazz);
-        }
+        tryAddImportToParentCompilationUnit(clazz);
         return addAnnotation(clazz.getSimpleName());
     }
 
@@ -273,10 +261,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
      * @return this
      */
     public ClassOrInterfaceDeclaration addMarkerAnnotation(Class<? extends Annotation> clazz) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImportWithoutDuplicates(clazz);
-        }
+        tryAddImportToParentCompilationUnit(clazz);
         return addMarkerAnnotation(clazz.getSimpleName());
     }
 
@@ -301,10 +286,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
      * @return this
      */
     public ClassOrInterfaceDeclaration addSingleMemberAnnotation(Class<? extends Annotation> clazz, String value) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImportWithoutDuplicates(clazz);
-        }
+        tryAddImportToParentCompilationUnit(clazz);
         return addSingleMemberAnnotation(clazz.getSimpleName(), value);
     }
 
@@ -317,12 +299,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
      * @return the {@link FieldDeclaration} created
      */
     public FieldDeclaration addField(Class<?> typeClass, int modifiers, String name) {
-        if (!ClassUtils.isPrimitiveOrWrapper(typeClass) && !typeClass.isArray()) {
-            Node parentNode = getParentNode();
-            if (parentNode != null && parentNode instanceof CompilationUnit) {
-                ((CompilationUnit) parentNode).addImportWithoutDuplicates(typeClass);
-            }
-        }
+        tryAddImportToParentCompilationUnit(typeClass);
         return addField(typeClass.getSimpleName(), modifiers, name);
     }
 
