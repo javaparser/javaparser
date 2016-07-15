@@ -23,6 +23,7 @@ package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
+import com.github.javaparser.SourcesHelper;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.DumpVisitor;
 
@@ -30,9 +31,15 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringReader;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class DumpingSteps {
@@ -43,6 +50,12 @@ public class DumpingSteps {
     @Given("the class:$classSrc")
     public void givenTheClass(String classSrc) {
         this.sourceUnderTest = classSrc.trim();
+    }
+
+    @Given("the class in the file \"$classFile\"")
+    public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException, ParseException {
+        URL url = getClass().getResource("../samples/" + classFile);
+        sourceUnderTest = SourcesHelper.readerToString(new FileReader(new File(url.toURI()))).trim();
     }
 
     @Given("the compilation unit:$classSrc")
@@ -59,7 +72,7 @@ public class DumpingSteps {
     public void isDumpedTo(String dumpSrc) {
         DumpVisitor dumpVisitor = new DumpVisitor();
         dumpVisitor.visit(compilationUnit, null);
-        assertThat(dumpVisitor.getSource().trim(), is(dumpSrc.trim()));
+        assertEquals(dumpSrc.trim(), dumpVisitor.getSource().trim());
     }
 
 }
