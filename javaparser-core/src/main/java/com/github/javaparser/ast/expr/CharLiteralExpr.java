@@ -22,10 +22,12 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.internal.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.Range.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -44,11 +46,18 @@ public final class CharLiteralExpr extends StringLiteralExpr {
      */
     @Deprecated
     public CharLiteralExpr(int beginLine, int beginColumn, int endLine, int endColumn, String value) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), value);
+        this(range(pos(beginLine, beginColumn), pos(endLine, endColumn)), value);
     }
     
     public CharLiteralExpr(Range range, String value) {
         super(range, value);
+    }
+
+    /**
+     * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
+     */
+    public static CharLiteralExpr escape(String string) {
+        return new CharLiteralExpr(Utils.escapeEndOfLines(string));
     }
 
     @Override
