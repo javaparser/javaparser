@@ -35,9 +35,9 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.DocumentableNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.TypedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
@@ -48,7 +48,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
-        implements DocumentableNode<FieldDeclaration>, TypedNode<FieldDeclaration>,
+        implements NodeWithJavaDoc<FieldDeclaration>, NodeWithType<FieldDeclaration>,
         NodeWithModifiers<FieldDeclaration> {
 
     private int modifiers;

@@ -31,7 +31,7 @@ import com.github.javaparser.ast.type.Type;
  *
  * @since 2.3.1
  */
-public interface TypedNode<T> {
+public interface NodeWithType<T> {
     Type getType();
 
     T setType(Type type);

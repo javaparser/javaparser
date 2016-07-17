@@ -25,7 +25,7 @@ import static com.github.javaparser.Position.pos;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.nodeTypes.DocumentableNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -34,7 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration>
-        implements DocumentableNode<InitializerDeclaration> {
+        implements NodeWithJavaDoc<InitializerDeclaration> {
 
     private boolean isStatic;
 

@@ -27,17 +27,17 @@ package com.github.javaparser.ast.nodeTypes;
  * @author Federico Tomassetti
  * @since July 2014
  */
-public interface WithDeclaration {
+public interface NodeWithDeclaration {
 
     /**
-     * As {@link WithDeclaration#getDeclarationAsString(boolean, boolean, boolean)} including
+     * As {@link NodeWithDeclaration#getDeclarationAsString(boolean, boolean, boolean)} including
      * the modifiers, the throws clause and the parameters with both type and name.
      * @return String representation of declaration
      */
     String getDeclarationAsString();
 
     /**
-     * As {@link WithDeclaration#getDeclarationAsString(boolean, boolean, boolean)} including
+     * As {@link NodeWithDeclaration#getDeclarationAsString(boolean, boolean, boolean)} including
      * the parameters with both type and name.
      * @param includingModifiers flag to include the modifiers (if present) in the string produced
      * @param includingThrows flag to include the throws clause (if present) in the string produced

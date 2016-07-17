@@ -32,8 +32,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.AnnotableNode;
-import com.github.javaparser.ast.nodeTypes.TypedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 
 public final class PositionUtils {
 
@@ -76,9 +76,9 @@ public final class PositionUtils {
     }
 
     public static AnnotationExpr getLastAnnotation(Node node) {
-        if (node instanceof AnnotableNode){
+        if (node instanceof NodeWithAnnotations){
             List<AnnotationExpr> annotations = new LinkedList<>();
-            annotations.addAll(((AnnotableNode<?>) node).getAnnotations());
+            annotations.addAll(((NodeWithAnnotations<?>) node).getAnnotations());
             if (annotations.isEmpty()){
                 return null;
             }
@@ -100,7 +100,7 @@ public final class PositionUtils {
 
     private static Node beginNodeWithoutConsideringAnnotations(Node node) {
         if (node instanceof MethodDeclaration || node instanceof FieldDeclaration) {
-            TypedNode<?> casted = (TypedNode<?>) node;
+            NodeWithType<?> casted = (NodeWithType<?>) node;
             return casted.getType();
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
@@ -119,7 +119,7 @@ public final class PositionUtils {
         }
         // if the node is contained, but it comes immediately after the annotations,
         // let's not consider it contained
-        if (container instanceof AnnotableNode){
+        if (container instanceof NodeWithAnnotations){
             int bl = beginLineWithoutConsideringAnnotation(container);
             int bc = beginColumnWithoutConsideringAnnotation(container);
             if (bl>contained.getBegin().line) return false;

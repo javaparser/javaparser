@@ -32,13 +32,13 @@ import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.DocumentableNode;
-import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
-import com.github.javaparser.ast.nodeTypes.TypedNode;
-import com.github.javaparser.ast.nodeTypes.WithDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
@@ -49,8 +49,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
-        implements DocumentableNode<MethodDeclaration>, WithDeclaration, NamedNode<MethodDeclaration>,
-        TypedNode<MethodDeclaration>,
+        implements NodeWithJavaDoc<MethodDeclaration>, NodeWithDeclaration, NodeWithName<MethodDeclaration>,
+        NodeWithType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>, NodeWithParameters<MethodDeclaration>,
         NodeWithThrowable<MethodDeclaration> {
 

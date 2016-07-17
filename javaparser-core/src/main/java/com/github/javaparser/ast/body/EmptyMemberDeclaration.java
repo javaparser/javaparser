@@ -25,7 +25,7 @@ import static com.github.javaparser.Position.pos;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.nodeTypes.DocumentableNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -33,7 +33,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDeclaration>
-        implements DocumentableNode<EmptyMemberDeclaration> {
+        implements NodeWithJavaDoc<EmptyMemberDeclaration> {
 
     public EmptyMemberDeclaration() {
         super(null);

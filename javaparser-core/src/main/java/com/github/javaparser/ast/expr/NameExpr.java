@@ -24,14 +24,14 @@ package com.github.javaparser.ast.expr;
 import static com.github.javaparser.Position.pos;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public class NameExpr extends Expression implements NamedNode<NameExpr> {
+public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 
 	private String name;
 

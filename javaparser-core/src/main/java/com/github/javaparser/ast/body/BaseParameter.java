@@ -29,13 +29,13 @@ import java.util.List;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.AnnotableNode;
-import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 
 public abstract class BaseParameter<T>
         extends Node
-        implements AnnotableNode<T>, NamedNode<T>, NodeWithModifiers<T> {
+        implements NodeWithAnnotations<T>, NodeWithName<T>, NodeWithModifiers<T> {
     private int modifiers;
 
     private List<AnnotationExpr> annotations;

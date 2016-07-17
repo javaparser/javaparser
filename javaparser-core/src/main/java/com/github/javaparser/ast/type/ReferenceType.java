@@ -28,14 +28,14 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.TypedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ReferenceType extends Type implements TypedNode<ReferenceType> {
+public final class ReferenceType extends Type implements NodeWithType<ReferenceType> {
 
 	private Type type;
 

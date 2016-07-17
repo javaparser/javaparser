@@ -32,12 +32,12 @@ import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.DocumentableNode;
-import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
-import com.github.javaparser.ast.nodeTypes.WithDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -47,8 +47,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration>
-        implements DocumentableNode<ConstructorDeclaration>, WithDeclaration,
-        NamedNode<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>,
+        implements NodeWithJavaDoc<ConstructorDeclaration>, NodeWithDeclaration,
+        NodeWithName<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>,
         NodeWithParameters<ConstructorDeclaration>, NodeWithThrowable<ConstructorDeclaration> {
 
     private int modifiers;

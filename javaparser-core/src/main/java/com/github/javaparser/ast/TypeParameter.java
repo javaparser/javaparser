@@ -28,7 +28,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -45,7 +45,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * </pre>
  * @author Julio Vilmar Gesser
  */
-public final class TypeParameter extends Node implements NamedNode<TypeParameter> {
+public final class TypeParameter extends Node implements NodeWithName<TypeParameter> {
 
 	private String name;
 

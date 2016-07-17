@@ -27,14 +27,14 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypeArguments;
-import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type implements NamedNode<ClassOrInterfaceType> {
+public final class ClassOrInterfaceType extends Type implements NodeWithName<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 

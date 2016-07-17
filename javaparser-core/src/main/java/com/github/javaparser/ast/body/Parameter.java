@@ -27,7 +27,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.TypedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -35,7 +35,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends BaseParameter<Parameter> implements TypedNode<Parameter> {
+public final class Parameter extends BaseParameter<Parameter> implements NodeWithType<Parameter> {
     private Type type;
 
     private boolean isVarArgs;

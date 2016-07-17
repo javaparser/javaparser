@@ -29,12 +29,12 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.internal.Utils;
-import com.github.javaparser.ast.nodeTypes.AnnotableNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class BodyDeclaration<T> extends Node implements AnnotableNode<T> {
+public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotations<T> {
 
     private List<AnnotationExpr> annotations;
 

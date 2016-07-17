@@ -37,7 +37,7 @@ import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
  * @author Federico Tomassetti
  * @since July 2014
  */
-public interface AnnotableNode<T> {
+public interface NodeWithAnnotations<T> {
     List<AnnotationExpr> getAnnotations();
 
     T setAnnotations(List<AnnotationExpr> annotations);

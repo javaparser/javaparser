@@ -29,9 +29,9 @@ import java.util.List;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.nodeTypes.AnnotableNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.TypedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -40,8 +40,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarationExpr extends Expression
-        implements TypedNode<VariableDeclarationExpr>, NodeWithModifiers<VariableDeclarationExpr>,
-        AnnotableNode<VariableDeclarationExpr> {
+        implements NodeWithType<VariableDeclarationExpr>, NodeWithModifiers<VariableDeclarationExpr>,
+        NodeWithAnnotations<VariableDeclarationExpr> {
 
 	private int modifiers;
 

@@ -30,8 +30,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.DocumentableNode;
-import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 
@@ -39,7 +39,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
  * @author Julio Vilmar Gesser
  */
 public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
-        implements NamedNode<T>, DocumentableNode<T>, NodeWithModifiers<T>, NodeWithMembers<T> {
+        implements NodeWithName<T>, NodeWithJavaDoc<T>, NodeWithModifiers<T>, NodeWithMembers<T> {
 
 	private NameExpr name;
 
