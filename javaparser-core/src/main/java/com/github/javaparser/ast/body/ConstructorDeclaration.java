@@ -28,13 +28,16 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.DocumentableNode;
+import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
+import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
+import com.github.javaparser.ast.nodeTypes.WithDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -45,7 +48,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration>
         implements DocumentableNode<ConstructorDeclaration>, WithDeclaration,
-        NamedNode<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration> {
+        NamedNode<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>,
+        NodeWithParameters<ConstructorDeclaration>, NodeWithThrowable<ConstructorDeclaration> {
 
     private int modifiers;
 
@@ -68,7 +72,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     public ConstructorDeclaration(int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters,
-                                  String name, List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
+                                  String name, List<Parameter> parameters, List<ReferenceType> throws_,
+                                  BlockStmt block) {
         super(annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -85,7 +90,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters, name, parameters, throws_, block);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters,
+                name, parameters, throws_, block);
     }
 
     public ConstructorDeclaration(Range range, int modifiers,
@@ -134,11 +140,13 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         return name;
     }
 
+    @Override
     public List<Parameter> getParameters() {
         parameters = ensureNotNull(parameters);
         return parameters;
     }
 
+    @Override
     public List<ReferenceType> getThrows() {
         throws_ = ensureNotNull(throws_);
         return throws_;
@@ -154,32 +162,41 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         setAsParentNodeOf(this.block);
     }
 
-    public void setModifiers(int modifiers) {
+    @Override
+    public ConstructorDeclaration setModifiers(int modifiers) {
         this.modifiers = modifiers;
+        return this;
     }
 
-    public void setName(String name) {
+    @Override
+    public ConstructorDeclaration setName(String name) {
         setNameExpr(new NameExpr(name));
+        return this;
     }
 
-    public void setNameExpr(NameExpr name) {
+    public ConstructorDeclaration setNameExpr(NameExpr name) {
         this.name = name;
-	setAsParentNodeOf(this.name);
+        setAsParentNodeOf(this.name);
+        return this;
     }
 
-    public void setParameters(List<Parameter> parameters) {
+    @Override
+    public ConstructorDeclaration setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
         setAsParentNodeOf(this.parameters);
+        return this;
     }
 
-    public void setThrows(List<ReferenceType> throws_) {
+    @Override
+    public ConstructorDeclaration setThrows(List<ReferenceType> throws_) {
         this.throws_ = throws_;
         setAsParentNodeOf(this.throws_);
+        return this;
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
-		setAsParentNodeOf(this.typeParameters);
+        setAsParentNodeOf(this.typeParameters);
     }
 
     /**
@@ -200,8 +217,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         sb.append(getName());
         sb.append("(");
         boolean firstParam = true;
-        for (Parameter param : getParameters())
-        {
+        for (Parameter param : getParameters()) {
             if (firstParam) {
                 firstParam = false;
             } else {
@@ -241,7 +257,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
+        if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
         return null;

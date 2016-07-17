@@ -27,7 +27,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypedNode;
+import com.github.javaparser.ast.nodeTypes.TypedNode;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;

@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
  
-package com.github.javaparser.ast.body;
+package com.github.javaparser.ast.nodeTypes;
 
 /**
  * Element with a declaration representable as a String.

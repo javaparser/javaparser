@@ -26,8 +26,8 @@ import static com.github.javaparser.Position.pos;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.TypeArguments;
+import com.github.javaparser.ast.nodeTypes.NamedNode;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -120,8 +120,10 @@ public final class ClassOrInterfaceType extends Type implements NamedNode<ClassO
         return new PrimitiveType(PrimitiveType.unboxMap.get(name));
     }
 
-    public void setName(final String name) {
+    @Override
+    public ClassOrInterfaceType setName(final String name) {
         this.name = name;
+        return this;
     }
 
     public void setScope(final ClassOrInterfaceType scope) {

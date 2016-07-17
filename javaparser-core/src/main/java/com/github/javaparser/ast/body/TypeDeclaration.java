@@ -27,18 +27,19 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.DocumentableNode;
+import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
-        implements NamedNode<T>, DocumentableNode<T>, NodeWithModifiers<T> {
+        implements NamedNode<T>, DocumentableNode<T>, NodeWithModifiers<T>, NodeWithMembers<T> {
 
 	private NameExpr name;
 
@@ -83,7 +84,8 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 		setMembers(members);
 	}
 
-    public final List<BodyDeclaration<?>> getMembers() {
+    @Override
+    public List<BodyDeclaration<?>> getMembers() {
         	members = ensureNotNull(members);
         	return members;
 	}
@@ -104,22 +106,33 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 		return name.getName();
 	}
 
-    public void setMembers(List<BodyDeclaration<?>> members) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public T setMembers(List<BodyDeclaration<?>> members) {
 		this.members = members;
 		setAsParentNodeOf(this.members);
+        return (T) this;
 	}
 
-	public final void setModifiers(int modifiers) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public T setModifiers(int modifiers) {
 		this.modifiers = modifiers;
+        return (T) this;
 	}
 
-	public final void setName(String name) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public T setName(String name) {
 		setNameExpr(new NameExpr(name));
+        return (T) this;
 	}
 
-	public final void setNameExpr(NameExpr nameExpr) {
+    @SuppressWarnings("unchecked")
+    public T setNameExpr(NameExpr nameExpr) {
 		this.name = nameExpr;
 		setAsParentNodeOf(this.name);
+        return (T) this;
 	}
 
 	public final NameExpr getNameExpr() {

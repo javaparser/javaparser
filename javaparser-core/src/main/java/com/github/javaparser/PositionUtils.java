@@ -28,12 +28,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.TypedNode;
-import com.github.javaparser.ast.body.AnnotableNode;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.AnnotableNode;
+import com.github.javaparser.ast.nodeTypes.TypedNode;
 
 public final class PositionUtils {
 

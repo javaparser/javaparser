@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NamedNode;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -118,8 +119,10 @@ public final class TypeParameter extends Node implements NamedNode<TypeParameter
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(final String name) {
+    @Override
+    public TypeParameter setName(final String name) {
 		this.name = name;
+        return this;
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package com.github.javaparser.ast;
+package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.body.ModifierSet;
 
@@ -13,6 +13,12 @@ public interface NodeWithModifiers<T> {
      * @return modifiers
      */
     int getModifiers();
+
+    T setModifiers(int modifiers);
+
+    default T addModifier(int modifier) {
+        return setModifiers(getModifiers() | modifier);
+    }
 
     default boolean isStatic() {
         return ModifierSet.isStatic(getModifiers());

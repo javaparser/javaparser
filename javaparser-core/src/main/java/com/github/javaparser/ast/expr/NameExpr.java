@@ -24,7 +24,7 @@ package com.github.javaparser.ast.expr;
 import static com.github.javaparser.Position.pos;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NamedNode;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -69,8 +69,10 @@ public class NameExpr extends Expression implements NamedNode<NameExpr> {
 		return name;
 	}
 
-	public final void setName(final String name) {
+    @Override
+    public NameExpr setName(final String name) {
 		this.name = name;
+        return this;
 	}
 
 }

@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast;
+package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.type.Type;
 

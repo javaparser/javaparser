@@ -24,7 +24,7 @@ package com.github.javaparser.ast.expr;
 import static com.github.javaparser.Position.pos;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypedNode;
+import com.github.javaparser.ast.nodeTypes.TypedNode;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;

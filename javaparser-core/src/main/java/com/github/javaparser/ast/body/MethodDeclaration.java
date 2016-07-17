@@ -28,14 +28,17 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypeParameter;
-import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.DocumentableNode;
+import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
+import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
+import com.github.javaparser.ast.nodeTypes.TypedNode;
+import com.github.javaparser.ast.nodeTypes.WithDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
@@ -48,7 +51,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         implements DocumentableNode<MethodDeclaration>, WithDeclaration, NamedNode<MethodDeclaration>,
         TypedNode<MethodDeclaration>,
-        NodeWithModifiers<MethodDeclaration> {
+        NodeWithModifiers<MethodDeclaration>, NodeWithParameters<MethodDeclaration>,
+        NodeWithThrowable<MethodDeclaration> {
 
     private int modifiers;
 
@@ -167,11 +171,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         return name;
     }
 
+    @Override
     public List<Parameter> getParameters() {
         parameters = ensureNotNull(parameters);
         return parameters;
     }
 
+    @Override
     public List<ReferenceType> getThrows() {
         throws_ = ensureNotNull(throws_);
         return throws_;
@@ -197,11 +203,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         return this;
     }
 
+    @Override
     public MethodDeclaration setModifiers(final int modifiers) {
         this.modifiers = modifiers;
         return this;
     }
 
+    @Override
     public MethodDeclaration setName(final String name) {
         setNameExpr(new NameExpr(name));
         return this;
@@ -213,12 +221,14 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         return this;
     }
 
+    @Override
     public MethodDeclaration setParameters(final List<Parameter> parameters) {
         this.parameters = parameters;
         setAsParentNodeOf(this.parameters);
         return this;
     }
 
+    @Override
     public MethodDeclaration setThrows(final List<ReferenceType> throws_) {
         this.throws_ = throws_;
         setAsParentNodeOf(this.throws_);

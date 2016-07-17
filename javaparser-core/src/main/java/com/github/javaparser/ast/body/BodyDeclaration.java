@@ -29,6 +29,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.internal.Utils;
+import com.github.javaparser.ast.nodeTypes.AnnotableNode;
 
 /**
  * @author Julio Vilmar Gesser
@@ -68,8 +69,11 @@ public abstract class BodyDeclaration<T> extends Node implements AnnotableNode<T
      * @param annotations a null value is currently treated as an empty list. This behavior could change
      *                    in the future, so please avoid passing null
      */
-    public final void setAnnotations(List<AnnotationExpr> annotations) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public final T setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
+        return (T) this;
     }
 }

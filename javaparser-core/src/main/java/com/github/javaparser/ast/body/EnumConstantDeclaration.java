@@ -28,11 +28,11 @@ import java.util.List;
 
 import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.DocumentableNode;
+import com.github.javaparser.ast.nodeTypes.NamedNode;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -116,8 +116,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 		setAsParentNodeOf(this.classBody);
     }
 
-    public void setName(String name) {
+    @Override
+    public EnumConstantDeclaration setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Override

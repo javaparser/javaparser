@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.Position.pos;
@@ -26,13 +26,13 @@ import static com.github.javaparser.Position.pos;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.NodeWithModifiers;
-import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.DocumentableNode;
+import com.github.javaparser.ast.nodeTypes.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.TypedNode;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -62,7 +62,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type, String name,
+                                       Expression defaultValue) {
         super(annotations);
         setModifiers(modifiers);
         setType(type);
@@ -74,11 +75,15 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, name, defaultValue);
+    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+                                       List<AnnotationExpr> annotations, Type type, String name,
+                                       Expression defaultValue) {
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, name,
+                defaultValue);
     }
 
-    public AnnotationMemberDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, Type type,
+                                       String name, Expression defaultValue) {
         super(range, annotations);
         setModifiers(modifiers);
         setType(type);
@@ -126,12 +131,16 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         setAsParentNodeOf(defaultValue);
     }
 
-    public void setModifiers(int modifiers) {
+    @Override
+    public AnnotationMemberDeclaration setModifiers(int modifiers) {
         this.modifiers = modifiers;
+        return this;
     }
 
-    public void setName(String name) {
+    @Override
+    public AnnotationMemberDeclaration setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Override
@@ -143,7 +152,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     @Override
     public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
+        if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
         return null;

@@ -27,10 +27,11 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NodeWithModifiers;
-import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.nodeTypes.AnnotableNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.TypedNode;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -39,7 +40,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarationExpr extends Expression
-        implements TypedNode<VariableDeclarationExpr>, NodeWithModifiers<VariableDeclarationExpr> {
+        implements TypedNode<VariableDeclarationExpr>, NodeWithModifiers<VariableDeclarationExpr>,
+        AnnotableNode<VariableDeclarationExpr> {
 
 	private int modifiers;
 
@@ -91,7 +93,8 @@ public final class VariableDeclarationExpr extends Expression
 		v.visit(this, arg);
 	}
 
-	public List<AnnotationExpr> getAnnotations() {
+	@Override
+    public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;
 	}
@@ -117,13 +120,17 @@ public final class VariableDeclarationExpr extends Expression
         return vars;
 	}
 
-	public void setAnnotations(final List<AnnotationExpr> annotations) {
+	@Override
+    public VariableDeclarationExpr setAnnotations(final List<AnnotationExpr> annotations) {
         this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
+        return this;
 	}
 
-	public void setModifiers(final int modifiers) {
+    @Override
+    public VariableDeclarationExpr setModifiers(final int modifiers) {
 		this.modifiers = modifiers;
+        return this;
 	}
 
 	@Override
