@@ -134,6 +134,17 @@ enum XYZ {
 
 }
 
+Scenario: An enum without fields has no () on its members
+Given the compilation unit:
+package test; enum XYZ {A,B,C}
+When the class is parsed by the Java parser
+Then it is dumped to:
+package test;
+
+enum XYZ {
+
+    A, B, C
+}
 
 Scenario: Strings with escaped newlines are parsed correctly
 Given the class:
