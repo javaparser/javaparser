@@ -21,18 +21,19 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EmptyMemberDeclaration extends BodyDeclaration implements DocumentableNode {
+public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDeclaration>
+        implements DocumentableNode<EmptyMemberDeclaration> {
 
     public EmptyMemberDeclaration() {
         super(null);

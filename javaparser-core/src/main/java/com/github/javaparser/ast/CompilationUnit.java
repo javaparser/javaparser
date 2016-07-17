@@ -63,12 +63,12 @@ public final class CompilationUnit extends Node {
 
     private List<ImportDeclaration> imports;
 
-    private List<TypeDeclaration> types;
+    private List<TypeDeclaration<?>> types;
 
     public CompilationUnit() {
     }
 
-    public CompilationUnit(PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration> types) {
+    public CompilationUnit(PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
         setPackage(pakage);
         setImports(imports);
         setTypes(types);
@@ -79,12 +79,12 @@ public final class CompilationUnit extends Node {
      */
     @Deprecated
     public CompilationUnit(int beginLine, int beginColumn, int endLine, int endColumn, PackageDeclaration pakage,
-                           List<ImportDeclaration> imports, List<TypeDeclaration> types) {
+                           List<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), pakage, imports, types);
     }
 
     public CompilationUnit(Range range, PackageDeclaration pakage, List<ImportDeclaration> imports,
-                           List<TypeDeclaration> types) {
+                           List<TypeDeclaration<?>> types) {
         super(range);
         setPackage(pakage);
         setImports(imports);
@@ -149,7 +149,7 @@ public final class CompilationUnit extends Node {
      * @see EmptyTypeDeclaration
      * @see EnumDeclaration
      */
-    public List<TypeDeclaration> getTypes() {
+    public List<TypeDeclaration<?>> getTypes() {
         types = ensureNotNull(types);
         return types;
     }
@@ -194,7 +194,7 @@ public final class CompilationUnit extends Node {
      * @param types
      *            the lis of types
      */
-    public void setTypes(List<TypeDeclaration> types) {
+    public void setTypes(List<TypeDeclaration<?>> types) {
         this.types = types;
         setAsParentNodeOf(this.types);
     }
@@ -231,9 +231,14 @@ public final class CompilationUnit extends Node {
     public CompilationUnit addImport(Class<?> clazz) {
         if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.equals(String.class))
             return this;
-        // TODO check for arrays
+        else if (clazz.isArray() && !ClassUtils.isPrimitiveOrWrapper(clazz.getComponentType())
+                && !clazz.getComponentType().equals(String.class))
+            return addImport(clazz.getComponentType().getName());
         return addImport(clazz.getName());
     }
+
+    // TODO Pour chaque type liste, ajouter un add qui prends par ex AnnotationExpr ou FieldExpression
+    // TODO checker si on peut mettre les builders dans AnnotableNode par ex et autres
 
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>

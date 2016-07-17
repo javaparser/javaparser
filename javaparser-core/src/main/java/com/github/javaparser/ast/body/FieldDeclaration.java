@@ -47,8 +47,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration
-        implements DocumentableNode, TypedNode<FieldDeclaration>, NodeWithModifiers {
+public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
+        implements DocumentableNode<FieldDeclaration>, TypedNode<FieldDeclaration>,
+        NodeWithModifiers<FieldDeclaration> {
 
     private int modifiers;
 

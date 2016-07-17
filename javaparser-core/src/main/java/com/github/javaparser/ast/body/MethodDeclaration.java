@@ -45,8 +45,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration
-        implements DocumentableNode, WithDeclaration, NamedNode, TypedNode<MethodDeclaration>, NodeWithModifiers {
+public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
+        implements DocumentableNode<MethodDeclaration>, WithDeclaration, NamedNode<MethodDeclaration>,
+        TypedNode<MethodDeclaration>,
+        NodeWithModifiers<MethodDeclaration> {
 
     private int modifiers;
 

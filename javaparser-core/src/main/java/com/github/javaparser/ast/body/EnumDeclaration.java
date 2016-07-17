@@ -40,7 +40,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration {
+public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
 
     private List<ClassOrInterfaceType> implementsList;
 
@@ -53,7 +53,9 @@ public final class EnumDeclaration extends TypeDeclaration {
         super(modifiers, name);
     }
 
-    public EnumDeclaration(int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+    public EnumDeclaration(int modifiers, List<AnnotationExpr> annotations, String name,
+                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);
@@ -63,11 +65,15 @@ public final class EnumDeclaration extends TypeDeclaration {
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+                           List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList,
+                           List<EnumConstantDeclaration> entries, List<BodyDeclaration<?>> members) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, implementsList, entries, members);
     }
     
-    public EnumDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+    public EnumDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, String name,
+                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);

@@ -28,6 +28,6 @@ package com.github.javaparser.ast;
  * 
  * @since 2.0.1 
  */
-public interface NamedNode {
+public interface NamedNode<T> {
     String getName();
 }

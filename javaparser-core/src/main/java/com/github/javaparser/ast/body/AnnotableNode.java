@@ -21,9 +21,9 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.expr.AnnotationExpr;
-
 import java.util.List;
+
+import com.github.javaparser.ast.expr.AnnotationExpr;
 
 /**
  * An element which can be the target of annotations.
@@ -31,6 +31,6 @@ import java.util.List;
  * @author Federico Tomassetti
  * @since July 2014
  */
-public interface AnnotableNode {
+public interface AnnotableNode<T> {
     List<AnnotationExpr> getAnnotations();
 }

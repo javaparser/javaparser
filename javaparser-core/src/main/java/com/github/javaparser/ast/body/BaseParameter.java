@@ -21,6 +21,9 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -29,12 +32,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
-public abstract class BaseParameter
+public abstract class BaseParameter<T>
     extends Node
-    implements AnnotableNode, NamedNode, NodeWithModifiers
+        implements AnnotableNode<T>, NamedNode<T>, NodeWithModifiers<T>
 {
     private int modifiers;
 
@@ -78,6 +78,7 @@ public abstract class BaseParameter
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
+    @Override
     public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;

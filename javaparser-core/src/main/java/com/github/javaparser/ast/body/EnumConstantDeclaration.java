@@ -39,13 +39,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumConstantDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode {
+public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration>
+        implements DocumentableNode<EnumConstantDeclaration>, NamedNode<EnumConstantDeclaration> {
 
     private String name;
 
     private List<Expression> args;
 
-    private List<BodyDeclaration> classBody;
+    private List<BodyDeclaration<?>> classBody;
 
     public EnumConstantDeclaration() {
     }
@@ -54,7 +55,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
         setName(name);
     }
 
-    public EnumConstantDeclaration(List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+    public EnumConstantDeclaration(List<AnnotationExpr> annotations, String name, List<Expression> args,
+                                   List<BodyDeclaration<?>> classBody) {
         super(annotations);
         setName(name);
         setArgs(args);
@@ -65,11 +67,14 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+    public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn,
+                                   List<AnnotationExpr> annotations, String name, List<Expression> args,
+                                   List<BodyDeclaration<?>> classBody) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, name, args, classBody);
     }
     
-    public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+    public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> args,
+                                   List<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);
         setArgs(args);
@@ -91,7 +96,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
         return args;
     }
 
-    public List<BodyDeclaration> getClassBody() {
+    public List<BodyDeclaration<?>> getClassBody() {
         classBody = ensureNotNull(classBody);
         return classBody;
     }
@@ -106,7 +111,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
 		setAsParentNodeOf(this.args);
     }
 
-    public void setClassBody(List<BodyDeclaration> classBody) {
+    public void setClassBody(List<BodyDeclaration<?>> classBody) {
         this.classBody = classBody;
 		setAsParentNodeOf(this.classBody);
     }

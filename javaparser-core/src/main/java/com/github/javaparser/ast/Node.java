@@ -30,7 +30,6 @@ import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.DumpVisitor;
@@ -251,14 +250,7 @@ public abstract class Node implements Cloneable {
         }
     }
 
-    /**
-     * Use this to store additional information to this node.
-     *
-     * @param comment to be set
-     */
-    public final void setJavaDocComment(String comment) {
-        setComment(new JavadocComment(comment));
-    }
+
 
     /**
      * Use this to store additional information to this node.

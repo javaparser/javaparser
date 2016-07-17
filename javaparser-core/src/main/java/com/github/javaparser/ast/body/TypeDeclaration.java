@@ -21,6 +21,11 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
@@ -29,21 +34,17 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class TypeDeclaration extends BodyDeclaration implements NamedNode, DocumentableNode, NodeWithModifiers {
+public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
+        implements NamedNode<T>, DocumentableNode<T>, NodeWithModifiers<T> {
 
 	private NameExpr name;
 
 	private int modifiers;
 
-	private List<BodyDeclaration> members;
+    private List<BodyDeclaration<?>> members;
 
 	public TypeDeclaration() {
 	}
@@ -55,7 +56,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 
 	public TypeDeclaration(List<AnnotationExpr> annotations,
 			int modifiers, String name,
-			List<BodyDeclaration> members) {
+                           List<BodyDeclaration<?>> members) {
 		super(annotations);
 		setName(name);
 		setModifiers(modifiers);
@@ -69,20 +70,20 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
 			int endColumn, List<AnnotationExpr> annotations,
 			int modifiers, String name,
-			List<BodyDeclaration> members) {
+                           List<BodyDeclaration<?>> members) {
 		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, modifiers, name, members);
 	}
 	
 	public TypeDeclaration(Range range, List<AnnotationExpr> annotations,
 			int modifiers, String name,
-			List<BodyDeclaration> members) {
+                           List<BodyDeclaration<?>> members) {
 		super(range, annotations);
 		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);
 	}
 
-	public final List<BodyDeclaration> getMembers() {
+    public final List<BodyDeclaration<?>> getMembers() {
         	members = ensureNotNull(members);
         	return members;
 	}
@@ -103,7 +104,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		return name.getName();
 	}
 
-	public void setMembers(List<BodyDeclaration> members) {
+    public void setMembers(List<BodyDeclaration<?>> members) {
 		this.members = members;
 		setAsParentNodeOf(this.members);
 	}
@@ -132,4 +133,5 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		}
 		return null;
 	}
+
 }

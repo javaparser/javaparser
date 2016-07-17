@@ -41,7 +41,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
+public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> {
 
     private boolean interface_;
 
@@ -66,7 +66,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
                                        final List<TypeParameter> typeParameters,
                                        final List<ClassOrInterfaceType> extendsList,
                                        final List<ClassOrInterfaceType> implementsList,
-                                       final List<BodyDeclaration> members) {
+                                       final List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);
@@ -85,7 +85,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
                                        final List<TypeParameter> typeParameters,
                                        final List<ClassOrInterfaceType> extendsList,
                                        final List<ClassOrInterfaceType> implementsList,
-                                       final List<BodyDeclaration> members) {
+                                       final List<BodyDeclaration<?>> members) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, isInterface, name,
                 typeParameters, extendsList, implementsList, members);
     }
@@ -96,7 +96,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
                                        final List<TypeParameter> typeParameters,
                                        final List<ClassOrInterfaceType> extendsList,
                                        final List<ClassOrInterfaceType> implementsList,
-                                       final List<BodyDeclaration> members) {
+                                       final List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);

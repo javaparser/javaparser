@@ -35,7 +35,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends BaseParameter implements TypedNode<Parameter> {
+public final class Parameter extends BaseParameter<Parameter> implements TypedNode<Parameter> {
     private Type type;
 
     private boolean isVarArgs;

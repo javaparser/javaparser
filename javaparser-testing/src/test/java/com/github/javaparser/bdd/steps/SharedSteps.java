@@ -21,16 +21,11 @@
  
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import org.hamcrest.CoreMatchers;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,11 +34,17 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
-import static org.junit.Assert.assertThat;
+import org.hamcrest.CoreMatchers;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 
 public class SharedSteps {
 
@@ -132,10 +133,9 @@ public class SharedSteps {
         assertThat(compilationUnit.toString(), CoreMatchers.is(equalToIgnoringWhiteSpace(classSrc)));
     }
 
-    public static BodyDeclaration getMemberByTypeAndPosition(TypeDeclaration typeDeclaration, int position,
-                                                       Class<? extends BodyDeclaration> typeClass){
+	public static BodyDeclaration<?> getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<? extends BodyDeclaration<?>> typeClass) {
         int typeCount = 0;
-        for(BodyDeclaration declaration : typeDeclaration.getMembers()){
+		for (BodyDeclaration<?> declaration : typeDeclaration.getMembers()) {
             if(declaration.getClass().equals(typeClass)){
                 if(typeCount == position){
                     return declaration;
@@ -148,11 +148,11 @@ public class SharedSteps {
 
     public static MethodDeclaration getMethodByPositionAndClassPosition(CompilationUnit compilationUnit,
                                                                          int methodPosition, int classPosition) {
-        TypeDeclaration type = compilationUnit.getTypes().get(classPosition -1);
+		TypeDeclaration<?> type = compilationUnit.getTypes().get(classPosition - 1);
 
         int memberCount = 0;
         int methodCount = 0;
-        for(BodyDeclaration bodyDeclaration : type.getMembers()) {
+		for (BodyDeclaration<?> bodyDeclaration : type.getMembers()) {
             if(bodyDeclaration instanceof MethodDeclaration){
                 if(methodCount == methodPosition -1) {
                     return (MethodDeclaration) type.getMembers().get(memberCount);

@@ -25,11 +25,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
@@ -44,16 +41,84 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ArrayAccessExpr;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.ArrayInitializerExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
+import com.github.javaparser.ast.expr.CastExpr;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.DoubleLiteralExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.InstanceOfExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.LongLiteralExpr;
+import com.github.javaparser.ast.expr.LongLiteralMinValueExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.MemberValuePair;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.QualifiedNameExpr;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.SuperExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.AssertStmt;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.BreakStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ContinueStmt;
+import com.github.javaparser.ast.stmt.DoStmt;
+import com.github.javaparser.ast.stmt.EmptyStmt;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.ForeachStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.LabeledStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchEntryStmt;
+import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.ast.stmt.SynchronizedStmt;
+import com.github.javaparser.ast.stmt.ThrowStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
+import com.github.javaparser.ast.stmt.WhileStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.IntersectionType;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.type.WildcardType;
 
 public class CloneVisitor implements GenericVisitor<Node, Object> {
 
@@ -61,7 +126,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(CompilationUnit _n, Object _arg) {
 		PackageDeclaration package_ = cloneNodes(_n.getPackage(), _arg);
 		List<ImportDeclaration> imports = visit(_n.getImports(), _arg);
-		List<TypeDeclaration> types = visit(_n.getTypes(), _arg);
+        List<TypeDeclaration<?>> types = visit(_n.getTypes(), _arg);
 
 		return new CompilationUnit(
 				_n.getRange(),
@@ -127,7 +192,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg);
 		List<ClassOrInterfaceType> extendsList = visit(_n.getExtends(), _arg);
 		List<ClassOrInterfaceType> implementsList = visit(_n.getImplements(), _arg);
-		List<BodyDeclaration> members = visit(_n.getMembers(), _arg);
+        List<BodyDeclaration<?>> members = visit(_n.getMembers(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(
@@ -144,7 +209,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		List<ClassOrInterfaceType> implementsList = visit(_n.getImplements(), _arg);
 		List<EnumConstantDeclaration> entries = visit(_n.getEntries(), _arg);
-		List<BodyDeclaration> members = visit(_n.getMembers(), _arg);
+        List<BodyDeclaration<?>> members = visit(_n.getMembers(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		EnumDeclaration r = new EnumDeclaration(
@@ -172,7 +237,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
-		List<BodyDeclaration> classBody = visit(_n.getClassBody(), _arg);
+        List<BodyDeclaration<?>> classBody = visit(_n.getClassBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		EnumConstantDeclaration r = new EnumConstantDeclaration(
@@ -187,7 +252,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(AnnotationDeclaration _n, Object _arg) {
 		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
-		List<BodyDeclaration> members = visit(_n.getMembers(), _arg);
+        List<BodyDeclaration<?>> members = visit(_n.getMembers(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		AnnotationDeclaration r = new AnnotationDeclaration(
@@ -393,7 +458,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
 		List<List<AnnotationExpr>> _arraysAnnotations = null;
 		if(arraysAnnotations != null){
-			_arraysAnnotations = new LinkedList<List<AnnotationExpr>>();
+			_arraysAnnotations = new LinkedList<>();
 			for(List<AnnotationExpr> aux: arraysAnnotations){
 				_arraysAnnotations.add(visit(aux, _arg));
 			}
@@ -488,7 +553,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
 		List<List<AnnotationExpr>> _arraysAnnotations = null;
 		if(arraysAnnotations != null){
-			_arraysAnnotations = new LinkedList<List<AnnotationExpr>>();
+			_arraysAnnotations = new LinkedList<>();
 			for(List<AnnotationExpr> aux: arraysAnnotations){
 				_arraysAnnotations.add(visit(aux, _arg));
 			}
@@ -753,7 +818,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		ClassOrInterfaceType type_ = cloneNodes(_n.getType(), _arg);
 		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
-		List<BodyDeclaration> anonymousBody = visit(_n.getAnonymousClassBody(), _arg);
+        List<BodyDeclaration<?>> anonymousBody = visit(_n.getAnonymousClassBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		ObjectCreationExpr r = new ObjectCreationExpr(
@@ -902,7 +967,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(TypeDeclarationStmt _n, Object _arg) {
-		TypeDeclaration typeDecl = cloneNodes(_n.getTypeDeclaration(), _arg);
+        TypeDeclaration<?> typeDecl = cloneNodes(_n.getTypeDeclaration(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		TypeDeclarationStmt r = new TypeDeclarationStmt(
@@ -1203,7 +1268,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
     public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {
         if (_nodes == null)
             return null;
-        List<T> r = new ArrayList<T>(_nodes.size());
+        List<T> r = new ArrayList<>(_nodes.size());
         for (T n : _nodes) {
             T rN = cloneNodes(n, _arg);
             if (rN != null)
@@ -1212,6 +1277,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
         return r;
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends Node> T cloneNodes(T _node, Object _arg) {
         if (_node == null)
             return null;

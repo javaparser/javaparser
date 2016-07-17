@@ -40,8 +40,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration
-        implements DocumentableNode, NamedNode, TypedNode<AnnotationMemberDeclaration>, NodeWithModifiers {
+public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration>
+        implements DocumentableNode<AnnotationMemberDeclaration>, NamedNode<AnnotationMemberDeclaration>,
+        TypedNode<AnnotationMemberDeclaration>, NodeWithModifiers<AnnotationMemberDeclaration> {
 
     private int modifiers;
 

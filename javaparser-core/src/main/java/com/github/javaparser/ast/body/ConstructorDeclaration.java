@@ -21,10 +21,17 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.DocumentableNode;
+import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
+import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -33,14 +40,12 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration,
-        NamedNode, NodeWithModifiers {
+public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration>
+        implements DocumentableNode<ConstructorDeclaration>, WithDeclaration,
+        NamedNode<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration> {
 
     private int modifiers;
 

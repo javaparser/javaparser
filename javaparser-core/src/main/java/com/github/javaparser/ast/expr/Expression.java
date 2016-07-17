@@ -21,11 +21,10 @@
  
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.Position;
+import static com.github.javaparser.Position.pos;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser

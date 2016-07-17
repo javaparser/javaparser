@@ -5,7 +5,7 @@ import com.github.javaparser.ast.body.ModifierSet;
 /**
  * A Node with Modifiers.
  */
-public interface NodeWithModifiers {
+public interface NodeWithModifiers<T> {
     /**
      * Return the modifiers of this variable declaration.
      *

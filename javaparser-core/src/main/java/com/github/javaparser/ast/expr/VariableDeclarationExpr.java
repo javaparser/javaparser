@@ -39,7 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarationExpr extends Expression
-        implements TypedNode<VariableDeclarationExpr>, NodeWithModifiers {
+        implements TypedNode<VariableDeclarationExpr>, NodeWithModifiers<VariableDeclarationExpr> {
 
 	private int modifiers;
 
