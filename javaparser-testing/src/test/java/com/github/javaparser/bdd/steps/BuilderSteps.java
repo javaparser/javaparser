@@ -41,18 +41,17 @@ public class BuilderSteps {
 		this.state = state;
 	}
 
-	@Given("a compilation unit with 3 imports but 2 same values")
-	public void givenATestCase() {
+	@Given("a compilation unit with 3 imports but 2 duplicates values")
+	public void givenACompilationUnitWith3ImportsBut2DuplicatesValues() {
 		CompilationUnit cu = new CompilationUnit();
 		state.put("cuBuilder", cu);
 		cu.addImport(List.class);
 		cu.addImport(Map.class);
 		cu.addImport(Map.class);
-
 	}
 
 	@Then("the compilation unit has 2 imports")
-	public void thenTheCollectedVariableNameIs(String nameUnderTest) {
+	public void thenTheCompilationUnitHas2Imports(String nameUnderTest) {
 		CompilationUnit cu = (CompilationUnit) state.get("cuBuilder");
 		assertThat(cu.getImports().size(), is(2));
 	}
