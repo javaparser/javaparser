@@ -80,13 +80,13 @@ public final class BlockStmt extends Statement {
 	}
 
     // TODO move to a nodeType + addAndGetStatement like methods ?
-    public BlockStmt addStatement(String statement) {
-        NameExpr nameExpr = new NameExpr(statement);
-        ExpressionStmt expressionStmt = new ExpressionStmt(nameExpr);
-        nameExpr.setParentNode(expressionStmt);
-        getStmts().add(expressionStmt);
-        expressionStmt.setParentNode(this);
+    public BlockStmt addStatement(Statement statement) {
+        getStmts().add(statement);
+        statement.setParentNode(this);
         return this;
+    }
+    public BlockStmt addStatement(String statement) {
+        return addStatement(new ExpressionStmt(new NameExpr(statement)));
     }
 
 }
