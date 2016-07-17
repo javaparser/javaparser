@@ -21,20 +21,20 @@
 
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.Position.pos;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type implements NamedNode {
+public final class ClassOrInterfaceType extends Type implements NamedNode<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 
