@@ -25,7 +25,6 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.SourcesHelper;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.DumpVisitor;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -37,9 +36,7 @@ import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class DumpingSteps {
 

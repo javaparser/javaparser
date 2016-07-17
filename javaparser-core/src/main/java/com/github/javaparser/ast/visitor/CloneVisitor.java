@@ -1185,11 +1185,10 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(MethodReferenceExpr _n, Object arg) {
 
-		List<TypeParameter> typeParams = visit(_n.getTypeParameters(), arg);
 		Expression scope = cloneNodes(_n.getScope(), arg);
 
 		return new MethodReferenceExpr(_n.getRange(), scope,
-				typeParams, _n.getIdentifier());
+				_n.getTypeArguments(), _n.getIdentifier());
 	}
 
 	@Override

@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -45,7 +46,7 @@ public class MethodReferenceExpr extends Expression {
 
     private Expression scope;
 
-    private List<TypeParameter> typeParameters;
+    private TypeArguments typeArguments;
 
     private String identifier;
 
@@ -58,16 +59,16 @@ public class MethodReferenceExpr extends Expression {
     @Deprecated
     public MethodReferenceExpr(int beginLine, int beginColumn, int endLine,
                                int endColumn, Expression scope,
-                               List<TypeParameter> typeParameters, String identifier) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, typeParameters, identifier);
+                               TypeArguments typeArguments, String identifier) {
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, typeArguments, identifier);
     }
     
     public MethodReferenceExpr(Range range, Expression scope,
-                               List<TypeParameter> typeParameters, String identifier) {
+                               TypeArguments typeArguments, String identifier) {
         super(range);
         setIdentifier(identifier);
         setScope(scope);
-        setTypeParameters(typeParameters);
+        setTypeArguments(typeArguments);
     }
 
     @Override
@@ -90,14 +91,12 @@ public class MethodReferenceExpr extends Expression {
         setAsParentNodeOf(this.scope);
     }
 
-    public List<TypeParameter> getTypeParameters() {
-        typeParameters = ensureNotNull(typeParameters);
-        return typeParameters;
+    public TypeArguments getTypeArguments() {
+        return typeArguments;
     }
 
-    public void setTypeParameters(List<TypeParameter> typeParameters) {
-        this.typeParameters = typeParameters;
-        setAsParentNodeOf(this.typeParameters);
+    public void setTypeArguments(TypeArguments typeArguments) {
+        this.typeArguments = typeArguments;
     }
 
     public String getIdentifier() {
