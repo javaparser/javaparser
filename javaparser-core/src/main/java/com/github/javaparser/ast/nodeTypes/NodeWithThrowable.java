@@ -2,6 +2,8 @@ package com.github.javaparser.ast.nodeTypes;
 
 import java.util.List;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 
 public interface NodeWithThrowable<T> {
@@ -9,5 +11,15 @@ public interface NodeWithThrowable<T> {
 
     List<ReferenceType> getThrows();
 
-    // TODO builder methods
+    @SuppressWarnings("unchecked")
+    default T addThrows(ReferenceType throwType) {
+        getThrows().add(throwType);
+        throwType.setParentNode((Node) this);
+        return (T) this;
+    }
+
+    default T addThrows(Class<?> clazz) {
+        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        return addThrows(new ReferenceType(new ClassOrInterfaceType(clazz.getSimpleName())));
+    }
 }

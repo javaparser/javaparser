@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -140,5 +142,19 @@ public interface NodeWithMembers<T> {
         return methodDeclaration;
     }
 
-    // TODO ctors
+    /**
+     * Adds a constructor to this
+     * 
+     * @param methodName the method name
+     * @param modifiers the modifiers like {@link ModifierSet#PUBLIC}
+     * @return the {@link MethodDeclaration} created
+     */
+    public default ConstructorDeclaration addCtor(int modifiers) {
+        ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
+        constructorDeclaration.setModifiers(modifiers);
+        constructorDeclaration.setName(((TypeDeclaration<?>) this).getName());
+        getMembers().add(constructorDeclaration);
+        constructorDeclaration.setParentNode((Node) this);
+        return constructorDeclaration;
+    }
 }

@@ -32,13 +32,14 @@ import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
+import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
-import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
@@ -52,7 +53,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         implements NodeWithJavaDoc<MethodDeclaration>, NodeWithDeclaration, NodeWithName<MethodDeclaration>,
         NodeWithType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>, NodeWithParameters<MethodDeclaration>,
-        NodeWithThrowable<MethodDeclaration> {
+        NodeWithThrowable<MethodDeclaration>, NodeWithBlockStmt<MethodDeclaration> {
 
     private int modifiers;
 
@@ -147,6 +148,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         return arrayCount;
     }
 
+    @Override
     public BlockStmt getBody() {
         return body;
     }
@@ -197,6 +199,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         this.arrayCount = arrayCount;
     }
 
+    @Override
     public MethodDeclaration setBody(final BlockStmt body) {
         this.body = body;
         setAsParentNodeOf(this.body);

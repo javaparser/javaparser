@@ -347,7 +347,7 @@ public abstract class Node implements Cloneable {
     public <T> T getParentNodeOfType(Class<T> classType) {
         Node parent = parentNode;
         while (parent != null) {
-            if (parent.getClass().equals(classType))
+            if (classType.isAssignableFrom(parent.getClass()))
                 return (T) parent;
             parent = parent.parentNode;
         }

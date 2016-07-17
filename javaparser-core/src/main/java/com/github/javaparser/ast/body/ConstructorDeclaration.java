@@ -32,12 +32,13 @@ import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
+import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
-import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -49,7 +50,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration>
         implements NodeWithJavaDoc<ConstructorDeclaration>, NodeWithDeclaration,
         NodeWithName<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>,
-        NodeWithParameters<ConstructorDeclaration>, NodeWithThrowable<ConstructorDeclaration> {
+        NodeWithParameters<ConstructorDeclaration>, NodeWithThrowable<ConstructorDeclaration>,
+        NodeWithBlockStmt<ConstructorDeclaration> {
 
     private int modifiers;
 
@@ -61,7 +63,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     private List<ReferenceType> throws_;
 
-    private BlockStmt block;
+    private BlockStmt body;
 
     public ConstructorDeclaration() {
     }
@@ -116,9 +118,16 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         v.visit(this, arg);
     }
 
+    /**
+     * Use {@link #getBody()} instead
+     * 
+     * @return
+     */
+    @Deprecated
     public BlockStmt getBlock() {
-        return block;
+        return body;
     }
+
 
     /**
      * Return the modifiers of this member declaration.
@@ -157,10 +166,18 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         return typeParameters;
     }
 
+    /**
+     * Use {@link #setBody(BlockStmt)} instead
+     * 
+     * @param block
+     */
+    @Deprecated
     public void setBlock(BlockStmt block) {
-        this.block = block;
-        setAsParentNodeOf(this.block);
+        this.body = block;
+        setAsParentNodeOf(this.body);
     }
+
+
 
     @Override
     public ConstructorDeclaration setModifiers(int modifiers) {
@@ -261,5 +278,16 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
             return (JavadocComment) getComment();
         }
         return null;
+    }
+
+    @Override
+    public BlockStmt getBody() {
+        return body;
+    }
+
+    @Override
+    public ConstructorDeclaration setBody(BlockStmt body) {
+        this.body = body;
+        return this;
     }
 }
