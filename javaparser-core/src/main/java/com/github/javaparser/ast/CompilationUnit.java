@@ -229,10 +229,10 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(Class<?> clazz) {
-        if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.equals(String.class))
+        if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.getName().startsWith("java.lang"))
             return this;
         else if (clazz.isArray() && !ClassUtils.isPrimitiveOrWrapper(clazz.getComponentType())
-                && !clazz.getComponentType().equals(String.class))
+                && !clazz.getComponentType().getName().startsWith("java.lang"))
             return addImport(clazz.getComponentType().getName());
         return addImport(clazz.getName());
     }

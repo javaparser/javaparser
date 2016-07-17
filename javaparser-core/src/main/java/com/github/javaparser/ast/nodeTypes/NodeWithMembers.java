@@ -6,11 +6,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 /**
@@ -156,5 +158,21 @@ public interface NodeWithMembers<T> {
         getMembers().add(constructorDeclaration);
         constructorDeclaration.setParentNode((Node) this);
         return constructorDeclaration;
+    }
+
+    public default BlockStmt addInitializer() {
+        BlockStmt block = new BlockStmt();
+        InitializerDeclaration initializerDeclaration = new InitializerDeclaration(false, block);
+        getMembers().add(initializerDeclaration);
+        initializerDeclaration.setParentNode((Node) this);
+        return block;
+    }
+
+    public default BlockStmt addStaticInitializer() {
+        BlockStmt block = new BlockStmt();
+        InitializerDeclaration initializerDeclaration = new InitializerDeclaration(true, block);
+        getMembers().add(initializerDeclaration);
+        initializerDeclaration.setParentNode((Node) this);
+        return block;
     }
 }
