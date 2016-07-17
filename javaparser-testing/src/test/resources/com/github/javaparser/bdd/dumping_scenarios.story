@@ -181,3 +181,47 @@ class A {
         }
     }
 }
+
+Scenario: we can parse blocks
+Given the block:
+{
+    a=2;
+    b=3;
+}
+When the block is parsed by the Java parser
+Then it is dumped to:
+{
+    a = 2;
+    b = 3;
+}
+
+Scenario: we can parse statements
+Given the statement:
+while (true) {
+}
+When the statement is parsed by the Java parser
+Then it is dumped to:
+while (true) {
+}
+
+Scenario: we can parse imports
+Given the import:
+import static a.b.c.Abc.*;
+When the import is parsed by the Java parser
+Then it is dumped to:
+import static a.b.c.Abc.*;
+
+Scenario: we can parse annotations
+Given the annotation:
+@Abc
+When the annotation is parsed by the Java parser
+Then it is dumped to:
+@Abc
+
+Scenario: we can parse body declarations
+Given the body declaration:
+private static final int x = 20;
+When the body declaration is parsed by the Java parser
+Then it is dumped to:
+private static final int x = 20;
+

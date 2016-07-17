@@ -24,9 +24,8 @@ package com.github.javaparser.bdd.steps;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.SourcesHelper;
-import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.DumpVisitor;
-
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -38,41 +37,64 @@ import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class DumpingSteps {
 
-    private CompilationUnit compilationUnit;
+    private Node resultNode;
     private String sourceUnderTest;
 
-    @Given("the class:$classSrc")
+    @Given("the {class|compilation unit|expression|block|expressions|statement|import|annotation|body declaration}:$classSrc")
     public void givenTheClass(String classSrc) {
         this.sourceUnderTest = classSrc.trim();
     }
 
-    @Given("the class in the file \"$classFile\"")
+    @Given("the {class|compilation unit|expression|block|expressions|statement|import|annotation|body declaration} in the file \"$classFile\"")
     public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException, ParseException {
         URL url = getClass().getResource("../samples/" + classFile);
         sourceUnderTest = SourcesHelper.readerToString(new FileReader(new File(url.toURI()))).trim();
     }
 
-    @Given("the compilation unit:$classSrc")
-    public void givenTheCompilationUnit(String classSrc) {
-        this.sourceUnderTest = classSrc.trim();
+    @When("the {class|compilation unit} is parsed by the Java parser")
+    public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parse(new StringReader(sourceUnderTest), true);
     }
 
-    @When("the class is parsed by the Java parser")
-    public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
-        compilationUnit = JavaParser.parse(new StringReader(sourceUnderTest), true);
+    @When("the expression is parsed by the Java parser")
+    public void whenTheExpressionIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseExpression(sourceUnderTest);
+    }
+
+    @When("the block is parsed by the Java parser")
+    public void whenTheBlockIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseBlock(sourceUnderTest);
+    }
+
+    @When("the statement is parsed by the Java parser")
+    public void whenTheStatementIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseStatement(sourceUnderTest);
+    }
+
+    @When("the import is parsed by the Java parser")
+    public void whenTheImportIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseImport(sourceUnderTest);
+    }
+
+    @When("the annotation is parsed by the Java parser")
+    public void whenTheAnnotationIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseAnnotation(sourceUnderTest);
+    }
+
+    @When("the body declaration is parsed by the Java parser")
+    public void whenTheBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseBodyDeclaration(sourceUnderTest);
     }
 
     @Then("it is dumped to:$dumpSrc")
     public void isDumpedTo(String dumpSrc) {
-        DumpVisitor dumpVisitor = new DumpVisitor();
-        dumpVisitor.visit(compilationUnit, null);
-        assertEquals(dumpSrc.trim(), dumpVisitor.getSource().trim());
+        assertEquals(dumpSrc.trim(), resultNode.toString().trim());
     }
 
 }

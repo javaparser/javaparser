@@ -22,12 +22,14 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.internal.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import static com.github.javaparser.Position.pos;
 
 /**
+ * Java® Language Specification 3.10.5 String Literals
  * @author Julio Vilmar Gesser
  */
 public class StringLiteralExpr extends LiteralExpr {
@@ -43,6 +45,13 @@ public class StringLiteralExpr extends LiteralExpr {
             throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
         }
 		this.value = value;
+	}
+
+	/**
+	 * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
+	 */
+	public static StringLiteralExpr escape(String string) {
+		return new StringLiteralExpr(Utils.escapeEndOfLines(string));
 	}
 
 	/**
