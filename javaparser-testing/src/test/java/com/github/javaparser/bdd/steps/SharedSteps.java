@@ -87,7 +87,7 @@ public class SharedSteps {
         state.put("cu2", JavaParser.parse(new StringReader(classSrc.trim()), true));
     }
 
-    @When("the \"$fileName\" is parsed")
+    @When("file \"$fileName\" is parsed")
     public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException, URISyntaxException {
         URL url = getClass().getResource("../samples/" + fileName);
         CompilationUnit compilationUnit = JavaParser.parse(new File(url.toURI()));

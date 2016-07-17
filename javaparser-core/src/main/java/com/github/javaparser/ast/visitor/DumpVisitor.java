@@ -1302,7 +1302,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printer.print(n.getName());
 
-		if (n.getArgs() != null) {
+		if (!n.getArgs().isEmpty()) {
 			printArguments(n.getArgs(), arg);
 		}
 

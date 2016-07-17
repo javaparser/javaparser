@@ -160,6 +160,11 @@ public final class JavaParser {
         return parse(file, Charset.defaultCharset().name(),true);
     }
 
+    public static CompilationUnit parse(final Reader reader)
+            throws ParseException {
+        return parse(reader, true);
+    }
+    
     public static CompilationUnit parse(final Reader reader, boolean considerComments)
             throws ParseException {
         try {

@@ -25,7 +25,7 @@ options {
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true; // Using the CommonTokenAction callback to collect tokens for later usage
   //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
-  JDK_VERSION = "1.6";
+  JDK_VERSION = "1.8";
   TOKEN_FACTORY = "ASTParser.GTToken";
   JAVA_TEMPLATE_TYPE = "modern";
 }
@@ -2425,9 +2425,9 @@ Expression PrimaryPrefix():
   (
 	  ret = Literal()
 	|
-	  "this" { ret = new ThisExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
+	  <THIS> { ret = new ThisExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
 	|
-	  "super" { ret = new SuperExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
+	  <SUPER> { ret = new SuperExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
 	  (
 	     "."
 	  [ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
@@ -2449,10 +2449,8 @@ Expression PrimaryPrefix():
 		{
 		  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs), token.image);
 		}
-     |   args = Arguments() {new MethodCallExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs, null, args);}
 	  )
 	|
-
 	  "(" {line=token.beginLine; column=token.beginColumn;}
 	  	[
 	  	( LOOKAHEAD(FormalParameter()) p = FormalParameter() { isLambda = true;} [args = FormalLambdaParameters()]

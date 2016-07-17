@@ -24,7 +24,7 @@ package com.github.javaparser;
 import java.io.*;
 
 public class SourcesHelper {
-    static String readerToString(Reader reader) throws IOException {
+    public static String readerToString(Reader reader) throws IOException {
         char[] arr = new char[8*1024]; // 8K at a time
         StringBuilder buf = new StringBuilder();
         int numChars;
