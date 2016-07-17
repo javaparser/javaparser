@@ -24,7 +24,7 @@ package com.github.javaparser.bdd.steps;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.awt.List;
+import java.util.List;
 import java.util.Map;
 
 import org.jbehave.core.annotations.Given;
@@ -36,7 +36,6 @@ public class BuilderSteps {
 
 	/* Map that maintains shares state across step classes.  If manipulating the objects in the map you must update the state */
 	private Map<String, Object> state;
-	private CompilationUnit cu;
 
 	public BuilderSteps(Map<String, Object> state) {
 		this.state = state;
@@ -44,7 +43,8 @@ public class BuilderSteps {
 
 	@Given("a compilation unit with 3 imports but 2 same values")
 	public void givenATestCase() {
-		cu = new CompilationUnit();
+		CompilationUnit cu = new CompilationUnit();
+		state.put("cuBuilder", cu);
 		cu.addImport(List.class);
 		cu.addImport(Map.class);
 		cu.addImport(Map.class);
@@ -53,6 +53,7 @@ public class BuilderSteps {
 
 	@Then("the compilation unit has 2 imports")
 	public void thenTheCollectedVariableNameIs(String nameUnderTest) {
+		CompilationUnit cu = (CompilationUnit) state.get("cuBuilder");
 		assertThat(cu.getImports().size(), is(2));
 	}
 
