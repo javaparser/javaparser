@@ -21,6 +21,10 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -29,14 +33,11 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 public abstract class BaseParameter
     extends Node
     implements AnnotableNode, NamedNode, NodeWithModifiers
 {
-    private int modifiers;
+    private EnumSet<Modifier> modifiers;
 
     private List<AnnotationExpr> annotations;
     
@@ -49,12 +50,12 @@ public abstract class BaseParameter
         setId(id);
 	}
 
-	public BaseParameter(int modifiers, VariableDeclaratorId id) {
+    public BaseParameter(EnumSet<Modifier> modifiers, VariableDeclaratorId id) {
         setModifiers(modifiers);
         setId(id);
 	}
 	
-	public BaseParameter(int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+    public BaseParameter(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);
@@ -64,11 +65,13 @@ public abstract class BaseParameter
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+    public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
+                         List<AnnotationExpr> annotations, VariableDeclaratorId id) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, id);
     }
 
-    public BaseParameter(final Range range, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+    public BaseParameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
+                         VariableDeclaratorId id) {
 	    super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
@@ -78,6 +81,7 @@ public abstract class BaseParameter
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
+    @Override
     public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;
@@ -99,7 +103,7 @@ public abstract class BaseParameter
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -117,7 +121,7 @@ public abstract class BaseParameter
         setAsParentNodeOf(this.id);
     }
 
-    public void setModifiers(int modifiers) {
+    public void setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
     }
 }

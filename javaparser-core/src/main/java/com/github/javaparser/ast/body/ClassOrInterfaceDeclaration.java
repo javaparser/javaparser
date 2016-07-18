@@ -21,17 +21,18 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -50,12 +51,13 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 	public ClassOrInterfaceDeclaration() {
 	}
 
-	public ClassOrInterfaceDeclaration(final int modifiers, final boolean isInterface, final String name) {
+    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
+                                       final String name) {
 		super(modifiers, name);
 		setInterface(isInterface);
 	}
 
-	public ClassOrInterfaceDeclaration(final int modifiers,
+    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
 			final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
@@ -71,14 +73,14 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration {
 	 */
 	@Deprecated
 	public ClassOrInterfaceDeclaration(final int beginLine, final int beginColumn, final int endLine,
-			final int endColumn, final int modifiers,
+                                       final int endColumn, final EnumSet<Modifier> modifiers,
 			final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {
 		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, isInterface, name, typeParameters, extendsList, implementsList, members);
 	}
 	
-	public ClassOrInterfaceDeclaration(Range range, final int modifiers,
+    public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
 			final List<AnnotationExpr> annotations, final boolean isInterface, final String name,
 			final List<TypeParameter> typeParameters, final List<ClassOrInterfaceType> extendsList,
 			final List<ClassOrInterfaceType> implementsList, final List<BodyDeclaration> members) {

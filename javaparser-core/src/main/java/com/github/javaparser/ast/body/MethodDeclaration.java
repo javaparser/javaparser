@@ -21,8 +21,19 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.DocumentableNode;
+import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
+import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -32,17 +43,12 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, TypedNode, NodeWithModifiers {
 
-	private int modifiers;
+    private EnumSet<Modifier> modifiers;
 
 	private List<TypeParameter> typeParameters;
 
@@ -63,20 +69,21 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     public MethodDeclaration() {
 	}
 
-	public MethodDeclaration(final int modifiers, final Type type, final String name) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name) {
 		setModifiers(modifiers);
 		setType(type);
 		setName(name);
 	}
 
-	public MethodDeclaration(final int modifiers, final Type type, final String name, final List<Parameter> parameters) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name,
+                             final List<Parameter> parameters) {
 		setModifiers(modifiers);
 		setType(type);
 		setName(name);
 		setParameters(parameters);
 	}
 
-	public MethodDeclaration(final int modifiers, final List<AnnotationExpr> annotations,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
 		super(annotations);
@@ -95,14 +102,14 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	 */
 	@Deprecated
 	public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final int modifiers, final List<AnnotationExpr> annotations,
+                             final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
 		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters, type, name, parameters, arrayCount, throws_, body);
 	}
 	
 	public MethodDeclaration(Range range,
-			final int modifiers, final List<AnnotationExpr> annotations,
+                             final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
 			final List<TypeParameter> typeParameters, final Type type, final String name,
 			final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_, final BlockStmt body) {
 		super(range, annotations);
@@ -139,7 +146,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 	 * @return modifiers
 	 */
 	@Override
-	public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
 		return modifiers;
 	}
 
@@ -181,7 +188,7 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
 		setAsParentNodeOf(this.body);
 	}
 
-	public void setModifiers(final int modifiers) {
+    public void setModifiers(final EnumSet<Modifier> modifiers) {
 		this.modifiers = modifiers;
 	}
 

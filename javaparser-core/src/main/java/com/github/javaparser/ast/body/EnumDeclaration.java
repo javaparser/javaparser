@@ -21,16 +21,17 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -44,11 +45,13 @@ public final class EnumDeclaration extends TypeDeclaration {
     public EnumDeclaration() {
     }
 
-    public EnumDeclaration(int modifiers, String name) {
+    public EnumDeclaration(EnumSet<Modifier> modifiers, String name) {
         super(modifiers, name);
     }
 
-    public EnumDeclaration(int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+    public EnumDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           List<BodyDeclaration> members) {
         super(annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);
@@ -58,11 +61,15 @@ public final class EnumDeclaration extends TypeDeclaration {
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
+                           List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList,
+                           List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, implementsList, entries, members);
     }
     
-    public EnumDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           List<BodyDeclaration> members) {
         super(range, annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);

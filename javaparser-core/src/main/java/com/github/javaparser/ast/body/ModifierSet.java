@@ -21,9 +21,9 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import java.util.EnumSet;
 
-import java.lang.reflect.Modifier;
+import com.github.javaparser.ast.AccessSpecifier;
 
 /**
  * Class to hold modifiers.<br>
@@ -34,29 +34,8 @@ public final class ModifierSet {
 
     /* Definitions of the bits in the modifiers field.  */
 
-    public static final int PUBLIC = Modifier.PUBLIC;
 
-    public static final int PRIVATE = Modifier.PRIVATE;
-
-    public static final int PROTECTED = Modifier.PROTECTED;
-
-    public static final int STATIC = Modifier.STATIC;
-
-    public static final int FINAL = Modifier.FINAL;
-
-    public static final int SYNCHRONIZED = Modifier.SYNCHRONIZED;
-
-    public static final int VOLATILE = Modifier.VOLATILE;
-
-    public static final int TRANSIENT = Modifier.TRANSIENT;
-
-    public static final int NATIVE = Modifier.NATIVE;
-
-    public static final int ABSTRACT = Modifier.ABSTRACT;
-
-    public static final int STRICTFP = Modifier.STRICT;
-
-    public static AccessSpecifier getAccessSpecifier(int modifiers) {
+	public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers) {
         if (isPublic(modifiers)){
             return AccessSpecifier.PUBLIC;
         } else if (isProtected(modifiers)){
@@ -68,32 +47,36 @@ public final class ModifierSet {
         }
     }
 
-    public static int addModifier(int modifiers, int mod) {
-        return modifiers | mod;
+    public static EnumSet<Modifier> addModifier(EnumSet<Modifier> modifiers, Modifier mod) {
+        if (modifiers == null)
+            modifiers = EnumSet.of(mod);
+        return modifiers;
     }
 
-    public static boolean hasModifier(int modifiers, int modifier) {
-        return (modifiers & modifier) != 0;
+    public static boolean hasModifier(EnumSet<Modifier> modifiers, Modifier modifier) {
+        if (modifiers == null)
+            return false;
+        return modifiers.contains(modifier);
     }
 
-    public static boolean isAbstract(int modifiers) {
-        return (modifiers & ABSTRACT) != 0;
+    public static boolean isAbstract(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.ABSTRACT);
     }
 
-    public static boolean isFinal(int modifiers) {
-        return (modifiers & FINAL) != 0;
+    public static boolean isFinal(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.FINAL);
     }
 
-    public static boolean isNative(int modifiers) {
-        return (modifiers & NATIVE) != 0;
+    public static boolean isNative(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.NATIVE);
     }
 
-    public static boolean isPrivate(int modifiers) {
-        return (modifiers & PRIVATE) != 0;
+    public static boolean isPrivate(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.PRIVATE);
     }
 
-    public static boolean isProtected(int modifiers) {
-        return (modifiers & PROTECTED) != 0;
+    public static boolean isProtected(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.PROTECTED);
     }
 
     /**
@@ -103,32 +86,32 @@ public final class ModifierSet {
      * @param modifiers indicator
      * @return true if modifier denotes package level access
      */
-    public static boolean hasPackageLevelAccess(int modifiers) {
+    public static boolean hasPackageLevelAccess(EnumSet<Modifier> modifiers) {
         return !isPublic(modifiers) && !isProtected(modifiers) && !isPrivate(modifiers);
     }
 
-    public static boolean isPublic(int modifiers) {
-        return (modifiers & PUBLIC) != 0;
+    public static boolean isPublic(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.PUBLIC);
     }
 
-    public static boolean isStatic(int modifiers) {
-        return (modifiers & STATIC) != 0;
+    public static boolean isStatic(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.STATIC);
     }
 
-    public static boolean isStrictfp(int modifiers) {
-        return (modifiers & STRICTFP) != 0;
+    public static boolean isStrictfp(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.STRICTFP);
     }
 
-    public static boolean isSynchronized(int modifiers) {
-        return (modifiers & SYNCHRONIZED) != 0;
+    public static boolean isSynchronized(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.SYNCHRONIZED);
     }
 
-    public static boolean isTransient(int modifiers) {
-        return (modifiers & TRANSIENT) != 0;
+    public static boolean isTransient(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.TRANSIENT);
     }
 
-    public static boolean isVolatile(int modifiers) {
-        return (modifiers & VOLATILE) != 0;
+    public static boolean isVolatile(EnumSet<Modifier> modifiers) {
+        return hasModifier(modifiers, Modifier.VOLATILE);
     }
 
     /**
@@ -137,8 +120,8 @@ public final class ModifierSet {
      * @param mod modifier to be removed
      * @return result for removing modifier
      */
-    public static int removeModifier(int modifiers, int mod) {
-        return modifiers & ~mod;
+    public static void removeModifier(EnumSet<Modifier> modifiers, Modifier mod) {
+        modifiers.remove(mod);
     }
 
     private ModifierSet() {

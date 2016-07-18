@@ -21,14 +21,15 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,11 +39,12 @@ public final class AnnotationDeclaration extends TypeDeclaration {
     public AnnotationDeclaration() {
     }
 
-    public AnnotationDeclaration(int modifiers, String name) {
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, String name) {
         super(modifiers, name);
     }
 
-    public AnnotationDeclaration(int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+                                 List<BodyDeclaration> members) {
         super(annotations, modifiers, name, members);
     }
 
@@ -50,11 +52,14 @@ public final class AnnotationDeclaration extends TypeDeclaration {
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+    public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn,
+                                 EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+                                 List<BodyDeclaration> members) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, members);
     }
     
-    public AnnotationDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
+                                 String name, List<BodyDeclaration> members) {
         super(range, annotations, modifiers, name, members);
     }
 
