@@ -42,7 +42,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class VariableDeclarationExpr extends Expression implements TypedNode, NodeWithModifiers {
 
-    private EnumSet<Modifier> modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
 	private List<AnnotationExpr> annotations;
 

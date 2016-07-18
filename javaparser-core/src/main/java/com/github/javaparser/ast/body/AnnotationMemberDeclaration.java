@@ -43,7 +43,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode, TypedNode, NodeWithModifiers {
 
-    private EnumSet<Modifier> modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private Type type;
 

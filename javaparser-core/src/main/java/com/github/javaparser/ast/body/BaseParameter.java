@@ -37,7 +37,7 @@ public abstract class BaseParameter
     extends Node
     implements AnnotableNode, NamedNode, NodeWithModifiers
 {
-    private EnumSet<Modifier> modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<AnnotationExpr> annotations;
     

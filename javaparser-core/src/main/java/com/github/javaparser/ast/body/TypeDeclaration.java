@@ -42,7 +42,7 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 
 	private NameExpr name;
 
-    private EnumSet<Modifier> modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
 	private List<BodyDeclaration> members;
 

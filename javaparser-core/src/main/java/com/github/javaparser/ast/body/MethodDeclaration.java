@@ -48,7 +48,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class MethodDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration, NamedNode, TypedNode, NodeWithModifiers {
 
-    private EnumSet<Modifier> modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
 	private List<TypeParameter> typeParameters;
 

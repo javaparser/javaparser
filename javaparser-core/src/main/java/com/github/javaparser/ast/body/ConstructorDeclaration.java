@@ -47,7 +47,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration,
         NamedNode, NodeWithModifiers {
 
-    private EnumSet<Modifier> modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<TypeParameter> typeParameters;
 
