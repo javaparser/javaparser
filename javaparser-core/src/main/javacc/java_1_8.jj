@@ -1484,7 +1484,7 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	  {
 	    if(!isInterface)
 	    {
-	      throwParseException(token, "An interface cannot have default members");
+	      throwParseException(token, "A class cannot have default members");
 	    }
 	    isDefault = true;
 	  }]
@@ -1521,7 +1521,7 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	  {
 	    if(isDefault && ! (ret instanceof MethodDeclaration))
 	    {
-	      throwParseException(token, "Just methods can have the keyword \"default\".");
+	      throwParseException(token, "Only methods can have the keyword \"default\".");
 	    }
 	  }
 	|
@@ -1760,9 +1760,9 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
   { return new ExplicitConstructorInvocationStmt(range(line, column, token.endLine, token.endColumn),typeArgs, isThis, expr, args); }
 }
 
-List Statements():
+List<Statement> Statements():
 {
-	List ret = null;
+	List<Statement> ret = null;
 	Statement stmt;
 }
 {
