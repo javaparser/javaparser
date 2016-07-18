@@ -51,7 +51,7 @@ public class BuilderSteps {
 	}
 
 	@Then("the compilation unit has 2 imports")
-	public void thenTheCompilationUnitHas2Imports(String nameUnderTest) {
+	public void thenTheCompilationUnitHas2Imports() {
 		CompilationUnit cu = (CompilationUnit) state.get("cuBuilder");
 		assertThat(cu.getImports().size(), is(2));
 	}
