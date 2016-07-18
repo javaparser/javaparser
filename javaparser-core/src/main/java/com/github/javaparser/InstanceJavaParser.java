@@ -126,7 +126,7 @@ public class InstanceJavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public List<?> parseStatements() throws ParseException {
+    public List<Statement> parseStatements() throws ParseException {
         try {
             return astParser.Statements();
         } finally {
@@ -215,20 +215,32 @@ public class InstanceJavaParser {
     }
 
     /**
-     * Parses the Java body declaration(e.g fields or methods) and returns a
+     * Parses a Java class body declaration(e.g fields or methods) and returns a
      * {@link BodyDeclaration} that represents it.
      *
-     * @param isInterface
-     *            whether the parsed source code is an interface.
-     *
-     * @return BodyDeclaration representing the Java body
+     * @return BodyDeclaration representing the Java class body
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public BodyDeclaration parseClassOrInterfaceBodyDeclaration(
-            boolean isInterface) throws ParseException {
+    public BodyDeclaration parseClassBodyDeclaration() throws ParseException {
         try {
-            return astParser.ClassOrInterfaceBodyDeclaration(isInterface);
+            return astParser.ClassOrInterfaceBodyDeclaration(false);
+        } finally {
+            closeProvider();
+        }
+    }
+
+    /**
+     * Parses a Java interface body declaration(e.g fields or methods) and returns a
+     * {@link BodyDeclaration} that represents it.
+     *
+     * @return BodyDeclaration representing the Java interface body
+     * @throws ParseException
+     *             if the source code has parser errors
+     */
+    public BodyDeclaration parseInterfaceBodyDeclaration() throws ParseException {
+        try {
+            return astParser.ClassOrInterfaceBodyDeclaration(true);
         } finally {
             closeProvider();
         }

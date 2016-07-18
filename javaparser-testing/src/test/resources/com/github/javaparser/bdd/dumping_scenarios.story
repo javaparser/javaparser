@@ -230,9 +230,23 @@ Then it is dumped to:
 @Abc
 
 Scenario: we can parse body declarations
-Given the body declaration:
+Given the body:
 private static final int x = 20;
 When the body declaration is parsed by the Java parser
 Then it is dumped to:
 private static final int x = 20;
 
+Scenario: we can parse class body declarations
+Given the body:
+public int xyz() {}
+When the class body declaration is parsed by the Java parser
+Then it is dumped to:
+public int xyz() {
+}
+
+Scenario: we can parse interface body declarations
+Given the body:
+int xyz();
+When the interface body declaration is parsed by the Java parser
+Then it is dumped to:
+int xyz();
