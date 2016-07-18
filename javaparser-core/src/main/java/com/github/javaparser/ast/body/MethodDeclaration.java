@@ -254,22 +254,22 @@ public final class MethodDeclaration extends BodyDeclaration implements Document
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
-            if (ModifierSet.isStatic(getModifiers())){
+            if (getModifiers().contains(Modifier.STATIC)) {
                 sb.append("static ");
             }
-            if (ModifierSet.isAbstract(getModifiers())){
+            if (getModifiers().contains(Modifier.ABSTRACT)) {
                 sb.append("abstract ");
             }
-            if (ModifierSet.isFinal(getModifiers())){
+            if (getModifiers().contains(Modifier.FINAL)) {
                 sb.append("final ");
             }
-            if (ModifierSet.isNative(getModifiers())){
+            if (getModifiers().contains(Modifier.NATIVE)) {
                 sb.append("native ");
             }
-            if (ModifierSet.isSynchronized(getModifiers())){
+            if (getModifiers().contains(Modifier.SYNCHRONIZED)) {
                 sb.append("synchronized ");
             }
         }

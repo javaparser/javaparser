@@ -31,7 +31,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypedNode;
 import com.github.javaparser.ast.body.Modifier;
-import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;

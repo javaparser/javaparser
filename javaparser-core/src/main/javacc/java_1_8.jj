@@ -95,7 +95,7 @@ final class ASTParser {
 	}
 
     public void addModifier(EnumSet<Modifier> modifiers, Modifier mod, Token token) throws ParseException {
-        if ((ModifierSet.hasModifier(modifiers, mod))) {
+        if (modifiers.contains(mod)) {
             throwParseException(token, "Duplicated modifier");
         }
         modifiers.add(mod);
@@ -105,7 +105,7 @@ final class ASTParser {
         if(mods == null)
             return;
         for(Modifier m : mods)
-            if ((ModifierSet.hasModifier(modifiers, m))) 
+            if (modifiers.contains(m)) 
                 throwParseException(token, "Duplicated modifier");
         for(Modifier m : mods)
             modifiers.add(m);

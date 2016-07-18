@@ -195,7 +195,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
                                          boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
         }
