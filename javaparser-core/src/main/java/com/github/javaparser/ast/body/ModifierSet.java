@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import java.util.EnumSet;
@@ -32,29 +32,24 @@ import com.github.javaparser.ast.AccessSpecifier;
  */
 public final class ModifierSet {
 
-    /* Definitions of the bits in the modifiers field.  */
+    /* Definitions of the bits in the modifiers field. */
 
-
-	public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers) {
-        if (isPublic(modifiers)){
+    public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers) {
+        if (isPublic(modifiers)) {
             return AccessSpecifier.PUBLIC;
-        } else if (isProtected(modifiers)){
+        } else if (isProtected(modifiers)) {
             return AccessSpecifier.PROTECTED;
-        } else if (isPrivate(modifiers)){
+        } else if (isPrivate(modifiers)) {
             return AccessSpecifier.PRIVATE;
         } else {
             return AccessSpecifier.DEFAULT;
         }
     }
 
-    public static EnumSet<Modifier> addModifier(EnumSet<Modifier> modifiers, Modifier mod) {
-        if (modifiers == null)
-            modifiers = EnumSet.of(mod);
-        return modifiers;
-    }
-
     public static boolean hasModifier(EnumSet<Modifier> modifiers, Modifier modifier) {
         if (modifiers == null)
+            return false;
+        if (modifier == null)
             return false;
         return modifiers.contains(modifier);
     }
@@ -83,6 +78,7 @@ public final class ModifierSet {
      * Is the element accessible from within the package?
      * It is the level of access which is applied if no modifiers are chosen,
      * it is sometimes called "default".
+     * 
      * @param modifiers indicator
      * @return true if modifier denotes package level access
      */
@@ -116,6 +112,7 @@ public final class ModifierSet {
 
     /**
      * Removes the given modifier.
+     * 
      * @param modifiers existing modifiers
      * @param mod modifier to be removed
      * @return result for removing modifier

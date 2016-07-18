@@ -8,7 +8,6 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Modifier;
-import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -39,8 +38,10 @@ public class ClassCreator {
         ASTHelper.addTypeDeclaration(cu, type);
 
         // create a method
-		MethodDeclaration method = new MethodDeclaration(EnumSet.of(Modifier.PUBLIC), ASTHelper.VOID_TYPE, "main");
-		method.setModifiers(ModifierSet.addModifier(method.getModifiers(), Modifier.STATIC));
+		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
+		MethodDeclaration method = new MethodDeclaration(modifiers, ASTHelper.VOID_TYPE, "main");
+		modifiers.add(Modifier.STATIC);
+		method.setModifiers(modifiers);
         ASTHelper.addMember(type, method);
 
         // add a parameter to the method

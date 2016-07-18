@@ -60,7 +60,7 @@ import static com.github.javaparser.Position.*;
  * <p>This class was generated automatically by javacc, do not edit.</p>
  */
 final class ASTParser {
-
+   
 	void reset(InputStream in, String encoding) throws IOException {
         ReInit(new StreamProvider(in, encoding));
     }
@@ -94,22 +94,23 @@ final class ASTParser {
 		}
 	}
 
-    public EnumSet<Modifier> addModifier(EnumSet<Modifier> modifiers, Modifier mod, Token token) throws ParseException {
+    public void addModifier(EnumSet<Modifier> modifiers, Modifier mod, Token token) throws ParseException {
         if ((ModifierSet.hasModifier(modifiers, mod))) {
             throwParseException(token, "Duplicated modifier");
         }
-        return ModifierSet.addModifier(modifiers, mod);
+        modifiers.add(mod);
     }
     
-    public EnumSet<Modifier> addModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods, Token token) throws ParseException {
-    	for(Modifier m : mods)
-        	if ((ModifierSet.hasModifier(modifiers, m))) 
-            	throwParseException(token, "Duplicated modifier");
+    public void addMultipleModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods, Token token) throws ParseException {
+        if(mods == null)
+            return;
         for(Modifier m : mods)
-        	modifiers = ModifierSet.addModifier(modifiers, m);
-        return modifiers;
+            if ((ModifierSet.hasModifier(modifiers, m))) 
+                throwParseException(token, "Duplicated modifier");
+        for(Modifier m : mods)
+            modifiers.add(m);
     }
-
+   
     /**
      * Return the list of tokens that have been encountered while parsing code using
      * this parser.
@@ -1238,7 +1239,7 @@ ModifierHolder Modifiers():
 {
     int beginLine = -1;
     int beginColumn = -1;
-    EnumSet<Modifier> modifiers = null;
+    EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
     List annotations = null;
     AnnotationExpr ann;
 }
@@ -1246,27 +1247,27 @@ ModifierHolder Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { modifiers = addModifier(modifiers, Modifier.PUBLIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "public" { addModifier(modifiers, Modifier.PUBLIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "static" { modifiers = addModifier(modifiers, Modifier.STATIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "static" { addModifier(modifiers, Modifier.STATIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "protected" { modifiers = addModifier(modifiers, Modifier.PROTECTED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "protected" {  addModifier(modifiers, Modifier.PROTECTED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "private" { modifiers = addModifier(modifiers, Modifier.PRIVATE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "private" { addModifier(modifiers, Modifier.PRIVATE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "final" { modifiers = addModifier(modifiers, Modifier.FINAL, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "final" { addModifier(modifiers, Modifier.FINAL, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "abstract" { modifiers = addModifier(modifiers, Modifier.ABSTRACT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "abstract" { addModifier(modifiers, Modifier.ABSTRACT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "synchronized" { modifiers = addModifier(modifiers, Modifier.SYNCHRONIZED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "native" { modifiers = addModifier(modifiers, Modifier.NATIVE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "native" { addModifier(modifiers, Modifier.NATIVE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "transient" { modifiers = addModifier(modifiers, Modifier.TRANSIENT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "transient" { addModifier(modifiers, Modifier.TRANSIENT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "volatile" { modifiers = addModifier(modifiers, Modifier.VOLATILE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "volatile" { addModifier(modifiers, Modifier.VOLATILE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "strictfp" { modifiers = addModifier(modifiers, Modifier.STRICTFP, token);  if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "strictfp" { addModifier(modifiers, Modifier.STRICTFP, token);  if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
    ann = Annotation() { annotations = add(annotations, ann); if(beginLine==-1) {beginLine=ann.getBegin().line; beginColumn=ann.getBegin().column;} }
   )
@@ -1524,7 +1525,8 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	        {
 	          aux = modifier2.modifiers;
 	        }
-	        ((MethodDeclaration)ret).setModifiers(addModifier(modifier.modifiers, aux, token));
+	        addMultipleModifier(modifier.modifiers, aux, token);
+	        ((MethodDeclaration)ret).setModifiers(modifier.modifiers);
 	      }
 	  )
 	  {
