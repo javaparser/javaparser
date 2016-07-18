@@ -182,6 +182,17 @@ class A {
     }
 }
 
+Scenario: An empty import does not fail
+Given the class:
+package a.b.c;
+
+;
+When the class is parsed by the Java parser
+Then it is dumped to:
+package a.b.c;
+
+;
+
 Scenario: we can parse blocks
 Given the block:
 {
