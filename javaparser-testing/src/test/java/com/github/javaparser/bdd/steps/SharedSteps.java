@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -87,7 +87,7 @@ public class SharedSteps {
         state.put("cu2", JavaParser.parse(new StringReader(classSrc.trim()), true));
     }
 
-    @When("the \"$fileName\" is parsed")
+    @When("file \"$fileName\" is parsed")
     public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException, URISyntaxException {
         URL url = getClass().getResource("../samples/" + fileName);
         CompilationUnit compilationUnit = JavaParser.parse(new File(url.toURI()));

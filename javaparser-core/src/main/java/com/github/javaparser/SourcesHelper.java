@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,7 +24,7 @@ package com.github.javaparser;
 import java.io.*;
 
 public class SourcesHelper {
-    static String readerToString(Reader reader) throws IOException {
+    public static String readerToString(Reader reader) throws IOException {
         char[] arr = new char[8*1024]; // 8K at a time
         StringBuilder buf = new StringBuilder();
         int numChars;

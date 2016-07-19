@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -334,13 +334,15 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final ImportDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printer.print("import ");
-		if (n.isStatic()) {
-			printer.print("static ");
-		}
-		n.getName().accept(this, arg);
-		if (n.isAsterisk()) {
-			printer.print(".*");
+		if (!n.isEmptyImportDeclaration()) {
+			printer.print("import ");
+			if (n.isStatic()) {
+				printer.print("static ");
+			}
+			n.getName().accept(this, arg);
+			if (n.isAsterisk()) {
+				printer.print(".*");
+			}
 		}
 		printer.printLn(";");
 
@@ -1302,7 +1304,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printer.print(n.getName());
 
-		if (n.getArgs() != null) {
+		if (!n.getArgs().isEmpty()) {
 			printArguments(n.getArgs(), arg);
 		}
 
@@ -1628,18 +1630,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
         }
 
         printer.print("::");
-        if (!n.getTypeParameters().isEmpty()) {
-            printer.print("<");
-            for (Iterator<TypeParameter> i = n.getTypeParameters().iterator(); i
-                    .hasNext();) {
-                TypeParameter p = i.next();
-                p.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
-                }
-            }
-            printer.print(">");
-        }
+	    printTypeArgs(n.getTypeArguments().getTypeArguments(), arg);
         if (identifier != null) {
             printer.print(identifier);
         }

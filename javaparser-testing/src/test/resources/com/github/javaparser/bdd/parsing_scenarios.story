@@ -369,12 +369,22 @@ When I take the PackageDeclaration
 Then the package name is com.github.javaparser.bdd
 
 
-Scenario: Strings with unescaped newlines are NOT parsed correctly
+Scenario: Strings with unescaped newlines are illegal (issue 211)
 Given the class:
 class A {
     public void helloWorld(String greeting, String name) {
         return "hello
         world";
+    }
+}
+Then the Java parser cannot parse it because of lexical errors
+
+Scenario: Chars with unescaped newlines are illegal (issue 211)
+Given the class:
+class A {
+    public void helloWorld(String greeting, String name) {
+        return '
+';
     }
 }
 Then the Java parser cannot parse it because of lexical errors
@@ -418,3 +428,13 @@ class A {
 }
 When I take the ObjectCreationExpr
 Then the type's diamond operator flag should be false
+
+Scenario: A method reference with type arguments is parsed correctly
+Given a CompilationUnit
+When the following source is parsed:
+class X { 
+	void x() { 
+		a.orElseGet( Stream::<IVariable<?>>empty ); 
+	} 
+}
+Then no errors are reported

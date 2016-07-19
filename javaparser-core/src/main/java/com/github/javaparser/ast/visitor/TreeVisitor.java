@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -18,18 +18,27 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
-package com.github.javaparser.ast;
 
+package com.github.javaparser.ast.visitor;
+
+import com.github.javaparser.ast.Node;
+
+/**
+ * Iterate over all the nodes in (a part of) the AST.
+ */
 public abstract class TreeVisitor {
 
-    public void visitDepthFirst(Node node){
-        process(node);
-        for (Node child : node.getChildrenNodes()){
-            visitDepthFirst(child);
-        }
-    }
+	/**
+	 * https://en.wikipedia.org/wiki/Depth-first_search
+	 *
+	 * @param node the start node, and the first one that is passed to process(node).
+	 */
+	public void visitDepthFirst(Node node) {
+		process(node);
+		for (Node child : node.getChildrenNodes()) {
+			visitDepthFirst(child);
+		}
+	}
 
-    public abstract void process(Node node);
-
+	public abstract void process(Node node);
 }

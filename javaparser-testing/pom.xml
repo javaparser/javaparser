@@ -2,7 +2,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -78,6 +78,7 @@
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -95,6 +96,7 @@
             <groupId>de.codecentric</groupId>
             <artifactId>jbehave-junit-runner</artifactId>
             <version>1.2.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
