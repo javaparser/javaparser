@@ -43,12 +43,12 @@ public class DumpingSteps {
     private Node resultNode;
     private String sourceUnderTest;
 
-    @Given("the {class|compilation unit|expression|block|expressions|statement|import|annotation|body declaration}:$classSrc")
+    @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body}:$classSrc")
     public void givenTheClass(String classSrc) {
         this.sourceUnderTest = classSrc.trim();
     }
 
-    @Given("the {class|compilation unit|expression|block|expressions|statement|import|annotation|body declaration} in the file \"$classFile\"")
+    @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body} in the file \"$classFile\"")
     public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException, ParseException {
         URL url = getClass().getResource("../samples/" + classFile);
         sourceUnderTest = SourcesHelper.readerToString(new FileReader(new File(url.toURI()))).trim();
@@ -87,6 +87,16 @@ public class DumpingSteps {
     @When("the body declaration is parsed by the Java parser")
     public void whenTheBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
         resultNode = JavaParser.parseBodyDeclaration(sourceUnderTest);
+    }
+
+    @When("the class body declaration is parsed by the Java parser")
+    public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseClassBodyDeclaration(sourceUnderTest);
+    }
+
+    @When("the interface body declaration is parsed by the Java parser")
+    public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseInterfaceBodyDeclaration(sourceUnderTest);
     }
 
     @Then("it is dumped to:$dumpSrc")
