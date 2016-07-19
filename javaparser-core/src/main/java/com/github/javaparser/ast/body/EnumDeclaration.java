@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,17 +24,12 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
-import java.lang.annotation.Annotation;
+import java.util.EnumSet;
 import java.util.List;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -50,11 +45,11 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
     public EnumDeclaration() {
     }
 
-    public EnumDeclaration(int modifiers, String name) {
+    public EnumDeclaration(EnumSet<Modifier> modifiers, String name) {
         super(modifiers, name);
     }
 
-    public EnumDeclaration(int modifiers, List<AnnotationExpr> annotations, String name,
+    public EnumDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
                            List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
@@ -66,13 +61,13 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
                            List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList,
                            List<EnumConstantDeclaration> entries, List<BodyDeclaration<?>> members) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, implementsList, entries, members);
     }
     
-    public EnumDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, String name,
+    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
                            List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
@@ -142,221 +137,4 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
         return enumConstant;
     }
 
-    /**
-     * Annotates this
-     * 
-     * @param name the name of the annotation
-     * @return the {@link NormalAnnotationExpr} added
-     */
-    @Override
-    public NormalAnnotationExpr addAnnotation(String name) {
-        NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                ASTHelper.createNameExpr(name), null);
-        getAnnotations().add(normalAnnotationExpr);
-        normalAnnotationExpr.setParentNode(this);
-        return normalAnnotationExpr;
-    }
-
-    /**
-     * Annotates this and automatically add the import
-     * 
-     * @param clazz the class of the annotation
-     * @return the {@link NormalAnnotationExpr} added
-     */
-    @Override
-    public NormalAnnotationExpr addAnnotation(Class<? extends Annotation> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addAnnotation(clazz.getSimpleName());
-    }
-
-    /**
-     * Annotates this with a marker annotation
-     * 
-     * @param name the name of the annotation
-     * @return this
-     */
-    @Override
-    public EnumDeclaration addMarkerAnnotation(String name) {
-        MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                ASTHelper.createNameExpr(name));
-        getAnnotations().add(markerAnnotationExpr);
-        markerAnnotationExpr.setParentNode(this);
-        return this;
-    }
-
-    /**
-     * Annotates this with a marker annotation and automatically add the import
-     * 
-     * @param clazz the class of the annotation
-     * @return this
-     */
-    @Override
-    public EnumDeclaration addMarkerAnnotation(Class<? extends Annotation> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addMarkerAnnotation(clazz.getSimpleName());
-    }
-
-    /**
-     * Annotates this with a single member annotation
-     * 
-     * @param name the name of the annotation
-     * @return this
-     */
-    @Override
-    public EnumDeclaration addSingleMemberAnnotation(String name, String value) {
-        SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                ASTHelper.createNameExpr(name), ASTHelper.createNameExpr(value));
-        getAnnotations().add(singleMemberAnnotationExpr);
-        singleMemberAnnotationExpr.setParentNode(this);
-        return this;
-    }
-
-    /**
-     * Annotates this with a single member annotation and automatically add the import
-     * 
-     * @param clazz the class of the annotation
-     * @return this
-     */
-    @Override
-    public EnumDeclaration addSingleMemberAnnotation(Class<? extends Annotation> clazz, String value) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addSingleMemberAnnotation(clazz.getSimpleName(), value);
-    }
-
-    /**
-     * Add a field to this {@link EnumDeclaration} and automatically add the import of the type if needed
-     * 
-     * @param typeClass the type of the field
-     * @param modifiers the modifiers like {@link ModifierSet#PUBLIC}
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    @Override
-    public FieldDeclaration addField(Class<?> typeClass, int modifiers, String name) {
-        tryAddImportToParentCompilationUnit(typeClass);
-        return addField(typeClass.getSimpleName(), modifiers, name);
-    }
-
-    /**
-     * Add a field to this {@link EnumDeclaration}
-     * 
-     * @param type the type of the field
-     * @param modifiers the modifiers like {@link ModifierSet#PUBLIC}
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    @Override
-    public FieldDeclaration addField(String type, int modifiers, String name) {
-        return addField(new ClassOrInterfaceType(type), modifiers, name);
-    }
-
-    /**
-     * Add a field to this {@link EnumDeclaration}
-     * 
-     * @param type the type of the field
-     * @param modifiers the modifiers like {@link ModifierSet#PUBLIC}
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    public FieldDeclaration addField(Type type, int modifiers, String name) {
-        FieldDeclaration fieldDeclaration = new FieldDeclaration();
-        fieldDeclaration.getVariables().add(new VariableDeclarator(new VariableDeclaratorId(name)));
-        fieldDeclaration.setModifiers(modifiers);
-        fieldDeclaration.setType(type);
-        getMembers().add(fieldDeclaration);
-        fieldDeclaration.setParentNode(this);
-        return fieldDeclaration;
-    }
-
-    /**
-     * Add a private field to this {@link EnumDeclaration}
-     * 
-     * @param type the type of the field
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    @Override
-    public FieldDeclaration addPrivateField(Class<?> typeClass, String name) {
-        return addField(typeClass, ModifierSet.PRIVATE, name);
-    }
-
-    /**
-     * Add a private field to this {@link EnumDeclaration} and automatically add the import of the type if
-     * needed
-     * 
-     * @param type the type of the field
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    @Override
-    public FieldDeclaration addPrivateField(String type, String name) {
-        return addField(type, ModifierSet.PRIVATE, name);
-    }
-
-    /**
-     * Add a public field to this {@link EnumDeclaration}
-     * 
-     * @param type the type of the field
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    @Override
-    public FieldDeclaration addPublicField(Class<?> typeClass, String name) {
-        return addField(typeClass, ModifierSet.PUBLIC, name);
-    }
-
-    /**
-     * Add a public field to this {@link EnumDeclaration} and automatically add the import of the type if
-     * needed
-     * 
-     * @param type the type of the field
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    @Override
-    public FieldDeclaration addPublicField(String type, String name) {
-        return addField(type, ModifierSet.PUBLIC, name);
-    }
-
-    /**
-     * Add a protected field to this {@link EnumDeclaration}
-     * 
-     * @param type the type of the field
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    @Override
-    public FieldDeclaration addProtectedField(Class<?> typeClass, String name) {
-        return addField(typeClass, ModifierSet.PROTECTED, name);
-    }
-
-    /**
-     * Add a protected field to this {@link EnumDeclaration} and automatically add the import of the type
-     * if needed
-     * 
-     * @param type the type of the field
-     * @param name the name of the field
-     * @return the {@link FieldDeclaration} created
-     */
-    @Override
-    public FieldDeclaration addProtectedField(String type, String name) {
-        return addField(type, ModifierSet.PROTECTED, name);
-    }
-
-    /**
-     * Adds a methods to this {@link EnumDeclaration}
-     * 
-     * @param methodName the method name
-     * @param modifiers the modifiers like {@link ModifierSet#PUBLIC}
-     * @return the {@link MethodDeclaration} created
-     */
-    @Override
-    public MethodDeclaration addMethod(String methodName, int modifiers) {
-        MethodDeclaration methodDeclaration = new MethodDeclaration();
-        methodDeclaration.setName(methodName);
-        methodDeclaration.setModifiers(modifiers);
-        getMembers().add(methodDeclaration);
-        methodDeclaration.setParentNode(this);
-        return methodDeclaration;
-    }
 }

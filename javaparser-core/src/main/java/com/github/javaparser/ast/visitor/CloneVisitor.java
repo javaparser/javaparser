@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -1250,11 +1250,10 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(MethodReferenceExpr _n, Object arg) {
 
-		List<TypeParameter> typeParams = visit(_n.getTypeParameters(), arg);
 		Expression scope = cloneNodes(_n.getScope(), arg);
 
 		return new MethodReferenceExpr(_n.getRange(), scope,
-				typeParams, _n.getIdentifier());
+				_n.getTypeArguments(), _n.getIdentifier());
 	}
 
 	@Override

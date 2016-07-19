@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -875,11 +875,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(MethodReferenceExpr n, final A arg) {
-        if (n.getTypeParameters() != null) {
-            for (final TypeParameter a : n.getTypeParameters()) {
-                a.accept(this, arg);
-            }
-        }
+	    if (n.getTypeArguments().getTypeArguments() != null) {
+		    for (final Type t : n.getTypeArguments().getTypeArguments()) {
+			    t.accept(this, arg);
+		    }
+	    }
         if (n.getScope() != null) {
             n.getScope().accept(this, arg);
         }

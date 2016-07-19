@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,17 +24,14 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -51,7 +48,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         implements NodeWithJavaDoc<FieldDeclaration>, NodeWithType<FieldDeclaration>,
         NodeWithModifiers<FieldDeclaration> {
 
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private Type type;
 
@@ -60,7 +57,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
     public FieldDeclaration() {
     }
 
-    public FieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, VariableDeclarator variable) {
         setModifiers(modifiers);
         setType(type);
         List<VariableDeclarator> aux = new ArrayList<>();
@@ -68,13 +65,13 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         setVariables(aux);
     }
 
-    public FieldDeclaration(int modifiers, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, List<VariableDeclarator> variables) {
         setModifiers(modifiers);
         setType(type);
         setVariables(variables);
     }
 
-    public FieldDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type,
+    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
                             List<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
@@ -86,12 +83,12 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
                             List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, variables);
     }
 
-    public FieldDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, Type type,
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
                             List<VariableDeclarator> variables) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -116,7 +113,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -130,15 +127,12 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return variables;
     }
 
-    public FieldDeclaration setModifiers(int modifiers) {
+    @Override
+    public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
         return this;
     }
 
-    public FieldDeclaration addModifier(int modifier) {
-        this.modifiers |= modifier;
-        return this;
-    }
 
     @Override
     public FieldDeclaration setType(Type type) {
@@ -160,80 +154,6 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return null;
     }
 
-    /**
-     * Annotates this
-     * 
-     * @param name the name of the annotation
-     * @return the {@link NormalAnnotationExpr} added
-     */
-    public NormalAnnotationExpr addAnnotation(String name) {
-        NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                ASTHelper.createNameExpr(name), null);
-        getAnnotations().add(normalAnnotationExpr);
-        normalAnnotationExpr.setParentNode(this);
-        return normalAnnotationExpr;
-    }
-
-    /**
-     * Annotates this and automatically add the import
-     * 
-     * @param clazz the class of the annotation
-     * @return the {@link NormalAnnotationExpr} added
-     */
-    public NormalAnnotationExpr addAnnotation(Class<? extends Annotation> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addAnnotation(clazz.getSimpleName());
-    }
-
-    /**
-     * Annotates this with a marker annotation
-     * 
-     * @param name the name of the annotation
-     * @return this
-     */
-    public FieldDeclaration addMarkerAnnotation(String name) {
-        MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                ASTHelper.createNameExpr(name));
-        getAnnotations().add(markerAnnotationExpr);
-        markerAnnotationExpr.setParentNode(this);
-        return this;
-    }
-
-    /**
-     * Annotates this with a marker annotation and automatically add the import
-     * 
-     * @param clazz the class of the annotation
-     * @return this
-     */
-    public FieldDeclaration addMarkerAnnotation(Class<? extends Annotation> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addMarkerAnnotation(clazz.getSimpleName());
-    }
-
-    /**
-     * Annotates this with a single member annotation
-     * 
-     * @param name the name of the annotation
-     * @return this
-     */
-    public FieldDeclaration addSingleMemberAnnotation(String name, String value) {
-        SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                ASTHelper.createNameExpr(name), ASTHelper.createNameExpr(value));
-        getAnnotations().add(singleMemberAnnotationExpr);
-        singleMemberAnnotationExpr.setParentNode(this);
-        return this;
-    }
-
-    /**
-     * Annotates this with a single member annotation and automatically add the import
-     * 
-     * @param clazz the class of the annotation
-     * @return this
-     */
-    public FieldDeclaration addSingleMemberAnnotation(Class<? extends Annotation> clazz, String value) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addSingleMemberAnnotation(clazz.getSimpleName(), value);
-    }
 
     /**
      * Create a getter for this field, <b>will only work if this field declares only 1 identifier and if this field is
@@ -251,7 +171,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
         String fieldName = getVariables().get(0).getId().getName();
         fieldName = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
-        MethodDeclaration getter = parent.addMethod("get" + fieldName, ModifierSet.PUBLIC).setType(getType());
+        MethodDeclaration getter = parent.addMethod("get" + fieldName, EnumSet.of(Modifier.PUBLIC)).setType(getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
         ReturnStmt r = new ReturnStmt(ASTHelper.createNameExpr(fieldName));
@@ -275,7 +195,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         String fieldName = getVariables().get(0).getId().getName();
         fieldName = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
-        MethodDeclaration setter = parent.addMethod("set" + fieldName, ModifierSet.PUBLIC).setType(ASTHelper.VOID_TYPE);
+        MethodDeclaration setter = parent.addMethod("set" + fieldName, EnumSet.of(Modifier.PUBLIC))
+                .setType(ASTHelper.VOID_TYPE);
         setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);

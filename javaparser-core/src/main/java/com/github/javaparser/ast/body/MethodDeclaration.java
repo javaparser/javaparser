@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -55,7 +56,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         NodeWithModifiers<MethodDeclaration>, NodeWithParameters<MethodDeclaration>,
         NodeWithThrowable<MethodDeclaration>, NodeWithBlockStmt<MethodDeclaration> {
 
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<TypeParameter> typeParameters;
 
@@ -76,13 +77,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     public MethodDeclaration() {
     }
 
-    public MethodDeclaration(final int modifiers, final Type type, final String name) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name) {
         setModifiers(modifiers);
         setType(type);
         setName(name);
     }
 
-    public MethodDeclaration(final int modifiers, final Type type, final String name,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name,
                              final List<Parameter> parameters) {
         setModifiers(modifiers);
         setType(type);
@@ -90,7 +91,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         setParameters(parameters);
     }
 
-    public MethodDeclaration(final int modifiers, final List<AnnotationExpr> annotations,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, final Type type, final String name,
                              final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_,
                              final BlockStmt body) {
@@ -110,7 +111,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
      */
     @Deprecated
     public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                             final int modifiers, final List<AnnotationExpr> annotations,
+                             final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, final Type type, final String name,
                              final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_,
                              final BlockStmt body) {
@@ -119,7 +120,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     }
 
     public MethodDeclaration(Range range,
-                             final int modifiers, final List<AnnotationExpr> annotations,
+                             final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, final Type type, final String name,
                              final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_,
                              final BlockStmt body) {
@@ -160,7 +161,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -207,7 +208,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     }
 
     @Override
-    public MethodDeclaration setModifiers(final int modifiers) {
+    public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
         return this;
     }
@@ -284,22 +285,22 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
                                          boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
-            if (ModifierSet.isStatic(getModifiers())) {
+            if (getModifiers().contains(Modifier.STATIC)) {
                 sb.append("static ");
             }
-            if (ModifierSet.isAbstract(getModifiers())) {
+            if (getModifiers().contains(Modifier.ABSTRACT)) {
                 sb.append("abstract ");
             }
-            if (ModifierSet.isFinal(getModifiers())) {
+            if (getModifiers().contains(Modifier.FINAL)) {
                 sb.append("final ");
             }
-            if (ModifierSet.isNative(getModifiers())) {
+            if (getModifiers().contains(Modifier.NATIVE)) {
                 sb.append("native ");
             }
-            if (ModifierSet.isSynchronized(getModifiers())) {
+            if (getModifiers().contains(Modifier.SYNCHRONIZED)) {
                 sb.append("synchronized ");
             }
         }

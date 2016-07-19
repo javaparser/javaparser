@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -277,7 +277,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		// javadoc are checked at CompilationUnit
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -317,7 +317,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		// javadoc are checked at CompilationUnit
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -377,7 +377,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		// javadoc are checked at CompilationUnit
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -401,7 +401,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		// javadoc are checked at CompilationUnit
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -429,7 +429,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		// javadoc are checked at CompilationUnit
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -481,7 +481,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		// javadoc are checked at CompilationUnit
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -517,7 +517,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
 		// javadoc are checked at CompilationUnit
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -577,7 +577,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
     protected Boolean visit(final BaseParameter<?> n1, final Node arg) {
         final BaseParameter<?> n2 = (BaseParameter<?>) arg;
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -1149,7 +1149,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	@Override public Boolean visit(final VariableDeclarationExpr n1, final Node arg) {
 		final VariableDeclarationExpr n2 = (VariableDeclarationExpr) arg;
 
-		if (n1.getModifiers() != n2.getModifiers()) {
+        if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -1517,7 +1517,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         if (!nodeEquals(n1.getScope(), n2.getScope())) {
             return false;
         }
-        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters())) {
+	    if (!nodesEquals(n1.getTypeArguments().getTypeArguments(), n2.getTypeArguments().getTypeArguments())) {
             return false;
         }
         if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {

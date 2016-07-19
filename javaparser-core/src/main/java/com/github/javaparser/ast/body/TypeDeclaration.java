@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -26,6 +26,12 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -43,20 +49,20 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 
 	private NameExpr name;
 
-	private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<BodyDeclaration<?>> members;
 
 	public TypeDeclaration() {
 	}
 
-	public TypeDeclaration(int modifiers, String name) {
+    public TypeDeclaration(EnumSet<Modifier> modifiers, String name) {
 		setName(name);
 		setModifiers(modifiers);
 	}
 
 	public TypeDeclaration(List<AnnotationExpr> annotations,
-			int modifiers, String name,
+                           EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {
 		super(annotations);
 		setName(name);
@@ -70,13 +76,13 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 	@Deprecated
 	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
 			int endColumn, List<AnnotationExpr> annotations,
-			int modifiers, String name,
+                           EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {
 		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, modifiers, name, members);
 	}
 	
 	public TypeDeclaration(Range range, List<AnnotationExpr> annotations,
-			int modifiers, String name,
+                           EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {
 		super(range, annotations);
 		setName(name);
@@ -97,7 +103,7 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 	 * @return modifiers
 	 */
 	@Override
-	public final int getModifiers() {
+    public final EnumSet<Modifier> getModifiers() {
 		return modifiers;
 	}
 
@@ -116,7 +122,7 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 
     @SuppressWarnings("unchecked")
     @Override
-    public T setModifiers(int modifiers) {
+    public T setModifiers(EnumSet<Modifier> modifiers) {
 		this.modifiers = modifiers;
         return (T) this;
 	}

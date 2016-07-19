@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,6 +24,7 @@ package com.github.javaparser.ast;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.ASTHelper;
@@ -33,7 +34,7 @@ import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EmptyTypeDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.body.Modifier;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -268,17 +269,17 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public ClassOrInterfaceDeclaration addClass(String name) {
-        return addClass(name, ModifierSet.PUBLIC);
+        return addClass(name, EnumSet.of(Modifier.PUBLIC));
     }
 
     /**
      * Add a class to the types of this compilation unit
      * 
      * @param name the class name
-     * @param modifiers the modifiers (like ModifierSet.PUBLIC)
+     * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public ClassOrInterfaceDeclaration addClass(String name, int modifiers) {
+    public ClassOrInterfaceDeclaration addClass(String name, EnumSet<Modifier> modifiers) {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(modifiers,
                 false, name);
         getTypes().add(classOrInterfaceDeclaration);
@@ -293,17 +294,17 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public ClassOrInterfaceDeclaration addInterface(String name) {
-        return addInterface(name, ModifierSet.PUBLIC);
+        return addInterface(name, EnumSet.of(Modifier.PUBLIC));
     }
 
     /**
      * Add an interface to the types of this compilation unit
      * 
      * @param name the interface name
-     * @param modifiers the modifiers (like ModifierSet.PUBLIC)
+     * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public ClassOrInterfaceDeclaration addInterface(String name, int modifiers) {
+    public ClassOrInterfaceDeclaration addInterface(String name, EnumSet<Modifier> modifiers) {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(modifiers,
                 true, name);
         getTypes().add(classOrInterfaceDeclaration);
@@ -318,17 +319,17 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public EnumDeclaration addEnum(String name) {
-        return addEnum(name, ModifierSet.PUBLIC);
+        return addEnum(name, EnumSet.of(Modifier.PUBLIC));
     }
 
     /**
      * Add an enum to the types of this compilation unit
      * 
      * @param name the enum name
-     * @param modifiers the modifiers (like ModifierSet.PUBLIC)
+     * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public EnumDeclaration addEnum(String name, int modifiers) {
+    public EnumDeclaration addEnum(String name, EnumSet<Modifier> modifiers) {
         EnumDeclaration enumDeclaration = new EnumDeclaration(modifiers, name);
         getTypes().add(enumDeclaration);
         enumDeclaration.setParentNode(this);
@@ -342,17 +343,17 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public AnnotationDeclaration addAnnotationDeclaration(String name) {
-        return addAnnotationDeclaration(name, ModifierSet.PUBLIC);
+        return addAnnotationDeclaration(name, EnumSet.of(Modifier.PUBLIC));
     }
 
     /**
      * Add an annotation declaration to the types of this compilation unit
      * 
      * @param name the annotation name
-     * @param modifiers the modifiers (like ModifierSet.PUBLIC)
+     * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public AnnotationDeclaration addAnnotationDeclaration(String name, int modifiers) {
+    public AnnotationDeclaration addAnnotationDeclaration(String name, EnumSet<Modifier> modifiers) {
         AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(modifiers, name);
         getTypes().add(annotationDeclaration);
         annotationDeclaration.setParentNode(this);

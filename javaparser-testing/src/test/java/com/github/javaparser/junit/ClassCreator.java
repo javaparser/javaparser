@@ -1,11 +1,13 @@
 package com.github.javaparser.junit;
 
+import java.util.EnumSet;
+
 import com.github.javaparser.ASTHelper;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.body.Modifier;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -32,12 +34,14 @@ public class ClassCreator {
         cu.setPackage(new PackageDeclaration(ASTHelper.createNameExpr("java.parser.test")));
 
         // create the type declaration 
-        ClassOrInterfaceDeclaration type = new ClassOrInterfaceDeclaration(ModifierSet.PUBLIC, false, "GeneratedClass");
+		ClassOrInterfaceDeclaration type = new ClassOrInterfaceDeclaration(EnumSet.of(Modifier.PUBLIC), false, "GeneratedClass");
         ASTHelper.addTypeDeclaration(cu, type);
 
         // create a method
-        MethodDeclaration method = new MethodDeclaration(ModifierSet.PUBLIC, ASTHelper.VOID_TYPE, "main");
-        method.setModifiers(ModifierSet.addModifier(method.getModifiers(), ModifierSet.STATIC));
+		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
+		MethodDeclaration method = new MethodDeclaration(modifiers, ASTHelper.VOID_TYPE, "main");
+		modifiers.add(Modifier.STATIC);
+		method.setModifiers(modifiers);
         ASTHelper.addMember(type, method);
 
         // add a parameter to the method

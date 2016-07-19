@@ -1,6 +1,8 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.body.ModifierSet;
+import java.util.EnumSet;
+
+import com.github.javaparser.ast.body.Modifier;
 
 /**
  * A Node with Modifiers.
@@ -9,58 +11,60 @@ public interface NodeWithModifiers<T> {
     /**
      * Return the modifiers of this variable declaration.
      *
-     * @see ModifierSet
+     * @see Modifier
      * @return modifiers
      */
-    int getModifiers();
+    EnumSet<Modifier> getModifiers();
 
-    T setModifiers(int modifiers);
+    T setModifiers(EnumSet<Modifier> modifiers);
 
-    default T addModifier(int modifier) {
-        return setModifiers(getModifiers() | modifier);
+    @SuppressWarnings("unchecked")
+    default T addModifier(Modifier modifier) {
+        getModifiers().add(modifier);
+        return (T) this;
     }
 
     default boolean isStatic() {
-        return ModifierSet.isStatic(getModifiers());
+        return getModifiers().contains(Modifier.STATIC);
     }
 
     default boolean isAbstract() {
-        return ModifierSet.isAbstract(getModifiers());
+        return getModifiers().contains(Modifier.ABSTRACT);
     }
 
     default boolean isFinal() {
-        return ModifierSet.isFinal(getModifiers());
+        return getModifiers().contains(Modifier.FINAL);
     }
 
     default boolean isNative() {
-        return ModifierSet.isNative(getModifiers());
+        return getModifiers().contains(Modifier.NATIVE);
     }
 
     default boolean isPrivate() {
-        return ModifierSet.isPrivate(getModifiers());
+        return getModifiers().contains(Modifier.PRIVATE);
     }
 
     default boolean isProtected() {
-        return ModifierSet.isProtected(getModifiers());
+        return getModifiers().contains(Modifier.PROTECTED);
     }
 
     default boolean isPublic() {
-        return ModifierSet.isPublic(getModifiers());
+        return getModifiers().contains(Modifier.PUBLIC);
     }
 
     default boolean isStrictfp() {
-        return ModifierSet.isStrictfp(getModifiers());
+        return getModifiers().contains(Modifier.STRICTFP);
     }
 
     default boolean isSynchronized() {
-        return ModifierSet.isSynchronized(getModifiers());
+        return getModifiers().contains(Modifier.SYNCHRONIZED);
     }
 
     default boolean isTransient() {
-        return ModifierSet.isTransient(getModifiers());
+        return getModifiers().contains(Modifier.TRANSIENT);
     }
 
     default boolean isVolatile() {
-        return ModifierSet.isVolatile(getModifiers());
+        return getModifiers().contains(Modifier.VOLATILE);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -23,6 +23,8 @@ package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.Position.pos;
 
+import java.util.EnumSet;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -33,7 +35,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclaration> {
 
     public EmptyTypeDeclaration() {
-        super(null, 0, null, null);
+        super(null, EnumSet.noneOf(Modifier.class), null, null);
     }
 
     /**
@@ -45,7 +47,7 @@ public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclara
     }
 
     public EmptyTypeDeclaration(Range range) {
-        super(range, null, 0, null, null);
+        super(range, null, EnumSet.noneOf(Modifier.class), null, null);
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -60,7 +60,7 @@ import static com.github.javaparser.Position.*;
  * <p>This class was generated automatically by javacc, do not edit.</p>
  */
 final class ASTParser {
-
+   
 	void reset(InputStream in, String encoding) throws IOException {
         ReInit(new StreamProvider(in, encoding));
     }
@@ -81,26 +81,36 @@ final class ASTParser {
     	return list;
     }
 
-	private class Modifier {
+	private class ModifierHolder {
 
-		final int modifiers;
+		final EnumSet<Modifier> modifiers;
 		final List annotations;
 		final Position begin;
 
-		public Modifier(Position begin, int modifiers, List annotations) {
+		public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, List annotations) {
 			this.begin = begin;
 			this.modifiers = modifiers;
 			this.annotations = annotations;
 		}
 	}
 
-    public int addModifier(int modifiers, int mod, Token token) throws ParseException {
-        if ((ModifierSet.hasModifier(modifiers, mod))) {
+    public void addModifier(EnumSet<Modifier> modifiers, Modifier mod, Token token) throws ParseException {
+        if (modifiers.contains(mod)) {
             throwParseException(token, "Duplicated modifier");
         }
-        return ModifierSet.addModifier(modifiers, mod);
+        modifiers.add(mod);
     }
-
+    
+    public void addMultipleModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods, Token token) throws ParseException {
+        if(mods == null)
+            return;
+        for(Modifier m : mods)
+            if (modifiers.contains(m)) 
+                throwParseException(token, "Duplicated modifier");
+        for(Modifier m : mods)
+            modifiers.add(m);
+    }
+   
     /**
      * Return the list of tokens that have been encountered while parsing code using
      * this parser.
@@ -130,14 +140,14 @@ final class ASTParser {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
 	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), 0);
-	       	    List params = add(null, new Parameter(ret.getRange(), 0, null, new UnknownType(), false, id));
+	       	    List params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
 	        } else {
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
 		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), 0);
-	        List params = add(null, new Parameter(ret.getRange(), 0, null, new UnknownType(), false, id));
+	        List params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
 	        ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
@@ -1225,11 +1235,11 @@ ImportDeclaration ImportDeclaration():
  * better error messages.
  */
 
-Modifier Modifiers():
+ModifierHolder Modifiers():
 {
     int beginLine = -1;
     int beginColumn = -1;
-    int modifiers = 0;
+    EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
     List annotations = null;
     AnnotationExpr ann;
 }
@@ -1237,34 +1247,34 @@ Modifier Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { modifiers = addModifier(modifiers, ModifierSet.PUBLIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "public" { addModifier(modifiers, Modifier.PUBLIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "static" { modifiers = addModifier(modifiers, ModifierSet.STATIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "static" { addModifier(modifiers, Modifier.STATIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "protected" { modifiers = addModifier(modifiers, ModifierSet.PROTECTED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "protected" {  addModifier(modifiers, Modifier.PROTECTED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "private" { modifiers = addModifier(modifiers, ModifierSet.PRIVATE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "private" { addModifier(modifiers, Modifier.PRIVATE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "final" { modifiers = addModifier(modifiers, ModifierSet.FINAL, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "final" { addModifier(modifiers, Modifier.FINAL, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "abstract" { modifiers = addModifier(modifiers, ModifierSet.ABSTRACT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "abstract" { addModifier(modifiers, Modifier.ABSTRACT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "synchronized" { modifiers = addModifier(modifiers, ModifierSet.SYNCHRONIZED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "native" { modifiers = addModifier(modifiers, ModifierSet.NATIVE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "native" { addModifier(modifiers, Modifier.NATIVE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "transient" { modifiers = addModifier(modifiers, ModifierSet.TRANSIENT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "transient" { addModifier(modifiers, Modifier.TRANSIENT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "volatile" { modifiers = addModifier(modifiers, ModifierSet.VOLATILE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "volatile" { addModifier(modifiers, Modifier.VOLATILE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "strictfp" { modifiers = addModifier(modifiers, ModifierSet.STRICTFP, token);  if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "strictfp" { addModifier(modifiers, Modifier.STRICTFP, token);  if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
    ann = Annotation() { annotations = add(annotations, ann); if(beginLine==-1) {beginLine=ann.getBegin().line; beginColumn=ann.getBegin().column;} }
   )
  )*
 
  {
-    return new Modifier(pos(beginLine, beginColumn), modifiers, annotations);
+    return new ModifierHolder(pos(beginLine, beginColumn), modifiers, annotations);
  }
 }
 
@@ -1273,7 +1283,7 @@ Modifier Modifiers():
  */
 TypeDeclaration TypeDeclaration():
 {
-   Modifier modifier;
+   ModifierHolder modifier;
    TypeDeclaration ret;
 }
 {
@@ -1294,7 +1304,7 @@ TypeDeclaration TypeDeclaration():
 }
 
 
-ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(Modifier modifier):
+ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier):
 {
    boolean isInterface = false;
    NameExpr name;
@@ -1352,7 +1362,7 @@ List ImplementsList(boolean isInterface):
    { return ret; }
 }
 
-EnumDeclaration EnumDeclaration(Modifier modifier):
+EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 {
 	NameExpr name;
 	List impList = null;
@@ -1464,9 +1474,9 @@ List ClassOrInterfaceBody(boolean isInterface):
 BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 {
    boolean isNestedInterface = false;
-   Modifier modifier;
-   Modifier modifier2 = null;
-   int aux = 0;
+   ModifierHolder modifier;
+   ModifierHolder modifier2 = null;
+   EnumSet<Modifier> aux = null;
    BodyDeclaration ret;
    boolean isDefault = false;
 }
@@ -1484,7 +1494,7 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	  {
 	    if(!isInterface)
 	    {
-	      throwParseException(token, "An interface cannot have default members");
+	      throwParseException(token, "A class cannot have default members");
 	    }
 	    isDefault = true;
 	  }]
@@ -1515,13 +1525,14 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	        {
 	          aux = modifier2.modifiers;
 	        }
-	        ((MethodDeclaration)ret).setModifiers(addModifier(modifier.modifiers, aux, token));
+	        addMultipleModifier(modifier.modifiers, aux, token);
+	        ((MethodDeclaration)ret).setModifiers(modifier.modifiers);
 	      }
 	  )
 	  {
 	    if(isDefault && ! (ret instanceof MethodDeclaration))
 	    {
-	      throwParseException(token, "Just methods can have the keyword \"default\".");
+	      throwParseException(token, "Only methods can have the keyword \"default\".");
 	    }
 	  }
 	|
@@ -1530,7 +1541,7 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
   { return ret; }
 }
 
-FieldDeclaration FieldDeclaration(Modifier modifier):
+FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 {
 	Type type;
 	List variables = new LinkedList();
@@ -1597,7 +1608,7 @@ ArrayInitializerExpr ArrayInitializer():
   { return new ArrayInitializerExpr(range(line, column, token.endLine, token.endColumn),values); }
 }
 
-MethodDeclaration MethodDeclaration(Modifier modifier):
+MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
 	List typeParameters = null;
 	Type type;
@@ -1671,16 +1682,16 @@ List InferredLambdaParameters():
 }
 {
    ","
-  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), 0, null, new UnknownType(), false, id));}
+  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));}
   (
-    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), 0, null, new UnknownType(), false, id)); }
+    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id)); }
   )*
   { return ret;  }
 }
 
 Parameter FormalParameter():
 {
-	Modifier modifier;
+	ModifierHolder modifier;
 	Type type;
 	boolean isVarArg = false;
 	VariableDeclaratorId id;
@@ -1696,7 +1707,7 @@ Parameter FormalParameter():
   }
 }
 
-ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
+ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
 	List typeParameters = null;
 	NameExpr name;
@@ -1760,9 +1771,9 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
   { return new ExplicitConstructorInvocationStmt(range(line, column, token.endLine, token.endColumn),typeArgs, isThis, expr, args); }
 }
 
-List Statements():
+List<Statement> Statements():
 {
-	List ret = null;
+	List<Statement> ret = null;
 	Statement stmt;
 }
 {
@@ -1836,7 +1847,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 {
 	ClassOrInterfaceType ret;
 	String name;
-	List typeArgs = null;
+	List<Type> typeArgs = null;
 	int line;
 	int column;
 	List annotations = null;
@@ -1983,7 +1994,7 @@ NameExpr Name():
 }
 {
   <IDENTIFIER> { ret = new NameExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image); }
-  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, token.image); } )*
+  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
   { return ret; }
 }
 
@@ -2040,8 +2051,7 @@ Expression Expression():
 	AssignExpr.Operator op;
 	Expression value;
 	Statement lambdaBody = null;
-	List params = null;
-	List typeArgs = null;
+	List<Type> typeArgs = null;
 	VariableDeclaratorId id = null;
 	Expression inner = null;
 }
@@ -2050,7 +2060,7 @@ Expression Expression():
   [
     (
        LOOKAHEAD(2)
-    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, value, op); }
+    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, value, op); }
   |
    "->" lambdaBody = LambdaBody()
    {
@@ -2070,9 +2080,9 @@ Expression Expression():
        ret = generateLambda(ret, lambdaBody);
      }
    }
- |  "::"  [typeArgs = TypeParameters() {typeArgs.remove(0);} ] (<IDENTIFIER> | "new")
+ |  "::"  [typeArgs = TypeArguments() {typeArgs.remove(0);} ] (<IDENTIFIER> | "new")
  {
-   ret = new MethodReferenceExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, typeArgs, token.image);
+   ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs), token.image);
  }
    )
   ]
@@ -2110,7 +2120,7 @@ Expression ConditionalExpression():
 }
 {
   ret = ConditionalOrExpression()
-  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, left, right); } ]
+  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, left, right); } ]
   { return ret; }
 }
 
@@ -2120,7 +2130,7 @@ Expression ConditionalOrExpression():
 	Expression right;
 }
 {
-  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.or); } )*
+  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.or); } )*
   { return ret; }
 }
 
@@ -2130,7 +2140,7 @@ Expression ConditionalAndExpression():
 	Expression right;
 }
 {
-  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.and); } )*
+  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.and); } )*
   { return ret; }
 }
 
@@ -2140,7 +2150,7 @@ Expression InclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.binOr); } )*
+  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.binOr); } )*
   { return ret; }
 }
 
@@ -2150,7 +2160,7 @@ Expression ExclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.xor); } )*
+  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.xor); } )*
   { return ret; }
 }
 
@@ -2160,7 +2170,7 @@ Expression AndExpression():
 	Expression right;
 }
 {
-  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, BinaryExpr.Operator.binAnd); } )*
+  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.binAnd); } )*
   { return ret; }
 }
 
@@ -2175,7 +2185,7 @@ Expression EqualityExpression():
   (
     ( "==" { op = BinaryExpr.Operator.equals; } |
       "!=" { op = BinaryExpr.Operator.notEquals; }
-    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, op); }
+    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2186,7 +2196,7 @@ Expression InstanceOfExpression():
 	Type type;
 }
 {
-  ret = RelationalExpression() [ "instanceof" type = Type() { ret = new InstanceOfExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, type); } ]
+  ret = RelationalExpression() [ "instanceof" type = Type() { ret = new InstanceOfExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, type); } ]
   { return ret; }
 }
 
@@ -2203,7 +2213,7 @@ Expression RelationalExpression():
   	  ">"  { op = BinaryExpr.Operator.greater; } |
   	  "<=" { op = BinaryExpr.Operator.lessEquals; } |
   	  ">=" { op = BinaryExpr.Operator.greaterEquals; }
-  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, op); }
+  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2220,7 +2230,7 @@ Expression ShiftExpression():
   	( "<<"             { op = BinaryExpr.Operator.lShift; } |
   	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.rSignedShift; } |
   	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.rUnsignedShift; }
-  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, op); }
+  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2236,7 +2246,7 @@ Expression AdditiveExpression():
   (
   	( "+" { op = BinaryExpr.Operator.plus; } |
   	  "-" { op = BinaryExpr.Operator.minus; }
-  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, op); }
+  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2253,7 +2263,7 @@ Expression MultiplicativeExpression():
   	( "*" { op = BinaryExpr.Operator.times; } |
   	  "/" { op = BinaryExpr.Operator.divide; } |
   	  "%" { op = BinaryExpr.Operator.remainder; }
-  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, right, op); }
+  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2347,7 +2357,7 @@ Expression PostfixExpression():
   	LOOKAHEAD(2)
     ( "++" { op = UnaryExpr.Operator.posIncrement; } |
       "--" { op = UnaryExpr.Operator.posDecrement; }
-    ) { ret = new UnaryExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, op); }
+    ) { ret = new UnaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, op); }
   ]
   { return ret; }
 }
@@ -2412,7 +2422,7 @@ Expression PrimaryPrefix():
 {
 	Expression ret = null;
 	NameExpr name;
-	List typeArgs = null;
+	List<Type> typeArgs = null;
 	List args = null;
 	boolean hasArgs = false;
 	boolean isLambda = false;
@@ -2430,26 +2440,26 @@ Expression PrimaryPrefix():
 	|
 	  <SUPER> { ret = new SuperExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), null); }
 	  (
-		    "."
-		    [ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
-		    name = SimpleName()
-		    [ args = Arguments() {hasArgs=true;} ]
-		    {
-				if (hasArgs) {
-		            MethodCallExpr m = new MethodCallExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, typeArgs, null, args);
-					m.setNameExpr(name);
-					ret = m;
-				} else {
-		            FieldAccessExpr f = new FieldAccessExpr(range(ret.getBegin().line, ret.getBegin().column, token.endLine, token.endColumn), ret, null, null);
-					f.setFieldExpr(name);
-					ret = f;
-				}
-		    }
-		|
-			"::" [typeArgs = TypeParameters() { typeArgs.remove(0); }] (<IDENTIFIER> | "new")
-			{
-			  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs, token.image);
+	     "."
+	  [ typeArgs = TypeArguments() {typeArgs.remove(0);} ]
+	  name = SimpleName()
+	  [ args = Arguments() {hasArgs=true;} ]
+	  	{
+			if (hasArgs) {
+	  			MethodCallExpr m = new MethodCallExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs, null, args);
+				m.setNameExpr(name);
+				ret = m;
+			} else {
+	  			FieldAccessExpr f = new FieldAccessExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, null, null);
+				f.setFieldExpr(name);
+				ret = f;
 			}
+	  	}
+	 |
+		"::" [typeArgs = TypeArguments() { typeArgs.remove(0); }] (<IDENTIFIER> | "new")
+		{
+		  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs), token.image);
+		}
 	  )
 	|
 	  "(" {line=token.beginLine; column=token.beginColumn;}
@@ -2466,12 +2476,12 @@ Expression PrimaryPrefix():
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
 	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), 0);
-	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), 0, null, new UnknownType(), false, id);
+	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id);
 	  		  		  }
 
 	  		  		}
 	  		  		args = add(0, args, p);
-	  		  		ret = new LambdaExpr(range(p.getBegin().line, p.getBegin().column, token.endLine, token.endColumn), args, null, true);
+	  		  		ret = new LambdaExpr(range(p.getBegin(), pos(token.endLine, token.endColumn)), args, null, true);
 	  		 	}
 
 	  		 }
@@ -2479,13 +2489,13 @@ Expression PrimaryPrefix():
 	  ret = AllocationExpression(null)
 	|
 	  LOOKAHEAD( ResultType() "." "class" )
-	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getBegin().line, type.getBegin().column, token.endLine, token.endColumn), type); }
+	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getBegin(), pos(token.endLine, token.endColumn)), type); }
 
 	| LOOKAHEAD (ResultType() "::" )
-	  type = ResultType() "::" [typeArgs = TypeParameters() { typeArgs.remove(0); }] (<IDENTIFIER> | "new")
+	  type = ResultType() "::" [typeArgs = TypeArguments() { typeArgs.remove(0); }] (<IDENTIFIER> | "new")
 		{
 		  ret = new TypeExpr(type.getRange(), type);
-		  ret = new MethodReferenceExpr(ret.getRange(), ret, typeArgs, token.image);
+		  ret = new MethodReferenceExpr(ret.getRange(), ret, createTypeArguments(typeArgs), token.image);
 		}
 
 	|
@@ -2609,18 +2619,18 @@ Expression NullLiteral():
   { return new NullLiteralExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn)); }
 }
 
-List Arguments():
+List<Expression> Arguments():
 {
-	List ret = null;
+	List<Expression> ret = null;
 }
 {
   "(" [ ret = ArgumentList() ] ")"
   { return ret; }
 }
 
-List ArgumentList():
+List<Expression> ArgumentList():
 {
-	List ret = new LinkedList();
+	List<Expression> ret = new LinkedList();
 	Expression expr;
 }
 {
@@ -2803,7 +2813,7 @@ Statement BlockStatement():
 	Statement ret;
 	Expression expr;
 	ClassOrInterfaceDeclaration typeDecl;
-	Modifier modifier;
+	ModifierHolder modifier;
 }
 {
   (
@@ -2823,7 +2833,7 @@ Statement BlockStatement():
 
 VariableDeclarationExpr VariableDeclarationExpression():
 {
-	Modifier modifier;
+	ModifierHolder modifier;
 	Type type;
 	List vars = new LinkedList();
 	VariableDeclarator var;
@@ -2875,10 +2885,9 @@ ExpressionStmt StatementExpression():
 	AssignExpr.Operator op;
 	Expression value;
 	Type type;
-	List typeArgs = null;
+	List<Type> typeArgs = null;
 	Statement lambdaBody = null;
 	VariableDeclaratorId id = null;
-	List params = null;
 	Expression inner = null;
 }
 {
@@ -2894,7 +2903,7 @@ ExpressionStmt StatementExpression():
 	    "--" { expr = new UnaryExpr(range(expr.getBegin().line, expr.getBegin().column, token.endLine, token.endColumn), expr, UnaryExpr.Operator.posDecrement);  }
 	  |
 	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin().line, expr.getBegin().column, token.endLine, token.endColumn), expr, value, op); }
-	  | "::"  [typeArgs = TypeParameters() { typeArgs.remove(0); } ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().line, expr.getBegin().column, token.endLine, token.endColumn), expr, typeArgs, token.image); 	  }
+	  | "::"  [typeArgs = TypeArguments() { typeArgs.remove(0); } ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().line, expr.getBegin().column, token.endLine, token.endColumn), expr, createTypeArguments(typeArgs), token.image); 	  }
 
 	 |
 	   "->" lambdaBody = LambdaBody()
@@ -3135,7 +3144,7 @@ TryStmt TryStatement():
 	List catchs = null;
 	Parameter except;
 	BlockStmt catchBlock;
-	Modifier exceptModifier;
+	ModifierHolder exceptModifier;
 	Type exceptType;
 	List exceptTypes = new LinkedList();
 	VariableDeclaratorId exceptId;
@@ -3332,7 +3341,7 @@ Expression  MemberValueArrayInitializer():
 
 /* Annotation Types. */
 
-AnnotationDeclaration AnnotationTypeDeclaration(Modifier modifier):
+AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
 	NameExpr name;
 	List members;
@@ -3363,7 +3372,7 @@ List AnnotationTypeBody():
 
 BodyDeclaration AnnotationBodyDeclaration():
 {
-   Modifier modifier;
+   ModifierHolder modifier;
    BodyDeclaration ret;
 }
 {
@@ -3388,7 +3397,7 @@ BodyDeclaration AnnotationBodyDeclaration():
   { return ret; }
 }
 
-AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(Modifier modifier):
+AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modifier):
 {
 	Type type;
 	String name;

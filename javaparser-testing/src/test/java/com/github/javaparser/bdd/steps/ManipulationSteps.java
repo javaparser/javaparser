@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -29,6 +29,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.body.Modifier;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
@@ -138,7 +139,7 @@ public class ManipulationSteps {
     @When("a public class called \"$className\" is added to the CompilationUnit")
     public void whenAClassCalledIsAddedToTheCompilationUnit(String className) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-		TypeDeclaration<?> type = new ClassOrInterfaceDeclaration(ModifierSet.PUBLIC, false, "CreateClass");
+		TypeDeclaration<?> type = new ClassOrInterfaceDeclaration(EnumSet.of(Modifier.PUBLIC), false, "CreateClass");
         compilationUnit.setTypes(Arrays.asList(type));
         state.put("cu1", compilationUnit);
     }
@@ -146,9 +147,11 @@ public class ManipulationSteps {
     @When("a public static method called \"$methodName\" returning void is added to class $position in the compilation unit")
     public void whenAStaticMethodCalledReturningIsAddedToClassInTheCompilationUnit(String methodName, int position) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-		TypeDeclaration<?> type = compilationUnit.getTypes().get(position - 1);
-        MethodDeclaration method = new MethodDeclaration(ModifierSet.PUBLIC, new VoidType(), methodName);
-        method.setModifiers(ModifierSet.addModifier(method.getModifiers(), ModifierSet.STATIC));
+		 TypeDeclaration<?> type = compilationUnit.getTypes().get(position -1);
+		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
+		MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), methodName);
+		modifiers.add(Modifier.STATIC);
+		method.setModifiers(modifiers);
         ASTHelper.addMember(type, method);
         state.put("cu1", compilationUnit);
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,6 +24,7 @@ package com.github.javaparser;
 import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -31,6 +32,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Modifier;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -120,7 +122,8 @@ public final class ASTHelper {
      *            variable declarator
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration createFieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
+    public static FieldDeclaration createFieldDeclaration(EnumSet<Modifier> modifiers, Type type,
+                                                          VariableDeclarator variable) {
         List<VariableDeclarator> variables = new ArrayList<>();
         variables.add(variable);
         return new FieldDeclaration(modifiers, type, variables);
@@ -137,7 +140,7 @@ public final class ASTHelper {
      *            field name
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration createFieldDeclaration(int modifiers, Type type, String name) {
+    public static FieldDeclaration createFieldDeclaration(EnumSet<Modifier> modifiers, Type type, String name) {
         VariableDeclaratorId id = new VariableDeclaratorId(name);
         VariableDeclarator variable = new VariableDeclarator(id);
         return createFieldDeclaration(modifiers, type, variable);

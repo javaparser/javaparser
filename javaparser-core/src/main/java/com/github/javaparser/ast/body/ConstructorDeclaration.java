@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -53,7 +54,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         NodeWithParameters<ConstructorDeclaration>, NodeWithThrowable<ConstructorDeclaration>,
         NodeWithBlockStmt<ConstructorDeclaration> {
 
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<TypeParameter> typeParameters;
 
@@ -68,12 +69,13 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration() {
     }
 
-    public ConstructorDeclaration(int modifiers, String name) {
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
         setModifiers(modifiers);
         setName(name);
     }
 
-    public ConstructorDeclaration(int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters,
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
+                                  List<TypeParameter> typeParameters,
                                   String name, List<Parameter> parameters, List<ReferenceType> throws_,
                                   BlockStmt block) {
         super(annotations);
@@ -89,14 +91,15 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn,
+                                  EnumSet<Modifier> modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters,
                 name, parameters, throws_, block);
     }
 
-    public ConstructorDeclaration(Range range, int modifiers,
+    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         super(range, annotations);
@@ -136,7 +139,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -180,7 +183,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
 
     @Override
-    public ConstructorDeclaration setModifiers(int modifiers) {
+    public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
         return this;
     }
@@ -227,7 +230,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                                          boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
         }

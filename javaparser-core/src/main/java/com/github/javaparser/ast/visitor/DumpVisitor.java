@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,9 +24,11 @@ package com.github.javaparser.ast.visitor;
 import static com.github.javaparser.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
 
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -45,7 +47,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.body.Modifier;
 import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -206,40 +208,9 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		return printer.getSource();
 	}
 
-	private void printModifiers(final int modifiers) {
-		if (ModifierSet.isPrivate(modifiers)) {
-			printer.print("private ");
-		}
-		if (ModifierSet.isProtected(modifiers)) {
-			printer.print("protected ");
-		}
-		if (ModifierSet.isPublic(modifiers)) {
-			printer.print("public ");
-		}
-		if (ModifierSet.isAbstract(modifiers)) {
-			printer.print("abstract ");
-		}
-		if (ModifierSet.isStatic(modifiers)) {
-			printer.print("static ");
-		}
-		if (ModifierSet.isFinal(modifiers)) {
-			printer.print("final ");
-		}
-		if (ModifierSet.isNative(modifiers)) {
-			printer.print("native ");
-		}
-		if (ModifierSet.isStrictfp(modifiers)) {
-			printer.print("strictfp ");
-		}
-		if (ModifierSet.isSynchronized(modifiers)) {
-			printer.print("synchronized ");
-		}
-		if (ModifierSet.isTransient(modifiers)) {
-			printer.print("transient ");
-		}
-		if (ModifierSet.isVolatile(modifiers)) {
-			printer.print("volatile ");
-		}
+    private void printModifiers(final EnumSet<Modifier> modifiers) {
+        if (modifiers.size() > 0)
+            printer.print(modifiers.stream().map(m -> m.getLib()).collect(Collectors.joining(" ")) + " ");
 	}
 
     private void printMembers(final List<BodyDeclaration<?>> members, final Object arg) {
@@ -1671,18 +1642,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
         }
 
         printer.print("::");
-        if (!n.getTypeParameters().isEmpty()) {
-            printer.print("<");
-            for (Iterator<TypeParameter> i = n.getTypeParameters().iterator(); i
-                    .hasNext();) {
-                TypeParameter p = i.next();
-                p.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
-                }
-            }
-            printer.print(">");
-        }
+	    printTypeArgs(n.getTypeArguments().getTypeArguments(), arg);
         if (identifier != null) {
             printer.print(identifier);
         }

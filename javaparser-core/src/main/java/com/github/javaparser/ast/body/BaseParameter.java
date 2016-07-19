@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,6 +24,10 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -36,7 +40,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 public abstract class BaseParameter<T>
         extends Node
         implements NodeWithAnnotations<T>, NodeWithName<T>, NodeWithModifiers<T> {
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<AnnotationExpr> annotations;
 
@@ -49,12 +53,12 @@ public abstract class BaseParameter<T>
         setId(id);
     }
 
-    public BaseParameter(int modifiers, VariableDeclaratorId id) {
+    public BaseParameter(EnumSet<Modifier> modifiers, VariableDeclaratorId id) {
         setModifiers(modifiers);
         setId(id);
     }
 
-    public BaseParameter(int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+    public BaseParameter(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);
@@ -64,12 +68,12 @@ public abstract class BaseParameter<T>
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+    public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
                          List<AnnotationExpr> annotations, VariableDeclaratorId id) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, id);
     }
 
-    public BaseParameter(final Range range, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+    public BaseParameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
@@ -111,7 +115,7 @@ public abstract class BaseParameter<T>
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -134,7 +138,7 @@ public abstract class BaseParameter<T>
 
     @Override
     @SuppressWarnings("unchecked")
-    public T setModifiers(int modifiers) {
+    public T setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
         return (T) this;
     }

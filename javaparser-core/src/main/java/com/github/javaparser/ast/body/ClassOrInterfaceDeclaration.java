@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -50,12 +51,13 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public ClassOrInterfaceDeclaration() {
     }
 
-    public ClassOrInterfaceDeclaration(final int modifiers, final boolean isInterface, final String name) {
+    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
+                                       final String name) {
         super(modifiers, name);
         setInterface(isInterface);
     }
 
-    public ClassOrInterfaceDeclaration(final int modifiers,
+    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
                                        final List<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,
@@ -74,7 +76,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      */
     @Deprecated
     public ClassOrInterfaceDeclaration(final int beginLine, final int beginColumn, final int endLine,
-                                       final int endColumn, final int modifiers,
+                                       final int endColumn, final EnumSet<Modifier> modifiers,
                                        final List<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,
@@ -85,7 +87,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                 typeParameters, extendsList, implementsList, members);
     }
 
-    public ClassOrInterfaceDeclaration(Range range, final int modifiers,
+    public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
                                        final List<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -25,6 +25,11 @@ import static com.github.javaparser.Position.pos;
 
 import java.util.List;
 
+import static com.github.javaparser.Position.pos;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.UnionType;
@@ -36,7 +41,7 @@ public class MultiTypeParameter extends BaseParameter<MultiTypeParameter> {
 	
     public MultiTypeParameter() {}
 
-    public MultiTypeParameter(int modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
+    public MultiTypeParameter(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
         super(modifiers, annotations, id);
         this.type = type;
     }
@@ -45,11 +50,11 @@ public class MultiTypeParameter extends BaseParameter<MultiTypeParameter> {
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
+    public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, id);
     }
 
-    public MultiTypeParameter(Range range, int modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
+    public MultiTypeParameter(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
         super(range, modifiers, annotations, id);
         this.type = type;
 	}

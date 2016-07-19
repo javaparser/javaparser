@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.Position.pos;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -48,7 +49,7 @@ public final class Parameter extends BaseParameter<Parameter> implements NodeWit
         setType(type);
     }
 
-    public Parameter(int modifiers, Type type, VariableDeclaratorId id) {
+    public Parameter(EnumSet<Modifier> modifiers, Type type, VariableDeclaratorId id) {
     	super(modifiers, id);
         setType(type);
     }
@@ -57,11 +58,13 @@ public final class Parameter extends BaseParameter<Parameter> implements NodeWit
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
+    public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
+                     List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, isVarArgs, id);
     }
     
-    public Parameter(final Range range, int modifiers, List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
+    public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+                     boolean isVarArgs, VariableDeclaratorId id) {
         super(range, modifiers, annotations, id);
         setType(type);
         setVarArgs(isVarArgs);
