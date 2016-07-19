@@ -28,7 +28,7 @@ Current 1.8 Release
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>2.4.0</version>
+    <version>2.5.0</version>
 </dependency>
 ```
 
