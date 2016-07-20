@@ -45,7 +45,7 @@ public class BuilderTest extends BasicJBehaveTest {
     }
 
     public BuilderTest() {
-		super("**/bdd/builder*.story");
+		super("**/bdd/builder/*.story");
     }
 }
 

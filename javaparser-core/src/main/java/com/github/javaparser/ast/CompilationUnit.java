@@ -398,7 +398,7 @@ public final class CompilationUnit extends Node {
      * @param annotationName the annotation name (case-sensitive)
      * @return null if not found, the annotation otherwise
      */
-    public AnnotationDeclaration getAnnotationByName(String annotationName) {
+    public AnnotationDeclaration getAnnotationDeclarationByName(String annotationName) {
         return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getName().equals(annotationName)
                 && type instanceof AnnotationDeclaration)
                 .findFirst().orElse(null);
