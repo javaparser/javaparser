@@ -1,0 +1,17 @@
+# Make the Bundle-SymbolicName fully qualified, not just the artifact id
+Bundle-SymbolicName: com.github.javaparser.javaparser-core
+
+# Export all packages except impl
+-exportcontents: \
+    com.github.javaparser, \
+    com.github.javaparser.ast, \
+    com.github.javaparser.ast.body, \
+    com.github.javaparser.ast.comments, \
+    com.github.javaparser.ast.expr, \
+    com.github.javaparser.ast.stmt, \
+    com.github.javaparser.ast.type, \
+    com.github.javaparser.ast.visitor
+
+# Don't use the project's version for the packages
+# We prefer not setting a version as we don't follow OSGi version semantics
+-nodefaultversion: true
