@@ -217,7 +217,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		if (target == null) {
 			return null;
 		}
-		n.setTarget(null);
+        n.setTarget(target);
 
 		final Expression value = (Expression) n.getValue().accept(this, arg);
 		if (value == null) {
