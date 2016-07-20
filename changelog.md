@@ -42,3 +42,10 @@ Other changes:
 * 329, 326, 327: deal with platform issues
 * 163, 236, 252, 296, 269, 339, 321, 322, 252, 253, 293, 295: various fixes
 * 310, 311, 313, 301, 294: some code clean-ups 
+
+Version 2.5.1
+-------------
+* #394: OSGi manifest added
+* #391: fix ModifierVisitor NullPointerException bug
+* #385: a few new parse methods
+* #386: fix dumping an empty import (a single ; after the package declaration)
