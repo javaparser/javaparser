@@ -349,14 +349,16 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final ImportDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printer.print("import ");
-		if (n.isStatic()) {
-			printer.print("static ");
-		}
-		n.getName().accept(this, arg);
-		if (n.isAsterisk()) {
-			printer.print(".*");
-		}
+        if (!n.isEmptyImportDeclaration()) {
+            printer.print("import ");
+            if (n.isStatic()) {
+                printer.print("static ");
+            }
+            n.getName().accept(this, arg);
+            if (n.isAsterisk()) {
+                printer.print(".*");
+            }
+        }
 		printer.printLn(";");
 
         printOrphanCommentsEnding(n);
