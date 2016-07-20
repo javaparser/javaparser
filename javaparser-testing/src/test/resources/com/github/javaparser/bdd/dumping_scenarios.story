@@ -263,8 +263,10 @@ When the class is parsed by the Java parser
 When the class is visited by an empty ModifierVisitorAdapter
 Then it is dumped to:
 public class Example {
-  private String mString;
-  public Example(String arg) {
-    mString = arg;
-  }
+
+    private String mString;
+
+    public Example(String arg) {
+        mString = arg;
+    }
 }
