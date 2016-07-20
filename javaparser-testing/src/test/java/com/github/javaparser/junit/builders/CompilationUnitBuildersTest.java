@@ -11,38 +11,6 @@ import org.junit.Test;
 
 import com.github.javaparser.ast.CompilationUnit;
 
-/*Scenario: A CompilationUnit in which we call 3 times setImport with 2 duplicates values
-
-Given a CompilationUnit
-Then the compilation unit has 2 imports
-
-Scenario:  A CompilationUnit in which we add a class with addClass(String name)
-
-Then the expected source should be:
-TODO
-
-Scenario:  A CompilationUnit in which we add a class with addClass(String name, EnumSet<Modifier> modifiers)
-
-Then the expected source should be:
-TODO
-
-	
-Scenario:  A CompilationUnit in which we addInterface(String name) 
-Scenario:  A CompilationUnit in which we addInterface(String name, EnumSet<Modifier> modifiers) 
-
-Scenario:  A CompilationUnit in which we addEnum(String name) 
-Scenario:  A CompilationUnit in which we addEnum(String name, EnumSet<Modifier> modifiers) 
-
-Scenario:  A CompilationUnit in which we addAnnotationDeclaration(String name) 
-Scenario:  A CompilationUnit in which we addAnnotationDeclaration(String name, EnumSet<Modifier> modifiers) 
-
-Scenario:  A CompilationUnit in which we getClassByName(String className) 
-Scenario:  A CompilationUnit in which we getInterfaceByName(String interfaceName) 
-Scenario:  A CompilationUnit in which we getEnumByName(String enumName) 
-Scenario:  A CompilationUnit in which we getAnnotationDeclarationByName(String annotationName) 
-
-*/
-
 public class CompilationUnitBuildersTest {
 	CompilationUnit cu;
 
@@ -68,4 +36,33 @@ public class CompilationUnitBuildersTest {
 		assertEquals("import " + List.class.getName() + ";" + System.getProperty("line.separator"), cu.getImports().get(1).toString());
 		assertEquals("import myImport;" + System.getProperty("line.separator"), cu.getImports().get(2).toString());
 	}
+
+	/*
+	
+	Scenario:  A CompilationUnit in which we add a class with addClass(String name)
+	
+	Then the expected source should be:
+	TODO
+	
+	Scenario:  A CompilationUnit in which we add a class with addClass(String name, EnumSet<Modifier> modifiers)
+	
+	Then the expected source should be:
+	TODO
+	
+		
+	Scenario:  A CompilationUnit in which we addInterface(String name) 
+	Scenario:  A CompilationUnit in which we addInterface(String name, EnumSet<Modifier> modifiers) 
+	
+	Scenario:  A CompilationUnit in which we addEnum(String name) 
+	Scenario:  A CompilationUnit in which we addEnum(String name, EnumSet<Modifier> modifiers) 
+	
+	Scenario:  A CompilationUnit in which we addAnnotationDeclaration(String name) 
+	Scenario:  A CompilationUnit in which we addAnnotationDeclaration(String name, EnumSet<Modifier> modifiers) 
+	
+	Scenario:  A CompilationUnit in which we getClassByName(String className) 
+	Scenario:  A CompilationUnit in which we getInterfaceByName(String interfaceName) 
+	Scenario:  A CompilationUnit in which we getEnumByName(String enumName) 
+	Scenario:  A CompilationUnit in which we getAnnotationDeclarationByName(String annotationName) 
+	
+	*/
 }
