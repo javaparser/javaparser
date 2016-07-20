@@ -201,7 +201,7 @@ public interface NodeWithMembers<T> {
     public default List<MethodDeclaration> getMethodsWithParameterTypes(String... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
-                        && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType())
+                        && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
                                 .collect(Collectors.toSet()).equals(Stream.of(paramTypes).collect(Collectors.toSet())))
                 .map(m -> (MethodDeclaration) m).collect(Collectors.toList());
     }

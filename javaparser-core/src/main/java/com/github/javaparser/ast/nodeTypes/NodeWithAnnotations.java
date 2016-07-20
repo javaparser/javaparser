@@ -131,6 +131,16 @@ public interface NodeWithAnnotations<T> {
     }
 
     /**
+     * Check whether an annotation with this class is present on this element
+     * 
+     * @param annotationClass the class of the annotation
+     * @return true if found, false if not
+     */
+    public default boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
+        return isAnnotationPresent(annotationClass.getSimpleName());
+    }
+
+    /**
      * Try to find an annotation by its name
      * 
      * @param annotationName the name of the annotation
@@ -139,5 +149,15 @@ public interface NodeWithAnnotations<T> {
     public default AnnotationExpr getAnnotationByName(String annotationName) {
         return getAnnotations().stream().filter(a -> a.getName().getName().equals(annotationName)).findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Try to find an annotation by its class
+     * 
+     * @param annotationClass the class of the annotation
+     * @return null if not found, the annotation otherwise
+     */
+    public default AnnotationExpr getAnnotationByName(Class<? extends Annotation> annotationClass) {
+        return getAnnotationByName(annotationClass.getSimpleName());
     }
 }
