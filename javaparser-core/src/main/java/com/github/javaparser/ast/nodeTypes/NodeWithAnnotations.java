@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.nodeTypes;
 
 import java.lang.annotation.Annotation;
@@ -115,9 +115,29 @@ public interface NodeWithAnnotations<T> {
      * @return this
      */
     public default T addSingleMemberAnnotation(Class<? extends Annotation> clazz,
-                                                                         String value) {
+                                               String value) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
         return addSingleMemberAnnotation(clazz.getSimpleName(), value);
     }
 
+    /**
+     * Check whether an annotation with this name is present on this element
+     * 
+     * @param annotationName the name of the annotation
+     * @return true if found, false if not
+     */
+    public default boolean isAnnotationPresent(String annotationName) {
+        return getAnnotations().stream().anyMatch(a -> a.getName().getName().equals(annotationName));
+    }
+
+    /**
+     * Try to find an annotation by its name
+     * 
+     * @param annotationName the name of the annotation
+     * @return null if not found, the annotation otherwise
+     */
+    public default AnnotationExpr getAnnotationByName(String annotationName) {
+        return getAnnotations().stream().filter(a -> a.getName().getName().equals(annotationName)).findFirst()
+                .orElse(null);
+    }
 }

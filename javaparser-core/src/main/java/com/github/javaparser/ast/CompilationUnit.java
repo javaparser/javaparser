@@ -237,9 +237,6 @@ public final class CompilationUnit extends Node {
         return addImport(clazz.getName());
     }
 
-    // TODO Pour chaque type liste, ajouter un add qui prends par ex AnnotationExpr ou FieldExpression
-    // TODO checker si on peut mettre les builders dans AnnotableNode par ex et autres
-
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
      * <b>This method check if no import with the same name is already in the list</b>

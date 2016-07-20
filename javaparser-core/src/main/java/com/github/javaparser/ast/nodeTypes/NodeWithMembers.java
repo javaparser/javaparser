@@ -2,6 +2,8 @@ package com.github.javaparser.ast.nodeTypes;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -177,5 +179,43 @@ public interface NodeWithMembers<T> {
         return block;
     }
 
-    // TODO remove methods
+    /**
+     * Try to find a {@link MethodDeclaration} by its name
+     * 
+     * @param name the name of the method
+     * @return the methods found (multiple in case of polymorphism)
+     */
+    public default List<MethodDeclaration> getMethodsWithName(String name) {
+        return getMembers().stream()
+                .filter(m -> m instanceof MethodDeclaration && ((MethodDeclaration) m).getName().equals(name))
+                .map(m -> (MethodDeclaration) m).collect(Collectors.toList());
+    }
+
+    /**
+     * Try to find a {@link MethodDeclaration} by its parameters types
+     * 
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
+     *            void foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @return the methods found (multiple in case of polymorphism)
+     */
+    public default List<MethodDeclaration> getMethodsWithParameterTypes(String... paramTypes) {
+        return getMembers().stream()
+                .filter(m -> m instanceof MethodDeclaration
+                        && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType())
+                                .collect(Collectors.toSet()).equals(Stream.of(paramTypes).collect(Collectors.toSet())))
+                .map(m -> (MethodDeclaration) m).collect(Collectors.toList());
+    }
+
+    /**
+     * Try to find a {@link FieldDeclaration} by its name
+     * 
+     * @param name the name of the field
+     * @return null if not found, the FieldDeclaration otherwise
+     */
+    public default FieldDeclaration getFieldWithName(String name) {
+        return (FieldDeclaration) getMembers().stream()
+                .filter(m -> m instanceof FieldDeclaration && ((FieldDeclaration) m).getVariables().stream()
+                        .anyMatch(var -> var.getId().getName().equals(name)))
+                .findFirst().orElse(null);
+    }
 }
