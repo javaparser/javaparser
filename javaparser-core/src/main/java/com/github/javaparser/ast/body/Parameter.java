@@ -27,6 +27,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;

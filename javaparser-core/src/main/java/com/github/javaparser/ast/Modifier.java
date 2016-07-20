@@ -1,8 +1,6 @@
-package com.github.javaparser.ast.body;
+package com.github.javaparser.ast;
 
 import java.util.EnumSet;
-
-import com.github.javaparser.ast.AccessSpecifier;
 
 public enum Modifier {
 	PUBLIC("public"),

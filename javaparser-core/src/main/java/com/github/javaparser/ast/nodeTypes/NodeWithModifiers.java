@@ -2,7 +2,7 @@ package com.github.javaparser.ast.nodeTypes;
 
 import java.util.EnumSet;
 
-import com.github.javaparser.ast.body.Modifier;
+import com.github.javaparser.ast.Modifier;
 
 /**
  * A Node with Modifiers.

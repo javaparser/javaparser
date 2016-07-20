@@ -28,7 +28,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.body.Modifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;

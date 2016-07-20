@@ -26,6 +26,7 @@ import static com.github.javaparser.Position.pos;
 import java.util.EnumSet;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
