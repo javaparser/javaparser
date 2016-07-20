@@ -126,6 +126,7 @@
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <maven-jacoco-plugin.version>0.7.7.201606060606</maven-jacoco-plugin.version>
         <maven-coveralls-plugin.version>4.2.0</maven-coveralls-plugin.version>
+        <bnd-maven-plugin.version>3.2.0</bnd-maven-plugin.version>
 	</properties>
 
 	<scm>
