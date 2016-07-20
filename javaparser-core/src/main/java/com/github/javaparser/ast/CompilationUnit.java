@@ -359,4 +359,40 @@ public final class CompilationUnit extends Node {
         annotationDeclaration.setParentNode(this);
         return annotationDeclaration;
     }
+
+    /**
+     * Try to get a class by its name
+     * 
+     * @param name the class name
+     * @return null if not found, the class otherwise
+     */
+    public ClassOrInterfaceDeclaration getClassByName(String className) {
+        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getName().equals(className)
+                && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface())
+                .findFirst().orElse(null);
+    }
+
+    /**
+     * Try to get an interface by its name
+     * 
+     * @param name the interface name
+     * @return null if not found, the interface otherwise
+     */
+    public ClassOrInterfaceDeclaration getInterfaceByName(String interfaceName) {
+        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getName().equals(interfaceName)
+                && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface())
+                .findFirst().orElse(null);
+    }
+
+    /**
+     * Try to get an enum by its name
+     * 
+     * @param name the enum name
+     * @return null if not found, the enum otherwise
+     */
+    public EnumDeclaration getEnumByName(String enumName) {
+        return (EnumDeclaration) getTypes().stream().filter(type -> type.getName().equals(enumName)
+                && type instanceof EnumDeclaration)
+                .findFirst().orElse(null);
+    }
 }
