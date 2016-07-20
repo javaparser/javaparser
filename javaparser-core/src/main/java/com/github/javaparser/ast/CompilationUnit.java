@@ -363,7 +363,7 @@ public final class CompilationUnit extends Node {
     /**
      * Try to get a class by its name
      * 
-     * @param name the class name
+     * @param className the class name (case-sensitive)
      * @return null if not found, the class otherwise
      */
     public ClassOrInterfaceDeclaration getClassByName(String className) {
@@ -375,7 +375,7 @@ public final class CompilationUnit extends Node {
     /**
      * Try to get an interface by its name
      * 
-     * @param name the interface name
+     * @param interfaceName the interface name (case-sensitive)
      * @return null if not found, the interface otherwise
      */
     public ClassOrInterfaceDeclaration getInterfaceByName(String interfaceName) {
@@ -387,12 +387,24 @@ public final class CompilationUnit extends Node {
     /**
      * Try to get an enum by its name
      * 
-     * @param name the enum name
+     * @param enumName the enum name (case-sensitive)
      * @return null if not found, the enum otherwise
      */
     public EnumDeclaration getEnumByName(String enumName) {
         return (EnumDeclaration) getTypes().stream().filter(type -> type.getName().equals(enumName)
                 && type instanceof EnumDeclaration)
+                .findFirst().orElse(null);
+    }
+
+    /**
+     * Try to get an annotation by its name
+     * 
+     * @param annotationName the annotation name (case-sensitive)
+     * @return null if not found, the annotation otherwise
+     */
+    public AnnotationDeclaration getAnnotationByName(String annotationName) {
+        return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getName().equals(annotationName)
+                && type instanceof AnnotationDeclaration)
                 .findFirst().orElse(null);
     }
 }

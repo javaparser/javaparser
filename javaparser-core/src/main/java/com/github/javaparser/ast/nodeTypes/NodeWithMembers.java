@@ -176,4 +176,6 @@ public interface NodeWithMembers<T> {
         initializerDeclaration.setParentNode((Node) this);
         return block;
     }
+
+    // TODO remove methods
 }
