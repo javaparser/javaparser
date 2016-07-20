@@ -247,7 +247,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
-        if (getImports().stream().anyMatch(i -> i.getName().getName().equals(name)))
+        if (getImports().stream().anyMatch(i -> i.getName().toString().equals(name)))
             return this;
         else {
             ImportDeclaration importDeclaration = new ImportDeclaration(ASTHelper.createNameExpr(name), isStatic,
