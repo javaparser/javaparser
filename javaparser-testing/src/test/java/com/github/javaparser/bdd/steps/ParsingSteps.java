@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -55,11 +56,13 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -338,6 +341,18 @@ public class ParsingSteps {
         } catch (TokenMgrException e) {
             // ok
         }
+    }
+
+    @Then("the assignExpr produced doesn't have a null target")
+    public void thenTheAssignExprProducedDoesntHaveANullTarget() {
+        CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
+        ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) compilationUnit.getTypes().get(0);
+        ConstructorDeclaration ctor = (ConstructorDeclaration) classDeclaration.getMembers().get(1);
+        ExpressionStmt assignStmt = (ExpressionStmt) ctor.getBody().getStmts().get(0);
+        AssignExpr assignExpr = (AssignExpr) assignStmt.getExpression();
+        assertNotNull(assignExpr.getTarget());
+        assertEquals(NameExpr.class, assignExpr.getTarget().getClass());
+        assertEquals(((NameExpr) assignExpr.getTarget()).getName(), "mString");
     }
 
     private void setSelectedNodeFromCompilationUnit(Class<? extends Node> nodeType) {
