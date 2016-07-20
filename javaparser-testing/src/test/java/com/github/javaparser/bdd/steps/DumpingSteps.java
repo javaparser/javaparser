@@ -18,16 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.SourcesHelper;
-import com.github.javaparser.ast.Node;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.FileReader;
@@ -36,7 +30,16 @@ import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static org.junit.Assert.assertEquals;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.SourcesHelper;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.ModifierVisitorAdapter;
 
 public class DumpingSteps {
 
@@ -97,6 +100,12 @@ public class DumpingSteps {
     @When("the interface body declaration is parsed by the Java parser")
     public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
         resultNode = JavaParser.parseInterfaceBodyDeclaration(sourceUnderTest);
+    }
+
+    @When("the class is visited by an empty ModifierVisitorAdapter")
+    public void whenTheClassIsVisitedByAnEmptyModifierVisitorAdapter() throws ParseException {
+        (new ModifierVisitorAdapter() {
+        }).visit((CompilationUnit) resultNode, null);
     }
 
     @Then("it is dumped to:$dumpSrc")
