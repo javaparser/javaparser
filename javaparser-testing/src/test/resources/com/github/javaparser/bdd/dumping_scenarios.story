@@ -250,3 +250,21 @@ int xyz();
 When the interface body declaration is parsed by the Java parser
 Then it is dumped to:
 int xyz();
+
+Scenario: It doesn't throw NPE when using a modifierVisitorAdapter
+Given the class:
+public class Example {
+  private String mString;
+  public Example(String arg) {
+    mString = arg;
+  }
+}
+When the class is parsed by the Java parser
+When the class is visited by an empty ModifierVisitorAdapter
+Then it is dumped to:
+public class Example {
+  private String mString;
+  public Example(String arg) {
+    mString = arg;
+  }
+}

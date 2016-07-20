@@ -438,3 +438,14 @@ class X {
 	} 
 }
 Then no errors are reported
+
+Scenario: The target of this assignExpr is not null
+Given a CompilationUnit
+When the following source is parsed:
+public class Example {
+  private String mString;
+  public Example(String arg) {
+    mString = arg;
+  }
+}
+Then the assignExpr produced doesn't have a null target
