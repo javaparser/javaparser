@@ -202,7 +202,7 @@ public interface NodeWithMembers<T> {
      * @param name the name of the method
      * @return the methods found (multiple in case of polymorphism)
      */
-    public default List<MethodDeclaration> getMethodsWithName(String name) {
+    public default List<MethodDeclaration> getMethodsByName(String name) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration && ((MethodDeclaration) m).getName().equals(name))
                 .map(m -> (MethodDeclaration) m).collect(Collectors.toList());
@@ -229,7 +229,7 @@ public interface NodeWithMembers<T> {
      * @param name the name of the field
      * @return null if not found, the FieldDeclaration otherwise
      */
-    public default FieldDeclaration getFieldWithName(String name) {
+    public default FieldDeclaration getFieldByName(String name) {
         return (FieldDeclaration) getMembers().stream()
                 .filter(m -> m instanceof FieldDeclaration && ((FieldDeclaration) m).getVariables().stream()
                         .anyMatch(var -> var.getId().getName().equals(name)))

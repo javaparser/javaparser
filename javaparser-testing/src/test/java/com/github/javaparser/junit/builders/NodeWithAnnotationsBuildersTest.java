@@ -71,17 +71,4 @@ public class NodeWithAnnotationsBuildersTest {
 		NormalAnnotationExpr annotation = testClass.addAnnotation(hey.class);
 		assertEquals(annotation, testClass.getAnnotationByClass(hey.class));
 	}
-	/*
-	NodeWithAnnotations
-	
-	public default T addMarkerAnnotation(String name) {
-	public default T addMarkerAnnotation(Class<? extends Annotation> clazz) {
-	public default T addSingleMemberAnnotation(String name, String value) {
-	public default T addSingleMemberAnnotation(Class<? extends Annotation> clazz,
-	public default boolean isAnnotationPresent(String annotationName) {
-	public default boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
-	public default AnnotationExpr getAnnotationByName(String annotationName) {
-	public default AnnotationExpr getAnnotationByName(Class<? extends Annotation> annotationClass) {
-	*/
-
 }

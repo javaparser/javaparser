@@ -52,7 +52,7 @@ public class FieldDeclarationBuildersTest {
 		testClass.addPrivateField(int.class, "myField").createGetter();
 		assertEquals(2, testClass.getMembers().size());
 		assertEquals(MethodDeclaration.class, testClass.getMembers().get(1).getClass());
-		List<MethodDeclaration> methodsWithName = testClass.getMethodsWithName("getMyField");
+		List<MethodDeclaration> methodsWithName = testClass.getMethodsByName("getMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration getter = methodsWithName.get(0);
 		assertEquals("getMyField", getter.getName());
@@ -65,7 +65,7 @@ public class FieldDeclarationBuildersTest {
 		testClass.addPrivateField(int.class, "myField").createSetter();
 		assertEquals(2, testClass.getMembers().size());
 		assertEquals(MethodDeclaration.class, testClass.getMembers().get(1).getClass());
-		List<MethodDeclaration> methodsWithName = testClass.getMethodsWithName("setMyField");
+		List<MethodDeclaration> methodsWithName = testClass.getMethodsByName("setMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration setter = methodsWithName.get(0);
 		assertEquals("setMyField", setter.getName());
@@ -79,7 +79,7 @@ public class FieldDeclarationBuildersTest {
 		testEnum.addPrivateField(int.class, "myField").createGetter();
 		assertEquals(2, testEnum.getMembers().size());
 		assertEquals(MethodDeclaration.class, testEnum.getMembers().get(1).getClass());
-		List<MethodDeclaration> methodsWithName = testEnum.getMethodsWithName("getMyField");
+		List<MethodDeclaration> methodsWithName = testEnum.getMethodsByName("getMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration getter = methodsWithName.get(0);
 		assertEquals("getMyField", getter.getName());
@@ -92,7 +92,7 @@ public class FieldDeclarationBuildersTest {
 		testEnum.addPrivateField(int.class, "myField").createSetter();
 		assertEquals(2, testEnum.getMembers().size());
 		assertEquals(MethodDeclaration.class, testEnum.getMembers().get(1).getClass());
-		List<MethodDeclaration> methodsWithName = testEnum.getMethodsWithName("setMyField");
+		List<MethodDeclaration> methodsWithName = testEnum.getMethodsByName("setMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration setter = methodsWithName.get(0);
 		assertEquals("setMyField", setter.getName());
