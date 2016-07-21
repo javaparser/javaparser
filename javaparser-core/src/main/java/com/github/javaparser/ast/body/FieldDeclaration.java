@@ -33,6 +33,9 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.AssignExpr.Operator;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -134,7 +137,6 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return this;
     }
 
-
     @Override
     public FieldDeclaration setType(Type type) {
         this.type = type;
@@ -155,24 +157,31 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return null;
     }
 
-
     /**
      * Create a getter for this field, <b>will only work if this field declares only 1 identifier and if this field is
      * already added to a ClassOrInterfaceDeclaration</b>
      * 
      * @return the {@link MethodDeclaration} created
+     * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
+     *             class or enum
      */
     public MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
-        ClassOrInterfaceDeclaration parent = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
-        if (parent == null)
+        ClassOrInterfaceDeclaration parentClass = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
+        EnumDeclaration parentEnum = getParentNodeOfType(EnumDeclaration.class);
+        if ((parentClass == null && parentEnum == null) || (parentClass != null && parentClass.isInterface()))
             throw new IllegalStateException(
-                    "You can use this only when the field is attached to a ClassOrInterfaceDeclaration");
+                    "You can use this only when the field is attached to a class or an enum");
 
         String fieldName = getVariables().get(0).getId().getName();
         fieldName = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
-        MethodDeclaration getter = parent.addMethod("get" + fieldName, EnumSet.of(Modifier.PUBLIC)).setType(getType());
+        MethodDeclaration getter = null;
+        if (parentClass != null)
+            getter = parentClass.addMethod("get" + fieldName, EnumSet.of(Modifier.PUBLIC));
+        else
+            getter = parentEnum.addMethod("get" + fieldName, EnumSet.of(Modifier.PUBLIC));
+        getter.setType(getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
         ReturnStmt r = new ReturnStmt(ASTHelper.createNameExpr(fieldName));
@@ -185,23 +194,32 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * already added to a ClassOrInterfaceDeclaration</b>
      * 
      * @return the {@link MethodDeclaration} created
+     * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
+     *             class or enum
      */
     public MethodDeclaration createSetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
-        ClassOrInterfaceDeclaration parent = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
-        if (parent == null)
+        ClassOrInterfaceDeclaration parentClass = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
+        EnumDeclaration parentEnum = getParentNodeOfType(EnumDeclaration.class);
+        if ((parentClass == null && parentEnum == null) || (parentClass != null && parentClass.isInterface()))
             throw new IllegalStateException(
-                    "You can use this only when the field is attached to a ClassOrInterfaceDeclaration");
+                    "You can use this only when the field is attached to a class or an enum");
+
         String fieldName = getVariables().get(0).getId().getName();
         fieldName = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
-        MethodDeclaration setter = parent.addMethod("set" + fieldName, EnumSet.of(Modifier.PUBLIC))
-                .setType(ASTHelper.VOID_TYPE);
+        MethodDeclaration setter = null;
+        if (parentClass != null)
+            setter = parentClass.addMethod("set" + fieldName, EnumSet.of(Modifier.PUBLIC));
+        else
+            setter = parentEnum.addMethod("set" + fieldName, EnumSet.of(Modifier.PUBLIC));
+        setter.setType(ASTHelper.VOID_TYPE);
         setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
-        ASTHelper.addStmt(blockStmt2, ASTHelper.createNameExpr("this." + fieldName + " = " + fieldName + ";"));
+        ASTHelper.addStmt(blockStmt2,
+                new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
         return setter;
     }
 
