@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,39 +37,40 @@ public interface NodeWithMembers<T> {
      * Add a field to this and automatically add the import of the type if needed
      * 
      * @param typeClass the type of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @param name the name of the field
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    public default FieldDeclaration addField(Class<?> typeClass, EnumSet<Modifier> modifiers, String name) {
+    public default FieldDeclaration addField(Class<?> typeClass, String name, Modifier... modifiers) {
         ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
-        return addField(typeClass.getSimpleName(), modifiers, name);
+        return addField(typeClass.getSimpleName(), name, modifiers);
     }
 
     /**
      * Add a field to this
      * 
      * @param type the type of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @param name the name of the field
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    public default FieldDeclaration addField(String type, EnumSet<Modifier> modifiers, String name) {
-        return addField(new ClassOrInterfaceType(type), modifiers, name);
+    public default FieldDeclaration addField(String type, String name, Modifier... modifiers) {
+        return addField(new ClassOrInterfaceType(type), name, modifiers);
     }
 
     /**
      * Add a field to this
      * 
      * @param type the type of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @param name the name of the field
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    public default FieldDeclaration addField(Type type, EnumSet<Modifier> modifiers, String name) {
+    public default FieldDeclaration addField(Type type, String name, Modifier... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         fieldDeclaration.getVariables().add(new VariableDeclarator(new VariableDeclaratorId(name)));
-        fieldDeclaration.setModifiers(modifiers);
+        fieldDeclaration.setModifiers(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
         fieldDeclaration.setType(type);
         getMembers().add(fieldDeclaration);
         fieldDeclaration.setParentNode((Node) this);
@@ -83,7 +85,7 @@ public interface NodeWithMembers<T> {
      * @return the {@link FieldDeclaration} created
      */
     public default FieldDeclaration addPrivateField(Class<?> typeClass, String name) {
-        return addField(typeClass, EnumSet.of(Modifier.PRIVATE), name);
+        return addField(typeClass, name, Modifier.PRIVATE);
     }
 
     /**
@@ -95,7 +97,7 @@ public interface NodeWithMembers<T> {
      * @return the {@link FieldDeclaration} created
      */
     public default FieldDeclaration addPrivateField(String type, String name) {
-        return addField(type, EnumSet.of(Modifier.PRIVATE), name);
+        return addField(type, name, Modifier.PRIVATE);
     }
 
     /**
@@ -106,7 +108,7 @@ public interface NodeWithMembers<T> {
      * @return the {@link FieldDeclaration} created
      */
     public default FieldDeclaration addPublicField(Class<?> typeClass, String name) {
-        return addField(typeClass, EnumSet.of(Modifier.PUBLIC), name);
+        return addField(typeClass, name, Modifier.PUBLIC);
     }
 
     /**
@@ -118,7 +120,7 @@ public interface NodeWithMembers<T> {
      * @return the {@link FieldDeclaration} created
      */
     public default FieldDeclaration addPublicField(String type, String name) {
-        return addField(type, EnumSet.of(Modifier.PUBLIC), name);
+        return addField(type, name, Modifier.PUBLIC);
     }
 
     /**
@@ -129,7 +131,7 @@ public interface NodeWithMembers<T> {
      * @return the {@link FieldDeclaration} created
      */
     public default FieldDeclaration addProtectedField(Class<?> typeClass, String name) {
-        return addField(typeClass, EnumSet.of(Modifier.PROTECTED), name);
+        return addField(typeClass, name, Modifier.PROTECTED);
     }
 
     /**
@@ -141,7 +143,7 @@ public interface NodeWithMembers<T> {
      * @return the {@link FieldDeclaration} created
      */
     public default FieldDeclaration addProtectedField(String type, String name) {
-        return addField(type, EnumSet.of(Modifier.PROTECTED), name);
+        return addField(type, name, Modifier.PROTECTED);
     }
 
     /**
@@ -151,10 +153,11 @@ public interface NodeWithMembers<T> {
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
-    public default MethodDeclaration addMethod(String methodName, EnumSet<Modifier> modifiers) {
+    public default MethodDeclaration addMethod(String methodName, Modifier... modifiers) {
         MethodDeclaration methodDeclaration = new MethodDeclaration();
         methodDeclaration.setName(methodName);
-        methodDeclaration.setModifiers(modifiers);
+        methodDeclaration.setModifiers(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
         getMembers().add(methodDeclaration);
         methodDeclaration.setParentNode((Node) this);
         return methodDeclaration;
@@ -167,9 +170,10 @@ public interface NodeWithMembers<T> {
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
-    public default ConstructorDeclaration addCtor(EnumSet<Modifier> modifiers) {
+    public default ConstructorDeclaration addCtor(Modifier... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
-        constructorDeclaration.setModifiers(modifiers);
+        constructorDeclaration.setModifiers(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
         constructorDeclaration.setName(((TypeDeclaration<?>) this).getName());
         getMembers().add(constructorDeclaration);
         constructorDeclaration.setParentNode((Node) this);

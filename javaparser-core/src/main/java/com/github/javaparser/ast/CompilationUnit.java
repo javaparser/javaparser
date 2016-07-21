@@ -24,8 +24,10 @@ package com.github.javaparser.ast;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ASTHelper;
 import com.github.javaparser.ClassUtils;
@@ -265,7 +267,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public ClassOrInterfaceDeclaration addClass(String name) {
-        return addClass(name, EnumSet.of(Modifier.PUBLIC));
+        return addClass(name, Modifier.PUBLIC);
     }
 
     /**
@@ -275,8 +277,10 @@ public final class CompilationUnit extends Node {
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public ClassOrInterfaceDeclaration addClass(String name, EnumSet<Modifier> modifiers) {
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(modifiers,
+    public ClassOrInterfaceDeclaration addClass(String name, Modifier... modifiers) {
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(
+                Arrays.stream(modifiers)
+                        .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 false, name);
         getTypes().add(classOrInterfaceDeclaration);
         classOrInterfaceDeclaration.setParentNode(this);
@@ -290,7 +294,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public ClassOrInterfaceDeclaration addInterface(String name) {
-        return addInterface(name, EnumSet.of(Modifier.PUBLIC));
+        return addInterface(name, Modifier.PUBLIC);
     }
 
     /**
@@ -300,8 +304,10 @@ public final class CompilationUnit extends Node {
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public ClassOrInterfaceDeclaration addInterface(String name, EnumSet<Modifier> modifiers) {
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(modifiers,
+    public ClassOrInterfaceDeclaration addInterface(String name, Modifier... modifiers) {
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(
+                Arrays.stream(modifiers)
+                        .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 true, name);
         getTypes().add(classOrInterfaceDeclaration);
         classOrInterfaceDeclaration.setParentNode(this);
@@ -315,7 +321,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public EnumDeclaration addEnum(String name) {
-        return addEnum(name, EnumSet.of(Modifier.PUBLIC));
+        return addEnum(name, Modifier.PUBLIC);
     }
 
     /**
@@ -325,8 +331,9 @@ public final class CompilationUnit extends Node {
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public EnumDeclaration addEnum(String name, EnumSet<Modifier> modifiers) {
-        EnumDeclaration enumDeclaration = new EnumDeclaration(modifiers, name);
+    public EnumDeclaration addEnum(String name, Modifier... modifiers) {
+        EnumDeclaration enumDeclaration = new EnumDeclaration(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
         getTypes().add(enumDeclaration);
         enumDeclaration.setParentNode(this);
         return enumDeclaration;
@@ -339,7 +346,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public AnnotationDeclaration addAnnotationDeclaration(String name) {
-        return addAnnotationDeclaration(name, EnumSet.of(Modifier.PUBLIC));
+        return addAnnotationDeclaration(name, Modifier.PUBLIC);
     }
 
     /**
@@ -349,8 +356,9 @@ public final class CompilationUnit extends Node {
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public AnnotationDeclaration addAnnotationDeclaration(String name, EnumSet<Modifier> modifiers) {
-        AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(modifiers, name);
+    public AnnotationDeclaration addAnnotationDeclaration(String name, Modifier... modifiers) {
+        AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
         getTypes().add(annotationDeclaration);
         annotationDeclaration.setParentNode(this);
         return annotationDeclaration;

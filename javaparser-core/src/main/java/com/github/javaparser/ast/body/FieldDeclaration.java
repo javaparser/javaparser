@@ -178,9 +178,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         fieldName = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         MethodDeclaration getter = null;
         if (parentClass != null)
-            getter = parentClass.addMethod("get" + fieldName, EnumSet.of(Modifier.PUBLIC));
+            getter = parentClass.addMethod("get" + fieldName, Modifier.PUBLIC);
         else
-            getter = parentEnum.addMethod("get" + fieldName, EnumSet.of(Modifier.PUBLIC));
+            getter = parentEnum.addMethod("get" + fieldName, Modifier.PUBLIC);
         getter.setType(getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -211,9 +211,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
         MethodDeclaration setter = null;
         if (parentClass != null)
-            setter = parentClass.addMethod("set" + fieldName, EnumSet.of(Modifier.PUBLIC));
+            setter = parentClass.addMethod("set" + fieldName, Modifier.PUBLIC);
         else
-            setter = parentEnum.addMethod("set" + fieldName, EnumSet.of(Modifier.PUBLIC));
+            setter = parentEnum.addMethod("set" + fieldName, Modifier.PUBLIC);
         setter.setType(ASTHelper.VOID_TYPE);
         setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();

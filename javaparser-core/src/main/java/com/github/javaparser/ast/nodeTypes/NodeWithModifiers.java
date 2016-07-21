@@ -1,6 +1,8 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.Modifier;
 
@@ -19,8 +21,9 @@ public interface NodeWithModifiers<T> {
     T setModifiers(EnumSet<Modifier> modifiers);
 
     @SuppressWarnings("unchecked")
-    default T addModifier(Modifier modifier) {
-        getModifiers().add(modifier);
+    default T addModifier(Modifier... modifiers) {
+        getModifiers().addAll(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
         return (T) this;
     }
 

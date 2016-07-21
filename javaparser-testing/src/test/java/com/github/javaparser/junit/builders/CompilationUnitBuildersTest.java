@@ -45,11 +45,11 @@ public class CompilationUnitBuildersTest {
 
     @Test
     public void testAddClass() {
-        ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", Modifier.PRIVATE.toEnumSet());
+        ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", Modifier.PRIVATE);
         assertEquals(1, cu.getTypes().size());
         assertEquals("testClass", cu.getTypes().get(0).getName());
         assertEquals(ClassOrInterfaceDeclaration.class, cu.getTypes().get(0).getClass());
-        assertTrue(myClassDeclaration.getModifiers().equals(Modifier.PRIVATE.toEnumSet()));
+        assertTrue(myClassDeclaration.isPrivate());
         assertFalse(myClassDeclaration.isInterface());
     }
 
@@ -58,7 +58,7 @@ public class CompilationUnitBuildersTest {
         ClassOrInterfaceDeclaration myInterfaceDeclaration = cu.addInterface("testInterface");
         assertEquals(1, cu.getTypes().size());
         assertEquals("testInterface", cu.getTypes().get(0).getName());
-        assertTrue(myInterfaceDeclaration.getModifiers().equals(Modifier.PUBLIC.toEnumSet()));
+        assertTrue(myInterfaceDeclaration.isPublic());
         assertEquals(ClassOrInterfaceDeclaration.class, cu.getTypes().get(0).getClass());
         assertTrue(myInterfaceDeclaration.isInterface());
     }
@@ -68,7 +68,7 @@ public class CompilationUnitBuildersTest {
         EnumDeclaration myEnumDeclaration = cu.addEnum("test");
         assertEquals(1, cu.getTypes().size());
         assertEquals("test", cu.getTypes().get(0).getName());
-        assertTrue(myEnumDeclaration.getModifiers().equals(Modifier.PUBLIC.toEnumSet()));
+        assertTrue(myEnumDeclaration.isPublic());
         assertEquals(EnumDeclaration.class, cu.getTypes().get(0).getClass());
     }
 
@@ -77,7 +77,7 @@ public class CompilationUnitBuildersTest {
         AnnotationDeclaration myAnnotationDeclaration = cu.addAnnotationDeclaration("test");
         assertEquals(1, cu.getTypes().size());
         assertEquals("test", cu.getTypes().get(0).getName());
-        assertTrue(myAnnotationDeclaration.getModifiers().equals(Modifier.PUBLIC.toEnumSet()));
+        assertTrue(myAnnotationDeclaration.isPublic());
         assertEquals(AnnotationDeclaration.class, cu.getTypes().get(0).getClass());
     }
 
