@@ -17,6 +17,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 
 /**
  * A node having members.
@@ -53,10 +54,22 @@ public interface NodeWithMembers<T> {
      * @return the {@link FieldDeclaration} created
      */
     public default FieldDeclaration addField(String type, EnumSet<Modifier> modifiers, String name) {
+        return addField(new ClassOrInterfaceType(type), modifiers, name);
+    }
+
+    /**
+     * Add a field to this
+     * 
+     * @param type the type of the field
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param name the name of the field
+     * @return the {@link FieldDeclaration} created
+     */
+    public default FieldDeclaration addField(Type type, EnumSet<Modifier> modifiers, String name) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         fieldDeclaration.getVariables().add(new VariableDeclarator(new VariableDeclaratorId(name)));
         fieldDeclaration.setModifiers(modifiers);
-        fieldDeclaration.setType(new ClassOrInterfaceType(type));
+        fieldDeclaration.setType(type);
         getMembers().add(fieldDeclaration);
         fieldDeclaration.setParentNode((Node) this);
         return fieldDeclaration;
