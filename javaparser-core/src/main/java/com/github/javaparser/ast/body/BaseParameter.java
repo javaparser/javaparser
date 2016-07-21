@@ -24,9 +24,6 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -35,8 +32,8 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
 public abstract class BaseParameter<T>
         extends Node
@@ -112,7 +109,7 @@ public abstract class BaseParameter<T>
     /**
      * Return the modifiers of this parameter declaration.
      * 
-     * @see ModifierSet
+     * @see Modifier
      * @return modifiers
      */
     @Override

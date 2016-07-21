@@ -136,7 +136,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     /**
      * Return the modifiers of this member declaration.
      * 
-     * @see ModifierSet
+     * @see Modifier
      * @return modifiers
      */
     @Override

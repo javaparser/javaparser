@@ -158,7 +158,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     /**
      * Return the modifiers of this member declaration.
      * 
-     * @see ModifierSet
+     * @see Modifier
      * @return modifiers
      */
     @Override

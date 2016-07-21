@@ -24,11 +24,6 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -38,9 +33,9 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
 /**
  * @author Julio Vilmar Gesser
@@ -98,11 +93,11 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 	}
 
 	/**
-	 * Return the modifiers of this type declaration.
-	 * 
-	 * @see ModifierSet
-	 * @return modifiers
-	 */
+     * Return the modifiers of this type declaration.
+     * 
+     * @see Modifier
+     * @return modifiers
+     */
 	@Override
     public final EnumSet<Modifier> getModifiers() {
 		return modifiers;

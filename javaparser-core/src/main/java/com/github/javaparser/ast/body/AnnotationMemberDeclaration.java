@@ -23,10 +23,6 @@ package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.Position.pos;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -36,8 +32,8 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -114,7 +110,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     /**
      * Return the modifiers of this member declaration.
      * 
-     * @see ModifierSet
+     * @see Modifier
      * @return modifiers
      */
     @Override

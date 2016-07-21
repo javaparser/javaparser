@@ -104,11 +104,11 @@ public final class VariableDeclarationExpr extends Expression
 	}
 
 	/**
-	 * Return the modifiers of this variable declaration.
-	 * 
-	 * @see ModifierSet
-	 * @return modifiers
-	 */
+     * Return the modifiers of this variable declaration.
+     * 
+     * @see Modifier
+     * @return modifiers
+     */
 	@Override
     public EnumSet<Modifier> getModifiers() {
 		return modifiers;

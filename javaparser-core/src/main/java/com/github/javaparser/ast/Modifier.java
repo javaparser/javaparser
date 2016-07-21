@@ -28,6 +28,10 @@ public enum Modifier {
         return lib;
     }
 
+    public EnumSet<Modifier> toEnumSet() {
+        return EnumSet.of(this);
+    }
+
     public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers) {
         if (modifiers.contains(Modifier.PUBLIC)) {
             return AccessSpecifier.PUBLIC;
