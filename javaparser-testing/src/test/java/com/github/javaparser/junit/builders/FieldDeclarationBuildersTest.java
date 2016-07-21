@@ -15,77 +15,104 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 
 public class FieldDeclarationBuildersTest {
-    CompilationUnit cu;
-    private ClassOrInterfaceDeclaration testClass;
-    private EnumDeclaration testEnum;
+	CompilationUnit cu;
+	private ClassOrInterfaceDeclaration testClass;
+	private EnumDeclaration testEnum;
 
-    @Before
-    public void setup() {
-        cu = new CompilationUnit();
-        testClass = cu.addClass("testClass");
-        testEnum = cu.addEnum("testEnum");
-    }
+	@Before
+	public void setup() {
+		cu = new CompilationUnit();
+		testClass = cu.addClass("testClass");
+		testEnum = cu.addEnum("testEnum");
+	}
 
-    @After
-    public void teardown() {
-        cu = null;
-        testClass = null;
-        testEnum = null;
-    }
+	@After
+	public void teardown() {
+		cu = null;
+		testClass = null;
+		testEnum = null;
+	}
 
-    @Test(expected = IllegalStateException.class)
-    public void testOrphanFieldGetter() {
-        new FieldDeclaration().createGetter();
-    }
+	@Test(expected = IllegalStateException.class)
+	public void testOrphanFieldGetter() {
+		new FieldDeclaration().createGetter();
+	}
 
-    @Test(expected = IllegalStateException.class)
-    public void testOrphanFieldSetter() {
-        new FieldDeclaration().createSetter();
-    }
+	@Test(expected = IllegalStateException.class)
+	public void testOrphanFieldSetter() {
+		new FieldDeclaration().createSetter();
+	}
 
-    @Test
-    public void testCreateGetterInAClass() {
-        testClass.addPrivateField(int.class, "myField").createGetter();
-        assertEquals(2, testClass.getMembers().size());
-        assertEquals(MethodDeclaration.class, testClass.getMembers().get(1).getClass());
-        List<MethodDeclaration> methodsWithName = testClass.getMethodsWithName("getMyField");
-        assertEquals(1, methodsWithName.size());
-        MethodDeclaration getter = methodsWithName.get(0);
-        assertEquals("getMyField", getter.getName());
-        assertEquals("int", getter.getType().toString());
-        assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
-    }
+	@Test
+	public void testCreateGetterInAClass() {
+		testClass.addPrivateField(int.class, "myField").createGetter();
+		assertEquals(2, testClass.getMembers().size());
+		assertEquals(MethodDeclaration.class, testClass.getMembers().get(1).getClass());
+		List<MethodDeclaration> methodsWithName = testClass.getMethodsWithName("getMyField");
+		assertEquals(1, methodsWithName.size());
+		MethodDeclaration getter = methodsWithName.get(0);
+		assertEquals("getMyField", getter.getName());
+		assertEquals("int", getter.getType().toString());
+		assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
+	}
 
-    @Test
-    public void testCreateSetterInAClass() {
-        testClass.addPrivateField(int.class, "myField").createSetter();
-        // TODO asserts
-    }
+	@Test
+	public void testCreateSetterInAClass() {
+		testClass.addPrivateField(int.class, "myField").createSetter();
+		assertEquals(2, testClass.getMembers().size());
+		assertEquals(MethodDeclaration.class, testClass.getMembers().get(1).getClass());
+		List<MethodDeclaration> methodsWithName = testClass.getMethodsWithName("setMyField");
+		assertEquals(1, methodsWithName.size());
+		MethodDeclaration setter = methodsWithName.get(0);
+		assertEquals("setMyField", setter.getName());
+		assertEquals("int", setter.getParameters().get(0).getType().toString());
+		assertEquals(ExpressionStmt.class, setter.getBody().getStmts().get(0).getClass());
+		assertEquals("this.myField = myField;", setter.getBody().getStmts().get(0).toString());
+	}
 
-    @Test
-    public void testCreateGetterInEnum() {
-        testEnum.addPrivateField(int.class, "myField").createGetter();
-        // TODO asserts
-    }
+	@Test
+	public void testCreateGetterInEnum() {
+		testEnum.addPrivateField(int.class, "myField").createGetter();
+		assertEquals(2, testEnum.getMembers().size());
+		assertEquals(MethodDeclaration.class, testEnum.getMembers().get(1).getClass());
+		List<MethodDeclaration> methodsWithName = testEnum.getMethodsWithName("getMyField");
+		assertEquals(1, methodsWithName.size());
+		MethodDeclaration getter = methodsWithName.get(0);
+		assertEquals("getMyField", getter.getName());
+		assertEquals("int", getter.getType().toString());
+		assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
+	}
 
-    @Test
-    public void testCreateSetterInEnum() {
-        testEnum.addPrivateField(int.class, "myField").createSetter();
-        // TODO asserts
-    }
+	@Test
+	public void testCreateSetterInEnum() {
+		testEnum.addPrivateField(int.class, "myField").createSetter();
+		assertEquals(2, testEnum.getMembers().size());
+		assertEquals(MethodDeclaration.class, testEnum.getMembers().get(1).getClass());
+		List<MethodDeclaration> methodsWithName = testEnum.getMethodsWithName("setMyField");
+		assertEquals(1, methodsWithName.size());
+		MethodDeclaration setter = methodsWithName.get(0);
+		assertEquals("setMyField", setter.getName());
+		assertEquals("int", setter.getParameters().get(0).getType().toString());
+		assertEquals(ExpressionStmt.class, setter.getBody().getStmts().get(0).getClass());
+		assertEquals("this.myField = myField;", setter.getBody().getStmts().get(0).toString());
+	}
 
-    @Test(expected = IllegalStateException.class)
-    public void testCreateGetterWithANonValidField() {
-        FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
-        myPrivateField.getVariables().add(new VariableDeclarator(new VariableDeclaratorId("secondField")));
-        myPrivateField.createGetter();
-    }
-    /*
-     * FieldDeclaration
-     * public MethodDeclaration createGetter() {
-     * public MethodDeclaration createSetter() {
-     */
+	@Test(expected = IllegalStateException.class)
+	public void testCreateGetterWithANonValidField() {
+		FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
+		myPrivateField.getVariables().add(new VariableDeclarator(new VariableDeclaratorId("secondField")));
+		myPrivateField.createGetter();
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testCreateSetterWithANonValidField() {
+		FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
+		myPrivateField.getVariables().add(new VariableDeclarator(new VariableDeclaratorId("secondField")));
+		myPrivateField.createSetter();
+	}
+
 }

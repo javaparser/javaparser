@@ -157,7 +157,7 @@ public interface NodeWithAnnotations<T> {
      * @param annotationClass the class of the annotation
      * @return null if not found, the annotation otherwise
      */
-    public default AnnotationExpr getAnnotationByName(Class<? extends Annotation> annotationClass) {
+    public default AnnotationExpr getAnnotationByClass(Class<? extends Annotation> annotationClass) {
         return getAnnotationByName(annotationClass.getSimpleName());
     }
 }

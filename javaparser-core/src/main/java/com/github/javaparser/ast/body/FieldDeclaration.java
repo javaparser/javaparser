@@ -175,12 +175,12 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
                     "You can use this only when the field is attached to a class or an enum");
 
         String fieldName = getVariables().get(0).getId().getName();
-        fieldName = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
+        String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         MethodDeclaration getter = null;
         if (parentClass != null)
-            getter = parentClass.addMethod("get" + fieldName, Modifier.PUBLIC);
+            getter = parentClass.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
         else
-            getter = parentEnum.addMethod("get" + fieldName, Modifier.PUBLIC);
+            getter = parentEnum.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
         getter.setType(getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -207,13 +207,13 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
                     "You can use this only when the field is attached to a class or an enum");
 
         String fieldName = getVariables().get(0).getId().getName();
-        fieldName = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
+        String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         MethodDeclaration setter = null;
         if (parentClass != null)
-            setter = parentClass.addMethod("set" + fieldName, Modifier.PUBLIC);
+            setter = parentClass.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
         else
-            setter = parentEnum.addMethod("set" + fieldName, Modifier.PUBLIC);
+            setter = parentEnum.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
         setter.setType(ASTHelper.VOID_TYPE);
         setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
