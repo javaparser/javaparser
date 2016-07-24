@@ -21,26 +21,27 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.TypedNode;
-import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.body.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarationExpr extends Expression implements TypedNode, NodeWithModifiers {
 
-	private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
 	private List<AnnotationExpr> annotations;
 
@@ -56,7 +57,8 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 		setVars(vars);
 	}
 
-	public VariableDeclarationExpr(final int modifiers, final Type type, final List<VariableDeclarator> vars) {
+    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type type,
+                                   final List<VariableDeclarator> vars) {
 		setModifiers(modifiers);
 		setType(type);
 		setVars(vars);
@@ -67,13 +69,15 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 	 */
 	@Deprecated
 	public VariableDeclarationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
+                                   final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
+                                   final Type type,
 			final List<VariableDeclarator> vars) {
 		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, vars);
 	}
 	
 	public VariableDeclarationExpr(final Range range,
-			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
+                                   final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
+                                   final Type type,
 			final List<VariableDeclarator> vars) {
 		super(range);
 		setModifiers(modifiers);
@@ -102,7 +106,7 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 	 * @return modifiers
 	 */
 	@Override
-	public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
 		return modifiers;
 	}
 
@@ -121,7 +125,7 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 		setAsParentNodeOf(this.annotations);
 	}
 
-	public void setModifiers(final int modifiers) {
+    public void setModifiers(final EnumSet<Modifier> modifiers) {
 		this.modifiers = modifiers;
 	}
 

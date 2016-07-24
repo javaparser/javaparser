@@ -21,12 +21,13 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+
+import java.util.EnumSet;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -34,7 +35,7 @@ import static com.github.javaparser.Position.pos;
 public final class EmptyTypeDeclaration extends TypeDeclaration {
 
     public EmptyTypeDeclaration() {
-        super(null, 0, null, null);
+        super(null, EnumSet.noneOf(Modifier.class), null, null);
     }
 
     /**
@@ -46,7 +47,7 @@ public final class EmptyTypeDeclaration extends TypeDeclaration {
     }
 
     public EmptyTypeDeclaration(Range range) {
-        super(range, null, 0, null, null);
+        super(range, null, EnumSet.noneOf(Modifier.class), null, null);
     }
 
     @Override

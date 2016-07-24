@@ -21,6 +21,13 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NodeWithModifiers;
@@ -31,18 +38,12 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class FieldDeclaration extends BodyDeclaration implements DocumentableNode, TypedNode, NodeWithModifiers {
 
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private Type type;
 
@@ -51,21 +52,22 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     public FieldDeclaration() {
     }
 
-    public FieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, VariableDeclarator variable) {
     	setModifiers(modifiers);
     	setType(type);
-    	List<VariableDeclarator> aux = new ArrayList<VariableDeclarator>();
+    	List<VariableDeclarator> aux = new ArrayList<>();
     	aux.add(variable);
     	setVariables(aux);
     }
 
-    public FieldDeclaration(int modifiers, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, List<VariableDeclarator> variables) {
     	setModifiers(modifiers);
     	setType(type);
     	setVariables(variables);
     }
 
-    public FieldDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+                            List<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
     	setType(type);
@@ -76,11 +78,13 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
+                            List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, variables);
     }
     
-    public FieldDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+                            List<VariableDeclarator> variables) {
         super(range, annotations);
         setModifiers(modifiers);
     	setType(type);
@@ -104,7 +108,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -118,7 +122,7 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
         return variables;
     }
 
-    public void setModifiers(int modifiers) {
+    public void setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
     }
 

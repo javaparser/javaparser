@@ -60,7 +60,7 @@ import static com.github.javaparser.Position.*;
  * <p>This class was generated automatically by javacc, do not edit.</p>
  */
 final class ASTParser {
-
+   
 	void reset(InputStream in, String encoding) throws IOException {
         ReInit(new StreamProvider(in, encoding));
     }
@@ -81,26 +81,36 @@ final class ASTParser {
     	return list;
     }
 
-	private class Modifier {
+	private class ModifierHolder {
 
-		final int modifiers;
+		final EnumSet<Modifier> modifiers;
 		final List annotations;
 		final Position begin;
 
-		public Modifier(Position begin, int modifiers, List annotations) {
+		public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, List annotations) {
 			this.begin = begin;
 			this.modifiers = modifiers;
 			this.annotations = annotations;
 		}
 	}
 
-    public int addModifier(int modifiers, int mod, Token token) throws ParseException {
-        if ((ModifierSet.hasModifier(modifiers, mod))) {
+    public void addModifier(EnumSet<Modifier> modifiers, Modifier mod, Token token) throws ParseException {
+        if (modifiers.contains(mod)) {
             throwParseException(token, "Duplicated modifier");
         }
-        return ModifierSet.addModifier(modifiers, mod);
+        modifiers.add(mod);
     }
-
+    
+    public void addMultipleModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods, Token token) throws ParseException {
+        if(mods == null)
+            return;
+        for(Modifier m : mods)
+            if (modifiers.contains(m)) 
+                throwParseException(token, "Duplicated modifier");
+        for(Modifier m : mods)
+            modifiers.add(m);
+    }
+   
     /**
      * Return the list of tokens that have been encountered while parsing code using
      * this parser.
@@ -130,14 +140,14 @@ final class ASTParser {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
 	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), 0);
-	       	    List params = add(null, new Parameter(ret.getRange(), 0, null, new UnknownType(), false, id));
+	       	    List params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
 	        } else {
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
 		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), 0);
-	        List params = add(null, new Parameter(ret.getRange(), 0, null, new UnknownType(), false, id));
+	        List params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
 	        ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
@@ -1225,11 +1235,11 @@ ImportDeclaration ImportDeclaration():
  * better error messages.
  */
 
-Modifier Modifiers():
+ModifierHolder Modifiers():
 {
     int beginLine = -1;
     int beginColumn = -1;
-    int modifiers = 0;
+    EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
     List annotations = null;
     AnnotationExpr ann;
 }
@@ -1237,34 +1247,34 @@ Modifier Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { modifiers = addModifier(modifiers, ModifierSet.PUBLIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "public" { addModifier(modifiers, Modifier.PUBLIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "static" { modifiers = addModifier(modifiers, ModifierSet.STATIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "static" { addModifier(modifiers, Modifier.STATIC, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "protected" { modifiers = addModifier(modifiers, ModifierSet.PROTECTED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "protected" {  addModifier(modifiers, Modifier.PROTECTED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "private" { modifiers = addModifier(modifiers, ModifierSet.PRIVATE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "private" { addModifier(modifiers, Modifier.PRIVATE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "final" { modifiers = addModifier(modifiers, ModifierSet.FINAL, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "final" { addModifier(modifiers, Modifier.FINAL, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "abstract" { modifiers = addModifier(modifiers, ModifierSet.ABSTRACT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "abstract" { addModifier(modifiers, Modifier.ABSTRACT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "synchronized" { modifiers = addModifier(modifiers, ModifierSet.SYNCHRONIZED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "native" { modifiers = addModifier(modifiers, ModifierSet.NATIVE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "native" { addModifier(modifiers, Modifier.NATIVE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "transient" { modifiers = addModifier(modifiers, ModifierSet.TRANSIENT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "transient" { addModifier(modifiers, Modifier.TRANSIENT, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "volatile" { modifiers = addModifier(modifiers, ModifierSet.VOLATILE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "volatile" { addModifier(modifiers, Modifier.VOLATILE, token); if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
-   "strictfp" { modifiers = addModifier(modifiers, ModifierSet.STRICTFP, token);  if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
+   "strictfp" { addModifier(modifiers, Modifier.STRICTFP, token);  if(beginLine==-1) {beginLine=token.beginLine; beginColumn=token.beginColumn;} }
   |
    ann = Annotation() { annotations = add(annotations, ann); if(beginLine==-1) {beginLine=ann.getBegin().line; beginColumn=ann.getBegin().column;} }
   )
  )*
 
  {
-    return new Modifier(pos(beginLine, beginColumn), modifiers, annotations);
+    return new ModifierHolder(pos(beginLine, beginColumn), modifiers, annotations);
  }
 }
 
@@ -1273,7 +1283,7 @@ Modifier Modifiers():
  */
 TypeDeclaration TypeDeclaration():
 {
-   Modifier modifier;
+   ModifierHolder modifier;
    TypeDeclaration ret;
 }
 {
@@ -1294,7 +1304,7 @@ TypeDeclaration TypeDeclaration():
 }
 
 
-ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(Modifier modifier):
+ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier):
 {
    boolean isInterface = false;
    NameExpr name;
@@ -1352,7 +1362,7 @@ List ImplementsList(boolean isInterface):
    { return ret; }
 }
 
-EnumDeclaration EnumDeclaration(Modifier modifier):
+EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 {
 	NameExpr name;
 	List impList = null;
@@ -1464,9 +1474,9 @@ List ClassOrInterfaceBody(boolean isInterface):
 BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 {
    boolean isNestedInterface = false;
-   Modifier modifier;
-   Modifier modifier2 = null;
-   int aux = 0;
+   ModifierHolder modifier;
+   ModifierHolder modifier2 = null;
+   EnumSet<Modifier> aux = null;
    BodyDeclaration ret;
    boolean isDefault = false;
 }
@@ -1515,7 +1525,8 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	        {
 	          aux = modifier2.modifiers;
 	        }
-	        ((MethodDeclaration)ret).setModifiers(addModifier(modifier.modifiers, aux, token));
+	        addMultipleModifier(modifier.modifiers, aux, token);
+	        ((MethodDeclaration)ret).setModifiers(modifier.modifiers);
 	      }
 	  )
 	  {
@@ -1530,7 +1541,7 @@ BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
   { return ret; }
 }
 
-FieldDeclaration FieldDeclaration(Modifier modifier):
+FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 {
 	Type type;
 	List variables = new LinkedList();
@@ -1597,7 +1608,7 @@ ArrayInitializerExpr ArrayInitializer():
   { return new ArrayInitializerExpr(range(line, column, token.endLine, token.endColumn),values); }
 }
 
-MethodDeclaration MethodDeclaration(Modifier modifier):
+MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
 	List typeParameters = null;
 	Type type;
@@ -1671,16 +1682,16 @@ List InferredLambdaParameters():
 }
 {
    ","
-  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), 0, null, new UnknownType(), false, id));}
+  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));}
   (
-    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), 0, null, new UnknownType(), false, id)); }
+    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id)); }
   )*
   { return ret;  }
 }
 
 Parameter FormalParameter():
 {
-	Modifier modifier;
+	ModifierHolder modifier;
 	Type type;
 	boolean isVarArg = false;
 	VariableDeclaratorId id;
@@ -1696,7 +1707,7 @@ Parameter FormalParameter():
   }
 }
 
-ConstructorDeclaration ConstructorDeclaration(Modifier modifier):
+ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
 	List typeParameters = null;
 	NameExpr name;
@@ -2465,7 +2476,7 @@ Expression PrimaryPrefix():
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
 	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), 0);
-	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), 0, null, new UnknownType(), false, id);
+	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id);
 	  		  		  }
 
 	  		  		}
@@ -2802,7 +2813,7 @@ Statement BlockStatement():
 	Statement ret;
 	Expression expr;
 	ClassOrInterfaceDeclaration typeDecl;
-	Modifier modifier;
+	ModifierHolder modifier;
 }
 {
   (
@@ -2822,7 +2833,7 @@ Statement BlockStatement():
 
 VariableDeclarationExpr VariableDeclarationExpression():
 {
-	Modifier modifier;
+	ModifierHolder modifier;
 	Type type;
 	List vars = new LinkedList();
 	VariableDeclarator var;
@@ -3133,7 +3144,7 @@ TryStmt TryStatement():
 	List catchs = null;
 	Parameter except;
 	BlockStmt catchBlock;
-	Modifier exceptModifier;
+	ModifierHolder exceptModifier;
 	Type exceptType;
 	List exceptTypes = new LinkedList();
 	VariableDeclaratorId exceptId;
@@ -3330,7 +3341,7 @@ Expression  MemberValueArrayInitializer():
 
 /* Annotation Types. */
 
-AnnotationDeclaration AnnotationTypeDeclaration(Modifier modifier):
+AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
 	NameExpr name;
 	List members;
@@ -3361,7 +3372,7 @@ List AnnotationTypeBody():
 
 BodyDeclaration AnnotationBodyDeclaration():
 {
-   Modifier modifier;
+   ModifierHolder modifier;
    BodyDeclaration ret;
 }
 {
@@ -3386,7 +3397,7 @@ BodyDeclaration AnnotationBodyDeclaration():
   { return ret; }
 }
 
-AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(Modifier modifier):
+AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modifier):
 {
 	Type type;
 	String name;

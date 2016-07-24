@@ -1,6 +1,8 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.ModifierSet;
+import java.util.EnumSet;
+
+import com.github.javaparser.ast.body.Modifier;
 
 /**
  * A Node with Modifiers.
@@ -12,5 +14,5 @@ public interface NodeWithModifiers {
 	 * @see ModifierSet
 	 * @return modifiers
 	 */
-	int getModifiers();
+    EnumSet<Modifier> getModifiers();
 }

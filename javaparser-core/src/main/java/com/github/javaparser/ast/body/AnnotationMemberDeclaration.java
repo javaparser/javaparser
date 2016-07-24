@@ -21,6 +21,11 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
@@ -33,16 +38,12 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class AnnotationMemberDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode, TypedNode, NodeWithModifiers {
 
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private Type type;
 
@@ -53,14 +54,15 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
     public AnnotationMemberDeclaration() {
     }
 
-    public AnnotationMemberDeclaration(int modifiers, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type type, String name, Expression defaultValue) {
         setModifiers(modifiers);
         setType(type);
         setName(name);
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+                                       String name, Expression defaultValue) {
         super(annotations);
         setModifiers(modifiers);
         setType(type);
@@ -72,11 +74,14 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn,
+                                       EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+                                       String name, Expression defaultValue) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, name, defaultValue);
     }
 
-    public AnnotationMemberDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
+                                       Type type, String name, Expression defaultValue) {
         super(range, annotations);
         setModifiers(modifiers);
         setType(type);
@@ -105,7 +110,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -124,7 +129,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration implement
         setAsParentNodeOf(defaultValue);
     }
 
-    public void setModifiers(int modifiers) {
+    public void setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
     }
 

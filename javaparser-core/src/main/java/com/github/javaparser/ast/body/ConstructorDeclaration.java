@@ -21,10 +21,18 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.DocumentableNode;
+import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.NodeWithModifiers;
+import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -33,16 +41,13 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration,
         NamedNode, NodeWithModifiers {
 
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<TypeParameter> typeParameters;
 
@@ -57,12 +62,13 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
     public ConstructorDeclaration() {
     }
 
-    public ConstructorDeclaration(int modifiers, String name) {
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
         setModifiers(modifiers);
         setName(name);
     }
 
-    public ConstructorDeclaration(int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters,
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
+                                  List<TypeParameter> typeParameters,
                                   String name, List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         super(annotations);
         setModifiers(modifiers);
@@ -77,13 +83,14 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn,
+                                  EnumSet<Modifier> modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters, name, parameters, throws_, block);
     }
 
-    public ConstructorDeclaration(Range range, int modifiers,
+    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         super(range, annotations);
@@ -116,7 +123,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -149,7 +156,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         setAsParentNodeOf(this.block);
     }
 
-    public void setModifiers(int modifiers) {
+    public void setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
     }
 
@@ -188,7 +195,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
                                          boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
         }
