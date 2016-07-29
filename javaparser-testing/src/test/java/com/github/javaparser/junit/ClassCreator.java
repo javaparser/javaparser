@@ -34,9 +34,7 @@ public class ClassCreator {
         cu.setPackage(new PackageDeclaration(ASTHelper.createNameExpr("java.parser.test")));
 
         // create the type declaration 
-		ClassOrInterfaceDeclaration type = new ClassOrInterfaceDeclaration(EnumSet.of(Modifier.PUBLIC), false, "GeneratedClass");
-        ASTHelper.addTypeDeclaration(cu, type);
-
+        ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
         // create a method
 		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
 		MethodDeclaration method = new MethodDeclaration(modifiers, ASTHelper.VOID_TYPE, "main");
