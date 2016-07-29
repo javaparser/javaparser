@@ -57,14 +57,6 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         setDimensions(null);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, int arrayCount, ArrayInitializerExpr initializer) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount, initializer);
-    }
-    
     public ArrayCreationExpr(Range range, Type type, int arrayCount, ArrayInitializerExpr initializer) {
         super(range);
         setType(type);
@@ -80,14 +72,6 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         setInitializer(null);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, List<Expression> dimensions, int arrayCount) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, dimensions, arrayCount);
-    }
-    
     public ArrayCreationExpr(Range range, Type type, List<Expression> dimensions, int arrayCount) {
         super(range);
         setType(type);

@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -29,7 +28,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -54,17 +52,6 @@ public final class ForStmt extends Statement {
 		setInit(init);
 		setUpdate(update);
 		setBody(body);
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public ForStmt(final int beginLine, final int beginColumn,
-	               final int endLine, final int endColumn,
-	               final List<Expression> init, final Expression compare,
-	               final List<Expression> update, final Statement body) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), init, compare, update, body);
 	}
 
 	public ForStmt(Range range,

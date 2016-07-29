@@ -24,8 +24,6 @@ package com.github.javaparser.ast.comments;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * Abstract class for all AST nodes that represent comments.
  * 
@@ -46,14 +44,6 @@ public abstract class Comment extends Node {
         this.content = content;
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public Comment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), content);
-    }
-    
     public Comment(Range range, String content) {
         super(range);
         this.content = content;

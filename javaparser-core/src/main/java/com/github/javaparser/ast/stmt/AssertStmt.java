@@ -21,14 +21,10 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.Range.range;
 
 /**
  * @author Julio Vilmar Gesser
@@ -49,15 +45,6 @@ public final class AssertStmt extends Statement {
 	public AssertStmt(final Expression check, final Expression msg) {
 		setCheck(check);
 		setMessage(msg);
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public AssertStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                  final Expression check, final Expression msg) {
-		this(range(beginLine, beginColumn, endLine, endColumn), check, msg);
 	}
 
 	public AssertStmt(final Range range, final Expression check, final Expression msg) {

@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -35,14 +33,6 @@ public final class NullLiteralExpr extends LiteralExpr {
 	public NullLiteralExpr() {
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public NullLiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
-	}
-	
 	public NullLiteralExpr(final Range range) {
 		super(range);
 	}

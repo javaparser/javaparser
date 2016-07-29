@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -40,15 +38,6 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 
 	public NameExpr(final String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public NameExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                final String name) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name);
 	}
 
 	public NameExpr(Range range, final String name) {

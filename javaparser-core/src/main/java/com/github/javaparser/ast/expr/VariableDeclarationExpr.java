@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.EnumSet;
@@ -67,17 +66,6 @@ public final class VariableDeclarationExpr extends Expression
 		setVars(vars);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public VariableDeclarationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                                   final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                                   final Type type,
-			final List<VariableDeclarator> vars) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, vars);
-	}
-	
 	public VariableDeclarationExpr(final Range range,
                                    final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
                                    final Type type,

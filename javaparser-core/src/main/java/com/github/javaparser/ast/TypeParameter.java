@@ -61,28 +61,17 @@ public final class TypeParameter extends Node implements NodeWithName<TypeParame
 		setTypeBound(typeBound);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public TypeParameter(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                     final String name, final List<ClassOrInterfaceType> typeBound) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, typeBound);
-	}
-	
 	public TypeParameter(Range range, final String name, final List<ClassOrInterfaceType> typeBound) {
 		super(range);
 		setName(name);
 		setTypeBound(typeBound);
 	}
 
-    public TypeParameter(int beginLine, int beginColumn, int endLine,
-                         int endColumn, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
-        this(beginLine, beginColumn, endLine, endColumn, name, typeBound);
-        setName(name);
-        setTypeBound(typeBound);
-	    setAnnotations(annotations);
-    }
+	public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
+		this(range, name, typeBound);
+		setTypeBound(typeBound);
+		setAnnotations(annotations);
+	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
