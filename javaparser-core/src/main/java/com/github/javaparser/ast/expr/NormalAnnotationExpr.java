@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
@@ -44,15 +43,6 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     public NormalAnnotationExpr(final NameExpr name, final List<MemberValuePair> pairs) {
         setName(name);
         setPairs(pairs);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public NormalAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                                final NameExpr name, final List<MemberValuePair> pairs) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, pairs);
     }
 
     public NormalAnnotationExpr(final Range range, final NameExpr name, final List<MemberValuePair> pairs) {

@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * <p>
  * AST node that represent line comments.
@@ -44,14 +42,6 @@ public final class LineComment extends Comment {
         super(content);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public LineComment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), content);
-    }
-    
     public LineComment(Range range, String content) {
         super(range, content);
     }

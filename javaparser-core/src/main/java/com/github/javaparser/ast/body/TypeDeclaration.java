@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.EnumSet;
@@ -66,17 +65,6 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 		setMembers(members);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
-			int endColumn, List<AnnotationExpr> annotations,
-                           EnumSet<Modifier> modifiers, String name,
-                           List<BodyDeclaration<?>> members) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, modifiers, name, members);
-	}
-	
 	public TypeDeclaration(Range range, List<AnnotationExpr> annotations,
                            EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {

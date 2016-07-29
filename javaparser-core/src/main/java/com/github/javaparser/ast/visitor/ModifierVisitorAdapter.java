@@ -401,7 +401,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(throwz);
 		}
-		n.setBlock((BlockStmt) n.getBlock().accept(this, arg));
+		n.setBody((BlockStmt) n.getBody().accept(this, arg));
 		return n;
 	}
 

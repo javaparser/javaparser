@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -36,14 +34,6 @@ public final class IntegerLiteralMinValueExpr extends IntegerLiteralExpr {
 		super(MIN_VALUE);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public IntegerLiteralMinValueExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
-	}
-	
 	public IntegerLiteralMinValueExpr(final Range range) {
 		super(range, MIN_VALUE);
 	}
