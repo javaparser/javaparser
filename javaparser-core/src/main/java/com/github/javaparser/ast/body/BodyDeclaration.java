@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -43,14 +41,6 @@ public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotat
 
     public BodyDeclaration(List<AnnotationExpr> annotations) {
     	setAnnotations(annotations);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public BodyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations);
     }
 
     public BodyDeclaration(Range range, List<AnnotationExpr> annotations) {

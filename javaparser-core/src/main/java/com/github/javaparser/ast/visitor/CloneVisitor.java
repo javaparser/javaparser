@@ -166,8 +166,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
         List<ClassOrInterfaceType> typeBound = visit(_n.getTypeBound(), _arg);
 
         List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
-        TypeParameter r = new TypeParameter(_n.getBegin().line,
-                _n.getBegin().column, _n.getEnd().line, _n.getEnd().column,
+        TypeParameter r = new TypeParameter(_n.getRange(),
                 _n.getName(), typeBound, annotations);
 
         Comment comment = cloneNodes(_n.getComment(), _arg);
@@ -328,7 +327,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg);
 		List<Parameter> parameters = visit(_n.getParameters(), _arg);
 		List<ReferenceType> throws_ = visit(_n.getThrows(), _arg);
-		BlockStmt block = cloneNodes(_n.getBlock(), _arg);
+		BlockStmt block = cloneNodes(_n.getBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		ConstructorDeclaration r = new ConstructorDeclaration(

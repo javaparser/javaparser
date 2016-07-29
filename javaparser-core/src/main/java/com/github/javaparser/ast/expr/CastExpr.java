@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
@@ -46,14 +44,6 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr>
     	setExpr(expr);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public CastExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, Expression expr) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, expr);
-    }
-    
     public CastExpr(Range range, Type type, Expression expr) {
         super(range);
         setType(type);

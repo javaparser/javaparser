@@ -21,8 +21,6 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,14 +63,6 @@ public abstract class Node implements Cloneable {
         this(Range.UNKNOWN);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public Node(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
-    }
-
     public Node(Range range) {
         this.range = range;
     }
@@ -105,28 +95,6 @@ public abstract class Node implements Cloneable {
     public abstract <A> void accept(VoidVisitor<A> v, A arg);
 
     /**
-     * Return the begin column of this node.
-     * 
-     * @return the begin column of this node
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public final int getBeginColumn() {
-        return range.begin.column;
-    }
-
-    /**
-     * Return the begin line of this node.
-     * 
-     * @return the begin line of this node
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public final int getBeginLine() {
-        return range.begin.line;
-    }
-
-    /**
      * This is a comment associated with this node.
      *
      * @return comment property
@@ -142,52 +110,6 @@ public abstract class Node implements Cloneable {
      */
     public final Object getData() {
         return data;
-    }
-
-    /**
-     * Return the end column of this node.
-     * 
-     * @return the end column of this node
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public final int getEndColumn() {
-        return range.end.column;
-    }
-
-    /**
-     * Return the end line of this node.
-     * 
-     * @return the end line of this node
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public final int getEndLine() {
-        return range.end.line;
-    }
-
-    /**
-     * Sets the begin column of this node.
-     * 
-     * @param beginColumn
-     *            the begin column of this node
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public final void setBeginColumn(final int beginColumn) {
-        range = range.withBeginColumn(beginColumn);
-    }
-
-    /**
-     * Sets the begin line of this node.
-     * 
-     * @param beginLine
-     *            the begin line of this node
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public final void setBeginLine(final int beginLine) {
-        range = range.withBeginLine(beginLine);
     }
 
     /**
@@ -277,30 +199,6 @@ public abstract class Node implements Cloneable {
      */
     public final void setData(final Object data) {
         this.data = data;
-    }
-
-    /**
-     * Sets the end column of this node.
-     * 
-     * @param endColumn
-     *            the end column of this node
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public final void setEndColumn(final int endColumn) {
-        range = range.withEndColumn(endColumn);
-    }
-
-    /**
-     * Sets the end line of this node.
-     * 
-     * @param endLine
-     *            the end line of this node
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public final void setEndLine(final int endLine) {
-        range = range.withEndLine(endLine);
     }
 
     /**
@@ -439,24 +337,8 @@ public abstract class Node implements Cloneable {
     public static final int ABSOLUTE_BEGIN_LINE = -1;
     public static final int ABSOLUTE_END_LINE = -2;
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public boolean isPositionedAfter(int line, int column) {
-        return range.isAfter(pos(line, column));
-    }
-
     public boolean isPositionedAfter(Position position) {
         return range.isAfter(position);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public boolean isPositionedBefore(int line, int column) {
-        return range.isBefore(pos(line, column));
     }
 
     public boolean isPositionedBefore(Position position) {

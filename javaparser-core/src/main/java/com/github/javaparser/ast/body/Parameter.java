@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -55,15 +53,6 @@ public final class Parameter extends BaseParameter<Parameter> implements NodeWit
         setType(type);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
-                     List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, isVarArgs, id);
-    }
-    
     public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
                      boolean isVarArgs, VariableDeclaratorId id) {
         super(range, modifiers, annotations, id);

@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
@@ -40,14 +38,6 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr> {
 
     public TypeExpr(){}
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public TypeExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type);
-    }
-    
     public TypeExpr(Range range, Type type) {
         super(range);
         setType(type);

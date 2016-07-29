@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * <p>
  * AST node that represent block comments.
@@ -45,14 +43,6 @@ public final class BlockComment extends Comment {
         super(content);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public BlockComment(int beginLine, int beginColumn, int endLine, int endColumn, String content) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), content);
-    }
-    
     public BlockComment(Range range, String content) {
         super(range, content);
     }

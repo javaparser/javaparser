@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.Arrays;
@@ -74,15 +73,6 @@ public final class CompilationUnit extends Node {
         setPackage(pakage);
         setImports(imports);
         setTypes(types);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public CompilationUnit(int beginLine, int beginColumn, int endLine, int endColumn, PackageDeclaration pakage,
-                           List<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), pakage, imports, types);
     }
 
     public CompilationUnit(Range range, PackageDeclaration pakage, List<ImportDeclaration> imports,
@@ -244,8 +234,8 @@ public final class CompilationUnit extends Node {
      * <b>This method check if no import with the same name is already in the list</b>
      * 
      * @param name the import name
-     * @param isStatic
-     * @param isAsterisk
+     * @param isStatic      is it an "import static"
+     * @param isAsterisk does the import end with ".*"
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
