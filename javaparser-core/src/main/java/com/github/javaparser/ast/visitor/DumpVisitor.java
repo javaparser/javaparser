@@ -1044,7 +1044,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			}
 		}
 		printer.print(" ");
-		n.getBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	@Override public void visit(final MethodDeclaration n, final Object arg) {

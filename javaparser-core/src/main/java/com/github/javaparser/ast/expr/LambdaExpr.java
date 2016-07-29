@@ -29,7 +29,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -48,16 +47,6 @@ public class LambdaExpr extends Expression {
 	public LambdaExpr() {
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public LambdaExpr(int beginLine, int beginColumn, int endLine,
-	                  int endColumn, List<Parameter> parameters, Statement body,
-	                  boolean parametersEnclosed) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), parameters, body, parametersEnclosed);
-	}
-	
 	public LambdaExpr(Range range, List<Parameter> parameters, Statement body,
                       boolean parametersEnclosed) {
 

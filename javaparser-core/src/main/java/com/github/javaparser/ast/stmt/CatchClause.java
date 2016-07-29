@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -53,17 +51,6 @@ public final class CatchClause extends Node {
         setCatchBlock(catchBlock);
     }
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                       final EnumSet<Modifier> exceptModifier, final List<AnnotationExpr> exceptAnnotations,
-                       final Type exceptTypes,
-	                   final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), exceptModifier, exceptAnnotations, exceptTypes, exceptId, catchBlock);
-	}
-	
     public CatchClause(final Range range,
                        final EnumSet<Modifier> exceptModifier, final List<AnnotationExpr> exceptAnnotations,
                        final Type exceptTypes,

@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -43,15 +41,6 @@ public class LongLiteralExpr extends StringLiteralExpr {
 		super(value);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public LongLiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                       final String value) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), value);
-	}
-	
 	public LongLiteralExpr(final Range range, final String value) {
 		super(range, value);
 	}

@@ -28,7 +28,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -50,15 +49,6 @@ public final class FieldAccessExpr extends Expression {
 		setField(field);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public FieldAccessExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                       final Expression scope, final List<Type> typeArgs, final String field) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, typeArgs, field);
-	}
-	
 	public FieldAccessExpr(final Range range, final Expression scope, final List<Type> typeArgs, final String field) {
 		super(range);
 		setScope(scope);

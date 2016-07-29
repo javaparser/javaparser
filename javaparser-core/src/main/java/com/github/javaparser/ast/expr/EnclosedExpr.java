@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -41,15 +39,6 @@ public final class EnclosedExpr extends Expression {
 		setInner(inner);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public EnclosedExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                    final Expression inner) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), inner);
-	}
-	
 	public EnclosedExpr(final Range range, final Expression inner) {
 		super(range);
 		setInner(inner);

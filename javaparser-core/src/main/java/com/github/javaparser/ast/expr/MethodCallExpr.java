@@ -28,7 +28,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -58,15 +57,6 @@ public final class MethodCallExpr extends Expression {
 		setArgs(args);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public MethodCallExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                      final Expression scope, final List<Type> typeArgs, final String name, final List<Expression> args) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, typeArgs, name, args);	
-	}
-	
 	public MethodCallExpr(final Range range, final Expression scope, final List<Type> typeArgs, final String name, final List<Expression> args) {
 		super(range);
 		setScope(scope);

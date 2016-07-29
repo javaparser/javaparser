@@ -63,14 +63,6 @@ public final class PackageDeclaration extends Node {
         setName(name);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public PackageDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, NameExpr name) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, name);
-    }
-    
     public PackageDeclaration(Range range, List<AnnotationExpr> annotations, NameExpr name) {
         super(range);
         setAnnotations(annotations);

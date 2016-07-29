@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
@@ -46,15 +44,6 @@ public final class MemberValuePair extends Node implements NodeWithName<MemberVa
 		setValue(value);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public MemberValuePair(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                       final String name, final Expression value) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, value);
-	}
-	
 	public MemberValuePair(final Range range, final String name, final Expression value) {
 		super(range);
 		setName(name);
