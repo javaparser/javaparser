@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -55,15 +53,6 @@ public final class UnaryExpr extends Expression {
 		setOperator(op);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public UnaryExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Expression expr, final Operator op) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), expr, op);
-	}
-	
 	public UnaryExpr(final Range range, final Expression expr, final Operator op) {
 		super(range);
 		setExpr(expr);

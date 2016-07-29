@@ -21,14 +21,9 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.List;
-
-import static com.github.javaparser.Position.pos;
 
 import java.util.EnumSet;
-import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
@@ -53,15 +48,6 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         super(annotations, modifiers, name, members);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
-                                 List<AnnotationExpr> annotations, String name, List<BodyDeclaration<?>> members) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, members);
-    }
-    
     public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
                                  List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);

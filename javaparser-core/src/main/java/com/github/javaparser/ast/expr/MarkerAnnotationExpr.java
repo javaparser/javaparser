@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -39,15 +37,6 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
 		setName(name);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public MarkerAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                            final NameExpr name) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name);
-	}
-	
 	public MarkerAnnotationExpr(final Range range, final NameExpr name) {
 		super(range);
 		setName(name);

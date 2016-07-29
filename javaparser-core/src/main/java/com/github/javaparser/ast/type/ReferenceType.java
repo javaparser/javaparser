@@ -55,15 +55,6 @@ public final class ReferenceType extends Type implements NodeWithType<ReferenceT
 		setArrayCount(arrayCount);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public ReferenceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Type type, final int arrayCount) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount);
-	}
-	
 	public ReferenceType(final Range range, final Type type, final int arrayCount) {
 		super(range);
 		setType(type);

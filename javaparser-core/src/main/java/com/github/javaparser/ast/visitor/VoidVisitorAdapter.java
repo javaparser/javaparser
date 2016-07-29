@@ -331,7 +331,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 				name.accept(this, arg);
 			}
 		}
-		n.getBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	@Override public void visit(final ContinueStmt n, final A arg) {

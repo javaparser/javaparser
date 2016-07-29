@@ -21,13 +21,10 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -43,15 +40,6 @@ public final class TypeDeclarationStmt extends Statement {
 		setTypeDeclaration(typeDecl);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public TypeDeclarationStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                           final TypeDeclaration typeDecl) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), typeDecl);
-	}
-	
 	public TypeDeclarationStmt(Range range, final TypeDeclaration typeDecl) {
 		super(range);
 		setTypeDeclaration(typeDecl);

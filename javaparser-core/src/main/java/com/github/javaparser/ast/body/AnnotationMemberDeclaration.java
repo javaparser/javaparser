@@ -21,8 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -71,17 +69,6 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         setType(type);
         setName(name);
         setDefaultValue(defaultValue);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public AnnotationMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
-                                       List<AnnotationExpr> annotations, Type type, String name,
-                                       Expression defaultValue) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, name,
-                defaultValue);
     }
 
     public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,

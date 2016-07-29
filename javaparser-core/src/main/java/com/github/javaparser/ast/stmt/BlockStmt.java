@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
@@ -43,15 +42,6 @@ public final class BlockStmt extends Statement {
 
 	public BlockStmt(final List<Statement> stmts) {
 		setStmts(stmts);
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public BlockStmt(final int beginLine, final int beginColumn,
-	                 final int endLine, final int endColumn, final List<Statement> stmts) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), stmts);
 	}
 
 	public BlockStmt(final Range range, final List<Statement> stmts) {
