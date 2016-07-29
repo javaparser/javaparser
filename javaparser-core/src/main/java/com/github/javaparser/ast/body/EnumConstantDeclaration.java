@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,30 +21,31 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import com.github.javaparser.ASTHelper;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumConstantDeclaration extends BodyDeclaration implements DocumentableNode, NamedNode {
+public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration>
+        implements NodeWithJavaDoc<EnumConstantDeclaration>, NodeWithName<EnumConstantDeclaration> {
 
     private String name;
 
     private List<Expression> args;
 
-    private List<BodyDeclaration> classBody;
+    private List<BodyDeclaration<?>> classBody;
 
     public EnumConstantDeclaration() {
     }
@@ -53,22 +54,16 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
         setName(name);
     }
 
-    public EnumConstantDeclaration(List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+    public EnumConstantDeclaration(List<AnnotationExpr> annotations, String name, List<Expression> args,
+                                   List<BodyDeclaration<?>> classBody) {
         super(annotations);
         setName(name);
         setArgs(args);
         setClassBody(classBody);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, name, args, classBody);
-    }
-    
-    public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> args, List<BodyDeclaration> classBody) {
+    public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> args,
+                                   List<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);
         setArgs(args);
@@ -90,7 +85,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
         return args;
     }
 
-    public List<BodyDeclaration> getClassBody() {
+    public List<BodyDeclaration<?>> getClassBody() {
         classBody = ensureNotNull(classBody);
         return classBody;
     }
@@ -105,13 +100,15 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
 		setAsParentNodeOf(this.args);
     }
 
-    public void setClassBody(List<BodyDeclaration> classBody) {
+    public void setClassBody(List<BodyDeclaration<?>> classBody) {
         this.classBody = classBody;
 		setAsParentNodeOf(this.classBody);
     }
 
-    public void setName(String name) {
+    @Override
+    public EnumConstantDeclaration setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Override
@@ -120,5 +117,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration implements Do
             return (JavadocComment) getComment();
         }
         return null;
+    }
+
+    public EnumConstantDeclaration addArgument(String valueExpr) {
+        getArgs().add(ASTHelper.createNameExpr(valueExpr));
+        return this;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,13 +21,10 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -44,15 +41,6 @@ public final class DoStmt extends Statement {
 	public DoStmt(final Statement body, final Expression condition) {
 		setBody(body);
 		setCondition(condition);
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public DoStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	              final Statement body, final Expression condition) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), body, condition);
 	}
 
 	public DoStmt(Range range, final Statement body, final Expression condition) {

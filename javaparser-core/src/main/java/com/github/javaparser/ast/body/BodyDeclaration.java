@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,19 +21,18 @@
  
 package com.github.javaparser.ast.body;
 
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.internal.Utils;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class BodyDeclaration extends Node implements AnnotableNode {
+public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotations<T> {
 
     private List<AnnotationExpr> annotations;
 
@@ -42,14 +41,6 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
 
     public BodyDeclaration(List<AnnotationExpr> annotations) {
     	setAnnotations(annotations);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public BodyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations);
     }
 
     public BodyDeclaration(Range range, List<AnnotationExpr> annotations) {
@@ -68,8 +59,11 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
      * @param annotations a null value is currently treated as an empty list. This behavior could change
      *                    in the future, so please avoid passing null
      */
-    public final void setAnnotations(List<AnnotationExpr> annotations) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public final T setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
+        return (T) this;
     }
 }

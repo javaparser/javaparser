@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -23,14 +23,8 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypeArguments;
-import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -53,16 +47,6 @@ public class MethodReferenceExpr extends Expression {
     public MethodReferenceExpr() {
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public MethodReferenceExpr(int beginLine, int beginColumn, int endLine,
-                               int endColumn, Expression scope,
-                               TypeArguments typeArguments, String identifier) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, typeArguments, identifier);
-    }
-    
     public MethodReferenceExpr(Range range, Expression scope,
                                TypeArguments typeArguments, String identifier) {
         super(range);

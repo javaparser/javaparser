@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -27,7 +27,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
@@ -44,14 +43,6 @@ public final class ArrayInitializerExpr extends Expression {
        setValues(values);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ArrayInitializerExpr(int beginLine, int beginColumn, int endLine, int endColumn, List<Expression> values) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), values);
-    }
-    
     public ArrayInitializerExpr(Range range, List<Expression> values) {
         super(range);
         setValues(values);

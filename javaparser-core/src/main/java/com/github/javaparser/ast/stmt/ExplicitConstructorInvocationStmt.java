@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
@@ -30,7 +29,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
@@ -56,16 +54,6 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 		setArgs(args);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public ExplicitConstructorInvocationStmt(final int beginLine,
-	                                         final int beginColumn, final int endLine, final int endColumn,
-	                                         final List<Type> typeArgs, final boolean isThis,
-	                                         final Expression expr, final List<Expression> args) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), typeArgs, isThis, expr, args);
-	}
 	public ExplicitConstructorInvocationStmt(Range range,
 	                                         final List<Type> typeArgs, final boolean isThis,
 	                                         final Expression expr, final List<Expression> args) {

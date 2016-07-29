@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,26 +21,29 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NodeWithModifiers;
-import com.github.javaparser.ast.TypedNode;
-import com.github.javaparser.ast.body.ModifierSet;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarationExpr extends Expression implements TypedNode, NodeWithModifiers {
+public final class VariableDeclarationExpr extends Expression
+        implements NodeWithType<VariableDeclarationExpr>, NodeWithModifiers<VariableDeclarationExpr>,
+        NodeWithAnnotations<VariableDeclarationExpr> {
 
-	private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
 	private List<AnnotationExpr> annotations;
 
@@ -56,24 +59,16 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 		setVars(vars);
 	}
 
-	public VariableDeclarationExpr(final int modifiers, final Type type, final List<VariableDeclarator> vars) {
+    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type type,
+                                   final List<VariableDeclarator> vars) {
 		setModifiers(modifiers);
 		setType(type);
 		setVars(vars);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public VariableDeclarationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
-			final List<VariableDeclarator> vars) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, vars);
-	}
-	
 	public VariableDeclarationExpr(final Range range,
-			final int modifiers, final List<AnnotationExpr> annotations, final Type type,
+                                   final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
+                                   final Type type,
 			final List<VariableDeclarator> vars) {
 		super(range);
 		setModifiers(modifiers);
@@ -90,19 +85,20 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
 		v.visit(this, arg);
 	}
 
-	public List<AnnotationExpr> getAnnotations() {
+	@Override
+    public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;
 	}
 
 	/**
-	 * Return the modifiers of this variable declaration.
-	 * 
-	 * @see ModifierSet
-	 * @return modifiers
-	 */
+     * Return the modifiers of this variable declaration.
+     * 
+     * @see Modifier
+     * @return modifiers
+     */
 	@Override
-	public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
 		return modifiers;
 	}
 
@@ -116,19 +112,24 @@ public final class VariableDeclarationExpr extends Expression implements TypedNo
         return vars;
 	}
 
-	public void setAnnotations(final List<AnnotationExpr> annotations) {
+	@Override
+    public VariableDeclarationExpr setAnnotations(final List<AnnotationExpr> annotations) {
         this.annotations = annotations;
 		setAsParentNodeOf(this.annotations);
+        return this;
 	}
 
-	public void setModifiers(final int modifiers) {
+    @Override
+    public VariableDeclarationExpr setModifiers(final EnumSet<Modifier> modifiers) {
 		this.modifiers = modifiers;
+        return this;
 	}
 
 	@Override
-	public void setType(final Type type) {
+    public VariableDeclarationExpr setType(final Type type) {
 		this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
 	}
 
 	public void setVars(final List<VariableDeclarator> vars) {

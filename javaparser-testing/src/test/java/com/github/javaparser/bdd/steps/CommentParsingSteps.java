@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,26 +21,6 @@
  
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.TokenMgrException;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.visitor.DumpVisitor;
-import com.github.javaparser.bdd.TestUtils;
-import org.jbehave.core.annotations.*;
-import org.jbehave.core.model.ExamplesTable;
-import org.jbehave.core.steps.Parameters;
-
-import java.io.IOException;
-import java.io.StringReader;
-
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -49,6 +29,39 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.io.StringReader;
+
+import org.jbehave.core.annotations.Alias;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+import org.jbehave.core.model.ExamplesTable;
+import org.jbehave.core.steps.Parameters;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.TokenMgrException;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.ast.comments.CommentsParser;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.visitor.DumpVisitor;
+import com.github.javaparser.bdd.TestUtils;
 
 public class CommentParsingSteps {
 
@@ -216,39 +229,39 @@ public class CommentParsingSteps {
 
     @Then("class $position is not commented")
     public void thenClassIsNotCommented(int position) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(position - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(position - 1);
         assertThat(classUnderTest.getComment(), is(nullValue()));
     }
 
     @Then("class $position is commented \"$expectedContent\"")
     public void thenClassIsCommented(int position, String expectedContent) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(position - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(position - 1);
         assertThat(classUnderTest.getComment().getContent(), is(expectedContent));
     }
 
     @Then("class $position has $expectedCount total contained comments")
     public void thenClassHasTotalContainedComments(int position, int expectedCount) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(position - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(position - 1);
         assertThat(classUnderTest.getAllContainedComments().size(), is(expectedCount));
     }
 
     @Then("class $position has $expectedCount orphan comment")
     @Alias("class $position has $expectedCount orphan comments")
     public void thenClassHasOrphanComments(int position, int expectedCount) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(position - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(position - 1);
         assertThat(classUnderTest.getOrphanComments().size(), is(expectedCount));
     }
 
     @Then("class $classPosition orphan comment $commentPosition is \"$expectedContent\"")
     public void thenClassOrphanCommentIs(int classPosition, int commentPosition, String expectedContent) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         Comment commentUnderTest = classUnderTest.getOrphanComments().get(commentPosition -1 );
         assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
     }
 
     @Then("method $methodPosition in class $classPosition is commented \"$expectedContent\"")
     public void thenMethodInClassIsCommented(int methodPosition, int classPosition, String expectedContent) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
         assertThat(methodUnderTest.getComment().getContent(), equalToIgnoringWhiteSpace(expectedContent));
@@ -256,7 +269,7 @@ public class CommentParsingSteps {
 
     @Then("method $methodPosition in class $classPosition has $expectedCount total contained comments")
     public void thenMethodInClassHasTotalContainedComments(int methodPosition, int classPosition, int expectedCount) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
         assertThat(methodUnderTest.getAllContainedComments().size(), is(expectedCount));
@@ -264,7 +277,7 @@ public class CommentParsingSteps {
 
     @Then("comment $commentPosition in method $methodPosition in class $classPosition is \"$expectedContent\"")
     public void thenCommentInMethodInClassIs(int commentPosition, int methodPosition, int classPosition, String expectedContent) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
         Comment commentUnderTest = methodUnderTest.getAllContainedComments().get(commentPosition - 1);
@@ -273,7 +286,7 @@ public class CommentParsingSteps {
 
     @Then("method $methodPosition in class $classPosition has $expectedCount orphan comments")
     public void thenMethodInClassHasOrphanComments(int methodPosition, int classPosition, int expectedCount) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
         assertThat(methodUnderTest.getOrphanComments().size(), is(expectedCount));
@@ -281,7 +294,7 @@ public class CommentParsingSteps {
 
     @Then("block statement in method $methodPosition in class $classPosition has $expectedCount total contained comments")
     public void thenBlockStatementInMethodInClassHasTotalContainedComments(int methodPosition, int classPosition, int expectedCount) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
         BlockStmt blockStmtUnderTest = methodUnderTest.getBody();
@@ -290,7 +303,7 @@ public class CommentParsingSteps {
 
     @Then("block statement in method $methodPosition in class $classPosition has $expectedCount orphan comments")
     public void thenBlockStatementInMethodInClassHasOrphanComments(int methodPosition, int classPosition, int expectedCount) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
         BlockStmt blockStmtUnderTest = methodUnderTest.getBody();
@@ -299,7 +312,7 @@ public class CommentParsingSteps {
 
     @Then("block statement in method $methodPosition in class $classPosition orphan comment $commentPosition is \"$expectedContent\"")
     public void thenBlockStatementInMethodInClassIs(int methodPosition, int classPosition, int commentPosition, String expectedContent) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition -1,
                 MethodDeclaration.class);
         BlockStmt blockStmtUnderTest = methodUnderTest.getBody();
@@ -309,7 +322,7 @@ public class CommentParsingSteps {
 
     @Then("type of method $methodPosition in class $classPosition is commented \"$expectedContent\"")
     public void thenTypeOfMethodInClassIsCommented(int methodPosition, int classPosition, String expectedContent) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition -1,
                 MethodDeclaration.class);
         Comment commentUnderTest = methodUnderTest.getType().getComment();
@@ -318,7 +331,7 @@ public class CommentParsingSteps {
 
     @Then("field $fieldPosition in class $classPosition contains $expectedCount comments")
     public void thenFieldInClassContainsComments(int fieldPosition, int classPosition, int expectedCount) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         assertThat(fieldUnderTest.getAllContainedComments().size(), is(expectedCount));
@@ -326,7 +339,7 @@ public class CommentParsingSteps {
 
     @Then("field $fieldPosition in class $classPosition is not commented")
     public void thenFieldInClassIsNotCommented(int fieldPosition, int classPosition) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         assertThat(fieldUnderTest.getComment(), is(nullValue()));
@@ -334,7 +347,7 @@ public class CommentParsingSteps {
 
     @Then("field $fieldPosition in class $classPosition is commented \"$expectedContent\"")
     public void thenFieldInClassIsCommented(int fieldPosition, int classPosition, String expectedContent) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         Comment commentUnderTest = fieldUnderTest.getComment();
@@ -343,7 +356,7 @@ public class CommentParsingSteps {
 
     @Then("variable $variablePosition value of field $fieldPosition in class $classPosition is commented \"$expectedContent\"")
     public void thenVariableValueOfFieldInClassIsCommented(int variablePosition, int fieldPosition, int classPosition, String expectedContent) {
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         VariableDeclarator variableUnderTest = fieldUnderTest.getVariables().get(variablePosition - 1);

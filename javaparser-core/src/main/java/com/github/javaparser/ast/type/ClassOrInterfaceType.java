@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,20 +21,18 @@
 
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.TypeArguments;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.TypeArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type implements NamedNode {
+public final class ClassOrInterfaceType extends Type implements NodeWithName<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 
@@ -52,25 +50,6 @@ public final class ClassOrInterfaceType extends Type implements NamedNode {
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
         setScope(scope);
         setName(name);
-    }
-
-    /**
-     *
-     * @deprecated use the other constructor that takes {@link TypeArguments}
-     */
-    @Deprecated
-    public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                                final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, name, TypeArguments.withArguments(typeArgs));
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                                final ClassOrInterfaceType scope, final String name, final TypeArguments typeArgs) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, name, typeArgs);
     }
 
     public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final TypeArguments typeArguments) {
@@ -120,8 +99,10 @@ public final class ClassOrInterfaceType extends Type implements NamedNode {
         return new PrimitiveType(PrimitiveType.unboxMap.get(name));
     }
 
-    public void setName(final String name) {
+    @Override
+    public ClassOrInterfaceType setName(final String name) {
         this.name = name;
+        return this;
     }
 
     public void setScope(final ClassOrInterfaceType scope) {

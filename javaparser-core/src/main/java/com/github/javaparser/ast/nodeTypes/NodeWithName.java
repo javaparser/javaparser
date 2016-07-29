@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast;
+package com.github.javaparser.ast.nodeTypes;
 
 /**
  * A node having a name.
@@ -28,6 +28,8 @@ package com.github.javaparser.ast;
  * 
  * @since 2.0.1 
  */
-public interface NamedNode {
+public interface NodeWithName<T> {
     String getName();
+
+    T setName(String name);
 }

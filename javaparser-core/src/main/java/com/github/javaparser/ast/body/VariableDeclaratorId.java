@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -22,17 +22,15 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclaratorId extends Node implements NamedNode {
+public final class VariableDeclaratorId extends Node implements NodeWithName<VariableDeclaratorId> {
 
     private String name;
 
@@ -45,14 +43,6 @@ public final class VariableDeclaratorId extends Node implements NamedNode {
        setName(name);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public VariableDeclaratorId(int beginLine, int beginColumn, int endLine, int endColumn, String name, int arrayCount) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, arrayCount);
-    }
-    
     public VariableDeclaratorId(Range range, String name, int arrayCount) {
         super(range);
         setName(name);
@@ -82,8 +72,10 @@ public final class VariableDeclaratorId extends Node implements NamedNode {
         this.arrayCount = arrayCount;
     }
 
-    public void setName(String name) {
+    @Override
+    public VariableDeclaratorId setName(String name) {
         this.name = name;
+        return this;
     }
 
 }

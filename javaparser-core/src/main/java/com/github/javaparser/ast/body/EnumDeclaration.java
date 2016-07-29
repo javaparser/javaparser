@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,21 +21,22 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration {
+public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
 
     private List<ClassOrInterfaceType> implementsList;
 
@@ -44,25 +45,21 @@ public final class EnumDeclaration extends TypeDeclaration {
     public EnumDeclaration() {
     }
 
-    public EnumDeclaration(int modifiers, String name) {
+    public EnumDeclaration(EnumSet<Modifier> modifiers, String name) {
         super(modifiers, name);
     }
 
-    public EnumDeclaration(int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+    public EnumDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, implementsList, entries, members);
-    }
-    
-    public EnumDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries, List<BodyDeclaration> members) {
+    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);
@@ -89,13 +86,47 @@ public final class EnumDeclaration extends TypeDeclaration {
         return implementsList;
     }
 
-    public void setEntries(List<EnumConstantDeclaration> entries) {
+    public EnumDeclaration setEntries(List<EnumConstantDeclaration> entries) {
         this.entries = entries;
 		setAsParentNodeOf(this.entries);
+        return this;
     }
 
-    public void setImplements(List<ClassOrInterfaceType> implementsList) {
+    public EnumDeclaration setImplements(List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
+        return this;
     }
+
+    /**
+     * Add an implements to this enum
+     * 
+     * @param name the name of the type to extends from
+     * @return this, the {@link EnumDeclaration}
+     */
+    public EnumDeclaration addImplements(String name) {
+        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
+        getImplements().add(classOrInterfaceType);
+        classOrInterfaceType.setParentNode(this);
+        return this;
+    }
+
+    /**
+     * Add an implements to this enum and automatically add the import
+     * 
+     * @param clazz the type to implements from
+     * @return this, the {@link EnumDeclaration}
+     */
+    public EnumDeclaration addImplements(Class<?> clazz) {
+        tryAddImportToParentCompilationUnit(clazz);
+        return addImplements(clazz.getSimpleName());
+    }
+
+    public EnumConstantDeclaration addEnumConstant(String name) {
+        EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
+        getEntries().add(enumConstant);
+        enumConstant.setParentNode(this);
+        return enumConstant;
+    }
+
 }

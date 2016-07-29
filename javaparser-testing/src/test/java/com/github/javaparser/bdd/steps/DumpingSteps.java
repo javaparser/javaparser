@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -18,16 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.SourcesHelper;
-import com.github.javaparser.ast.Node;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.FileReader;
@@ -36,19 +30,28 @@ import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static org.junit.Assert.assertEquals;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.SourcesHelper;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.ModifierVisitorAdapter;
 
 public class DumpingSteps {
 
     private Node resultNode;
     private String sourceUnderTest;
 
-    @Given("the {class|compilation unit|expression|block|expressions|statement|import|annotation|body declaration}:$classSrc")
+    @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body}:$classSrc")
     public void givenTheClass(String classSrc) {
         this.sourceUnderTest = classSrc.trim();
     }
 
-    @Given("the {class|compilation unit|expression|block|expressions|statement|import|annotation|body declaration} in the file \"$classFile\"")
+    @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body} in the file \"$classFile\"")
     public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException, ParseException {
         URL url = getClass().getResource("../samples/" + classFile);
         sourceUnderTest = SourcesHelper.readerToString(new FileReader(new File(url.toURI()))).trim();
@@ -87,6 +90,22 @@ public class DumpingSteps {
     @When("the body declaration is parsed by the Java parser")
     public void whenTheBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
         resultNode = JavaParser.parseBodyDeclaration(sourceUnderTest);
+    }
+
+    @When("the class body declaration is parsed by the Java parser")
+    public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseClassBodyDeclaration(sourceUnderTest);
+    }
+
+    @When("the interface body declaration is parsed by the Java parser")
+    public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
+        resultNode = JavaParser.parseInterfaceBodyDeclaration(sourceUnderTest);
+    }
+
+    @When("the class is visited by an empty ModifierVisitorAdapter")
+    public void whenTheClassIsVisitedByAnEmptyModifierVisitorAdapter() throws ParseException {
+        (new ModifierVisitorAdapter() {
+        }).visit((CompilationUnit) resultNode, null);
     }
 
     @Then("it is dumped to:$dumpSrc")

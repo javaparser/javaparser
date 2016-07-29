@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,12 +21,9 @@
  
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,14 +35,6 @@ public final class VoidType extends Type {
 
 	public VoidType(Range range) {
 		super(range);
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public VoidType(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

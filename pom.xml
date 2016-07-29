@@ -8,7 +8,7 @@
 	<groupId>com.github.javaparser</groupId>
 	<artifactId>javaparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>2.4.1-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 
 	<name>javaparser-parent</name>
 	<url>https://github.com/javaparser</url>
@@ -110,6 +110,11 @@
 			<email>michael.schieder@gmail.com</email>
 			<url>https://github.com/mschieder</url>
 		</contributor>
+		<contributor>
+			<name>CRUZ Maximilien</name>
+			<email>maximilien.cruz@gmail.com</email>
+			<url>https://github.com/DeepSnowNeeL</url>
+		</contributor>
 	</contributors>
 
 	<properties>
@@ -126,6 +131,7 @@
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <maven-jacoco-plugin.version>0.7.7.201606060606</maven-jacoco-plugin.version>
         <maven-coveralls-plugin.version>4.2.0</maven-coveralls-plugin.version>
+        <bnd-maven-plugin.version>3.2.0</bnd-maven-plugin.version>
 	</properties>
 
 	<scm>

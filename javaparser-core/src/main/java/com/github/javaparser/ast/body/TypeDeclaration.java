@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,80 +21,73 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.NodeWithModifiers;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class TypeDeclaration extends BodyDeclaration implements NamedNode, DocumentableNode, NodeWithModifiers {
+public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
+        implements NodeWithName<T>, NodeWithJavaDoc<T>, NodeWithModifiers<T>, NodeWithMembers<T> {
 
 	private NameExpr name;
 
-	private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-	private List<BodyDeclaration> members;
+    private List<BodyDeclaration<?>> members;
 
 	public TypeDeclaration() {
 	}
 
-	public TypeDeclaration(int modifiers, String name) {
+    public TypeDeclaration(EnumSet<Modifier> modifiers, String name) {
 		setName(name);
 		setModifiers(modifiers);
 	}
 
 	public TypeDeclaration(List<AnnotationExpr> annotations,
-			int modifiers, String name,
-			List<BodyDeclaration> members) {
+                           EnumSet<Modifier> modifiers, String name,
+                           List<BodyDeclaration<?>> members) {
 		super(annotations);
 		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
-			int endColumn, List<AnnotationExpr> annotations,
-			int modifiers, String name,
-			List<BodyDeclaration> members) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, modifiers, name, members);
-	}
-	
 	public TypeDeclaration(Range range, List<AnnotationExpr> annotations,
-			int modifiers, String name,
-			List<BodyDeclaration> members) {
+                           EnumSet<Modifier> modifiers, String name,
+                           List<BodyDeclaration<?>> members) {
 		super(range, annotations);
 		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);
 	}
 
-	public final List<BodyDeclaration> getMembers() {
+    @Override
+    public List<BodyDeclaration<?>> getMembers() {
         	members = ensureNotNull(members);
         	return members;
 	}
 
 	/**
-	 * Return the modifiers of this type declaration.
-	 * 
-	 * @see ModifierSet
-	 * @return modifiers
-	 */
+     * Return the modifiers of this type declaration.
+     * 
+     * @see Modifier
+     * @return modifiers
+     */
 	@Override
-	public final int getModifiers() {
+    public final EnumSet<Modifier> getModifiers() {
 		return modifiers;
 	}
 
@@ -103,22 +96,33 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		return name.getName();
 	}
 
-	public void setMembers(List<BodyDeclaration> members) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public T setMembers(List<BodyDeclaration<?>> members) {
 		this.members = members;
 		setAsParentNodeOf(this.members);
+        return (T) this;
 	}
 
-	public final void setModifiers(int modifiers) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public T setModifiers(EnumSet<Modifier> modifiers) {
 		this.modifiers = modifiers;
+        return (T) this;
 	}
 
-	public final void setName(String name) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public T setName(String name) {
 		setNameExpr(new NameExpr(name));
+        return (T) this;
 	}
 
-	public final void setNameExpr(NameExpr nameExpr) {
+    @SuppressWarnings("unchecked")
+    public T setNameExpr(NameExpr nameExpr) {
 		this.name = nameExpr;
 		setAsParentNodeOf(this.name);
+        return (T) this;
 	}
 
 	public final NameExpr getNameExpr() {
@@ -132,4 +136,5 @@ public abstract class TypeDeclaration extends BodyDeclaration implements NamedNo
 		}
 		return null;
 	}
+
 }

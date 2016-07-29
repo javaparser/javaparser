@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -23,8 +23,6 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -34,15 +32,6 @@ public abstract class AnnotationExpr extends Expression {
 
 	public AnnotationExpr() {}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public AnnotationExpr(int beginLine, int beginColumn, int endLine,
-	                      int endColumn) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
-	}
-	
 	public AnnotationExpr(Range range) {
 		super(range);
 	}

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,21 +21,21 @@
  
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypedNode;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ReferenceType extends Type implements TypedNode {
+public final class ReferenceType extends Type implements NodeWithType<ReferenceType> {
 
 	private Type type;
 
@@ -55,15 +55,6 @@ public final class ReferenceType extends Type implements TypedNode {
 		setArrayCount(arrayCount);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public ReferenceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Type type, final int arrayCount) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount);
-	}
-	
 	public ReferenceType(final Range range, final Type type, final int arrayCount) {
 		super(range);
 		setType(type);
@@ -108,9 +99,10 @@ public final class ReferenceType extends Type implements TypedNode {
 	}
 
 	@Override
-	public void setType(final Type type) {
+    public ReferenceType setType(final Type type) {
 		this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -44,14 +42,6 @@ public final class ArrayAccessExpr extends Expression {
         setIndex(index);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ArrayAccessExpr(int beginLine, int beginColumn, int endLine, int endColumn, Expression name, Expression index) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, index);
-    }
-    
     public ArrayAccessExpr(Range range, Expression name, Expression index) {
         super(range);
         setName(name);

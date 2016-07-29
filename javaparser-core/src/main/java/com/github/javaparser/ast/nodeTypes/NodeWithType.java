@@ -19,8 +19,11 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast;
+package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
 /**
@@ -31,8 +34,30 @@ import com.github.javaparser.ast.type.Type;
  *
  * @since 2.3.1
  */
-public interface TypedNode {
+public interface NodeWithType<T> {
+    /**
+     * Gets the type
+     * 
+     * @return the type
+     */
     Type getType();
 
-    void setType(Type type);
+    /**
+     * Sets the type
+     * 
+     * @param type the type
+     * @return this
+     */
+    T setType(Type type);
+
+    /**
+     * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
+     * 
+     * @param typeClass the type
+     * @return this
+     */
+    default T setType(Class<?> typeClass) {
+        ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
+        return setType(new ClassOrInterfaceType(typeClass.getSimpleName()));
+    }
 }

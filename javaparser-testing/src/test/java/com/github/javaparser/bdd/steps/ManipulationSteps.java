@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -22,33 +22,43 @@
 package com.github.javaparser.bdd.steps;
 
 
-import com.github.javaparser.ASTHelper;
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
+import com.github.javaparser.ASTHelper;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ManipulationSteps {
 
@@ -129,7 +139,7 @@ public class ManipulationSteps {
     @When("a public class called \"$className\" is added to the CompilationUnit")
     public void whenAClassCalledIsAddedToTheCompilationUnit(String className) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        TypeDeclaration type = new ClassOrInterfaceDeclaration(ModifierSet.PUBLIC, false, "CreateClass");
+		TypeDeclaration<?> type = new ClassOrInterfaceDeclaration(EnumSet.of(Modifier.PUBLIC), false, "CreateClass");
         compilationUnit.setTypes(Arrays.asList(type));
         state.put("cu1", compilationUnit);
     }
@@ -137,9 +147,11 @@ public class ManipulationSteps {
     @When("a public static method called \"$methodName\" returning void is added to class $position in the compilation unit")
     public void whenAStaticMethodCalledReturningIsAddedToClassInTheCompilationUnit(String methodName, int position) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        TypeDeclaration type = compilationUnit.getTypes().get(position -1);
-        MethodDeclaration method = new MethodDeclaration(ModifierSet.PUBLIC, new VoidType(), methodName);
-        method.setModifiers(ModifierSet.addModifier(method.getModifiers(), ModifierSet.STATIC));
+		 TypeDeclaration<?> type = compilationUnit.getTypes().get(position -1);
+		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
+		MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), methodName);
+		modifiers.add(Modifier.STATIC);
+		method.setModifiers(modifiers);
         ASTHelper.addMember(type, method);
         state.put("cu1", compilationUnit);
     }

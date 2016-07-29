@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,18 +21,15 @@
  
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public class NameExpr extends Expression implements NamedNode {
+public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 
 	private String name;
 
@@ -41,15 +38,6 @@ public class NameExpr extends Expression implements NamedNode {
 
 	public NameExpr(final String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public NameExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                final String name) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name);
 	}
 
 	public NameExpr(Range range, final String name) {
@@ -70,8 +58,10 @@ public class NameExpr extends Expression implements NamedNode {
 		return name;
 	}
 
-	public final void setName(final String name) {
+    @Override
+    public NameExpr setName(final String name) {
 		this.name = name;
+        return this;
 	}
 
 }

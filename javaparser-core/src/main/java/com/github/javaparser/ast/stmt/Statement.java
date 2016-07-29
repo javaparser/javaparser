@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,12 +21,8 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.Range.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -36,14 +32,6 @@ public abstract class Statement extends Node {
 	public Statement() {
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public Statement(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		this(range(beginLine, beginColumn, endLine, endColumn));
-	}
-	
 	public Statement(final Range range) {
 		super(range);
 	}

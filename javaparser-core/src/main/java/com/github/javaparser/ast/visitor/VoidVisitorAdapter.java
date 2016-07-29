@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,11 +21,10 @@
  
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
+import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -39,14 +38,53 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ArrayAccessExpr;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.ArrayInitializerExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
+import com.github.javaparser.ast.expr.CastExpr;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.DoubleLiteralExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.InstanceOfExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.LongLiteralExpr;
+import com.github.javaparser.ast.expr.LongLiteralMinValueExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.MemberValuePair;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.QualifiedNameExpr;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.SuperExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -69,9 +107,15 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.*;
-
-import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.IntersectionType;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.type.WildcardType;
 
 /**
  * @author Julio Vilmar Gesser
@@ -90,7 +134,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		}
 		n.getNameExpr().accept(this, arg);
 		if (n.getMembers() != null) {
-			for (final BodyDeclaration member : n.getMembers()) {
+            for (final BodyDeclaration<?> member : n.getMembers()) {
 				member.accept(this, arg);
 			}
 		}
@@ -220,7 +264,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		for (final ClassOrInterfaceType c : n.getImplements()) {
 			c.accept(this, arg);
 		}
-		for (final BodyDeclaration member : n.getMembers()) {
+        for (final BodyDeclaration<?> member : n.getMembers()) {
 			member.accept(this, arg);
 		}
 	}
@@ -248,7 +292,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			}
 		}
 		if (n.getTypes() != null) {
-			for (final TypeDeclaration typeDeclaration : n.getTypes()) {
+            for (final TypeDeclaration<?> typeDeclaration : n.getTypes()) {
 				typeDeclaration.accept(this, arg);
 			}
 		}
@@ -287,7 +331,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 				name.accept(this, arg);
 			}
 		}
-		n.getBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	@Override public void visit(final ContinueStmt n, final A arg) {
@@ -344,7 +388,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			}
 		}
 		if (n.getClassBody() != null) {
-			for (final BodyDeclaration member : n.getClassBody()) {
+            for (final BodyDeclaration<?> member : n.getClassBody()) {
 				member.accept(this, arg);
 			}
 		}
@@ -372,7 +416,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			}
 		}
 		if (n.getMembers() != null) {
-			for (final BodyDeclaration member : n.getMembers()) {
+            for (final BodyDeclaration<?> member : n.getMembers()) {
 				member.accept(this, arg);
 			}
 		}
@@ -599,7 +643,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			}
 		}
 		if (n.getAnonymousClassBody() != null) {
-			for (final BodyDeclaration member : n.getAnonymousClassBody()) {
+            for (final BodyDeclaration<?> member : n.getAnonymousClassBody()) {
 				member.accept(this, arg);
 			}
 		}

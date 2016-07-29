@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,16 +21,17 @@
  
 package com.github.javaparser.ast;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * <p>
@@ -44,7 +45,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
  * </pre>
  * @author Julio Vilmar Gesser
  */
-public final class TypeParameter extends Node implements NamedNode {
+public final class TypeParameter extends Node implements NodeWithName<TypeParameter> {
 
 	private String name;
 
@@ -60,28 +61,17 @@ public final class TypeParameter extends Node implements NamedNode {
 		setTypeBound(typeBound);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public TypeParameter(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                     final String name, final List<ClassOrInterfaceType> typeBound) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, typeBound);
-	}
-	
 	public TypeParameter(Range range, final String name, final List<ClassOrInterfaceType> typeBound) {
 		super(range);
 		setName(name);
 		setTypeBound(typeBound);
 	}
 
-    public TypeParameter(int beginLine, int beginColumn, int endLine,
-                         int endColumn, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
-        this(beginLine, beginColumn, endLine, endColumn, name, typeBound);
-        setName(name);
-        setTypeBound(typeBound);
-	    setAnnotations(annotations);
-    }
+	public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
+		this(range, name, typeBound);
+		setTypeBound(typeBound);
+		setAnnotations(annotations);
+	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
@@ -118,8 +108,10 @@ public final class TypeParameter extends Node implements NamedNode {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(final String name) {
+    @Override
+    public TypeParameter setName(final String name) {
 		this.name = name;
+        return this;
 	}
 
 	/**

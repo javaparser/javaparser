@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,32 +21,24 @@
  
 package com.github.javaparser.ast.body;
 
+import java.util.EnumSet;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EmptyTypeDeclaration extends TypeDeclaration {
+public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclaration> {
 
     public EmptyTypeDeclaration() {
-        super(null, 0, null, null);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public EmptyTypeDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
+        super(null, EnumSet.noneOf(Modifier.class), null, null);
     }
 
     public EmptyTypeDeclaration(Range range) {
-        super(range, null, 0, null, null);
+        super(range, null, EnumSet.noneOf(Modifier.class), null, null);
     }
 
     @Override

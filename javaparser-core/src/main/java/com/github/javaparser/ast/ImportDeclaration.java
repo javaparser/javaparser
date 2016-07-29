@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,13 +21,10 @@
  
 package com.github.javaparser.ast;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * <p>
@@ -56,14 +53,6 @@ public final class ImportDeclaration extends Node {
         asterisk = false;
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    private ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
-    }
-    
     private ImportDeclaration(Range range) {
         super(range);
         this.isEmptyImportDeclaration = true;
@@ -80,15 +69,6 @@ public final class ImportDeclaration extends Node {
 
     /**
      * Create an empty import declaration specifying its position.
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public static ImportDeclaration createEmptyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn){
-        return new ImportDeclaration(beginLine, beginColumn, endLine, endColumn);
-    }
-
-    /**
-     * Create an empty import declaration specifying its position.
      */
     public static ImportDeclaration createEmptyDeclaration(Range range){
         return new ImportDeclaration(range);
@@ -99,14 +79,6 @@ public final class ImportDeclaration extends Node {
         setName(name);
         setStatic(isStatic);
         this.isEmptyImportDeclaration = false;
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ImportDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, NameExpr name, boolean isStatic, boolean isAsterisk) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, isStatic, isAsterisk);
     }
 
     public ImportDeclaration(Range range, NameExpr name, boolean isStatic, boolean isAsterisk) {

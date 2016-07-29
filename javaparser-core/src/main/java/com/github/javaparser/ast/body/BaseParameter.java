@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -18,66 +18,60 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeWithModifiers;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
-public abstract class BaseParameter
-    extends Node
-    implements AnnotableNode, NamedNode, NodeWithModifiers
-{
-    private int modifiers;
+public abstract class BaseParameter<T>
+        extends Node
+        implements NodeWithAnnotations<T>, NodeWithName<T>, NodeWithModifiers<T> {
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<AnnotationExpr> annotations;
-    
+
     private VariableDeclaratorId id;
-    
+
     public BaseParameter() {
     }
-    
+
     public BaseParameter(VariableDeclaratorId id) {
         setId(id);
-	}
-
-	public BaseParameter(int modifiers, VariableDeclaratorId id) {
-        setModifiers(modifiers);
-        setId(id);
-	}
-	
-	public BaseParameter(int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
-        setModifiers(modifiers);
-        setAnnotations(annotations);
-        setId(id);
-	}
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, id);
     }
 
-    public BaseParameter(final Range range, int modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
-	    super(range);
+    public BaseParameter(EnumSet<Modifier> modifiers, VariableDeclaratorId id) {
+        setModifiers(modifiers);
+        setId(id);
+    }
+
+    public BaseParameter(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);
-	}
+    }
+
+    public BaseParameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {
+        super(range);
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setId(id);
+    }
 
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
+    @Override
     public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;
@@ -92,24 +86,37 @@ public abstract class BaseParameter
         return getId().getName();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public T setName(String name) {
+        if (id != null)
+            id.setName(name);
+        else
+            id = new VariableDeclaratorId(name);
+        return (T) this;
+    }
+
     /**
      * Return the modifiers of this parameter declaration.
      * 
-     * @see ModifierSet
+     * @see Modifier
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
     /**
      * @param annotations a null value is currently treated as an empty list. This behavior could change
-     *                    in the future, so please avoid passing null
+     *            in the future, so please avoid passing null
      */
-    public void setAnnotations(List<AnnotationExpr> annotations) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public T setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
         setAsParentNodeOf(this.annotations);
+        return (T) this;
     }
 
     public void setId(VariableDeclaratorId id) {
@@ -117,7 +124,10 @@ public abstract class BaseParameter
         setAsParentNodeOf(this.id);
     }
 
-    public void setModifiers(int modifiers) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public T setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
+        return (T) this;
     }
 }

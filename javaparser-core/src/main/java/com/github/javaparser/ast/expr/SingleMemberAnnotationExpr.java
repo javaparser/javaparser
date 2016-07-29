@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -42,15 +40,6 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 		setMemberValue(memberValue);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public SingleMemberAnnotationExpr(final int beginLine, final int beginColumn, final int endLine,
-	                                  final int endColumn, final NameExpr name, final Expression memberValue) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, memberValue);
-	}
-	
 	public SingleMemberAnnotationExpr(final Range range, final NameExpr name, final Expression memberValue) {
 		super(range);
 		setName(name);

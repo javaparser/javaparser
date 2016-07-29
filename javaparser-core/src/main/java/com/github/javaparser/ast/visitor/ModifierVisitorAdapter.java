@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -143,10 +143,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(annotations);
 		}
-		final List<BodyDeclaration> members = n.getMembers();
+        final List<BodyDeclaration<?>> members = n.getMembers();
 		if (members != null) {
 			for (int i = 0; i < members.size(); i++) {
-				members.set(i, (BodyDeclaration) members.get(i).accept(this, arg));
+                members.set(i, (BodyDeclaration<?>) members.get(i).accept(this, arg));
 			}
 			removeNulls(members);
 		}
@@ -217,7 +217,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		if (target == null) {
 			return null;
 		}
-		n.setTarget(null);
+        n.setTarget(target);
 
 		final Expression value = (Expression) n.getValue().accept(this, arg);
 		if (value == null) {
@@ -320,10 +320,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(implementz);
 		}
-		final List<BodyDeclaration> members = n.getMembers();
+        final List<BodyDeclaration<?>> members = n.getMembers();
 		if (members != null) {
 			for (int i = 0; i < members.size(); i++) {
-				members.set(i, (BodyDeclaration) members.get(i).accept(this, arg));
+                members.set(i, (BodyDeclaration<?>) members.get(i).accept(this, arg));
 			}
 			removeNulls(members);
 		}
@@ -355,10 +355,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(imports);
 		}
-		final List<TypeDeclaration> types = n.getTypes();
+        final List<TypeDeclaration<?>> types = n.getTypes();
 		if (types != null) {
 			for (int i = 0; i < types.size(); i++) {
-				types.set(i, (TypeDeclaration) types.get(i).accept(this, arg));
+                types.set(i, (TypeDeclaration<?>) types.get(i).accept(this, arg));
 			}
 			removeNulls(types);
 		}
@@ -401,7 +401,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(throwz);
 		}
-		n.setBlock((BlockStmt) n.getBlock().accept(this, arg));
+		n.setBody((BlockStmt) n.getBody().accept(this, arg));
 		return n;
 	}
 
@@ -461,10 +461,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(args);
 		}
-		final List<BodyDeclaration> classBody = n.getClassBody();
+        final List<BodyDeclaration<?>> classBody = n.getClassBody();
 		if (classBody != null) {
 			for (int i = 0; i < classBody.size(); i++) {
-				classBody.set(i, (BodyDeclaration) classBody.get(i).accept(this, arg));
+                classBody.set(i, (BodyDeclaration<?>) classBody.get(i).accept(this, arg));
 			}
 			removeNulls(classBody);
 		}
@@ -493,10 +493,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(entries);
 		}
-		final List<BodyDeclaration> members = n.getMembers();
+        final List<BodyDeclaration<?>> members = n.getMembers();
 		if (members != null) {
 			for (int i = 0; i < members.size(); i++) {
-				members.set(i, (BodyDeclaration) members.get(i).accept(this, arg));
+                members.set(i, (BodyDeclaration<?>) members.get(i).accept(this, arg));
 			}
 			removeNulls(members);
 		}
@@ -756,10 +756,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(args);
 		}
-		final List<BodyDeclaration> anonymousClassBody = n.getAnonymousClassBody();
+        final List<BodyDeclaration<?>> anonymousClassBody = n.getAnonymousClassBody();
 		if (anonymousClassBody != null) {
 			for (int i = 0; i < anonymousClassBody.size(); i++) {
-				anonymousClassBody.set(i, (BodyDeclaration) anonymousClassBody.get(i).accept(this, arg));
+                anonymousClassBody.set(i, (BodyDeclaration<?>) anonymousClassBody.get(i).accept(this, arg));
 			}
 			removeNulls(anonymousClassBody);
 		}
@@ -779,18 +779,18 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 	
 	@Override public Node visit(final Parameter n, final A arg) {
-		visit((BaseParameter) n, arg);
+        visit((BaseParameter<?>) n, arg);
 		n.setType((Type) n.getType().accept(this, arg));
 		return n;
 	}
 	
 	@Override public Node visit(MultiTypeParameter n, A arg) {
-    	visit((BaseParameter) n, arg);
+        visit((BaseParameter<?>) n, arg);
         n.setType((UnionType)n.getType().accept(this, arg));
         return n;
     }
 
-	protected Node visit(final BaseParameter n, final A arg) {
+    protected Node visit(final BaseParameter<?> n, final A arg) {
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -926,7 +926,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final TypeDeclarationStmt n, final A arg) {
-		n.setTypeDeclaration((TypeDeclaration) n.getTypeDeclaration().accept(this, arg));
+        n.setTypeDeclaration((TypeDeclaration<?>) n.getTypeDeclaration().accept(this, arg));
 		return n;
 	}
 

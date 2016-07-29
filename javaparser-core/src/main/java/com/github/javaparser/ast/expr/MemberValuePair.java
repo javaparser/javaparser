@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -22,17 +22,15 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MemberValuePair extends Node implements NamedNode {
+public final class MemberValuePair extends Node implements NodeWithName<MemberValuePair> {
 
 	private String name;
 
@@ -46,15 +44,6 @@ public final class MemberValuePair extends Node implements NamedNode {
 		setValue(value);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public MemberValuePair(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                       final String name, final Expression value) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, value);
-	}
-	
 	public MemberValuePair(final Range range, final String name, final Expression value) {
 		super(range);
 		setName(name);
@@ -78,8 +67,10 @@ public final class MemberValuePair extends Node implements NamedNode {
 		return value;
 	}
 
-	public void setName(final String name) {
+    @Override
+    public MemberValuePair setName(final String name) {
 		this.name = name;
+        return this;
 	}
 
 	public void setValue(final Expression value) {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,7 +21,11 @@
  
 package com.github.javaparser.ast.stmt;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
@@ -29,10 +33,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -51,18 +51,9 @@ public final class CatchClause extends Node {
         setCatchBlock(catchBlock);
     }
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                   final int exceptModifier, final List<AnnotationExpr> exceptAnnotations, final Type exceptTypes,
-	                   final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), exceptModifier, exceptAnnotations, exceptTypes, exceptId, catchBlock);
-	}
-	
     public CatchClause(final Range range,
-                       final int exceptModifier, final List<AnnotationExpr> exceptAnnotations, final Type exceptTypes,
+                       final EnumSet<Modifier> exceptModifier, final List<AnnotationExpr> exceptAnnotations,
+                       final Type exceptTypes,
                        final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
         super(range);
         setParam(new Parameter(range, exceptModifier, exceptAnnotations, exceptTypes, false, exceptId));

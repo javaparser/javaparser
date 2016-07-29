@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,40 +21,35 @@
  
 package com.github.javaparser.ast.body;
 
+import java.util.List;
+
+import java.util.EnumSet;
+
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationDeclaration extends TypeDeclaration {
+public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> {
 
     public AnnotationDeclaration() {
     }
 
-    public AnnotationDeclaration(int modifiers, String name) {
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, String name) {
         super(modifiers, name);
     }
 
-    public AnnotationDeclaration(int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+                                 List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public AnnotationDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, members);
-    }
-    
-    public AnnotationDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, String name, List<BodyDeclaration> members) {
+    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+                                 List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
     }
 

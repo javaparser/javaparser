@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2015 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -21,21 +21,21 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ArrayCreationExpr extends Expression implements TypedNode {
+public final class ArrayCreationExpr extends Expression implements NodeWithType<ArrayCreationExpr> {
 
     private Type type;
 
@@ -57,14 +57,6 @@ public final class ArrayCreationExpr extends Expression implements TypedNode {
         setDimensions(null);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, int arrayCount, ArrayInitializerExpr initializer) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount, initializer);
-    }
-    
     public ArrayCreationExpr(Range range, Type type, int arrayCount, ArrayInitializerExpr initializer) {
         super(range);
         setType(type);
@@ -80,14 +72,6 @@ public final class ArrayCreationExpr extends Expression implements TypedNode {
         setInitializer(null);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, List<Expression> dimensions, int arrayCount) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, dimensions, arrayCount);
-    }
-    
     public ArrayCreationExpr(Range range, Type type, List<Expression> dimensions, int arrayCount) {
         super(range);
         setType(type);
@@ -139,9 +123,10 @@ public final class ArrayCreationExpr extends Expression implements TypedNode {
     }
 
     @Override
-    public void setType(Type type) {
+    public ArrayCreationExpr setType(Type type) {
         this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
     }
 
     public List<List<AnnotationExpr>> getArraysAnnotations() {
