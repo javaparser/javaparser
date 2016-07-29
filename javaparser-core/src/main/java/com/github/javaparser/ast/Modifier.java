@@ -4,15 +4,15 @@ import java.util.EnumSet;
 
 public enum Modifier {
 	PUBLIC("public"),
+    PROTECTED("protected"),
 	PRIVATE("private"),
-	PROTECTED("protected"),
+    ABSTRACT("abstract"),
 	STATIC("static"),
 	FINAL("final"),
+    TRANSIENT("transient"), 
+    VOLATILE("volatile"),
 	SYNCHRONIZED("synchronized"),
-	VOLATILE("volatile"),
-	TRANSIENT("transient"),
 	NATIVE("native"),
-	ABSTRACT("abstract"),
 	STRICTFP("strictfp");
 
     String lib;
