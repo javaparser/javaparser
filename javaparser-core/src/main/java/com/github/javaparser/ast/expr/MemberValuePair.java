@@ -21,18 +21,18 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MemberValuePair extends Node implements NamedNode {
+public final class MemberValuePair extends Node implements NodeWithName<MemberValuePair> {
 
 	private String name;
 
@@ -78,8 +78,10 @@ public final class MemberValuePair extends Node implements NamedNode {
 		return value;
 	}
 
-	public void setName(final String name) {
+    @Override
+    public MemberValuePair setName(final String name) {
 		this.name = name;
+        return this;
 	}
 
 	public void setValue(final Expression value) {

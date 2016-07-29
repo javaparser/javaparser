@@ -21,13 +21,13 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * Defines an expression that accesses the class of a type.
@@ -37,7 +37,7 @@ import static com.github.javaparser.Position.pos;
  * </code>
  * @author Julio Vilmar Gesser
  */
-public final class ClassExpr extends Expression implements TypedNode {
+public final class ClassExpr extends Expression implements NodeWithType<ClassExpr> {
 
     private Type type;
 
@@ -77,8 +77,9 @@ public final class ClassExpr extends Expression implements TypedNode {
     }
 
     @Override
-    public void setType(Type type) {
+    public ClassExpr setType(Type type) {
         this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
     }
 }

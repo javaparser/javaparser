@@ -21,21 +21,19 @@
  
 package com.github.javaparser;
 
+import static java.lang.Integer.signum;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.TypedNode;
-import com.github.javaparser.ast.body.AnnotableNode;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-
-import java.lang.Override;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-
-import static java.lang.Integer.signum;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 
 public final class PositionUtils {
 
@@ -48,12 +46,7 @@ public final class PositionUtils {
     }
 
     public static <T extends Node> void sortByBeginPosition(List<T> nodes, final boolean ignoringAnnotations){
-        Collections.sort(nodes, new Comparator<Node>() {
-            @Override
-            public int compare(Node o1, Node o2) {
-                return PositionUtils.compare(o1, o2, ignoringAnnotations);
-            }
-        });
+        Collections.sort(nodes, (o1, o2) -> PositionUtils.compare(o1, o2, ignoringAnnotations));
     }
 
     public static boolean areInOrder(Node a, Node b){
@@ -83,9 +76,9 @@ public final class PositionUtils {
     }
 
     public static AnnotationExpr getLastAnnotation(Node node) {
-        if (node instanceof AnnotableNode){
-            List<AnnotationExpr> annotations = new LinkedList<AnnotationExpr>();
-            annotations.addAll(((AnnotableNode) node).getAnnotations());
+        if (node instanceof NodeWithAnnotations){
+            List<AnnotationExpr> annotations = new LinkedList<>();
+            annotations.addAll(((NodeWithAnnotations<?>) node).getAnnotations());
             if (annotations.isEmpty()){
                 return null;
             }
@@ -107,7 +100,7 @@ public final class PositionUtils {
 
     private static Node beginNodeWithoutConsideringAnnotations(Node node) {
         if (node instanceof MethodDeclaration || node instanceof FieldDeclaration) {
-            TypedNode casted = (TypedNode) node;
+            NodeWithType<?> casted = (NodeWithType<?>) node;
             return casted.getType();
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
@@ -126,7 +119,7 @@ public final class PositionUtils {
         }
         // if the node is contained, but it comes immediately after the annotations,
         // let's not consider it contained
-        if (container instanceof AnnotableNode){
+        if (container instanceof NodeWithAnnotations){
             int bl = beginLineWithoutConsideringAnnotation(container);
             int bc = beginColumnWithoutConsideringAnnotation(container);
             if (bl>contained.getBegin().line) return false;

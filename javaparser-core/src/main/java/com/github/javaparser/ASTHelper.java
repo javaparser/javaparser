@@ -21,7 +21,14 @@
  
 package com.github.javaparser;
 
+import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -40,15 +47,10 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.PrimitiveType.Primitive;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * This class helps to construct new nodes.
@@ -120,8 +122,9 @@ public final class ASTHelper {
      *            variable declarator
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration createFieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
-        List<VariableDeclarator> variables = new ArrayList<VariableDeclarator>();
+    public static FieldDeclaration createFieldDeclaration(EnumSet<Modifier> modifiers, Type type,
+                                                          VariableDeclarator variable) {
+        List<VariableDeclarator> variables = new ArrayList<>();
         variables.add(variable);
         return new FieldDeclaration(modifiers, type, variables);
     }
@@ -137,7 +140,7 @@ public final class ASTHelper {
      *            field name
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration createFieldDeclaration(int modifiers, Type type, String name) {
+    public static FieldDeclaration createFieldDeclaration(EnumSet<Modifier> modifiers, Type type, String name) {
         VariableDeclaratorId id = new VariableDeclaratorId(name);
         VariableDeclarator variable = new VariableDeclarator(id);
         return createFieldDeclaration(modifiers, type, variable);
@@ -153,7 +156,7 @@ public final class ASTHelper {
      * @return instance of {@link VariableDeclarationExpr}
      */
     public static VariableDeclarationExpr createVariableDeclarationExpr(Type type, String name) {
-        List<VariableDeclarator> vars = new ArrayList<VariableDeclarator>();
+        List<VariableDeclarator> vars = new ArrayList<>();
         vars.add(new VariableDeclarator(new VariableDeclaratorId(name)));
         return new VariableDeclarationExpr(type, vars);
     }
@@ -170,7 +173,7 @@ public final class ASTHelper {
     public static void addParameter(MethodDeclaration method, Parameter parameter) {
         List<Parameter> parameters = method.getParameters();
         if (isNullOrEmpty(parameters)) {
-            parameters = new ArrayList<Parameter>();
+            parameters = new ArrayList<>();
             method.setParameters(parameters);
         }
         parameters.add(parameter);
@@ -188,7 +191,7 @@ public final class ASTHelper {
     public static void addArgument(MethodCallExpr call, Expression arg) {
         List<Expression> args = call.getArgs();
         if (isNullOrEmpty(args)) {
-            args = new ArrayList<Expression>();
+            args = new ArrayList<>();
             call.setArgs(args);
         }
         args.add(arg);
@@ -202,11 +205,13 @@ public final class ASTHelper {
      *            compilation unit
      * @param type
      *            type declaration
+     * @deprecated use {@link CompilationUnit#addClass(String)} kind of methods
      */
-    public static void addTypeDeclaration(CompilationUnit cu, TypeDeclaration type) {
-        List<TypeDeclaration> types = cu.getTypes();
+    @Deprecated
+    public static void addTypeDeclaration(CompilationUnit cu, TypeDeclaration<?> type) {
+        List<TypeDeclaration<?>> types = cu.getTypes();
         if (isNullOrEmpty(types)) {
-            types = new ArrayList<TypeDeclaration>();
+            types = new ArrayList<>();
             cu.setTypes(types);
         }
         types.add(type);
@@ -249,7 +254,7 @@ public final class ASTHelper {
     public static void addStmt(BlockStmt block, Statement stmt) {
         List<Statement> stmts = block.getStmts();
         if (isNullOrEmpty(stmts)) {
-            stmts = new ArrayList<Statement>();
+            stmts = new ArrayList<>();
             block.setStmts(stmts);
         }
         stmts.add(stmt);
@@ -275,17 +280,17 @@ public final class ASTHelper {
      * @param decl
      *            member declaration
      */
-    public static void addMember(TypeDeclaration type, BodyDeclaration decl) {
-        List<BodyDeclaration> members = type.getMembers();
+    public static void addMember(TypeDeclaration<?> type, BodyDeclaration<?> decl) {
+        List<BodyDeclaration<?>> members = type.getMembers();
         if (isNullOrEmpty(members)) {
-            members = new ArrayList<BodyDeclaration>();
+            members = new ArrayList<>();
             type.setMembers(members);
         }
         members.add(decl);
     }
 
     public static <N extends Node> List<N> getNodesByType(Node container, Class<N> clazz) {
-        List<N> nodes = new ArrayList<N>();
+        List<N> nodes = new ArrayList<>();
         for (Node child : container.getChildrenNodes()) {
             if (clazz.isInstance(child)) {
                 nodes.add(clazz.cast(child));

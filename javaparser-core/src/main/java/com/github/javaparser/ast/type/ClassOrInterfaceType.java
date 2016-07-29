@@ -21,20 +21,20 @@
 
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.TypeArguments;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.Position.pos;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.TypeArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type implements NamedNode {
+public final class ClassOrInterfaceType extends Type implements NodeWithName<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 
@@ -120,8 +120,10 @@ public final class ClassOrInterfaceType extends Type implements NamedNode {
         return new PrimitiveType(PrimitiveType.unboxMap.get(name));
     }
 
-    public void setName(final String name) {
+    @Override
+    public ClassOrInterfaceType setName(final String name) {
         this.name = name;
+        return this;
     }
 
     public void setScope(final ClassOrInterfaceType scope) {

@@ -149,7 +149,7 @@ public class ParsingSteps {
     public void thenFieldInClassContainsAnnotationValueIs(int fieldPosition, int classPosition, int annotationPosition, String expectedValue) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
 
-        TypeDeclaration classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         AnnotationExpr annotationUnderTest = fieldUnderTest.getAnnotations().get(annotationPosition - 1);
@@ -348,7 +348,7 @@ public class ParsingSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) compilationUnit.getTypes().get(0);
         ConstructorDeclaration ctor = (ConstructorDeclaration) classDeclaration.getMembers().get(1);
-        ExpressionStmt assignStmt = (ExpressionStmt) ctor.getBlock().getStmts().get(0);
+        ExpressionStmt assignStmt = (ExpressionStmt) ctor.getBody().getStmts().get(0);
         AssignExpr assignExpr = (AssignExpr) assignStmt.getExpression();
         assertNotNull(assignExpr.getTarget());
         assertEquals(NameExpr.class, assignExpr.getTarget().getClass());

@@ -21,16 +21,17 @@
  
 package com.github.javaparser.ast;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * <p>
@@ -44,7 +45,7 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
  * </pre>
  * @author Julio Vilmar Gesser
  */
-public final class TypeParameter extends Node implements NamedNode {
+public final class TypeParameter extends Node implements NodeWithName<TypeParameter> {
 
 	private String name;
 
@@ -118,8 +119,10 @@ public final class TypeParameter extends Node implements NamedNode {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(final String name) {
+    @Override
+    public TypeParameter setName(final String name) {
 		this.name = name;
+        return this;
 	}
 
 	/**

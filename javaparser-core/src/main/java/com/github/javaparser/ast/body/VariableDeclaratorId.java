@@ -21,18 +21,18 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclaratorId extends Node implements NamedNode {
+public final class VariableDeclaratorId extends Node implements NodeWithName<VariableDeclaratorId> {
 
     private String name;
 
@@ -82,8 +82,10 @@ public final class VariableDeclaratorId extends Node implements NamedNode {
         this.arrayCount = arrayCount;
     }
 
-    public void setName(String name) {
+    @Override
+    public VariableDeclaratorId setName(String name) {
         this.name = name;
+        return this;
     }
 
 }

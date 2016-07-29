@@ -21,28 +21,41 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
+import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
+import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration implements DocumentableNode, WithDeclaration,
-        NamedNode, NodeWithModifiers {
+public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration>
+        implements NodeWithJavaDoc<ConstructorDeclaration>, NodeWithDeclaration,
+        NodeWithName<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>,
+        NodeWithParameters<ConstructorDeclaration>, NodeWithThrowable<ConstructorDeclaration>,
+        NodeWithBlockStmt<ConstructorDeclaration> {
 
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<TypeParameter> typeParameters;
 
@@ -52,18 +65,20 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     private List<ReferenceType> throws_;
 
-    private BlockStmt block;
+    private BlockStmt body;
 
     public ConstructorDeclaration() {
     }
 
-    public ConstructorDeclaration(int modifiers, String name) {
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
         setModifiers(modifiers);
         setName(name);
     }
 
-    public ConstructorDeclaration(int modifiers, List<AnnotationExpr> annotations, List<TypeParameter> typeParameters,
-                                  String name, List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
+                                  List<TypeParameter> typeParameters,
+                                  String name, List<Parameter> parameters, List<ReferenceType> throws_,
+                                  BlockStmt block) {
         super(annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -77,13 +92,15 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers,
+    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn,
+                                  EnumSet<Modifier> modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters, name, parameters, throws_, block);
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters,
+                name, parameters, throws_, block);
     }
 
-    public ConstructorDeclaration(Range range, int modifiers,
+    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         super(range, annotations);
@@ -105,18 +122,25 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         v.visit(this, arg);
     }
 
+    /**
+     * Use {@link #getBody()} instead
+     * 
+     * @return
+     */
+    @Deprecated
     public BlockStmt getBlock() {
-        return block;
+        return body;
     }
+
 
     /**
      * Return the modifiers of this member declaration.
      * 
-     * @see ModifierSet
+     * @see Modifier
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -129,11 +153,13 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         return name;
     }
 
+    @Override
     public List<Parameter> getParameters() {
         parameters = ensureNotNull(parameters);
         return parameters;
     }
 
+    @Override
     public List<ReferenceType> getThrows() {
         throws_ = ensureNotNull(throws_);
         return throws_;
@@ -144,37 +170,54 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         return typeParameters;
     }
 
+    /**
+     * Use {@link #setBody(BlockStmt)} instead
+     * 
+     * @param block
+     */
+    @Deprecated
     public void setBlock(BlockStmt block) {
-        this.block = block;
-        setAsParentNodeOf(this.block);
+        this.body = block;
+        setAsParentNodeOf(this.body);
     }
 
-    public void setModifiers(int modifiers) {
+
+
+    @Override
+    public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
+        return this;
     }
 
-    public void setName(String name) {
+    @Override
+    public ConstructorDeclaration setName(String name) {
         setNameExpr(new NameExpr(name));
+        return this;
     }
 
-    public void setNameExpr(NameExpr name) {
+    public ConstructorDeclaration setNameExpr(NameExpr name) {
         this.name = name;
-	setAsParentNodeOf(this.name);
+        setAsParentNodeOf(this.name);
+        return this;
     }
 
-    public void setParameters(List<Parameter> parameters) {
+    @Override
+    public ConstructorDeclaration setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
         setAsParentNodeOf(this.parameters);
+        return this;
     }
 
-    public void setThrows(List<ReferenceType> throws_) {
+    @Override
+    public ConstructorDeclaration setThrows(List<ReferenceType> throws_) {
         this.throws_ = throws_;
         setAsParentNodeOf(this.throws_);
+        return this;
     }
 
     public void setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
-		setAsParentNodeOf(this.typeParameters);
+        setAsParentNodeOf(this.typeParameters);
     }
 
     /**
@@ -188,15 +231,14 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
                                          boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
             sb.append(accessSpecifier.getCodeRepresenation());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
         }
         sb.append(getName());
         sb.append("(");
         boolean firstParam = true;
-        for (Parameter param : getParameters())
-        {
+        for (Parameter param : getParameters()) {
             if (firstParam) {
                 firstParam = false;
             } else {
@@ -236,9 +278,20 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     @Override
     public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
+        if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
         return null;
+    }
+
+    @Override
+    public BlockStmt getBody() {
+        return body;
+    }
+
+    @Override
+    public ConstructorDeclaration setBody(BlockStmt body) {
+        this.body = body;
+        return this;
     }
 }

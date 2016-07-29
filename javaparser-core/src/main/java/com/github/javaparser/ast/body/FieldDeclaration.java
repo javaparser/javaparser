@@ -18,31 +18,41 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.DocumentableNode;
-import com.github.javaparser.ast.NodeWithModifiers;
-import com.github.javaparser.ast.TypedNode;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.AssignExpr.Operator;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration implements DocumentableNode, TypedNode, NodeWithModifiers {
+public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
+        implements NodeWithJavaDoc<FieldDeclaration>, NodeWithType<FieldDeclaration>,
+        NodeWithModifiers<FieldDeclaration> {
 
-    private int modifiers;
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private Type type;
 
@@ -51,40 +61,43 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     public FieldDeclaration() {
     }
 
-    public FieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
-    	setModifiers(modifiers);
-    	setType(type);
-    	List<VariableDeclarator> aux = new ArrayList<VariableDeclarator>();
-    	aux.add(variable);
-    	setVariables(aux);
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, VariableDeclarator variable) {
+        setModifiers(modifiers);
+        setType(type);
+        List<VariableDeclarator> aux = new ArrayList<>();
+        aux.add(variable);
+        setVariables(aux);
     }
 
-    public FieldDeclaration(int modifiers, Type type, List<VariableDeclarator> variables) {
-    	setModifiers(modifiers);
-    	setType(type);
-    	setVariables(variables);
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, List<VariableDeclarator> variables) {
+        setModifiers(modifiers);
+        setType(type);
+        setVariables(variables);
     }
 
-    public FieldDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+                            List<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
-    	setType(type);
-    	setVariables(variables);
+        setType(type);
+        setVariables(variables);
     }
 
     /**
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
+                            List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, variables);
     }
-    
-    public FieldDeclaration(Range range, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
+
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+                            List<VariableDeclarator> variables) {
         super(range, annotations);
         setModifiers(modifiers);
-    	setType(type);
-    	setVariables(variables);
+        setType(type);
+        setVariables(variables);
     }
 
     @Override
@@ -100,11 +113,11 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     /**
      * Return the modifiers of this member declaration.
      * 
-     * @see ModifierSet
+     * @see Modifier
      * @return modifiers
      */
     @Override
-    public int getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -118,26 +131,96 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
         return variables;
     }
 
-    public void setModifiers(int modifiers) {
+    @Override
+    public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
+        return this;
     }
 
     @Override
-    public void setType(Type type) {
+    public FieldDeclaration setType(Type type) {
         this.type = type;
-		setAsParentNodeOf(this.type);
+        setAsParentNodeOf(this.type);
+        return this;
     }
 
     public void setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
-		setAsParentNodeOf(this.variables);
+        setAsParentNodeOf(this.variables);
     }
 
     @Override
     public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
+        if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
         return null;
     }
+
+    /**
+     * Create a getter for this field, <b>will only work if this field declares only 1 identifier and if this field is
+     * already added to a ClassOrInterfaceDeclaration</b>
+     * 
+     * @return the {@link MethodDeclaration} created
+     * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
+     *             class or enum
+     */
+    public MethodDeclaration createGetter() {
+        if (getVariables().size() != 1)
+            throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
+        ClassOrInterfaceDeclaration parentClass = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
+        EnumDeclaration parentEnum = getParentNodeOfType(EnumDeclaration.class);
+        if ((parentClass == null && parentEnum == null) || (parentClass != null && parentClass.isInterface()))
+            throw new IllegalStateException(
+                    "You can use this only when the field is attached to a class or an enum");
+
+        String fieldName = getVariables().get(0).getId().getName();
+        String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
+        MethodDeclaration getter = null;
+        if (parentClass != null)
+            getter = parentClass.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
+        else
+            getter = parentEnum.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
+        getter.setType(getType());
+        BlockStmt blockStmt = new BlockStmt();
+        getter.setBody(blockStmt);
+        ReturnStmt r = new ReturnStmt(ASTHelper.createNameExpr(fieldName));
+        ASTHelper.addStmt(blockStmt, r);
+        return getter;
+    }
+
+    /**
+     * Create a setter for this field, <b>will only work if this field declares only 1 identifier and if this field is
+     * already added to a ClassOrInterfaceDeclaration</b>
+     * 
+     * @return the {@link MethodDeclaration} created
+     * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
+     *             class or enum
+     */
+    public MethodDeclaration createSetter() {
+        if (getVariables().size() != 1)
+            throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
+        ClassOrInterfaceDeclaration parentClass = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
+        EnumDeclaration parentEnum = getParentNodeOfType(EnumDeclaration.class);
+        if ((parentClass == null && parentEnum == null) || (parentClass != null && parentClass.isInterface()))
+            throw new IllegalStateException(
+                    "You can use this only when the field is attached to a class or an enum");
+
+        String fieldName = getVariables().get(0).getId().getName();
+        String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
+
+        MethodDeclaration setter = null;
+        if (parentClass != null)
+            setter = parentClass.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
+        else
+            setter = parentEnum.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
+        setter.setType(ASTHelper.VOID_TYPE);
+        setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
+        BlockStmt blockStmt2 = new BlockStmt();
+        setter.setBody(blockStmt2);
+        ASTHelper.addStmt(blockStmt2,
+                new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
+        return setter;
+    }
+
 }

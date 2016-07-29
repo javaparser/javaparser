@@ -21,17 +21,17 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
 
 /**
  * Defines constructor call expression.
@@ -53,7 +53,7 @@ public final class ObjectCreationExpr extends Expression {
 	private List<Expression> args;
 
     // This can be null, to indicate there is no body
-    private List<BodyDeclaration> anonymousClassBody;
+    private List<BodyDeclaration<?>> anonymousClassBody;
 
 	public ObjectCreationExpr() {
 	}
@@ -76,13 +76,13 @@ public final class ObjectCreationExpr extends Expression {
 	@Deprecated
 	public ObjectCreationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
 	                          final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
-	                          final List<Expression> args, final List<BodyDeclaration> anonymousBody) {
+                              final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
 		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, type, typeArgs, args, anonymousBody);
 	}
 	
 	public ObjectCreationExpr(final Range range,
 			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
-			final List<Expression> args, final List<BodyDeclaration> anonymousBody) {
+                              final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
 		super(range);
 		setScope(scope);
 		setType(type);
@@ -102,7 +102,7 @@ public final class ObjectCreationExpr extends Expression {
     /**
      * This can be null, to indicate there is no body
      */
-	public List<BodyDeclaration> getAnonymousClassBody() {
+    public List<BodyDeclaration<?>> getAnonymousClassBody() {
 		return anonymousClassBody;
 	}
 
@@ -124,7 +124,7 @@ public final class ObjectCreationExpr extends Expression {
         return typeArgs;
 	}
 
-	public void setAnonymousClassBody(final List<BodyDeclaration> anonymousClassBody) {
+    public void setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
 		this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
 	}

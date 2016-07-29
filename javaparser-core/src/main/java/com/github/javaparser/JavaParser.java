@@ -21,6 +21,13 @@
  
 package com.github.javaparser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -28,6 +35,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -101,8 +109,9 @@ public final class JavaParser {
 
     /**
      * Parses the Java code contained in the {@link InputStream} and returns a
-     * {@link CompilationUnit} that represents it.
-     *
+     * {@link CompilationUnit} that represents it.<br>
+     * Note: Uses UTF-8 encoding
+     * 
      * @param in
      *            {@link InputStream} containing Java source code
      * @return CompilationUnit representing the Java source code
@@ -111,7 +120,7 @@ public final class JavaParser {
      */
     public static CompilationUnit parse(final InputStream in)
             throws ParseException {
-        return parse(in, Charset.defaultCharset().name(),true);
+        return parse(in, "UTF-8", true);
     }
 
     public static CompilationUnit parse(final File file, final String encoding)
@@ -147,7 +156,9 @@ public final class JavaParser {
 
     /**
      * Parses the Java code contained in a {@link File} and returns a
-     * {@link CompilationUnit} that represents it.
+     * {@link CompilationUnit} that represents it.<br>
+     * Note: Uses UTF-8 encoding
+     * 
      *
      * @param file
      *            {@link File} containing Java source code
@@ -158,7 +169,7 @@ public final class JavaParser {
      */
     public static CompilationUnit parse(final File file) throws ParseException,
             IOException {
-        return parse(file, Charset.defaultCharset().name(),true);
+        return parse(file, "UTF-8", true);
     }
 
     public static CompilationUnit parse(final Reader reader)
@@ -275,7 +286,7 @@ public final class JavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public static BodyDeclaration parseBodyDeclaration(final String body) throws ParseException {
+    public static BodyDeclaration<?> parseBodyDeclaration(final String body) throws ParseException {
         return new InstanceJavaParser(body).parseBodyDeclaration();
     }
 
@@ -288,7 +299,7 @@ public final class JavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public static BodyDeclaration parseClassBodyDeclaration(String body) throws ParseException {
+    public static BodyDeclaration<?> parseClassBodyDeclaration(String body) throws ParseException {
         return new InstanceJavaParser(body).parseClassBodyDeclaration();
     }
 

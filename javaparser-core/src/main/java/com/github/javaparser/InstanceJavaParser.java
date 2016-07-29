@@ -20,6 +20,14 @@
 
 package com.github.javaparser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.List;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -27,9 +35,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
-
-import java.io.*;
-import java.util.List;
 
 /**
  * A thin wrapper around ASTParser with a few convenience methods for parsing CompilationUnits, Blocks, Statements, etc.
@@ -206,7 +211,7 @@ public class InstanceJavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public BodyDeclaration parseBodyDeclaration() throws ParseException {
+    public BodyDeclaration<?> parseBodyDeclaration() throws ParseException {
         try {
             return astParser.AnnotationBodyDeclaration();
         } finally {
@@ -214,7 +219,7 @@ public class InstanceJavaParser {
         }
     }
 
-    /**
+     /**
      * Parses a Java class body declaration(e.g fields or methods) and returns a
      * {@link BodyDeclaration} that represents it.
      *
@@ -222,7 +227,7 @@ public class InstanceJavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public BodyDeclaration parseClassBodyDeclaration() throws ParseException {
+    public BodyDeclaration<?> parseClassBodyDeclaration() throws ParseException {
         try {
             return astParser.ClassOrInterfaceBodyDeclaration(false);
         } finally {
@@ -238,7 +243,7 @@ public class InstanceJavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public BodyDeclaration parseInterfaceBodyDeclaration() throws ParseException {
+    public BodyDeclaration<?> parseInterfaceBodyDeclaration() throws ParseException {
         try {
             return astParser.ClassOrInterfaceBodyDeclaration(true);
         } finally {

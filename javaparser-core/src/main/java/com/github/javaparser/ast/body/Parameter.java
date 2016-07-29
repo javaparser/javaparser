@@ -21,21 +21,23 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.Position.pos;
+
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypedNode;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends BaseParameter implements TypedNode {
+public final class Parameter extends BaseParameter<Parameter> implements NodeWithType<Parameter> {
     private Type type;
 
     private boolean isVarArgs;
@@ -48,7 +50,7 @@ public final class Parameter extends BaseParameter implements TypedNode {
         setType(type);
     }
 
-    public Parameter(int modifiers, Type type, VariableDeclaratorId id) {
+    public Parameter(EnumSet<Modifier> modifiers, Type type, VariableDeclaratorId id) {
     	super(modifiers, id);
         setType(type);
     }
@@ -57,11 +59,13 @@ public final class Parameter extends BaseParameter implements TypedNode {
      * @deprecated prefer using Range objects.
      */
     @Deprecated
-    public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
+    public Parameter(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
+                     List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
         this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, isVarArgs, id);
     }
     
-    public Parameter(final Range range, int modifiers, List<AnnotationExpr> annotations, Type type, boolean isVarArgs, VariableDeclaratorId id) {
+    public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+                     boolean isVarArgs, VariableDeclaratorId id) {
         super(range, modifiers, annotations, id);
         setType(type);
         setVarArgs(isVarArgs);
@@ -87,9 +91,10 @@ public final class Parameter extends BaseParameter implements TypedNode {
     }
 
     @Override
-    public void setType(Type type) {
+    public Parameter setType(Type type) {
         this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
     }
 
     public void setVarArgs(boolean isVarArgs) {

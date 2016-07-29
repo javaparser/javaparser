@@ -18,63 +18,91 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
+import com.github.javaparser.ASTHelper;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class NormalAnnotationExpr extends AnnotationExpr {
 
-	private List<MemberValuePair> pairs;
+    private List<MemberValuePair> pairs;
 
-	public NormalAnnotationExpr() {
-	}
+    public NormalAnnotationExpr() {
+    }
 
-	public NormalAnnotationExpr(final NameExpr name, final List<MemberValuePair> pairs) {
-		setName(name);
-		setPairs(pairs);
-	}
+    public NormalAnnotationExpr(final NameExpr name, final List<MemberValuePair> pairs) {
+        setName(name);
+        setPairs(pairs);
+    }
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public NormalAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                            final NameExpr name, final List<MemberValuePair> pairs) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, pairs);
-	}
-	
-	public NormalAnnotationExpr(final Range range, final NameExpr name, final List<MemberValuePair> pairs) {
-		super(range);
-		setName(name);
-		setPairs(pairs);
-	}
+    /**
+     * @deprecated prefer using Range objects.
+     */
+    @Deprecated
+    public NormalAnnotationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+                                final NameExpr name, final List<MemberValuePair> pairs) {
+        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name, pairs);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    public NormalAnnotationExpr(final Range range, final NameExpr name, final List<MemberValuePair> pairs) {
+        super(range);
+        setName(name);
+        setPairs(pairs);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	public List<MemberValuePair> getPairs() {
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    public List<MemberValuePair> getPairs() {
         pairs = ensureNotNull(pairs);
         return pairs;
-	}
+    }
 
-	public void setPairs(final List<MemberValuePair> pairs) {
-		this.pairs = pairs;
-		setAsParentNodeOf(this.pairs);
-	}
+    public void setPairs(final List<MemberValuePair> pairs) {
+        this.pairs = pairs;
+        setAsParentNodeOf(this.pairs);
+    }
+
+    /**
+     * adds a pair to this annotation
+     * 
+     * @param key
+     * @param value
+     * @return this, the {@link NormalAnnotationExpr}
+     */
+    public NormalAnnotationExpr addPair(String key, String value) {
+        return addPair(key, ASTHelper.createNameExpr(value));
+    }
+
+    /**
+     * adds a pair to this annotation
+     * 
+     * @param key
+     * @param value
+     * @return this, the {@link NormalAnnotationExpr}
+     */
+    public NormalAnnotationExpr addPair(String key, NameExpr value) {
+        MemberValuePair memberValuePair = new MemberValuePair(key, value);
+        getPairs().add(memberValuePair);
+        memberValuePair.setParentNode(this);
+        return this;
+    }
 }

@@ -21,14 +21,15 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
@@ -77,4 +78,15 @@ public final class BlockStmt extends Statement {
 		this.stmts = stmts;
 		setAsParentNodeOf(this.stmts);
 	}
+
+    // TODO move to a nodeType + addAndGetStatement like methods ?
+    public BlockStmt addStatement(Statement statement) {
+        getStmts().add(statement);
+        statement.setParentNode(this);
+        return this;
+    }
+    public BlockStmt addStatement(String statement) {
+        return addStatement(new ExpressionStmt(new NameExpr(statement)));
+    }
+
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -19,18 +19,30 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast;
+package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.JavadocComment;
 
 /**
  * Node which can be documented through a Javadoc comment.
  */
-public interface DocumentableNode {
+public interface NodeWithJavaDoc<T> {
     /**
      * Gets the JavaDoc for this node. You can set the JavaDoc by calling setComment with a JavadocComment.
      *
      * @return The JavaDoc for this node if it exists, null if it doesn't.
      */
     JavadocComment getJavaDoc();
+
+    /**
+     * Use this to store additional information to this node.
+     *
+     * @param comment to be set
+     */
+    @SuppressWarnings("unchecked")
+    public default T setJavaDocComment(String comment) {
+        ((Node) this).setComment(new JavadocComment(comment));
+        return (T) this;
+    }
 }

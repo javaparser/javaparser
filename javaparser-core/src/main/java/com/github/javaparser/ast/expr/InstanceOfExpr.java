@@ -21,18 +21,18 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Position.pos;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypedNode;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
-public final class InstanceOfExpr extends Expression implements TypedNode {
+public final class InstanceOfExpr extends Expression implements NodeWithType<InstanceOfExpr> {
 
 	private Expression expr;
 
@@ -84,8 +84,9 @@ public final class InstanceOfExpr extends Expression implements TypedNode {
 	}
 
 	@Override
-	public void setType(final Type type) {
+    public InstanceOfExpr setType(final Type type) {
 		this.type = type;
 		setAsParentNodeOf(this.type);
+        return this;
 	}
 }
