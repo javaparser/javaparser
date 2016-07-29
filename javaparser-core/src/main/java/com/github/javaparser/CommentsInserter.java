@@ -198,7 +198,9 @@ class CommentsInserter {
         // let's give to it the comment
         if (node.getBegin().line == lineComment.getBegin().line
                 && !node.hasComment()) {
-            node.setComment(lineComment);
+            if(!(node instanceof Comment)) {
+                node.setComment(lineComment);
+            }
             return true;
         } else {
             // try with all the children, sorted by reverse position (so the
