@@ -176,7 +176,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
         String fieldName = getVariables().get(0).getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
-        MethodDeclaration getter = null;
+        final MethodDeclaration getter;
         if (parentClass != null)
             getter = parentClass.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
         else
@@ -184,8 +184,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         getter.setType(getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
-        ReturnStmt r = new ReturnStmt(ASTHelper.createNameExpr(fieldName));
-        ASTHelper.addStmt(blockStmt, r);
+        blockStmt.addStatement(new ReturnStmt(ASTHelper.createNameExpr(fieldName)));
         return getter;
     }
 
@@ -209,7 +208,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         String fieldName = getVariables().get(0).getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
-        MethodDeclaration setter = null;
+        final MethodDeclaration setter;
         if (parentClass != null)
             setter = parentClass.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
         else

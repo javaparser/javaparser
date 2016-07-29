@@ -47,7 +47,7 @@ public class ClassCreator {
         // add a parameter to the method
         Parameter param = ASTHelper.createParameter(ASTHelper.createReferenceType("String", 0), "args");
         param.setVarArgs(true);
-        ASTHelper.addParameter(method, param);
+        method.addParameter(param);
 
         // add a body to the method
         BlockStmt block = new BlockStmt();
