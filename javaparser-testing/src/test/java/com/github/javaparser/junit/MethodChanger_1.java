@@ -13,14 +13,11 @@ public class MethodChanger_1 {
 
     public static void main(String[] args) throws Exception {
         // creates an input stream for the file to be parsed
-        FileInputStream in = new FileInputStream("test.java");
 
         CompilationUnit cu;
-        try {
+        try (FileInputStream in = new FileInputStream("test.java")) {
             // parse the file
             cu = JavaParser.parse(in);
-        } finally {
-            in.close();
         }
 
         // visit and change the methods names and parameters
@@ -33,7 +30,7 @@ public class MethodChanger_1 {
     /**
      * Simple visitor implementation for visiting MethodDeclaration nodes.
      */
-    private static class MethodChangerVisitor extends VoidVisitorAdapter {
+    private static class MethodChangerVisitor extends VoidVisitorAdapter<Object> {
 
         @Override
         public void visit(MethodDeclaration n, Object arg) {
@@ -41,10 +38,7 @@ public class MethodChanger_1 {
             n.setName(n.getName().toUpperCase());
 
             // create the new parameter
-            Parameter newArg = ASTHelper.createParameter(ASTHelper.INT_TYPE, "value");
-
-            // add the parameter to the method
-            ASTHelper.addParameter(n, newArg);
+            n.addParameter(ASTHelper.INT_TYPE, "value");
         }
     }
 }
