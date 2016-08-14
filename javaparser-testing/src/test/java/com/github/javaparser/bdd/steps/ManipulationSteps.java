@@ -162,7 +162,7 @@ public class ManipulationSteps {
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter param = ASTHelper.createParameter(ASTHelper.createReferenceType(typeName, 0), parameterName);
         param.setVarArgs(true);
-        ASTHelper.addParameter(method, param);
+        method.addParameter(param);
     }
 
     @When("a BlockStmt is added to method $methodPosition in class $classPosition")
@@ -195,7 +195,7 @@ public class ManipulationSteps {
     public void whenMethodInClassHasAnIntArgumentCalledAdded(int methodPosition, int classPosition, String paramName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        ASTHelper.addParameter(method, ASTHelper.createParameter(ASTHelper.INT_TYPE, paramName));
+        method.addParameter(ASTHelper.INT_TYPE, paramName);
     }
 
     @When("the compilation unit is cloned")
@@ -288,7 +288,7 @@ public class ManipulationSteps {
     private static class AddNewIntParameterCalledValueVisitor extends VoidVisitorAdapter<Void> {
         @Override
         public void visit(MethodDeclaration n, Void arg) {
-            ASTHelper.addParameter(n, ASTHelper.createParameter(ASTHelper.INT_TYPE, "value"));
+            n.addParameter(ASTHelper.INT_TYPE, "value");
         }
     }
 }

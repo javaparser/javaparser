@@ -162,24 +162,6 @@ public final class ASTHelper {
     }
 
     /**
-     * Adds the given parameter to the method. The list of parameters will be
-     * initialized if it is <code>null</code>.
-     * 
-     * @param method
-     *            method
-     * @param parameter
-     *            parameter
-     */
-    public static void addParameter(MethodDeclaration method, Parameter parameter) {
-        List<Parameter> parameters = method.getParameters();
-        if (isNullOrEmpty(parameters)) {
-            parameters = new ArrayList<>();
-            method.setParameters(parameters);
-        }
-        parameters.add(parameter);
-    }
-
-    /**
      * Adds the given argument to the method call. The list of arguments will be
      * initialized if it is <code>null</code>.
      * 
@@ -195,6 +177,7 @@ public final class ASTHelper {
             call.setArgs(args);
         }
         args.add(arg);
+        arg.setParentNode(call);
     }
 
     /**
@@ -215,7 +198,7 @@ public final class ASTHelper {
             cu.setTypes(types);
         }
         types.add(type);
-
+        type.setParentNode(cu);
     }
 
     /**
@@ -245,22 +228,6 @@ public final class ASTHelper {
     }
 
     /**
-     * Adds the given statement to the specified block. The list of statements
-     * will be initialized if it is <code>null</code>.
-     * 
-     * @param block to have expression added to
-     * @param stmt to be added
-     */
-    public static void addStmt(BlockStmt block, Statement stmt) {
-        List<Statement> stmts = block.getStmts();
-        if (isNullOrEmpty(stmts)) {
-            stmts = new ArrayList<>();
-            block.setStmts(stmts);
-        }
-        stmts.add(stmt);
-    }
-
-    /**
      * Adds the given expression to the specified block. The list of statements
      * will be initialized if it is <code>null</code>.
      * 
@@ -268,7 +235,7 @@ public final class ASTHelper {
      * @param expr to be added
      */
     public static void addStmt(BlockStmt block, Expression expr) {
-        addStmt(block, new ExpressionStmt(expr));
+        block.addStatement(new ExpressionStmt(expr));
     }
 
     /**
@@ -287,6 +254,7 @@ public final class ASTHelper {
             type.setMembers(members);
         }
         members.add(decl);
+        decl.setParentNode(type);
     }
 
     public static <N extends Node> List<N> getNodesByType(Node container, Class<N> clazz) {
