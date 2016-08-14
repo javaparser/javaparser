@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -58,15 +59,15 @@ public class InstanceJavaParser {
         this(new StreamProvider(input));
     }
 
-    public InstanceJavaParser(InputStream input, String encoding) throws IOException {
-        this(new StreamProvider(input, encoding));
+    public InstanceJavaParser(InputStream input, Charset encoding) throws IOException {
+        this(new StreamProvider(input, encoding.name()));
     }
 
     public InstanceJavaParser(File file) throws IOException {
         this(new FileInputStream(file));
     }
 
-    public InstanceJavaParser(File file, String encoding) throws IOException {
+    public InstanceJavaParser(File file, Charset encoding) throws IOException {
         this(new FileInputStream(file), encoding);
     }
     
