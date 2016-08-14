@@ -36,8 +36,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
-
-import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -48,6 +46,7 @@ import java.util.List;
  */
 public final class JavaParser {
     private static final CommentsInserter commentsInserter = new CommentsInserter();
+    private static final Charset UTF8 = Charset.forName("utf-8");
     
     private JavaParser() {
         // hide the constructor
@@ -70,7 +69,7 @@ public final class JavaParser {
     }
 
     public static CompilationUnit parse(final InputStream in,
-                                        final String encoding) throws ParseException {
+                                        final Charset encoding) throws ParseException {
         return parse(in,encoding,true);
     }
 
@@ -87,14 +86,11 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static CompilationUnit parse(final InputStream in,
-                                        String encoding,
+                                        Charset encoding,
                                         boolean considerComments) throws ParseException {
         try {
-            InputStreamReader inputStreamReader = new InputStreamReader(in, encoding);
-            try {
+            try (InputStreamReader inputStreamReader = new InputStreamReader(in, encoding)) {
                 return parse(inputStreamReader, considerComments);
-            } finally {
-                inputStreamReader.close();
             }
         } catch (IOException ioe) {
             throw new ParseException(ioe.getMessage());
@@ -114,10 +110,10 @@ public final class JavaParser {
      */
     public static CompilationUnit parse(final InputStream in)
             throws ParseException {
-        return parse(in, "UTF-8", true);
+        return parse(in, UTF8, true);
     }
 
-    public static CompilationUnit parse(final File file, final String encoding)
+    public static CompilationUnit parse(final File file, final Charset encoding)
             throws ParseException, IOException {
         return parse(file,encoding,true);
     }
@@ -134,14 +130,11 @@ public final class JavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public static CompilationUnit parse(final File file, final String encoding, boolean considerComments)
+    public static CompilationUnit parse(final File file, final Charset encoding, boolean considerComments)
             throws ParseException {
         try {
-            final FileInputStream in = new FileInputStream(file);
-            try {
+            try (FileInputStream in = new FileInputStream(file)) {
                 return parse(in, encoding, considerComments);
-            } finally {
-                in.close();
             }
         } catch (IOException ioe) {
             throw new ParseException(ioe.getMessage());
@@ -163,7 +156,7 @@ public final class JavaParser {
      */
     public static CompilationUnit parse(final File file) throws ParseException,
             IOException {
-        return parse(file, "UTF-8", true);
+        return parse(file, UTF8, true);
     }
 
     public static CompilationUnit parse(final Reader reader)
