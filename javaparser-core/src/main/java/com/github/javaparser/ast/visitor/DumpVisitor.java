@@ -281,12 +281,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(")");
 	}
 
-	private void printJavadoc(final JavadocComment javadoc, final Object arg) {
-		if (javadoc != null) {
-			javadoc.accept(this, arg);
-		}
-	}
-
 	private void printJavaComment(final Comment javacomment, final Object arg) {
 		if (javacomment != null) {
 			javacomment.accept(this, arg);
@@ -366,7 +360,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final ClassOrInterfaceDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
 
@@ -416,7 +409,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final EmptyTypeDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printer.print(";");
 
         printOrphanCommentsEnding(n);
@@ -587,7 +579,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printOrphanCommentsBeforeThisChildNode(n);
 
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
 		n.getType().accept(this, arg);
@@ -1011,7 +1002,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final ConstructorDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
 
@@ -1051,7 +1041,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printOrphanCommentsBeforeThisChildNode(n);
 
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
 		if (n.isDefault()) {
@@ -1271,7 +1260,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final EnumDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
 
@@ -1315,7 +1303,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final EnumConstantDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printer.print(n.getName());
 
@@ -1334,13 +1321,11 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final EmptyMemberDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printer.print(";");
 	}
 
 	@Override public void visit(final InitializerDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		if (n.isStatic()) {
 			printer.print("static ");
 		}
@@ -1508,7 +1493,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	@Override public void visit(final AnnotationDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
 
@@ -1526,7 +1510,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
     @Override
     public void visit(final AnnotationMemberDeclaration n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printJavadoc(n.getJavaDoc(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
 

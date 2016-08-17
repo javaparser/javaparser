@@ -270,3 +270,19 @@ public class Example {
         mString = arg;
     }
 }
+
+Scenario: JavaDoc OR comment is printed, not both.
+Given the class:
+public class Foo {
+    /** This line gets duplicated */
+    public void foo() {
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class Foo {
+
+    /** This line gets duplicated */
+    public void foo() {
+    }
+}
