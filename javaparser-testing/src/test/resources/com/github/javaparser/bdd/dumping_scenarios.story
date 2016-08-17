@@ -167,8 +167,8 @@ Given the class:
 class A {
     public void a() {
         try {
-        } catch (IndexOutOfBoundException | IOException e) { 
-        } 
+        } catch (IndexOutOfBoundException | IOException e) {
+        }
     }
 }
 When the class is parsed by the Java parser
@@ -284,5 +284,60 @@ public class Foo {
 
     /** This line gets duplicated */
     public void foo() {
+    }
+}
+
+Scenario: Duplicate methods are not a parsing error (#416)
+Given the class:
+public class Foo {
+    public void foo() {
+    }
+    public void foo() {
+    }
+    public void foo() {
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class Foo {
+
+    public void foo() {
+    }
+
+    public void foo() {
+    }
+
+    public void foo() {
+    }
+}
+
+Scenario: Both array syntaxes are supported (#416)
+Given the class:
+public class Foo {
+    public void m1(boolean[] boolArray) {}
+    public void m1(boolean boolArray[]) {}
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class Foo {
+
+    public void m1(boolean[] boolArray) {
+    }
+
+    public void m1(boolean boolArray[]) {
+    }
+}
+
+
+Scenario: Array parts can be annotated
+Given the class:
+class Foo {
+    void m1(@Boo boolean @Index1 [] @ Index2 [] boolArray) {}
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class Foo {
+
+    void m1(@Boo boolean @Index1 [] @Index2 [] boolArray) {
     }
 }
