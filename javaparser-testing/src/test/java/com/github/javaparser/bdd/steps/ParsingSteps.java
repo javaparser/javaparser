@@ -336,7 +336,7 @@ public class ParsingSteps {
     @Then("the Java parser cannot parse it because of lexical errors")
     public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
         try {
-            JavaParser.parse(new StringReader(sourceUnderTest), true);
+            JavaParser.parse(sourceUnderTest);
             fail("Lexical error expected");
         } catch (TokenMgrException e) {
             // ok

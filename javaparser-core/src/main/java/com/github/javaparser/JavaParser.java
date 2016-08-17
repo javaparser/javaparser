@@ -21,12 +21,7 @@
  
 package com.github.javaparser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -179,6 +174,31 @@ public final class JavaParser {
     }
 
     /**
+     * Parses the Java code contained in code and returns a
+     * {@link CompilationUnit} that represents it.
+     *
+     * @param code Java source code
+     * @param considerComments parse or ignore comments
+     * @return CompilationUnit representing the Java source code
+     * @throws ParseException if the source code has parser errors
+     */
+    public static CompilationUnit parse(String code, boolean considerComments) throws ParseException {
+        return parse(new StringReader(code), considerComments);
+    }
+
+    /**
+     * Parses the Java code contained in code and returns a
+     * {@link CompilationUnit} that represents it.
+     *
+     * @param code Java source code
+     * @return CompilationUnit representing the Java source code
+     * @throws ParseException if the source code has parser errors
+     */
+    public static CompilationUnit parse(String code) throws ParseException {
+        return parse(code, true);
+    }
+
+    /**
      * Parses the Java block contained in a {@link String} and returns a
      * {@link BlockStmt} that represents it.
      *
@@ -302,5 +322,4 @@ public final class JavaParser {
     public static BodyDeclaration parseInterfaceBodyDeclaration(String body) throws ParseException {
         return new InstanceJavaParser(body).parseInterfaceBodyDeclaration();
     }
-
 }

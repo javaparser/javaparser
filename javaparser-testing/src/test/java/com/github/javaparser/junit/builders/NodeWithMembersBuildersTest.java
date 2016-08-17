@@ -84,6 +84,18 @@ public class NodeWithMembersBuildersTest {
 	}
 
 	@Test
+	public void testGetMethods() {
+		MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
+		MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
+
+		List<MethodDeclaration> methods = classDeclaration.getMethods();
+
+		assertEquals(2, methods.size());
+		assertTrue(methods.contains(addMethod));
+		assertTrue(methods.contains(addMethod2));
+	}
+
+	@Test
 	public void testGetMethodsWithParameterTypes() {
 		classDeclaration.addMethod("foo", Modifier.PUBLIC);
 		MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
@@ -109,5 +121,16 @@ public class NodeWithMembersBuildersTest {
 		classDeclaration.addField(float.class, "secondField", Modifier.PRIVATE);
 		FieldDeclaration fieldByName = classDeclaration.getFieldByName("fieldName");
 		assertEquals(addField, fieldByName);
+	}
+
+	@Test
+	public void testGetFields() {
+		FieldDeclaration firstField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
+		FieldDeclaration secondField = classDeclaration.addField(float.class, "secondField", Modifier.PRIVATE);
+
+		List<FieldDeclaration> fields = classDeclaration.getFields();
+
+		assertTrue(fields.contains(firstField));
+		assertTrue(fields.contains(secondField));
 	}
 }
