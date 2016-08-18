@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,15 +22,15 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.*;
 
 /**
  * A node having members.
- * 
+ *
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getMembers
  * method.
- * 
- * 
+ *
  */
 public interface NodeWithMembers<T> {
     List<BodyDeclaration<?>> getMembers();
@@ -38,7 +39,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Add a field to this and automatically add the import of the type if needed
-     * 
+     *
      * @param typeClass the type of the field
      * @param name the name of the field
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
@@ -51,7 +52,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Add a field to this
-     * 
+     *
      * @param type the type of the field
      * @param name the name of the field
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
@@ -63,7 +64,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Add a field to this
-     * 
+     *
      * @param type the type of the field
      * @param name the name of the field
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
@@ -82,7 +83,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Add a private field to this
-     * 
+     *
      * @param typeClass the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created
@@ -94,7 +95,7 @@ public interface NodeWithMembers<T> {
     /**
      * Add a private field to this and automatically add the import of the type if
      * needed
-     * 
+     *
      * @param type the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created
@@ -105,7 +106,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Add a public field to this
-     * 
+     *
      * @param typeClass the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created
@@ -117,7 +118,7 @@ public interface NodeWithMembers<T> {
     /**
      * Add a public field to this and automatically add the import of the type if
      * needed
-     * 
+     *
      * @param type the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created
@@ -128,7 +129,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Add a protected field to this
-     * 
+     *
      * @param typeClass the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created
@@ -140,7 +141,7 @@ public interface NodeWithMembers<T> {
     /**
      * Add a protected field to this and automatically add the import of the type
      * if needed
-     * 
+     *
      * @param type the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created
@@ -151,7 +152,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Adds a methods with void return by default to this
-     * 
+     *
      * @param methodName the method name
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
@@ -169,7 +170,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Adds a constructor to this
-     * 
+     *
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
@@ -212,20 +213,20 @@ public interface NodeWithMembers<T> {
     }
 
     /**
-     * Get all methods
+     * Find all methods in the members of this node.
      *
-     * @return the methods found
+     * @return the methods found. This list is immutable.
      */
     default List<MethodDeclaration> getMethods() {
-        return getMembers().stream()
+        return unmodifiableList(getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration)
                 .map(m -> (MethodDeclaration) m)
-                .collect(toList());
+                .collect(toList()));
     }
 
     /**
      * Try to find a {@link MethodDeclaration} by its parameters types
-     * 
+     *
      * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
      *            void foo(Map&lt;Integer,String&gt; myMap,int number)
      * @return the methods found (multiple in case of polymorphism)
@@ -240,7 +241,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Try to find a {@link MethodDeclaration} by its parameters types
-     * 
+     *
      * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
      *            void foo(Map&lt;Integer,String&gt; myMap,int number)
      * @return the methods found (multiple in case of polymorphism)
@@ -268,14 +269,14 @@ public interface NodeWithMembers<T> {
     }
 
     /**
-     * Get all fields
+	 * Find all fields in the members of this node.
      *
-     * @return null if not found, the FieldDeclaration otherwise
+	 * @return the fields found. This list is immutable.
      */
     default List<FieldDeclaration> getFields() {
-        return getMembers().stream()
+        return unmodifiableList(getMembers().stream()
                 .filter(m -> m instanceof FieldDeclaration )
                 .map(m -> (FieldDeclaration) m)
-                .collect(toList());
+                .collect(toList()));
     }
 }
