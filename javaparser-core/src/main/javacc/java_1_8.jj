@@ -152,6 +152,10 @@ final class ASTParser {
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
 	        ret.setEnd(lambdaBody.getEnd());
+        } else if (ret instanceof CastExpr) {
+            CastExpr castExpr = (CastExpr)ret;
+            Expression inner = generateLambda(castExpr.getExpr(), lambdaBody);
+            castExpr.setExpr(inner);
 	    } else {
 	        throw new ParseException("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
 	    }
@@ -2091,8 +2095,7 @@ Expression Expression():
    {
      if (ret instanceof CastExpr)
      {
-       inner = generateLambda(((CastExpr)ret).getExpr(), lambdaBody);
-       ((CastExpr)ret).setExpr(inner);
+       ret = generateLambda(ret, lambdaBody);
      }
      else if (ret instanceof ConditionalExpr){
      	 ConditionalExpr ce = (ConditionalExpr) ret;
@@ -2933,15 +2936,7 @@ ExpressionStmt StatementExpression():
 	 |
 	   "->" lambdaBody = LambdaBody()
 	   {
-	     if (expr instanceof CastExpr)
-	     {
-           inner = generateLambda(((CastExpr)expr).getExpr(), lambdaBody);
-           ((CastExpr)expr).setExpr(inner);
-	     }
-	     else
-	     {
-	       expr = generateLambda(expr, lambdaBody);
-	     }
+            expr = generateLambda(expr, lambdaBody);
 	   }
 	  ]
   )

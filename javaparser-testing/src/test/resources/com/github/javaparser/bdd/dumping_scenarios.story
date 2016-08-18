@@ -167,8 +167,8 @@ Given the class:
 class A {
     public void a() {
         try {
-        } catch (IndexOutOfBoundException | IOException e) { 
-        } 
+        } catch (IndexOutOfBoundException | IOException e) {
+        }
     }
 }
 When the class is parsed by the Java parser
@@ -268,5 +268,36 @@ public class Example {
 
     public Example(String arg) {
         mString = arg;
+    }
+}
+
+Scenario: various lamba casts (issue 418)
+Given the class:
+public class TestLambda {
+    void okMethod() {
+        return (ITF) () -> {
+            return true;
+        };
+    }
+    void faliingMethod() {
+        testThis(check ? null : (ITF) () -> {
+            return true;
+        });
+    }
+}
+When the class body declaration is parsed by the Java parser
+Then it is dumped to:
+public class TestLambda {
+
+    void okMethod() {
+        return (ITF) () -> {
+            return true;
+        };
+    }
+
+    void faliingMethod() {
+        testThis(check ? null : (ITF) () -> {
+            return true;
+        });
     }
 }
