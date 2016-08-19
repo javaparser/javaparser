@@ -62,27 +62,6 @@ public final class ASTHelper {
     }
 
     /**
-     * Adds the given type declaration to the compilation unit. The list of
-     * types will be initialized if it is <code>null</code>.
-     * 
-     * @param cu
-     *            compilation unit
-     * @param type
-     *            type declaration
-     * @deprecated use {@link CompilationUnit#addClass(String)} kind of methods
-     */
-    @Deprecated
-    public static void addTypeDeclaration(CompilationUnit cu, TypeDeclaration<?> type) {
-        List<TypeDeclaration<?>> types = cu.getTypes();
-        if (isNullOrEmpty(types)) {
-            types = new ArrayList<>();
-            cu.setTypes(types);
-        }
-        types.add(type);
-        type.setParentNode(cu);
-    }
-
-    /**
      * Creates a new {@link ReferenceType} for a class or interface.
      * 
      * @param name
