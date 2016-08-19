@@ -138,14 +138,14 @@ final class ASTParser {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
 	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), 0);
-	       	    List params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
+	       	    List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
 	        } else {
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
 		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), 0);
-	        List params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
+	        List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
 	        ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
@@ -1195,9 +1195,9 @@ TOKEN :
 CompilationUnit CompilationUnit():
 {
 	PackageDeclaration pakage = null;
-	List imports = null;
+	List<ImportDeclaration> imports = null;
 	ImportDeclaration in = null;
-	List types = null;
+	List<TypeDeclaration<?>> types = null;
 	TypeDeclaration tn = null;
 	int line = -1;
 	int column = 0;
@@ -1223,7 +1223,7 @@ ImportDeclaration EmptyImportDeclaration():
 
 PackageDeclaration PackageDeclaration():
 {
-	List annotations = null;
+	List<AnnotationExpr> annotations = null;
 	AnnotationExpr ann;
 	NameExpr name;
 	int line;
@@ -1232,7 +1232,7 @@ PackageDeclaration PackageDeclaration():
 {
 ( ann = Annotation() { annotations = add(annotations, ann); } )*
   "package" {line=token.beginLine; column=token.beginColumn;}  name = Name() ";"
-  { return new PackageDeclaration(range(line, column, token.endLine, token.endColumn),annotations, name); }
+  { return new PackageDeclaration(range(line, column, token.endLine, token.endColumn), annotations, name); }
 }
 
 ImportDeclaration ImportDeclaration():
@@ -1259,7 +1259,7 @@ ModifierHolder Modifiers():
     int beginLine = -1;
     int beginColumn = -1;
     EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
-    List annotations = null;
+    List<AnnotationExpr> annotations = null;
     AnnotationExpr ann;
 }
 {
@@ -1327,10 +1327,10 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
 {
    boolean isInterface = false;
    NameExpr name;
-   List typePar = null;
-   List extList = null;
-   List impList = null;
-   List members;
+   List<TypeParameter> typePar = null;
+   List<ClassOrInterfaceType> extList = null;
+   List<ClassOrInterfaceType> impList = null;
+   List<BodyDeclaration<?>> members;
    int line = modifier.begin.line;
    int column = modifier.begin.column;
 }
@@ -1348,13 +1348,13 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
   }
 }
 
-List ExtendsList(boolean isInterface):
+List<ClassOrInterfaceType> ExtendsList(boolean isInterface):
 {
    boolean extendsMoreThanOne = false;
-   List ret = new LinkedList();
+   List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
-    AnnotationExpr ann;
-   List annotations = null;
+   AnnotationExpr ann;
+   List<AnnotationExpr> annotations = null;
 }
 {
    "extends" (ann = Annotation()   { annotations = add(annotations, ann);})* cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); }
@@ -1366,9 +1366,9 @@ List ExtendsList(boolean isInterface):
    { return ret; }
 }
 
-List ImplementsList(boolean isInterface):
+List<ClassOrInterfaceType> ImplementsList(boolean isInterface):
 {
-   List ret = new LinkedList();
+   List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
 }
 {
@@ -1384,11 +1384,11 @@ List ImplementsList(boolean isInterface):
 EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 {
 	NameExpr name;
-	List impList = null;
+	List<ClassOrInterfaceType> impList = null;
 	EnumConstantDeclaration entry;
-	List entries = null;
-	BodyDeclaration member;
-	List members = null;
+	List<EnumConstantDeclaration> entries = null;
+	BodyDeclaration<?> member;
+	List<BodyDeclaration<?>> members = null;
 	int line = modifier.begin.line;
 	int column = modifier.begin.column;
 }
@@ -1417,11 +1417,11 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 
 EnumConstantDeclaration EnumConstantDeclaration():
 {
-	List annotations = null;
+	List<AnnotationExpr> annotations = null;
 	AnnotationExpr ann;
 	String name;
-	List args = null;
-	List classBody = null;
+	List<Expression> args = null;
+	List<BodyDeclaration<?>> classBody = null;
 	int line = -1;
 	int column = -1;
        
@@ -1432,21 +1432,19 @@ EnumConstantDeclaration EnumConstantDeclaration():
   <IDENTIFIER> { name = token.image; if(line==-1){line=token.beginLine; column=token.beginColumn;} } 
   [ args = Arguments() ] [ classBody = ClassOrInterfaceBody(false) ]
   { 
-      EnumConstantDeclaration tmp = new EnumConstantDeclaration(range(line, column, token.endLine, token.endColumn), annotations, name, args, classBody);  
-       
-      return tmp;
+      return new EnumConstantDeclaration(range(line, column, token.endLine, token.endColumn), annotations, name, args, classBody);  
   }
 }
 
-List TypeParameters():
+List<TypeParameter> TypeParameters():
 {
-	List ret = new LinkedList();
+	List<TypeParameter> ret = new LinkedList<TypeParameter>();
 	TypeParameter tp;
-	List annotations = null;
+	List<AnnotationExpr> annotations = null;
 	AnnotationExpr ann;
 }
 {
-   "<" { ret.add(new int[]{token.beginLine, token.beginColumn}); }
+   "<" { }
    (ann = Annotation()   { annotations = add(annotations, ann);})*
 
    tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; }
@@ -1458,7 +1456,7 @@ List TypeParameters():
 TypeParameter TypeParameter():
 {
 	String name;
-	List typeBound = null;
+	List<ClassOrInterfaceType> typeBound = null;
 	int line;
 	int column;
 }
@@ -1480,9 +1478,9 @@ List TypeBound():
    { return ret; }
 }
 
-List ClassOrInterfaceBody(boolean isInterface):
+List<BodyDeclaration<?>> ClassOrInterfaceBody(boolean isInterface):
 {
-	List ret = new LinkedList();
+	List<BodyDeclaration<?>> ret = new LinkedList<BodyDeclaration<?>>();
 	BodyDeclaration member;
 }
 {
@@ -1490,12 +1488,12 @@ List ClassOrInterfaceBody(boolean isInterface):
   { return ret; }
 }
 
-BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
+BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 {
    ModifierHolder modifier;
    ModifierHolder modifier2 = null;
    EnumSet<Modifier> aux = null;
-   BodyDeclaration ret;
+   BodyDeclaration<?> ret;
    boolean isDefault = false;
 }
 {
@@ -2616,7 +2614,7 @@ List<Expression> Arguments():
 
 List<Expression> ArgumentList():
 {
-	List<Expression> ret = new LinkedList();
+	List<Expression> ret = new LinkedList<Expression>();
 	Expression expr;
 }
 {
