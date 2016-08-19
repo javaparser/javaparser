@@ -93,6 +93,41 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         setVariables(variables);
     }
 
+    /**
+     * Creates a {@link FieldDeclaration}.
+     *
+     * @param modifiers
+     *            modifiers
+     * @param type
+     *            type
+     * @param variable
+     *            variable declarator
+     * @return instance of {@link FieldDeclaration}
+     */
+    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type,
+                                                          VariableDeclarator variable) {
+        List<VariableDeclarator> variables = new ArrayList<>();
+        variables.add(variable);
+        return new FieldDeclaration(modifiers, type, variables);
+    }
+
+    /**
+     * Creates a {@link FieldDeclaration}.
+     *
+     * @param modifiers
+     *            modifiers
+     * @param type
+     *            type
+     * @param name
+     *            field name
+     * @return instance of {@link FieldDeclaration}
+     */
+    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type, String name) {
+        VariableDeclaratorId id = new VariableDeclaratorId(name);
+        VariableDeclarator variable = new VariableDeclarator(id);
+        return create(modifiers, type, variable);
+    }
+
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);

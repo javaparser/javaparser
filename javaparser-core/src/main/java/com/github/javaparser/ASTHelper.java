@@ -62,56 +62,6 @@ public final class ASTHelper {
     }
 
     /**
-     * Creates a {@link FieldDeclaration}.
-     * 
-     * @param modifiers
-     *            modifiers
-     * @param type
-     *            type
-     * @param variable
-     *            variable declarator
-     * @return instance of {@link FieldDeclaration}
-     */
-    public static FieldDeclaration createFieldDeclaration(EnumSet<Modifier> modifiers, Type type,
-                                                          VariableDeclarator variable) {
-        List<VariableDeclarator> variables = new ArrayList<>();
-        variables.add(variable);
-        return new FieldDeclaration(modifiers, type, variables);
-    }
-
-    /**
-     * Creates a {@link FieldDeclaration}.
-     * 
-     * @param modifiers
-     *            modifiers
-     * @param type
-     *            type
-     * @param name
-     *            field name
-     * @return instance of {@link FieldDeclaration}
-     */
-    public static FieldDeclaration createFieldDeclaration(EnumSet<Modifier> modifiers, Type type, String name) {
-        VariableDeclaratorId id = new VariableDeclaratorId(name);
-        VariableDeclarator variable = new VariableDeclarator(id);
-        return createFieldDeclaration(modifiers, type, variable);
-    }
-
-    /**
-     * Creates a {@link VariableDeclarationExpr}.
-     * 
-     * @param type
-     *            type
-     * @param name
-     *            name
-     * @return instance of {@link VariableDeclarationExpr}
-     */
-    public static VariableDeclarationExpr createVariableDeclarationExpr(Type type, String name) {
-        List<VariableDeclarator> vars = new ArrayList<>();
-        vars.add(new VariableDeclarator(new VariableDeclaratorId(name)));
-        return new VariableDeclarationExpr(type, vars);
-    }
-
-    /**
      * Adds the given argument to the method call. The list of arguments will be
      * initialized if it is <code>null</code>.
      * 

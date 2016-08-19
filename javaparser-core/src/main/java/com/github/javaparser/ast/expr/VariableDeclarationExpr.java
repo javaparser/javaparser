@@ -23,12 +23,14 @@ package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -75,6 +77,17 @@ public final class VariableDeclarationExpr extends Expression
 		setAnnotations(annotations);
 		setType(type);
 		setVars(vars);
+	}
+
+	/**
+	 * Creates a {@link VariableDeclarationExpr}.
+	 *
+	 * @return instance of {@link VariableDeclarationExpr}
+	 */
+	public static VariableDeclarationExpr create(Type type, String name) {
+		List<VariableDeclarator> vars = new ArrayList<>();
+		vars.add(new VariableDeclarator(new VariableDeclaratorId(name)));
+		return new VariableDeclarationExpr(type, vars);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
