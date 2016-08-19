@@ -62,25 +62,6 @@ public final class ASTHelper {
     }
 
     /**
-     * Adds the given argument to the method call. The list of arguments will be
-     * initialized if it is <code>null</code>.
-     * 
-     * @param call
-     *            method call
-     * @param arg
-     *            argument value
-     */
-    public static void addArgument(MethodCallExpr call, Expression arg) {
-        List<Expression> args = call.getArgs();
-        if (isNullOrEmpty(args)) {
-            args = new ArrayList<>();
-            call.setArgs(args);
-        }
-        args.add(arg);
-        arg.setParentNode(call);
-    }
-
-    /**
      * Adds the given type declaration to the compilation unit. The list of
      * types will be initialized if it is <code>null</code>.
      * 

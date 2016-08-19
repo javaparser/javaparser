@@ -26,6 +26,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.utils.Utils.*;
@@ -63,6 +64,24 @@ public final class MethodCallExpr extends Expression {
 		setTypeArgs(typeArgs);
 		setName(name);
 		setArgs(args);
+	}
+
+
+	/**
+	 * Adds the given argument to the method call. The list of arguments will be
+	 * initialized if it is <code>null</code>.
+	 *
+	 * @param arg
+	 *            argument value
+	 */
+	public void addArgument(Expression arg) {
+		List<Expression> args = getArgs();
+		if (isNullOrEmpty(args)) {
+			args = new ArrayList<>();
+			setArgs(args);
+		}
+		args.add(arg);
+		arg.setParentNode(this);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
