@@ -21,7 +21,7 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.EnumSet;
 import java.util.List;

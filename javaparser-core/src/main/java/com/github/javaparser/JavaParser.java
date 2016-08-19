@@ -39,6 +39,8 @@ import com.github.javaparser.ast.stmt.Statement;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.readerToString;
+
 /**
  * Parse Java source code and creates Abstract Syntax Tree classes.
  *
@@ -167,7 +169,7 @@ public final class JavaParser {
     public static CompilationUnit parse(final Reader reader, boolean considerComments)
             throws ParseException {
         try {
-            String comments = SourcesHelper.readerToString(reader);
+            String comments = readerToString(reader);
             CompilationUnit cu = new InstanceJavaParser(comments).parse();
             if (considerComments){
                 commentsInserter.insertComments(cu, comments);

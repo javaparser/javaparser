@@ -21,7 +21,7 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 

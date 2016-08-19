@@ -21,7 +21,7 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.ASTHelper;
-import com.github.javaparser.ClassUtils;
+import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;

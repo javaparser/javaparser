@@ -21,7 +21,7 @@
  
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
