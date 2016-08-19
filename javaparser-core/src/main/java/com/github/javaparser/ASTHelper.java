@@ -62,19 +62,6 @@ public final class ASTHelper {
     }
 
     /**
-     * Creates a new {@link Parameter}.
-     * 
-     * @param type
-     *            type of the parameter
-     * @param name
-     *            name of the parameter
-     * @return instance of {@link Parameter}
-     */
-    public static Parameter createParameter(Type type, String name) {
-        return new Parameter(type, new VariableDeclaratorId(name));
-    }
-
-    /**
      * Creates a {@link FieldDeclaration}.
      * 
      * @param modifiers
