@@ -74,19 +74,15 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     /**
      * adds a pair to this annotation
      * 
-     * @param key
-     * @param value
      * @return this, the {@link NormalAnnotationExpr}
      */
     public NormalAnnotationExpr addPair(String key, String value) {
-        return addPair(key, ASTHelper.createNameExpr(value));
+        return addPair(key, NameExpr.create(value));
     }
 
     /**
      * adds a pair to this annotation
      * 
-     * @param key
-     * @param value
      * @return this, the {@link NormalAnnotationExpr}
      */
     public NormalAnnotationExpr addPair(String key, NameExpr value) {

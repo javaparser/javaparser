@@ -64,4 +64,22 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
         return this;
 	}
 
+
+	/**
+	 * Creates a new {@link NameExpr} from a qualified name.<br>
+	 * The qualified name can contains "." (dot) characters.
+	 *
+	 * @param qualifiedName
+	 *            qualified name
+	 * @return instanceof {@link NameExpr}
+	 */
+	public static NameExpr create(String qualifiedName) {
+		String[] split = qualifiedName.split("\\.");
+		NameExpr ret = new NameExpr(split[0]);
+		for (int i = 1; i < split.length; i++) {
+			ret = new QualifiedNameExpr(ret, split[i]);
+		}
+		return ret;
+	}
+
 }

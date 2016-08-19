@@ -26,10 +26,7 @@ import java.util.List;
 
 import com.github.javaparser.ASTHelper;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.expr.*;
 
 /**
  * An element which can be the target of annotations.
@@ -50,7 +47,7 @@ public interface NodeWithAnnotations<T> {
      */
     public default NormalAnnotationExpr addAnnotation(String name) {
         NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                ASTHelper.createNameExpr(name), null);
+                NameExpr.create(name), null);
         getAnnotations().add(normalAnnotationExpr);
         normalAnnotationExpr.setParentNode((Node) this);
         return normalAnnotationExpr;
@@ -76,7 +73,7 @@ public interface NodeWithAnnotations<T> {
     @SuppressWarnings("unchecked")
     public default T addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                ASTHelper.createNameExpr(name));
+                NameExpr.create(name));
         getAnnotations().add(markerAnnotationExpr);
         markerAnnotationExpr.setParentNode((Node) this);
         return (T) this;
@@ -102,7 +99,7 @@ public interface NodeWithAnnotations<T> {
     @SuppressWarnings("unchecked")
     public default T addSingleMemberAnnotation(String name, String value) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                ASTHelper.createNameExpr(name), ASTHelper.createNameExpr(value));
+                NameExpr.create(name), NameExpr.create(value));
         getAnnotations().add(singleMemberAnnotationExpr);
         singleMemberAnnotationExpr.setParentNode((Node) this);
         return (T) this;

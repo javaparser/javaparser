@@ -177,7 +177,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         getter.setType(getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
-        blockStmt.addStatement(new ReturnStmt(ASTHelper.createNameExpr(fieldName)));
+        blockStmt.addStatement(new ReturnStmt(NameExpr.create(fieldName)));
         return getter;
     }
 
