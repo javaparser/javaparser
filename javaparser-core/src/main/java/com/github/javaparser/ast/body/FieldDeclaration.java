@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -245,8 +244,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
-        ASTHelper.addStmt(blockStmt2,
-                new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
+        blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
         return setter;
     }
 

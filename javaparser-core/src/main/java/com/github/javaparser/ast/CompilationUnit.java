@@ -28,7 +28,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.Range;

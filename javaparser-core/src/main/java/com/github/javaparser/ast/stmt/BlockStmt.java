@@ -26,6 +26,7 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -48,7 +49,7 @@ public final class BlockStmt extends Statement {
 		super(range);
 		setStmts(stmts);
 	}
-
+	
 	@Override
 	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
@@ -75,8 +76,14 @@ public final class BlockStmt extends Statement {
         statement.setParentNode(this);
         return this;
     }
+	
     public BlockStmt addStatement(String statement) {
         return addStatement(new ExpressionStmt(new NameExpr(statement)));
     }
+
+	public BlockStmt addStatement(Expression expr) {
+		return addStatement(new ExpressionStmt(expr));
+	}
+
 
 }

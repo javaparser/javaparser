@@ -24,7 +24,6 @@ package com.github.javaparser.ast.nodeTypes;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 

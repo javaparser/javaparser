@@ -25,7 +25,6 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;

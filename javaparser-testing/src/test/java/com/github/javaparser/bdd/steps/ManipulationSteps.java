@@ -21,7 +21,6 @@
  
 package com.github.javaparser.bdd.steps;
 
-import static com.github.javaparser.ASTHelper.*;
 import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,6 +33,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import com.github.javaparser.ast.type.ReferenceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -152,7 +152,7 @@ public class ManipulationSteps {
 		MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), methodName);
 		modifiers.add(Modifier.STATIC);
 		method.setModifiers(modifiers);
-        addMember(type, method);
+        type.addMember(method);
         state.put("cu1", compilationUnit);
     }
 
@@ -160,7 +160,7 @@ public class ManipulationSteps {
     public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter param = Parameter.create(createReferenceType(typeName, 0), parameterName);
+        Parameter param = Parameter.create(ReferenceType.create(typeName, 0), parameterName);
         param.setVarArgs(true);
         method.addParameter(param);
     }
@@ -180,8 +180,8 @@ public class ManipulationSteps {
         NameExpr clazz = new NameExpr(className);
         FieldAccessExpr field = new FieldAccessExpr(clazz, fieldName);
         MethodCallExpr call = new MethodCallExpr(field, methodName);
-        addArgument(call, new StringLiteralExpr(stringValue));
-        addStmt(method.getBody(), call);
+        call.addArgument(new StringLiteralExpr(stringValue));
+        method.getBody().addStatement(call);
     }
 
     @When("method $methodPosition in class $classPosition has it's name converted to uppercase")

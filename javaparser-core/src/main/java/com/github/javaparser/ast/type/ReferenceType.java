@@ -77,6 +77,32 @@ public final class ReferenceType extends Type implements NodeWithType<ReferenceT
         this.arraysAnnotations = arraysAnnotations;
     }
 
+	/**
+	 * Creates a new {@link ReferenceType} for a class or interface.
+	 *
+	 * @param name
+	 *            name of the class or interface
+	 * @param arrayCount
+	 *            number of arrays or <code>0</code> if is not a array.
+	 * @return instanceof {@link ReferenceType}
+	 */
+	public static ReferenceType create(String name, int arrayCount) {
+		return new ReferenceType(new ClassOrInterfaceType(name), arrayCount);
+	}
+
+	/**
+	 * Creates a new {@link ReferenceType} for the given primitive type.
+	 *
+	 * @param type
+	 *            primitive type
+	 * @param arrayCount
+	 *            number of arrays or <code>0</code> if is not a array.
+	 * @return instanceof {@link ReferenceType}
+	 */
+	public static ReferenceType create(PrimitiveType type, int arrayCount) {
+		return new ReferenceType(type, arrayCount);
+	}
+	
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}

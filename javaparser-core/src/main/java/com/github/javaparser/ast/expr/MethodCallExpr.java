@@ -74,7 +74,7 @@ public final class MethodCallExpr extends Expression {
 	 * @param arg
 	 *            argument value
 	 */
-	public void addArgument(Expression arg) {
+	public MethodCallExpr addArgument(Expression arg) {
 		List<Expression> args = getArgs();
 		if (isNullOrEmpty(args)) {
 			args = new ArrayList<>();
@@ -82,6 +82,7 @@ public final class MethodCallExpr extends Expression {
 		}
 		args.add(arg);
 		arg.setParentNode(this);
+		return this;
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
