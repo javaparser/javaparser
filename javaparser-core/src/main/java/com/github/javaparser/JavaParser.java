@@ -168,7 +168,7 @@ public final class JavaParser {
             throws ParseException {
         try {
             String comments = SourcesHelper.readerToString(reader);
-            CompilationUnit cu = new InstanceJavaParser(comments).parse();
+            CompilationUnit cu = new InstanceJavaParser().setSource(comments).parse();
             if (considerComments){
                 commentsInserter.insertComments(cu, comments);
             }
@@ -190,7 +190,7 @@ public final class JavaParser {
      */
     public static BlockStmt parseBlock(final String blockStatement)
             throws ParseException {
-        return new InstanceJavaParser(blockStatement).parseBlock();
+        return new InstanceJavaParser().setSource(blockStatement).parseBlock();
     }
 
     /**
@@ -204,7 +204,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static Statement parseStatement(final String statement) throws ParseException {
-        return new InstanceJavaParser(statement).parseStatement();
+        return new InstanceJavaParser().setSource(statement).parseStatement();
     }
 
     /**
@@ -218,7 +218,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static List<Statement> parseStatements(final String statements) throws ParseException {
-        return new InstanceJavaParser(statements).parseStatements();
+        return new InstanceJavaParser().setSource(statements).parseStatements();
     }
 
     /**
@@ -232,7 +232,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static ImportDeclaration parseImport(final String importDeclaration) throws ParseException {
-        return new InstanceJavaParser(importDeclaration).parseImport();
+        return new InstanceJavaParser().setSource(importDeclaration).parseImport();
     }
 
     /**
@@ -246,7 +246,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static Expression parseExpression(final String expression) throws ParseException {
-        return new InstanceJavaParser(expression).parseExpression();
+        return new InstanceJavaParser().setSource(expression).parseExpression();
     }
 
     /**
@@ -260,7 +260,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static AnnotationExpr parseAnnotation(final String annotation) throws ParseException {
-        return new InstanceJavaParser(annotation).parseAnnotation();
+        return new InstanceJavaParser().setSource(annotation).parseAnnotation();
     }
 
     /**
@@ -274,7 +274,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static BodyDeclaration<?> parseBodyDeclaration(final String body) throws ParseException {
-        return new InstanceJavaParser(body).parseBodyDeclaration();
+        return new InstanceJavaParser().setSource(body).parseBodyDeclaration();
     }
 
     /**
@@ -287,7 +287,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static BodyDeclaration<?> parseClassBodyDeclaration(String body) throws ParseException {
-        return new InstanceJavaParser(body).parseClassBodyDeclaration();
+        return new InstanceJavaParser().setSource(body).parseClassBodyDeclaration();
     }
 
     /**
@@ -300,7 +300,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static BodyDeclaration parseInterfaceBodyDeclaration(String body) throws ParseException {
-        return new InstanceJavaParser(body).parseInterfaceBodyDeclaration();
+        return new InstanceJavaParser().setSource(body).parseInterfaceBodyDeclaration();
     }
 
 }

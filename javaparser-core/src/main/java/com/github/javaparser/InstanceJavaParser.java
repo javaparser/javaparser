@@ -20,15 +20,6 @@
 
 package com.github.javaparser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.nio.charset.Charset;
-import java.util.List;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -37,42 +28,55 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.List;
+
 /**
  * A thin wrapper around ASTParser with a few convenience methods for parsing CompilationUnits, Blocks, Statements, etc.
  * 
  * @author Sebastian Kuerten
  */
 public class InstanceJavaParser {
-    private final ASTParser astParser;
-    private final Provider provider;
+    private ASTParser astParser = null;
+    private Provider provider = null;
 
-    public InstanceJavaParser(Provider provider) {
+    public InstanceJavaParser() {
+        // No specific constructors for this class.
+    }
+
+    public InstanceJavaParser setSource(Provider provider) {
         this.provider=provider;
-        astParser = new ASTParser(provider);
+        if(astParser==null) {
+            astParser = new ASTParser(provider);
+        }else{
+            astParser.ReInit(provider);
+        }
+        return this;
     }
 
-    public InstanceJavaParser(Reader reader) {
-        this(new StreamProvider(reader));
+    public InstanceJavaParser setSource(Reader reader) {
+        return setSource(new StreamProvider(reader));
     }
 
-    public InstanceJavaParser(InputStream input) throws IOException {
-        this(new StreamProvider(input));
+    public InstanceJavaParser setSource(InputStream input) throws IOException {
+        return setSource(new StreamProvider(input));
     }
 
-    public InstanceJavaParser(InputStream input, Charset encoding) throws IOException {
-        this(new StreamProvider(input, encoding.name()));
+    public InstanceJavaParser setSource(InputStream input, Charset encoding) throws IOException {
+        return setSource(new StreamProvider(input, encoding.name()));
     }
 
-    public InstanceJavaParser(File file) throws IOException {
-        this(new FileInputStream(file));
+    public InstanceJavaParser setSource(File file) throws IOException {
+        return setSource(new FileInputStream(file));
     }
 
-    public InstanceJavaParser(File file, Charset encoding) throws IOException {
-        this(new FileInputStream(file), encoding);
+    public InstanceJavaParser setSource(File file, Charset encoding) throws IOException {
+        return setSource(new FileInputStream(file), encoding);
     }
     
-    public InstanceJavaParser(String source) {
-        this(new StringReader(source));
+    public InstanceJavaParser setSource(String source) {
+        return setSource(new StringReader(source));
     }
 
     /**
@@ -82,7 +86,14 @@ public class InstanceJavaParser {
      * @return a list of tokens
      */
     public List<Token> getTokens() {
+        checkSourceSet();
         return astParser.getTokens();
+    }
+
+    private void checkSourceSet() {
+        if (astParser == null || provider == null) {
+            throw new IllegalStateException("Please setSource() before doing any parsing.");
+        }
     }
 
     /**
@@ -95,6 +106,7 @@ public class InstanceJavaParser {
      */
     public CompilationUnit parse() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.CompilationUnit();
         } finally {
             closeProvider();
@@ -103,6 +115,7 @@ public class InstanceJavaParser {
 
     private void closeProvider() {
         try {
+            checkSourceSet();
             provider.close();
         } catch (IOException e) {
             // Since we're done parsing and have our result, we don't care about any errors.
@@ -118,6 +131,7 @@ public class InstanceJavaParser {
      */
     public BlockStmt parseBlock() throws ParseException {
         try{
+            checkSourceSet();
             return astParser.Block();
         } finally {
             closeProvider();
@@ -134,6 +148,7 @@ public class InstanceJavaParser {
      */
     public List<Statement> parseStatements() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.Statements();
         } finally {
             closeProvider();
@@ -150,6 +165,7 @@ public class InstanceJavaParser {
      */
     public Statement parseStatement() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.Statement();
         } finally {
             closeProvider();
@@ -166,6 +182,7 @@ public class InstanceJavaParser {
      */
     public ImportDeclaration parseImport() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.ImportDeclaration();
         } finally {
             closeProvider();
@@ -182,6 +199,7 @@ public class InstanceJavaParser {
      */
     public Expression parseExpression() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.Expression();
         } finally {
             closeProvider();
@@ -198,6 +216,7 @@ public class InstanceJavaParser {
      */
     public AnnotationExpr parseAnnotation() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.Annotation();
         } finally {
             closeProvider();
@@ -214,6 +233,7 @@ public class InstanceJavaParser {
      */
     public BodyDeclaration<?> parseBodyDeclaration() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.AnnotationBodyDeclaration();
         } finally {
             closeProvider();
@@ -230,6 +250,7 @@ public class InstanceJavaParser {
      */
     public BodyDeclaration<?> parseClassBodyDeclaration() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.ClassOrInterfaceBodyDeclaration(false);
         } finally {
             closeProvider();
@@ -246,6 +267,7 @@ public class InstanceJavaParser {
      */
     public BodyDeclaration<?> parseInterfaceBodyDeclaration() throws ParseException {
         try {
+            checkSourceSet();
             return astParser.ClassOrInterfaceBodyDeclaration(true);
         } finally {
             closeProvider();
