@@ -21,6 +21,8 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.type.VoidType.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -168,9 +171,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         if (parentClass != null)
-            getter = parentClass.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
+            getter = parentClass.addMethod("get" + fieldNameUpper, PUBLIC);
         else
-            getter = parentEnum.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
+            getter = parentEnum.addMethod("get" + fieldNameUpper, PUBLIC);
         getter.setType(getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -200,10 +203,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
         final MethodDeclaration setter;
         if (parentClass != null)
-            setter = parentClass.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
+            setter = parentClass.addMethod("set" + fieldNameUpper, PUBLIC);
         else
-            setter = parentEnum.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
-        setter.setType(ASTHelper.VOID_TYPE);
+            setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
+        setter.setType(VOID_TYPE);
         setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);

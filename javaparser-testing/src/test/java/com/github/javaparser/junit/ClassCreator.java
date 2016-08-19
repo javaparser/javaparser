@@ -15,6 +15,8 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 
+import static com.github.javaparser.ast.type.VoidType.*;
+
 public class ClassCreator {
 
     public static void main(String[] args) throws Exception {
@@ -37,7 +39,7 @@ public class ClassCreator {
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
         // create a method
 		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
-		MethodDeclaration method = new MethodDeclaration(modifiers, ASTHelper.VOID_TYPE, "main");
+		MethodDeclaration method = new MethodDeclaration(modifiers, VOID_TYPE, "main");
 		modifiers.add(Modifier.STATIC);
 		method.setModifiers(modifiers);
         ASTHelper.addMember(type, method);
