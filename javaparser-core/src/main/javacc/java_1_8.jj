@@ -24,7 +24,6 @@ options {
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true; // Using the CommonTokenAction callback to collect tokens for later usage
-  //SUPPORT_CLASS_VISIBILITY_PUBLIC=false;
   JDK_VERSION = "1.8";
   TOKEN_FACTORY = "ASTParser.GTToken";
   JAVA_TEMPLATE_TYPE = "modern";
@@ -65,29 +64,28 @@ final class ASTParser {
         ReInit(new StreamProvider(in, encoding));
     }
 
-    private List add(List list, Object obj) {
+    private <T> List<T> add(List<T> list, T obj) {
     	if (list == null) {
-    		list = new LinkedList();
+    		list = new LinkedList<T>();
     	}
     	list.add(obj);
     	return list;
     }
 
-    private List add(int pos, List list, Object obj) {
+    private <T> List<T> add(int pos, List<T> list, T obj) {
     	if (list == null) {
-    		list = new LinkedList();
+    		list = new LinkedList<T>();
     	}
     	list.add(pos, obj);
     	return list;
     }
 
 	private class ModifierHolder {
-
 		final EnumSet<Modifier> modifiers;
-		final List annotations;
+		final List<AnnotationExpr> annotations;
 		final Position begin;
 
-		public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, List annotations) {
+		public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations) {
 			this.begin = begin;
 			this.modifiers = modifiers;
 			this.annotations = annotations;
@@ -164,7 +162,6 @@ final class ASTParser {
     }
     
     static final class GTToken extends Token {
-
         int realKind = ASTParserConstants.GT;
 
         GTToken(int kind, String image) {
@@ -176,9 +173,6 @@ final class ASTParser {
             return new GTToken(kind, image);
         }
     }
-
-    private Token last_special_token = null;
-
 }
 
 PARSER_END(ASTParser)
@@ -1498,7 +1492,6 @@ List ClassOrInterfaceBody(boolean isInterface):
 
 BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface):
 {
-   boolean isNestedInterface = false;
    ModifierHolder modifier;
    ModifierHolder modifier2 = null;
    EnumSet<Modifier> aux = null;
@@ -1744,8 +1737,6 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	int column = modifier.begin.column;
 	int bbLine = 0;
 	int bbColumn = 0;
-	int beLine = 0;
-	int beColumn = 0;
 	Type throwType;
 }
 {
@@ -2023,19 +2014,6 @@ NameExpr Name():
   { return ret; }
 }
 
-List ClassOrInterfaceTypeList():
-{
-	List ret = new LinkedList();
-	ClassOrInterfaceType type;
-	List annotations= null;
-	AnnotationExpr ann;
-}
-{
-  (ann = Annotation()   { annotations = add(annotations, ann);  })* type = ClassOrInterfaceType() { type.setAnnotations(annotations); ret.add(type); annotations=null;}  ( "," (ann = Annotation()   { annotations = add(annotations, ann);  })* type = ClassOrInterfaceType() { type.setAnnotations(annotations); ret.add(type); annotations=null;} )*
-
-  { return ret; }
-}
-
 NameExpr SimpleName():
 {
     NameExpr ret;
@@ -2044,18 +2022,6 @@ NameExpr SimpleName():
   <IDENTIFIER> { ret = new NameExpr(range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.image); }
   { return ret; }
 }
-
-List NameList():
-{
-	List ret = new LinkedList();
-	NameExpr name;
-}
-{
-  name = Name() { ret.add(name); }  ( "," name = Name() { ret.add(name); } )*
-
-  { return ret; }
-}
-
 
 /*
  * Expression syntax follows.
@@ -2077,7 +2043,6 @@ Expression Expression():
 	Expression value;
 	Statement lambdaBody = null;
 	List<Type> typeArgs = null;
-	VariableDeclaratorId id = null;
 	Expression inner = null;
 }
 {
@@ -2394,10 +2359,8 @@ Expression CastExpression():
 	int line;
 	int column;
 	AnnotationExpr ann;
-	Type st;
 	List annotations = null;
 	List typesOfMultiCast = null;
-	boolean isMulti = false;
 }
 {
   "(" {line=token.beginLine; column=token.beginColumn;}
@@ -2426,7 +2389,6 @@ Expression CastExpression():
 Expression PrimaryExpression():
 {
 	Expression ret;
-	Expression inner;
 }
 {
   ret = PrimaryPrefix() ( LOOKAHEAD(2) ret = PrimarySuffix(ret) )*
@@ -2436,7 +2398,6 @@ Expression PrimaryExpression():
 Expression PrimaryExpressionWithoutSuperSuffix():
 {
 	Expression ret;
-	Expression inner;
 }
 {
   ret = PrimaryPrefix() ( LOOKAHEAD( PrimarySuffixWithoutSuper(null) ) ret = PrimarySuffixWithoutSuper(ret) )*
@@ -2909,10 +2870,8 @@ ExpressionStmt StatementExpression():
 	Expression expr;
 	AssignExpr.Operator op;
 	Expression value;
-	Type type;
 	List<Type> typeArgs = null;
 	Statement lambdaBody = null;
-	VariableDeclaratorId id = null;
 	Expression inner = null;
 }
 {
@@ -3036,7 +2995,6 @@ DoStmt DoStatement():
 
 Statement ForStatement():
 {
-	String id = null;
 	VariableDeclarationExpr varExpr = null;
 	Expression expr = null;
 	List init = null;
@@ -3167,7 +3125,6 @@ TryStmt TryStatement():
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
 	List catchs = null;
-	Parameter except;
 	BlockStmt catchBlock;
 	ModifierHolder exceptModifier;
 	Type exceptType;
