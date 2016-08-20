@@ -1498,12 +1498,12 @@ TypeParameter TypeParameter():
    { return new TypeParameter(range(line, column, token.endLine, token.endColumn),name, typeBound); }
 }
 
-List TypeBound():
+List<ClassOrInterfaceType> TypeBound():
 {
-	List ret = new LinkedList();
+	List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
 	ClassOrInterfaceType cit;
 	AnnotationExpr ann;
-	List annotations = null;
+	List<AnnotationExpr> annotations = null;
 }
 {
    "extends" (ann = Annotation()   { annotations = add(annotations, ann);})* cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); annotations=null;}
@@ -1662,12 +1662,12 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
 	Type type;
 	NameExpr name;
-	List parameters;
+	List<Parameter> parameters;
 	int arrayCount = 0;
-	List throws_ = null;
+	List<ReferenceType> throws_ = null;
 	BlockStmt block = null;
 	Position beginPos = modifier.begin;
-	Type throwType;
+	ReferenceType throwType;
 }
 {
   // Modifiers already matched in the caller!
@@ -1686,7 +1686,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 
 ReferenceType ReferenceTypeWithAnnotations():
 {
-	List annotations = new ArrayList();
+	List<AnnotationExpr> annotations = new ArrayList();
 	AnnotationExpr annotation = null;
 	ReferenceType type;
 }
@@ -1859,8 +1859,8 @@ ReferenceType ReferenceType():
 {
 	Type type;
 	int arrayCount = 0;
-	List annotations = null;
-	List accum= null;
+	List<AnnotationExpr> annotations = null;
+	List<List<AnnotationExpr>> accum= null;
 	AnnotationExpr ann;
 }
 {
@@ -1876,8 +1876,8 @@ IntersectionType IntersectionType():
 {
 	int line;
 	int column;
-	Type elementType;
-	List elements = null;
+	ReferenceType elementType;
+	List<ReferenceType> elements = null;
 }
 {
     elementType=ReferenceType() {
@@ -1916,7 +1916,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 
 ClassOrInterfaceType ClassOrInterfaceTypeWithAnnotations():
 {
-	List annotations = new ArrayList();
+	List<AnnotationExpr> annotations = new ArrayList();
 	AnnotationExpr annotation = null;
 	ClassOrInterfaceType type;
 }
@@ -1969,7 +1969,7 @@ WildcardType Wildcard():
 	int line;
 	int column;
 	AnnotationExpr ann;
-	List annotations = null;
+	List<AnnotationExpr> annotations = null;
 }
 {
    "?" {line=token.beginLine; column=token.beginColumn;}
@@ -2382,30 +2382,31 @@ Expression PostfixExpression():
 Expression CastExpression():
 {
 	Expression ret;
-	Type type;
+	ReferenceType referenceType;
+	PrimitiveType primitiveType;
 	int line;
 	int column;
 	AnnotationExpr ann;
-	List annotations = null;
-	List typesOfMultiCast = null;
+	List<AnnotationExpr> annotations = null;
+	List<ReferenceType> typesOfMultiCast = null;
 }
 {
   "(" {line=token.beginLine; column=token.beginColumn;}
    (ann = Annotation()   { annotations = add(annotations, ann);})*
   (
   	  LOOKAHEAD(2)
-  	  type = PrimitiveType() ")" ret = UnaryExpression() { type.setAnnotations(annotations); ret = new CastExpr(range(line, column, token.endLine, token.endColumn), type, ret); }
+  	  primitiveType = PrimitiveType() ")" ret = UnaryExpression() { primitiveType.setAnnotations(annotations); ret = new CastExpr(range(line, column, token.endLine, token.endColumn), primitiveType, ret); }
   	|
-  	  type = ReferenceType() { typesOfMultiCast = add(typesOfMultiCast, type); type.setAnnotations(annotations); }
-  	  ( "&" type = ReferenceType() {
-  	    typesOfMultiCast = add(typesOfMultiCast, type);
+  	  referenceType = ReferenceType() { typesOfMultiCast = add(typesOfMultiCast, referenceType); referenceType.setAnnotations(annotations); }
+  	  ( "&" referenceType = ReferenceType() {
+  	    typesOfMultiCast = add(typesOfMultiCast, referenceType);
   	    }
   	  )*
   	  ")" ret = UnaryExpressionNotPlusMinus() {
   	    if (typesOfMultiCast.size() > 1) {
-  	        type = new IntersectionType(range(line, column, token.endLine, token.endColumn), typesOfMultiCast);
+  	        ret = new CastExpr(range(line, column, token.endLine, token.endColumn), new IntersectionType(range(line, column, token.endLine, token.endColumn), typesOfMultiCast), ret);
   	    }
-  	    ret = new CastExpr(range(line, column, token.endLine, token.endColumn), type, ret);
+  	    ret = new CastExpr(range(line, column, token.endLine, token.endColumn), referenceType, ret);
   	  }
  )
   { return ret; }
@@ -2436,7 +2437,8 @@ Expression PrimaryPrefix():
 	Expression ret = null;
 	NameExpr name;
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
-	List args = null;
+	List<Expression> args = null;
+	List<Parameter> params = null;
 	boolean hasArgs = false;
 	boolean isLambda = false;
 	Type type;
@@ -2477,8 +2479,8 @@ Expression PrimaryPrefix():
 	|
 	  "(" {line=token.beginLine; column=token.beginColumn;}
 	  	[
-	  	( LOOKAHEAD(FormalParameter()) p = FormalParameter() { isLambda = true;} [args = FormalLambdaParameters()]
-	  	| ret = Expression() [args = InferredLambdaParameters() { isLambda = true;} ]
+	  	( LOOKAHEAD(FormalParameter()) p = FormalParameter() { isLambda = true;} [params = FormalLambdaParameters()]
+	  	| ret = Expression() [params = InferredLambdaParameters() { isLambda = true;} ]
 	  	)
 	  	]
 	  	")"
@@ -2493,8 +2495,8 @@ Expression PrimaryPrefix():
 	  		  		  }
 
 	  		  		}
-	  		  		args = add(0, args, p);
-	  		  		ret = new LambdaExpr(range(p.getBegin(), pos(token.endLine, token.endColumn)), args, null, true);
+	  		  		params = add(0, params, p);
+	  		  		ret = new LambdaExpr(range(p.getBegin(), pos(token.endLine, token.endColumn)), params, null, true);
 	  		 	}
 
 	  		 }
@@ -2545,7 +2547,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 {
 	Expression ret;
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
-	List args = null;
+	List<Expression> args = null;
 	boolean hasArgs = false;
 	NameExpr name;
 }
@@ -2658,11 +2660,11 @@ Expression AllocationExpression(Expression scope):
 	Type type;
 	Object[] arr = null;
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
-	List anonymousBody = null;
-	List args;
+	List<BodyDeclaration<?>> anonymousBody = null;
+	List<Expression> args;
 	int line;
 	int column;
-	List annotations = null;
+	List<AnnotationExpr> annotations = null;
 	AnnotationExpr ann;
 }
 {
@@ -2717,10 +2719,10 @@ Object[] ArrayDimsAndInits():
 {
 	Object[] ret = new Object[3];
 	Expression expr;
-	List inits = null;
+	List<Expression> inits = null;
 	int i = 0;
-	List accum = null;
-	List annotations = null;
+	List<List<AnnotationExpr>> accum = null;
+	List<AnnotationExpr> annotations = null;
 	AnnotationExpr ann;
 }
 {
@@ -2807,7 +2809,7 @@ LabeledStmt LabeledStatement():
 
 BlockStmt Block():
 {
-	List stmts;
+	List<Statement> stmts;
 	int beginLine;
 	int beginColumn;
 }
@@ -2848,7 +2850,7 @@ VariableDeclarationExpr VariableDeclarationExpression():
 {
 	ModifierHolder modifier;
 	Type type;
-	List vars = new LinkedList();
+	List<VariableDeclarator> vars = new LinkedList<VariableDeclarator>();
 	VariableDeclarator var;
 }
 {
@@ -2939,7 +2941,7 @@ SwitchStmt SwitchStatement():
 {
 	Expression selector;
 	SwitchEntryStmt entry;
-	List entries = null;
+	List<SwitchEntryStmt> entries = null;
 	int line;
 	int column;
 }
@@ -2954,7 +2956,7 @@ SwitchStmt SwitchStatement():
 SwitchEntryStmt SwitchEntry():
 {
 	Expression label = null;
-	List stmts;
+	List<Statement> stmts;
 	int line;
 	int column;
 }
@@ -3024,8 +3026,8 @@ Statement ForStatement():
 {
 	VariableDeclarationExpr varExpr = null;
 	Expression expr = null;
-	List init = null;
-	List update = null;
+	List<Expression> init = null;
+	List<Expression> update = null;
 	Statement body;
 	int line;
 	int column;
@@ -3050,24 +3052,24 @@ Statement ForStatement():
   }
 }
 
-List ForInit():
+List<Expression> ForInit():
 {
-	List ret;
+	List<Expression> ret;
 	Expression expr;
 }
 {
   (
 	  LOOKAHEAD( Modifiers() Type() <IDENTIFIER> )
-	  expr = VariableDeclarationExpression() { ret = new LinkedList(); ret.add(expr); }
+	  expr = VariableDeclarationExpression() { ret = new LinkedList<Expression>(); ret.add(expr); }
 	|
 	  ret = ExpressionList()
   )
   { return ret; }
 }
 
-List ExpressionList():
+List<Expression> ExpressionList():
 {
-	List ret = new LinkedList();
+	List<Expression> ret = new LinkedList();
 	Expression expr;
 }
 {
@@ -3076,9 +3078,9 @@ List ExpressionList():
   { return ret; }
 }
 
-List ForUpdate():
+List<Expression> ForUpdate():
 {
-	List ret;
+	List<Expression> ret;
 }
 {
   ret = ExpressionList()
@@ -3148,14 +3150,14 @@ TryStmt TryStatement():
  * finally/catch is present.
  */
 {
-	List resources = new LinkedList();
+	List<VariableDeclarationExpr> resources = new LinkedList<VariableDeclarationExpr>();
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
-	List catchs = null;
+	List<CatchClause> catchs = null;
 	BlockStmt catchBlock;
 	ModifierHolder exceptModifier;
-	Type exceptType;
-	List exceptTypes = new LinkedList();
+	ReferenceType exceptionType;
+	List<ReferenceType> exceptionTypes = new LinkedList<ReferenceType>();
 	VariableDeclaratorId exceptId;
 	int line;
 	int column;
@@ -3172,20 +3174,20 @@ TryStmt TryStatement():
   		(
   			"catch" {cLine=token.beginLine; cColumn=token.beginColumn;}
   			"(" 
-  			exceptModifier = Modifiers() exceptType = Type() { exceptTypes.add(exceptType); }
-  			( "|" exceptType = Type() { exceptTypes.add(exceptType); } )*
+  			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); }
+  			( "|" exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId()
   			")"
   			 
   			catchBlock = Block()
   			{
-  			   if (exceptTypes.size() > 1) {
-  			        type = new UnionType(exceptTypes);
+  			   if (exceptionTypes.size() > 1) {
+  			        type = new UnionType(exceptionTypes);
   			   } else {
-  			        type = (Type)exceptTypes.get(0);
+  			        type = (Type)exceptionTypes.get(0);
   			   }
   			   catchs = add(catchs, new CatchClause(range(cLine, cColumn, token.endLine, token.endColumn), exceptModifier.modifiers, exceptModifier.annotations, type, exceptId, catchBlock));
-  			   exceptTypes = new LinkedList(); }
+  			   exceptionTypes = new LinkedList(); }
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|
@@ -3195,9 +3197,9 @@ TryStmt TryStatement():
 }
 
 
-List ResourceSpecification() :
+List<VariableDeclarationExpr> ResourceSpecification() :
 {
-List vars;
+List<VariableDeclarationExpr> vars;
 }
 {
   "("
@@ -3208,9 +3210,9 @@ List vars;
 }
 
 
-List Resources() :
+List<VariableDeclarationExpr> Resources() :
 {
-	List vars = new LinkedList();
+	List<VariableDeclarationExpr> vars = new LinkedList<VariableDeclarationExpr>();
 	VariableDeclarationExpr var;
 }
  {
@@ -3264,7 +3266,7 @@ AnnotationExpr Annotation():
 NormalAnnotationExpr NormalAnnotation():
 {
 	NameExpr name;
-	List pairs = null;
+	List<MemberValuePair> pairs = null;
 	int line;
 	int column;
 }
@@ -3296,9 +3298,9 @@ SingleMemberAnnotationExpr SingleMemberAnnotation():
   { return new SingleMemberAnnotationExpr(range(line, column, token.endLine, token.endColumn),name, memberVal); }
 }
 
-List MemberValuePairs():
+List<MemberValuePair> MemberValuePairs():
 {
-	List ret = new LinkedList();
+	List<MemberValuePair> ret = new LinkedList<MemberValuePair>();
 	MemberValuePair pair;
 }
 {
@@ -3335,7 +3337,7 @@ Expression MemberValue():
 
 Expression  MemberValueArrayInitializer():
 {
-	List ret = new LinkedList();
+	List<Expression> ret = new LinkedList();
 	Expression member;
 	int line;
 	int column;
@@ -3353,7 +3355,7 @@ Expression  MemberValueArrayInitializer():
 AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
 	NameExpr name;
-	List members;
+	List<BodyDeclaration<?>> members;
 	int line = modifier.begin.line;
 	int column = modifier.begin.column;
 }
@@ -3368,9 +3370,9 @@ AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
   }
 }
 
-List AnnotationTypeBody():
+List<BodyDeclaration<?>> AnnotationTypeBody():
 {
-	List ret = null;
+	List<BodyDeclaration<?>> ret = null;
 	BodyDeclaration member;
 }
 {
@@ -3379,7 +3381,7 @@ List AnnotationTypeBody():
   { return ret; }
 }
 
-BodyDeclaration AnnotationBodyDeclaration():
+BodyDeclaration<?> AnnotationBodyDeclaration():
 {
    ModifierHolder modifier;
    BodyDeclaration ret;
