@@ -76,6 +76,13 @@ public class Position implements Comparable<Position> {
 		return !valid();
 	}
 
+	public Position orIfInvalid(Position anotherPosition) {
+		if (valid()) {
+			return this;
+		}
+		return anotherPosition;
+	}
+	
 	public boolean isAfter(Position position) {
 		if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
 		if (line > position.line) {
