@@ -173,6 +173,21 @@ final class ASTParser {
             return new GTToken(kind, image);
         }
     }
+
+    private static class RangedList<T> {
+        Range range = Range.UNKNOWN;
+        List<T> list = new LinkedList<T>();
+        void beginAt(Token token){
+            range=range.withBegin(pos(token.beginLine, token.beginColumn));
+        }
+        void endAt(Token token){
+            range=range.withEnd(pos(token.endLine, token.endColumn));
+        }
+        void add(T t){
+            list.add(t);
+        }
+    }
+
 }
 
 PARSER_END(ASTParser)
@@ -1327,7 +1342,7 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
 {
    boolean isInterface = false;
    NameExpr name;
-   List<TypeParameter> typePar = null;
+   RangedList<TypeParameter> typePar = null;
    List<ClassOrInterfaceType> extList = null;
    List<ClassOrInterfaceType> impList = null;
    List<BodyDeclaration<?>> members;
@@ -1337,12 +1352,12 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
 {
   ( "class" | "interface" { isInterface = true; } ) { if (line == -1) {line=token.beginLine; column=token.beginColumn;} }
   name = Name()
-  [ typePar = TypeParameters() {typePar.remove(0);} ]
+  [ typePar = TypeParameters() ]
   [ extList = ExtendsList(isInterface) ]
   [ impList = ImplementsList(isInterface) ]
   members = ClassOrInterfaceBody(isInterface)
 
-  { ClassOrInterfaceDeclaration tmp = new ClassOrInterfaceDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, isInterface, null, typePar, extList, impList, members);
+  { ClassOrInterfaceDeclaration tmp = new ClassOrInterfaceDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, isInterface, null, typePar.list, extList, impList, members);
     tmp.setNameExpr(name);
     return tmp;
   }
@@ -1436,20 +1451,20 @@ EnumConstantDeclaration EnumConstantDeclaration():
   }
 }
 
-List<TypeParameter> TypeParameters():
+RangedList<TypeParameter> TypeParameters():
 {
-	List<TypeParameter> ret = new LinkedList<TypeParameter>();
+	RangedList<TypeParameter> ret = new RangedList<TypeParameter>();
 	TypeParameter tp;
 	List<AnnotationExpr> annotations = null;
 	AnnotationExpr ann;
 }
 {
-   "<" { }
+   "<" { ret.beginAt(token); }
    (ann = Annotation()   { annotations = add(annotations, ann);})*
 
    tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; }
    ( "," (ann = Annotation()   { annotations = add(annotations, ann);})* tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; } )*
-   ">"
+   ">" { ret.endAt(token); }
    { return ret; }
 }
 
@@ -1560,7 +1575,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 {
 	Type type;
-	List variables = new LinkedList();
+	List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
 	VariableDeclarator val;
 }
 {
@@ -1614,7 +1629,7 @@ Expression VariableInitializer():
 
 ArrayInitializerExpr ArrayInitializer():
 {
-	List values = null;
+	List<Expression> values = null;
 	Expression val;
 	int line;
 	int column;
@@ -1626,27 +1641,26 @@ ArrayInitializerExpr ArrayInitializer():
 
 MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
-	List typeParameters = null;
+	RangedList<TypeParameter> typeParameters = null;
 	Type type;
 	NameExpr name;
 	List parameters;
 	int arrayCount = 0;
 	List throws_ = null;
 	BlockStmt block = null;
-	int line = modifier.begin.line;
-	int column = modifier.begin.column;
+	Position beginPos = modifier.begin;
 	Type throwType;
 }
 {
   // Modifiers already matched in the caller!
-  [ typeParameters = TypeParameters() { int[] lineCol=(int[])typeParameters.remove(0); if(line==-1){ line=lineCol[0]; column=lineCol[1];} } ]
-  type = ResultType() { if(line==-1){line=type.getBegin().line; column=type.getBegin().column;}}
+  [ typeParameters = TypeParameters() { if(beginPos.line==-1){ beginPos=typeParameters.range.begin;} } ]
+  type = ResultType() { if(beginPos.line==-1){beginPos=type.getBegin();}}
   name = Name() parameters = FormalParameters() ( "[" "]" { arrayCount++; } )*
   [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
     ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
   { 
-      MethodDeclaration tmp = new MethodDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, typeParameters, type, null, parameters, arrayCount, throws_, block);
+      MethodDeclaration tmp = new MethodDeclaration(range(beginPos, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, null, parameters, arrayCount, throws_, block);
       tmp.setNameExpr(name);
       return tmp;
   }
@@ -1669,9 +1683,9 @@ ReferenceType ReferenceTypeWithAnnotations():
     }
 }
 
-List FormalParameters():
+List<Parameter> FormalParameters():
 {
-	List ret = null;
+	List<Parameter> ret = null;
 	Parameter par;
 }
 {
@@ -1680,9 +1694,9 @@ List FormalParameters():
   { return ret; }
 }
 
-List FormalLambdaParameters():
+List<Parameter> FormalLambdaParameters():
 {
-  List ret = null;
+  List<Parameter> ret = null;
   Parameter par;
 }
 {
@@ -1691,9 +1705,9 @@ List FormalLambdaParameters():
   { return ret;  }
 }
 
-List InferredLambdaParameters():
+List<Parameter> InferredLambdaParameters():
 {
-  List ret = null;
+  List<Parameter> ret = null;
   VariableDeclaratorId id;
 }
 {
@@ -1725,22 +1739,21 @@ Parameter FormalParameter():
 
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
-	List typeParameters = null;
+	RangedList<TypeParameter> typeParameters = null;
 	NameExpr name;
 	List parameters;
 	List throws_ = null;
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	List stmts;
-	int line = modifier.begin.line;
-	int column = modifier.begin.column;
+    Position beginPos = modifier.begin;
 	int bbLine = 0;
 	int bbColumn = 0;
 	Type throwType;
 }
 {
-  [ typeParameters = TypeParameters() { int[] lineCol=(int[])typeParameters.remove(0); if(line==-1){ line=lineCol[0]; column=lineCol[1];} } ]
+  [ typeParameters = TypeParameters() { if(beginPos.line==-1){ beginPos=typeParameters.range.begin;} } ]
   // Modifiers matched in the caller
-  name = SimpleName() { if(line==-1){line=token.beginLine; column=token.beginColumn;}} parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+  name = SimpleName() { if(beginPos.line==-1){ beginPos=typeParameters.range.begin;} } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
   ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   "{" { bbLine=token.beginLine; bbColumn=token.beginColumn; }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
@@ -1751,7 +1764,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   	if (exConsInv != null) {
   		stmts = add(0, stmts, exConsInv);
   	}
-  	ConstructorDeclaration tmp = new ConstructorDeclaration(range(line, column, token.endLine, token.endColumn), modifier.modifiers, modifier.annotations, typeParameters, null, parameters, throws_, new BlockStmt(range(bbLine, bbColumn, token.endLine, token.endColumn), stmts));
+  	ConstructorDeclaration tmp = new ConstructorDeclaration(range(beginPos, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, null, parameters, throws_, new BlockStmt(range(bbLine, bbColumn, token.endLine, token.endColumn), stmts));
     tmp.setNameExpr(name);
     return tmp;
   }
