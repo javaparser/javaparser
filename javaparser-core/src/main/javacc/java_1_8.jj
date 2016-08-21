@@ -1250,11 +1250,10 @@ CompilationUnit CompilationUnit():
 
 ImportDeclaration EmptyImportDeclaration():
 {
-    // FIXME position is always invalid
-	Position begin = INVALID;
+	Position begin;
 }
 {
-    ";"
+    ";" {begin = tokenBegin();} 
     { return ImportDeclaration.createEmptyDeclaration(range(begin, tokenEnd())); }
 }
 
