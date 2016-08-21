@@ -59,7 +59,7 @@ public class DumpingSteps {
 
     @When("the {class|compilation unit} is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
-        resultNode = JavaParser.parse(new StringReader(sourceUnderTest), true);
+        resultNode = JavaParser.parse(sourceUnderTest, true);
     }
 
     @When("the expression is parsed by the Java parser")
