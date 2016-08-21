@@ -1,13 +1,13 @@
 package com.github.javaparser.junit;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.FileInputStream;
+
+import static com.github.javaparser.ast.type.PrimitiveType.*;
 
 public class MethodChanger_1 {
 
@@ -38,7 +38,7 @@ public class MethodChanger_1 {
             n.setName(n.getName().toUpperCase());
 
             // create the new parameter
-            n.addParameter(ASTHelper.INT_TYPE, "value");
+            n.addParameter(INT_TYPE, "value");
         }
     }
 }

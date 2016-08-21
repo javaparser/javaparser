@@ -21,15 +21,15 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ASTHelper;
-import com.github.javaparser.ClassUtils;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -198,7 +198,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageName(String name) {
-        setPackage(new PackageDeclaration(ASTHelper.createNameExpr(name)));
+        setPackage(new PackageDeclaration(NameExpr.create(name)));
         return this;
     }
 
@@ -242,7 +242,7 @@ public final class CompilationUnit extends Node {
         if (getImports().stream().anyMatch(i -> i.getName().toString().equals(name)))
             return this;
         else {
-            ImportDeclaration importDeclaration = new ImportDeclaration(ASTHelper.createNameExpr(name), isStatic,
+            ImportDeclaration importDeclaration = new ImportDeclaration(NameExpr.create(name), isStatic,
                     isAsterisk);
             getImports().add(importDeclaration);
             importDeclaration.setParentNode(this);

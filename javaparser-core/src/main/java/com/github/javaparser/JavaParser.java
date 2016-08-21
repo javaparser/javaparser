@@ -34,6 +34,8 @@ import com.github.javaparser.ast.stmt.Statement;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.readerToString;
+
 /**
  * Parse Java source code and creates Abstract Syntax Tree classes.
  *
@@ -398,7 +400,7 @@ public final class JavaParser {
     public static CompilationUnit parse(final Reader reader, boolean considerComments)
             throws ParseException {
         try {
-            String comments = SourcesHelper.readerToString(reader);
+            String comments = readerToString(reader);
             CompilationUnit cu = new JavaParser().setSource(comments).parse();
             if (considerComments){
                 commentsInserter.insertComments(cu, comments);
@@ -407,6 +409,31 @@ public final class JavaParser {
         } catch (IOException ioe){
             throw new ParseException(ioe.getMessage());
         }
+    }
+
+    /**
+     * Parses the Java code contained in code and returns a
+     * {@link CompilationUnit} that represents it.
+     *
+     * @param code Java source code
+     * @param considerComments parse or ignore comments
+     * @return CompilationUnit representing the Java source code
+     * @throws ParseException if the source code has parser errors
+     */
+    public static CompilationUnit parse(String code, boolean considerComments) throws ParseException {
+        return parse(new StringReader(code), considerComments);
+    }
+
+    /**
+     * Parses the Java code contained in code and returns a
+     * {@link CompilationUnit} that represents it.
+     *
+     * @param code Java source code
+     * @return CompilationUnit representing the Java source code
+     * @throws ParseException if the source code has parser errors
+     */
+    public static CompilationUnit parse(String code) throws ParseException {
+        return parse(code, true);
     }
 
     /**

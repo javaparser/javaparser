@@ -2,7 +2,6 @@ package com.github.javaparser.junit;
 
 import java.util.EnumSet;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -14,6 +13,9 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.type.ReferenceType;
+
+import static com.github.javaparser.ast.type.VoidType.*;
 
 public class ClassCreator {
 
@@ -31,19 +33,19 @@ public class ClassCreator {
     private static CompilationUnit createCU() {
         CompilationUnit cu = new CompilationUnit();
         // set the package
-        cu.setPackage(new PackageDeclaration(ASTHelper.createNameExpr("java.parser.test")));
+        cu.setPackage(new PackageDeclaration(NameExpr.create("java.parser.test")));
 
         // create the type declaration 
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
         // create a method
 		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
-		MethodDeclaration method = new MethodDeclaration(modifiers, ASTHelper.VOID_TYPE, "main");
+		MethodDeclaration method = new MethodDeclaration(modifiers, VOID_TYPE, "main");
 		modifiers.add(Modifier.STATIC);
 		method.setModifiers(modifiers);
-        ASTHelper.addMember(type, method);
+        type.addMember(method);
 
         // add a parameter to the method
-        Parameter param = ASTHelper.createParameter(ASTHelper.createReferenceType("String", 0), "args");
+        Parameter param = Parameter.create(ReferenceType.create("String", 0), "args");
         param.setVarArgs(true);
         method.addParameter(param);
 
@@ -55,8 +57,8 @@ public class ClassCreator {
         NameExpr clazz = new NameExpr("System");
         FieldAccessExpr field = new FieldAccessExpr(clazz, "out");
         MethodCallExpr call = new MethodCallExpr(field, "println");
-        ASTHelper.addArgument(call, new StringLiteralExpr("Hello World!"));
-        ASTHelper.addStmt(block, call);
+        call.addArgument(new StringLiteralExpr("Hello World!"));
+        block.addStatement(call);
 
         return cu;
     }

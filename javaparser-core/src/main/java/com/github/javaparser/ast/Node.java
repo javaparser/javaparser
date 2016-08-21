@@ -21,19 +21,16 @@
 
 package com.github.javaparser.ast;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.ast.visitor.DumpVisitor;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.visitor.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -355,4 +352,21 @@ public abstract class Node implements Cloneable {
             parentNode.addImport(clazz);
         }
     }
+
+    /**
+     * Recursively finds all nodes of a certain type.
+     *
+     * @param clazz the type of node to find.
+     */
+    public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
+        List<N> nodes = new ArrayList<>();
+        for (Node child : getChildrenNodes()) {
+            if (clazz.isInstance(child)) {
+                nodes.add(clazz.cast(child));
+            }
+            nodes.addAll(child.getNodesByType(clazz));
+        }
+        return nodes;
+    }
+
 }
