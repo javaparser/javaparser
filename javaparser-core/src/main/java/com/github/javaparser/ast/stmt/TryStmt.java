@@ -28,7 +28,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
 import java.util.List;
 
-import static com.github.javaparser.ast.internal.Utils.*;
+import static com.github.javaparser.utils.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser

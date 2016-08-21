@@ -31,6 +31,22 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class PrimitiveType extends Type {
+	
+	public static final PrimitiveType BYTE_TYPE = new PrimitiveType(Primitive.Byte);
+
+	public static final PrimitiveType SHORT_TYPE = new PrimitiveType(Primitive.Short);
+
+	public static final PrimitiveType INT_TYPE = new PrimitiveType(Primitive.Int);
+
+	public static final PrimitiveType LONG_TYPE = new PrimitiveType(Primitive.Long);
+
+	public static final PrimitiveType FLOAT_TYPE = new PrimitiveType(Primitive.Float);
+
+	public static final PrimitiveType DOUBLE_TYPE = new PrimitiveType(Primitive.Double);
+
+	public static final PrimitiveType BOOLEAN_TYPE = new PrimitiveType(Primitive.Boolean);
+
+	public static final PrimitiveType CHAR_TYPE = new PrimitiveType(Primitive.Char);
 
 	public enum Primitive {
 		Boolean ("Boolean"),
