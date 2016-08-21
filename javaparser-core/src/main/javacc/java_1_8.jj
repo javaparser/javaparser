@@ -1432,7 +1432,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
   [ impList = ImplementsList(false) ]
   "{"
   	[
-    	{ entries = new LinkedList(); }
+    	{ entries = new LinkedList<EnumConstantDeclaration>(); }
     	entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
   	]
   	[ "," ]
@@ -1685,7 +1685,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 
 ReferenceType ReferenceTypeWithAnnotations():
 {
-	List<AnnotationExpr> annotations = new ArrayList();
+	List<AnnotationExpr> annotations = new ArrayList<AnnotationExpr>();
 	AnnotationExpr annotation = null;
 	ReferenceType type;
 }
@@ -3031,7 +3031,7 @@ List<Expression> ForInit():
 
 List<Expression> ExpressionList():
 {
-	List<Expression> ret = new LinkedList();
+	List<Expression> ret = new LinkedList<Expression>();
 	Expression expr;
 }
 {
@@ -3142,7 +3142,7 @@ TryStmt TryStatement():
   			        type = (Type)exceptionTypes.get(0);
   			   }
   			   catchs = add(catchs, new CatchClause(range(catchBegin, tokenEnd()), exceptModifier.modifiers, exceptModifier.annotations, type, exceptId, catchBlock));
-  			   exceptionTypes = new LinkedList(); }
+  			   exceptionTypes = new LinkedList<ReferenceType>(); }
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|
@@ -3288,7 +3288,7 @@ Expression MemberValue():
 
 Expression  MemberValueArrayInitializer():
 {
-	List<Expression> ret = new LinkedList();
+	List<Expression> ret = new LinkedList<Expression>();
 	Expression member;
 	Position begin;
 }
