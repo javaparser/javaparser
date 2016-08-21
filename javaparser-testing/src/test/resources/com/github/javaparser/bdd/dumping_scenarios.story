@@ -167,8 +167,8 @@ Given the class:
 class A {
     public void a() {
         try {
-        } catch (IndexOutOfBoundException | IOException e) {
-        }
+        } catch (IndexOutOfBoundException | IOException e) { 
+        } 
     }
 }
 When the class is parsed by the Java parser
@@ -270,6 +270,23 @@ public class Example {
         mString = arg;
     }
 }
+
+Scenario: JavaDoc OR comment is printed, not both.
+Given the class:
+public class Foo {
+    /** This line gets duplicated */
+    public void foo() {
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class Foo {
+
+    /** This line gets duplicated */
+    public void foo() {
+    }
+}
+
 
 Scenario: various lamba casts (issue 418)
 Given the class:
