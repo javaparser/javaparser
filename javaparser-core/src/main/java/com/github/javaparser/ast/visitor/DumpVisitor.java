@@ -21,8 +21,8 @@
  
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
 import java.util.EnumSet;
 import java.util.Iterator;

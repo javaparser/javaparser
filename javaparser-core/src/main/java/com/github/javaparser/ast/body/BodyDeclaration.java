@@ -26,7 +26,7 @@ import java.util.List;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.internal.Utils;
+import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 
 /**

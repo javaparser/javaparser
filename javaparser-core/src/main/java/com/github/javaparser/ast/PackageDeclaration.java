@@ -24,13 +24,11 @@ package com.github.javaparser.ast;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.internal.Utils;
+import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * <p>

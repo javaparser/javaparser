@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
  
-package com.github.javaparser;
+package com.github.javaparser.utils;
 
 import static java.lang.Integer.signum;
 

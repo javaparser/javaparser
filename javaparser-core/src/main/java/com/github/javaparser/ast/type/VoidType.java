@@ -29,7 +29,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class VoidType extends Type {
-
+	
+	public static final VoidType VOID_TYPE = new VoidType();
+	
 	public VoidType() {
 	}
 

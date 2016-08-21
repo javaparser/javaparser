@@ -27,6 +27,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.comments.CommentsParser;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.utils.PositionUtils;
 
 import java.io.IOException;
 import java.util.Collections;

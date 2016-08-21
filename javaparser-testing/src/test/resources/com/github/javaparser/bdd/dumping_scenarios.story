@@ -286,3 +286,35 @@ public class Foo {
     public void foo() {
     }
 }
+
+
+Scenario: various lamba casts (issue 418)
+Given the class:
+public class TestLambda {
+    void okMethod() {
+        return (ITF) () -> {
+            return true;
+        };
+    }
+    void faliingMethod() {
+        testThis(check ? null : (ITF) () -> {
+            return true;
+        });
+    }
+}
+When the class body declaration is parsed by the Java parser
+Then it is dumped to:
+public class TestLambda {
+
+    void okMethod() {
+        return (ITF) () -> {
+            return true;
+        };
+    }
+
+    void faliingMethod() {
+        testThis(check ? null : (ITF) () -> {
+            return true;
+        });
+    }
+}
