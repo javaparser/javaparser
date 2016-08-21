@@ -2480,6 +2480,7 @@ Expression PrimaryPrefix():
 
 	  		  		}
 	  		  		params = add(0, params, p);
+	  		  		// TODO p may be null here
 	  		  		ret = new LambdaExpr(range(p.getBegin(), tokenEnd()), params, null, true);
 	  		 	}
 
@@ -2642,7 +2643,7 @@ Expression AllocationExpression(Expression scope):
 	Expression ret;
 	ArrayCreationExpr arrayExpr;
 	Type type;
-	Object[] arr = null;
+	Object[] arr;
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	List<BodyDeclaration<?>> anonymousBody = null;
 	List<Expression> args;
@@ -2697,6 +2698,7 @@ Expression AllocationExpression(Expression scope):
  * The third LOOKAHEAD specification below is to parse to PrimarySuffix
  * if there is an expression between the "[...]".
  */
+// TODO fix the horrible return type.
 Object[] ArrayDimsAndInits():
 {
 	Object[] ret = new Object[3];
@@ -2711,9 +2713,9 @@ Object[] ArrayDimsAndInits():
   (ann = Annotation()   { annotations = add(annotations, ann);  })*
   (
 	  LOOKAHEAD(2)
-	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); annotations=null; inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) (ann = Annotation()   { annotations = add(annotations, ann);  })* "[" "]" { i++; } )* {  accum = add(accum, annotations); annotations=null; ret[0] = inits; ret[1] = Integer.valueOf(i); }
+	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) (ann = Annotation()   { annotations = add(annotations, ann);  })* "[" "]" { i++; } )* {  accum = add(accum, annotations); annotations=null; ret[0] = inits; ret[1] = i; }
 	|
-	  ( "[" "]" { i++; } )+ expr = ArrayInitializer() { accum = add(accum, annotations);annotations=null;  ret[0] = Integer.valueOf(i); ret[1] = expr; }
+	  ( "[" "]" { i++; } )+ expr = ArrayInitializer() { accum = add(accum, annotations);ret[0] = i; ret[1] = expr; }
   )
   { ret[2]=accum; return ret; }
 }
@@ -2877,7 +2879,7 @@ ExpressionStmt StatementExpression():
 	AssignExpr.Operator op;
 	Expression value;
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
-	Statement lambdaBody = null;
+	Statement lambdaBody;
 }
 {
   ( LOOKAHEAD(2)
@@ -2956,8 +2958,10 @@ IfStmt IfStatement():
   { 
       IfStmt tmp = new IfStmt(range(begin, tokenEnd()),condition, thenStmt, elseStmt);
       
+      // TODO comment is always null
       thenStmt.setComment(thenCmmt);
       if (elseStmt != null)
+          // TODO comment is always null
           elseStmt.setComment(elseCmmt);
       return tmp;
   }
