@@ -21,7 +21,7 @@
  
 package com.github.javaparser.bdd.steps;
 
-
+import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
@@ -33,12 +33,12 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import com.github.javaparser.ast.type.ReferenceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
@@ -152,7 +152,7 @@ public class ManipulationSteps {
 		MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), methodName);
 		modifiers.add(Modifier.STATIC);
 		method.setModifiers(modifiers);
-        ASTHelper.addMember(type, method);
+        type.addMember(method);
         state.put("cu1", compilationUnit);
     }
 
@@ -160,7 +160,7 @@ public class ManipulationSteps {
     public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter param = ASTHelper.createParameter(ASTHelper.createReferenceType(typeName, 0), parameterName);
+        Parameter param = Parameter.create(ReferenceType.create(typeName, 0), parameterName);
         param.setVarArgs(true);
         method.addParameter(param);
     }
@@ -180,8 +180,8 @@ public class ManipulationSteps {
         NameExpr clazz = new NameExpr(className);
         FieldAccessExpr field = new FieldAccessExpr(clazz, fieldName);
         MethodCallExpr call = new MethodCallExpr(field, methodName);
-        ASTHelper.addArgument(call, new StringLiteralExpr(stringValue));
-        ASTHelper.addStmt(method.getBody(), call);
+        call.addArgument(new StringLiteralExpr(stringValue));
+        method.getBody().addStatement(call);
     }
 
     @When("method $methodPosition in class $classPosition has it's name converted to uppercase")
@@ -195,7 +195,7 @@ public class ManipulationSteps {
     public void whenMethodInClassHasAnIntArgumentCalledAdded(int methodPosition, int classPosition, String paramName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        method.addParameter(ASTHelper.INT_TYPE, paramName);
+        method.addParameter(INT_TYPE, paramName);
     }
 
     @When("the compilation unit is cloned")
@@ -274,7 +274,7 @@ public class ManipulationSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameters().get(parameterPosition -1);
-        assertThat(parameter.getType(), is(ASTHelper.INT_TYPE));
+        assertThat(parameter.getType(), is(INT_TYPE));
         assertThat(parameter.getId().getName(), is(expectedName));
     }
 
@@ -288,7 +288,7 @@ public class ManipulationSteps {
     private static class AddNewIntParameterCalledValueVisitor extends VoidVisitorAdapter<Void> {
         @Override
         public void visit(MethodDeclaration n, Void arg) {
-            n.addParameter(ASTHelper.INT_TYPE, "value");
+            n.addParameter(INT_TYPE, "value");
         }
     }
 }

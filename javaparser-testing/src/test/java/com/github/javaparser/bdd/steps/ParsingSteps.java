@@ -40,7 +40,6 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.TokenMgrException;
@@ -224,8 +223,8 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIsScope(int statementPosition, int methodPosition,
                                                                      int classPosition, String expectedName) {
         ExpressionStmt statementUnderTest = (ExpressionStmt)getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        assertEquals(1, ASTHelper.getNodesByType(statementUnderTest, MethodReferenceExpr.class).size());
-        MethodReferenceExpr methodReferenceUnderTest = ASTHelper.getNodesByType(statementUnderTest, MethodReferenceExpr.class).get(0);
+        assertEquals(1, statementUnderTest.getNodesByType(MethodReferenceExpr.class).size());
+        MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.getNodesByType(MethodReferenceExpr.class).get(0);
         assertThat(methodReferenceUnderTest.getScope().toString(), is(expectedName));
     }
 
@@ -233,8 +232,8 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIdentifierIsCompareByAge(int statementPosition, int methodPosition,
                                                                                       int classPosition, String expectedName) {
         Statement statementUnderTest = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        assertEquals(1, ASTHelper.getNodesByType(statementUnderTest, MethodReferenceExpr.class).size());
-        MethodReferenceExpr methodReferenceUnderTest = ASTHelper.getNodesByType(statementUnderTest, MethodReferenceExpr.class).get(0);
+        assertEquals(1, statementUnderTest.getNodesByType(MethodReferenceExpr.class).size());
+        MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.getNodesByType(MethodReferenceExpr.class).get(0);
         assertThat(methodReferenceUnderTest.getIdentifier(), is(expectedName));
     }
 
@@ -357,7 +356,7 @@ public class ParsingSteps {
 
     private void setSelectedNodeFromCompilationUnit(Class<? extends Node> nodeType) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        List<? extends Node> nodes = ASTHelper.getNodesByType(compilationUnit, nodeType);
+        List<? extends Node> nodes = compilationUnit.getNodesByType(nodeType);
         if (nodes.size() != 1) {
             throw new RuntimeException(format("Exactly one %s expected", nodeType.getSimpleName()));
         }

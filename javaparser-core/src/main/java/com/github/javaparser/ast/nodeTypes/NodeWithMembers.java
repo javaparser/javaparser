@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -24,6 +23,8 @@ import com.github.javaparser.ast.type.Type;
 
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.*;
+
+import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
 
 /**
  * A node having members.
@@ -106,6 +107,8 @@ public interface NodeWithMembers<T> {
 
     /**
      * Add a public field to this
+     * 
+     * @param typeClass the type of the field
      *
      * @param typeClass the type of the field
      * @param name the name of the field
@@ -160,7 +163,7 @@ public interface NodeWithMembers<T> {
     default MethodDeclaration addMethod(String methodName, Modifier... modifiers) {
         MethodDeclaration methodDeclaration = new MethodDeclaration();
         methodDeclaration.setName(methodName);
-        methodDeclaration.setType(ASTHelper.VOID_TYPE);
+        methodDeclaration.setType(VOID_TYPE);
         methodDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         getMembers().add(methodDeclaration);
@@ -170,7 +173,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Adds a constructor to this
-     *
+     * 
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
