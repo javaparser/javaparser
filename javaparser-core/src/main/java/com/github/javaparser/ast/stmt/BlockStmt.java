@@ -27,14 +27,14 @@ import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class BlockStmt extends Statement {
+public final class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
 
 	private List<Statement> stmts;
 
@@ -69,24 +69,18 @@ public final class BlockStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public List<Statement> getStmts() {
+	@Override
+    public List<Statement> getStmts() {
         stmts = ensureNotNull(stmts);
         return stmts;
 	}
 
-	public void setStmts(final List<Statement> stmts) {
+    @Override
+    public BlockStmt setStmts(final List<Statement> stmts) {
 		this.stmts = stmts;
 		setAsParentNodeOf(this.stmts);
+        return this;
 	}
 
-    // TODO move to a nodeType + addAndGetStatement like methods ?
-    public BlockStmt addStatement(Statement statement) {
-        getStmts().add(statement);
-        statement.setParentNode(this);
-        return this;
-    }
-    public BlockStmt addStatement(String statement) {
-        return addStatement(new ExpressionStmt(new NameExpr(statement)));
-    }
 
 }
