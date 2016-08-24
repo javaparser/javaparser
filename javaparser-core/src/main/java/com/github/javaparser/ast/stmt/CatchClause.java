@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -37,7 +38,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class CatchClause extends Node {
+public final class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> {
 
     private Parameter param;
 
@@ -68,6 +69,7 @@ public final class CatchClause extends Node {
 		v.visit(this, arg);
 	}
 
+    // TODO Should we deprecate those ?
 	public BlockStmt getCatchBlock() {
 		return catchBlock;
 	}
@@ -76,6 +78,7 @@ public final class CatchClause extends Node {
 		return param;
 	}
 
+    // TODO Should we deprecate those ?
 	public void setCatchBlock(final BlockStmt catchBlock) {
 		this.catchBlock = catchBlock;
 		setAsParentNodeOf(this.catchBlock);
@@ -85,4 +88,16 @@ public final class CatchClause extends Node {
 		this.param = param;
 		setAsParentNodeOf(this.param);
 	}
+
+    @Override
+    public BlockStmt getBody() {
+        return catchBlock;
+    }
+
+    @Override
+    public CatchClause setBody(BlockStmt block) {
+        this.catchBlock = block;
+        setAsParentNodeOf(this.catchBlock);
+        return this;
+    }
 }

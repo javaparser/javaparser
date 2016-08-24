@@ -23,13 +23,14 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class DoStmt extends Statement {
+public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 
 	private Statement body;
 
@@ -57,7 +58,8 @@ public final class DoStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public Statement getBody() {
+	@Override
+    public Statement getBody() {
 		return body;
 	}
 
@@ -65,9 +67,11 @@ public final class DoStmt extends Statement {
 		return condition;
 	}
 
-	public void setBody(final Statement body) {
+	@Override
+    public DoStmt setBody(final Statement body) {
 		this.body = body;
 		setAsParentNodeOf(this.body);
+        return this;
 	}
 
 	public void setCondition(final Expression condition) {
