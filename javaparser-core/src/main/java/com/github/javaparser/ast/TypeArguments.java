@@ -25,7 +25,7 @@ import com.github.javaparser.ast.type.Type;
 import java.util.Collections;
 import java.util.List;
 
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 public class TypeArguments {
     public static final TypeArguments EMPTY = withArguments(Collections.<Type>emptyList());

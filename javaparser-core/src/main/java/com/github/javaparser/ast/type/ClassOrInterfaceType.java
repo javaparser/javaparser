@@ -21,8 +21,6 @@
 
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -52,25 +50,6 @@ public final class ClassOrInterfaceType extends Type implements NodeWithName<Cla
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
         setScope(scope);
         setName(name);
-    }
-
-    /**
-     *
-     * @deprecated use the other constructor that takes {@link TypeArguments}
-     */
-    @Deprecated
-    public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                                final ClassOrInterfaceType scope, final String name, final List<Type> typeArgs) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, name, TypeArguments.withArguments(typeArgs));
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ClassOrInterfaceType(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                                final ClassOrInterfaceType scope, final String name, final TypeArguments typeArgs) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, name, typeArgs);
     }
 
     public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final TypeArguments typeArguments) {

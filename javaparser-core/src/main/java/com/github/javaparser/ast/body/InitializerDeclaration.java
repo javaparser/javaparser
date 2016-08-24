@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
@@ -49,14 +47,6 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         setBlock(block);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public InitializerDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, boolean isStatic, BlockStmt block) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), isStatic, block);
-    }
-    
     public InitializerDeclaration(Range range, boolean isStatic, BlockStmt block) {
         super(range, null);
         setStatic(isStatic);

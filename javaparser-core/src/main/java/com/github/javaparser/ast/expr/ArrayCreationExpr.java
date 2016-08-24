@@ -21,21 +21,21 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
-
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ArrayCreationExpr extends Expression implements NodeWithType<ArrayCreationExpr> {
+public final class ArrayCreationExpr extends Expression implements NodeWithType<ArrayCreationExpr>, NodeWithArrays<ArrayCreationExpr> {
 
     private Type type;
 
@@ -57,14 +57,6 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         setDimensions(null);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, int arrayCount, ArrayInitializerExpr initializer) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount, initializer);
-    }
-    
     public ArrayCreationExpr(Range range, Type type, int arrayCount, ArrayInitializerExpr initializer) {
         super(range);
         setType(type);
@@ -80,14 +72,6 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         setInitializer(null);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ArrayCreationExpr(int beginLine, int beginColumn, int endLine, int endColumn, Type type, List<Expression> dimensions, int arrayCount) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, dimensions, arrayCount);
-    }
-    
     public ArrayCreationExpr(Range range, Type type, List<Expression> dimensions, int arrayCount) {
         super(range);
         setType(type);
@@ -106,6 +90,7 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         v.visit(this, arg);
     }
 
+    @Override
     public int getArrayCount() {
         return arrayCount;
     }
@@ -124,8 +109,10 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return type;
     }
 
-    public void setArrayCount(int arrayCount) {
+    @Override
+    public ArrayCreationExpr setArrayCount(int arrayCount) {
         this.arrayCount = arrayCount;
+        return this;
     }
 
     public void setDimensions(List<Expression> dimensions) {
@@ -145,13 +132,16 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return this;
     }
 
+    @Override
     public List<List<AnnotationExpr>> getArraysAnnotations() {
         arraysAnnotations = ensureNotNull(arraysAnnotations);
         return arraysAnnotations;
     }
 
-    public void setArraysAnnotations(
+    @Override
+    public ArrayCreationExpr setArraysAnnotations(
             List<List<AnnotationExpr>> arraysAnnotations) {
         this.arraysAnnotations = arraysAnnotations;
+        return this;
     }
 }

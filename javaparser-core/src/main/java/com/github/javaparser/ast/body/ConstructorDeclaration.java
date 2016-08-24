@@ -21,8 +21,7 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -85,19 +84,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         setName(name);
         setParameters(parameters);
         setThrows(throws_);
-        setBlock(block);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ConstructorDeclaration(int beginLine, int beginColumn, int endLine, int endColumn,
-                                  EnumSet<Modifier> modifiers,
-                                  List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
-                                  List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters,
-                name, parameters, throws_, block);
+        setBody(block);
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
@@ -109,7 +96,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         setName(name);
         setParameters(parameters);
         setThrows(throws_);
-        setBlock(block);
+        setBody(block);
     }
 
     @Override
@@ -121,17 +108,6 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
     }
-
-    /**
-     * Use {@link #getBody()} instead
-     * 
-     * @return
-     */
-    @Deprecated
-    public BlockStmt getBlock() {
-        return body;
-    }
-
 
     /**
      * Return the modifiers of this member declaration.
@@ -169,19 +145,6 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         typeParameters = ensureNotNull(typeParameters);
         return typeParameters;
     }
-
-    /**
-     * Use {@link #setBody(BlockStmt)} instead
-     * 
-     * @param block
-     */
-    @Deprecated
-    public void setBlock(BlockStmt block) {
-        this.body = block;
-        setAsParentNodeOf(this.body);
-    }
-
-
 
     @Override
     public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
@@ -292,6 +255,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     @Override
     public ConstructorDeclaration setBody(BlockStmt body) {
         this.body = body;
+        setAsParentNodeOf(body);
         return this;
     }
 }

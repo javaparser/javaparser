@@ -572,7 +572,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getBlock().accept(this, arg);
+			R result = n.getBody().accept(this, arg);
 			if (result != null) {
 				return result;
 			}

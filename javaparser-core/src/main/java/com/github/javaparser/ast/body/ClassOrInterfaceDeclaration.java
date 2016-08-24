@@ -21,8 +21,7 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -73,22 +72,6 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         setTypeParameters(typeParameters);
         setExtends(extendsList);
         setImplements(implementsList);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public ClassOrInterfaceDeclaration(final int beginLine, final int beginColumn, final int endLine,
-                                       final int endColumn, final EnumSet<Modifier> modifiers,
-                                       final List<AnnotationExpr> annotations, final boolean isInterface,
-                                       final String name,
-                                       final List<TypeParameter> typeParameters,
-                                       final List<ClassOrInterfaceType> extendsList,
-                                       final List<ClassOrInterfaceType> implementsList,
-                                       final List<BodyDeclaration<?>> members) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, isInterface, name,
-                typeParameters, extendsList, implementsList, members);
     }
 
     public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,

@@ -65,6 +65,24 @@ public class Position implements Comparable<Position> {
 		return new Position(line, this.column);
 	}
 
+	/**
+	 * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after the end of the source.
+	 */
+	public boolean valid() {
+		return line > 0 && column > 0;
+	}
+
+	public boolean invalid() {
+		return !valid();
+	}
+
+	public Position orIfInvalid(Position anotherPosition) {
+		if (valid()) {
+			return this;
+		}
+		return anotherPosition;
+	}
+	
 	public boolean isAfter(Position position) {
 		if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
 		if (line > position.line) {

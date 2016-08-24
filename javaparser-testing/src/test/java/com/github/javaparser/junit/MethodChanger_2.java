@@ -3,26 +3,23 @@ package com.github.javaparser.junit;
 import java.io.FileInputStream;
 import java.util.List;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
+
+import static com.github.javaparser.ast.type.PrimitiveType.*;
 
 public class MethodChanger_2 {
 
     public static void main(String[] args) throws Exception {
         // creates an input stream for the file to be parsed
-        FileInputStream in = new FileInputStream("test.java");
 
         CompilationUnit cu;
-        try {
+        try (FileInputStream in = new FileInputStream("test.java")) {
             // parse the file
             cu = JavaParser.parse(in);
-        } finally {
-            in.close();
         }
 
         // change the methods names and parameters
@@ -50,9 +47,6 @@ public class MethodChanger_2 {
         n.setName(n.getName().toUpperCase());
 
         // create the new parameter
-        Parameter newArg = ASTHelper.createParameter(ASTHelper.INT_TYPE, "value");
-
-        // add the parameter to the method
-        ASTHelper.addParameter(n, newArg);
+        n.addParameter(INT_TYPE, "value");
     }
 }

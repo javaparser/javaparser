@@ -21,7 +21,7 @@
  
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -331,7 +331,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 				name.accept(this, arg);
 			}
 		}
-		n.getBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	@Override public void visit(final ContinueStmt n, final A arg) {

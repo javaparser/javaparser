@@ -21,6 +21,7 @@
 
 package com.github.javaparser.bdd.steps;
 
+import static com.github.javaparser.utils.Utils.readerToString;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -36,7 +37,6 @@ import org.jbehave.core.annotations.When;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
-import com.github.javaparser.SourcesHelper;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitorAdapter;
@@ -54,12 +54,12 @@ public class DumpingSteps {
     @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body} in the file \"$classFile\"")
     public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException, ParseException {
         URL url = getClass().getResource("../samples/" + classFile);
-        sourceUnderTest = SourcesHelper.readerToString(new FileReader(new File(url.toURI()))).trim();
+        sourceUnderTest = readerToString(new FileReader(new File(url.toURI()))).trim();
     }
 
     @When("the {class|compilation unit} is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
-        resultNode = JavaParser.parse(new StringReader(sourceUnderTest), true);
+        resultNode = JavaParser.parse(sourceUnderTest, true);
     }
 
     @When("the expression is parsed by the Java parser")

@@ -21,16 +21,15 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -63,16 +62,6 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         setClassBody(classBody);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public EnumConstantDeclaration(int beginLine, int beginColumn, int endLine, int endColumn,
-                                   List<AnnotationExpr> annotations, String name, List<Expression> args,
-                                   List<BodyDeclaration<?>> classBody) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, name, args, classBody);
-    }
-    
     public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> args,
                                    List<BodyDeclaration<?>> classBody) {
         super(range, annotations);
@@ -131,7 +120,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     public EnumConstantDeclaration addArgument(String valueExpr) {
-        getArgs().add(ASTHelper.createNameExpr(valueExpr));
+        getArgs().add(NameExpr.create(valueExpr));
         return this;
     }
 }

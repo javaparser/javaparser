@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.EnumSet;
 
 import com.github.javaparser.Range;
@@ -37,14 +35,6 @@ public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclara
 
     public EmptyTypeDeclaration() {
         super(null, EnumSet.noneOf(Modifier.class), null, null);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public EmptyTypeDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
     }
 
     public EmptyTypeDeclaration(Range range) {

@@ -27,6 +27,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.comments.CommentsParser;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.utils.PositionUtils;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -198,7 +199,9 @@ class CommentsInserter {
         // let's give to it the comment
         if (node.getBegin().line == lineComment.getBegin().line
                 && !node.hasComment()) {
-            node.setComment(lineComment);
+            if(!(node instanceof Comment)) {
+                node.setComment(lineComment);
+            }
             return true;
         } else {
             // try with all the children, sorted by reverse position (so the
