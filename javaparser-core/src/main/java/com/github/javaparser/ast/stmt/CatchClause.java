@@ -69,7 +69,12 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 		v.visit(this, arg);
 	}
 
-    // TODO Should we deprecate those ?
+    /**
+     * Use {@link #getBody()} instead
+     * 
+     * @return
+     */
+    @Deprecated
 	public BlockStmt getCatchBlock() {
 		return catchBlock;
 	}
@@ -78,7 +83,12 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 		return param;
 	}
 
-    // TODO Should we deprecate those ?
+    /**
+     * Use {@link #setBody(BlockStmt)} instead
+     * 
+     * @param catchBlock
+     */
+    @Deprecated
 	public void setCatchBlock(final BlockStmt catchBlock) {
 		this.catchBlock = catchBlock;
 		setAsParentNodeOf(this.catchBlock);
