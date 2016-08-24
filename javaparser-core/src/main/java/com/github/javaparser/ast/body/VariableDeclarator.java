@@ -18,12 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -45,13 +46,15 @@ public final class VariableDeclarator extends Node {
 
     /**
      * Defines the declaration of a variable.
+     * 
      * @param id The identifier for this variable. IE. The variables name.
      * @param init What this variable should be initialized to.
-     *             An {@link com.github.javaparser.ast.expr.AssignExpr} is unnecessary as the <code>=</code> operator is already added.
+     *            An {@link com.github.javaparser.ast.expr.AssignExpr} is unnecessary as the <code>=</code> operator is
+     *            already added.
      */
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
-    	setId(id);
-    	setInit(init);
+        setId(id);
+        setInit(init);
     }
 
     public VariableDeclarator(Range range, VariableDeclaratorId id, Expression init) {
@@ -80,11 +83,21 @@ public final class VariableDeclarator extends Node {
 
     public void setId(VariableDeclaratorId id) {
         this.id = id;
-		setAsParentNodeOf(this.id);
+        setAsParentNodeOf(this.id);
     }
 
     public void setInit(Expression init) {
         this.init = init;
-		setAsParentNodeOf(this.init);
+        setAsParentNodeOf(this.init);
+    }
+
+    /**
+     * Will create a {@link NameExpr} with the init param
+     * 
+     * @param init
+     */
+    public void setInit(String init) {
+        this.init = new NameExpr(init);
+        setAsParentNodeOf(this.init);
     }
 }

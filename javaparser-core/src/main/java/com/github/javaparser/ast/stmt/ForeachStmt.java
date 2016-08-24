@@ -23,6 +23,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -58,7 +59,20 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 		setBody(body);
 	}
 
-	@Override
+    /**
+     * Will create a {@link NameExpr} with the iterable param
+     * 
+     * @param var
+     * @param iterable
+     * @param body
+     */
+    public ForeachStmt(VariableDeclarationExpr var, String iterable, BlockStmt body) {
+        setVariable(var);
+        setIterable(new NameExpr(iterable));
+        setBody(body);
+    }
+
+    @Override
 	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
