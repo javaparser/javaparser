@@ -44,6 +44,10 @@ public final class VariableDeclarator extends Node {
         setId(id);
     }
 
+    public VariableDeclarator(String variableName) {
+        setId(new VariableDeclaratorId(variableName));
+    }
+
     /**
      * Defines the declaration of a variable.
      * 
@@ -54,6 +58,11 @@ public final class VariableDeclarator extends Node {
      */
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
         setId(id);
+        setInit(init);
+    }
+
+    public VariableDeclarator(String variableName, Expression init) {
+        setId(new VariableDeclaratorId(variableName));
         setInit(init);
     }
 
