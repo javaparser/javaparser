@@ -445,6 +445,8 @@ public class Abc<@C A, @C X extends @C String & @C Serializable> {
 */
     }
 }
+
+Scenario: we can parse a package-info file.
 Given the class in the file "package-info.java"
 When the class is parsed by the Java parser
 Then it is dumped to:
