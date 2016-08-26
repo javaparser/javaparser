@@ -23,7 +23,6 @@ package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -32,7 +31,6 @@ import java.util.stream.Collectors;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -111,9 +109,7 @@ public final class VariableDeclarationExpr extends Expression
      * @return instance of {@link VariableDeclarationExpr}
      */
     public static VariableDeclarationExpr create(Type type, String name) {
-        List<VariableDeclarator> vars = new ArrayList<>();
-        vars.add(new VariableDeclarator(new VariableDeclaratorId(name)));
-        return new VariableDeclarationExpr(type, vars);
+        return new VariableDeclarationExpr(type, name);
     }
 
     @Override
