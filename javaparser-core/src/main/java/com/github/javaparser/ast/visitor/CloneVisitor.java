@@ -444,7 +444,8 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 		PrimitiveType r = new PrimitiveType(
 				_n.getRange(),
-				_n.getType()
+				_n.getType(),
+				_n.getAnnotations()
 		);
 		r.setComment(comment);
 		return r;

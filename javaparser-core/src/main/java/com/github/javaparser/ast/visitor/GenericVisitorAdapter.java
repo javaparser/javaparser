@@ -1304,6 +1304,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final ReferenceType n, final A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		{
 			R result = n.getType().accept(this, arg);
 			if (result != null) {
@@ -1558,14 +1564,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final VariableDeclarationExpr n, final A arg) {
-		if (n.getAnnotations() != null) {
-			for (final AnnotationExpr a : n.getAnnotations()) {
-				{
-					R result = a.accept(this, arg);
-					if (result != null) {
-						return result;
-					}
-				}
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
 			}
 		}
 		{

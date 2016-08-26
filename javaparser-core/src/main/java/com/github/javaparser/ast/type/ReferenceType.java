@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -36,6 +37,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
+public final class ReferenceType extends Type<ReferenceType> implements NodeWithType<ReferenceType>, NodeWithAnnotations<ReferenceType> {
 public final class ReferenceType extends Type implements NodeWithType<ReferenceType>, NodeWithArrays<ReferenceType> {
 
 	private Type type;
@@ -103,7 +105,7 @@ public final class ReferenceType extends Type implements NodeWithType<ReferenceT
 	public static ReferenceType create(PrimitiveType type, int arrayCount) {
 		return new ReferenceType(type, arrayCount);
 	}
-	
+
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
