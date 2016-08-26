@@ -60,32 +60,24 @@ public final class VariableDeclarationExpr extends Expression
 
     public VariableDeclarationExpr(final Type type, String variableName) {
         setType(type);
-        List<VariableDeclarator> vars = new ArrayList<>();
-        vars.add(new VariableDeclarator(variableName));
-        setVars(vars);
+        setVars(Arrays.asList(new VariableDeclarator(variableName)));
     }
 
     public VariableDeclarationExpr(final Type type, VariableDeclarator var) {
         setType(type);
-        List<VariableDeclarator> vars = new ArrayList<>();
-        vars.add(var);
-        setVars(vars);
+        setVars(Arrays.asList(var));
     }
 
     public VariableDeclarationExpr(final Type type, String variableName, Modifier... modifiers) {
         setType(type);
-        List<VariableDeclarator> vars = new ArrayList<>();
-        vars.add(new VariableDeclarator(variableName));
-        setVars(vars);
+        setVars(Arrays.asList(new VariableDeclarator(variableName)));
         setModifiers(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
     }
 
     public VariableDeclarationExpr(final Type type, VariableDeclarator var, Modifier... modifiers) {
         setType(type);
-        List<VariableDeclarator> vars = new ArrayList<>();
-        vars.add(var);
-        setVars(vars);
+        setVars(Arrays.asList(var));
         setModifiers(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
     }
