@@ -20,11 +20,27 @@ public interface NodeWithStatements<T> {
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
+    public default T addStatement(int index, final Statement statement) {
+        getStmts().add(index, statement);
+        statement.setParentNode((Node) this);
+        return (T) this;
+    }
+
     public default T addStatement(Expression expr) {
-        return addStatement(new ExpressionStmt(expr));
+        ExpressionStmt statement = new ExpressionStmt(expr);
+        expr.setParentNode(statement);
+        return addStatement(statement);
     }
 
     public default T addStatement(String statement) {
-        return addStatement(new ExpressionStmt(new NameExpr(statement)));
+        return addStatement(new NameExpr(statement));
     }
+
+    public default T addStatement(int index, final Expression expr) {
+        Statement stmt = new ExpressionStmt(expr);
+        expr.setParentNode(stmt);
+        return addStatement(index, stmt);
+    }
+
 }
