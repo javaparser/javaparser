@@ -690,6 +690,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
     @Override public Boolean visit(final IntersectionType n1, final Node arg) {
         final IntersectionType n2 = (IntersectionType) arg;
 
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return false;
+		}
+
         List<ReferenceType> n1Elements = n1.getElements();
         List<ReferenceType> n2Elements = n2.getElements();
 
@@ -714,6 +718,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
     @Override public Boolean visit(final UnionType n1, final Node arg) {
         final UnionType n2 = (UnionType) arg;
+
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return false;
+		}
 
         List<ReferenceType> n1Elements = n1.getElements();
         List<ReferenceType> n2Elements = n2.getElements();
