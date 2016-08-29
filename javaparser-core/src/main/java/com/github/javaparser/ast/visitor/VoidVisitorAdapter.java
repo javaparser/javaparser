@@ -86,6 +86,7 @@ import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -117,6 +118,8 @@ import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -157,6 +160,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
+		visitArraysAnnotations(n, arg);
 		n.getType().accept(this, arg);
 		if (!isNullOrEmpty(n.getDimensions())) {
 			for (final Expression dim : n.getDimensions()) {
@@ -654,8 +658,9 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override public void visit(final ReferenceType n, final A arg) {
-		visitAnnotations(n, arg);
 		visitComment(n.getComment(), arg);
+		visitAnnotations(n, arg);
+		visitArraysAnnotations(n, arg);
 		n.getType().accept(this, arg);
 	}
 
@@ -864,6 +869,16 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	private void visitAnnotations(NodeWithAnnotations<?> n, A arg) {
 		for (AnnotationExpr annotation : n.getAnnotations()) {
 			annotation.accept(this, arg);
+		}
+	}
+
+	private void visitArraysAnnotations(NodeWithArrays<?> n, A arg) {
+		for (List<AnnotationExpr> aux : n.getArraysAnnotations()) {
+			if (aux != null) {
+				for (AnnotationExpr annotation : aux) {
+					annotation.accept(this, arg);
+				}
+			}
 		}
 	}
 }

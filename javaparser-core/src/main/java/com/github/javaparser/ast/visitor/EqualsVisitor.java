@@ -83,6 +83,7 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -664,24 +665,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
-		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
-		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
-
-		if (n1a !=null && n2a!= null) {
-			if(n1a.size() != n2a.size()){
-				return false;
-			}
-			else{
-				int i = 0;
-				for(List<AnnotationExpr> aux: n1a){
-					if(!nodesEquals(aux, n2a.get(i))){
-						return false;
-					}
-					i++;
-				}
-			}
-		}
-		else if (n1a != n2a){
+		if (!arraysAnnotationsEquals(n1, n2)) {
 			return false;
 		}
 		return true;
@@ -806,26 +790,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getDimensions(), n2.getDimensions())) {
 			return false;
 		}
-		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
-		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
 
-		if (n1a !=null && n2a!= null) {
-			if(n1a.size() != n2a.size()){
-				return false;
-			}
-			else{
-				int i = 0;
-				for(List<AnnotationExpr> aux: n1a){
-					if(!nodesEquals(aux, n2a.get(i))){
-						return false;
-					}
-					i++;
-				}
-			}
-		}
-		else if (n1a != n2a){
+		if (!arraysAnnotationsEquals(n1, n2)) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -1537,4 +1506,27 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         }
         return true;
     }
+
+	private boolean arraysAnnotationsEquals(NodeWithArrays<?> n1, NodeWithArrays<?> n2) {
+		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
+		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
+
+		if (n1a != null && n2a != null) {
+			if (n1a.size() != n2a.size()) {
+				return false;
+			} else {
+				int i = 0;
+				for (List<AnnotationExpr> aux : n1a) {
+					if (!nodesEquals(aux, n2a.get(i))) {
+						return false;
+					}
+					i++;
+				}
+			}
+		} else if (n1a != n2a) {
+			return false;
+		}
+		return true;
+	}
+
 }

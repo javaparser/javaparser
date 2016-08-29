@@ -82,6 +82,7 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -114,10 +115,26 @@ import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
 
+import java.util.List;
+
 /**
  * @author Julio Vilmar Gesser
  */
 public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A> {
+
+	private R visitArraysAnnotations(NodeWithArrays<?> n, A arg) {
+		for(List<AnnotationExpr> aux: n.getArraysAnnotations()) {
+			if (aux != null) {
+				for (AnnotationExpr annotation : aux) {
+					R result = annotation.accept(this, arg);
+					if (result != null) {
+						return result;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public R visit(final AnnotationDeclaration n, final A arg) {
@@ -208,6 +225,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final ArrayCreationExpr n, final A arg) {
+		{
+			R result = visitArraysAnnotations(n, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		{
 			R result = n.getType().accept(this, arg);
 			if (result != null) {
@@ -1316,6 +1339,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final ReferenceType n, final A arg) {
+		{
+			R result = visitArraysAnnotations(n, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		for (final AnnotationExpr a : n.getAnnotations()) {
 			R result = a.accept(this, arg);
 			if (result != null) {
