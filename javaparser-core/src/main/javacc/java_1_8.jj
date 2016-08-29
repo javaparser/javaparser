@@ -1984,25 +1984,24 @@ WildcardType Wildcard():
 PrimitiveType PrimitiveType():
 {
 	PrimitiveType ret;
-	List<AnnotationExpr> annotations = new ArrayList<AnnotationExpr>();
 }
 {
 (
-  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Boolean, annotations); }
+  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Boolean); }
 |
-  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Char, annotations); }
+  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Char); }
 |
-  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Byte, annotations); }
+  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Byte); }
 |
-  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Short, annotations); }
+  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Short); }
 |
-  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Int, annotations); }
+  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Int); }
 |
-  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Long, annotations); }
+  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Long); }
 |
-  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Float, annotations); }
+  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Float); }
 |
-  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Double, annotations); }
+  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Double); }
 )
 { return ret; }
 }

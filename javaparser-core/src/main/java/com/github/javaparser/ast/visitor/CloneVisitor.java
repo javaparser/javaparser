@@ -441,13 +441,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(PrimitiveType _n, Object _arg) {
 		Comment comment = cloneNodes(_n.getComment(), _arg);
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 
 		PrimitiveType r = new PrimitiveType(
 				_n.getRange(),
-				_n.getType(),
-				_n.getAnnotations()
+				_n.getType()
 		);
 		r.setComment(comment);
+		r.setAnnotations(annotations);
 		return r;
 	}
 
@@ -474,12 +475,13 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
     @Override
     public Node visit(IntersectionType _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
         List<ReferenceType> elements = visit(_n.getElements(), _arg);
 
-        IntersectionType r = new IntersectionType(_n.getRange(),
-                elements);
+        IntersectionType r = new IntersectionType(_n.getRange(), elements);
         Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
+		r.setAnnotations(annotations);
         return r;
     }
 
@@ -496,15 +498,18 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(VoidType _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		VoidType r = new VoidType(_n.getRange());
+		r.setAnnotations(annotations);
 		r.setComment(comment);
 		return r;
 	}
 
 	@Override
 	public Node visit(WildcardType _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		ReferenceType ext = cloneNodes(_n.getExtends(), _arg);
 		ReferenceType sup = cloneNodes(_n.getSuper(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
@@ -514,6 +519,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 				ext, sup
 		);
 		r.setComment(comment);
+		r.setAnnotations(annotations);
 		return r;
 	}
 

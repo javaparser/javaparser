@@ -72,7 +72,7 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 		}
 	}
 
-	static final HashMap<String, Primitive> unboxMap = new HashMap<String, Primitive>();
+	static final HashMap<String, Primitive> unboxMap = new HashMap<>();
 	static {
 		for(Primitive unboxedType : Primitive.values()) {
 			unboxMap.put(unboxedType.nameOfBoxedType, unboxedType);
@@ -88,10 +88,9 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 		this.type = type;
 	}
 
-	public PrimitiveType(Range range, final Primitive type, final List<AnnotationExpr> annotations) {
+	public PrimitiveType(Range range, final Primitive type) {
 		super(range);
 		this.type = type;
-		setAnnotations(annotations);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
