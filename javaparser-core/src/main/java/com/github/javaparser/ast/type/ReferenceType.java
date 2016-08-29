@@ -37,8 +37,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ReferenceType extends Type<ReferenceType> implements NodeWithType<ReferenceType>, NodeWithAnnotations<ReferenceType> {
-public final class ReferenceType extends Type implements NodeWithType<ReferenceType>, NodeWithArrays<ReferenceType> {
+public final class ReferenceType extends Type<ReferenceType> implements NodeWithType<ReferenceType>, NodeWithAnnotations<ReferenceType>, NodeWithArrays<ReferenceType>  {
 
 	private Type type;
 

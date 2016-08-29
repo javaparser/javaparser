@@ -492,7 +492,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final PrimitiveType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printAnnotations(n.getAnnotations(), arg);
+		printAnnotations(n.getAnnotations(), true, arg);
 		switch (n.getType()) {
 			case Boolean:
 				printer.print("boolean");
@@ -550,7 +550,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
     @Override public void visit(final UnionType n, final Object arg) {
         printJavaComment(n.getComment(), arg);
-		printAnnotations(n.getAnnotations(), arg);
+		printAnnotations(n.getAnnotations(), true, arg);
         boolean isFirst = true;
         for (ReferenceType element : n.getElements()) {
             if (isFirst) {
@@ -566,7 +566,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final WildcardType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		printAnnotations(n.getAnnotations(), arg);
+		printAnnotations(n.getAnnotations(), false, arg);
 		printer.print("?");
 		if (n.getExtends() != null) {
 			printer.print(" extends ");

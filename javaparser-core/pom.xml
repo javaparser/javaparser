@@ -22,12 +22,6 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
-    <dependencies>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-        </dependency>
-    </dependencies>
 
     <properties>
         <java.version>1.8</java.version>

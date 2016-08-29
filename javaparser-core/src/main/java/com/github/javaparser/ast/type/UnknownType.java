@@ -22,13 +22,10 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
-
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for

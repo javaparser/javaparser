@@ -429,7 +429,7 @@ Then it is dumped to:
 public class Abc<@C A, @C X extends @C String & @C Serializable> {
 
     @C
-    int @C[] @C[] f;
+    int @C [] @C [] f;
 
     @C
     public Abc(@C int p, List<@C ? extends Object> aa) {
