@@ -444,6 +444,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final ClassOrInterfaceType n, final A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getScope() != null) {
 			{
 				R result = n.getScope().accept(this, arg);
@@ -1288,6 +1294,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final PrimitiveType n, final A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
@@ -1321,6 +1333,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override
     public R visit(final IntersectionType n, final A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
         {
             for (ReferenceType element : n.getElements()) {
                 R result = element.accept(this, arg);
@@ -1334,6 +1352,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override
     public R visit(final UnionType n, final A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
         {
             for (ReferenceType element : n.getElements()) {
                 R result = element.accept(this, arg);
@@ -1613,6 +1637,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final VoidType n, final A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
@@ -1635,6 +1665,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
 	@Override
 	public R visit(final WildcardType n, final A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getExtends() != null) {
 			{
 				R result = n.getExtends().accept(this, arg);
