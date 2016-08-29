@@ -537,6 +537,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final IntersectionType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		printAnnotations(n.getAnnotations(), false, arg);
 		boolean isFirst = true;
 		for (ReferenceType element : n.getElements()) {
 			element.accept(this, arg);
@@ -644,6 +645,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final VoidType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		printAnnotations(n.getAnnotations(), false, arg);
 		printer.print("void");
 	}
 

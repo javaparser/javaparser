@@ -487,12 +487,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
     @Override
     public Node visit(UnionType _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
         List<ReferenceType> elements = visit(_n.getElements(), _arg);
 
         UnionType r = new UnionType(_n.getRange(),
                 elements);
         Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
+		r.setAnnotations(annotations);
         return r;
     }
 
