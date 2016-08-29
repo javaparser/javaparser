@@ -373,3 +373,24 @@ class Foo {
     void m1(@Boo boolean @Index1 [] @Index2 [] boolArray) {
     }
 }
+
+
+Scenario: Annotations are supported inside catch (issue 436)
+Given the compilation unit:
+public class Abc {
+	public void a() {
+		try {
+		} catch (@C NullPointerException | @C IOException e) {
+		}
+	}
+}
+When the compilation unit is parsed by the Java parser
+Then it is dumped to:
+public class Abc {
+
+    public void a() {
+        try {
+        } catch (@C NullPointerException | @C IOException e) {
+        }
+    }
+}

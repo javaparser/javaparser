@@ -3126,7 +3126,7 @@ TryStmt TryStatement():
   			"catch" {catchBegin=tokenBegin();}
   			"(" 
   			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); }
-  			( "|" exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); } )*
+  			( "|" exceptionType = ReferenceTypeWithAnnotations() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId()
   			")"
   			 
