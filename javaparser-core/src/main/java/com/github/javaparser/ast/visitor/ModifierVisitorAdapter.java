@@ -330,6 +330,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final ClassOrInterfaceType n, final A arg) {
+		visitAnnotations(n, arg);
 		if (n.getScope() != null) {
 			n.setScope((ClassOrInterfaceType) n.getScope().accept(this, arg));
 		}
@@ -827,7 +828,8 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 
     @Override
     public Node visit(final UnionType n, final A arg) {
-        final List<ReferenceType> elements = n.getElements();
+		visitAnnotations(n, arg);
+		final List<ReferenceType> elements = n.getElements();
         if (elements != null) {
             for (int i = 0; i < elements.size(); i++) {
                 elements.set(i, (ReferenceType) elements.get(i).accept(this, arg));
