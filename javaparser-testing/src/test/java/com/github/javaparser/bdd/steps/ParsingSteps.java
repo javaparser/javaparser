@@ -342,6 +342,16 @@ public class ParsingSteps {
         }
     }
 
+    @Then("the Java parser cannot parse it because of a parse error")
+    public void javaParserCannotParseBecauseOfAParseError() {
+        try {
+            JavaParser.parse(sourceUnderTest);
+            fail("Parse error expected");
+        } catch (ParseException e) {
+            // ok
+        }
+    }
+
     @Then("the assignExpr produced doesn't have a null target")
     public void thenTheAssignExprProducedDoesntHaveANullTarget() {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
