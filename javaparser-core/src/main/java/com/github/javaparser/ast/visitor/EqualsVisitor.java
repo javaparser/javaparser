@@ -493,7 +493,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getBlock(), n2.getBlock())) {
+		if (!nodeEquals(n1.getBody(), n2.getBody())) {
 			return false;
 		}
 

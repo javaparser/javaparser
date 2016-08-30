@@ -22,11 +22,9 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.internal.Utils;
+import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * Java® Language Specification 3.10.5 String Literals
@@ -54,14 +52,6 @@ public class StringLiteralExpr extends LiteralExpr {
 		return new StringLiteralExpr(Utils.escapeEndOfLines(string));
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public StringLiteralExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                         final String value) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), value);
-	}
 	public StringLiteralExpr(final Range range, final String value) {
 		super(range);
 		this.value = value;

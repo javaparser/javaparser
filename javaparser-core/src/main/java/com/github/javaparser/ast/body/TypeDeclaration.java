@@ -21,9 +21,10 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -66,17 +67,6 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 		setMembers(members);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
-			int endColumn, List<AnnotationExpr> annotations,
-                           EnumSet<Modifier> modifiers, String name,
-                           List<BodyDeclaration<?>> members) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, modifiers, name, members);
-	}
-	
 	public TypeDeclaration(Range range, List<AnnotationExpr> annotations,
                            EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {
@@ -84,6 +74,24 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);
+	}
+
+	/**
+	 * Adds the given declaration to the specified type. The list of members
+	 * will be initialized if it is <code>null</code>.
+	 *
+	 * @param decl
+	 *            member declaration
+	 */
+	public TypeDeclaration<T> addMember(BodyDeclaration<?> decl) {
+		List<BodyDeclaration<?>> members = getMembers();
+		if (isNullOrEmpty(members)) {
+			members = new ArrayList<>();
+			setMembers(members);
+		}
+		members.add(decl);
+		decl.setParentNode(this);
+		return this;
 	}
 
     @Override

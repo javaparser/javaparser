@@ -21,12 +21,9 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -34,14 +31,6 @@ import static com.github.javaparser.Position.pos;
 public final class EmptyStmt extends Statement {
 
 	public EmptyStmt() {
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public EmptyStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
 	}
 
 	public EmptyStmt(Range range) {

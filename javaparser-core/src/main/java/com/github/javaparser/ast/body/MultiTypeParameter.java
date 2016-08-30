@@ -21,14 +21,9 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-
 import java.util.List;
-
-import static com.github.javaparser.Position.pos;
 
 import java.util.EnumSet;
-import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
@@ -45,14 +40,6 @@ public class MultiTypeParameter extends BaseParameter<MultiTypeParameter> {
     public MultiTypeParameter(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
         super(modifiers, annotations, id);
         this.type = type;
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, id);
     }
 
     public MultiTypeParameter(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, UnionType type, VariableDeclaratorId id) {

@@ -21,8 +21,7 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 
@@ -70,16 +69,6 @@ public final class ObjectCreationExpr extends Expression {
 		setArgs(args);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public ObjectCreationExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                          final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
-                              final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), scope, type, typeArgs, args, anonymousBody);
-	}
-	
 	public ObjectCreationExpr(final Range range,
 			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
                               final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {

@@ -21,8 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -58,16 +57,6 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
         setEntries(entries);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public EnumDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
-                           List<AnnotationExpr> annotations, String name, List<ClassOrInterfaceType> implementsList,
-                           List<EnumConstantDeclaration> entries, List<BodyDeclaration<?>> members) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, name, implementsList, entries, members);
-    }
-    
     public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
                            List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {

@@ -21,14 +21,11 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -51,17 +48,6 @@ public final class ForeachStmt extends Statement {
 		setBody(body);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public ForeachStmt(final int beginLine, final int beginColumn,
-	                   final int endLine, final int endColumn,
-	                   final VariableDeclarationExpr var, final Expression iterable,
-	                   final Statement body) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), var, iterable, body);
-	}
-	
 	public ForeachStmt(Range range,
 	                   final VariableDeclarationExpr var, final Expression iterable,
 	                   final Statement body) {

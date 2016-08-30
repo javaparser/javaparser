@@ -75,17 +75,17 @@ public class SharedSteps {
 
     @When("the following source is parsed:$classSrc")
     public void whenTheFollowingSourceIsParsed(String classSrc) throws ParseException {
-        state.put("cu1", JavaParser.parse(new StringReader(classSrc.trim()), true));
+        state.put("cu1", JavaParser.parse(classSrc.trim()));
     }
 
     @When("the following source is parsed (trimming space):$classSrc")
     public void whenTheFollowingSourceIsParsedTrimmingSpace(String classSrc) throws ParseException {
-        state.put("cu1", JavaParser.parse(new StringReader(classSrc.trim()), true));
+        state.put("cu1", JavaParser.parse(classSrc.trim()));
     }
 
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
     public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException {
-        state.put("cu2", JavaParser.parse(new StringReader(classSrc.trim()), true));
+        state.put("cu2", JavaParser.parse(classSrc.trim()));
     }
 
     @When("file \"$fileName\" is parsed")

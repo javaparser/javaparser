@@ -19,8 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.internal;
+package com.github.javaparser.utils;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -58,4 +60,17 @@ public class Utils {
 		}
 		return escapedString.toString();
 	}
+
+	public static String readerToString(Reader reader) throws IOException {
+		char[] arr = new char[8*1024]; // 8K at a time
+		StringBuilder buf = new StringBuilder();
+		int numChars;
+
+		while ((numChars = reader.read(arr, 0, arr.length)) > 0) {
+			buf.append(arr, 0, numChars);
+		}
+
+		return buf.toString();
+	}
+
 }

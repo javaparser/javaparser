@@ -21,8 +21,7 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -105,19 +104,6 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         setArrayCount(arrayCount);
         setThrows(throws_);
         setBody(body);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public MethodDeclaration(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                             final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, final Type type, final String name,
-                             final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_,
-                             final BlockStmt body) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, typeParameters,
-                type, name, parameters, arrayCount, throws_, body);
     }
 
     public MethodDeclaration(Range range,

@@ -21,14 +21,14 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.type.VoidType.*;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.github.javaparser.ASTHelper;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -42,6 +42,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -83,21 +84,47 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         setVariables(variables);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
-                            List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, type, variables);
-    }
-
     public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
                             List<VariableDeclarator> variables) {
         super(range, annotations);
         setModifiers(modifiers);
         setType(type);
         setVariables(variables);
+    }
+
+    /**
+     * Creates a {@link FieldDeclaration}.
+     *
+     * @param modifiers
+     *            modifiers
+     * @param type
+     *            type
+     * @param variable
+     *            variable declarator
+     * @return instance of {@link FieldDeclaration}
+     */
+    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type,
+                                                          VariableDeclarator variable) {
+        List<VariableDeclarator> variables = new ArrayList<>();
+        variables.add(variable);
+        return new FieldDeclaration(modifiers, type, variables);
+    }
+
+    /**
+     * Creates a {@link FieldDeclaration}.
+     *
+     * @param modifiers
+     *            modifiers
+     * @param type
+     *            type
+     * @param name
+     *            field name
+     * @return instance of {@link FieldDeclaration}
+     */
+    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type, String name) {
+        VariableDeclaratorId id = new VariableDeclaratorId(name);
+        VariableDeclarator variable = new VariableDeclarator(id);
+        return create(modifiers, type, variable);
     }
 
     @Override
@@ -176,16 +203,15 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
         String fieldName = getVariables().get(0).getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
-        MethodDeclaration getter = null;
+        final MethodDeclaration getter;
         if (parentClass != null)
-            getter = parentClass.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
+            getter = parentClass.addMethod("get" + fieldNameUpper, PUBLIC);
         else
-            getter = parentEnum.addMethod("get" + fieldNameUpper, Modifier.PUBLIC);
+            getter = parentEnum.addMethod("get" + fieldNameUpper, PUBLIC);
         getter.setType(getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
-        ReturnStmt r = new ReturnStmt(ASTHelper.createNameExpr(fieldName));
-        ASTHelper.addStmt(blockStmt, r);
+        blockStmt.addStatement(new ReturnStmt(NameExpr.create(fieldName)));
         return getter;
     }
 
@@ -209,17 +235,16 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         String fieldName = getVariables().get(0).getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
-        MethodDeclaration setter = null;
+        final MethodDeclaration setter;
         if (parentClass != null)
-            setter = parentClass.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
+            setter = parentClass.addMethod("set" + fieldNameUpper, PUBLIC);
         else
-            setter = parentEnum.addMethod("set" + fieldNameUpper, Modifier.PUBLIC);
-        setter.setType(ASTHelper.VOID_TYPE);
+            setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
+        setter.setType(VOID_TYPE);
         setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
-        ASTHelper.addStmt(blockStmt2,
-                new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
+        blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
         return setter;
     }
 
