@@ -34,6 +34,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
+import com.github.javaparser.ParseProblemException;
 import org.hamcrest.CoreMatchers;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -74,22 +75,22 @@ public class SharedSteps {
      */
 
     @When("the following source is parsed:$classSrc")
-    public void whenTheFollowingSourceIsParsed(String classSrc) throws ParseException {
+    public void whenTheFollowingSourceIsParsed(String classSrc) throws ParseProblemException {
         state.put("cu1", JavaParser.parse(classSrc.trim()));
     }
 
     @When("the following source is parsed (trimming space):$classSrc")
-    public void whenTheFollowingSourceIsParsedTrimmingSpace(String classSrc) throws ParseException {
+    public void whenTheFollowingSourceIsParsedTrimmingSpace(String classSrc) throws ParseProblemException {
         state.put("cu1", JavaParser.parse(classSrc.trim()));
     }
 
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
-    public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseException {
+    public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) throws ParseProblemException {
         state.put("cu2", JavaParser.parse(classSrc.trim()));
     }
 
     @When("file \"$fileName\" is parsed")
-    public void whenTheJavaFileIsParsed(String fileName) throws IOException, ParseException, URISyntaxException {
+    public void whenTheJavaFileIsParsed(String fileName) throws IOException, URISyntaxException, ParseProblemException {
         URL url = getClass().getResource("../samples/" + fileName);
         CompilationUnit compilationUnit = JavaParser.parse(new File(url.toURI()));
         state.put("cu1", compilationUnit);

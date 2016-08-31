@@ -36,6 +36,7 @@ import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
 
+import com.github.javaparser.ParseProblemException;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -333,7 +334,7 @@ public class ParsingSteps {
     }
 
     @Then("the Java parser cannot parse it because of lexical errors")
-    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
+    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseProblemException {
         try {
             JavaParser.parse(sourceUnderTest);
             fail("Lexical error expected");

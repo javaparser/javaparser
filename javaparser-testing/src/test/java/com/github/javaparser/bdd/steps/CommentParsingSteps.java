@@ -31,8 +31,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
-import java.io.StringReader;
 
+import com.github.javaparser.ParseProblemException;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -41,7 +41,6 @@ import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.TokenMgrException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -91,12 +90,12 @@ public class CommentParsingSteps {
     }
 
     @When("the class is parsed by the Java parser")
-    public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheClassIsParsedByTheJavaParser() throws ParseProblemException {
         compilationUnit = JavaParser.parse(sourceUnderTest);
     }
 
     @Then("the Java parser cannot parse it because of lexical errors")
-    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
+    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseProblemException {
         try {
             compilationUnit = JavaParser.parse(sourceUnderTest);
             fail("Lexical error expected");
