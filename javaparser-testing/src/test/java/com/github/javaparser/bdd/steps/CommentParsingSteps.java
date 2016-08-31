@@ -21,39 +21,12 @@
  
 package com.github.javaparser.bdd.steps;
 
-import static com.github.javaparser.Range.range;
-import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-
-import com.github.javaparser.ParseProblemException;
-import org.jbehave.core.annotations.Alias;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-import org.jbehave.core.model.ExamplesTable;
-import org.jbehave.core.steps.Parameters;
-
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.TokenMgrException;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.CommentsCollection;
-import com.github.javaparser.ast.comments.CommentsParser;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -61,12 +34,29 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.DumpVisitor;
 import com.github.javaparser.bdd.TestUtils;
+import org.jbehave.core.annotations.Alias;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+import org.jbehave.core.model.ExamplesTable;
+import org.jbehave.core.steps.Parameters;
+
+import java.io.IOException;
+
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Range.range;
+import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class CommentParsingSteps {
 
     private CompilationUnit compilationUnit;
     private CommentsCollection commentsCollection;
     private String sourceUnderTest;
+    private ParserConfiguration configuration = new ParserConfiguration();
 
     @Given("the class:$classSrc")
     public void givenTheClass(String classSrc) {
@@ -86,21 +76,24 @@ public class CommentParsingSteps {
 
     @When("the do not consider annotations as node start for code attribution is $value on the Java parser")
     public void whenTheDoNotConsiderAnnotationsAsNodeStartForCodeAttributionIsTrueOnTheJavaParser(boolean value) {
-        JavaParser.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(value);
+        configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution = value;
+    }
+
+    @When("the do not assign comments preceding empty lines is $value on the Java parser")
+    public void whenTheDoNotAssignCommentsPrecedingEmptyLinesIsTrueOnTheJavaParser(boolean value) {
+        configuration.doNotAssignCommentsPrecedingEmptyLines = value;
     }
 
     @When("the class is parsed by the Java parser")
-    public void whenTheClassIsParsedByTheJavaParser() throws ParseProblemException {
-        compilationUnit = JavaParser.parse(sourceUnderTest);
+    public void whenTheClassIsParsedByTheJavaParser() {
+        compilationUnit = new JavaParser(configuration).parseFull(provider(sourceUnderTest)).result.get();
     }
 
     @Then("the Java parser cannot parse it because of lexical errors")
-    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseProblemException {
-        try {
-            compilationUnit = JavaParser.parse(sourceUnderTest);
+    public void javaParserCannotParseBecauseOfLexicalErrors() {
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parseFull(provider(sourceUnderTest));
+        if(result.isSuccessful()){
             fail("Lexical error expected");
-        } catch (TokenMgrException e) {
-            // ok
         }
     }
 

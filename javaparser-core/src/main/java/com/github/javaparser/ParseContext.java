@@ -11,6 +11,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import java.util.List;
 
 @FunctionalInterface
+// TODO this needs a better name. "StartProduction"?
 public interface ParseContext<R> {
 	ParseContext<CompilationUnit> COMPILATION_UNIT = ASTParser::CompilationUnit;
 	ParseContext<BlockStmt> BLOCK = ASTParser::Block;

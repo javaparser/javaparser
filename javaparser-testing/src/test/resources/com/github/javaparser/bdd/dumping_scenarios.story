@@ -231,10 +231,10 @@ Then it is dumped to:
 
 Scenario: we can parse body declarations
 Given the body:
-private static final int x = 20;
-When the body declaration is parsed by the Java parser
+String author();
+When the annotation body declaration is parsed by the Java parser
 Then it is dumped to:
-private static final int x = 20;
+String author();
 
 Scenario: we can parse class body declarations
 Given the body:

@@ -21,8 +21,6 @@
 
 package com.github.javaparser;
 
-import java.io.*;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -31,22 +29,24 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ASTParser.*;
-import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.ASTParser.tokenRange;
+import static com.github.javaparser.Providers.UTF8;
+import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.Utils.providerToString;
-import static java.util.Collections.*;
+import static java.util.Collections.singletonList;
 
 /**
- * Parse Java source code and creates Abstract Syntax Tree classes.
+ * Parse Java source code and creates Abstract Syntax Trees.
  *
  * @author Júlio Vilmar Gesser
  */
 public final class JavaParser {
-	private static final CommentsInserter commentsInserter = new CommentsInserter();
+	private final CommentsInserter commentsInserter;
 
 	private ASTParser astParser = null;
 
@@ -54,8 +54,8 @@ public final class JavaParser {
 	 * Instantiate the parser. Note that parsing can also be done with the static methods on this class.
 	 * Creating an instance will reduce setup time between parsing files.
 	 */
-	public JavaParser() {
-		// No specific constructors for this class.
+	public JavaParser(ParserConfiguration configuration) {
+		commentsInserter = new CommentsInserter(configuration);
 	}
 
 	private ASTParser getParserForProvider(Provider provider) {
@@ -97,6 +97,8 @@ public final class JavaParser {
 			return new ParseResult<>(Optional.of(resultNode), parser.problems);
 		} catch (ParseException e) {
 			return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))));
+        } catch (TokenMgrException e) {
+            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), Range.UNKNOWN)));
 		} finally {
 			try {
 				provider.close();
@@ -114,17 +116,19 @@ public final class JavaParser {
 	 * @return the parse result and a collection of encountered problems.
 	 */
 	public ParseResult<CompilationUnit> parseFull(Provider provider) {
-		final ASTParser parser = getParserForProvider(provider);
 		try {
-			String comments = providerToString(provider);
-			CompilationUnit resultNode = ParseContext.COMPILATION_UNIT.parse(parser);
-			commentsInserter.insertComments(resultNode, comments);
+			final String sourceCode = providerToString(provider);
+            final ASTParser parser = getParserForProvider(provider(sourceCode));
+			final CompilationUnit resultNode = ParseContext.COMPILATION_UNIT.parse(parser);
+			commentsInserter.insertComments(resultNode, sourceCode);
 
 			return new ParseResult<>(Optional.of(resultNode), parser.problems);
 		} catch (ParseException e) {
-			return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))));
-		} catch (IOException e) {
-			// The commentsInserter won't throw an IOException since it's reading from a String.
+            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))));
+        } catch (TokenMgrException e) {
+            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), Range.UNKNOWN)));
+        } catch (IOException e) {
+            // The commentsInserter won't throw an IOException since it's reading from a String.
 			throw new AssertionError("Unreachable code");
 		} finally {
 			try {
@@ -133,22 +137,6 @@ public final class JavaParser {
 				// Since we're done parsing and have our result, we don't care about any errors.
 			}
 		}
-	}
-
-	public static boolean getDoNotConsiderAnnotationsAsNodeStartForCodeAttribution() {
-		return commentsInserter.getDoNotConsiderAnnotationsAsNodeStartForCodeAttribution();
-	}
-
-	public static void setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(boolean newValue) {
-		commentsInserter.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(newValue);
-	}
-
-	public static boolean getDoNotAssignCommentsPreceedingEmptyLines() {
-		return commentsInserter.getDoNotAssignCommentsPreceedingEmptyLines();
-	}
-
-	public static void setDoNotAssignCommentsPreceedingEmptyLines(boolean newValue) {
-		commentsInserter.setDoNotAssignCommentsPreceedingEmptyLines(newValue);
 	}
 
 	public static CompilationUnit parse(final InputStream in, final Charset encoding) throws ParseProblemException {
@@ -270,25 +258,25 @@ public final class JavaParser {
 	}
 
 	private static <T> T simplifiedParse(ParseContext<T> context, Provider provider) throws ParseProblemException {
-		ParseResult<T> result = new JavaParser().parseStructure(context, provider);
+		ParseResult<T> result = new JavaParser(new ParserConfiguration()).parseStructure(context, provider);
 		if (result.isSuccessful()) {
 			return result.result.get();
 		}
 		throw new ParseProblemException(result.problems);
 	}
 
-	private static CompilationUnit simplifiedParse(Provider provider, boolean considerComments) throws ParseProblemException {
-		final ParseResult<CompilationUnit> result;
-		if(considerComments) {
-			result = new JavaParser().parseFull(provider);
-		}else{
-			result = new JavaParser().parseStructure(ParseContext.COMPILATION_UNIT, provider);
-		}
-		if (result.isSuccessful()) {
-			return result.result.get();
-		}
-		throw new ParseProblemException(result.problems);
-	}
+    private static CompilationUnit simplifiedParse(Provider provider, boolean considerComments) throws ParseProblemException {
+        final ParseResult<CompilationUnit> result;
+        if (considerComments) {
+            result = new JavaParser(new ParserConfiguration()).parseFull(provider);
+        } else {
+            result = new JavaParser(new ParserConfiguration()).parseStructure(ParseContext.COMPILATION_UNIT, provider);
+        }
+        if (result.isSuccessful()) {
+            return result.result.get();
+        }
+        throw new ParseProblemException(result.problems);
+    }
 
 	/**
 	 * Parses the Java statements contained in a {@link String} and returns a
