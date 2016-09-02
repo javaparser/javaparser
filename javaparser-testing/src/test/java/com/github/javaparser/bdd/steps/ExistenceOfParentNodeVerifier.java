@@ -341,12 +341,6 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(MultiTypeParameter n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
         public void visit(NameExpr n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);

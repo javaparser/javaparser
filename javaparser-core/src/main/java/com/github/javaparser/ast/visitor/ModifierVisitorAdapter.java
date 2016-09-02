@@ -41,7 +41,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -784,12 +783,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		return n;
 	}
 	
-	@Override public Node visit(MultiTypeParameter n, A arg) {
-        visit((BaseParameter<?>) n, arg);
-        n.setType((UnionType)n.getType().accept(this, arg));
-        return n;
-    }
-
     protected Node visit(final BaseParameter<?> n, final A arg) {
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {

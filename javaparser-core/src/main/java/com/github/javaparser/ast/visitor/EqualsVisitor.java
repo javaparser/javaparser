@@ -40,7 +40,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
@@ -566,14 +565,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         return visit((BaseParameter<?>) n1, arg);
 	}
 	
-	@Override public Boolean visit(MultiTypeParameter n1, Node arg) {
-		MultiTypeParameter n2 = (MultiTypeParameter) arg;
-        if (!nodeEquals(n1.getType(), n2.getType())) {
-            return false;
-        }
-        return visit((BaseParameter<?>) n1, arg);
-	}
-
     protected Boolean visit(final BaseParameter<?> n1, final Node arg) {
         final BaseParameter<?> n2 = (BaseParameter<?>) arg;
 

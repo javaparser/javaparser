@@ -37,7 +37,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -1257,35 +1256,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		return null;
 	}
 	
-	@Override
-	public R visit(final MultiTypeParameter n, final A arg) {
-		if (n.getAnnotations() != null) {
-			for (final AnnotationExpr a : n.getAnnotations()) {
-				{
-					R result = a.accept(this, arg);
-					if (result != null) {
-						return result;
-					}
-				}
-			}
-		}
-		{
-			if (n.getType() != null) {
-				R result = n.getType().accept(this, arg);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
-		{
-			R result = n.getId().accept(this, arg);
-			if (result != null) {
-				return result;
-			}
-		}
-		return null;
-	}
-
 	@Override
 	public R visit(final PrimitiveType n, final A arg) {
 		return null;

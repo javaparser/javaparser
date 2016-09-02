@@ -42,7 +42,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -367,21 +366,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Parameter r = new Parameter(
 				_n.getRange(),
 				_n.getModifiers(), annotations, type_, _n.isVarArgs(), id
-		);
-		r.setComment(comment);
-		return r;
-	}
-	
-	@Override
-	public Node visit(MultiTypeParameter _n, Object _arg) {
-		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
-		UnionType type = cloneNodes(_n.getType(), _arg);
-		VariableDeclaratorId id = cloneNodes(_n.getId(), _arg);
-		Comment comment = cloneNodes(_n.getComment(), _arg);
-
-		MultiTypeParameter r = new MultiTypeParameter(
-				_n.getRange(),
-				_n.getModifiers(), annotations, type, id
 		);
 		r.setComment(comment);
 		return r;
