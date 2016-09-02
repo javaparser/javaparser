@@ -447,17 +447,15 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ClassOrInterfaceType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 
-		if (n.getAnnotations() != null) {
-			for (AnnotationExpr ae : n.getAnnotations()) {
-				ae.accept(this, arg);
-				printer.print(" ");
-			}
-		}
-
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 			printer.print(".");
 		}
+		for (AnnotationExpr ae : n.getAnnotations()) {
+			ae.accept(this, arg);
+			printer.print(" ");
+		}
+
 		printer.print(n.getName());
 
 		if (n.isUsingDiamondOperator()) {
@@ -470,11 +468,9 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final TypeParameter n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		if (n.getAnnotations() != null) {
-			for (AnnotationExpr ann : n.getAnnotations()) {
-				ann.accept(this, arg);
-				printer.print(" ");
-			}
+		for (AnnotationExpr ann : n.getAnnotations()) {
+			ann.accept(this, arg);
+			printer.print(" ");
 		}
 		printer.print(n.getName());
 		if (!isNullOrEmpty(n.getTypeBound())) {

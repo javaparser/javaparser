@@ -1390,8 +1390,8 @@ List<ClassOrInterfaceType> ExtendsList(boolean isInterface):
    List<AnnotationExpr> annotations = null;
 }
 {
-   "extends" annotations = Annotations() cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); }
-   ( "," cit = ClassOrInterfaceType() { ret.add(cit); extendsMoreThanOne = true; } )*
+   "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
+   ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); extendsMoreThanOne = true; } )*
    {
       if (extendsMoreThanOne && !isInterface)
          throwParseException("A class cannot extend more than one other class");
@@ -1405,8 +1405,8 @@ List<ClassOrInterfaceType> ImplementsList(boolean isInterface):
    ClassOrInterfaceType cit;
 }
 {
-   "implements" cit = ClassOrInterfaceTypeWithAnnotations() { ret.add(cit); }
-   ( "," cit = ClassOrInterfaceTypeWithAnnotations() { ret.add(cit); } )*
+   "implements" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
+   ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
    {
       if (isInterface)
          throwParseException("An interface cannot implement other interfaces");
@@ -1505,8 +1505,8 @@ List<ClassOrInterfaceType> TypeBound():
 	List<AnnotationExpr> annotations;
 }
 {
-   "extends" annotations = Annotations() cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); }
-   ( "&"   annotations = Annotations() cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); } )*
+   "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
+   ( "&"   cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
    { return ret; }
 }
 
@@ -1877,6 +1877,24 @@ IntersectionType IntersectionType():
     { return new IntersectionType(range(begin, tokenEnd()), elements); }
 }
 
+ClassOrInterfaceType AnnotatedClassOrInterfaceType():
+{
+	List<AnnotationExpr> annotations;
+	ClassOrInterfaceType cit;
+}
+{
+    annotations = Annotations()
+    cit = ClassOrInterfaceType()
+    {
+        if (cit.getScope()!=null) {
+            cit.getScope().setAnnotations(annotations);
+        } else {
+            cit.setAnnotations(annotations);
+        }
+        return cit;
+    }
+}
+
 ClassOrInterfaceType ClassOrInterfaceType():
 {
 	ClassOrInterfaceType ret;
@@ -1902,25 +1920,6 @@ ClassOrInterfaceType ClassOrInterfaceType():
   )*
   { return ret; }
 }
-
-ClassOrInterfaceType ClassOrInterfaceTypeWithAnnotations():
-{
-	List<AnnotationExpr> annotations = new ArrayList<AnnotationExpr>();
-	ClassOrInterfaceType type;
-}
-{
-    annotations = Annotations() type = ClassOrInterfaceType() {
-        if(annotations != null){
-            if (type.getAnnotations() != null) {
-                type.getAnnotations().addAll(annotations);
-            } else {
-                type.setAnnotations(annotations);
-            }
-        }
-        return type;
-    }
-}
-
 
 RangedList<Type> TypeArguments():
 {
@@ -2665,9 +2664,9 @@ Expression AllocationExpression(Expression scope):
 	  }
 	|
 	 [ typeArgs = TypeArguments() annotations = Annotations() ]
-	  type = ClassOrInterfaceType()
+	  type = AnnotatedClassOrInterfaceType()
       (
-	      arr = ArrayDimsAndInits() {type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);	  }
+	      arr = ArrayDimsAndInits() {arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);	  }
 		  {
 		    arrayExpr.setArraysAnnotations((List)arr[2]);
 		  	if (arr[0] instanceof Integer) {
@@ -2681,7 +2680,7 @@ Expression AllocationExpression(Expression scope):
 		  }
 	  |
 	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-	      { type.setAnnotations(annotations); ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
+	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
       )
   )
   { return ret; }

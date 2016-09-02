@@ -394,3 +394,21 @@ public class Abc {
         }
     }
 }
+
+Scenario: Inner class notation does not confuse annotations (#107)
+Given the class:
+class A extends @Ann1 B.@Ann2 C {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A extends @Ann1 B.@Ann2 C {
+}
+
+Scenario: Make sure interface extends can be annotated
+Given the class:
+interface A extends @X B, @Y C, @Z D {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+interface A extends @X B, @Y C, @Z D {
+}
