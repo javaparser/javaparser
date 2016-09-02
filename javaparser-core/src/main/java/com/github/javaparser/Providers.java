@@ -2,6 +2,9 @@ package com.github.javaparser;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
 
 /**
  * Factory for providers of source code for JavaParser.
@@ -37,6 +40,14 @@ public abstract class Providers {
 
 	public static Provider provider(File file) throws FileNotFoundException {
 		return provider(file, UTF8);
+	}
+
+	public static Provider provider(Path path, Charset encoding) throws IOException {
+		return provider(Files.newInputStream(path), encoding);
+	}
+
+	public static Provider provider(Path path) throws IOException {
+		return provider(path, UTF8);
 	}
 
 	public static Provider provider(String source) {

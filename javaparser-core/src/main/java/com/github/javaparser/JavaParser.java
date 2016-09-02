@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.Statement;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -186,6 +187,39 @@ public final class JavaParser {
 	 */
 	public static CompilationUnit parse(final File file) throws FileNotFoundException, ParseProblemException {
 		return simplifiedParse(provider(file), true);
+	}
+
+
+	public static CompilationUnit parse(final Path path, final Charset encoding) throws ParseProblemException, IOException {
+		return simplifiedParse(provider(path, encoding), true);
+	}
+
+	/**
+	 * Parses the Java code contained in a file and returns a
+	 * {@link CompilationUnit} that represents it.
+	 *
+	 * @param path     path to a file containing Java source code
+	 * @param encoding encoding of the source code
+	 * @return CompilationUnit representing the Java source code
+	 * @throws IOException the path could not be accessed
+	 * @throws ParseProblemException if the source code has parser errors
+	 */
+	public static CompilationUnit parse(final Path path, final Charset encoding, boolean considerComments) throws ParseProblemException, IOException {
+		return simplifiedParse(provider(path, encoding), considerComments);
+	}
+
+	/**
+	 * Parses the Java code contained in a file and returns a
+	 * {@link CompilationUnit} that represents it.<br>
+	 * Note: Uses UTF-8 encoding
+	 *
+	 * @param path     path to a file containing Java source code
+	 * @return CompilationUnit representing the Java source code
+	 * @throws ParseProblemException if the source code has parser errors
+	 * @throws IOException the path could not be accessed
+	 */
+	public static CompilationUnit parse(final Path path) throws IOException, ParseProblemException {
+		return simplifiedParse(provider(path), true);
 	}
 
 	public static CompilationUnit parse(final Reader reader) throws ParseProblemException {
