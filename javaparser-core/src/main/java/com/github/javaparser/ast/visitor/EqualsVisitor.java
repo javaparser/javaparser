@@ -30,7 +30,6 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BaseParameter;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EmptyMemberDeclaration;
@@ -562,13 +561,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodeEquals(n1.getType(), n2.getType())) {
 			return false;
 		}
-        return visit((BaseParameter<?>) n1, arg);
-	}
-	
-    protected Boolean visit(final BaseParameter<?> n1, final Node arg) {
-        final BaseParameter<?> n2 = (BaseParameter<?>) arg;
 
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+		if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 

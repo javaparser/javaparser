@@ -30,7 +30,6 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BaseParameter;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -778,12 +777,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 	
 	@Override public Node visit(final Parameter n, final A arg) {
-        visit((BaseParameter<?>) n, arg);
-		n.setType((Type) n.getType().accept(this, arg));
-		return n;
-	}
-	
-    protected Node visit(final BaseParameter<?> n, final A arg) {
 		final List<AnnotationExpr> annotations = n.getAnnotations();
 		if (annotations != null) {
 			for (int i = 0; i < annotations.size(); i++) {
@@ -791,11 +784,12 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(annotations);
 		}
-		
+
 		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
+		n.setType((Type) n.getType().accept(this, arg));
 		return n;
 	}
-
+	
 	@Override public Node visit(final PrimitiveType n, final A arg) {
 		return n;
 	}
