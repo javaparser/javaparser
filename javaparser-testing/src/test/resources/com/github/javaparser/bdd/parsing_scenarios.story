@@ -377,7 +377,7 @@ class A {
         world";
     }
 }
-Then the Java parser cannot parse it because of lexical errors
+Then the Java parser cannot parse the compilation unit
 
 Scenario: Chars with unescaped newlines are illegal (issue 211)
 Given the class:
@@ -387,7 +387,7 @@ class A {
 ';
     }
 }
-Then the Java parser cannot parse it because of lexical errors
+Then the Java parser cannot parse the compilation unit
 
 Scenario: Diamond Operator information is exposed
 
@@ -460,4 +460,86 @@ public class Example {
         true /*primaryConnection*/); // comment
   }
 }
+Then no errors are reported
+
+Scenario: We can not have a conditional expression on the left of an assignment statement (issue 109)
+Given the statement:
+a?b:c = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have an or expression on the left of an assignment statement (issue 109)
+Given the statement:
+a||b = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have an instanceof expression on the left of an assignment statement (issue 109)
+Given the statement:
+a instanceof C = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have a less than expression on the left of an assignment statement (issue 109)
+Given the statement:
+a < 3 = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have an unary minus expression on the left of an assignment statement (issue 109)
+Given the statement:
+-a = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have a postfix increment expression on the left of an assignment statement (issue 109)
+Given the statement:
+a++ = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have a cast on the left of an assignment statement (issue 109)
+Given the statement:
+(double)a = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can have a primary expression on the left of an assignment statement (issue 109)
+Given a CompilationUnit
+When the following source is parsed:
+class X { void a() {a = 1;} }
+Then no errors are reported
+
+Scenario: We can not have a conditional expression on the left of an assignment expression (issue 109)
+Given the statement:
+a = a?b:c = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have an or expression on the left of an assignment expression (issue 109)
+Given the statement:
+a = a||b = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have an instanceof expression on the left of an assignment expression (issue 109)
+Given the statement:
+a = a instanceof C = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have a less than expression on the left of an assignment expression (issue 109)
+Given the statement:
+a = a < 3 = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have an unary minus expression on the left of an assignment expression (issue 109)
+Given the statement:
+a = -a = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have a postfix increment expression on the left of an assignment expression (issue 109)
+Given the statement:
+a = a++ = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can not have a cast on the left of an assignment expression (issue 109)
+Given the statement:
+a = (double)a = 1;
+Then the Java parser cannot parse the statement
+
+Scenario: We can have a primary expression on the left of an assignment expression (issue 109)
+Given a CompilationUnit
+When the following source is parsed:
+class X { void a() {a = b = 1;} }
 Then no errors are reported

@@ -21,53 +21,32 @@
 
 package com.github.javaparser.bdd.steps;
 
-import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
-import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
-import static java.lang.String.format;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
-import java.io.StringReader;
-import java.util.List;
-import java.util.Map;
-
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.TokenMgrException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+
+import java.util.List;
+import java.util.Map;
+
+import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
+import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
+import static java.lang.String.format;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.*;
 
 public class ParsingSteps {
 
@@ -77,13 +56,13 @@ public class ParsingSteps {
         this.state = state;
     }
 
-    private String sourceUnderTest;
+    private String sourceUnderTest=null;
 
     /*
      * Given steps
      */
 
-    @Given("the class:$classSrc")
+    @Given("the {class|statement}:$classSrc")
     public void givenTheClass(String classSrc) {
         this.sourceUnderTest = classSrc.trim();
     }
@@ -332,12 +311,22 @@ public class ParsingSteps {
         assertEquals(expectedValue, expr.getType().isUsingDiamondOperator());
     }
 
-    @Then("the Java parser cannot parse it because of lexical errors")
-    public void javaParserCannotParseBecauseOfLexicalErrors() throws ParseException {
+    @Then("the Java parser cannot parse the compilation unit")
+    public void javaParserCannotParseCompilationUnit() {
         try {
             JavaParser.parse(sourceUnderTest);
-            fail("Lexical error expected");
-        } catch (TokenMgrException e) {
+            fail("Error expected");
+        } catch (TokenMgrException | ParseException e) {
+            // ok
+        }
+    }
+
+    @Then("the Java parser cannot parse the statement")
+    public void javaParserCannotParseExpression() {
+        try {
+            Statement statement = JavaParser.parseStatement(sourceUnderTest);
+            fail("Error expected");
+        } catch (TokenMgrException | ParseException e) {
             // ok
         }
     }

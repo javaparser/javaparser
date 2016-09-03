@@ -2047,15 +2047,6 @@ NameExpr SimpleName():
  */
 
 Expression Expression():
-/*
- * This expansion has been written this way instead of:
- *   Assignment() | ConditionalExpression()
- * for performance reasons.
- * However, it is a weakening of the grammar for it allows the LHS of
- * assignments to be any conditional expression whereas it can only be
- * a primary expression.  Consider adding a semantic predicate to work
- * around this.
- */
 {
 	Expression ret;
 	AssignExpr.Operator op;
@@ -2064,37 +2055,41 @@ Expression Expression():
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
 }
 {
-  ret = ConditionalExpression()
-  [
-    (
-       LOOKAHEAD(2)
-    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, value, op); }
-  |
-   "->" lambdaBody = LambdaBody()
-   {
-     if (ret instanceof CastExpr)
-     {
-       ret = generateLambda(ret, lambdaBody);
-     }
-     else if (ret instanceof ConditionalExpr){
-     	 ConditionalExpr ce = (ConditionalExpr) ret;
-         if(ce.getElseExpr() != null){
-            ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
-         }
-     }
-     else
-     {
-       ret = generateLambda(ret, lambdaBody);
-     }
-   }
- |  "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
- {
-   ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs.list), token.image);
- }
-   )
-  ]
-
-  { return ret; }
+    ret = ConditionalExpression()
+    [
+        (
+                LOOKAHEAD(2)
+                op = AssignmentOperator() value = Expression()
+                {
+                    if(ret instanceof FieldAccessExpr || ret instanceof NameExpr || ret instanceof ArrayAccessExpr) {
+                        ret = new AssignExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, value, op);
+                    } else {
+                        throwParseException("Left hand side of an assignment can only be a primary expression");
+                    }
+                }
+            |
+                "->" lambdaBody = LambdaBody()
+                {
+                    if (ret instanceof CastExpr) {
+                        ret = generateLambda(ret, lambdaBody);
+                    }
+                    else if (ret instanceof ConditionalExpr){
+                        ConditionalExpr ce = (ConditionalExpr) ret;
+                        if(ce.getElseExpr() != null){
+                            ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
+                        }
+                    } else {
+                        ret = generateLambda(ret, lambdaBody);
+                    }
+                }
+            |
+                "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
+                {
+                    ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs.list), token.image);
+                }
+        )
+    ]
+    { return ret; }
 }
 
 AssignExpr.Operator AssignmentOperator():
