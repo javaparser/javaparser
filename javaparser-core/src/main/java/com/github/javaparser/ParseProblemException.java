@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Thrown when parsing problems occur during parsing with the static methods on JavaParser.
  */
-public class ParseProblemException extends Exception {
+public class ParseProblemException extends RuntimeException {
     /** The problems that were encountered during parsing */
     public final List<Problem> problems;
     

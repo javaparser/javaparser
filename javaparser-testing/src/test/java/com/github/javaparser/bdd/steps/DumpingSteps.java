@@ -59,52 +59,52 @@ public class DumpingSteps {
     }
 
     @When("the {class|compilation unit} is parsed by the Java parser")
-    public void whenTheClassIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheClassIsParsedByTheJavaParser() {
         resultNode = JavaParser.parse(sourceUnderTest, true);
     }
 
     @When("the expression is parsed by the Java parser")
-    public void whenTheExpressionIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheExpressionIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseExpression(sourceUnderTest);
     }
 
     @When("the block is parsed by the Java parser")
-    public void whenTheBlockIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheBlockIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseBlock(sourceUnderTest);
     }
 
     @When("the statement is parsed by the Java parser")
-    public void whenTheStatementIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheStatementIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseStatement(sourceUnderTest);
     }
 
     @When("the import is parsed by the Java parser")
-    public void whenTheImportIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheImportIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseImport(sourceUnderTest);
     }
 
     @When("the annotation is parsed by the Java parser")
-    public void whenTheAnnotationIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheAnnotationIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseAnnotation(sourceUnderTest);
     }
 
     @When("the annotation body declaration is parsed by the Java parser")
-    public void whenTheBodyDeclarationIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheBodyDeclarationIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseAnnotationBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class body declaration is parsed by the Java parser")
-    public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseClassBodyDeclaration(sourceUnderTest);
     }
 
     @When("the interface body declaration is parsed by the Java parser")
-    public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() throws ParseProblemException {
+    public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseInterfaceBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class is visited by an empty ModifierVisitorAdapter")
-    public void whenTheClassIsVisitedByAnEmptyModifierVisitorAdapter() throws ParseProblemException {
+    public void whenTheClassIsVisitedByAnEmptyModifierVisitorAdapter() {
         (new ModifierVisitorAdapter() {
         }).visit((CompilationUnit) resultNode, null);
     }

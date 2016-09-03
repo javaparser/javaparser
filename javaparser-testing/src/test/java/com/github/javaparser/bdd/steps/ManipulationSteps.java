@@ -111,12 +111,12 @@ public class ManipulationSteps {
     }
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseBlock")
-    public void whenIsTheStringIsParsedByTheJavaParser(String value) throws ParseProblemException {
+    public void whenIsTheStringIsParsedByTheJavaParser(String value) {
         blockStmt = JavaParser.parseBlock(value);
     }
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseStatement")
-    public void whenIsTheStringIsParsedByTheJavaParserUsingParseStatement(String value) throws ParseProblemException {
+    public void whenIsTheStringIsParsedByTheJavaParserUsingParseStatement(String value) {
         statement= JavaParser.parseStatement(value);
     }
 

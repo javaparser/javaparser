@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.ASTParser.tokenRange;
+import static com.github.javaparser.ParseContext.*;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.Utils.providerToString;
@@ -108,7 +109,7 @@ public final class JavaParser {
 		try {
 			final String sourceCode = providerToString(provider);
             final ASTParser parser = getParserForProvider(provider(sourceCode));
-			final CompilationUnit resultNode = ParseContext.COMPILATION_UNIT.parse(parser);
+			final CompilationUnit resultNode = COMPILATION_UNIT.parse(parser);
 			commentsInserter.insertComments(resultNode, sourceCode);
 
 			return new ParseResult<>(Optional.of(resultNode), parser.problems, astParser.getTokens());
@@ -128,7 +129,7 @@ public final class JavaParser {
 		}
 	}
 
-	public static CompilationUnit parse(final InputStream in, final Charset encoding) throws ParseProblemException {
+	public static CompilationUnit parse(final InputStream in, final Charset encoding) {
 		return parse(in, encoding, true);
 	}
 
@@ -141,7 +142,7 @@ public final class JavaParser {
 	 * @return CompilationUnit representing the Java source code
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static CompilationUnit parse(final InputStream in, Charset encoding, boolean considerComments) throws ParseProblemException {
+	public static CompilationUnit parse(final InputStream in, Charset encoding, boolean considerComments) {
 		return simplifiedParse(provider(in, encoding), considerComments);
 	}
 
@@ -154,11 +155,11 @@ public final class JavaParser {
 	 * @return CompilationUnit representing the Java source code
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static CompilationUnit parse(final InputStream in) throws ParseProblemException {
+	public static CompilationUnit parse(final InputStream in) {
 		return parse(in, UTF8, true);
 	}
 
-	public static CompilationUnit parse(final File file, final Charset encoding) throws ParseProblemException, FileNotFoundException {
+	public static CompilationUnit parse(final File file, final Charset encoding) throws FileNotFoundException {
 		return simplifiedParse(provider(file, encoding), true);
 	}
 
@@ -171,7 +172,7 @@ public final class JavaParser {
 	 * @return CompilationUnit representing the Java source code
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static CompilationUnit parse(final File file, final Charset encoding, boolean considerComments) throws ParseProblemException, FileNotFoundException {
+	public static CompilationUnit parse(final File file, final Charset encoding, boolean considerComments) throws FileNotFoundException {
 		return simplifiedParse(provider(file, encoding), considerComments);
 	}
 
@@ -185,12 +186,12 @@ public final class JavaParser {
 	 * @throws ParseProblemException if the source code has parser errors
 	 * @throws FileNotFoundException the file was not found
 	 */
-	public static CompilationUnit parse(final File file) throws FileNotFoundException, ParseProblemException {
+	public static CompilationUnit parse(final File file) throws FileNotFoundException {
 		return simplifiedParse(provider(file), true);
 	}
 
 
-	public static CompilationUnit parse(final Path path, final Charset encoding) throws ParseProblemException, IOException {
+	public static CompilationUnit parse(final Path path, final Charset encoding) throws IOException {
 		return simplifiedParse(provider(path, encoding), true);
 	}
 
@@ -204,7 +205,7 @@ public final class JavaParser {
 	 * @throws IOException the path could not be accessed
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static CompilationUnit parse(final Path path, final Charset encoding, boolean considerComments) throws ParseProblemException, IOException {
+	public static CompilationUnit parse(final Path path, final Charset encoding, boolean considerComments) throws IOException {
 		return simplifiedParse(provider(path, encoding), considerComments);
 	}
 
@@ -218,15 +219,15 @@ public final class JavaParser {
 	 * @throws ParseProblemException if the source code has parser errors
 	 * @throws IOException the path could not be accessed
 	 */
-	public static CompilationUnit parse(final Path path) throws IOException, ParseProblemException {
+	public static CompilationUnit parse(final Path path) throws IOException {
 		return simplifiedParse(provider(path), true);
 	}
 
-	public static CompilationUnit parse(final Reader reader) throws ParseProblemException {
+	public static CompilationUnit parse(final Reader reader) {
 		return parse(reader, true);
 	}
 
-	public static CompilationUnit parse(final Reader reader, boolean considerComments) throws ParseProblemException {
+	public static CompilationUnit parse(final Reader reader, boolean considerComments) {
 		return simplifiedParse(provider(reader), considerComments);
 	}
 
@@ -239,7 +240,7 @@ public final class JavaParser {
 	 * @return CompilationUnit representing the Java source code
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static CompilationUnit parse(String code, boolean considerComments) throws ParseProblemException {
+	public static CompilationUnit parse(String code, boolean considerComments) {
 		return simplifiedParse(provider(code), considerComments);
 	}
 
@@ -251,7 +252,7 @@ public final class JavaParser {
 	 * @return CompilationUnit representing the Java source code
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static CompilationUnit parse(String code) throws ParseProblemException {
+	public static CompilationUnit parse(String code) {
 		return parse(code, true);
 	}
 
@@ -263,8 +264,8 @@ public final class JavaParser {
 	 * @return BlockStmt representing the Java block
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static BlockStmt parseBlock(final String blockStatement) throws ParseProblemException {
-		return simplifiedParse(ParseContext.BLOCK, provider(blockStatement));
+	public static BlockStmt parseBlock(final String blockStatement) {
+		return simplifiedParse(BLOCK, provider(blockStatement));
 	}
 
 	/**
@@ -275,11 +276,11 @@ public final class JavaParser {
 	 * @return Statement representing the Java statement
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static Statement parseStatement(final String statement) throws ParseProblemException {
-		return simplifiedParse(ParseContext.STATEMENT, provider(statement));
+	public static Statement parseStatement(final String statement) {
+		return simplifiedParse(STATEMENT, provider(statement));
 	}
 
-	private static <T> T simplifiedParse(ParseContext<T> context, Provider provider) throws ParseProblemException {
+	private static <T> T simplifiedParse(ParseContext<T> context, Provider provider) {
 		ParseResult<T> result = new JavaParser(new ParserConfiguration()).parseStructure(context, provider);
 		if (result.isSuccessful()) {
 			return result.result.get();
@@ -287,12 +288,12 @@ public final class JavaParser {
 		throw new ParseProblemException(result.problems);
 	}
 
-    private static CompilationUnit simplifiedParse(Provider provider, boolean considerComments) throws ParseProblemException {
+    private static CompilationUnit simplifiedParse(Provider provider, boolean considerComments) {
         final ParseResult<CompilationUnit> result;
         if (considerComments) {
             result = new JavaParser(new ParserConfiguration()).parseFull(provider);
         } else {
-            result = new JavaParser(new ParserConfiguration()).parseStructure(ParseContext.COMPILATION_UNIT, provider);
+            result = new JavaParser(new ParserConfiguration()).parseStructure(COMPILATION_UNIT, provider);
         }
         if (result.isSuccessful()) {
             return result.result.get();
@@ -308,8 +309,8 @@ public final class JavaParser {
 	 * @return list of Statement representing the Java statement
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static List<Statement> parseStatements(final String statements) throws ParseProblemException {
-		return simplifiedParse(ParseContext.STATEMENTS, provider(statements));
+	public static List<Statement> parseStatements(final String statements) {
+		return simplifiedParse(STATEMENTS, provider(statements));
 	}
 
 	/**
@@ -320,8 +321,8 @@ public final class JavaParser {
 	 * @return ImportDeclaration representing the Java import declaration
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static ImportDeclaration parseImport(final String importDeclaration) throws ParseProblemException {
-		return simplifiedParse(ParseContext.IMPORT_DECLARATION, provider(importDeclaration));
+	public static ImportDeclaration parseImport(final String importDeclaration) {
+		return simplifiedParse(IMPORT_DECLARATION, provider(importDeclaration));
 	}
 
 	/**
@@ -332,8 +333,8 @@ public final class JavaParser {
 	 * @return Expression representing the Java expression
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static Expression parseExpression(final String expression) throws ParseProblemException {
-		return simplifiedParse(ParseContext.EXPRESSION, provider(expression));
+	public static Expression parseExpression(final String expression) {
+		return simplifiedParse(EXPRESSION, provider(expression));
 	}
 
 	/**
@@ -344,8 +345,8 @@ public final class JavaParser {
 	 * @return AnnotationExpr representing the Java annotation
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static AnnotationExpr parseAnnotation(final String annotation) throws ParseProblemException {
-		return simplifiedParse(ParseContext.ANNOTATION, provider(annotation));
+	public static AnnotationExpr parseAnnotation(final String annotation) {
+		return simplifiedParse(ANNOTATION, provider(annotation));
 	}
 
 	/**
@@ -356,8 +357,8 @@ public final class JavaParser {
 	 * @return BodyDeclaration representing the Java annotation
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static BodyDeclaration<?> parseAnnotationBodyDeclaration(final String body) throws ParseProblemException {
-		return simplifiedParse(ParseContext.ANNOTATION_BODY, provider(body));
+	public static BodyDeclaration<?> parseAnnotationBodyDeclaration(final String body) {
+		return simplifiedParse(ANNOTATION_BODY, provider(body));
 	}
 
 	/**
@@ -368,8 +369,8 @@ public final class JavaParser {
 	 * @return BodyDeclaration representing the Java class body
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static BodyDeclaration<?> parseClassBodyDeclaration(String body) throws ParseProblemException {
-		return simplifiedParse(ParseContext.CLASS_BODY, provider(body));
+	public static BodyDeclaration<?> parseClassBodyDeclaration(String body) {
+		return simplifiedParse(CLASS_BODY, provider(body));
 	}
 
 	/**
@@ -380,7 +381,7 @@ public final class JavaParser {
 	 * @return BodyDeclaration representing the Java interface body
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static BodyDeclaration parseInterfaceBodyDeclaration(String body) throws ParseProblemException {
-		return simplifiedParse(ParseContext.INTERFACE_BODY, provider(body));
+	public static BodyDeclaration parseInterfaceBodyDeclaration(String body) {
+		return simplifiedParse(INTERFACE_BODY, provider(body));
 	}
 }
