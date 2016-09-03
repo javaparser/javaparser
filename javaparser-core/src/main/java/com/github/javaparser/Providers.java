@@ -10,7 +10,7 @@ import java.nio.file.Path;
  * Factory for providers of source code for JavaParser.
  * Providers that have no parameter for encoding but need it will use UTF-8.
  */
-public abstract class Providers {
+public final class Providers {
 	public static final Charset UTF8 = Charset.forName("utf-8");
 
 	private Providers() {
