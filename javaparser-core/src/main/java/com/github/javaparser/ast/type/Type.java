@@ -24,6 +24,7 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ import static com.github.javaparser.utils.Utils.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class Type extends Node {
+public abstract class Type<T extends Type> extends Node {
 
     private List<AnnotationExpr> annotations;
 
@@ -49,16 +50,18 @@ public abstract class Type extends Node {
     
     public Type(Range range, List<AnnotationExpr> annotations) {
         super(range);
-        this.annotations = annotations;
+        setAnnotations(annotations);
     }
-    
+
     public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationExpr> annotations) {
+    public T setAnnotations(List<AnnotationExpr> annotations) {
+        setAsParentNodeOf(annotations);
         this.annotations = annotations;
+        return (T) this;
     }
 
 }

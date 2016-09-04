@@ -488,12 +488,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final PrimitiveType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		if (!isNullOrEmpty(n.getAnnotations())) {
-			for (AnnotationExpr ae : n.getAnnotations()) {
-				ae.accept(this, arg);
-				printer.print(" ");
-			}
-		}
+		printAnnotations(n.getAnnotations(), true, arg);
 		switch (n.getType()) {
 			case Boolean:
 				printer.print("boolean");
@@ -538,6 +533,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final IntersectionType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		printAnnotations(n.getAnnotations(), false, arg);
 		boolean isFirst = true;
 		for (ReferenceType element : n.getElements()) {
 			element.accept(this, arg);
@@ -549,30 +545,25 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	@Override
-	public void visit(final UnionType n, final Object arg) {
-		printJavaComment(n.getComment(), arg);
-		boolean isFirst = true;
-		for (ReferenceType element : n.getElements()) {
-			if (isFirst) {
-				isFirst = false;
-			} else {
-				printer.print(" | ");
-			}
-			element.accept(this, arg);
-		}
-	}
+    @Override public void visit(final UnionType n, final Object arg) {
+        printJavaComment(n.getComment(), arg);
+		printAnnotations(n.getAnnotations(), true, arg);
+        boolean isFirst = true;
+        for (ReferenceType element : n.getElements()) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                printer.print(" | ");
+            }
+	        element.accept(this, arg);
+        }
+    }
 
 
 	@Override
 	public void visit(final WildcardType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		if (n.getAnnotations() != null) {
-			for (AnnotationExpr ae : n.getAnnotations()) {
-				printer.print(" ");
-				ae.accept(this, arg);
-			}
-		}
+		printAnnotations(n.getAnnotations(), false, arg);
 		printer.print("?");
 		if (n.getExtends() != null) {
 			printer.print(" extends ");
@@ -650,6 +641,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final VoidType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
+		printAnnotations(n.getAnnotations(), false, arg);
 		printer.print("void");
 	}
 

@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.visitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -86,6 +87,8 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -135,14 +138,30 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		}
 	}
 
-	@Override public Node visit(final AnnotationDeclaration n, final A arg) {
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
+	private void visitArraysAnnotations(NodeWithArrays<?> n, A arg) {
+		/* TODO this code always keeps annotations for the same amount of array indexes, since we can't see if
+		 the user wants to say "I want no annotations on this array index" or "I don't want this array index anymore"
+		  */
+		List<List<AnnotationExpr>> result = new ArrayList<>();
+		for (List<AnnotationExpr> aux : n.getArraysAnnotations()) {
+			if (aux == null) {
+				result.add(null);
+			} else {
+				List<AnnotationExpr> l = new ArrayList<>();
+				for (AnnotationExpr annotation : aux) {
+					AnnotationExpr newAnnotationExpr = (AnnotationExpr) annotation.accept(this, arg);
+					if (newAnnotationExpr != null) {
+						l.add(newAnnotationExpr);
+					}
+				}
+				result.add(l);
 			}
-			removeNulls(annotations);
 		}
+		n.setArraysAnnotations(result);
+	}
+
+	@Override public Node visit(final AnnotationDeclaration n, final A arg) {
+		visitAnnotations(n, arg);
         final List<BodyDeclaration<?>> members = n.getMembers();
 		if (members != null) {
 			for (int i = 0; i < members.size(); i++) {
@@ -151,6 +170,16 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			removeNulls(members);
 		}
 		return n;
+	}
+
+	private void visitAnnotations(NodeWithAnnotations<?> n, A arg) {
+		final List<AnnotationExpr> annotations = n.getAnnotations();
+		if (annotations != null) {
+			for (int i = 0; i < annotations.size(); i++) {
+				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
+			}
+			removeNulls(annotations);
+		}
 	}
 
 	@Override public Node visit(final AnnotationMemberDeclaration n, final A arg) {
@@ -185,6 +214,8 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 				removeNulls(dimensions);
 			}
 		}
+		visitArraysAnnotations(n, arg);
+
 		if (n.getInitializer() != null) {
 			n.setInitializer((ArrayInitializerExpr) n.getInitializer().accept(this, arg));
 		}
@@ -292,13 +323,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final ClassOrInterfaceDeclaration n, final A arg) {
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		visitAnnotations(n, arg);
 		final List<TypeParameter> typeParameters = n.getTypeParameters();
 		if (typeParameters != null) {
 			for (int i = 0; i < typeParameters.size(); i++) {
@@ -331,6 +356,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final ClassOrInterfaceType n, final A arg) {
+		visitAnnotations(n, arg);
 		if (n.getScope() != null) {
 			n.setScope((ClassOrInterfaceType) n.getScope().accept(this, arg));
 		}
@@ -785,25 +811,20 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 	
 	@Override public Node visit(MultiTypeParameter n, A arg) {
+		visitAnnotations(n, arg);
         visit((BaseParameter<?>) n, arg);
         n.setType((UnionType)n.getType().accept(this, arg));
         return n;
     }
 
     protected Node visit(final BaseParameter<?> n, final A arg) {
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
-		
+		visitAnnotations(n, arg);
 		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
 		return n;
 	}
 
 	@Override public Node visit(final PrimitiveType n, final A arg) {
+		visitAnnotations(n, arg);
 		return n;
 	}
 
@@ -813,12 +834,15 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final ReferenceType n, final A arg) {
+		visitAnnotations(n, arg);
+		visitArraysAnnotations(n, arg);
 		n.setType((Type) n.getType().accept(this, arg));
 		return n;
 	}
 
     @Override
     public Node visit(final IntersectionType n, final A arg) {
+		visitAnnotations(n, arg);
         final List<ReferenceType> elements = n.getElements();
         if (elements != null) {
             for (int i = 0; i < elements.size(); i++) {
@@ -831,7 +855,8 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 
     @Override
     public Node visit(final UnionType n, final A arg) {
-        final List<ReferenceType> elements = n.getElements();
+		visitAnnotations(n, arg);
+		final List<ReferenceType> elements = n.getElements();
         if (elements != null) {
             for (int i = 0; i < elements.size(); i++) {
                 elements.set(i, (ReferenceType) elements.get(i).accept(this, arg));
@@ -1000,6 +1025,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final VoidType n, final A arg) {
+		visitAnnotations(n, arg);
 		return n;
 	}
 
@@ -1010,6 +1036,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	}
 
 	@Override public Node visit(final WildcardType n, final A arg) {
+		visitAnnotations(n, arg);
 		if (n.getExtends() != null) {
 			n.setExtends((ReferenceType) n.getExtends().accept(this, arg));
 		}

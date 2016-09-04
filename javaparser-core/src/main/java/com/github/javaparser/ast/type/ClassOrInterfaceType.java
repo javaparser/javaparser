@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypeArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -32,7 +33,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type implements NodeWithName<ClassOrInterfaceType> {
+public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> implements NodeWithName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 
