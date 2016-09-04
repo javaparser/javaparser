@@ -21,19 +21,20 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 
-import static com.github.javaparser.utils.Utils.*;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class SwitchEntryStmt extends Statement {
+public final class SwitchEntryStmt extends Statement implements NodeWithStatements<SwitchEntryStmt> {
 
 	private Expression label;
 
@@ -68,7 +69,8 @@ public final class SwitchEntryStmt extends Statement {
 		return label;
 	}
 
-	public List<Statement> getStmts() {
+	@Override
+    public List<Statement> getStmts() {
         stmts = ensureNotNull(stmts);
         return stmts;
 	}
@@ -78,8 +80,10 @@ public final class SwitchEntryStmt extends Statement {
 		setAsParentNodeOf(this.label);
 	}
 
-	public void setStmts(final List<Statement> stmts) {
+	@Override
+    public SwitchEntryStmt setStmts(final List<Statement> stmts) {
 		this.stmts = stmts;
 		setAsParentNodeOf(this.stmts);
+        return this;
 	}
 }
