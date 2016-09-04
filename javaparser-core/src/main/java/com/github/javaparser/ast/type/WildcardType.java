@@ -22,13 +22,14 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class WildcardType extends Type {
+public final class WildcardType extends Type<WildcardType> implements NodeWithAnnotations<WildcardType> {
 
 	private ReferenceType ext;
 

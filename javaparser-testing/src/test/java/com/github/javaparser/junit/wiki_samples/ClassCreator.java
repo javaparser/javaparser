@@ -1,4 +1,4 @@
-package com.github.javaparser.junit;
+package com.github.javaparser.junit.wiki_samples;
 
 import java.util.EnumSet;
 
