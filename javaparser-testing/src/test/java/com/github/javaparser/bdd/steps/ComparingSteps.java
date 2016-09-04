@@ -22,7 +22,7 @@
 package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import static org.hamcrest.CoreMatchers.*;
 import org.jbehave.core.annotations.Given;
@@ -42,12 +42,12 @@ public class ComparingSteps {
      */
 
     @Given("the first class:$classSrc")
-    public void givenTheFirstClass(String classSrc) throws ParseException {
+    public void givenTheFirstClass(String classSrc) {
         this.first = JavaParser.parse(classSrc.trim());
     }
 
     @Given("the second class:$classSrc")
-    public void givenTheSecondClass(String classSrc) throws ParseException {
+    public void givenTheSecondClass(String classSrc) {
         this.second = JavaParser.parse(classSrc.trim());
     }
 

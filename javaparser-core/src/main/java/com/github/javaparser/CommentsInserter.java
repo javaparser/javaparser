@@ -41,10 +41,10 @@ import java.util.List;
  * @author Júlio Vilmar Gesser
  */
 class CommentsInserter {
-    private boolean doNotAssignCommentsPreceedingEmptyLines = true;
-    private boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
-    
-    CommentsInserter() {
+    private final ParserConfiguration configuration;
+
+    CommentsInserter(ParserConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     /**
@@ -57,22 +57,6 @@ class CommentsInserter {
         CommentsCollection allComments = commentsParser.parse(cuSourceCode);
 
         insertCommentsInCu(cu, allComments);
-    }
-
-    public boolean getDoNotConsiderAnnotationsAsNodeStartForCodeAttribution() {
-        return doNotConsiderAnnotationsAsNodeStartForCodeAttribution;
-    }
-
-    public void setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(boolean newValue) {
-        this.doNotConsiderAnnotationsAsNodeStartForCodeAttribution = newValue;
-    }
-
-    public boolean getDoNotAssignCommentsPreceedingEmptyLines() {
-        return doNotAssignCommentsPreceedingEmptyLines;
-    }
-
-    public void setDoNotAssignCommentsPreceedingEmptyLines(boolean newValue) {
-        this.doNotAssignCommentsPreceedingEmptyLines = newValue;
     }
 
     /**
@@ -131,7 +115,7 @@ class CommentsInserter {
             List<Comment> commentsInsideChild = new LinkedList<Comment>();
             for (Comment c : commentsToAttribute) {
                 if (PositionUtils.nodeContains(child, c,
-                        doNotConsiderAnnotationsAsNodeStartForCodeAttribution)) {
+                        configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)) {
                     commentsInsideChild.add(c);
                 }
             }
@@ -163,7 +147,7 @@ class CommentsInserter {
         childrenAndComments.addAll(children);
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
-                doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
+                configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
 
         for (Node thing : childrenAndComments) {
             if (thing instanceof Comment) {
@@ -173,7 +157,7 @@ class CommentsInserter {
                 }
             } else {
                 if (previousComment != null && !thing.hasComment()) {
-                    if (!doNotAssignCommentsPreceedingEmptyLines
+                    if (!configuration.doNotAssignCommentsPrecedingEmptyLines
                             || !thereAreLinesBetween(previousComment, thing)) {
                         thing.setComment(previousComment);
                         attributedComments.add(previousComment);

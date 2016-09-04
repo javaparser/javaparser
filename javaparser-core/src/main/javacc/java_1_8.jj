@@ -61,8 +61,9 @@ import static com.github.javaparser.Position.*;
 final class ASTParser {
 
     private final Position INVALID = pos(-1, 0);
-   
-	void reset(InputStream in, String encoding) throws IOException {
+    List<Problem> problems = new ArrayList<Problem>();
+
+    void reset(InputStream in, String encoding) throws IOException {
         ReInit(new StreamProvider(in, encoding));
     }
 
@@ -94,19 +95,19 @@ final class ASTParser {
 		}
 	}
 
-    public void addModifier(EnumSet<Modifier> modifiers, Modifier mod, Token token) throws ParseException {
+    public void addModifier(EnumSet<Modifier> modifiers, Modifier mod) {
         if (modifiers.contains(mod)) {
-            throwParseException("Duplicated modifier");
+            addProblem("Duplicated modifier");
         }
         modifiers.add(mod);
     }
     
-    public void addMultipleModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods, Token token) throws ParseException {
+    public void addMultipleModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods) {
         if(mods == null)
             return;
         for(Modifier m : mods)
             if (modifiers.contains(m)) 
-                throwParseException("Duplicated modifier");
+                addProblem("Duplicated modifier");
         for(Modifier m : mods)
             modifiers.add(m);
     }
@@ -121,21 +122,11 @@ final class ASTParser {
         return token_source.getTokens();
     }
 
-    private void throwParseException(String message) throws ParseException {
-        StringBuilder buf = new StringBuilder();
-        buf.append(message);
-        buf.append(": \"");
-        buf.append(token.image);
-        buf.append("\" at line ");
-        buf.append(token.beginLine);
-        buf.append(", column ");
-        buf.append(token.beginColumn);
-        ParseException e = new ParseException(buf.toString());
-        e.currentToken = token;
-        throw e;
+    private void addProblem(String message) {
+        problems.add(new Problem(message + ": \"" + token.image, tokenRange()));
     }
 
-    private Expression generateLambda(Expression ret, Statement lambdaBody) throws ParseException {
+    private Expression generateLambda(Expression ret, Statement lambdaBody) {
 	    if (ret instanceof EnclosedExpr) {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
@@ -157,7 +148,7 @@ final class ASTParser {
             Expression inner = generateLambda(castExpr.getExpr(), lambdaBody);
             castExpr.setExpr(inner);
 	    } else {
-	        throw new ParseException("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
+	        addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
 	    }
 	    return ret;
     }
@@ -209,6 +200,10 @@ final class ASTParser {
     }
     
     private Range tokenRange() {
+        return tokenRange(token);
+    }
+
+    public static Range tokenRange(Token token) {
         return range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
     }
 }
@@ -1301,27 +1296,27 @@ ModifierHolder Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { addModifier(modifiers, Modifier.PUBLIC, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "public" { addModifier(modifiers, Modifier.PUBLIC); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "static" { addModifier(modifiers, Modifier.STATIC, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "static" { addModifier(modifiers, Modifier.STATIC); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "protected" {  addModifier(modifiers, Modifier.PROTECTED, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "protected" {  addModifier(modifiers, Modifier.PROTECTED); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "private" { addModifier(modifiers, Modifier.PRIVATE, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "private" { addModifier(modifiers, Modifier.PRIVATE); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "final" { addModifier(modifiers, Modifier.FINAL, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "final" { addModifier(modifiers, Modifier.FINAL); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "abstract" { addModifier(modifiers, Modifier.ABSTRACT, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "abstract" { addModifier(modifiers, Modifier.ABSTRACT); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "native" { addModifier(modifiers, Modifier.NATIVE, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "native" { addModifier(modifiers, Modifier.NATIVE); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "transient" { addModifier(modifiers, Modifier.TRANSIENT, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "transient" { addModifier(modifiers, Modifier.TRANSIENT); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "volatile" { addModifier(modifiers, Modifier.VOLATILE, token); begin = begin.orIfInvalid(tokenBegin()); }
+   "volatile" { addModifier(modifiers, Modifier.VOLATILE); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "strictfp" { addModifier(modifiers, Modifier.STRICTFP, token);  begin = begin.orIfInvalid(tokenBegin()); }
+   "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(tokenBegin()); }
   |
    ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin()); }
   )
@@ -1394,7 +1389,7 @@ List<ClassOrInterfaceType> ExtendsList(boolean isInterface):
    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); extendsMoreThanOne = true; } )*
    {
       if (extendsMoreThanOne && !isInterface)
-         throwParseException("A class cannot extend more than one other class");
+         addProblem("A class cannot extend more than one other class");
    }
    { return ret; }
 }
@@ -1409,7 +1404,7 @@ List<ClassOrInterfaceType> ImplementsList(boolean isInterface):
    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
    {
       if (isInterface)
-         throwParseException("An interface cannot implement other interfaces");
+         addProblem("An interface cannot implement other interfaces");
    }
    { return ret; }
 }
@@ -1535,14 +1530,14 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	  ret = InitializerDeclaration()
 	  {
 	     if (isInterface)
-	        throwParseException("An interface cannot have initializers");
+	        addProblem("An interface cannot have initializers");
 	  }
 	|
 	  modifier = Modifiers() [ "default" modifier2= Modifiers()
 	  {
 	    if(!isInterface)
 	    {
-	      throwParseException("A class cannot have default members");
+	      addProblem("A class cannot have default members");
 	    }
 	    isDefault = true;
 	  }]
@@ -1566,21 +1561,21 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	      {
 	        if(isDefault && ret!= null && ((MethodDeclaration)ret).getBody() == null)
 	        {
-	          throwParseException("\"default\" methods must have a body");
+	          addProblem("\"default\" methods must have a body");
 	        }
 	        ((MethodDeclaration)ret).setDefault(isDefault);
 	        if(modifier2!= null)
 	        {
 	          aux = modifier2.modifiers;
 	        }
-	        addMultipleModifier(modifier.modifiers, aux, token);
+	        addMultipleModifier(modifier.modifiers, aux);
 	        ((MethodDeclaration)ret).setModifiers(modifier.modifiers);
 	      }
 	  )
 	  {
 	    if(isDefault && ! (ret instanceof MethodDeclaration))
 	    {
-	      throwParseException("Only methods can have the keyword \"default\".");
+	      addProblem("Only methods can have the keyword \"default\".");
 	    }
 	  }
 	|
@@ -3145,7 +3140,7 @@ TryStmt TryStatement():
   )
   {
     if (finallyBlock==null && catchs==null && resources==null) {
-      throwParseException("Try has no finally, no catch, and no resources");
+      addProblem("Try has no finally, no catch, and no resources");
     }
     return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
   }
