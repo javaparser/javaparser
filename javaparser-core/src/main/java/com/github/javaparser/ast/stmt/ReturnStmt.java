@@ -23,6 +23,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -45,7 +46,17 @@ public final class ReturnStmt extends Statement {
 		setExpr(expr);
 	}
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    /**
+     * Will create a NameExpr with the string param
+     * 
+     * @param expr
+     */
+    public ReturnStmt(String expr) {
+        setExpr(new NameExpr(expr));
+    }
+
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
 		return v.visit(this, arg);
 	}
 
