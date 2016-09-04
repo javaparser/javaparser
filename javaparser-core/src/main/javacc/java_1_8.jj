@@ -3102,7 +3102,7 @@ TryStmt TryStatement():
  * finally/catch is present.
  */
 {
-	List<VariableDeclarationExpr> resources = new LinkedList<VariableDeclarationExpr>();
+	List<VariableDeclarationExpr> resources = null;
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
 	List<CatchClause> catchs = null;
@@ -3143,13 +3143,18 @@ TryStmt TryStatement():
   	|
   		"finally" finallyBlock = Block()
   )
-  { return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock); }
+  {
+    if (finallyBlock==null && catchs==null && resources==null) {
+      throwParseException("Try has no finally, no catch, and no resources");
+    }
+    return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
+  }
 }
 
 
 List<VariableDeclarationExpr> ResourceSpecification() :
 {
-List<VariableDeclarationExpr> vars;
+  List<VariableDeclarationExpr> vars;
 }
 {
   "("
