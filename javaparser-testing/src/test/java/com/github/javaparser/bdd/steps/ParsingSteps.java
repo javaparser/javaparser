@@ -348,7 +348,7 @@ public class ParsingSteps {
         try {
             JavaParser.parse(sourceUnderTest);
             fail("Parse error expected");
-        } catch (ParseException e) {
+        } catch (ParseProblemException e) {
             // ok
         }
     }

@@ -3140,7 +3140,7 @@ TryStmt TryStatement():
   )
   {
     if (finallyBlock==null && catchs==null && resources==null) {
-      throwParseException("Try has no finally, no catch, and no resources");
+      addProblem("Try has no finally, no catch, and no resources");
     }
     return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
   }
