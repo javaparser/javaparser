@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -40,15 +38,6 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 
 	public NameExpr(final String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public NameExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                final String name) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), name);
 	}
 
 	public NameExpr(Range range, final String name) {
@@ -73,6 +62,24 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
     public NameExpr setName(final String name) {
 		this.name = name;
         return this;
+	}
+
+
+	/**
+	 * Creates a new {@link NameExpr} from a qualified name.<br>
+	 * The qualified name can contains "." (dot) characters.
+	 *
+	 * @param qualifiedName
+	 *            qualified name
+	 * @return instanceof {@link NameExpr}
+	 */
+	public static NameExpr create(String qualifiedName) {
+		String[] split = qualifiedName.split("\\.");
+		NameExpr ret = new NameExpr(split[0]);
+		for (int i = 1; i < split.length; i++) {
+			ret = new QualifiedNameExpr(ret, split[i]);
+		}
+		return ret;
 	}
 
 }

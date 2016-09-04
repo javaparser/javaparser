@@ -21,18 +21,16 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class DoStmt extends Statement {
+public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 
 	private Statement body;
 
@@ -44,15 +42,6 @@ public final class DoStmt extends Statement {
 	public DoStmt(final Statement body, final Expression condition) {
 		setBody(body);
 		setCondition(condition);
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public DoStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	              final Statement body, final Expression condition) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), body, condition);
 	}
 
 	public DoStmt(Range range, final Statement body, final Expression condition) {
@@ -69,7 +58,8 @@ public final class DoStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public Statement getBody() {
+	@Override
+    public Statement getBody() {
 		return body;
 	}
 
@@ -77,9 +67,11 @@ public final class DoStmt extends Statement {
 		return condition;
 	}
 
-	public void setBody(final Statement body) {
+	@Override
+    public DoStmt setBody(final Statement body) {
 		this.body = body;
 		setAsParentNodeOf(this.body);
+        return this;
 	}
 
 	public void setCondition(final Expression condition) {

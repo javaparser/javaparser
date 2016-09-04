@@ -21,7 +21,6 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -29,8 +28,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
 import java.util.List;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.*;
+import static com.github.javaparser.utils.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -55,16 +53,6 @@ public final class TryStmt extends Statement {
 		setFinallyBlock(finallyBlock);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public TryStmt(final int beginLine, final int beginColumn,
-	               final int endLine, final int endColumn, List<VariableDeclarationExpr> resources,
-	               final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), resources, tryBlock, catchs, finallyBlock);
-	}
-	
 	public TryStmt(Range range, List<VariableDeclarationExpr> resources,
 	               final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
 		super(range);

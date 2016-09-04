@@ -21,16 +21,15 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ASTHelper;
-import com.github.javaparser.ClassUtils;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -74,15 +73,6 @@ public final class CompilationUnit extends Node {
         setPackage(pakage);
         setImports(imports);
         setTypes(types);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public CompilationUnit(int beginLine, int beginColumn, int endLine, int endColumn, PackageDeclaration pakage,
-                           List<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), pakage, imports, types);
     }
 
     public CompilationUnit(Range range, PackageDeclaration pakage, List<ImportDeclaration> imports,
@@ -208,7 +198,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageName(String name) {
-        setPackage(new PackageDeclaration(ASTHelper.createNameExpr(name)));
+        setPackage(new PackageDeclaration(NameExpr.create(name)));
         return this;
     }
 
@@ -244,15 +234,15 @@ public final class CompilationUnit extends Node {
      * <b>This method check if no import with the same name is already in the list</b>
      * 
      * @param name the import name
-     * @param isStatic
-     * @param isAsterisk
+     * @param isStatic      is it an "import static"
+     * @param isAsterisk does the import end with ".*"
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
         if (getImports().stream().anyMatch(i -> i.getName().toString().equals(name)))
             return this;
         else {
-            ImportDeclaration importDeclaration = new ImportDeclaration(ASTHelper.createNameExpr(name), isStatic,
+            ImportDeclaration importDeclaration = new ImportDeclaration(NameExpr.create(name), isStatic,
                     isAsterisk);
             getImports().add(importDeclaration);
             importDeclaration.setParentNode(this);

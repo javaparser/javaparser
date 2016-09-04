@@ -43,12 +43,12 @@ public class ComparingSteps {
 
     @Given("the first class:$classSrc")
     public void givenTheFirstClass(String classSrc) throws ParseException {
-        this.first = JavaParser.parse(new StringReader(classSrc.trim()), true);
+        this.first = JavaParser.parse(classSrc.trim());
     }
 
     @Given("the second class:$classSrc")
     public void givenTheSecondClass(String classSrc) throws ParseException {
-        this.second = JavaParser.parse(new StringReader(classSrc.trim()), true);
+        this.second = JavaParser.parse(classSrc.trim());
     }
 
     /*

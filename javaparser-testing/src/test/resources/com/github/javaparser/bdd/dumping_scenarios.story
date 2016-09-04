@@ -270,3 +270,226 @@ public class Example {
         mString = arg;
     }
 }
+
+Scenario: JavaDoc OR comment is printed, not both.
+Given the class:
+public class Foo {
+    /** This line gets duplicated */
+    public void foo() {
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class Foo {
+
+    /** This line gets duplicated */
+    public void foo() {
+    }
+}
+
+
+Scenario: various lamba casts (issue 418)
+Given the class:
+public class TestLambda {
+    void okMethod() {
+        return (ITF) () -> {
+            return true;
+        };
+    }
+    void faliingMethod() {
+        testThis(check ? null : (ITF) () -> {
+            return true;
+        });
+    }
+}
+When the class body declaration is parsed by the Java parser
+Then it is dumped to:
+public class TestLambda {
+
+    void okMethod() {
+        return (ITF) () -> {
+            return true;
+        };
+    }
+
+    void faliingMethod() {
+        testThis(check ? null : (ITF) () -> {
+            return true;
+        });
+    }
+}
+
+Scenario: Duplicate methods are not a parsing error (#416)
+Given the class:
+public class Foo {
+    public void foo() {
+    }
+    public void foo() {
+    }
+    public void foo() {
+    }
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class Foo {
+
+    public void foo() {
+    }
+
+    public void foo() {
+    }
+
+    public void foo() {
+    }
+}
+
+Scenario: Both array syntaxes are supported (#416)
+Given the class:
+public class Foo {
+    public void m1(boolean[] boolArray) {}
+    public void m1(boolean boolArray[]) {}
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+public class Foo {
+
+    public void m1(boolean[] boolArray) {
+    }
+
+    public void m1(boolean boolArray[]) {
+    }
+}
+
+
+Scenario: Array parts can be annotated
+Given the class:
+class Foo {
+    void m1(@Boo boolean @Index1 [] @ Index2 [] boolArray) {}
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class Foo {
+
+    void m1(@Boo boolean @Index1 [] @Index2 [] boolArray) {
+    }
+}
+
+Scenario: Annotations are supported on annotations
+Given the class:
+@C @interface D {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+@C
+@interface D {
+}
+
+Scenario: Annotations are supported on interfaces
+Given the class:
+@C interface Abc {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+@C
+interface Abc {
+}
+
+Scenario: Annotations are supported on enums
+Given the class:
+@C enum Abc {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+@C
+enum Abc {
+
+}
+
+Scenario: Annotations are supported on classes (issue 436 is the commented part)
+Given the compilation unit:
+@C
+public class Abc<@C A, @C X extends @C String & @C Serializable> {
+
+	@C int @C[] @C []f;
+
+	@C
+	public Abc(@C int p, List<@C ? extends Object> aa){
+		@C int b;
+	}
+	public @C void a(@C int o) {
+/*		try {
+			throw new IOException();
+		} catch (@C NullPointerException | @C IOException e) {
+		}
+*/	}
+}
+When the compilation unit is parsed by the Java parser
+Then it is dumped to:
+@C
+public class Abc<@C A, @C X extends @C String & @C Serializable> {
+
+    @C
+    int @C [] @C [] f;
+
+    @C
+    public Abc(@C int p, List<@C ? extends Object> aa) {
+        @C int b;
+    }
+
+    @C
+    public void a(@C int o) {
+    /*		try {
+			throw new IOException();
+		} catch (@C NullPointerException | @C IOException e) {
+		}
+*/
+    }
+}
+
+Scenario: we can parse a package-info file.
+Given the class in the file "package-info.java"
+When the class is parsed by the Java parser
+Then it is dumped to:
+/**
+ * This package contains class for doing some stuff.
+ */
+@C package com.company.stuff;
+
+
+Scenario: Annotations are supported inside catch (issue 436)
+Given the compilation unit:
+public class Abc {
+	public void a() {
+		try {
+		} catch (@C NullPointerException | @C IOException e) {
+		}
+	}
+}
+When the compilation unit is parsed by the Java parser
+Then it is dumped to:
+public class Abc {
+
+    public void a() {
+        try {
+        } catch (@C NullPointerException | @C IOException e) {
+        }
+    }
+}
+
+Scenario: Inner class notation does not confuse annotations (#107)
+Given the class:
+class A extends @Ann1 B.@Ann2 C {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A extends @Ann1 B.@Ann2 C {
+}
+
+Scenario: Make sure interface extends can be annotated
+Given the class:
+interface A extends @X B, @Y C, @Z D {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+interface A extends @X B, @Y C, @Z D {
+}

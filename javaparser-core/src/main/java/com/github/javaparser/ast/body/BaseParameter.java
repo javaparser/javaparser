@@ -21,8 +21,7 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.ast.internal.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -60,15 +59,6 @@ public abstract class BaseParameter<T>
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);
-    }
-
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public BaseParameter(int beginLine, int beginColumn, int endLine, int endColumn, EnumSet<Modifier> modifiers,
-                         List<AnnotationExpr> annotations, VariableDeclaratorId id) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), modifiers, annotations, id);
     }
 
     public BaseParameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, VariableDeclaratorId id) {

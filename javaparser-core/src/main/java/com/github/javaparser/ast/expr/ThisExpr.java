@@ -25,8 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -41,15 +39,6 @@ public final class ThisExpr extends Expression {
 		setClassExpr(classExpr);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public ThisExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Expression classExpr) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), classExpr);
-	}
-	
 	public ThisExpr(final Range range, final Expression classExpr) {
 		super(range);
 		setClassExpr(classExpr);

@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.Position.pos;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
@@ -46,15 +44,6 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
 		setType(type);
 	}
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public InstanceOfExpr(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                      final Expression expr, final Type type) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), expr, type);
-	}
-	
 	public InstanceOfExpr(final Range range, final Expression expr, final Type type) {
 		super(range);
 		setExpr(expr);

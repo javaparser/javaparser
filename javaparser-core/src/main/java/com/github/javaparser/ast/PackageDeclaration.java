@@ -24,13 +24,12 @@ package com.github.javaparser.ast;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.internal.Utils;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * <p>
@@ -45,7 +44,7 @@ import static com.github.javaparser.Position.pos;
  * </pre>
  * @author Julio Vilmar Gesser
  */
-public final class PackageDeclaration extends Node {
+public final class PackageDeclaration extends Node implements NodeWithAnnotations<PackageDeclaration> {
 
     private List<AnnotationExpr> annotations;
 
@@ -63,14 +62,6 @@ public final class PackageDeclaration extends Node {
         setName(name);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public PackageDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations, NameExpr name) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), annotations, name);
-    }
-    
     public PackageDeclaration(Range range, List<AnnotationExpr> annotations, NameExpr name) {
         super(range);
         setAnnotations(annotations);
@@ -118,9 +109,10 @@ public final class PackageDeclaration extends Node {
      * @param annotations
      *            the annotations to set
      */
-    public void setAnnotations(List<AnnotationExpr> annotations) {
+    public PackageDeclaration setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
         setAsParentNodeOf(this.annotations);
+        return this;
     }
 
     /**
@@ -129,9 +121,10 @@ public final class PackageDeclaration extends Node {
      * @param name
      *            the name to set
      */
-    public void setName(NameExpr name) {
+    public PackageDeclaration setName(NameExpr name) {
         this.name = name;
         setAsParentNodeOf(this.name);
+        return this;
     }
 
 }

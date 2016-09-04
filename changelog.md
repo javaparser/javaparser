@@ -45,7 +45,15 @@ Other changes:
 
 Version 2.5.1
 -------------
-* #394: OSGi manifest added
-* #391: fix ModifierVisitor NullPointerException bug
-* #385: a few new parse methods
-* #386: fix dumping an empty import (a single ; after the package declaration)
+* 394 OSGi manifest added
+* 391 fix ModifierVisitor NullPointerException bug
+* 385 a few new parse methods
+* 386 fix dumping an empty import (a single ; after the package declaration)
+
+Version 3.0.0-alpha.1
+------------------
+* 400 405 introduce many "builder" style methods for constructing code. Thanks DeepSnowNeeL!
+* 409 remove ASTHelper (methods are now on specific Node subclasses)
+* 414 JavaParser can now be instantiated and reused. InstanceJavaParser removed
+* 418 417 411 408 bugs
+* 367 420 407 402 various cleanups

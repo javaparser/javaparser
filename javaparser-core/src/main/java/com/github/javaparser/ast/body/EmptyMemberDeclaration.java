@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.Position.pos;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
@@ -39,14 +37,6 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
         super(null);
     }
 
-    /**
-     * @deprecated prefer using Range objects.
-     */
-    @Deprecated
-    public EmptyMemberDeclaration(int beginLine, int beginColumn, int endLine, int endColumn) {
-        this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)));
-    }
-    
     public EmptyMemberDeclaration(Range range) {
         super(range, null);
     }

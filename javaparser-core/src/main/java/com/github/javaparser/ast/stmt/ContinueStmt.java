@@ -21,12 +21,9 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * @author Julio Vilmar Gesser
@@ -40,15 +37,6 @@ public final class ContinueStmt extends Statement {
 
 	public ContinueStmt(final String id) {
 		this.id = id;
-	}
-
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public ContinueStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-	                    final String id) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), id);
 	}
 
 	public ContinueStmt(Range range, final String id) {

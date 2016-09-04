@@ -21,25 +21,24 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.Position.pos;
-
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.EnumSet;
+import java.util.List;
+
 /**
  * @author Julio Vilmar Gesser
  */
-public final class CatchClause extends Node {
+public final class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> {
 
     private Parameter param;
 
@@ -53,17 +52,6 @@ public final class CatchClause extends Node {
         setCatchBlock(catchBlock);
     }
 
-	/**
-	 * @deprecated prefer using Range objects.
-	 */
-	@Deprecated
-	public CatchClause(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-                       final EnumSet<Modifier> exceptModifier, final List<AnnotationExpr> exceptAnnotations,
-                       final Type exceptTypes,
-	                   final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
-		this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), exceptModifier, exceptAnnotations, exceptTypes, exceptId, catchBlock);
-	}
-	
     public CatchClause(final Range range,
                        final EnumSet<Modifier> exceptModifier, final List<AnnotationExpr> exceptAnnotations,
                        final Type exceptTypes,
@@ -81,14 +69,30 @@ public final class CatchClause extends Node {
 		v.visit(this, arg);
 	}
 
+    /**
+     * Use {@link #getBody()} instead
+     * 
+     * @return
+     */
+    @Deprecated
 	public BlockStmt getCatchBlock() {
 		return catchBlock;
 	}
 
+	/**
+	 * Note that the type of the Parameter can be a UnionType. In this case, any annotations found at the start of the catch(@X A a |...)
+	 * are found directly in the Parameter. Annotations that are on the second or later type - catch(A a | @X B b ...) are found on those types.
+	 */
 	public Parameter getParam() {
 		return param;
 	}
 
+    /**
+     * Use {@link #setBody(BlockStmt)} instead
+     * 
+     * @param catchBlock
+     */
+    @Deprecated
 	public void setCatchBlock(final BlockStmt catchBlock) {
 		this.catchBlock = catchBlock;
 		setAsParentNodeOf(this.catchBlock);
@@ -98,4 +102,16 @@ public final class CatchClause extends Node {
 		this.param = param;
 		setAsParentNodeOf(this.param);
 	}
+
+    @Override
+    public BlockStmt getBody() {
+        return catchBlock;
+    }
+
+    @Override
+    public CatchClause setBody(BlockStmt block) {
+        this.catchBlock = block;
+        setAsParentNodeOf(this.catchBlock);
+        return this;
+    }
 }
