@@ -1,13 +1,12 @@
-package com.github.javaparser.junit;
+package com.github.javaparser.junit.wiki_samples;
 
 import org.junit.Test;
 
-public class PrintingTheCompilationUnitToSystemOutputTest {
+public class ChangingMethodsFromAClassWithAVisitorTest {
     @Test
     public void printingTheCompilationUnitToSystemOutput() throws Exception {
         try (TestFileToken f = new TestFileToken("test.java")) {
-            CuPrinter.main(new String[]{});
+            MethodChanger_1.main(new String[]{});
         }
     }
-
 }
