@@ -22,16 +22,17 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VoidType extends Type {
-	
+public final class VoidType extends Type<VoidType> implements NodeWithAnnotations<VoidType> {
+
 	public static final VoidType VOID_TYPE = new VoidType();
-	
+
 	public VoidType() {
 	}
 

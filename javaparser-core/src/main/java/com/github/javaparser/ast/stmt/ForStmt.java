@@ -21,19 +21,20 @@
  
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 
-import static com.github.javaparser.utils.Utils.*;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithBody;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ForStmt extends Statement {
+public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
 	private List<Expression> init;
 
@@ -74,7 +75,8 @@ public final class ForStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public Statement getBody() {
+	@Override
+    public Statement getBody() {
 		return body;
 	}
 
@@ -92,9 +94,11 @@ public final class ForStmt extends Statement {
         return update;
 	}
 
-	public void setBody(final Statement body) {
+	@Override
+    public ForStmt setBody(final Statement body) {
 		this.body = body;
 		setAsParentNodeOf(this.body);
+        return this;
 	}
 
 	public void setCompare(final Expression compare) {

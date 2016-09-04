@@ -18,19 +18,19 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -47,106 +47,130 @@ public final class VariableDeclarationExpr extends Expression
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-	private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotations;
 
-	private Type type;
+    private Type type;
 
-	private List<VariableDeclarator> vars;
+    private List<VariableDeclarator> vars;
 
-	public VariableDeclarationExpr() {
-	}
+    public VariableDeclarationExpr() {
+    }
 
-	public VariableDeclarationExpr(final Type type, final List<VariableDeclarator> vars) {
-		setType(type);
-		setVars(vars);
-	}
+    public VariableDeclarationExpr(final Type type, String variableName) {
+        setType(type);
+        setVars(Arrays.asList(new VariableDeclarator(variableName)));
+    }
+
+    public VariableDeclarationExpr(final Type type, VariableDeclarator var) {
+        setType(type);
+        setVars(Arrays.asList(var));
+    }
+
+    public VariableDeclarationExpr(final Type type, String variableName, Modifier... modifiers) {
+        setType(type);
+        setVars(Arrays.asList(new VariableDeclarator(variableName)));
+        setModifiers(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+    }
+
+    public VariableDeclarationExpr(final Type type, VariableDeclarator var, Modifier... modifiers) {
+        setType(type);
+        setVars(Arrays.asList(var));
+        setModifiers(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+    }
+
+    public VariableDeclarationExpr(final Type type, final List<VariableDeclarator> vars) {
+        setType(type);
+        setVars(vars);
+    }
 
     public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type type,
                                    final List<VariableDeclarator> vars) {
-		setModifiers(modifiers);
-		setType(type);
-		setVars(vars);
-	}
+        setModifiers(modifiers);
+        setType(type);
+        setVars(vars);
+    }
 
-	public VariableDeclarationExpr(final Range range,
+    public VariableDeclarationExpr(final Range range,
                                    final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
                                    final Type type,
-			final List<VariableDeclarator> vars) {
-		super(range);
-		setModifiers(modifiers);
-		setAnnotations(annotations);
-		setType(type);
-		setVars(vars);
-	}
+                                   final List<VariableDeclarator> vars) {
+        super(range);
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setType(type);
+        setVars(vars);
+    }
 
-	/**
-	 * Creates a {@link VariableDeclarationExpr}.
-	 *
-	 * @return instance of {@link VariableDeclarationExpr}
-	 */
-	public static VariableDeclarationExpr create(Type type, String name) {
-		List<VariableDeclarator> vars = new ArrayList<>();
-		vars.add(new VariableDeclarator(new VariableDeclaratorId(name)));
-		return new VariableDeclarationExpr(type, vars);
-	}
+    /**
+     * Creates a {@link VariableDeclarationExpr}.
+     *
+     * @return instance of {@link VariableDeclarationExpr}
+     */
+    public static VariableDeclarationExpr create(Type type, String name) {
+        return new VariableDeclarationExpr(type, name);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	@Override
+    @Override
     public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;
-	}
+    }
 
-	/**
+    /**
      * Return the modifiers of this variable declaration.
      * 
      * @see Modifier
      * @return modifiers
      */
-	@Override
+    @Override
     public EnumSet<Modifier> getModifiers() {
-		return modifiers;
-	}
+        return modifiers;
+    }
 
-	@Override
-	public Type getType() {
-		return type;
-	}
+    @Override
+    public Type getType() {
+        return type;
+    }
 
-	public List<VariableDeclarator> getVars() {
+    public List<VariableDeclarator> getVars() {
         vars = ensureNotNull(vars);
         return vars;
-	}
+    }
 
-	@Override
+    @Override
     public VariableDeclarationExpr setAnnotations(final List<AnnotationExpr> annotations) {
         this.annotations = annotations;
-		setAsParentNodeOf(this.annotations);
+        setAsParentNodeOf(this.annotations);
         return this;
-	}
+    }
 
     @Override
     public VariableDeclarationExpr setModifiers(final EnumSet<Modifier> modifiers) {
-		this.modifiers = modifiers;
+        this.modifiers = modifiers;
         return this;
-	}
+    }
 
-	@Override
+    @Override
     public VariableDeclarationExpr setType(final Type type) {
-		this.type = type;
-		setAsParentNodeOf(this.type);
+        this.type = type;
+        setAsParentNodeOf(this.type);
         return this;
-	}
+    }
 
-	public void setVars(final List<VariableDeclarator> vars) {
-		this.vars = vars;
-		setAsParentNodeOf(this.vars);
-	}
+    public void setVars(final List<VariableDeclarator> vars) {
+        this.vars = vars;
+        setAsParentNodeOf(this.vars);
+    }
 }

@@ -1255,12 +1255,11 @@ ImportDeclaration EmptyImportDeclaration():
 PackageDeclaration PackageDeclaration():
 {
 	List<AnnotationExpr> annotations = null;
-	AnnotationExpr ann;
 	NameExpr name;
 	Position begin;
 }
 {
-( ann = Annotation() { annotations = add(annotations, ann); } )*
+  annotations = Annotations() 
   "package" {begin = tokenBegin();}  name = Name() ";"
   { return new PackageDeclaration(range(begin, tokenEnd()), annotations, name); }
 }
@@ -1383,12 +1382,11 @@ List<ClassOrInterfaceType> ExtendsList(boolean isInterface):
    boolean extendsMoreThanOne = false;
    List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
-   AnnotationExpr ann;
    List<AnnotationExpr> annotations = null;
 }
 {
-   "extends" (ann = Annotation()   { annotations = add(annotations, ann);})* cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); }
-   ( "," cit = ClassOrInterfaceType() { ret.add(cit); extendsMoreThanOne = true; } )*
+   "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
+   ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); extendsMoreThanOne = true; } )*
    {
       if (extendsMoreThanOne && !isInterface)
          addProblem("A class cannot extend more than one other class");
@@ -1402,8 +1400,8 @@ List<ClassOrInterfaceType> ImplementsList(boolean isInterface):
    ClassOrInterfaceType cit;
 }
 {
-   "implements" cit = ClassOrInterfaceTypeWithAnnotations() { ret.add(cit); }
-   ( "," cit = ClassOrInterfaceTypeWithAnnotations() { ret.add(cit); } )*
+   "implements" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
+   ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
    {
       if (isInterface)
          addProblem("An interface cannot implement other interfaces");
@@ -1473,14 +1471,13 @@ RangedList<TypeParameter> TypeParameters():
 	RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new LinkedList<TypeParameter>());
 	TypeParameter tp;
 	List<AnnotationExpr> annotations = null;
-	AnnotationExpr ann;
 }
 {
    "<" { ret.beginAt(tokenBegin()); }
-   (ann = Annotation()   { annotations = add(annotations, ann);})*
-
+   annotations = Annotations() 
    tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; }
-   ( "," (ann = Annotation()   { annotations = add(annotations, ann);})* tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; } )*
+   ( "," 
+   annotations = Annotations() tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; } )*
    ">" { ret.endAt(tokenEnd()); }
    { return ret; }
 }
@@ -1500,12 +1497,11 @@ List<ClassOrInterfaceType> TypeBound():
 {
 	List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
 	ClassOrInterfaceType cit;
-	AnnotationExpr ann;
-	List<AnnotationExpr> annotations = null;
+	List<AnnotationExpr> annotations;
 }
 {
-   "extends" (ann = Annotation()   { annotations = add(annotations, ann);})* cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); annotations=null;}
-   ( "&"   (ann = Annotation()   { annotations = add(annotations, ann);})*  cit = ClassOrInterfaceType() { cit.setAnnotations(annotations); ret.add(cit); annotations=null;} )*
+   "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
+   ( "&"   cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
    { return ret; }
 }
 
@@ -1660,19 +1656,19 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	int arrayCount = 0;
 	List<ReferenceType> throws_ = null;
 	BlockStmt block = null;
-	Position beginPos = modifier.begin;
+	Position begin = modifier.begin;
 	ReferenceType throwType;
 }
 {
   // Modifiers already matched in the caller!
-  [ typeParameters = TypeParameters() { if(beginPos.line==-1){ beginPos=typeParameters.range.begin;} } ]
-  type = ResultType() { if(beginPos.line==-1){beginPos=type.getBegin();}}
+  [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
+  type = ResultType() { begin = begin.orIfInvalid(type.getBegin()); }
   name = Name() parameters = FormalParameters() ( "[" "]" { arrayCount++; } )*
   [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
     ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
   { 
-      MethodDeclaration tmp = new MethodDeclaration(range(beginPos, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, null, parameters, arrayCount, throws_, block);
+      MethodDeclaration tmp = new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, null, parameters, arrayCount, throws_, block);
       tmp.setNameExpr(name);
       return tmp;
   }
@@ -1680,16 +1676,18 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 
 ReferenceType ReferenceTypeWithAnnotations():
 {
-	List<AnnotationExpr> annotations = new ArrayList<AnnotationExpr>();
-	AnnotationExpr annotation = null;
+	List<AnnotationExpr> annotations;
 	ReferenceType type;
 }
 {
-    (annotation = Annotation() { annotations = add(annotations, annotation); } )* type = ReferenceType() {
-        if (type.getAnnotations() != null) {
-            type.getAnnotations().addAll(annotations);
-        } else {
-            type.setAnnotations(annotations);
+    annotations = Annotations() 
+    type = ReferenceType() {
+        if(annotations != null){
+            if (type.getAnnotations() != null) {
+                type.getAnnotations().addAll(annotations);
+            } else {
+                type.setAnnotations(annotations);
+            }
         }
         return type;
     }
@@ -1852,13 +1850,12 @@ ReferenceType ReferenceType():
 	int arrayCount = 0;
 	List<AnnotationExpr> annotations = null;
 	List<List<AnnotationExpr>> accum= null;
-	AnnotationExpr ann;
 }
 {
   (
-   type = PrimitiveType() ( LOOKAHEAD(2)  (ann = Annotation()   { annotations = add(annotations, ann);  })* "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )+
+   type = PrimitiveType() ( LOOKAHEAD(2) annotations = Annotations()  "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )+
   |
-   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) (ann = Annotation()   { annotations = add(annotations, ann);  })* "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )*
+   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )*
   )
   { return new ReferenceType(range(type.getBegin(), tokenEnd()), type, arrayCount, null, accum); }
 }
@@ -1875,6 +1872,24 @@ IntersectionType IntersectionType():
     { return new IntersectionType(range(begin, tokenEnd()), elements); }
 }
 
+ClassOrInterfaceType AnnotatedClassOrInterfaceType():
+{
+	List<AnnotationExpr> annotations;
+	ClassOrInterfaceType cit;
+}
+{
+    annotations = Annotations()
+    cit = ClassOrInterfaceType()
+    {
+        if (cit.getScope()!=null) {
+            cit.getScope().setAnnotations(annotations);
+        } else {
+            cit.setAnnotations(annotations);
+        }
+        return cit;
+    }
+}
+
 ClassOrInterfaceType ClassOrInterfaceType():
 {
 	ClassOrInterfaceType ret;
@@ -1882,7 +1897,6 @@ ClassOrInterfaceType ClassOrInterfaceType():
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	Position begin;
 	List<AnnotationExpr> annotations = null;
-	AnnotationExpr ann;
 }
 {
   <IDENTIFIER> {begin=tokenBegin();} { name = token.image; }
@@ -1891,7 +1905,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
       ret = new ClassOrInterfaceType(range(begin, tokenEnd()),null, name, createTypeArguments(typeArgs.list));
   }
   (
-	  LOOKAHEAD(2) "." (ann = Annotation()   { annotations = add(annotations, ann);})*  <IDENTIFIER> { name = token.image; }
+	  LOOKAHEAD(2) "." annotations = Annotations()  <IDENTIFIER> { name = token.image; }
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
 	  {
 	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, createTypeArguments(typeArgs.list));
@@ -1901,24 +1915,6 @@ ClassOrInterfaceType ClassOrInterfaceType():
   )*
   { return ret; }
 }
-
-ClassOrInterfaceType ClassOrInterfaceTypeWithAnnotations():
-{
-	List<AnnotationExpr> annotations = new ArrayList<AnnotationExpr>();
-	AnnotationExpr annotation = null;
-	ClassOrInterfaceType type;
-}
-{
-    (annotation = Annotation() { annotations = add(annotations, annotation); } )* type = ClassOrInterfaceType() {
-        if (type.getAnnotations() != null) {
-            type.getAnnotations().addAll(annotations);
-        } else {
-            type.setAnnotations(annotations);
-        }
-        return type;
-    }
-}
-
 
 RangedList<Type> TypeArguments():
 {
@@ -1938,10 +1934,9 @@ Type TypeArgument():
 {
 	Type ret;
 	List<AnnotationExpr> annotations = null;
-	AnnotationExpr ann;
 }
 {
-  (ann = Annotation()   { annotations = add(annotations, ann);})*
+ annotations = Annotations() 
  (
    ret = ReferenceType()
  |
@@ -1955,18 +1950,17 @@ WildcardType Wildcard():
 	ReferenceType ext = null;
 	ReferenceType sup = null;
 	Position begin;
-	AnnotationExpr ann;
 	List<AnnotationExpr> annotations = null;
 }
 {
    "?" {begin=tokenBegin();}
    [
-		"extends" (ann = Annotation()   { annotations = add(annotations, ann);})* ext = ReferenceType()
+		"extends" annotations = Annotations() ext = ReferenceType()
 		{
 		  ext.setAnnotations(annotations);
 		}
 	|
-		"super" (ann = Annotation()   { annotations = add(annotations, ann);})* sup = ReferenceType()
+		"super" annotations = Annotations() sup = ReferenceType()
 		{
 		  sup.setAnnotations(annotations);
 		}
@@ -2366,13 +2360,12 @@ Expression CastExpression():
 	ReferenceType referenceType;
 	PrimitiveType primitiveType;
 	Position begin = INVALID;
-	AnnotationExpr ann;
 	List<AnnotationExpr> annotations = null;
 	List<ReferenceType> typesOfMultiCast = null;
 }
 {
   "(" {begin=tokenBegin();}
-   (ann = Annotation()   { annotations = add(annotations, ann);})*
+  annotations = Annotations() 
   (
   	  LOOKAHEAD(2)
   	  primitiveType = PrimitiveType() ")" ret = UnaryExpression() { primitiveType.setAnnotations(annotations); ret = new CastExpr(range(begin, tokenEnd()), primitiveType, ret); }
@@ -2644,12 +2637,11 @@ Expression AllocationExpression(Expression scope):
 	List<Expression> args;
 	Position begin;
 	List<AnnotationExpr> annotations = null;
-	AnnotationExpr ann;
 }
 {
   "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin();} }
 
-  (ann = Annotation()   { annotations = add(annotations, ann);})*
+  annotations = Annotations() 
   (
 	  type = PrimitiveType() {type.setAnnotations(annotations); }
 	  arr = ArrayDimsAndInits()
@@ -2666,10 +2658,10 @@ Expression AllocationExpression(Expression scope):
 	  	ret = arrayExpr;
 	  }
 	|
-	 [ typeArgs = TypeArguments()  (ann = Annotation()   { annotations = add(annotations, ann);})* ]
-	  type = ClassOrInterfaceType()
+	 [ typeArgs = TypeArguments() annotations = Annotations() ]
+	  type = AnnotatedClassOrInterfaceType()
       (
-	      arr = ArrayDimsAndInits() {type.setAnnotations(annotations); arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);	  }
+	      arr = ArrayDimsAndInits() {arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);	  }
 		  {
 		    arrayExpr.setArraysAnnotations((List)arr[2]);
 		  	if (arr[0] instanceof Integer) {
@@ -2683,7 +2675,7 @@ Expression AllocationExpression(Expression scope):
 		  }
 	  |
 	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-	      { type.setAnnotations(annotations); ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
+	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
       )
   )
   { return ret; }
@@ -2702,13 +2694,12 @@ Object[] ArrayDimsAndInits():
 	int i = 0;
 	List<List<AnnotationExpr>> accum = null;
 	List<AnnotationExpr> annotations = null;
-	AnnotationExpr ann;
 }
 {
-  (ann = Annotation()   { annotations = add(annotations, ann);  })*
+  annotations = Annotations() 
   (
 	  LOOKAHEAD(2)
-	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) (ann = Annotation()   { annotations = add(annotations, ann);  })* "[" "]" { i++; } )* {  accum = add(accum, annotations); annotations=null; ret[0] = inits; ret[1] = i; }
+	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { i++; } )* {  accum = add(accum, annotations); annotations=null; ret[0] = inits; ret[1] = i; }
 	|
 	  ( "[" "]" { i++; } )+ expr = ArrayInitializer() { accum = add(accum, annotations);ret[0] = i; ret[1] = expr; }
   )
@@ -3106,7 +3097,7 @@ TryStmt TryStatement():
  * finally/catch is present.
  */
 {
-	List<VariableDeclarationExpr> resources = new LinkedList<VariableDeclarationExpr>();
+	List<VariableDeclarationExpr> resources = null;
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
 	List<CatchClause> catchs = null;
@@ -3129,7 +3120,7 @@ TryStmt TryStatement():
   			"catch" {catchBegin=tokenBegin();}
   			"(" 
   			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); }
-  			( "|" exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); } )*
+  			( "|" exceptionType = ReferenceTypeWithAnnotations() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId()
   			")"
   			 
@@ -3147,13 +3138,18 @@ TryStmt TryStatement():
   	|
   		"finally" finallyBlock = Block()
   )
-  { return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock); }
+  {
+    if (finallyBlock==null && catchs==null && resources==null) {
+      throwParseException("Try has no finally, no catch, and no resources");
+    }
+    return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
+  }
 }
 
 
 List<VariableDeclarationExpr> ResourceSpecification() :
 {
-List<VariableDeclarationExpr> vars;
+  List<VariableDeclarationExpr> vars;
 }
 {
   "("
@@ -3199,6 +3195,16 @@ void RSIGNEDSHIFT():
 }
 
 /* Annotation syntax follows. */
+
+List<AnnotationExpr> Annotations():
+{
+	List<AnnotationExpr> annotations = null;
+	AnnotationExpr annotation;
+}
+{
+   (annotation = Annotation()  {annotations = add(annotations, annotation);} )*
+   { return annotations; }
+}
 
 AnnotationExpr Annotation():
 {

@@ -1,4 +1,4 @@
-package com.github.javaparser.junit.removenode;
+package com.github.javaparser.junit.wiki_samples.removenode;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
