@@ -31,6 +31,7 @@ import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import com.github.javaparser.ParseProblemException;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -58,52 +59,52 @@ public class DumpingSteps {
     }
 
     @When("the {class|compilation unit} is parsed by the Java parser")
-    public void whenTheClassIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheClassIsParsedByTheJavaParser() {
         resultNode = JavaParser.parse(sourceUnderTest, true);
     }
 
     @When("the expression is parsed by the Java parser")
-    public void whenTheExpressionIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheExpressionIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseExpression(sourceUnderTest);
     }
 
     @When("the block is parsed by the Java parser")
-    public void whenTheBlockIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheBlockIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseBlock(sourceUnderTest);
     }
 
     @When("the statement is parsed by the Java parser")
-    public void whenTheStatementIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheStatementIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseStatement(sourceUnderTest);
     }
 
     @When("the import is parsed by the Java parser")
-    public void whenTheImportIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheImportIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseImport(sourceUnderTest);
     }
 
     @When("the annotation is parsed by the Java parser")
-    public void whenTheAnnotationIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheAnnotationIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseAnnotation(sourceUnderTest);
     }
 
-    @When("the body declaration is parsed by the Java parser")
-    public void whenTheBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
-        resultNode = JavaParser.parseBodyDeclaration(sourceUnderTest);
+    @When("the annotation body declaration is parsed by the Java parser")
+    public void whenTheBodyDeclarationIsParsedByTheJavaParser() {
+        resultNode = JavaParser.parseAnnotationBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class body declaration is parsed by the Java parser")
-    public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseClassBodyDeclaration(sourceUnderTest);
     }
 
     @When("the interface body declaration is parsed by the Java parser")
-    public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() throws ParseException {
+    public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() {
         resultNode = JavaParser.parseInterfaceBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class is visited by an empty ModifierVisitorAdapter")
-    public void whenTheClassIsVisitedByAnEmptyModifierVisitorAdapter() throws ParseException {
+    public void whenTheClassIsVisitedByAnEmptyModifierVisitorAdapter() {
         (new ModifierVisitorAdapter() {
         }).visit((CompilationUnit) resultNode, null);
     }

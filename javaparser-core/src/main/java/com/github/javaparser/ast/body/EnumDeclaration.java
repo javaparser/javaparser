@@ -29,6 +29,7 @@ import java.util.List;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -36,7 +37,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
+public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
+        implements NodeWithImplements<EnumDeclaration> {
 
     private List<ClassOrInterfaceType> implementsList;
 
@@ -81,6 +83,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
         return entries;
     }
 
+    @Override
     public List<ClassOrInterfaceType> getImplements() {
         implementsList = ensureNotNull(implementsList);
         return implementsList;
@@ -92,35 +95,14 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
         return this;
     }
 
+    @Override
     public EnumDeclaration setImplements(List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
         return this;
     }
 
-    /**
-     * Add an implements to this enum
-     * 
-     * @param name the name of the type to extends from
-     * @return this, the {@link EnumDeclaration}
-     */
-    public EnumDeclaration addImplements(String name) {
-        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
-        getImplements().add(classOrInterfaceType);
-        classOrInterfaceType.setParentNode(this);
-        return this;
-    }
 
-    /**
-     * Add an implements to this enum and automatically add the import
-     * 
-     * @param clazz the type to implements from
-     * @return this, the {@link EnumDeclaration}
-     */
-    public EnumDeclaration addImplements(Class<?> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addImplements(clazz.getSimpleName());
-    }
 
     public EnumConstantDeclaration addEnumConstant(String name) {
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
@@ -128,5 +110,6 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> {
         enumConstant.setParentNode(this);
         return enumConstant;
     }
+
 
 }

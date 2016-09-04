@@ -461,3 +461,14 @@ public class Example {
   }
 }
 Then no errors are reported
+
+Scenario: try requires resources, a finally or a catch (issue 442)
+Given the class:
+class A {
+    public void helloWorld() {
+        try {
+        }
+    }
+}
+Then the Java parser cannot parse it because of a parse error
+

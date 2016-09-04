@@ -33,6 +33,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.type.ReferenceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
@@ -110,12 +111,12 @@ public class ManipulationSteps {
     }
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseBlock")
-    public void whenIsTheStringIsParsedByTheJavaParser(String value) throws ParseException {
+    public void whenIsTheStringIsParsedByTheJavaParser(String value) {
         blockStmt = JavaParser.parseBlock(value);
     }
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseStatement")
-    public void whenIsTheStringIsParsedByTheJavaParserUsingParseStatement(String value) throws ParseException {
+    public void whenIsTheStringIsParsedByTheJavaParserUsingParseStatement(String value) {
         statement= JavaParser.parseStatement(value);
     }
 
