@@ -39,7 +39,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -602,15 +601,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		n.getId().accept(this, arg);
 	}
 	
-	@Override public void visit(final MultiTypeParameter n, final A arg) {
-		visitComment(n.getComment(), arg);
-		visitAnnotations(n, arg);
-        if (n.getType() != null) {
-			n.getType().accept(this, arg);
-		}
-		n.getId().accept(this, arg);
-	}
-
 	@Override public void visit(final PrimitiveType n, final A arg) {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);

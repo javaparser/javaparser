@@ -26,25 +26,37 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends BaseParameter<Parameter> implements NodeWithType<Parameter> {
+public final class Parameter extends Node implements NodeWithType<Parameter>, NodeWithAnnotations<Parameter>, NodeWithName<Parameter>, NodeWithModifiers<Parameter> {
     private Type type;
 
     private boolean isVarArgs;
+
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+
+    private List<AnnotationExpr> annotations;
+
+    private VariableDeclaratorId id;
 
     public Parameter() {
     }
 
     public Parameter(Type type, VariableDeclaratorId id) {
-    	super(id);
+        setId(id);
         setType(type);
     }
 
@@ -62,13 +74,17 @@ public final class Parameter extends BaseParameter<Parameter> implements NodeWit
     }
 
     public Parameter(EnumSet<Modifier> modifiers, Type type, VariableDeclaratorId id) {
-    	super(modifiers, id);
+        setModifiers(modifiers);
+        setId(id);
         setType(type);
     }
 
     public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
                      boolean isVarArgs, VariableDeclaratorId id) {
-        super(range, modifiers, annotations, id);
+        super(range);
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setId(id);
         setType(type);
         setVarArgs(isVarArgs);
     }
@@ -101,5 +117,67 @@ public final class Parameter extends BaseParameter<Parameter> implements NodeWit
 
     public void setVarArgs(boolean isVarArgs) {
         this.isVarArgs = isVarArgs;
+    }
+    /**
+     * @return the list returned could be immutable (in that case it will be empty)
+     */
+    @Override
+    public List<AnnotationExpr> getAnnotations() {
+        annotations = ensureNotNull(annotations);
+        return annotations;
+    }
+
+    public VariableDeclaratorId getId() {
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return getId().getName();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Parameter setName(String name) {
+        if (id != null)
+            id.setName(name);
+        else
+            id = new VariableDeclaratorId(name);
+        return this;
+    }
+
+    /**
+     * Return the modifiers of this parameter declaration.
+     *
+     * @see Modifier
+     * @return modifiers
+     */
+    @Override
+    public EnumSet<Modifier> getModifiers() {
+        return modifiers;
+    }
+
+    /**
+     * @param annotations a null value is currently treated as an empty list. This behavior could change
+     *            in the future, so please avoid passing null
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public Parameter setAnnotations(List<AnnotationExpr> annotations) {
+        this.annotations = annotations;
+        setAsParentNodeOf(this.annotations);
+        return this;
+    }
+
+    public void setId(VariableDeclaratorId id) {
+        this.id = id;
+        setAsParentNodeOf(this.id);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Parameter setModifiers(EnumSet<Modifier> modifiers) {
+        this.modifiers = modifiers;
+        return this;
     }
 }

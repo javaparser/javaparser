@@ -31,7 +31,6 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BaseParameter;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -42,7 +41,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -860,26 +858,12 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	
 	@Override public Node visit(final Parameter n, final A arg) {
 		visitComment(n, arg);
-        visit((BaseParameter<?>) n, arg);
+		visitAnnotations(n, arg);
+		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
 		n.setType((Type) n.getType().accept(this, arg));
 		return n;
 	}
 	
-	@Override public Node visit(MultiTypeParameter n, A arg) {
-		visitComment(n, arg);
-		visitAnnotations(n, arg);
-        visit((BaseParameter<?>) n, arg);
-        n.setType((UnionType)n.getType().accept(this, arg));
-        return n;
-    }
-
-    protected Node visit(final BaseParameter<?> n, final A arg) {
-		visitComment(n, arg);
-		visitAnnotations(n, arg);
-		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
-		return n;
-	}
-
 	@Override public Node visit(final PrimitiveType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);

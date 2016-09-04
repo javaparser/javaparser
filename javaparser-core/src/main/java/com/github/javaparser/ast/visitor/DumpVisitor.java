@@ -48,7 +48,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -1106,20 +1105,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		if (n.isVarArgs()) {
 			printer.print("...");
 		}
-		printer.print(" ");
-		n.getId().accept(this, arg);
-	}
-
-	@Override
-	public void visit(MultiTypeParameter n, Object arg) {
-		printAnnotations(n.getAnnotations(), false, arg);
-		printModifiers(n.getModifiers());
-
-		Type type = n.getType();
-		if (type != null) {
-			type.accept(this, arg);
-		}
-
 		printer.print(" ");
 		n.getId().accept(this, arg);
 	}
