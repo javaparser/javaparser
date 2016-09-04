@@ -22,16 +22,19 @@
 package com.github.javaparser.ast.type;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class PrimitiveType extends Type {
-	
+public final class PrimitiveType extends Type<PrimitiveType> implements NodeWithAnnotations<PrimitiveType> {
+
 	public static final PrimitiveType BYTE_TYPE = new PrimitiveType(Primitive.Byte);
 
 	public static final PrimitiveType SHORT_TYPE = new PrimitiveType(Primitive.Short);
@@ -69,7 +72,7 @@ public final class PrimitiveType extends Type {
 		}
 	}
 
-	static final HashMap<String, Primitive> unboxMap = new HashMap<String, Primitive>();
+	static final HashMap<String, Primitive> unboxMap = new HashMap<>();
 	static {
 		for(Primitive unboxedType : Primitive.values()) {
 			unboxMap.put(unboxedType.nameOfBoxedType, unboxedType);

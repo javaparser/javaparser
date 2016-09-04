@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * @since 3.0.0
  */
-public class IntersectionType extends Type {
+public class IntersectionType extends Type<IntersectionType> implements NodeWithAnnotations<IntersectionType> {
 
     private List<ReferenceType> elements;
 

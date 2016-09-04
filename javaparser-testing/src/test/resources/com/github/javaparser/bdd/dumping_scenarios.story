@@ -373,3 +373,84 @@ class Foo {
     void m1(@Boo boolean @Index1 [] @Index2 [] boolArray) {
     }
 }
+
+Scenario: Annotations are supported on annotations
+Given the class:
+@C @interface D {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+@C
+@interface D {
+}
+
+Scenario: Annotations are supported on interfaces
+Given the class:
+@C interface Abc {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+@C
+interface Abc {
+}
+
+Scenario: Annotations are supported on enums
+Given the class:
+@C enum Abc {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+@C
+enum Abc {
+
+}
+
+Scenario: Annotations are supported on classes (issue 436 is the commented part)
+Given the compilation unit:
+@C
+public class Abc<@C A, @C X extends @C String & @C Serializable> {
+
+	@C int @C[] @C []f;
+
+	@C
+	public Abc(@C int p, List<@C ? extends Object> aa){
+		@C int b;
+	}
+	public @C void a(@C int o) {
+/*		try {
+			throw new IOException();
+		} catch (@C NullPointerException | @C IOException e) {
+		}
+*/	}
+}
+When the compilation unit is parsed by the Java parser
+Then it is dumped to:
+@C
+public class Abc<@C A, @C X extends @C String & @C Serializable> {
+
+    @C
+    int @C [] @C [] f;
+
+    @C
+    public Abc(@C int p, List<@C ? extends Object> aa) {
+        @C int b;
+    }
+
+    @C
+    public void a(@C int o) {
+    /*		try {
+			throw new IOException();
+		} catch (@C NullPointerException | @C IOException e) {
+		}
+*/
+    }
+}
+
+Scenario: we can parse a package-info file.
+Given the class in the file "package-info.java"
+When the class is parsed by the Java parser
+Then it is dumped to:
+/**
+ * This package contains class for doing some stuff.
+ */
+@C package com.company.stuff;
