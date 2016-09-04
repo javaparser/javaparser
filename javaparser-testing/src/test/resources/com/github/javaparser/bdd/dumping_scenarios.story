@@ -454,3 +454,42 @@ Then it is dumped to:
  * This package contains class for doing some stuff.
  */
 @C package com.company.stuff;
+
+
+Scenario: Annotations are supported inside catch (issue 436)
+Given the compilation unit:
+public class Abc {
+	public void a() {
+		try {
+		} catch (@C NullPointerException | @C IOException e) {
+		}
+	}
+}
+When the compilation unit is parsed by the Java parser
+Then it is dumped to:
+public class Abc {
+
+    public void a() {
+        try {
+        } catch (@C NullPointerException | @C IOException e) {
+        }
+    }
+}
+
+Scenario: Inner class notation does not confuse annotations (#107)
+Given the class:
+class A extends @Ann1 B.@Ann2 C {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+class A extends @Ann1 B.@Ann2 C {
+}
+
+Scenario: Make sure interface extends can be annotated
+Given the class:
+interface A extends @X B, @Y C, @Z D {
+}
+When the class is parsed by the Java parser
+Then it is dumped to:
+interface A extends @X B, @Y C, @Z D {
+}
