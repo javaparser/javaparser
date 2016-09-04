@@ -1008,6 +1008,11 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 
 	@Override public Node visit(final TryStmt n, final A arg) {
 		visitComment(n, arg);
+		final List<VariableDeclarationExpr> types = n.getResources();
+		for (int i = 0; i < types.size(); i++) {
+			n.getResources().set(i,
+					(VariableDeclarationExpr) n.getResources().get(i).accept(this, arg));
+		}
 		n.setTryBlock((BlockStmt) n.getTryBlock().accept(this, arg));
 		final List<CatchClause> catchs = n.getCatchs();
 		if (catchs != null) {
