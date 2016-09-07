@@ -84,11 +84,11 @@ public final class JavaParser {
 		final ASTParser parser = getParserForProvider(provider);
 		try {
 			N resultNode = context.parse(parser);
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, astParser.getTokens());
+			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
 		} catch (ParseException e) {
-			return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))), new LinkedList<>());
+			return new ParseResult<>(e);
         } catch (TokenMgrException e) {
-            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), Range.UNKNOWN)), new LinkedList<>());
+            return new ParseResult<>(e);
 		} finally {
 			try {
 				provider.close();
@@ -112,11 +112,11 @@ public final class JavaParser {
 			final CompilationUnit resultNode = COMPILATION_UNIT.parse(parser);
 			commentsInserter.insertComments(resultNode, sourceCode);
 
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, astParser.getTokens());
+			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
 		} catch (ParseException e) {
-            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))), new LinkedList<>());
+            return new ParseResult<>(e);
         } catch (TokenMgrException e) {
-            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), Range.UNKNOWN)), new LinkedList<>());
+            return new ParseResult<>(e);
         } catch (IOException e) {
             // The commentsInserter won't throw an IOException since it's reading from a String.
 			throw new AssertionError("Unreachable code");

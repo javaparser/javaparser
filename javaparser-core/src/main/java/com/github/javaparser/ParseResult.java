@@ -9,14 +9,14 @@ import java.util.Optional;
 public class ParseResult<T> {
     public final Optional<T> result;
     public final List<Problem> problems;
-    public final List<Token> tokens;
+    public final Optional<List<Token>> tokens;
 
-    public ParseResult(Optional<T> result, List<Problem> problems, List<Token> tokens) {
+    public ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens) {
         this.result = result;
         this.problems = problems;
         this.tokens = tokens;
     }
-    
+
     public boolean isSuccessful() {
         return problems.isEmpty();
     }
