@@ -111,6 +111,7 @@ import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.ArrayType;
 
 /**
  * @author Julio Vilmar Gesser
@@ -641,22 +642,21 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	@Override public Boolean visit(final ReferenceType n1, final Node arg) {
 		final ReferenceType n2 = (ReferenceType) arg;
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
-			return false;
-		}
 		if (!nodeEquals(n1.getType(), n2.getType())) {
 			return false;
 		}
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
-		if (!arraysAnnotationsEquals(n1, n2)) {
-			return false;
-		}
 		return true;
 	}
 
-    @Override public Boolean visit(final IntersectionType n1, final Node arg) {
+	@Override
+	public Boolean visit(ArrayType n, Node arg) {
+		return visit((ReferenceType)n, arg);
+	}
+
+	@Override public Boolean visit(final IntersectionType n1, final Node arg) {
         final IntersectionType n2 = (IntersectionType) arg;
 
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {

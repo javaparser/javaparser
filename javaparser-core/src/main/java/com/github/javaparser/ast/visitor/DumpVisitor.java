@@ -125,6 +125,7 @@ import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.ArrayType;
 
 /**
  * Dumps the AST to formatted Java source code.
@@ -526,7 +527,13 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			}
 		}
 		n.getType().accept(this, arg);
-		printArrayBraces(n, arg);
+	}
+
+	@Override
+	public void visit(ArrayType n, Object arg) {
+		n.getType().accept(this, arg);
+		printAnnotations(n.getAnnotations(), true, arg);
+		printer.print("[]"); 
 	}
 
 	@Override

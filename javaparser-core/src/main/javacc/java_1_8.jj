@@ -153,6 +153,17 @@ final class ASTParser {
 	    return ret;
     }
 
+    private ReferenceType juggleArrayTypes(Range range, Type type, int arrayCount, List<List<AnnotationExpr>> accum) {
+        if (arrayCount == 0) {
+            // Cast is allowed since only ReferenceType can be matched without [].
+            return (ReferenceType) type;
+        }
+        for (List<AnnotationExpr> annotations: accum) {
+            type = new ArrayType(range, type, annotations);
+        }
+        return (ArrayType) type;
+    }
+
     private TypeArguments createTypeArguments(List<Type> typeArgs) {
         boolean usesDiamondOperator = typeArgs != null && typeArgs.isEmpty();
         return usesDiamondOperator ? TypeArguments.withDiamondOperator() : TypeArguments.withArguments(typeArgs);
@@ -1857,7 +1868,7 @@ ReferenceType ReferenceType():
   |
    type = ClassOrInterfaceType()  ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )*
   )
-  { return new ReferenceType(range(type.getBegin(), tokenEnd()), type, arrayCount, null, accum); }
+  { return juggleArrayTypes(range(type.getBegin(), tokenEnd()), type, arrayCount, accum); }
 }
 
 IntersectionType IntersectionType():

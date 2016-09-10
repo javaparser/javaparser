@@ -45,7 +45,7 @@ public class ClassCreator {
         type.addMember(method);
 
         // add a parameter to the method
-        Parameter param = Parameter.create(ReferenceType.create("String", 0), "args");
+        Parameter param = Parameter.create(ReferenceType.create("String"), "args");
         param.setVarArgs(true);
         method.addParameter(param);
 

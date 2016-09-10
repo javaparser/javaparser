@@ -127,6 +127,8 @@ public interface VoidVisitor<A> {
 
 	void visit(ReferenceType n, A arg);
 
+	void visit(ArrayType n, A arg);
+
     void visit(IntersectionType n, A arg);
 
     void visit(UnionType n, A arg);

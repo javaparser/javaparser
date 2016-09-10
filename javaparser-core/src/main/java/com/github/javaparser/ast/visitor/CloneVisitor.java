@@ -110,6 +110,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.PrimitiveType;
@@ -441,17 +442,21 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(ReferenceType _n, Object _arg) {
 		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
-		List<List<AnnotationExpr>> _arraysAnnotations = cloneArraysAnnotations(_n, _arg);
 
         ReferenceType r = new ReferenceType(_n.getBegin().line,
                 _n.getBegin().column, _n.getEnd().line, _n.getEnd().column, type_,
-                _n.getArrayCount(), ann, _arraysAnnotations);
+                ann);
         Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
 		return r;
 	}
 
-    @Override
+	@Override
+	public Node visit(ArrayType n, Object arg) {
+		return visit((ReferenceType)n, arg);
+	}
+
+	@Override
     public Node visit(IntersectionType _n, Object _arg) {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
         List<ReferenceType> elements = visit(_n.getElements(), _arg);

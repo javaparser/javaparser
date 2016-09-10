@@ -107,6 +107,7 @@ import com.github.javaparser.ast.stmt.SynchronizedStmt;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
@@ -614,11 +615,15 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final ReferenceType n, final A arg) {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
-		visitArraysAnnotations(n, arg);
 		n.getType().accept(this, arg);
 	}
 
-    @Override public void visit(final IntersectionType n, final A arg) {
+	@Override
+	public void visit(ArrayType n, A arg) {
+		visit((ReferenceType)n, arg);
+	}
+
+	@Override public void visit(final IntersectionType n, final A arg) {
         visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
 		for (ReferenceType element : n.getElements()) {

@@ -101,6 +101,7 @@ import com.github.javaparser.ast.stmt.SynchronizedStmt;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
@@ -1276,12 +1277,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	@Override
 	public R visit(final ReferenceType n, final A arg) {
 		visitComment(n, arg);
-		{
-			R result = visitArraysAnnotations(n, arg);
-			if (result != null) {
-				return result;
-			}
-		}
 		for (final AnnotationExpr a : n.getAnnotations()) {
 			R result = a.accept(this, arg);
 			if (result != null) {
@@ -1297,7 +1292,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		return null;
 	}
 
-    @Override
+	@Override
+	public R visit(ArrayType n, A arg) {
+		return visit((ReferenceType)n, arg);
+	}
+
+	@Override
     public R visit(final IntersectionType n, final A arg) {
 		visitComment(n, arg);
 		for (final AnnotationExpr a : n.getAnnotations()) {

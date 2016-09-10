@@ -109,6 +109,7 @@ import com.github.javaparser.ast.stmt.SynchronizedStmt;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
@@ -879,12 +880,16 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	@Override public Node visit(final ReferenceType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
-		visitArraysAnnotations(n, arg);
 		n.setType((Type) n.getType().accept(this, arg));
 		return n;
 	}
 
-    @Override
+	@Override
+	public Node visit(ArrayType n, A arg) {
+		return visit((ReferenceType)n, arg);
+	}
+
+	@Override
     public Node visit(final IntersectionType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
