@@ -153,12 +153,11 @@ final class ASTParser {
 	    return ret;
     }
 
-    private ReferenceType juggleArrayTypes(Range range, Type type, int arrayCount, List<List<AnnotationExpr>> accum) {
+    private ReferenceType juggleArrayTypes(Range range, Type type, int arrayCount, List<List<AnnotationExpr>> arrayAnnotations) {
         if (arrayCount == 0) {
-            // Cast is allowed since only ReferenceType can be matched without [].
-            return (ReferenceType) type;
+            return new ReferenceType(range, type);
         }
-        for (List<AnnotationExpr> annotations: accum) {
+        for (List<AnnotationExpr> annotations: arrayAnnotations) {
             type = new ArrayType(range, type, annotations);
         }
         return (ArrayType) type;

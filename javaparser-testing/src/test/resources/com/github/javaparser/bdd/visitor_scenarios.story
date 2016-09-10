@@ -73,4 +73,4 @@ Given a CompilationUnit
 Given a VoidVisitorAdapter with a visit method that asserts sensible line positions
 When file "JavaConcepts.java" is parsed
 When the CompilationUnit is visited by the PositionTestVisitor
-Then the total number of nodes visited is 1427
+Then the total number of nodes visited is 1433
