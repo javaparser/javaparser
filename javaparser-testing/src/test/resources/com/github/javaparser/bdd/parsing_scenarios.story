@@ -462,6 +462,12 @@ public class Example {
 }
 Then no errors are reported
 
+Scenario: alternative [] placings
+Given a CompilationUnit
+When the following source is parsed:
+class I{int[]bar(int[]x[])[]{return new int[][]{};}}
+Then no errors are reported
+
 Scenario: try requires resources, a finally or a catch (issue 442)
 Given the class:
 class A {
