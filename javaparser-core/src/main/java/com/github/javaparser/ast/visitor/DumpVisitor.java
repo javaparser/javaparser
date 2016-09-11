@@ -421,18 +421,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override
-	public void visit(final ReferenceType n, final Object arg) {
-		printJavaComment(n.getComment(), arg);
-		if (!isNullOrEmpty(n.getAnnotations())) {
-			for (AnnotationExpr ae : n.getAnnotations()) {
-				ae.accept(this, arg);
-				printer.print(" ");
-			}
-		}
-		n.getType().accept(this, arg);
-	}
-
-	@Override
     public void visit(final ArrayType n, final Object arg) {
         final List<ArrayType> arrayTypeBuffer = new LinkedList<>();
         Type type = n;

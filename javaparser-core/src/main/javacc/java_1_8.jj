@@ -155,7 +155,7 @@ final class ASTParser {
 
     private ReferenceType juggleArrayTypes(Range range, Type type, int arrayCount, List<List<AnnotationExpr>> arrayAnnotations) {
         if (arrayCount == 0) {
-            return new ReferenceType(range, type);
+            return (ReferenceType)type;
         }
         for (int i = arrayAnnotations.size() - 1; i >= 0; i--) {
             type = new ArrayType(range, type, arrayAnnotations.get(i));

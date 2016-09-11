@@ -834,13 +834,6 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ReferenceType n, final A arg) {
-		visitComment(n, arg);
-		visitAnnotations(n, arg);
-		n.setType((Type) n.getType().accept(this, arg));
-		return n;
-	}
-
 	@Override
 	public Node visit(ArrayType n, A arg) {
 		visitComment(n, arg);

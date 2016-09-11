@@ -630,18 +630,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return true;
 	}
 
-	@Override public Boolean visit(final ReferenceType n1, final Node arg) {
-		final ReferenceType n2 = (ReferenceType) arg;
-
-		if (!nodeEquals(n1.getType(), n2.getType())) {
-			return false;
-		}
-		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
-			return false;
-		}
-		return true;
-	}
-
 	@Override
 	public Boolean visit(ArrayType n1, Node arg) {
 		final ArrayType n2 = (ArrayType) arg;

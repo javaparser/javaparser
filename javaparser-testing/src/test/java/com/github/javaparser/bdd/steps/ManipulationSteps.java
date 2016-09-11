@@ -33,15 +33,13 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -161,7 +159,7 @@ public class ManipulationSteps {
     public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter param = Parameter.create(ReferenceType.create(typeName), parameterName);
+        Parameter param = Parameter.create(new ClassOrInterfaceType(typeName), parameterName);
         param.setVarArgs(true);
         method.addParameter(param);
     }

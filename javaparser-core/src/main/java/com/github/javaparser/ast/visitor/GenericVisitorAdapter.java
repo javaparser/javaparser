@@ -1235,24 +1235,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	}
 
 	@Override
-	public R visit(final ReferenceType n, final A arg) {
-		visitComment(n, arg);
-		for (final AnnotationExpr a : n.getAnnotations()) {
-			R result = a.accept(this, arg);
-			if (result != null) {
-				return result;
-			}
-		}
-		{
-			R result = n.getType().accept(this, arg);
-			if (result != null) {
-				return result;
-			}
-		}
-		return null;
-	}
-
-	@Override
 	public R visit(ArrayType n, A arg) {
 		visitComment(n, arg);
 		for (final AnnotationExpr a : n.getAnnotations()) {

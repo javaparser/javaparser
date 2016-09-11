@@ -33,7 +33,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> implements NodeWithName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType> {
+public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements NodeWithName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 

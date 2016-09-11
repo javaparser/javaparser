@@ -13,6 +13,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 
 import static com.github.javaparser.ast.type.VoidType.*;
@@ -45,7 +46,7 @@ public class ClassCreator {
         type.addMember(method);
 
         // add a parameter to the method
-        Parameter param = Parameter.create(ReferenceType.create("String"), "args");
+        Parameter param = Parameter.create(new ClassOrInterfaceType("String"), "args");
         param.setVarArgs(true);
         method.addParameter(param);
 
