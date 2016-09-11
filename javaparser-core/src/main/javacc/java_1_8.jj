@@ -2654,35 +2654,12 @@ Expression AllocationExpression(Expression scope):
   annotations = Annotations() 
   (
 	  type = PrimitiveType() {type.setAnnotations(annotations); }
-	  arr = ArrayDimsAndInits()
-	  {
-	    arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);
-	    arrayExpr.setArraysAnnotations((List)arr[2]);
-	  	if (arr[0] instanceof Integer) {
-	  	    arrayExpr.setArrayCount(((Integer)arr[0]).intValue());
-	  	    arrayExpr.setInitializer((ArrayInitializerExpr)arr[1]);
-	  	} else {
-	  	    arrayExpr.setArrayCount(((Integer)arr[1]).intValue());
-	  	    arrayExpr.setDimensions((List)arr[0]);
-	  	}
-	  	ret = arrayExpr;
-	  }
+	  ret = ArrayCreation(begin, type)
 	|
 	 [ typeArgs = TypeArguments() annotations = Annotations() ]
 	  type = AnnotatedClassOrInterfaceType()
       (
-	      arr = ArrayDimsAndInits() {arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);	  }
-		  {
-		    arrayExpr.setArraysAnnotations((List)arr[2]);
-		  	if (arr[0] instanceof Integer) {
-			  	arrayExpr.setArrayCount(((Integer)arr[0]).intValue());
-		  	    arrayExpr.setInitializer((ArrayInitializerExpr)arr[1]);
-		  	} else {
-			  	arrayExpr.setArrayCount(((Integer)arr[1]).intValue());
-		  	    arrayExpr.setDimensions((List)arr[0]);
-		  	}
-		  	ret = arrayExpr;
-		  }
+	      ret = ArrayCreation(begin, type)
 	  |
 	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
 	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
@@ -2695,27 +2672,43 @@ Expression AllocationExpression(Expression scope):
  * The third LOOKAHEAD specification below is to parse to PrimarySuffix
  * if there is an expression between the "[...]".
  */
-// TODO fix the horrible return type.
-Object[] ArrayDimsAndInits():
+ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
-	Object[] ret = new Object[3];
+    ArrayCreationExpr ret;
 	Expression expr;
+	ArrayInitializerExpr arrayInitializerExpr;
 	List<Expression> inits = null;
 	int i = 0;
 	List<List<AnnotationExpr>> accum = null;
 	List<AnnotationExpr> annotations = null;
+	ArrayCreationExpr arrayExpr;
 }
 {
   annotations = Annotations() 
   (
 	  LOOKAHEAD(2)
-	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { i++; } )* {  accum = add(accum, annotations); annotations=null; ret[0] = inits; ret[1] = i; }
+	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { i++; } )* 
+	  {  
+	    accum = add(accum, annotations); 
+        arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);
+        arrayExpr.setArraysAnnotations(accum);
+        arrayExpr.setArrayCount(i);
+        arrayExpr.setDimensions(inits);
+        ret = arrayExpr;
+	  }
 	|
-	  ( "[" "]" { i++; } )+ expr = ArrayInitializer() { accum = add(accum, annotations);ret[0] = i; ret[1] = expr; }
+	  ( "[" "]" { i++; } )+ arrayInitializerExpr = ArrayInitializer() 
+	  { 
+	    accum = add(accum, annotations);
+        arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);
+        arrayExpr.setArraysAnnotations(accum);
+        arrayExpr.setArrayCount(i);
+        arrayExpr.setInitializer(arrayInitializerExpr);
+        ret = arrayExpr;
+	  }
   )
-  { ret[2]=accum; return ret; }
+  { return ret; }
 }
-
 
 /*
  * Statement syntax follows.
