@@ -93,7 +93,6 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -116,16 +115,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
-import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.*;
 
 /**
  * Dumps the AST to formatted Java source code.
@@ -289,16 +279,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	private void printJavaComment(final Comment javacomment, final Object arg) {
 		if (javacomment != null) {
 			javacomment.accept(this, arg);
-		}
-	}
-
-	private void printArrayBraces(NodeWithArrays<?> n, Object arg) {
-		List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
-		for (int i = 0; i < n.getArrayCount(); i++) {
-			if (arraysAnnotations != null && i < arraysAnnotations.size()) {
-				printAnnotations(arraysAnnotations.get(i), true, arg);
-			}
-			printer.print("[]");
 		}
 	}
 
@@ -537,6 +517,17 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override
+	public void visit(DimensionedArrayType n, Object arg) {
+		n.getType().accept(this, arg);
+		printAnnotations(n.getAnnotations(), true, arg);
+		printer.print("[");
+		if(n.getDimension()!=null) {
+			n.getDimension().accept(this, arg);
+		}
+		printer.print("]");
+	}
+
+	@Override
 	public void visit(final IntersectionType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printAnnotations(n.getAnnotations(), false, arg);
@@ -665,23 +656,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printer.print("new ");
 		n.getType().accept(this, arg);
-		List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
-		if (!isNullOrEmpty(n.getDimensions())) {
-			int j = 0;
-			for (final Expression dim : n.getDimensions()) {
-				if (arraysAnnotations != null && j < arraysAnnotations.size()) {
-					printAnnotations(arraysAnnotations.get(j), true, arg);
-				}
-				printer.print("[");
-				dim.accept(this, arg);
-				printer.print("]");
-				j++;
-			}
-			printArrayBraces(n, arg);
-
-		}
 		if (n.getInitializer() != null) {
-			printArrayBraces(n, arg);
 			printer.print(" ");
 			n.getInitializer().accept(this, arg);
 		}

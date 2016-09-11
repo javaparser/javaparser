@@ -21,15 +21,11 @@
  
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
 import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -53,12 +49,6 @@ public class ReferenceType extends Type<ReferenceType> implements NodeWithType<R
 		setType(type);
 	}
 
-    public ReferenceType(int beginLine, int beginColumn, int endLine,
-                         int endColumn, Type type, 
-                         List<AnnotationExpr> annotations) {
-	    this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, annotations);
-    }
-	
     public ReferenceType(Range range, Type type, List<AnnotationExpr> annotations) {
         super(range, annotations);
         setType(type);

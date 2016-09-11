@@ -12,6 +12,7 @@ public interface NodeWithBlockStmt<T> {
         BlockStmt block = new BlockStmt();
         setBody(block);
         block.setParentNode((Node) this);
+
         return block;
     }
 }

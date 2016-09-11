@@ -87,7 +87,6 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -110,16 +109,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
 
 public class CloneVisitor implements GenericVisitor<Node, Object> {
 
@@ -443,17 +433,34 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
 
-        ReferenceType r = new ReferenceType(_n.getBegin().line,
-                _n.getBegin().column, _n.getEnd().line, _n.getEnd().column, type_,
-                ann);
+        ReferenceType r = new ReferenceType(_n.getRange(), type_, ann);
         Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
 		return r;
 	}
 
 	@Override
-	public Node visit(ArrayType n, Object arg) {
-		return visit((ReferenceType)n, arg);
+	public Node visit(ArrayType _n, Object _arg) {
+		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
+		Type type_ = cloneNodes(_n.getType(), _arg);
+
+		ArrayType r = new ArrayType(_n.getRange(), type_, ann);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+		r.setComment(comment);
+		return r;
+	}
+
+	@Override
+	public Node visit(DimensionedArrayType _n, Object _arg) {
+		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
+		Type type_ = cloneNodes(_n.getType(), _arg);
+		Expression dimension_ = cloneNodes(_n.getDimension(), _arg);
+
+		DimensionedArrayType r = new DimensionedArrayType(_n.getRange(), type_, dimension_, ann);
+
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+		r.setComment(comment);
+		return r;
 	}
 
 	@Override
@@ -534,14 +541,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(ArrayCreationExpr _n, Object _arg) {
 		Type type_ = cloneNodes(_n.getType(), _arg);
-		List<Expression> dimensions = visit(_n.getDimensions(), _arg);
-		ArrayCreationExpr r = new ArrayCreationExpr(_n.getRange(), type_,
-				dimensions, _n.getArrayCount());
+		ArrayCreationExpr r = new ArrayCreationExpr(_n.getRange(), type_);
 		if (_n.getInitializer() != null) {// ArrayCreationExpr has two mutually
 			// exclusive constructors
 			r.setInitializer(cloneNodes(_n.getInitializer(), _arg));
 		}
-		r.setArraysAnnotations(cloneArraysAnnotations(_n, _arg));
 		Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
 		return r;
@@ -1268,17 +1272,4 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
             return null;
         return (T) r;
     }
-
-
-	private List<List<AnnotationExpr>> cloneArraysAnnotations(NodeWithArrays<?> _n, Object _arg) {
-		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
-		List<List<AnnotationExpr>> _arraysAnnotations = null;
-		if(arraysAnnotations != null){
-			_arraysAnnotations = new LinkedList<>();
-			for(List<AnnotationExpr> aux: arraysAnnotations){
-				_arraysAnnotations.add(visit(aux, _arg));
-			}
-		}
-		return _arraysAnnotations;
-	}
 }

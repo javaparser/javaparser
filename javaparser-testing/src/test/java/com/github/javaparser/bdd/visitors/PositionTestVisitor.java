@@ -29,6 +29,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -108,6 +109,24 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final CatchClause n, final Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(LambdaExpr n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(MethodReferenceExpr n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(TypeExpr n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
@@ -345,7 +364,25 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
+    @Override
+    public void visit(ArrayType n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(DimensionedArrayType n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
     @Override public void visit(final IntersectionType n, final Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(UnionType n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
@@ -441,6 +478,12 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final WildcardType n, final Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(UnknownType n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }

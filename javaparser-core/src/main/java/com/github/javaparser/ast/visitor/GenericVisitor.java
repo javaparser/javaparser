@@ -128,6 +128,8 @@ public interface GenericVisitor<R, A> {
 	R visit(ReferenceType n, A arg);
 	
 	R visit(ArrayType n, A arg);
+	
+	R visit(DimensionedArrayType n, A arg);
 
     R visit(IntersectionType n, A arg);
 

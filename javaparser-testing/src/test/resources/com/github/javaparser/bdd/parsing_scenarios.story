@@ -478,3 +478,12 @@ class A {
 }
 Then the Java parser cannot parse it because of a parse error
 
+
+Scenario: Partially dimensioned arrays are fine
+Given a CompilationUnit
+When the following source is parsed:
+class X {
+    int a = new int @A [10] @A [20] @A [] [];
+    int b = new int @A [] @A []{{1}};
+}
+Then no errors are reported

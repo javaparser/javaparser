@@ -163,6 +163,13 @@ final class ASTParser {
         return (ArrayType) type;
     }
 
+    private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<List<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
+        for(int i=0; i<arrayAnnotations.size(); i++){
+            type = new DimensionedArrayType(range, type, dimensions.get(i), arrayAnnotations.get(i));
+        }
+        return new ArrayCreationExpr(range, type, arrayInitializerExpr);
+    }
+
     private TypeArguments createTypeArguments(List<Type> typeArgs) {
         boolean usesDiamondOperator = typeArgs != null && typeArgs.isEmpty();
         return usesDiamondOperator ? TypeArguments.withDiamondOperator() : TypeArguments.withArguments(typeArgs);
@@ -2675,39 +2682,24 @@ Expression AllocationExpression(Expression scope):
 ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
     ArrayCreationExpr ret;
-	Expression expr;
-	ArrayInitializerExpr arrayInitializerExpr;
+	Expression expr = null;
+	ArrayInitializerExpr arrayInitializerExpr = null;
 	List<Expression> inits = null;
 	int i = 0;
 	List<List<AnnotationExpr>> accum = null;
 	List<AnnotationExpr> annotations = null;
-	ArrayCreationExpr arrayExpr;
 }
-{
-  annotations = Annotations() 
-  (
-	  LOOKAHEAD(2)
-	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { i++; } )* 
-	  {  
-	    accum = add(accum, annotations); 
-        arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);
-        arrayExpr.setArraysAnnotations(accum);
-        arrayExpr.setArrayCount(i);
-        arrayExpr.setDimensions(inits);
-        ret = arrayExpr;
-	  }
-	|
-	  ( "[" "]" { i++; } )+ arrayInitializerExpr = ArrayInitializer() 
-	  { 
-	    accum = add(accum, annotations);
-        arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);
-        arrayExpr.setArraysAnnotations(accum);
-        arrayExpr.setArrayCount(i);
-        arrayExpr.setInitializer(arrayInitializerExpr);
-        ret = arrayExpr;
-	  }
-  )
-  { return ret; }
+{ 
+    ( annotations = Annotations() 
+    "[" 
+    (expr = Expression())? 
+    { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null;} 
+    "]" 
+    )+ 
+    (arrayInitializerExpr = ArrayInitializer())? 
+    {  
+        return juggleArrayCreation(range(begin, tokenEnd()), type, inits, accum, arrayInitializerExpr);
+    }
 }
 
 /*

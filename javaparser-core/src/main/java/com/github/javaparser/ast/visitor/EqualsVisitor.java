@@ -81,7 +81,6 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -103,15 +102,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
-import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -652,8 +643,32 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	}
 
 	@Override
-	public Boolean visit(ArrayType n, Node arg) {
-		return visit((ReferenceType)n, arg);
+	public Boolean visit(ArrayType n1, Node arg) {
+		final ArrayType n2 = (ArrayType) arg;
+
+		if (!nodeEquals(n1.getType(), n2.getType())) {
+			return false;
+		}
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean visit(DimensionedArrayType n1, Node arg) {
+		final DimensionedArrayType n2 = (DimensionedArrayType) arg;
+
+		if (!nodeEquals(n1.getType(), n2.getType())) {
+			return false;
+		}
+		if (!nodeEquals(n1.getDimension(), n2.getDimension())) {
+			return false;
+		}
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override public Boolean visit(final IntersectionType n1, final Node arg) {
@@ -760,23 +775,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	@Override public Boolean visit(final ArrayCreationExpr n1, final Node arg) {
 		final ArrayCreationExpr n2 = (ArrayCreationExpr) arg;
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
-			return false;
-		}
-
 		if (!nodeEquals(n1.getType(), n2.getType())) {
 			return false;
 		}
 
 		if (!nodeEquals(n1.getInitializer(), n2.getInitializer())) {
-			return false;
-		}
-
-		if (!nodesEquals(n1.getDimensions(), n2.getDimensions())) {
-			return false;
-		}
-
-		if (!arraysAnnotationsEquals(n1, n2)) {
 			return false;
 		}
 
@@ -1495,27 +1498,4 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         }
         return true;
     }
-
-	private boolean arraysAnnotationsEquals(NodeWithArrays<?> n1, NodeWithArrays<?> n2) {
-		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
-		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
-
-		if (n1a != null && n2a != null) {
-			if (n1a.size() != n2a.size()) {
-				return false;
-			} else {
-				int i = 0;
-				for (List<AnnotationExpr> aux : n1a) {
-					if (!nodesEquals(aux, n2a.get(i))) {
-						return false;
-					}
-					i++;
-				}
-			}
-		} else if (n1a != n2a) {
-			return false;
-		}
-		return true;
-	}
-
 }
