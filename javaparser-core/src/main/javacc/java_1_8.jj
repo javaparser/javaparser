@@ -157,14 +157,14 @@ final class ASTParser {
         if (arrayCount == 0) {
             return new ReferenceType(range, type);
         }
-        for (List<AnnotationExpr> annotations: arrayAnnotations) {
-            type = new ArrayType(range, type, annotations);
+        for (int i = arrayAnnotations.size() - 1; i >= 0; i--) {
+            type = new ArrayType(range, type, arrayAnnotations.get(i));
         }
         return (ArrayType) type;
     }
 
     private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<List<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
-        for(int i=0; i<arrayAnnotations.size(); i++){
+        for(int i = arrayAnnotations.size() - 1; i >= 0; i--){
             type = new DimensionedArrayType(range, type, dimensions.get(i), arrayAnnotations.get(i));
         }
         return new ArrayCreationExpr(range, type, arrayInitializerExpr);
