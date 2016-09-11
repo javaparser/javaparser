@@ -103,8 +103,6 @@ import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.stmt.WhileStmt;
 
-import java.util.List;
-
 /**
  * @author Julio Vilmar Gesser
  */
