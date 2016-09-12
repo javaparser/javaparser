@@ -191,6 +191,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 				return result;
 			}
 		}
+		for(ArrayCreationLevel level: n.getLevels()){
+			R result = level.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
 		if (n.getInitializer() != null) {
 			R result = n.getInitializer().accept(this, arg);
 			if (result != null) {
@@ -329,7 +335,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getCatchBlock().accept(this, arg);
+			R result = n.getBody().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1251,16 +1257,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	}
 
 	@Override
-	public R visit(DimensionedArrayType n, A arg) {
+	public R visit(ArrayCreationLevel n, A arg) {
 		visitComment(n, arg);
 		for (final AnnotationExpr a : n.getAnnotations()) {
 			R result = a.accept(this, arg);
-			if (result != null) {
-				return result;
-			}
-		}
-		{
-			R result = n.getType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1427,7 +1427,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getBlock().accept(this, arg);
+			R result = n.getBody().accept(this, arg);
 			if (result != null) {
 				return result;
 			}

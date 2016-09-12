@@ -24,10 +24,7 @@ package com.github.javaparser.ast.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -439,12 +436,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	}
 
 	@Override
-	public Node visit(DimensionedArrayType _n, Object _arg) {
+	public Node visit(ArrayCreationLevel _n, Object _arg) {
 		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
-		Type type_ = cloneNodes(_n.getType(), _arg);
 		Expression dimension_ = cloneNodes(_n.getDimension(), _arg);
 
-		DimensionedArrayType r = new DimensionedArrayType(_n.getRange(), type_, dimension_, ann);
+		ArrayCreationLevel r = new ArrayCreationLevel(_n.getRange(), dimension_, ann);
 
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 		r.setComment(comment);
@@ -529,11 +525,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(ArrayCreationExpr _n, Object _arg) {
 		Type type_ = cloneNodes(_n.getType(), _arg);
-		ArrayCreationExpr r = new ArrayCreationExpr(_n.getRange(), type_);
-		if (_n.getInitializer() != null) {// ArrayCreationExpr has two mutually
-			// exclusive constructors
-			r.setInitializer(cloneNodes(_n.getInitializer(), _arg));
-		}
+		List<ArrayCreationLevel> levels_ = visit(_n.getLevels(), _arg);
+		ArrayInitializerExpr initializer_ = cloneNodes(_n.getInitializer(), _arg);
+
+		ArrayCreationExpr r = new ArrayCreationExpr(_n.getRange(), type_, levels_, initializer_);
+
 		Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
 		return r;
@@ -1170,7 +1166,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(SynchronizedStmt _n, Object _arg) {
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
-		BlockStmt block = cloneNodes(_n.getBlock(), _arg);
+		BlockStmt block = cloneNodes(_n.getBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		SynchronizedStmt r = new SynchronizedStmt(
@@ -1200,7 +1196,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(CatchClause _n, Object _arg) {
 		Parameter param = cloneNodes(_n.getParam(), _arg);
-		BlockStmt catchBlock = cloneNodes(_n.getCatchBlock(), _arg);
+		BlockStmt catchBlock = cloneNodes(_n.getBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		CatchClause r = new CatchClause(

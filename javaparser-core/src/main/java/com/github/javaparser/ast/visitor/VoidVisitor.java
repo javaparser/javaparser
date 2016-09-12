@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -127,7 +128,7 @@ public interface VoidVisitor<A> {
 
 	void visit(ArrayType n, A arg);
 	
-	void visit(DimensionedArrayType n, A arg);
+	void visit(ArrayCreationLevel n, A arg);
 
     void visit(IntersectionType n, A arg);
 

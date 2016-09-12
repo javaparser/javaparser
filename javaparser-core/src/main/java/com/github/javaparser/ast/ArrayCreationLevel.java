@@ -1,22 +1,24 @@
-package com.github.javaparser.ast.type;
+package com.github.javaparser.ast;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-/**
- * Every type followed by [...] gets wrapped in an DimensionedArrayType for each [...].
- */
-public class DimensionedArrayType extends ArrayType {
-    private Expression dimension;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
-    public DimensionedArrayType(Range range, Type type, Expression dimension, List<AnnotationExpr> annotations) {
-        super(range, type, annotations);
+public class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
+    private Expression dimension;
+    private List<AnnotationExpr> annotations;
+
+    public ArrayCreationLevel(Range range, Expression dimension, List<AnnotationExpr> annotations) {
+        super(range);
         setDimension(dimension);
+        setAnnotations(annotations);
     }
 
     @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -34,5 +36,16 @@ public class DimensionedArrayType extends ArrayType {
 
     public Expression getDimension() {
         return dimension;
+    }
+
+    public List<AnnotationExpr> getAnnotations() {
+        annotations = ensureNotNull(annotations);
+        return annotations;
+    }
+
+    public ArrayCreationLevel setAnnotations(List<AnnotationExpr> annotations) {
+        setAsParentNodeOf(annotations);
+        this.annotations = annotations;
+        return this;
     }
 }

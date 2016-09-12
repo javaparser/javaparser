@@ -438,26 +438,14 @@ public class DumpVisitor implements VoidVisitor<Object> {
     }
 
 	@Override
-    public void visit(final DimensionedArrayType n, final Object arg) {
-        final List<DimensionedArrayType> arrayTypeBuffer = new LinkedList<>();
-        Type type = n;
-        while (type instanceof DimensionedArrayType) {
-            final DimensionedArrayType arrayType = (DimensionedArrayType) type;
-            arrayTypeBuffer.add(arrayType);
-            type = arrayType.getType();
-        }
-
-        type.accept(this, arg);
-
-        for (DimensionedArrayType arrayType : arrayTypeBuffer) {
-            printAnnotations(arrayType.getAnnotations(), true, arg);
-            printer.print("[");
-            if (arrayType.getDimension() != null) {
-                arrayType.getDimension().accept(this, arg);
-            }
-            printer.print("]");
-        }
-    }
+	public void visit(final ArrayCreationLevel n, final Object arg) {
+		printAnnotations(n.getAnnotations(), true, arg);
+		printer.print("[");
+		if (n.getDimension() != null) {
+			n.getDimension().accept(this, arg);
+		}
+		printer.print("]");
+	}
 
 	@Override
 	public void visit(final IntersectionType n, final Object arg) {
@@ -588,6 +576,9 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printer.print("new ");
 		n.getType().accept(this, arg);
+		for (ArrayCreationLevel level : n.getLevels()) {
+			level.accept(this, arg);
+		}
 		if (n.getInitializer() != null) {
 			printer.print(" ");
 			n.getInitializer().accept(this, arg);
@@ -1375,7 +1366,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print("synchronized (");
 		n.getExpr().accept(this, arg);
 		printer.print(") ");
-		n.getBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	@Override
@@ -1420,7 +1411,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(" catch (");
 		n.getParam().accept(this, arg);
 		printer.print(") ");
-		n.getCatchBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 
 	}
 

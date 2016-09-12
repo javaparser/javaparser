@@ -23,10 +23,7 @@ package com.github.javaparser.ast.visitor;
 
 import java.util.List;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -643,12 +640,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	}
 
 	@Override
-	public Boolean visit(DimensionedArrayType n1, Node arg) {
-		final DimensionedArrayType n2 = (DimensionedArrayType) arg;
+	public Boolean visit(ArrayCreationLevel n1, Node arg) {
+		final ArrayCreationLevel n2 = (ArrayCreationLevel) arg;
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
-			return false;
-		}
 		if (!nodeEquals(n1.getDimension(), n2.getDimension())) {
 			return false;
 		}
@@ -763,6 +757,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		final ArrayCreationExpr n2 = (ArrayCreationExpr) arg;
 
 		if (!nodeEquals(n1.getType(), n2.getType())) {
+			return false;
+		}
+
+		if (!nodesEquals(n1.getLevels(), n2.getLevels())) {
 			return false;
 		}
 
@@ -1404,7 +1402,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getBlock(), n2.getBlock())) {
+		if (!nodeEquals(n1.getBody(), n2.getBody())) {
 			return false;
 		}
 
@@ -1440,7 +1438,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getCatchBlock(), n2.getCatchBlock())) {
+		if (!nodeEquals(n1.getBody(), n2.getBody())) {
 			return false;
 		}
 

@@ -23,10 +23,7 @@ package com.github.javaparser.ast.visitor;
 
 import java.util.List;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -177,6 +174,12 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		visitComment(n, arg);
 		n.setType((Type) n.getType().accept(this, arg));
 
+		final List<ArrayCreationLevel> values = n.getLevels();
+		for (int i = 0; i < values.size(); i++) {
+			values.set(i, (ArrayCreationLevel) values.get(i).accept(this, arg));
+		}
+		removeNulls(values);
+
 		if (n.getInitializer() != null) {
 			n.setInitializer((ArrayInitializerExpr) n.getInitializer().accept(this, arg));
 		}
@@ -278,7 +281,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override public Node visit(final CatchClause n, final A arg) {
 		visitComment(n, arg);
 		n.setParam((Parameter)n.getParam().accept(this, arg));
-		n.setCatchBlock((BlockStmt) n.getCatchBlock().accept(this, arg));
+		n.setBody((BlockStmt) n.getBody().accept(this, arg));
 		return n;
 
 	}
@@ -843,10 +846,9 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
 	@Override
-	public Node visit(DimensionedArrayType n, A arg) {
+	public Node visit(ArrayCreationLevel n, A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
-		n.setType((Type) n.getType().accept(this, arg));
 		if(n.getDimension()!=null) {
 			n.setDimension((Expression) n.getDimension().accept(this, arg));
 		}
@@ -941,7 +943,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override public Node visit(final SynchronizedStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setExpr((Expression) n.getExpr().accept(this, arg));
-		n.setBlock((BlockStmt) n.getBlock().accept(this, arg));
+		n.setBody((BlockStmt) n.getBody().accept(this, arg));
 		return n;
 	}
 

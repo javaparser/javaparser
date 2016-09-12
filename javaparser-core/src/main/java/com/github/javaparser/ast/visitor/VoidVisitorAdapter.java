@@ -21,9 +21,11 @@
  
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -83,29 +85,7 @@ import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.stmt.WhileStmt;
 
 /**
  * @author Julio Vilmar Gesser
@@ -141,6 +121,9 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
 		n.getType().accept(this, arg);
+		for (ArrayCreationLevel level : n.getLevels()) {
+			level.accept(this, arg);
+		}
 		if (n.getInitializer() != null) {
 			n.getInitializer().accept(this, arg);
 		}
@@ -204,7 +187,7 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final CatchClause n, final A arg) {
 		visitComment(n.getComment(), arg);
 		n.getParam().accept(this, arg);
-		n.getCatchBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	@Override public void visit(final CharLiteralExpr n, final A arg) {
@@ -600,10 +583,9 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	}
 
 	@Override
-	public void visit(DimensionedArrayType n, A arg) {
+	public void visit(ArrayCreationLevel n, A arg) {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
-		n.getType().accept(this, arg);
 		if(n.getDimension()!=null) {
 			n.getDimension().accept(this, arg);
 		}
@@ -674,7 +656,7 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final SynchronizedStmt n, final A arg) {
 		visitComment(n.getComment(), arg);
 		n.getExpr().accept(this, arg);
-		n.getBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	@Override public void visit(final ThisExpr n, final A arg) {

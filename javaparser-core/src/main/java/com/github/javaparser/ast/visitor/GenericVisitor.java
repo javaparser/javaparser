@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -127,7 +128,7 @@ public interface GenericVisitor<R, A> {
 
 	R visit(ArrayType n, A arg);
 	
-	R visit(DimensionedArrayType n, A arg);
+	R visit(ArrayCreationLevel n, A arg);
 
     R visit(IntersectionType n, A arg);
 

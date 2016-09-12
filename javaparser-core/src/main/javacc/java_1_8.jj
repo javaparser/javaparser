@@ -155,7 +155,7 @@ final class ASTParser {
 
     private ReferenceType juggleArrayTypes(Range range, Type type, int arrayCount, List<List<AnnotationExpr>> arrayAnnotations) {
         if (arrayCount == 0) {
-            return (ReferenceType)type;
+            return (ReferenceType) type;
         }
         for (int i = arrayAnnotations.size() - 1; i >= 0; i--) {
             type = new ArrayType(range, type, arrayAnnotations.get(i));
@@ -164,10 +164,12 @@ final class ASTParser {
     }
 
     private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<List<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
-        for(int i = arrayAnnotations.size() - 1; i >= 0; i--){
-            type = new DimensionedArrayType(range, type, dimensions.get(i), arrayAnnotations.get(i));
+        List<ArrayCreationLevel> levels = new ArrayList<ArrayCreationLevel>();
+        
+        for(int i = 0; i < arrayAnnotations.size(); i++){
+            levels.add(new ArrayCreationLevel(range, dimensions.get(i), arrayAnnotations.get(i)));
         }
-        return new ArrayCreationExpr(range, type, arrayInitializerExpr);
+        return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
     }
 
     private TypeArguments createTypeArguments(List<Type> typeArgs) {
@@ -1399,7 +1401,6 @@ List<ClassOrInterfaceType> ExtendsList(boolean isInterface):
    boolean extendsMoreThanOne = false;
    List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
-   List<AnnotationExpr> annotations = null;
 }
 {
    "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
@@ -2646,9 +2647,7 @@ List<Expression> ArgumentList():
 Expression AllocationExpression(Expression scope):
 {
 	Expression ret;
-	ArrayCreationExpr arrayExpr;
 	Type type;
-	Object[] arr;
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	List<BodyDeclaration<?>> anonymousBody = null;
 	List<Expression> args;
@@ -2681,20 +2680,19 @@ Expression AllocationExpression(Expression scope):
  */
 ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
-    ArrayCreationExpr ret;
 	Expression expr = null;
 	ArrayInitializerExpr arrayInitializerExpr = null;
 	List<Expression> inits = null;
-	int i = 0;
 	List<List<AnnotationExpr>> accum = null;
 	List<AnnotationExpr> annotations = null;
 }
 { 
-    ( annotations = Annotations() 
-    "[" 
-    (expr = Expression())? 
-    { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null;} 
-    "]" 
+    (
+        annotations = Annotations() 
+        "[" 
+        (expr = Expression())? 
+            { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
+        "]" 
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
     {  
