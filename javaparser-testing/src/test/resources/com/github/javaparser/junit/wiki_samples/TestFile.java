@@ -1,4 +1,4 @@
-package com.github.javaparser.junit;
+package com.github.javaparser.junit.wiki_samples;
 
 public class TestFile {
     public int foo(int e) {

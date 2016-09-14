@@ -21,6 +21,9 @@
 
 package com.github.javaparser.utils;
 
+import com.github.javaparser.Provider;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -62,15 +65,26 @@ public class Utils {
 	}
 
 	public static String readerToString(Reader reader) throws IOException {
-		char[] arr = new char[8*1024]; // 8K at a time
-		StringBuilder buf = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
+		final char[] buffer = new char[8 * 1024];
 		int numChars;
 
-		while ((numChars = reader.read(arr, 0, arr.length)) > 0) {
-			buf.append(arr, 0, numChars);
+		while ((numChars = reader.read(buffer, 0, buffer.length)) > 0) {
+			result.append(buffer, 0, numChars);
 		}
 
-		return buf.toString();
+		return result.toString();
 	}
 
+	public static String providerToString(Provider provider) throws IOException {
+		final StringBuilder result = new StringBuilder();
+		final char[] buffer = new char[8 * 1024];
+		int numChars;
+
+		while ((numChars = provider.read(buffer, 0, buffer.length)) != -1) {
+			result.append(buffer, 0, numChars);
+		}
+
+		return result.toString();
+	}
 }

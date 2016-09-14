@@ -30,6 +30,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
+import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -37,7 +39,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> {
+public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration>
+        implements NodeWithImplements<ClassOrInterfaceDeclaration>, NodeWithExtends<ClassOrInterfaceDeclaration> {
 
     private boolean interface_;
 
@@ -100,6 +103,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return extendsList;
     }
 
+    @Override
     public List<ClassOrInterfaceType> getImplements() {
         implementsList = ensureNotNull(implementsList);
         return implementsList;
@@ -118,10 +122,13 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * 
      * @param extendsList a null value is currently treated as an empty list. This behavior could change
      *            in the future, so please avoid passing null
+     * @return
      */
-    public void setExtends(final List<ClassOrInterfaceType> extendsList) {
+    @Override
+    public ClassOrInterfaceDeclaration setExtends(final List<ClassOrInterfaceType> extendsList) {
         this.extendsList = extendsList;
         setAsParentNodeOf(this.extendsList);
+        return this;
     }
 
     /**
@@ -129,9 +136,11 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @param implementsList a null value is currently treated as an empty list. This behavior could change
      *            in the future, so please avoid passing null
      */
-    public void setImplements(final List<ClassOrInterfaceType> implementsList) {
+    @Override
+    public ClassOrInterfaceDeclaration setImplements(final List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
         setAsParentNodeOf(this.implementsList);
+        return this;
     }
 
     public void setInterface(final boolean interface_) {
@@ -148,53 +157,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         setAsParentNodeOf(this.typeParameters);
     }
 
-    /**
-     * Add an extends to this class or interface and automatically add the import
-     * 
-     * @param clazz the class to extand from
-     * @return this, the {@link ClassOrInterfaceDeclaration}
-     */
-    public ClassOrInterfaceDeclaration addExtends(Class<?> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addExtends(clazz.getSimpleName());
-    }
-
-    /**
-     * Add an extends to this class or interface
-     * 
-     * @param name the name of the type to extends from
-     * @return this, the {@link ClassOrInterfaceDeclaration}
-     */
-    public ClassOrInterfaceDeclaration addExtends(String name) {
-        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
-        getExtends().add(classOrInterfaceType);
-        classOrInterfaceType.setParentNode(this);
-        return this;
-    }
-
-    /**
-     * Add an implements to this class or interface
-     * 
-     * @param name the name of the type to extends from
-     * @return this, the {@link ClassOrInterfaceDeclaration}
-     */
-    public ClassOrInterfaceDeclaration addImplements(String name) {
-        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
-        getImplements().add(classOrInterfaceType);
-        classOrInterfaceType.setParentNode(this);
-        return this;
-    }
-
-    /**
-     * Add an implements to this class or interface and automatically add the import
-     * 
-     * @param clazz the type to implements from
-     * @return this, the {@link ClassOrInterfaceDeclaration}
-     */
-    public ClassOrInterfaceDeclaration addImplements(Class<?> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
-        return addImplements(clazz.getSimpleName());
-    }
+   
 
 
 }

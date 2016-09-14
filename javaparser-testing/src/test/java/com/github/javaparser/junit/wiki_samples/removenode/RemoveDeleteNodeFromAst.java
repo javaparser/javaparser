@@ -1,6 +1,6 @@
-package com.github.javaparser.junit.removenode;
+package com.github.javaparser.junit.wiki_samples.removenode;
 
-import com.github.javaparser.junit.TestFileToken;
+import com.github.javaparser.junit.wiki_samples.TestFileToken;
 import org.junit.Test;
 
 public class RemoveDeleteNodeFromAst {
