@@ -1,10 +1,8 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -24,6 +22,16 @@ public interface NodeWithParameters<T> {
         return addParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name);
     }
 
+    /**
+     * Remember to import the class in the compilation unit yourself
+     * 
+     * @param className the name of the class, ex : org.test.Foo or Foo if you added manually the import
+     * @param name the name of the parameter
+     */
+    default T addParameter(String className, String name) {
+        return addParameter(new ClassOrInterfaceType(className), name);
+    }
+
     @SuppressWarnings("unchecked")
     default T addParameter(Parameter parameter) {
         getParameters().add(parameter);
@@ -40,6 +48,17 @@ public interface NodeWithParameters<T> {
         return addAndGetParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name);
     }
 
+    /**
+     * Remember to import the class in the compilation unit yourself
+     * 
+     * @param className the name of the class, ex : org.test.Foo or Foo if you added manually the import
+     * @param name the name of the parameter
+     * @return the {@link Parameter} created
+     */
+    default Parameter addAndGetParameter(String className, String name) {
+        return addAndGetParameter(new ClassOrInterfaceType(className), name);
+    }
+
     default Parameter addAndGetParameter(Parameter parameter) {
         getParameters().add(parameter);
         parameter.setParentNode((Node) this);
@@ -52,7 +71,7 @@ public interface NodeWithParameters<T> {
      * @param name the name of the param
      * @return null if not found, the param found otherwise
      */
-    default Parameter getParamByName(String name){
+    default Parameter getParamByName(String name) {
         return getParameters().stream()
                 .filter(p -> p.getName().equals(name)).findFirst().orElse(null);
     }

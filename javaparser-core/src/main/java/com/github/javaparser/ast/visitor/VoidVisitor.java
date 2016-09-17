@@ -39,7 +39,6 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
@@ -114,8 +113,6 @@ public interface VoidVisitor<A> {
 
 	void visit(Parameter n, A arg);
 	
-	void visit(MultiTypeParameter n, A arg);
-
 	void visit(EmptyMemberDeclaration n, A arg);
 
 	void visit(InitializerDeclaration n, A arg);

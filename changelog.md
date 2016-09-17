@@ -57,3 +57,9 @@ Version 3.0.0-alpha.1
 * 414 JavaParser can now be instantiated and reused. InstanceJavaParser removed
 * 418 417 411 408 bugs
 * 367 420 407 402 various cleanups
+
+Version 3.0.0-alpha.2
+------------------
+* 157 a new parser frontend, check https://github.com/javaparser/javaparser/pull/447 for explanations
+* 435 more builder methods like 400 and 405
+* 111 440 443 444 445 446 bugs & cleanups

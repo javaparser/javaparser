@@ -30,7 +30,6 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BaseParameter;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EmptyMemberDeclaration;
@@ -40,7 +39,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
@@ -83,6 +81,7 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -563,21 +562,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodeEquals(n1.getType(), n2.getType())) {
 			return false;
 		}
-        return visit((BaseParameter<?>) n1, arg);
-	}
-	
-	@Override public Boolean visit(MultiTypeParameter n1, Node arg) {
-		MultiTypeParameter n2 = (MultiTypeParameter) arg;
-        if (!nodeEquals(n1.getType(), n2.getType())) {
-            return false;
-        }
-        return visit((BaseParameter<?>) n1, arg);
-	}
 
-    protected Boolean visit(final BaseParameter<?> n1, final Node arg) {
-        final BaseParameter<?> n2 = (BaseParameter<?>) arg;
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+		if (!n1.getModifiers().equals(n2.getModifiers())) {
 			return false;
 		}
 
@@ -664,24 +650,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
-		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
-		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
-
-		if (n1a !=null && n2a!= null) {
-			if(n1a.size() != n2a.size()){
-				return false;
-			}
-			else{
-				int i = 0;
-				for(List<AnnotationExpr> aux: n1a){
-					if(!nodesEquals(aux, n2a.get(i))){
-						return false;
-					}
-					i++;
-				}
-			}
-		}
-		else if (n1a != n2a){
+		if (!arraysAnnotationsEquals(n1, n2)) {
 			return false;
 		}
 		return true;
@@ -689,6 +658,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
     @Override public Boolean visit(final IntersectionType n1, final Node arg) {
         final IntersectionType n2 = (IntersectionType) arg;
+
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return false;
+		}
 
         List<ReferenceType> n1Elements = n1.getElements();
         List<ReferenceType> n2Elements = n2.getElements();
@@ -714,6 +687,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 
     @Override public Boolean visit(final UnionType n1, final Node arg) {
         final UnionType n2 = (UnionType) arg;
+
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return false;
+		}
 
         List<ReferenceType> n1Elements = n1.getElements();
         List<ReferenceType> n2Elements = n2.getElements();
@@ -763,11 +740,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	}
 
 	@Override public Boolean visit(final UnknownType n1, final Node arg) {
-		final UnknownType n2 = (UnknownType) arg;
-
-		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
-			return false;
-		}
 		return true;
 	}
 
@@ -803,26 +775,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getDimensions(), n2.getDimensions())) {
 			return false;
 		}
-		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
-		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
 
-		if (n1a !=null && n2a!= null) {
-			if(n1a.size() != n2a.size()){
-				return false;
-			}
-			else{
-				int i = 0;
-				for(List<AnnotationExpr> aux: n1a){
-					if(!nodesEquals(aux, n2a.get(i))){
-						return false;
-					}
-					i++;
-				}
-			}
-		}
-		else if (n1a != n2a){
+		if (!arraysAnnotationsEquals(n1, n2)) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -1474,6 +1431,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getCatchs(), n2.getCatchs())) {
 			return false;
 		}
+		
+		if(!nodesEquals(n1.getResources(), n2.getResources())) {
+			return false;
+		}
 
 		if (!nodeEquals(n1.getFinallyBlock(), n2.getFinallyBlock())) {
 			return false;
@@ -1534,4 +1495,27 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         }
         return true;
     }
+
+	private boolean arraysAnnotationsEquals(NodeWithArrays<?> n1, NodeWithArrays<?> n2) {
+		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
+		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
+
+		if (n1a != null && n2a != null) {
+			if (n1a.size() != n2a.size()) {
+				return false;
+			} else {
+				int i = 0;
+				for (List<AnnotationExpr> aux : n1a) {
+					if (!nodesEquals(aux, n2a.get(i))) {
+						return false;
+					}
+					i++;
+				}
+			}
+		} else if (n1a != n2a) {
+			return false;
+		}
+		return true;
+	}
+
 }

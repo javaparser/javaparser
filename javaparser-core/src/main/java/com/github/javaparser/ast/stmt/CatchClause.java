@@ -21,9 +21,6 @@
  
 package com.github.javaparser.ast.stmt;
 
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -34,6 +31,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -79,6 +79,10 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 		return catchBlock;
 	}
 
+	/**
+	 * Note that the type of the Parameter can be a UnionType. In this case, any annotations found at the start of the catch(@X A a |...)
+	 * are found directly in the Parameter. Annotations that are on the second or later type - catch(A a | @X B b ...) are found on those types.
+	 */
 	public Parameter getParam() {
 		return param;
 	}

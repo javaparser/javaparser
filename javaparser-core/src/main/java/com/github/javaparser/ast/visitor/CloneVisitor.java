@@ -42,7 +42,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.MultiTypeParameter;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -88,6 +87,7 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -371,21 +371,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		r.setComment(comment);
 		return r;
 	}
-	
-	@Override
-	public Node visit(MultiTypeParameter _n, Object _arg) {
-		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
-		UnionType type = cloneNodes(_n.getType(), _arg);
-		VariableDeclaratorId id = cloneNodes(_n.getId(), _arg);
-		Comment comment = cloneNodes(_n.getComment(), _arg);
-
-		MultiTypeParameter r = new MultiTypeParameter(
-				_n.getRange(),
-				_n.getModifiers(), annotations, type, id
-		);
-		r.setComment(comment);
-		return r;
-	}
 
 	@Override
 	public Node visit(EmptyMemberDeclaration _n, Object _arg) {
@@ -441,12 +426,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(PrimitiveType _n, Object _arg) {
 		Comment comment = cloneNodes(_n.getComment(), _arg);
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 
 		PrimitiveType r = new PrimitiveType(
 				_n.getRange(),
 				_n.getType()
 		);
 		r.setComment(comment);
+		r.setAnnotations(annotations);
 		return r;
 	}
 
@@ -454,14 +441,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(ReferenceType _n, Object _arg) {
 		List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg);
 		Type type_ = cloneNodes(_n.getType(), _arg);
-		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
-		List<List<AnnotationExpr>> _arraysAnnotations = null;
-		if(arraysAnnotations != null){
-			_arraysAnnotations = new LinkedList<>();
-			for(List<AnnotationExpr> aux: arraysAnnotations){
-				_arraysAnnotations.add(visit(aux, _arg));
-			}
-		}
+		List<List<AnnotationExpr>> _arraysAnnotations = cloneArraysAnnotations(_n, _arg);
 
         ReferenceType r = new ReferenceType(_n.getBegin().line,
                 _n.getBegin().column, _n.getEnd().line, _n.getEnd().column, type_,
@@ -473,37 +453,43 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
     @Override
     public Node visit(IntersectionType _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
         List<ReferenceType> elements = visit(_n.getElements(), _arg);
 
-        IntersectionType r = new IntersectionType(_n.getRange(),
-                elements);
+        IntersectionType r = new IntersectionType(_n.getRange(), elements);
         Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
+		r.setAnnotations(annotations);
         return r;
     }
 
     @Override
     public Node visit(UnionType _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
         List<ReferenceType> elements = visit(_n.getElements(), _arg);
 
         UnionType r = new UnionType(_n.getRange(),
                 elements);
         Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
+		r.setAnnotations(annotations);
         return r;
     }
 
 	@Override
 	public Node visit(VoidType _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		VoidType r = new VoidType(_n.getRange());
+		r.setAnnotations(annotations);
 		r.setComment(comment);
 		return r;
 	}
 
 	@Override
 	public Node visit(WildcardType _n, Object _arg) {
+		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		ReferenceType ext = cloneNodes(_n.getExtends(), _arg);
 		ReferenceType sup = cloneNodes(_n.getSuper(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
@@ -513,6 +499,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 				ext, sup
 		);
 		r.setComment(comment);
+		r.setAnnotations(annotations);
 		return r;
 	}
 
@@ -549,16 +536,8 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 			// exclusive constructors
 			r.setInitializer(cloneNodes(_n.getInitializer(), _arg));
 		}
-		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
-		List<List<AnnotationExpr>> _arraysAnnotations = null;
-		if(arraysAnnotations != null){
-			_arraysAnnotations = new LinkedList<>();
-			for(List<AnnotationExpr> aux: arraysAnnotations){
-				_arraysAnnotations.add(visit(aux, _arg));
-			}
-		}
-		r.setArraysAnnotations(_arraysAnnotations);
-        Comment comment = cloneNodes(_n.getComment(), _arg);
+		r.setArraysAnnotations(cloneArraysAnnotations(_n, _arg));
+		Comment comment = cloneNodes(_n.getComment(), _arg);
         r.setComment(comment);
 		return r;
 	}
@@ -1285,4 +1264,16 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
         return (T) r;
     }
 
+
+	private List<List<AnnotationExpr>> cloneArraysAnnotations(NodeWithArrays<?> _n, Object _arg) {
+		List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations();
+		List<List<AnnotationExpr>> _arraysAnnotations = null;
+		if(arraysAnnotations != null){
+			_arraysAnnotations = new LinkedList<>();
+			for(List<AnnotationExpr> aux: arraysAnnotations){
+				_arraysAnnotations.add(visit(aux, _arg));
+			}
+		}
+		return _arraysAnnotations;
+	}
 }

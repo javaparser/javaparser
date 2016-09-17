@@ -21,8 +21,11 @@
  
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for
@@ -31,7 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  *
  * @author Didier Villevalois
  */
-public final class UnknownType extends Type {
+public final class UnknownType extends Type<UnknownType> {
 
     public UnknownType() {
     }
@@ -45,4 +48,15 @@ public final class UnknownType extends Type {
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
+
+    @Override
+    public List<AnnotationExpr> getAnnotations() {
+        throw new IllegalStateException("Inferred lambda types cannot be annotated.");
+    }
+
+    @Override
+    public UnknownType setAnnotations(List<AnnotationExpr> annotations) {
+        throw new IllegalStateException("Inferred lambda types cannot be annotated.");
+    }
+
 }
