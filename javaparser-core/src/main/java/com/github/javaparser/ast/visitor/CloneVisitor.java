@@ -640,7 +640,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(FieldAccessExpr _n, Object _arg) {
 		Expression scope = cloneNodes(_n.getScope(), _arg);
-		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
+        List<Type<?>> typeArgs = visit(_n.getTypeArgs(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		FieldAccessExpr r = new FieldAccessExpr(
