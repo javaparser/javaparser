@@ -48,7 +48,7 @@ public final class ObjectCreationExpr extends Expression {
 
 	private ClassOrInterfaceType type;
 
-	private List<Type> typeArgs;
+    private List<Type<?>> typeArgs;
 
 	private List<Expression> args;
 
@@ -71,7 +71,7 @@ public final class ObjectCreationExpr extends Expression {
 	}
 
 	public ObjectCreationExpr(final Range range,
-			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
+                              final Expression scope, final ClassOrInterfaceType type, final List<Type<?>> typeArgs,
                               final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
 		super(range);
 		setScope(scope);
@@ -116,7 +116,7 @@ public final class ObjectCreationExpr extends Expression {
 		return type;
 	}
 
-	public List<Type> getTypeArgs() {
+    public List<Type<?>> getTypeArgs() {
 		typeArgs = ensureNotNull(typeArgs);
         return typeArgs;
 	}
@@ -141,8 +141,8 @@ public final class ObjectCreationExpr extends Expression {
 		setAsParentNodeOf(this.type);
 	}
 
-	public void setTypeArgs(final List<Type> typeArgs) {
+    public void setTypeArgs(final List<Type<?>> typeArgs) {
 		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
-	}
+        setAsParentNodeOf(this.typeArgs);
+    }
 }
