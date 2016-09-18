@@ -100,7 +100,7 @@ public class NodeWithMembersBuildersTest {
 		classDeclaration.addMethod("foo", Modifier.PUBLIC);
 		MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
 		ClassOrInterfaceType type = new ClassOrInterfaceType("List");
-		ArrayList<Type> typeArguments = new ArrayList<>();
+		ArrayList<Type<?>> typeArguments = new ArrayList<>();
 		typeArguments.add(new ClassOrInterfaceType("String"));
 		type.setTypeArguments(TypeArguments.withArguments(typeArguments));
 		MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", Modifier.PUBLIC).addParameter(new ReferenceType(type), "overload");
