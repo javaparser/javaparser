@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -94,6 +95,13 @@ public final class ObjectCreationExpr extends Expression {
     public List<BodyDeclaration<?>> getAnonymousClassBody() {
 		return anonymousClassBody;
 	}
+
+    public void addAnonymousClassBody(BodyDeclaration<?> body) {
+        if (anonymousClassBody == null)
+            anonymousClassBody = new ArrayList<>();
+        anonymousClassBody.add(body);
+        body.setParentNode(this);
+    }
 
 	public List<Expression> getArgs() {
 		args = ensureNotNull(args);
