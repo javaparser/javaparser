@@ -21,22 +21,22 @@
  
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ExplicitConstructorInvocationStmt extends Statement {
 
-	private List<Type> typeArgs;
+    private List<Type<?>> typeArgs;
 
 	private boolean isThis;
 
@@ -55,7 +55,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public ExplicitConstructorInvocationStmt(Range range,
-	                                         final List<Type> typeArgs, final boolean isThis,
+                                             final List<Type<?>> typeArgs, final boolean isThis,
 	                                         final Expression expr, final List<Expression> args) {
 		super(range);
 		setTypeArgs(typeArgs);
@@ -83,7 +83,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 		return expr;
 	}
 
-	public List<Type> getTypeArgs() {
+    public List<Type<?>> getTypeArgs() {
         typeArgs = ensureNotNull(typeArgs);
         return typeArgs;
 	}
@@ -106,7 +106,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 		this.isThis = isThis;
 	}
 
-	public void setTypeArgs(final List<Type> typeArgs) {
+    public void setTypeArgs(final List<Type<?>> typeArgs) {
 		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
 	}

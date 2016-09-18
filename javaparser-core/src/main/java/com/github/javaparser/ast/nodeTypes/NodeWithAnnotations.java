@@ -25,7 +25,11 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 
 /**
  * An element which can be the target of annotations.
@@ -93,6 +97,7 @@ public interface NodeWithAnnotations<T> {
      * Annotates this with a single member annotation
      * 
      * @param name the name of the annotation
+     * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */
     @SuppressWarnings("unchecked")
@@ -108,6 +113,7 @@ public interface NodeWithAnnotations<T> {
      * Annotates this with a single member annotation and automatically add the import
      * 
      * @param clazz the class of the annotation
+     * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */
     public default T addSingleMemberAnnotation(Class<? extends Annotation> clazz,

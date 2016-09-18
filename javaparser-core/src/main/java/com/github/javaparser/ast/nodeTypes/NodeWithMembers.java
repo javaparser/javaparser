@@ -1,10 +1,14 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.github.javaparser.ast.Modifier;
@@ -20,11 +24,6 @@ import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
-
-import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.*;
-
-import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
 
 /**
  * A node having members.
@@ -71,7 +70,7 @@ public interface NodeWithMembers<T> {
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Type type, String name, Modifier... modifiers) {
+    default FieldDeclaration addField(Type<?> type, String name, Modifier... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         fieldDeclaration.getVariables().add(new VariableDeclarator(new VariableDeclaratorId(name)));
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)

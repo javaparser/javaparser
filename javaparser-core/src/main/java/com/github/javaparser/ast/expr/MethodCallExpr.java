@@ -18,124 +18,123 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
+import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.*;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class MethodCallExpr extends Expression {
 
-	private Expression scope;
+    private Expression scope;
 
-	private List<Type> typeArgs;
+    private List<Type<?>> typeArgs;
 
-	private NameExpr name;
+    private NameExpr name;
 
-	private List<Expression> args;
+    private List<Expression> args;
 
-	public MethodCallExpr() {
-	}
+    public MethodCallExpr() {
+    }
 
-	public MethodCallExpr(final Expression scope, final String name) {
-		setScope(scope);
-		setName(name);
-	}
+    public MethodCallExpr(final Expression scope, final String name) {
+        setScope(scope);
+        setName(name);
+    }
 
-	public MethodCallExpr(final Expression scope, final String name, final List<Expression> args) {
-		setScope(scope);
-		setName(name);
-		setArgs(args);
-	}
+    public MethodCallExpr(final Expression scope, final String name, final List<Expression> args) {
+        setScope(scope);
+        setName(name);
+        setArgs(args);
+    }
 
-	public MethodCallExpr(final Range range, final Expression scope, final List<Type> typeArgs, final String name, final List<Expression> args) {
-		super(range);
-		setScope(scope);
-		setTypeArgs(typeArgs);
-		setName(name);
-		setArgs(args);
-	}
+    public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArgs, final String name,
+                          final List<Expression> args) {
+        super(range);
+        setScope(scope);
+        setTypeArgs(typeArgs);
+        setName(name);
+        setArgs(args);
+    }
 
+    /**
+     * Adds the given argument to the method call.
+     *
+     * @param arg
+     *            argument value
+     */
+    public MethodCallExpr addArgument(Expression arg) {
+        getArgs().add(arg);
+        arg.setParentNode(this);
+        return this;
+    }
 
-	/**
-	 * Adds the given argument to the method call. The list of arguments will be
-	 * initialized if it is <code>null</code>.
-	 *
-	 * @param arg
-	 *            argument value
-	 */
-	public MethodCallExpr addArgument(Expression arg) {
-		List<Expression> args = getArgs();
-		if (isNullOrEmpty(args)) {
-			args = new ArrayList<>();
-			setArgs(args);
-		}
-		args.add(arg);
-		arg.setParentNode(this);
-		return this;
-	}
+    public void addArgument(String arg) {
+        addArgument(new NameExpr(arg));
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public List<Expression> getArgs() {
+    public List<Expression> getArgs() {
         args = ensureNotNull(args);
         return args;
-	}
+    }
 
-	public String getName() {
-		return name.getName();
-	}
+    public String getName() {
+        return name.getName();
+    }
 
-	public NameExpr getNameExpr() {
-		return name;
-	}
+    public NameExpr getNameExpr() {
+        return name;
+    }
 
-	public Expression getScope() {
-		return scope;
-	}
+    public Expression getScope() {
+        return scope;
+    }
 
-	public List<Type> getTypeArgs() {
+    public List<Type<?>> getTypeArgs() {
         typeArgs = ensureNotNull(typeArgs);
         return typeArgs;
-	}
+    }
 
-	public void setArgs(final List<Expression> args) {
-		this.args = args;
-		setAsParentNodeOf(this.args);
-	}
+    public void setArgs(final List<Expression> args) {
+        this.args = args;
+        setAsParentNodeOf(this.args);
+    }
 
-	public void setName(final String name) {
-		setNameExpr(new NameExpr(name));
-	}
+    public void setName(final String name) {
+        setNameExpr(new NameExpr(name));
+    }
 
-	public void setNameExpr(NameExpr name) {
-		this.name = name;
-		setAsParentNodeOf(this.name);
-	}
+    public void setNameExpr(NameExpr name) {
+        this.name = name;
+        setAsParentNodeOf(this.name);
+    }
 
-	public void setScope(final Expression scope) {
-		this.scope = scope;
-		setAsParentNodeOf(this.scope);
-	}
+    public void setScope(final Expression scope) {
+        this.scope = scope;
+        setAsParentNodeOf(this.scope);
+    }
 
-	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
-	}
+    public void setTypeArgs(final List<Type<?>> typeArgs) {
+        this.typeArgs = typeArgs;
+        setAsParentNodeOf(this.typeArgs);
+    }
 }

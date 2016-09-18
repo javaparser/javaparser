@@ -40,7 +40,7 @@ public interface NodeWithType<T> {
      * 
      * @return the type
      */
-    Type getType();
+    Type<?> getType();
 
     /**
      * Sets the type
@@ -48,7 +48,7 @@ public interface NodeWithType<T> {
      * @param type the type
      * @return this
      */
-    T setType(Type type);
+    T setType(Type<?> type);
 
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
@@ -60,4 +60,10 @@ public interface NodeWithType<T> {
         ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
         return setType(new ClassOrInterfaceType(typeClass.getSimpleName()));
     }
+
+    default T setType(final String type) {
+        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
+        return setType(classOrInterfaceType);
+    }
+
 }
