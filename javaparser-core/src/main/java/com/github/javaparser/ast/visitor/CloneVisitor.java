@@ -412,7 +412,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(ClassOrInterfaceType _n, Object _arg) {
 		ClassOrInterfaceType scope = cloneNodes(_n.getScope(), _arg);
-		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
+        List<Type<?>> typeArgs = visit(_n.getTypeArgs(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		ClassOrInterfaceType r = new ClassOrInterfaceType(
@@ -766,7 +766,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(MethodCallExpr _n, Object _arg) {
 		Expression scope = cloneNodes(_n.getScope(), _arg);
-		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
+        List<Type<?>> typeArgs = visit(_n.getTypeArgs(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
@@ -794,7 +794,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(ObjectCreationExpr _n, Object _arg) {
 		Expression scope = cloneNodes(_n.getScope(), _arg);
 		ClassOrInterfaceType type_ = cloneNodes(_n.getType(), _arg);
-		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
+        List<Type<?>> typeArgs = visit(_n.getTypeArgs(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
         List<BodyDeclaration<?>> anonymousBody = visit(_n.getAnonymousClassBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
@@ -930,7 +930,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(ExplicitConstructorInvocationStmt _n, Object _arg) {
-		List<Type> typeArgs = visit(_n.getTypeArgs(), _arg);
+        List<Type<?>> typeArgs = visit(_n.getTypeArgs(), _arg);
 		Expression expr = cloneNodes(_n.getExpr(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);

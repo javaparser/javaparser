@@ -37,7 +37,7 @@ public final class MethodCallExpr extends Expression {
 
     private Expression scope;
 
-    private List<Type> typeArgs;
+    private List<Type<?>> typeArgs;
 
     private NameExpr name;
 
@@ -57,7 +57,7 @@ public final class MethodCallExpr extends Expression {
         setArgs(args);
     }
 
-    public MethodCallExpr(final Range range, final Expression scope, final List<Type> typeArgs, final String name,
+    public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArgs, final String name,
                           final List<Expression> args) {
         super(range);
         setScope(scope);
@@ -109,7 +109,7 @@ public final class MethodCallExpr extends Expression {
         return scope;
     }
 
-    public List<Type> getTypeArgs() {
+    public List<Type<?>> getTypeArgs() {
         typeArgs = ensureNotNull(typeArgs);
         return typeArgs;
     }
@@ -133,7 +133,7 @@ public final class MethodCallExpr extends Expression {
         setAsParentNodeOf(this.scope);
     }
 
-    public void setTypeArgs(final List<Type> typeArgs) {
+    public void setTypeArgs(final List<Type<?>> typeArgs) {
         this.typeArgs = typeArgs;
         setAsParentNodeOf(this.typeArgs);
     }
