@@ -20,25 +20,25 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.type.Type;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import com.github.javaparser.ast.type.Type;
 
 public class TypeArguments {
-    public static final TypeArguments EMPTY = withArguments(Collections.<Type>emptyList());
+    public static final TypeArguments EMPTY = withArguments(Collections.<Type<?>>emptyList());
 
-    private final List<Type> typeArguments;
+    private final List<Type<?>> typeArguments;
     private final boolean usesDiamondOperator;
 
-    private TypeArguments(List<Type> typeArguments, boolean usesDiamondOperator) {
+    private TypeArguments(List<Type<?>> typeArguments, boolean usesDiamondOperator) {
         this.typeArguments = ensureNotNull(typeArguments);
         this.usesDiamondOperator = usesDiamondOperator;
     }
 
-    public List<Type> getTypeArguments() {
+    public List<Type<?>> getTypeArguments() {
         return typeArguments;
     }
 
@@ -47,10 +47,10 @@ public class TypeArguments {
     }
 
     public static TypeArguments withDiamondOperator() {
-        return new TypeArguments(Collections.<Type>emptyList(), true);
+        return new TypeArguments(Collections.<Type<?>>emptyList(), true);
     }
 
-    public static TypeArguments withArguments(List<Type> typeArguments) {
+    public static TypeArguments withArguments(List<Type<?>> typeArguments) {
         return new TypeArguments(typeArguments, false);
     }
 }
