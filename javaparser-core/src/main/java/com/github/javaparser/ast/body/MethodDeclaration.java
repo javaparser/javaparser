@@ -29,18 +29,11 @@ import java.util.List;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
-import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
-import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
@@ -53,6 +46,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         implements NodeWithJavaDoc<MethodDeclaration>, NodeWithDeclaration, NodeWithName<MethodDeclaration>,
         NodeWithType<MethodDeclaration>,
+        NodeWithElementType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>, NodeWithParameters<MethodDeclaration>,
         NodeWithThrowable<MethodDeclaration>, NodeWithBlockStmt<MethodDeclaration> {
 
@@ -60,7 +54,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     private List<TypeParameter> typeParameters;
 
-    private Type type;
+    private Type elementType;
 
     private NameExpr name;
 
@@ -175,7 +169,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     @Override
     public Type getType() {
-        return type;
+        // FIXME
+        return null;
+    }
+
+    @Override
+    public Type getElementType() {
+        return elementType;
     }
 
     public List<TypeParameter> getTypeParameters() {
@@ -228,8 +228,16 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     @Override
     public MethodDeclaration setType(final Type type) {
-        this.type = type;
-        setAsParentNodeOf(this.type);
+        // FIXME
+//        this.type = type;
+//        setAsParentNodeOf(this.type);
+        return this;
+    }
+
+    @Override
+    public MethodDeclaration setElementType(final Type elementType) {
+        this.elementType = elementType;
+        setAsParentNodeOf(this.elementType);
         return this;
     }
 

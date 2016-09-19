@@ -1021,11 +1021,11 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			removeNulls(annotations);
 		}
 
-		final Type type = (Type) n.getType().accept(this, arg);
+		final Type type = (Type) n.getElementType().accept(this, arg);
 		if (type == null) {
 			return null;
 		}
-		n.setType(type);
+		n.setElementType(type);
 
 		final List<VariableDeclarator> vars = n.getVars();
 		for (int i = 0; i < vars.size();) {

@@ -28,10 +28,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -41,8 +38,13 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends Node implements NodeWithType<Parameter>, NodeWithAnnotations<Parameter>, NodeWithName<Parameter>, NodeWithModifiers<Parameter> {
-    private Type type;
+public final class Parameter extends Node implements
+        NodeWithType<Parameter>,
+        NodeWithElementType<Parameter>,
+        NodeWithAnnotations<Parameter>,
+        NodeWithName<Parameter>,
+        NodeWithModifiers<Parameter> {
+    private Type elementType;
 
     private boolean isVarArgs;
 
@@ -101,7 +103,8 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
 
     @Override
     public Type getType() {
-        return type;
+        // FIXME
+        return null;
     }
 
     public boolean isVarArgs() {
@@ -110,8 +113,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
 
     @Override
     public Parameter setType(Type type) {
-        this.type = type;
-		setAsParentNodeOf(this.type);
+        // FIXME
+//        this.type = type;
+//		setAsParentNodeOf(this.type);
         return this;
     }
 
@@ -180,4 +184,17 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
         this.modifiers = modifiers;
         return this;
     }
+
+    @Override
+    public Type getElementType() {
+        return elementType;
+    }
+
+    @Override
+    public Parameter setElementType(final Type elementType) {
+        this.elementType = elementType;
+        setAsParentNodeOf(this.elementType);
+        return this;
+    }
+
 }

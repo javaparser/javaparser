@@ -715,7 +715,7 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final VariableDeclarationExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
 		for (final VariableDeclarator v : n.getVars()) {
 			v.accept(this, arg);
 		}

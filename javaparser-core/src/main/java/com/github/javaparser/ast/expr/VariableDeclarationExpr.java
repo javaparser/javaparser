@@ -32,8 +32,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -41,65 +41,66 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarationExpr extends Expression
-        implements NodeWithType<VariableDeclarationExpr>, NodeWithModifiers<VariableDeclarationExpr>,
+public final class VariableDeclarationExpr extends Expression implements
+        NodeWithElementType<VariableDeclarationExpr>,
+        NodeWithModifiers<VariableDeclarationExpr>,
         NodeWithAnnotations<VariableDeclarationExpr> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<AnnotationExpr> annotations;
 
-    private Type type;
+    private Type elementType;
 
     private List<VariableDeclarator> vars;
 
     public VariableDeclarationExpr() {
     }
 
-    public VariableDeclarationExpr(final Type type, String variableName) {
-        setType(type);
+    public VariableDeclarationExpr(final Type elementType, String variableName) {
+        setElementType(elementType);
         setVars(Arrays.asList(new VariableDeclarator(variableName)));
     }
 
-    public VariableDeclarationExpr(final Type type, VariableDeclarator var) {
-        setType(type);
+    public VariableDeclarationExpr(final Type elementType, VariableDeclarator var) {
+        setElementType(elementType);
         setVars(Arrays.asList(var));
     }
 
-    public VariableDeclarationExpr(final Type type, String variableName, Modifier... modifiers) {
-        setType(type);
+    public VariableDeclarationExpr(final Type elementType, String variableName, Modifier... modifiers) {
+        setElementType(elementType);
         setVars(Arrays.asList(new VariableDeclarator(variableName)));
         setModifiers(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
     }
 
-    public VariableDeclarationExpr(final Type type, VariableDeclarator var, Modifier... modifiers) {
-        setType(type);
+    public VariableDeclarationExpr(final Type elementType, VariableDeclarator var, Modifier... modifiers) {
+        setElementType(elementType);
         setVars(Arrays.asList(var));
         setModifiers(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
     }
 
-    public VariableDeclarationExpr(final Type type, final List<VariableDeclarator> vars) {
-        setType(type);
+    public VariableDeclarationExpr(final Type elementType, final List<VariableDeclarator> vars) {
+        setElementType(elementType);
         setVars(vars);
     }
 
-    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type type,
+    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type elementType,
                                    final List<VariableDeclarator> vars) {
         setModifiers(modifiers);
-        setType(type);
+        setElementType(elementType);
         setVars(vars);
     }
 
     public VariableDeclarationExpr(final Range range,
                                    final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                                   final Type type,
+                                   final Type elementType,
                                    final List<VariableDeclarator> vars) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
-        setType(type);
+        setElementType(elementType);
         setVars(vars);
     }
 
@@ -140,8 +141,8 @@ public final class VariableDeclarationExpr extends Expression
     }
 
     @Override
-    public Type getType() {
-        return type;
+    public Type getElementType() {
+        return elementType;
     }
 
     public List<VariableDeclarator> getVars() {
@@ -163,9 +164,9 @@ public final class VariableDeclarationExpr extends Expression
     }
 
     @Override
-    public VariableDeclarationExpr setType(final Type type) {
-        this.type = type;
-        setAsParentNodeOf(this.type);
+    public VariableDeclarationExpr setElementType(final Type elementType) {
+        this.elementType = elementType;
+        setAsParentNodeOf(this.elementType);
         return this;
     }
 

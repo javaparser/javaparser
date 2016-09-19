@@ -1102,7 +1102,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
 			return false;
 		}
 

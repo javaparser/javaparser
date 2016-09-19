@@ -855,7 +855,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(VariableDeclarationExpr _n, Object _arg) {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
-		Type type_ = cloneNodes(_n.getType(), _arg);
+		Type type_ = cloneNodes(_n.getElementType(), _arg);
 		List<VariableDeclarator> vars = visit(_n.getVars(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 

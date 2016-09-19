@@ -36,26 +36,28 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
-        implements NodeWithJavaDoc<FieldDeclaration>, NodeWithType<FieldDeclaration>,
+public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements
+        NodeWithJavaDoc<FieldDeclaration>,
+        NodeWithElementType<FieldDeclaration>,
+        NodeWithType<FieldDeclaration>,
         NodeWithModifiers<FieldDeclaration> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private Type type;
+    private Type elementType;
 
     private List<VariableDeclarator> variables;
 
@@ -150,7 +152,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
     @Override
     public Type getType() {
-        return type;
+        // TODO
+        return null;
     }
 
     public List<VariableDeclarator> getVariables() {
@@ -166,8 +169,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
     @Override
     public FieldDeclaration setType(Type type) {
-        this.type = type;
-        setAsParentNodeOf(this.type);
+        // TODO
+//        this.type = type;
+//        setAsParentNodeOf(this.type);
         return this;
     }
 
@@ -246,6 +250,19 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         setter.setBody(blockStmt2);
         blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
         return setter;
+    }
+
+
+    @Override
+    public Type getElementType() {
+        return elementType;
+    }
+
+    @Override
+    public FieldDeclaration setElementType(final Type elementType) {
+        this.elementType = elementType;
+        setAsParentNodeOf(this.elementType);
+        return this;
     }
 
 }

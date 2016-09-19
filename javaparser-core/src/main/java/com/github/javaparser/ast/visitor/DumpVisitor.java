@@ -1038,7 +1038,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printAnnotations(n.getAnnotations(), false, arg);
 		printModifiers(n.getModifiers());
 
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
 		printer.print(" ");
 
 		for (final Iterator<VariableDeclarator> i = n.getVars().iterator(); i.hasNext(); ) {
