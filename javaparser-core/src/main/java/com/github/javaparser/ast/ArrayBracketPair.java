@@ -12,35 +12,27 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
- * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
- * the first one contains the expression "1",
- * the second the expression "2".
+ * In, for example, <code>int[] a[];</code> there are two ArrayBracketPair objects,
+ * one for the [] after int, one for the [] after a.
  */
-public class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
-    private Expression dimension;
+public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayBracketPair> {
     private List<AnnotationExpr> annotations;
 
-    public ArrayCreationLevel(Range range, Expression dimension, List<AnnotationExpr> annotations) {
+    public ArrayBracketPair(Range range, List<AnnotationExpr> annotations) {
         super(range);
-        setDimension(dimension);
         setAnnotations(annotations);
     }
 
     @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
+return null; //TODO        v.visit(this, arg);
     }
 
     @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
+//TODO        v.visit(this, arg);
     }
 
     public void setDimension(Expression dimension) {
-        this.dimension = dimension;
         setAsParentNodeOf(dimension);
-    }
-
-    public Expression getDimension() {
-        return dimension;
     }
 
     public List<AnnotationExpr> getAnnotations() {
@@ -48,7 +40,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return annotations;
     }
 
-    public ArrayCreationLevel setAnnotations(List<AnnotationExpr> annotations) {
+    public ArrayBracketPair setAnnotations(List<AnnotationExpr> annotations) {
         setAsParentNodeOf(annotations);
         this.annotations = annotations;
         return this;
