@@ -44,7 +44,8 @@ public final class Parameter extends Node implements
         NodeWithElementType<Parameter>,
         NodeWithAnnotations<Parameter>,
         NodeWithName<Parameter>,
-        NodeWithModifiers<Parameter> {
+        NodeWithModifiers<Parameter>,
+        NodeWithArrayBrackets<Parameter>{
     private Type elementType;
 
     private boolean isVarArgs;
@@ -55,9 +56,7 @@ public final class Parameter extends Node implements
 
     private VariableDeclaratorId id;
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterType;
-
-    private List<ArrayBracketPair> arrayBracketPairsAfterName;
+    private List<ArrayBracketPair> arrayBracketPairs;
 
     public Parameter() {
     }
@@ -202,30 +201,18 @@ public final class Parameter extends Node implements
         return this;
     }
 
-
     /**
-     * @return the array brackets in this position: <code>int[] abc</code>
+     * @return the array brackets in this position: <code>int abc[]</code>.
      */
-    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
-        return arrayBracketPairsAfterType;
+    @Override
+    public List<ArrayBracketPair> getArrayBracketPairs() {
+        return arrayBracketPairs;
     }
 
-    public Parameter setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
-        setAsParentNodeOf(arrayBracketPairsAfterType);
-        return this;
-    }
-
-    /**
-     * @return the array brackets in this position: <code>int abc[]</code>
-     */
-    public List<ArrayBracketPair> getArrayBracketPairsAfterName() {
-        return arrayBracketPairsAfterName;
-    }
-
-    public Parameter setArrayBracketPairsAfterName(List<ArrayBracketPair> arrayBracketPairsAfterName) {
-        this.arrayBracketPairsAfterName = arrayBracketPairsAfterName;
-        setAsParentNodeOf(arrayBracketPairsAfterName);
+    @Override
+    public Parameter setArrayBracketPairs(List<ArrayBracketPair> arrayBracketPairs) {
+        this.arrayBracketPairs = arrayBracketPairs;
+        setAsParentNodeOf(arrayBracketPairs);
         return this;
     }
 }

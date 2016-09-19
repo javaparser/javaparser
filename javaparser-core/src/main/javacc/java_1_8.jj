@@ -130,14 +130,14 @@ final class ASTParser {
 	    if (ret instanceof EnclosedExpr) {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
-	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), 0);
+	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), null);
 	       	    List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
 	        } else {
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
-		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), 0);
+		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), null);
 	        List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
 	        ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
@@ -1634,12 +1634,13 @@ VariableDeclarator VariableDeclarator():
 VariableDeclaratorId VariableDeclaratorId():
 {
 	String name;
-	int arrayCount = 0;
 	Position begin;
+	ArrayBracketPair arrayBracketPair;
+	List<ArrayBracketPair> arrayBracketPairs = null;
 }
 {
-  <IDENTIFIER> { name = token.image; begin=tokenBegin();}  ( "[" "]" { arrayCount++; } )*
-  { return new VariableDeclaratorId(range(begin, tokenEnd()),name, arrayCount); }
+  <IDENTIFIER> { name = token.image; begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+  { return new VariableDeclaratorId(range(begin, tokenEnd()),name, arrayBracketPairs); }
 }
 
 Expression VariableInitializer():
@@ -1879,6 +1880,17 @@ ReferenceType ReferenceType():
   { return juggleArrayTypes(range(type.getBegin(), tokenEnd()), type, arrayCount, accum); }
 }
 
+ArrayBracketPair ArrayBracketPair():
+{
+    List<AnnotationExpr> annotations = null;
+    Position begin = INVALID;
+}
+{
+    annotations = Annotations() { begin = annotations.getBegin(); }
+    "[" { begin = begin.orIfInvalid(tokenBegin()); } "]"
+    { return new ArrayBracketPair(range(begin, tokenEnd()), annotations); }
+}
+
 IntersectionType IntersectionType():
 {
 	Position begin;
@@ -2037,7 +2049,7 @@ NameExpr Name():
 }
 {
   <IDENTIFIER> { ret = new NameExpr(tokenRange(), token.image); }
-  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
+  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(range(ret.getBegin(), tokenEnd()), ret, token.image); } )*
   { return ret; }
 }
 
