@@ -25,6 +25,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -53,6 +54,10 @@ public final class Parameter extends Node implements
     private List<AnnotationExpr> annotations;
 
     private VariableDeclaratorId id;
+
+    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+
+    private List<ArrayBracketPair> arrayBracketPairsAfterName;
 
     public Parameter() {
     }
@@ -197,4 +202,30 @@ public final class Parameter extends Node implements
         return this;
     }
 
+
+    /**
+     * @return the array brackets in this position: <code>int[] abc</code>
+     */
+    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
+        return arrayBracketPairsAfterType;
+    }
+
+    public Parameter setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+        setAsParentNodeOf(arrayBracketPairsAfterType);
+        return this;
+    }
+
+    /**
+     * @return the array brackets in this position: <code>int abc[]</code>
+     */
+    public List<ArrayBracketPair> getArrayBracketPairsAfterName() {
+        return arrayBracketPairsAfterName;
+    }
+
+    public Parameter setArrayBracketPairsAfterName(List<ArrayBracketPair> arrayBracketPairsAfterName) {
+        this.arrayBracketPairsAfterName = arrayBracketPairsAfterName;
+        setAsParentNodeOf(arrayBracketPairsAfterName);
+        return this;
+    }
 }

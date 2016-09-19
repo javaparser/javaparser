@@ -22,19 +22,26 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclaratorId extends Node implements NodeWithName<VariableDeclaratorId> {
+public final class VariableDeclaratorId extends Node implements
+        NodeWithName<VariableDeclaratorId>,
+        NodeWithType<VariableDeclaratorId> {
 
     private String name;
 
-    private int arrayCount;
+    private List<ArrayBracketPair> arrayBracketPairsAfterId;
 
     public VariableDeclaratorId() {
     }
@@ -43,10 +50,10 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
        setName(name);
     }
 
-    public VariableDeclaratorId(Range range, String name, int arrayCount) {
+    public VariableDeclaratorId(Range range, String name, List<ArrayBracketPair> arrayBracketPairsAfterId) {
         super(range);
         setName(name);
-        setArrayCount(arrayCount);
+        setArrayBracketPairsAfterId(arrayBracketPairsAfterId);
     }
 
     @Override
@@ -59,17 +66,9 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
         v.visit(this, arg);
     }
 
-    public int getArrayCount() {
-        return arrayCount;
-    }
-
     @Override
     public String getName() {
         return name;
-    }
-
-    public void setArrayCount(int arrayCount) {
-        this.arrayCount = arrayCount;
     }
 
     @Override
@@ -78,4 +77,25 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
         return this;
     }
 
+    public List<ArrayBracketPair> getArrayBracketPairsAfterId() {
+        return arrayBracketPairsAfterId;
+    }
+
+    public VariableDeclaratorId setArrayBracketPairsAfterId(List<ArrayBracketPair> arrayBracketPairsAfterId) {
+        this.arrayBracketPairsAfterId = arrayBracketPairsAfterId;
+        setAsParentNodeOf(arrayBracketPairsAfterId);
+        return this;
+    }
+
+    @Override
+    public Type<?> getType() {
+        // FIXME
+        return null;
+    }
+
+    @Override
+    public VariableDeclaratorId setType(Type<?> type) {
+        // FIXME
+        return null;
+    }
 }

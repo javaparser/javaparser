@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -60,13 +61,15 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     private List<Parameter> parameters;
 
-    private int arrayCount;
-
     private List<ReferenceType> throws_;
 
     private BlockStmt body;
 
     private boolean isDefault = false;
+
+    private List<ArrayBracketPair> arrayBracketPairsAfterReturnType;
+
+    private List<ArrayBracketPair> arrayBracketPairsAfterParameterList;
 
     public MethodDeclaration() {
     }
@@ -87,15 +90,17 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, final Type type, final String name,
-                             final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_,
-                             final BlockStmt body) {
+                             final List<Parameter> parameters, final List<ArrayBracketPair> arrayBracketPairsAfterReturnType,
+                             final List<ArrayBracketPair> arrayBracketPairsAfterParameterList,
+                             final List<ReferenceType> throws_, final BlockStmt body) {
         super(annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setType(type);
         setName(name);
         setParameters(parameters);
-        setArrayCount(arrayCount);
+        setArrayBracketPairsAfterReturnType(arrayBracketPairsAfterReturnType);
+        setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
         setThrows(throws_);
         setBody(body);
     }
@@ -103,15 +108,17 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     public MethodDeclaration(Range range,
                              final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, final Type type, final String name,
-                             final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_,
-                             final BlockStmt body) {
+                             final List<Parameter> parameters, final List<ArrayBracketPair> arrayBracketPairsAfterReturnType,
+                             final List<ArrayBracketPair> arrayBracketPairsAfterParameterList,
+                             final List<ReferenceType> throws_, final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setType(type);
         setName(name);
         setParameters(parameters);
-        setArrayCount(arrayCount);
+        setArrayBracketPairsAfterReturnType(arrayBracketPairsAfterReturnType);
+        setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
         setThrows(throws_);
         setBody(body);
     }
@@ -124,10 +131,6 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     @Override
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
-    }
-
-    public int getArrayCount() {
-        return arrayCount;
     }
 
     @Override
@@ -181,10 +184,6 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     public List<TypeParameter> getTypeParameters() {
         typeParameters = ensureNotNull(typeParameters);
         return typeParameters;
-    }
-
-    public void setArrayCount(final int arrayCount) {
-        this.arrayCount = arrayCount;
     }
 
     @Override
@@ -342,5 +341,31 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
             return (JavadocComment) getComment();
         }
         return null;
+    }
+
+    /**
+     * @return the array brackets in this position: <code>int[] abc() {...}</code>
+     */
+    public List<ArrayBracketPair> getArrayBracketPairsAfterReturnType() {
+        return arrayBracketPairsAfterReturnType;
+    }
+
+    public MethodDeclaration setArrayBracketPairsAfterReturnType(List<ArrayBracketPair> arrayBracketPairsAfterReturnType) {
+        this.arrayBracketPairsAfterReturnType = arrayBracketPairsAfterReturnType;
+        setAsParentNodeOf(arrayBracketPairsAfterReturnType);
+        return this;
+    }
+
+	/**
+     * @return the array brackets in this position: <code>int abc()[] {...}</code>
+     */
+    public List<ArrayBracketPair> getArrayBracketPairsAfterParameterList() {
+        return arrayBracketPairsAfterParameterList;
+    }
+
+    public MethodDeclaration setArrayBracketPairsAfterParameterList(List<ArrayBracketPair> arrayBracketPairsAfterParameterList) {
+        this.arrayBracketPairsAfterParameterList = arrayBracketPairsAfterParameterList;
+        setAsParentNodeOf(arrayBracketPairsAfterParameterList);
+        return this;
     }
 }

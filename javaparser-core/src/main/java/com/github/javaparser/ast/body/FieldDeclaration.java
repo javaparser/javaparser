@@ -30,6 +30,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -61,6 +62,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     private List<VariableDeclarator> variables;
 
+    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+
     public FieldDeclaration() {
     }
 
@@ -79,19 +82,21 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
-                            List<VariableDeclarator> variables) {
+                            List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterType) {
         super(annotations);
         setModifiers(modifiers);
         setType(type);
         setVariables(variables);
+        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
     }
 
     public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
-                            List<VariableDeclarator> variables) {
+                            List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterType) {
         super(range, annotations);
         setModifiers(modifiers);
         setType(type);
         setVariables(variables);
+        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
     }
 
     /**
@@ -265,4 +270,16 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         return this;
     }
 
+    /**
+     * @return the array brackets in this position: <code>class C { int[] abc; }</code>
+     */
+    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
+        return arrayBracketPairsAfterType;
+    }
+
+    public FieldDeclaration setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+        setAsParentNodeOf(arrayBracketPairsAfterType);
+        return this;
+    }
 }
