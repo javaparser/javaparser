@@ -57,6 +57,10 @@ public class JavaParserFacade {
         return instances.get(typeSolver);
     }
 
+    public static void clearInstances() {
+	    instances.clear();
+    }
+
     private static TypeUsage solveGenericTypes(TypeUsage typeUsage, Context context, TypeSolver typeSolver) {
         if (typeUsage.isTypeVariable()) {
             Optional<TypeUsage> solved = context.solveGenericType(typeUsage.describe(), typeSolver);
