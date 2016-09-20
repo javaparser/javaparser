@@ -40,7 +40,13 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
-        throw new UnsupportedOperationException();
+		Set<MethodDeclaration> methods = new HashSet<>();
+		for (BodyDeclaration member : wrappedNode.getMembers()) {
+			if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
+				methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration)member, typeSolver));
+			}
+		}
+		return methods;
     }
 
     @Override
