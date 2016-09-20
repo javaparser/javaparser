@@ -298,8 +298,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-		//throw new UnsupportedOperationException("Solving symbol " + name);
-		return SymbolReference.unsolved(ValueDeclaration.class);
+		return getContext().solveSymbol(name, typeSolver);
 	}
 
 	@Override

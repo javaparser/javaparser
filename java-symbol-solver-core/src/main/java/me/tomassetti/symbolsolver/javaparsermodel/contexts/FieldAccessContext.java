@@ -3,7 +3,6 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -25,25 +24,13 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-		if (wrappedNode.getFieldExpr().toString().equals(name)) {
-			Expression scope = wrappedNode.getScope();
-			if (scope instanceof ThisExpr) {
-				com.github.javaparser.ast.body.TypeDeclaration context = null; 
-				
-				Node parentNode = scope.getParentNode();
-				while (parentNode != null && !(parentNode instanceof com.github.javaparser.ast.body.TypeDeclaration)) {
-					parentNode = parentNode.getParentNode();
-				}
-				if (parentNode != null) {
-					context = (com.github.javaparser.ast.body.TypeDeclaration)parentNode;
-				}
-
-				if (context != null) { 
-					return JavaParserFactory.getContext(context, typeSolver).solveSymbol(name, typeSolver);
-				}
-			}
-		}
-		return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveSymbol(name, typeSolver);
+        if (wrappedNode.getFieldExpr().toString().equals(name)) {
+            if (wrappedNode.getScope() instanceof ThisExpr) {
+                TypeUsage typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
+                return typeOfThis.asReferenceTypeUsage().getTypeDeclaration().solveSymbol(name, typeSolver);
+            }
+        }
+        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveSymbol(name, typeSolver);
     }
 
     @Override
