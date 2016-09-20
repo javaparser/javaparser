@@ -22,10 +22,8 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrayBrackets;
 
 import java.util.List;
 
@@ -34,11 +32,9 @@ import static com.github.javaparser.utils.Utils.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class Type<T extends Type> extends Node implements NodeWithArrayBrackets<T> {
+public abstract class Type<T extends Type> extends Node  {
 
     private List<AnnotationExpr> annotations;
-
-    private List<ArrayBracketPair> arrayBracketPairs;
 
     public Type() {
     }
@@ -65,20 +61,5 @@ public abstract class Type<T extends Type> extends Node implements NodeWithArray
         setAsParentNodeOf(annotations);
         this.annotations = annotations;
         return (T) this;
-    }
-
-    /**
-     * @return the array brackets directly after a type.
-     */
-    @Override
-    public List<ArrayBracketPair> getArrayBracketPairs() {
-        return arrayBracketPairs;
-    }
-
-    @Override
-    public T setArrayBracketPairs(List<ArrayBracketPair> arrayBracketPairs) {
-        this.arrayBracketPairs = arrayBracketPairs;
-        setAsParentNodeOf(arrayBracketPairs);
-        return (T)this;
     }
 }
