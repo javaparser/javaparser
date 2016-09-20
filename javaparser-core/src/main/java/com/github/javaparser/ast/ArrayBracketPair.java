@@ -31,10 +31,6 @@ public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayB
 		v.visit(this, arg);
     }
 
-    public void setDimension(Expression dimension) {
-        setAsParentNodeOf(dimension);
-    }
-
     public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
         return annotations;
