@@ -21,6 +21,8 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.type.ArrayType.*;
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.EnumSet;
@@ -40,6 +42,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.Pair;
 
 /**
  * @author Julio Vilmar Gesser
@@ -173,8 +176,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     @Override
     public Type getType() {
-        throw new AssertionError();
-        // FIXME
+        return wrapInArrayTypes(getElementType(),
+                ((NodeWithArrayBrackets<?>) getElementType()).getArrayBracketPairs(),
+                getArrayBracketPairs());
     }
 
     @Override
@@ -228,11 +232,11 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     @Override
     public MethodDeclaration setType(final Type type) {
-        throw new AssertionError();
-        // FIXME
-//        this.type = type;
-//        setAsParentNodeOf(this.type);
-//        return this;
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        setElementType(typeListPair.a);
+        ((NodeWithArrayBrackets<?>)getElementType()).setArrayBracketPairs(typeListPair.b);
+        setArrayBracketPairs(null);
+        return this;
     }
 
     @Override

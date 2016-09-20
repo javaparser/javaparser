@@ -70,23 +70,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-assertions-generator-maven-plugin</artifactId>
-                <version>2.0.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate-assertions</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <packages>
-                        <param>com.github.javaparser</param>
-                    </packages>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
     <dependencies>

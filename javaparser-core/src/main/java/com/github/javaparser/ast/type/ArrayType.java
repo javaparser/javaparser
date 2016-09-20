@@ -8,11 +8,13 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * TODO this javadoc is incomprehensible.
- * Every type followed by [] gets wrapped in an ArrayType for each [].
+ * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
+ * So, int[][] becomes ArrayType(ArrayType(int)).
  */
 public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnotations<ArrayType> {
     private Type componentType;
@@ -50,6 +52,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
      * Takes lists of arrayBracketPairs, assumes the lists are ordered left to right and the pairs are ordered left to right, mirroring the actual code.
      * The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds to the rightmost ArrayBracketPair.
      */
+    @SafeVarargs
     public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
         for (int i = arrayBracketPairLists.length - 1; i >= 0; i--) {
             List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
@@ -60,8 +63,22 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         return type;
     }
 
-	public static Pair<Type, List<ArrayBracketPair>> unwrapArrayTypes(Type type) {
-		// TODO
-		throw new AssertionError();
-	}
+    /**
+     * Takes a type that may be an ArrayType. Unwraps ArrayTypes until the element type is found.
+     *
+     * @return a pair of the element type, and the unwrapped ArrayTypes, if any.
+     */
+    public static Pair<Type, List<ArrayBracketPair>> unwrapArrayTypes(Type type) {
+        final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>();
+        while (type instanceof ArrayType) {
+            ArrayType arrayType = (ArrayType) type;
+            arrayBracketPairs.add(0, new ArrayBracketPair(Range.UNKNOWN, arrayType.getAnnotations()));
+            type = arrayType.getComponentType();
+        }
+        return new Pair<>(type, arrayBracketPairs);
+    }
+    
+    public static ArrayType arrayOf(Type type, AnnotationExpr... annotations) {
+        return new ArrayType(type, Arrays.asList(annotations));
+    }
 }

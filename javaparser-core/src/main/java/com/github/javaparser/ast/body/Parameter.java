@@ -30,10 +30,13 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.Pair;
 
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -44,8 +47,8 @@ public final class Parameter extends Node implements
         NodeWithElementType<Parameter>,
         NodeWithAnnotations<Parameter>,
         NodeWithName<Parameter>,
-        NodeWithModifiers<Parameter>,
-        NodeWithArrayBrackets<Parameter>{
+        NodeWithModifiers<Parameter> {
+
     private Type elementType;
 
     private boolean isVarArgs;
@@ -55,8 +58,6 @@ public final class Parameter extends Node implements
     private List<AnnotationExpr> annotations;
 
     private VariableDeclaratorId id;
-
-    private List<ArrayBracketPair> arrayBracketPairs;
 
     public Parameter() {
     }
@@ -107,8 +108,9 @@ public final class Parameter extends Node implements
 
     @Override
     public Type getType() {
-        throw new AssertionError();
-        // FIXME
+        return wrapInArrayTypes(elementType,
+                ((NodeWithArrayBrackets<?>) getElementType()).getArrayBracketPairs(),
+                getId().getArrayBracketPairs());
     }
 
     public boolean isVarArgs() {
@@ -117,10 +119,11 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setType(Type type) {
-        // FIXME
-//        this.type = type;
-//		setAsParentNodeOf(this.type);
-        throw new AssertionError();
+        Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
+        setElementType(unwrapped.a);
+        ((NodeWithArrayBrackets<?>)getElementType()).setArrayBracketPairs(unwrapped.b);
+        getId().setArrayBracketPairs(null);
+        return this;
     }
 
     public void setVarArgs(boolean isVarArgs) {
@@ -198,22 +201,6 @@ public final class Parameter extends Node implements
     public Parameter setElementType(final Type elementType) {
         this.elementType = elementType;
         setAsParentNodeOf(this.elementType);
-        return this;
-    }
-
-    /**
-     * @return the array brackets in this position: <code>int abc[]</code>.
-     */
-    @Override
-    public List<ArrayBracketPair> getArrayBracketPairs() {
-        arrayBracketPairs = ensureNotNull(arrayBracketPairs);
-        return arrayBracketPairs;
-    }
-
-    @Override
-    public Parameter setArrayBracketPairs(List<ArrayBracketPair> arrayBracketPairs) {
-        this.arrayBracketPairs = arrayBracketPairs;
-        setAsParentNodeOf(arrayBracketPairs);
         return this;
     }
 }

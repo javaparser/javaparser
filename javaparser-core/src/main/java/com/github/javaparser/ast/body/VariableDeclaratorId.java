@@ -117,9 +117,7 @@ public final class VariableDeclaratorId extends Node implements
         Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         NodeWithElementType<? extends Node> nodeWithElementType = findElementType();
         nodeWithElementType.setElementType(unwrapped.a);
-        unwrapped.a.setParentNode((Node) nodeWithElementType);
         setArrayBracketPairs(unwrapped.b);
-        setAsParentNodeOf(unwrapped.a);
         return this;
     }
 }
