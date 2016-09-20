@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.VoidType.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
@@ -30,7 +31,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -40,9 +40,6 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -201,7 +198,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         getter.setElementType(getElementType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
-        blockStmt.addStatement(new ReturnStmt(NameExpr.create(fieldName)));
+        blockStmt.addStatement(new ReturnStmt(name(fieldName)));
         return getter;
     }
 

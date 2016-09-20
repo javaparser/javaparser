@@ -25,15 +25,18 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithArrayBrackets;
+import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.Pair;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -98,31 +101,25 @@ public final class VariableDeclaratorId extends Node implements
 
     @Override
     public Type getType() {
-        throw new AssertionError();
-//        Node parent = getParentNode();
-//        if(parent){
-//        }
-//        return
-//                        juggleArrayTypes(elementType, ((NodeWithArrayBrackets<?>)elementType).getArrayBracketPairs())
-//                        ,
-//                ;
-//        return null;
+        Type elementType = findElementType().getElementType();
+
+        return wrapInArrayTypes(elementType,
+                ((NodeWithArrayBrackets<?>) elementType).getArrayBracketPairs(),
+                getArrayBracketPairs());
+    }
+
+    private NodeWithElementType<? extends Node> findElementType() {
+        return getParentNodeOfType(FieldDeclaration.class);
     }
 
     @Override
     public VariableDeclaratorId setType(Type type) {
-        throw new AssertionError();
-        // TODO
-//        this.elementType=type;
-//        this.type = type;
-//        setAsParentNodeOf(this.type);
-//        return this;
-    }
-
-    private Type juggleArrayTypes(Type type, List<ArrayBracketPair> arrayBracketPairs) {
-        for (int i = arrayBracketPairs.size() - 1; i >= 0; i--) {
-            type = new ArrayType(type, arrayBracketPairs.get(i).getAnnotations());
-        }
-        return type;
+        Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
+        NodeWithElementType<? extends Node> nodeWithElementType = findElementType();
+        nodeWithElementType.setElementType(unwrapped.a);
+        unwrapped.a.setParentNode((Node) nodeWithElementType);
+        setArrayBracketPairs(unwrapped.b);
+        setAsParentNodeOf(unwrapped.a);
+        return this;
     }
 }

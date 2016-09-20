@@ -240,7 +240,7 @@ public abstract class Node implements Cloneable {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getParentNodeOfType(Class<T> classType) {
+    public <T extends Node> T getParentNodeOfType(Class<T> classType) {
         Node parent = parentNode;
         while (parent != null) {
             if (classType.isAssignableFrom(parent.getClass()))

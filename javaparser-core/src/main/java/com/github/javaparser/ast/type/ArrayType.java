@@ -1,10 +1,12 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.Pair;
 
 import java.util.List;
 
@@ -44,4 +46,22 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         return this;
     }
 
+    /**
+     * Takes lists of arrayBracketPairs, assumes the lists are ordered left to right and the pairs are ordered left to right, mirroring the actual code.
+     * The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds to the rightmost ArrayBracketPair.
+     */
+    public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
+        for (int i = arrayBracketPairLists.length - 1; i >= 0; i--) {
+            List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
+            for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
+                type = new ArrayType(type, arrayBracketPairList.get(j).getAnnotations());
+            }
+        }
+        return type;
+    }
+
+	public static Pair<Type, List<ArrayBracketPair>> unwrapArrayTypes(Type type) {
+		// TODO
+		throw new AssertionError();
+	}
 }

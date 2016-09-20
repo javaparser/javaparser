@@ -14,8 +14,8 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.ReferenceType;
 
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.VoidType.*;
 
 public class ClassCreator {
@@ -34,7 +34,7 @@ public class ClassCreator {
     private static CompilationUnit createCU() {
         CompilationUnit cu = new CompilationUnit();
         // set the package
-        cu.setPackage(new PackageDeclaration(NameExpr.create("java.parser.test")));
+        cu.setPackage(new PackageDeclaration(name("java.parser.test")));
 
         // create the type declaration 
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
