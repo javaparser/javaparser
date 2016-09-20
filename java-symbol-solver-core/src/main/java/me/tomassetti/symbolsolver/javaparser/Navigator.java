@@ -23,8 +23,34 @@ public final class Navigator {
         if (cu.getTypes() == null) {
             return Optional.empty();
         }
-        return cu.getTypes().stream().filter((t) -> t.getName().equals(name)).findFirst();
+        
+        String[] nameParts = name.split("\\.", 2);
+        final String typeName = nameParts[0];
+        
+        Optional<TypeDeclaration> type = cu.getTypes().stream().filter((t) -> t.getName().equals(typeName)).findFirst();
+        
+        if (nameParts.length > 1 && type.isPresent()) {
+            return findType(type.get(), nameParts[1]);
+        } 
+        return type;
     }
+    
+    public static Optional<TypeDeclaration> findType(TypeDeclaration td, String name) {
+        String[] nameParts = name.split("\\.", 2);
+        
+        Optional<TypeDeclaration> type = Optional.empty();
+        for (Node n: td.getChildrenNodes()) {
+            if (n instanceof TypeDeclaration && ((TypeDeclaration)n).getName().equals(nameParts[0])) {
+                type = Optional.of((TypeDeclaration)n);
+                break;
+            }
+        }
+        if (nameParts.length > 1 && type.isPresent()) {
+            return findType(type.get(), nameParts[1]);
+        } 
+        return type;
+    }
+    
 
     public static ClassOrInterfaceDeclaration demandClass(CompilationUnit cu, String name) {
         ClassOrInterfaceDeclaration cd = demandClassOrInterface(cu, name);

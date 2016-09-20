@@ -3,6 +3,8 @@ package me.tomassetti.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
@@ -55,27 +57,45 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<TypeDeclaration> tryToSolveType(String name) {
-        // TODO support internal classes
         // TODO support enums
         // TODO support interfaces
-        File srcFile = new File(srcDir.getAbsolutePath() + "/" + name.replaceAll("\\.", "/") + ".java");
-        if (srcFile.exists()) {
-            try {
-                CompilationUnit compilationUnit = JavaParser.parse(srcFile);
-                Optional<com.github.javaparser.ast.body.TypeDeclaration> astTypeDeclaration = Navigator.findType(compilationUnit, simpleName(name));
-                if (!astTypeDeclaration.isPresent()) {
-                    return SymbolReference.unsolved(TypeDeclaration.class);
+    	
+    	String[] nameElements = name.split("\\.");
+    	
+    	for (int i = nameElements.length; i > 0; i--) {
+        	String filePath = srcDir.getAbsolutePath();
+        	for (int j = 0; j < i; j++) {
+        		filePath += "/" + nameElements[j];
+        	}
+        	filePath += ".java";
+        	
+            File srcFile = new File(filePath);
+            if (srcFile.exists()) {
+                try {
+                    String typeName = "";
+                    for (int j = i - 1; j < nameElements.length; j++) {
+                        if (j != i - 1)
+                        {
+                            typeName += ".";
+                        }
+                        typeName += nameElements[j];
+                    }
+                    CompilationUnit compilationUnit = JavaParser.parse(srcFile);
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration> astTypeDeclaration = Navigator.findType(compilationUnit, typeName);
+                    if (!astTypeDeclaration.isPresent()) {
+                        return SymbolReference.unsolved(TypeDeclaration.class);
+                    }
+                    TypeDeclaration typeDeclaration = JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get());
+                    return SymbolReference.solved(typeDeclaration);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-                TypeDeclaration typeDeclaration = JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get());
-                return SymbolReference.solved(typeDeclaration);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
-        } else {
-            return SymbolReference.unsolved(TypeDeclaration.class);
         }
+    	
+    	return SymbolReference.unsolved(TypeDeclaration.class);
     }
 
 }
