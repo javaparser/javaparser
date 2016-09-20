@@ -95,7 +95,7 @@ public final class PrimitiveType extends Type<PrimitiveType> implements
 
 	public PrimitiveType(Range range, final Primitive type) {
 		super(range);
-		this.type = type;
+		setType(type);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
