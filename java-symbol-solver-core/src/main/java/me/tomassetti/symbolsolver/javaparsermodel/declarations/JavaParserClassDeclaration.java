@@ -23,10 +23,7 @@ import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class JavaParserClassDeclaration extends AbstractClassDeclaration {
@@ -369,7 +366,13 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public Set<MethodDeclaration> getDeclaredMethods() {
-		throw new UnsupportedOperationException();
+		Set<MethodDeclaration> methods = new HashSet<>();
+		for (BodyDeclaration member : wrappedNode.getMembers()) {
+			if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
+				methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration)member, typeSolver));
+			}
+		}
+		return methods;
 	}
 
 	private ReferenceTypeUsageImpl toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
