@@ -21,16 +21,21 @@
 
 package com.github.javaparser.ast;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.visitor.*;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.DumpVisitor;
+import com.github.javaparser.ast.visitor.EqualsVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -168,8 +173,6 @@ public abstract class Node implements Cloneable {
             this.comment.setCommentedNode(this);
         }
     }
-
-
 
     /**
      * Use this to store additional information to this node.
@@ -369,4 +372,37 @@ public abstract class Node implements Cloneable {
         return nodes;
     }
 
+    /**
+     * Try to remove this node from the parent
+     * 
+     * @return true if removed, false otherwise
+     * @throws RuntimeException if it fails in an unexpected way
+     */
+    public boolean remove() {
+        if (parentNode == null)
+            return false;
+        boolean success = parentNode.childrenNodes.remove(this);
+        Class<?> parentClass = parentNode.getClass();
+        while (parentClass != Object.class) {
+            for (Field f : parentClass.getDeclaredFields()) {
+                f.setAccessible(true);
+                try {
+                    Object object = f.get(parentNode);
+                    if (object == null)
+                        continue;
+                    if (List.class.isAssignableFrom(object.getClass())) {
+                        List<?> l = (List<?>) object;
+                        success &= l.remove(this);
+                    } else if (object == this) {
+                        f.set(parentNode, null);
+                        success &= true;
+                    }
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    throw new RuntimeException("Error while removing " + getClass().getSimpleName(), e);
+                }
+            }
+            parentClass = parentClass.getSuperclass();
+        }
+        return success;
+    }
 }
