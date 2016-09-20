@@ -87,7 +87,7 @@ import com.github.javaparser.ast.type.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
+public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final AnnotationDeclaration n, final A arg) {
 		visitComment(n.getComment(), arg);
