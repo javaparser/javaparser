@@ -57,6 +57,9 @@ public class JavaParserFacade {
         return instances.get(typeSolver);
     }
 
+    /**
+     * This method is used to clear internal caches for the sake of releasing memory.
+     */
     public static void clearInstances() {
 	    instances.clear();
     }
