@@ -27,11 +27,14 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithArrayBrackets;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -81,6 +84,7 @@ public final class VariableDeclaratorId extends Node implements
 
     @Override
     public List<ArrayBracketPair> getArrayBracketPairs() {
+        arrayBracketPairs = ensureNotNull(arrayBracketPairs);
         return arrayBracketPairs;
     }
 
@@ -91,15 +95,34 @@ public final class VariableDeclaratorId extends Node implements
         return this;
     }
 
+
     @Override
-    public Type<?> getType() {
-        // FIXME
-        return null;
+    public Type getType() {
+        throw new AssertionError();
+//        Node parent = getParentNode();
+//        if(parent){
+//        }
+//        return
+//                        juggleArrayTypes(elementType, ((NodeWithArrayBrackets<?>)elementType).getArrayBracketPairs())
+//                        ,
+//                ;
+//        return null;
     }
 
     @Override
-    public VariableDeclaratorId setType(Type<?> type) {
-        // FIXME
-        return null;
+    public VariableDeclaratorId setType(Type type) {
+        throw new AssertionError();
+        // TODO
+//        this.elementType=type;
+//        this.type = type;
+//        setAsParentNodeOf(this.type);
+//        return this;
+    }
+
+    private Type juggleArrayTypes(Type type, List<ArrayBracketPair> arrayBracketPairs) {
+        for (int i = arrayBracketPairs.size() - 1; i >= 0; i--) {
+            type = new ArrayType(type, arrayBracketPairs.get(i).getAnnotations());
+        }
+        return type;
     }
 }

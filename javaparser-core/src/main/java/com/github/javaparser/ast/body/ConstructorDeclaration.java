@@ -210,7 +210,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
             if (includingParameterName) {
                 sb.append(param.toStringWithoutComments());
             } else {
-                sb.append(param.getType().toStringWithoutComments());
+                sb.append(param.getElementType().toStringWithoutComments());
             }
         }
         sb.append(")");

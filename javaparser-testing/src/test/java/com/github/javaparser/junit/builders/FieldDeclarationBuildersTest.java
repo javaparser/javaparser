@@ -56,7 +56,7 @@ public class FieldDeclarationBuildersTest {
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration getter = methodsWithName.get(0);
 		assertEquals("getMyField", getter.getName());
-		assertEquals("int", getter.getType().toString());
+		assertEquals("int", getter.getElementType().toString());
 		assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
 	}
 
@@ -69,7 +69,7 @@ public class FieldDeclarationBuildersTest {
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration setter = methodsWithName.get(0);
 		assertEquals("setMyField", setter.getName());
-		assertEquals("int", setter.getParameters().get(0).getType().toString());
+		assertEquals("int", setter.getParameters().get(0).getElementType().toString());
 		assertEquals(ExpressionStmt.class, setter.getBody().getStmts().get(0).getClass());
 		assertEquals("this.myField = myField;", setter.getBody().getStmts().get(0).toString());
 	}
@@ -83,7 +83,7 @@ public class FieldDeclarationBuildersTest {
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration getter = methodsWithName.get(0);
 		assertEquals("getMyField", getter.getName());
-		assertEquals("int", getter.getType().toString());
+		assertEquals("int", getter.getElementType().toString());
 		assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
 	}
 
@@ -96,7 +96,7 @@ public class FieldDeclarationBuildersTest {
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration setter = methodsWithName.get(0);
 		assertEquals("setMyField", setter.getName());
-		assertEquals("int", setter.getParameters().get(0).getType().toString());
+		assertEquals("int", setter.getParameters().get(0).getElementType().toString());
 		assertEquals(ExpressionStmt.class, setter.getBody().getStmts().get(0).getClass());
 		assertEquals("this.myField = myField;", setter.getBody().getStmts().get(0).toString());
 	}

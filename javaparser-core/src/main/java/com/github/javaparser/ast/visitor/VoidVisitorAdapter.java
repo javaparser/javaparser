@@ -21,10 +21,7 @@
  
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -375,7 +372,7 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final FieldDeclaration n, final A arg) {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
 		for (final VariableDeclarator var : n.getVariables()) {
 			var.accept(this, arg);
 		}
@@ -494,7 +491,7 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 				t.accept(this, arg);
 			}
 		}
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
 		n.getNameExpr().accept(this, arg);
 		if (n.getParameters() != null) {
 			for (final Parameter p : n.getParameters()) {
@@ -561,7 +558,7 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override public void visit(final Parameter n, final A arg) {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
 		n.getId().accept(this, arg);
 	}
 	
@@ -579,7 +576,7 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	public void visit(ArrayType n, A arg) {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
-		n.getType().accept(this, arg);
+		n.getComponentType().accept(this, arg);
 	}
 
 	@Override
@@ -790,7 +787,12 @@ public  class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         }
     }
 
-    private void visitComment(final Comment n, final A arg) {
+	@Override
+	public void visit(ArrayBracketPair n, A arg) {
+		visitAnnotations(n, arg);
+	}
+
+	private void visitComment(final Comment n, final A arg) {
 		if (n != null) {
 			n.accept(this, arg);
 		}

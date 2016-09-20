@@ -3,21 +3,26 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
 /**
+ * TODO this javadoc is incomprehensible.
  * Every type followed by [] gets wrapped in an ArrayType for each [].
  */
-public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnotations<ArrayType>, NodeWithType<ArrayType> {
-    private Type type;
+public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnotations<ArrayType> {
+    private Type componentType;
 
-    public ArrayType(Range range, Type type, List<AnnotationExpr> annotations) {
+    public ArrayType(Type componentType, List<AnnotationExpr> annotations) {
+        setComponentType(componentType);
+        setAnnotations(annotations);
+    }
+
+    public ArrayType(Range range, Type componentType, List<AnnotationExpr> annotations) {
         super(range);
-        setType(type);
+        setComponentType(componentType);
         setAnnotations(annotations);
     }
 
@@ -29,15 +34,13 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         v.visit(this, arg);
     }
 
-    @Override
-    public Type getType() {
-        return type;
+    public Type getComponentType() {
+        return componentType;
     }
 
-    @Override
-    public ArrayType setType(final Type type) {
-        this.type = type;
-        setAsParentNodeOf(this.type);
+    public ArrayType setComponentType(final Type type) {
+        this.componentType = type;
+        setAsParentNodeOf(this.componentType);
         return this;
     }
 

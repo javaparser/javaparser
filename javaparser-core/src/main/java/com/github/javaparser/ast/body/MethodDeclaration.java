@@ -77,29 +77,29 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     public MethodDeclaration() {
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name) {
         setModifiers(modifiers);
-        setType(type);
+        setElementType(elementType);
         setName(name);
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name,
                              final List<Parameter> parameters) {
         setModifiers(modifiers);
-        setType(type);
+        setElementType(elementType);
         setName(name);
         setParameters(parameters);
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, final Type type, final String name,
+                             final List<TypeParameter> typeParameters, final Type elementType, final String name,
                              final List<Parameter> parameters,
                              final List<ArrayBracketPair> arrayBracketPairs,
                              final List<ReferenceType> throws_, final BlockStmt body) {
         super(annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
-        setType(type);
+        setElementType(elementType);
         setName(name);
         setParameters(parameters);
         setArrayBracketPairs(arrayBracketPairs);
@@ -109,14 +109,14 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     public MethodDeclaration(Range range,
                              final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, final Type type, final String name,
+                             final List<TypeParameter> typeParameters, final Type elementType, final String name,
                              final List<Parameter> parameters,
                              final List<ArrayBracketPair> arrayBracketPairs,
                              final List<ReferenceType> throws_, final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
-        setType(type);
+        setElementType(elementType);
         setName(name);
         setParameters(parameters);
         setArrayBracketPairs(arrayBracketPairs);
@@ -173,8 +173,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     @Override
     public Type getType() {
+        throw new AssertionError();
         // FIXME
-        return null;
     }
 
     @Override
@@ -228,10 +228,11 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     @Override
     public MethodDeclaration setType(final Type type) {
+        throw new AssertionError();
         // FIXME
 //        this.type = type;
 //        setAsParentNodeOf(this.type);
-        return this;
+//        return this;
     }
 
     @Override
@@ -300,7 +301,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
             }
         }
         // TODO verify it does not print comments connected to the type
-        sb.append(getType().toStringWithoutComments());
+        sb.append(getElementType().toStringWithoutComments());
         sb.append(" ");
         sb.append(getName());
         sb.append("(");
@@ -314,7 +315,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
             if (includingParameterName) {
                 sb.append(param.toStringWithoutComments());
             } else {
-                sb.append(param.getType().toStringWithoutComments());
+                sb.append(param.getElementType().toStringWithoutComments());
                 if (param.isVarArgs()) {
                     sb.append("...");
                 }
@@ -349,6 +350,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
      */
     @Override
     public List<ArrayBracketPair> getArrayBracketPairs() {
+        arrayBracketPairs = ensureNotNull(arrayBracketPairs);
         return arrayBracketPairs;
     }
 

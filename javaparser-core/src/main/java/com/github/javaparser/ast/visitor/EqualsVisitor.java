@@ -424,7 +424,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
 			return false;
 		}
 
@@ -452,7 +452,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	@Override public Boolean visit(final VariableDeclaratorId n1, final Node arg) {
 		final VariableDeclaratorId n2 = (VariableDeclaratorId) arg;
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
+		if(!nodesEquals(n1.getArrayBracketPairs(), n2.getArrayBracketPairs())){
 			return false;
 		}
 
@@ -508,7 +508,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
+		if(!nodesEquals(n1.getArrayBracketPairs(), n2.getArrayBracketPairs())){
 			return false;
 		}
 
@@ -516,7 +516,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
 			return false;
 		}
 
@@ -547,7 +547,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	
 	@Override public Boolean visit(final Parameter n1, final Node arg) {
 		final Parameter n2 = (Parameter) arg;
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
 			return false;
 		}
 
@@ -608,14 +608,24 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
 			return false;
 		}
+
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
+
+		if(!nodesEquals(n1.getArrayBracketPairs(), n2.getArrayBracketPairs())){
+			return false;
+		}
+
 		return true;
 	}
 
 	@Override public Boolean visit(final PrimitiveType n1, final Node arg) {
 		final PrimitiveType n2 = (PrimitiveType) arg;
+
+		if(!nodesEquals(n1.getArrayBracketPairs(), n2.getArrayBracketPairs())){
+			return false;
+		}
 
 		if (n1.getType() != n2.getType()) {
 			return false;
@@ -630,7 +640,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	public Boolean visit(ArrayType n1, Node arg) {
 		final ArrayType n2 = (ArrayType) arg;
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getComponentType(), n2.getComponentType())) {
 			return false;
 		}
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
@@ -1483,4 +1493,14 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         }
         return true;
     }
+
+	@Override
+	public Boolean visit(ArrayBracketPair n1, Node arg) {
+		ArrayBracketPair n2 = (ArrayBracketPair) arg;
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+			return false;
+		}
+
+		return true;
+	}
 }

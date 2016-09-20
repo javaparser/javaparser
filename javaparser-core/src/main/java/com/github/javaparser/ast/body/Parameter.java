@@ -61,37 +61,37 @@ public final class Parameter extends Node implements
     public Parameter() {
     }
 
-    public Parameter(Type type, VariableDeclaratorId id) {
+    public Parameter(Type elementType, VariableDeclaratorId id) {
         setId(id);
-        setType(type);
+        setElementType(elementType);
     }
 
     /**
      * Creates a new {@link Parameter}.
      *
-     * @param type
+     * @param elementType
      *            type of the parameter
      * @param name
      *            name of the parameter
      * @return instance of {@link Parameter}
      */
-    public static Parameter create(Type type, String name) {
-        return new Parameter(type, new VariableDeclaratorId(name));
+    public static Parameter create(Type elementType, String name) {
+        return new Parameter(elementType, new VariableDeclaratorId(name));
     }
 
-    public Parameter(EnumSet<Modifier> modifiers, Type type, VariableDeclaratorId id) {
+    public Parameter(EnumSet<Modifier> modifiers, Type elementType, VariableDeclaratorId id) {
         setModifiers(modifiers);
         setId(id);
-        setType(type);
+        setElementType(elementType);
     }
 
-    public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+    public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
                      boolean isVarArgs, VariableDeclaratorId id) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);
-        setType(type);
+        setElementType(elementType);
         setVarArgs(isVarArgs);
     }
 
@@ -107,8 +107,8 @@ public final class Parameter extends Node implements
 
     @Override
     public Type getType() {
+        throw new AssertionError();
         // FIXME
-        return null;
     }
 
     public boolean isVarArgs() {
@@ -120,7 +120,7 @@ public final class Parameter extends Node implements
         // FIXME
 //        this.type = type;
 //		setAsParentNodeOf(this.type);
-        return this;
+        throw new AssertionError();
     }
 
     public void setVarArgs(boolean isVarArgs) {
@@ -206,6 +206,7 @@ public final class Parameter extends Node implements
      */
     @Override
     public List<ArrayBracketPair> getArrayBracketPairs() {
+        arrayBracketPairs = ensureNotNull(arrayBracketPairs);
         return arrayBracketPairs;
     }
 

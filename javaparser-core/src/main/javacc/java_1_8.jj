@@ -52,6 +52,7 @@ import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.nodeTypes.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 
@@ -153,16 +154,6 @@ final class ASTParser {
 	    return ret;
     }
     
-    private ReferenceType juggleArrayTypes(Range range, Type type, int arrayCount, List<List<AnnotationExpr>> arrayAnnotations) {
-        if (arrayCount == 0) {
-            return (ReferenceType) type;
-        }
-        for (int i = arrayAnnotations.size() - 1; i >= 0; i--) {
-            type = new ArrayType(range, type, arrayAnnotations.get(i));
-        }
-        return (ArrayType) type;
-    }
-
     private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<List<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
         List<ArrayCreationLevel> levels = new ArrayList<ArrayCreationLevel>();
         
@@ -1673,31 +1664,32 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	Type type;
 	NameExpr name;
 	List<Parameter> parameters;
-	int arrayCount = 0;
+	ArrayBracketPair arrayBracketPair;
+	List<ArrayBracketPair> arrayBracketPairs = null;
 	List<ReferenceType> throws_ = null;
 	BlockStmt block = null;
 	Position begin = modifier.begin;
-	ReferenceType throwType;
+	Type throwType;
 }
 {
   // Modifiers already matched in the caller!
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   type = ResultType() { begin = begin.orIfInvalid(type.getBegin()); }
-  name = Name() parameters = FormalParameters() ( "[" "]" { arrayCount++; } )*
-  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
-    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
+  name = Name() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, (ReferenceType)throwType); }
+    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, (ReferenceType)throwType); })* ]
   ( block = Block() | ";" )
   { 
-      MethodDeclaration tmp = new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, null, parameters, arrayCount, throws_, block);
+      MethodDeclaration tmp = new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, null, parameters, arrayBracketPairs, throws_, block);
       tmp.setNameExpr(name);
       return tmp;
   }
 }
 
-ReferenceType ReferenceTypeWithAnnotations():
+Type ReferenceTypeWithAnnotations():
 {
 	List<AnnotationExpr> annotations;
-	ReferenceType type;
+	Type type;
 }
 {
     annotations = Annotations() 
@@ -1775,13 +1767,13 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	List<Statement> stmts;
     Position begin = modifier.begin;
 	Position blockBegin = INVALID;
-	ReferenceType throwType;
+	Type throwType;
 }
 {
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   // Modifiers matched in the caller
-  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
-  ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
+  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, (ReferenceType)throwType); }
+  ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, (ReferenceType)throwType); })* ]
   "{" { blockBegin=tokenBegin(); }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
     stmts = Statements()
@@ -1864,20 +1856,26 @@ Type Type():
  { return ret; }
 }
 
-ReferenceType ReferenceType():
+/* ReferenceType returns a Type because a PrimitiveType with array braces will (in getType on the AST)
+    become wrapped in ArrayType(s) which ARE ReferenceTypes. Since this happens so late, it cannot be
+    correctly typed here. */
+Type ReferenceType():
 {
 	Type type;
 	int arrayCount = 0;
-	List<AnnotationExpr> annotations = null;
-	List<List<AnnotationExpr>> accum= null;
+	ArrayBracketPair arrayBracketPair;
+	List<ArrayBracketPair> arrayBracketPairs = null;
 }
 {
   (
-   type = PrimitiveType() ( LOOKAHEAD(2) annotations = Annotations()  "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )+
+   type = PrimitiveType() ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
   |
-   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )*
+   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
-  { return juggleArrayTypes(range(type.getBegin(), tokenEnd()), type, arrayCount, accum); }
+  {
+        ((NodeWithArrayBrackets)type).setArrayBracketPairs(arrayBracketPairs);
+        return type;
+   }
 }
 
 ArrayBracketPair ArrayBracketPair():
@@ -1886,7 +1884,7 @@ ArrayBracketPair ArrayBracketPair():
     Position begin = INVALID;
 }
 {
-    annotations = Annotations() { begin = annotations.getBegin(); }
+    annotations = Annotations()
     "[" { begin = begin.orIfInvalid(tokenBegin()); } "]"
     { return new ArrayBracketPair(range(begin, tokenEnd()), annotations); }
 }
@@ -1894,12 +1892,12 @@ ArrayBracketPair ArrayBracketPair():
 IntersectionType IntersectionType():
 {
 	Position begin;
-	ReferenceType elementType;
+	Type elementType;
 	List<ReferenceType> elements = null;
 }
 {
-    elementType=ReferenceType() { begin=elementType.getBegin(); elements = add(elements, elementType); }
-    "&" (elementType=ReferenceType() { elements = add(elements, elementType); } )+
+    elementType=ReferenceType() { begin=elementType.getBegin(); elements = add(elements, (ReferenceType)elementType); }
+    "&" (elementType=ReferenceType() { elements = add(elements, (ReferenceType)elementType); } )+
     { return new IntersectionType(range(begin, tokenEnd()), elements); }
 }
 
@@ -1978,8 +1976,8 @@ Type TypeArgument():
 
 WildcardType Wildcard():
 {
-	ReferenceType ext = null;
-	ReferenceType sup = null;
+	Type ext = null;
+	Type sup = null;
 	Position begin;
 	List<AnnotationExpr> annotations = null;
 }
@@ -1997,7 +1995,7 @@ WildcardType Wildcard():
 		}
    ]
    { 
-     return new WildcardType(range(begin, tokenEnd()),ext, sup);
+     return new WildcardType(range(begin, tokenEnd()),(ReferenceType)ext, (ReferenceType)sup);
    }
 }
 
@@ -2388,7 +2386,7 @@ Expression PostfixExpression():
 Expression CastExpression():
 {
 	Expression ret;
-	ReferenceType referenceType;
+	Type referenceType;
 	PrimitiveType primitiveType;
 	Position begin = INVALID;
 	List<AnnotationExpr> annotations = null;
@@ -2401,9 +2399,9 @@ Expression CastExpression():
   	  LOOKAHEAD(2)
   	  primitiveType = PrimitiveType() ")" ret = UnaryExpression() { primitiveType.setAnnotations(annotations); ret = new CastExpr(range(begin, tokenEnd()), primitiveType, ret); }
   	|
-  	  referenceType = ReferenceType() { typesOfMultiCast = add(typesOfMultiCast, referenceType); referenceType.setAnnotations(annotations); }
+  	  referenceType = ReferenceType() { typesOfMultiCast = add(typesOfMultiCast, (ReferenceType)referenceType); referenceType.setAnnotations(annotations); }
   	  ( "&" referenceType = ReferenceType() {
-  	    typesOfMultiCast = add(typesOfMultiCast, referenceType);
+  	    typesOfMultiCast = add(typesOfMultiCast, (ReferenceType)referenceType);
   	    }
   	  )*
   	  ")" ret = UnaryExpressionNotPlusMinus() {
@@ -2493,7 +2491,7 @@ Expression PrimaryPrefix():
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
-	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), 0);
+	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), null);
 	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id);
 	  		  		  }
 
@@ -3109,7 +3107,7 @@ TryStmt TryStatement():
 	List<CatchClause> catchs = null;
 	BlockStmt catchBlock;
 	ModifierHolder exceptModifier;
-	ReferenceType exceptionType;
+	Type exceptionType;
 	List<ReferenceType> exceptionTypes = new LinkedList<ReferenceType>();
 	VariableDeclaratorId exceptId;
 	Position begin;
@@ -3125,8 +3123,8 @@ TryStmt TryStatement():
   		(
   			"catch" {catchBegin=tokenBegin();}
   			"(" 
-  			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); }
-  			( "|" exceptionType = ReferenceTypeWithAnnotations() { exceptionTypes.add(exceptionType); } )*
+  			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add((ReferenceType)exceptionType); }
+  			( "|" exceptionType = ReferenceTypeWithAnnotations() { exceptionTypes.add((ReferenceType)exceptionType); } )*
   			exceptId = VariableDeclaratorId()
   			")"
   			 

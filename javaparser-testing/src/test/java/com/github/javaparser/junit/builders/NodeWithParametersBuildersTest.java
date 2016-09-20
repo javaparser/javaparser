@@ -35,7 +35,7 @@ public class NodeWithParametersBuildersTest {
 		assertEquals("import " + List.class.getName() + ";" + System.getProperty("line.separator"), cu.getImports().get(0).toString());
 		assertEquals(2, addMethod.getParameters().size());
 		assertEquals("yay", addMethod.getParameters().get(0).getName());
-		assertEquals("List", addMethod.getParameters().get(1).getType().toString());
+		assertEquals("List", addMethod.getParameters().get(1).getElementType().toString());
 		assertEquals(myNewParam, addMethod.getParameters().get(1));
 	}
 

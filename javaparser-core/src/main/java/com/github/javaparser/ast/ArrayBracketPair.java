@@ -24,11 +24,11 @@ public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayB
     }
 
     @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-return null; //TODO        v.visit(this, arg);
+        return v.visit(this, arg);
     }
 
     @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-//TODO        v.visit(this, arg);
+		v.visit(this, arg);
     }
 
     public void setDimension(Expression dimension) {

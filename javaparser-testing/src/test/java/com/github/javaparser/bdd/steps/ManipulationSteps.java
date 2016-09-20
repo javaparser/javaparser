@@ -273,7 +273,7 @@ public class ManipulationSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameters().get(parameterPosition -1);
-        assertThat(parameter.getType(), is(INT_TYPE));
+        assertThat(parameter.getElementType(), is(INT_TYPE));
         assertThat(parameter.getId().getName(), is(expectedName));
     }
 

@@ -32,6 +32,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -136,6 +138,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
      */
     @Override
     public List<ArrayBracketPair> getArrayBracketPairs() {
+        arrayBracketPairs = ensureNotNull(arrayBracketPairs);
         return arrayBracketPairs;
     }
 

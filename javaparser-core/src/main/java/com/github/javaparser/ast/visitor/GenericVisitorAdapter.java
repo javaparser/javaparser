@@ -773,7 +773,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getElementType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1044,7 +1044,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getElementType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1200,7 +1200,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getElementType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1248,7 +1248,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getComponentType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1708,6 +1708,19 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		}
 		return null;
     }
+
+	@Override
+	public R visit(ArrayBracketPair n, A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			{
+				R result = a.accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public R visit(final BlockComment n, final A arg) {

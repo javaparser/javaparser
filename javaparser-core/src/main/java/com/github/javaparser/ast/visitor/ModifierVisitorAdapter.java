@@ -569,7 +569,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			}
 			removeNulls(annotations);
 		}
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setElementType((Type) n.getElementType().accept(this, arg));
 		final List<VariableDeclarator> variables = n.getVariables();
 		for (int i = 0; i < variables.size(); i++) {
 			variables.set(i, (VariableDeclarator) variables.get(i).accept(this, arg));
@@ -730,7 +730,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			}
 			removeNulls(typeParameters);
 		}
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setElementType((Type) n.getElementType().accept(this, arg));
 		final List<Parameter> parameters = n.getParameters();
 		if (parameters != null) {
 			for (int i = 0; i < parameters.size(); i++) {
@@ -821,7 +821,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setElementType((Type) n.getElementType().accept(this, arg));
 		return n;
 	}
 	
@@ -841,7 +841,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	public Node visit(ArrayType n, A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setComponentType((Type) n.getComponentType().accept(this, arg));
 		return n;
 	}
 
@@ -1122,6 +1122,12 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		if (n.getType() != null) {
             n.setType((Type<?>) n.getType().accept(this, arg));
 		}
+		return n;
+	}
+
+	@Override
+	public Node visit(ArrayBracketPair n, A arg) {
+		visitAnnotations(n, arg);
 		return n;
 	}
 

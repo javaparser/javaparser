@@ -75,7 +75,7 @@ public interface NodeWithMembers<T> {
         fieldDeclaration.getVariables().add(new VariableDeclarator(new VariableDeclaratorId(name)));
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        fieldDeclaration.setType(type);
+        fieldDeclaration.setElementType(type);
         getMembers().add(fieldDeclaration);
         fieldDeclaration.setParentNode((Node) this);
         return fieldDeclaration;
@@ -162,7 +162,7 @@ public interface NodeWithMembers<T> {
     default MethodDeclaration addMethod(String methodName, Modifier... modifiers) {
         MethodDeclaration methodDeclaration = new MethodDeclaration();
         methodDeclaration.setName(methodName);
-        methodDeclaration.setType(VOID_TYPE);
+        methodDeclaration.setElementType(VOID_TYPE);
         methodDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         getMembers().add(methodDeclaration);
@@ -236,7 +236,7 @@ public interface NodeWithMembers<T> {
     default List<MethodDeclaration> getMethodsByParameterTypes(String... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
-                        && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
+                        && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getElementType().toString())
                                 .collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
@@ -251,7 +251,7 @@ public interface NodeWithMembers<T> {
     default List<MethodDeclaration> getMethodsByParameterTypes(Class<?>... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
-                        && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
+                        && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getElementType().toString())
                                 .collect(toSet())
                                 .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())))
                 .map(m -> (MethodDeclaration) m).collect(toList());

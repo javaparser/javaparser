@@ -31,6 +31,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithArrayBrackets;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -123,6 +125,7 @@ public final class PrimitiveType extends Type<PrimitiveType> implements
 	 */
 	@Override
 	public List<ArrayBracketPair> getArrayBracketPairs() {
+		arrayBracketPairs = ensureNotNull(arrayBracketPairs);
 		return arrayBracketPairs;
 	}
 

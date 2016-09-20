@@ -21,12 +21,9 @@
  
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -255,4 +252,6 @@ public interface VoidVisitor<A> {
     void visit(MethodReferenceExpr n, A arg);
 
     void visit(TypeExpr n, A arg);
+
+	void visit(ArrayBracketPair arrayBracketPair, A arg);
 }
