@@ -52,7 +52,11 @@ _We plan to write soon more examples and tutorials._
 
 ## Status of the project
 
-This project is young but we have already tried it on significant projects and it is doing well so far. It supports all features of Java 8 (lambdas, generic, type inference, etc.). Of course we expect some bugs to emerge from time to time but we are committed to help users solve them as soon as possible.
+This project is young but we have already tried it on significant projects and it is doing well so far. 
+It supports all features of Java 8 (lambdas, generic, type inference, etc.). 
+Of course we expect some bugs to emerge from time to time but we are committed to help users solve them as soon as possible.
+
+TODO add link to COATI
 
 ## License
 
@@ -64,6 +68,8 @@ We use Travis to ensure our tests are passing all the time and we use [Walkmod](
 The _dev-files_ dir contains configurations for the Eclipse and the IDEA formatters (I took them from the JavaParser project, thanks guys!).
 
 [![Walkmod Status](http://walkmod.com/pulls/ftomassetti/java-symbol-solver/master/status.svg)](http://walkmod.com)
+
+An overview of the architecture of the project is available in Design.MD
 
 ## Contributing
 
