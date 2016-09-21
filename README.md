@@ -69,3 +69,5 @@ The _dev-files_ dir contains configurations for the Eclipse and the IDEA formatt
 
 I would absolutely love every possible kind of contributions: if you have questions, ideas, need help or want to propose a change just open an issue. Pull-requests are greatly appreciated.
 
+Thanks to Malte Langkabel, Matozoid, Ayman Abdelghany, Evan Rittenhouse, Rachel Pau, selslack and Simone Basso for their contributions!
+
