@@ -14,6 +14,9 @@ public interface Declaration {
         return true;
     }
 
+    /**
+     * Should return the name or throw a RuntimeException if the name is not available.
+     */
     String getName();
 
     default boolean isField() {
