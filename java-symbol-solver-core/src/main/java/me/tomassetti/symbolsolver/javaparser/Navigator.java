@@ -19,23 +19,60 @@ public final class Navigator {
         // prevent instantiation
     }
 
-    public static Optional<TypeDeclaration> findType(CompilationUnit cu, String name) {
+    private static String getOuterTypeName(String qualifiedName) {
+        return qualifiedName.split("\\.", 2)[0];
+    }
+    
+    private static String getInnerTypeName(String qualifiedName) {
+        if (qualifiedName.contains(".")) {
+            return qualifiedName.split("\\.", 2)[1];
+        }
+        return "";
+    }
+    
+    public static Optional<TypeDeclaration> findType(CompilationUnit cu, String qualifiedName) {
         if (cu.getTypes() == null) {
             return Optional.empty();
         }
-        return cu.getTypes().stream().filter((t) -> t.getName().equals(name)).findFirst();
-    }
+        
+        final String typeName = getOuterTypeName(qualifiedName);
+        Optional<TypeDeclaration> type = cu.getTypes().stream().filter((t) -> t.getName().equals(typeName)).findFirst();
 
-    public static ClassOrInterfaceDeclaration demandClass(CompilationUnit cu, String name) {
-        ClassOrInterfaceDeclaration cd = demandClassOrInterface(cu, name);
+        final String innerTypeName = getInnerTypeName(qualifiedName);
+        if (type.isPresent() && !innerTypeName.isEmpty()) {
+            return findType(type.get(), innerTypeName);
+        } 
+        return type;
+    }
+    
+    public static Optional<TypeDeclaration> findType(TypeDeclaration td, String qualifiedName) {
+        final String typeName = getOuterTypeName(qualifiedName);
+        
+        Optional<TypeDeclaration> type = Optional.empty();
+        for (Node n: td.getChildrenNodes()) {
+            if (n instanceof TypeDeclaration && ((TypeDeclaration)n).getName().equals(typeName)) {
+                type = Optional.of((TypeDeclaration)n);
+                break;
+            }
+        }
+        final String innerTypeName = getInnerTypeName(qualifiedName);
+        if (type.isPresent() && !innerTypeName.isEmpty()) {
+            return findType(type.get(), innerTypeName);
+        } 
+        return type;
+    }
+    
+
+    public static ClassOrInterfaceDeclaration demandClass(CompilationUnit cu, String qualifiedName) {
+        ClassOrInterfaceDeclaration cd = demandClassOrInterface(cu, qualifiedName);
         if (cd.isInterface()) {
             throw new IllegalStateException("Type is not a class");
         }
         return cd;
     }
 
-    public static EnumDeclaration demandEnum(CompilationUnit cu, String name) {
-        Optional<TypeDeclaration> res = findType(cu, name);
+    public static EnumDeclaration demandEnum(CompilationUnit cu, String qualifiedName) {
+        Optional<TypeDeclaration> res = findType(cu, qualifiedName);
         if (!res.isPresent()) {
             throw new IllegalStateException("No type found");
         }
@@ -126,10 +163,10 @@ public final class Navigator {
         return null;
     }
 
-    public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String name) {
-        Optional<TypeDeclaration> res = findType(compilationUnit, name);
+    public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String qualifiedName) {
+        Optional<TypeDeclaration> res = findType(compilationUnit, qualifiedName);
         if (!res.isPresent()) {
-            throw new IllegalStateException("No type named '" + name + "'found");
+            throw new IllegalStateException("No type named '" + qualifiedName + "'found");
         }
         if (!(res.get() instanceof ClassOrInterfaceDeclaration)) {
             throw new IllegalStateException("Type is not a class or an interface, it is " + res.get().getClass().getCanonicalName());
