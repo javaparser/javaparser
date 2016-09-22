@@ -3,7 +3,6 @@ package me.tomassetti.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -44,15 +43,6 @@ public class JavaParserTypeSolver implements TypeSolver {
     @Override
     public void setParent(TypeSolver parent) {
         this.parent = parent;
-    }
-
-    private String simpleName(String name) {
-        int index = name.lastIndexOf('.');
-        if (index == -1) {
-            return name;
-        } else {
-            return name.substring(index + 1);
-        }
     }
 
     @Override
