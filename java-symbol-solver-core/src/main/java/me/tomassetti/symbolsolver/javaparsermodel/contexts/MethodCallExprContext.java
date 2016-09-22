@@ -143,6 +143,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else {
                 throw new UnsupportedOperationException("unbounded wildcard");
             }
+        } else if (typeUsage instanceof ArrayTypeUsage) {
+            return solveMethodAsUsage(((ArrayTypeUsage)typeUsage).getComponentType(), name, parameterTypes, typeSolver, invokationContext);
         } else {
             throw new UnsupportedOperationException("type usage: " + typeUsage.getClass().getCanonicalName());
         }
