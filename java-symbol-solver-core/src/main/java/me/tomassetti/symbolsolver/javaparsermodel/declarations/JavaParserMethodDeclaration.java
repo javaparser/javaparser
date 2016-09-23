@@ -1,7 +1,10 @@
 package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ModifierSet;
+
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -134,12 +137,13 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public boolean isAbstract() {
-        throw new UnsupportedOperationException();
+        return (wrappedNode.getBody() == null);
     }
 
     @Override
     public boolean isPrivate() {
-        throw new UnsupportedOperationException();
+        AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(wrappedNode.getModifiers());
+        return (accessSpecifier == AccessSpecifier.PRIVATE);
     }
 
     private Optional<TypeUsage> typeParamByName(String name, TypeSolver typeSolver, Context context) {

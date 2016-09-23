@@ -1,11 +1,22 @@
 import java.util.List;
 
+@FunctionalInterface
+public interface Lambda {
+	String process(String value);
+}
+
 public class Agenda {
+	
+	Lambda functional = p -> p.toLowerCase();
 
     private List<String> persons;
 
     public void lambdaMap(String personName) {
         return persons.stream().map(p -> p.toLowerCase());
+    }
+
+    public void testFunctionalVar() {
+    	Lambda a = p -> p.toLowerCase();
     }
 
 }
