@@ -1,10 +1,9 @@
 package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ModifierSet;
-
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -15,8 +14,6 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.WildcardUsage;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -142,8 +139,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public boolean isPrivate() {
-        AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(wrappedNode.getModifiers());
-        return (accessSpecifier == AccessSpecifier.PRIVATE);
+        return wrappedNode.getModifiers().contains(com.github.javaparser.ast.Modifier.PRIVATE);
     }
 
     private Optional<TypeUsage> typeParamByName(String name, TypeSolver typeSolver, Context context) {
