@@ -118,7 +118,7 @@ public final class Navigator {
     public static NameExpr findNameExpression(Node node, String name) {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
-            if (nameExpr.getName().equals(name)) {
+            if (nameExpr.getName() != null && nameExpr.getName().equals(name)) {
                 return nameExpr;
             }
         }
