@@ -310,8 +310,7 @@
   Line 459) visit(_n.getDimensions(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
   Line 460) ArrayCreationExpr r = new ArrayCreationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, dimensions, _n.getArrayCount()) ==> com.github.javaparser.ast.expr.ArrayCreationExpr
   Line 460) new ArrayCreationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, dimensions, _n.getArrayCount()) ==> com.github.javaparser.ast.expr.ArrayCreationExpr
-  Line 463) // ArrayCreationExpr has two mutually
-_n.getInitializer() != null ==> boolean
+  Line 463) _n.getInitializer() != null ==> boolean
   Line 465) r.setInitializer(cloneNodes(_n.getInitializer(), _arg)) ==> void
   Line 467) List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
   Line 467) _n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>

@@ -30,13 +30,13 @@ public final class Navigator {
         return "";
     }
     
-    public static Optional<TypeDeclaration> findType(CompilationUnit cu, String qualifiedName) {
+    public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
         if (cu.getTypes() == null) {
             return Optional.empty();
         }
         
         final String typeName = getOuterTypeName(qualifiedName);
-        Optional<TypeDeclaration> type = cu.getTypes().stream().filter((t) -> t.getName().equals(typeName)).findFirst();
+        Optional<TypeDeclaration<?>> type = cu.getTypes().stream().filter((t) -> t.getName().equals(typeName)).findFirst();
 
         final String innerTypeName = getInnerTypeName(qualifiedName);
         if (type.isPresent() && !innerTypeName.isEmpty()) {
@@ -45,10 +45,10 @@ public final class Navigator {
         return type;
     }
     
-    public static Optional<TypeDeclaration> findType(TypeDeclaration td, String qualifiedName) {
+    public static Optional<TypeDeclaration<?>> findType(TypeDeclaration td, String qualifiedName) {
         final String typeName = getOuterTypeName(qualifiedName);
         
-        Optional<TypeDeclaration> type = Optional.empty();
+        Optional<TypeDeclaration<?>> type = Optional.empty();
         for (Node n: td.getChildrenNodes()) {
             if (n instanceof TypeDeclaration && ((TypeDeclaration)n).getName().equals(typeName)) {
                 type = Optional.of((TypeDeclaration)n);
@@ -72,7 +72,7 @@ public final class Navigator {
     }
 
     public static EnumDeclaration demandEnum(CompilationUnit cu, String qualifiedName) {
-        Optional<TypeDeclaration> res = findType(cu, qualifiedName);
+        Optional<TypeDeclaration<?>> res = findType(cu, qualifiedName);
         if (!res.isPresent()) {
             throw new IllegalStateException("No type found");
         }
@@ -118,7 +118,7 @@ public final class Navigator {
     public static NameExpr findNameExpression(Node node, String name) {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
-            if (nameExpr.getName().equals(name)) {
+            if (nameExpr.getName() != null && nameExpr.getName().equals(name)) {
                 return nameExpr;
             }
         }
@@ -164,7 +164,7 @@ public final class Navigator {
     }
 
     public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String qualifiedName) {
-        Optional<TypeDeclaration> res = findType(compilationUnit, qualifiedName);
+        Optional<TypeDeclaration<?>> res = findType(compilationUnit, qualifiedName);
         if (!res.isPresent()) {
             throw new IllegalStateException("No type named '" + qualifiedName + "'found");
         }
