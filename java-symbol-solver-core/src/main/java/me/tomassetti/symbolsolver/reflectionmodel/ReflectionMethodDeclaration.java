@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ModifierSet;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -12,6 +11,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,17 +105,17 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public boolean isAbstract() {
-        return ModifierSet.isAbstract(method.getModifiers());
+        return Modifier.isAbstract(method.getModifiers());
     }
 
     @Override
     public boolean isPrivate() {
-        return ModifierSet.isPrivate(method.getModifiers());
+        return Modifier.isPrivate(method.getModifiers());
     }
 
     @Override
     public boolean isPackageProtected() {
-        return !ModifierSet.isPrivate(method.getModifiers()) && !ModifierSet.isProtected(method.getModifiers()) && !ModifierSet.isPublic(method.getModifiers());
+        return !Modifier.isPrivate(method.getModifiers()) && !Modifier.isProtected(method.getModifiers()) && !Modifier.isPublic(method.getModifiers());
     }
 
 }

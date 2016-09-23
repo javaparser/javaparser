@@ -1,14 +1,12 @@
 package me.tomassetti.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-
 import me.tomassetti.symbolsolver.javaparser.Navigator;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,14 +69,12 @@ public class JavaParserTypeSolver implements TypeSolver {
                         typeName += nameElements[j];
                     }
                     CompilationUnit compilationUnit = JavaParser.parse(srcFile);
-                    Optional<com.github.javaparser.ast.body.TypeDeclaration> astTypeDeclaration = Navigator.findType(compilationUnit, typeName);
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName);
                     if (!astTypeDeclaration.isPresent()) {
                         return SymbolReference.unsolved(TypeDeclaration.class);
                     }
                     TypeDeclaration typeDeclaration = JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get());
                     return SymbolReference.solved(typeDeclaration);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

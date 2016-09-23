@@ -90,7 +90,7 @@ public class SourceFileInfoExtractor {
             } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)) {
                 try {
                     TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
-                    out.println("  Line " + node.getBeginLine() + ") " + node + " ==> " + ref.describe());
+                    out.println("  Line " + node.getRange().begin.line + ") " + node + " ==> " + ref.describe());
                     ok++;
                 } catch (UnsupportedOperationException upe) {
                     unsupported++;
