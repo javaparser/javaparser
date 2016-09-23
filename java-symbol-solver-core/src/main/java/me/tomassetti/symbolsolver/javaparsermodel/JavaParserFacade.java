@@ -9,6 +9,7 @@ import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.*;
 import me.tomassetti.symbolsolver.logic.FunctionalInterfaceLogic;
 import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
+import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -314,7 +315,6 @@ public class JavaParserFacade {
                 } else {
                     throw e;
                 }
-
             }
         } else if (node instanceof ObjectCreationExpr) {
             ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) node;
@@ -397,6 +397,16 @@ public class JavaParserFacade {
                 res = new ArrayTypeUsage(res);
             }
             return res;
+        } else if (node instanceof ArrayAccessExpr) {
+            ArrayAccessExpr arrayAccessExpr = (ArrayAccessExpr) node;
+            return getTypeConcrete(arrayAccessExpr.getName(), solveLambdas);
+        } else if (node instanceof SuperExpr) {
+            TypeDeclaration typeOfNode = getTypeDeclaration(findContainingTypeDecl(node));
+            if (typeOfNode instanceof ClassDeclaration) {
+                return ((ClassDeclaration)typeOfNode).getSuperClass();
+            } else {
+                throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+            }
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

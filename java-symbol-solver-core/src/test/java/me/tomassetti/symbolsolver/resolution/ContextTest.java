@@ -18,6 +18,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
@@ -27,6 +28,7 @@ import static org.easymock.EasyMock.*;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -214,6 +216,22 @@ public class ContextTest {
 
         assertEquals("stream", ref.getName());
         assertEquals("java.util.Collection", ref.declaringType().getQualifiedName());
+    }
+    
+    @Test
+    public void resolveReferenceToMethodCalledOnArrayAccess() throws ParseException, IOException {
+        CompilationUnit cu = parseSample("ArrayAccess");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "access");
+        MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim");
+        
+        File src = new File("src/test/resources");
+        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JavaParserTypeSolver(src));
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim);
+
+        assertEquals("trim", ref.getName());
+        assertEquals("java.lang.String", ref.declaringType().getQualifiedName());
     }
 
     @Test
