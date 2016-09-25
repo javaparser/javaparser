@@ -59,6 +59,8 @@ public final class Parameter extends Node implements
 
     private VariableDeclaratorId id;
 
+    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+
     public Parameter() {
     }
 
@@ -109,8 +111,8 @@ public final class Parameter extends Node implements
     @Override
     public Type getType() {
         return wrapInArrayTypes(elementType,
-                ((NodeWithArrayBrackets<?>) getElementType()).getArrayBracketPairs(),
-                getId().getArrayBracketPairs());
+                getArrayBracketPairsAfterType(),
+                getId().getArrayBracketPairsAfterId());
     }
 
     public boolean isVarArgs() {
@@ -121,8 +123,8 @@ public final class Parameter extends Node implements
     public Parameter setType(Type type) {
         Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         setElementType(unwrapped.a);
-        ((NodeWithArrayBrackets<?>)getElementType()).setArrayBracketPairs(unwrapped.b);
-        getId().setArrayBracketPairs(null);
+        setArrayBracketPairsAfterType(unwrapped.b);
+        getId().setArrayBracketPairsAfterId(null);
         return this;
     }
 
@@ -201,6 +203,19 @@ public final class Parameter extends Node implements
     public Parameter setElementType(final Type elementType) {
         this.elementType = elementType;
         setAsParentNodeOf(this.elementType);
+        return this;
+    }
+
+    @Override
+    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
+        arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
+        return arrayBracketPairsAfterType;
+    }
+
+    @Override
+    public Parameter setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+        setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }
 }

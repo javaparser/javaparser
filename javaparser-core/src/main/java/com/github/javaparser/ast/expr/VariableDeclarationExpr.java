@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
@@ -54,6 +55,8 @@ public final class VariableDeclarationExpr extends Expression implements
     private Type elementType;
 
     private List<VariableDeclarator> vars;
+
+    private List<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public VariableDeclarationExpr() {
     }
@@ -97,12 +100,14 @@ public final class VariableDeclarationExpr extends Expression implements
     public VariableDeclarationExpr(final Range range,
                                    final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
                                    final Type elementType,
-                                   final List<VariableDeclarator> vars) {
+                                   final List<VariableDeclarator> vars,
+                                   final List<ArrayBracketPair> arrayBracketPairsAfterType) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setElementType(elementType);
         setVars(vars);
+        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
     }
 
     /**
@@ -174,5 +179,18 @@ public final class VariableDeclarationExpr extends Expression implements
     public void setVars(final List<VariableDeclarator> vars) {
         this.vars = vars;
         setAsParentNodeOf(this.vars);
+    }
+
+    @Override
+    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
+        arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
+        return arrayBracketPairsAfterType;
+    }
+
+    @Override
+    public VariableDeclarationExpr setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+        setAsParentNodeOf(arrayBracketPairsAfterType);
+        return this;
     }
 }

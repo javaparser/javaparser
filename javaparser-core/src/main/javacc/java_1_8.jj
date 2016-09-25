@@ -52,8 +52,11 @@ import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.utils.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
+import static com.github.javaparser.ast.type.ArrayType.*;
 
 /**
  * <p>This class was generated automatically by javacc, do not edit.</p>
@@ -1615,10 +1618,11 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
           val = VariableDeclarator() { variables.add(val); }
   ( "," val = VariableDeclarator() { variables.add(val); } )* ";"
 
-  { 
-	Position begin = modifier.begin.orIfInvalid(type.getBegin());
-  	return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, variables);
-  }
+    { 
+        Position begin = modifier.begin.orIfInvalid(type.getBegin());
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
+    }
 }
 
 VariableDeclarator VariableDeclarator():
@@ -1673,24 +1677,24 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	Type type;
 	NameExpr name;
 	List<Parameter> parameters;
-	int arrayCount = 0;
+	ArrayBracketPair arrayBracketPair;
+	List<ArrayBracketPair> arrayBracketPairs = null;
 	List<ReferenceType> throws_ = null;
 	BlockStmt block = null;
 	Position begin = modifier.begin;
-	ReferenceType throwType;
+	Type throwType;
 }
 {
   // Modifiers already matched in the caller!
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   type = ResultType() { begin = begin.orIfInvalid(type.getBegin()); }
-  name = Name() parameters = FormalParameters() ( "[" "]" { arrayCount++; } )*
-  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
-    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
+  name = Name() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, (ReferenceType)throwType); }
+    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, (ReferenceType)throwType); })* ]
   ( block = Block() | ";" )
   { 
-      MethodDeclaration tmp = new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, null, parameters, arrayCount, throws_, block);
-      tmp.setNameExpr(name);
-      return tmp;
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, name, parameters, typeListPair.b, arrayBracketPairs, throws_, block);
   }
 }
 
@@ -1867,17 +1871,16 @@ Type Type():
 ReferenceType ReferenceType():
 {
 	Type type;
-	int arrayCount = 0;
-	List<AnnotationExpr> annotations = null;
-	List<List<AnnotationExpr>> accum= null;
+	ArrayBracketPair arrayBracketPair;
+	List<ArrayBracketPair> arrayBracketPairs = null;
 }
 {
   (
-   type = PrimitiveType() ( LOOKAHEAD(2) annotations = Annotations()  "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )+
+   type = PrimitiveType() ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
   |
-   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )*
+   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
-  { return juggleArrayTypes(range(type.getBegin(), tokenEnd()), type, arrayCount, accum); }
+  { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
 }
 
 ArrayBracketPair ArrayBracketPair():
@@ -1886,7 +1889,7 @@ ArrayBracketPair ArrayBracketPair():
     Position begin = INVALID;
 }
 {
-    annotations = Annotations() { begin = annotations.getBegin(); }
+    annotations = Annotations()
     "[" { begin = begin.orIfInvalid(tokenBegin()); } "]"
     { return new ArrayBracketPair(range(begin, tokenEnd()), annotations); }
 }
@@ -2049,7 +2052,7 @@ NameExpr Name():
 }
 {
   <IDENTIFIER> { ret = new NameExpr(tokenRange(), token.image); }
-  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(range(ret.getBegin(), tokenEnd()), ret, token.image); } )*
+  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
   { return ret; }
 }
 
@@ -2493,7 +2496,7 @@ Expression PrimaryPrefix():
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
-	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), 0);
+	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), null);
 	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id);
 	  		  		  }
 
@@ -2829,8 +2832,9 @@ VariableDeclarationExpr VariableDeclarationExpression():
 {
   modifier = Modifiers() type = Type() var = VariableDeclarator() { vars.add(var); } ( "," var = VariableDeclarator() { vars.add(var); } )*
   {
-    Position begin=modifier.begin.orIfInvalid(type.getBegin());
-    return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, vars);
+        Position begin=modifier.begin.orIfInvalid(type.getBegin());
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, vars, typeListPair.b);
   }
 }
 

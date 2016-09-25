@@ -24,7 +24,6 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrayBrackets;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -36,20 +35,17 @@ import com.github.javaparser.utils.Pair;
 
 import java.util.List;
 
-import static com.github.javaparser.ast.type.ArrayType.*;
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclaratorId extends Node implements
-        NodeWithName<VariableDeclaratorId>,
-        NodeWithType<VariableDeclaratorId>,
-        NodeWithArrayBrackets<VariableDeclaratorId> {
+public final class VariableDeclaratorId extends Node implements NodeWithName<VariableDeclaratorId> {
 
     private String name;
 
-    private List<ArrayBracketPair> arrayBracketPairs;
+    private List<ArrayBracketPair> arrayBracketPairsAfterId;
 
     public VariableDeclaratorId() {
     }
@@ -58,10 +54,10 @@ public final class VariableDeclaratorId extends Node implements
        setName(name);
     }
 
-    public VariableDeclaratorId(Range range, String name, List<ArrayBracketPair> arrayBracketPairs) {
+    public VariableDeclaratorId(Range range, String name, List<ArrayBracketPair> arrayBracketPairsAfterId) {
         super(range);
         setName(name);
-        setArrayBracketPairs(arrayBracketPairs);
+        setArrayBracketPairsAfterId(arrayBracketPairsAfterId);
     }
 
     @Override
@@ -85,39 +81,14 @@ public final class VariableDeclaratorId extends Node implements
         return this;
     }
 
-    @Override
-    public List<ArrayBracketPair> getArrayBracketPairs() {
-        arrayBracketPairs = ensureNotNull(arrayBracketPairs);
-        return arrayBracketPairs;
+    public List<ArrayBracketPair> getArrayBracketPairsAfterId() {
+        arrayBracketPairsAfterId = ensureNotNull(arrayBracketPairsAfterId);
+        return arrayBracketPairsAfterId;
     }
 
-    @Override
-    public VariableDeclaratorId setArrayBracketPairs(List<ArrayBracketPair> arrayBracketPairs) {
-        this.arrayBracketPairs = arrayBracketPairs;
-        setAsParentNodeOf(arrayBracketPairs);
-        return this;
-    }
-
-
-    @Override
-    public Type getType() {
-        Type elementType = findElementType().getElementType();
-
-        return wrapInArrayTypes(elementType,
-                ((NodeWithArrayBrackets<?>) elementType).getArrayBracketPairs(),
-                getArrayBracketPairs());
-    }
-
-    private NodeWithElementType<? extends Node> findElementType() {
-        return getParentNodeOfType(FieldDeclaration.class);
-    }
-
-    @Override
-    public VariableDeclaratorId setType(Type type) {
-        Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
-        NodeWithElementType<? extends Node> nodeWithElementType = findElementType();
-        nodeWithElementType.setElementType(unwrapped.a);
-        setArrayBracketPairs(unwrapped.b);
+    public VariableDeclaratorId setArrayBracketPairsAfterId(List<ArrayBracketPair> arrayBracketPairsAfterId) {
+        this.arrayBracketPairsAfterId = arrayBracketPairsAfterId;
+        setAsParentNodeOf(arrayBracketPairsAfterId);
         return this;
     }
 }

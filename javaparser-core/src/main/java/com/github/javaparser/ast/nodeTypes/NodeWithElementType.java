@@ -21,10 +21,14 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+
+import java.util.List;
 
 /**
  * A node having an element type.
@@ -47,6 +51,10 @@ public interface NodeWithElementType<T> {
      */
     T setElementType(Type<?> elementType);
 
+    List<ArrayBracketPair> getArrayBracketPairsAfterType();
+
+    T setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType);
+
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
      * 
@@ -62,5 +70,4 @@ public interface NodeWithElementType<T> {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
         return setElementType(classOrInterfaceType);
     }
-
 }

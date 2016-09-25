@@ -47,17 +47,16 @@ import com.github.javaparser.utils.Pair;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
-        implements NodeWithJavaDoc<MethodDeclaration>,
-        NodeWithDeclaration,
+public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements 
+        NodeWithJavaDoc<MethodDeclaration>, 
+        NodeWithDeclaration, 
         NodeWithName<MethodDeclaration>,
         NodeWithType<MethodDeclaration>,
         NodeWithElementType<MethodDeclaration>,
-        NodeWithModifiers<MethodDeclaration>,
+        NodeWithModifiers<MethodDeclaration>, 
         NodeWithParameters<MethodDeclaration>,
-        NodeWithThrowable<MethodDeclaration>,
-        NodeWithBlockStmt<MethodDeclaration>,
-        NodeWithArrayBrackets<MethodDeclaration> {
+        NodeWithThrowable<MethodDeclaration>, 
+        NodeWithBlockStmt<MethodDeclaration> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
@@ -75,7 +74,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     private boolean isDefault = false;
 
-    private List<ArrayBracketPair> arrayBracketPairs;
+    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+
+    private List<ArrayBracketPair> arrayBracketPairsAfterParameterList;
 
     public MethodDeclaration() {
     }
@@ -94,35 +95,47 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         setParameters(parameters);
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, final Type elementType, final String name,
-                             final List<Parameter> parameters,
-                             final List<ArrayBracketPair> arrayBracketPairs,
-                             final List<ReferenceType> throws_, final BlockStmt body) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, 
+                             final List<AnnotationExpr> annotations,
+                             final List<TypeParameter> typeParameters, 
+                             final Type elementType, 
+                             final String name,
+                             final List<Parameter> parameters, 
+                             final List<ArrayBracketPair> arrayBracketPairsAfterType,
+                             final List<ArrayBracketPair> arrayBracketPairsAfterParameterList,
+                             final List<ReferenceType> throws_, 
+                             final BlockStmt body) {
         super(annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setElementType(elementType);
         setName(name);
         setParameters(parameters);
-        setArrayBracketPairs(arrayBracketPairs);
+        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
+        setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
         setThrows(throws_);
         setBody(body);
     }
 
     public MethodDeclaration(Range range,
-                             final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, final Type elementType, final String name,
-                             final List<Parameter> parameters,
-                             final List<ArrayBracketPair> arrayBracketPairs,
-                             final List<ReferenceType> throws_, final BlockStmt body) {
+                             final EnumSet<Modifier> modifiers, 
+                             final List<AnnotationExpr> annotations,
+                             final List<TypeParameter> typeParameters, 
+                             final Type elementType, 
+                             final NameExpr nameExpr,
+                             final List<Parameter> parameters, 
+                             final List<ArrayBracketPair> arrayBracketPairsAfterType,
+                             final List<ArrayBracketPair> arrayBracketPairsAfterParameterList,
+                             final List<ReferenceType> throws_, 
+                             final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setElementType(elementType);
-        setName(name);
+        setNameExpr(nameExpr);
         setParameters(parameters);
-        setArrayBracketPairs(arrayBracketPairs);
+        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
+        setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
         setThrows(throws_);
         setBody(body);
     }
@@ -177,8 +190,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     @Override
     public Type getType() {
         return wrapInArrayTypes(getElementType(),
-                ((NodeWithArrayBrackets<?>) getElementType()).getArrayBracketPairs(),
-                getArrayBracketPairs());
+                getArrayBracketPairsAfterType(),
+                getArrayBracketPairsAfterParameterList());
     }
 
     @Override
@@ -234,8 +247,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     public MethodDeclaration setType(final Type type) {
         Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
         setElementType(typeListPair.a);
-        ((NodeWithArrayBrackets<?>)getElementType()).setArrayBracketPairs(typeListPair.b);
-        setArrayBracketPairs(null);
+        setArrayBracketPairsAfterType(typeListPair.b);
+        setArrayBracketPairsAfterParameterList(null);
         return this;
     }
 
@@ -349,19 +362,32 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         return null;
     }
 
-	/**
-     * @return the array brackets in this position: <code>int abc()[] {...}</code>
+    /**
+     * @return the array brackets in this position: <code>class C { int[] abc; }</code>
      */
     @Override
-    public List<ArrayBracketPair> getArrayBracketPairs() {
-        arrayBracketPairs = ensureNotNull(arrayBracketPairs);
-        return arrayBracketPairs;
+    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
+        arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
+        return arrayBracketPairsAfterType;
     }
 
     @Override
-    public MethodDeclaration setArrayBracketPairs(List<ArrayBracketPair> arrayBracketPairs) {
-        this.arrayBracketPairs = arrayBracketPairs;
-        setAsParentNodeOf(arrayBracketPairs);
+    public MethodDeclaration setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+        setAsParentNodeOf(arrayBracketPairsAfterType);
+        return this;
+    }
+
+	/**
+     * @return the array brackets in this position: <code>int abc()[] {...}</code>
+     */
+    public List<ArrayBracketPair> getArrayBracketPairsAfterParameterList() {
+        return arrayBracketPairsAfterParameterList;
+    }
+
+    public MethodDeclaration setArrayBracketPairsAfterParameterList(List<ArrayBracketPair> arrayBracketPairsAfterParameterList) {
+        this.arrayBracketPairsAfterParameterList = arrayBracketPairsAfterParameterList;
+        setAsParentNodeOf(arrayBracketPairsAfterParameterList);
         return this;
     }
 }
