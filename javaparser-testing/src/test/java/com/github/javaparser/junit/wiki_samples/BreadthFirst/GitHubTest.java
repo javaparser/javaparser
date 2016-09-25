@@ -1,0 +1,35 @@
+package com.github.javaparser.junit.wiki_samples.BreadthFirst;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.TreeVisitor;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+public class GitHubTest {
+
+	public static void main(String... args) throws Exception {
+		FileInputStream file = new FileInputStream("forGitHubTest.java");
+		CompilationUnit cu = getCompilationUnit(file);
+		String result = cu.toString();
+		new TreeVisitor().visitBreadthFirst(cu);	
+		System.out.println(cu.toString());
+	}
+
+	public static CompilationUnit getCompilationUnit(InputStream in) {
+		try {
+			CompilationUnit cu;
+			try {
+				cu = JavaParser.parse(in);
+				return cu;
+			} finally {
+				in.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+}
