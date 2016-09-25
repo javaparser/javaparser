@@ -33,7 +33,7 @@ public class GitHubTest {
 	}
 }
 
-public class MyVisitor extends TreeVisitor {
+class MyVisitor extends TreeVisitor {
 	public void process(Node node) {
 		System.out.println(node.toString());
 	}
