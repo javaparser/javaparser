@@ -133,6 +133,9 @@ public final class VariableDeclarator extends Node implements
     public VariableDeclarator setType(Type type) {
         Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         NodeWithElementType<?> nodeWithElementType = getParentNodeOfType(NodeWithElementType.class);
+        if (nodeWithElementType == null) {
+            throw new IllegalStateException("Cannot set type without a parent");
+        }
         nodeWithElementType.setElementType(unwrapped.a);
         nodeWithElementType.setArrayBracketPairsAfterElementType(null);
         getId().setArrayBracketPairsAfterId(unwrapped.b);
