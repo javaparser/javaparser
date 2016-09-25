@@ -109,7 +109,7 @@ public final class VariableDeclarationExpr extends Expression implements
         setAnnotations(annotations);
         setElementType(elementType);
         setVariables(variables);
-        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
+        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterType);
     }
 
     /**
@@ -185,14 +185,13 @@ public final class VariableDeclarationExpr extends Expression implements
         setAsParentNodeOf(this.variables);
     }
 
-    @Override
-    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
+    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
         return arrayBracketPairsAfterType;
     }
 
     @Override
-    public VariableDeclarationExpr setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+    public VariableDeclarationExpr setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
         this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;

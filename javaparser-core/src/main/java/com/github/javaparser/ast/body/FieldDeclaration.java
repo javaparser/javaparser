@@ -61,7 +61,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     private List<VariableDeclarator> variables;
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+    private List<ArrayBracketPair> arrayBracketPairsAfterElementType;
 
     public FieldDeclaration() {
     }
@@ -80,22 +80,22 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setVariables(variables);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
-                            List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterType) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
+                            List<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
         setElementType(type);
         setVariables(variables);
-        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
+        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
     public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
-                            List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterType) {
+                            List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);
         setElementType(type);
         setVariables(variables);
-        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
+        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
     /**
@@ -260,15 +260,14 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
      */
-    @Override
-    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
-        arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
-        return arrayBracketPairsAfterType;
+    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
+        arrayBracketPairsAfterElementType = ensureNotNull(arrayBracketPairsAfterElementType);
+        return arrayBracketPairsAfterElementType;
     }
 
     @Override
-    public FieldDeclaration setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+    public FieldDeclaration setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterElementType = arrayBracketPairsAfterType;
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }

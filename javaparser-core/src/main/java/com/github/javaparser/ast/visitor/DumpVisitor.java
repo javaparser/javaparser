@@ -505,7 +505,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
 		n.getElementType().accept(this, arg);
-		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterType()){
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterElementType()){
 			pair.accept(this, arg);
 		}
 
@@ -965,7 +965,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 
 		n.getElementType().accept(this, arg);
-		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterType()){
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterElementType()){
 			pair.accept(this, arg);
 		}
 		printer.print(" ");
@@ -1013,7 +1013,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		if (n.getElementType() != null) {
 			n.getElementType().accept(this, arg);
 		}
-		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterType()){
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterElementType()){
 			pair.accept(this, arg);
 		}
 		if (n.isVarArgs()) {
@@ -1048,7 +1048,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printModifiers(n.getModifiers());
 
 		n.getElementType().accept(this, arg);
-		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterType()){
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterElementType()){
 			pair.accept(this, arg);
 		}
 		printer.print(" ");

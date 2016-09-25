@@ -1684,7 +1684,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
   ( block = Block() | ";" )
   { 
         Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, name, parameters, typeListPair.b, arrayBracketPairs, throws_, block);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, parameters, arrayBracketPairs, throws_, block);
   }
 }
 

@@ -125,7 +125,7 @@ public final class VariableDeclarator extends Node implements
         NodeWithElementType<?> elementType = getParentNodeOfType(NodeWithElementType.class);
 
         return wrapInArrayTypes(elementType.getElementType(),
-                elementType.getArrayBracketPairsAfterType(),
+                elementType.getArrayBracketPairsAfterElementType(),
                 getId().getArrayBracketPairsAfterId());
     }
 
@@ -134,7 +134,7 @@ public final class VariableDeclarator extends Node implements
         Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         NodeWithElementType<?> nodeWithElementType = getParentNodeOfType(NodeWithElementType.class);
         nodeWithElementType.setElementType(unwrapped.a);
-        nodeWithElementType.setArrayBracketPairsAfterType(null);
+        nodeWithElementType.setArrayBracketPairsAfterElementType(null);
         getId().setArrayBracketPairsAfterId(unwrapped.b);
         return this;
     }

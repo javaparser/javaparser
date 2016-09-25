@@ -432,7 +432,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if(!nodesEquals(n1.getArrayBracketPairsAfterType(), n2.getArrayBracketPairsAfterType())){
+		if(!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())){
 			return false;
 		}
 		
@@ -512,7 +512,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if(!nodesEquals(n1.getArrayBracketPairsAfterType(), n2.getArrayBracketPairsAfterType())){
+		if(!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())){
 			return false;
 		}
 
@@ -559,7 +559,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if(!nodesEquals(n1.getArrayBracketPairsAfterType(), n2.getArrayBracketPairsAfterType())){
+		if(!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())){
 			return false;
 		}
 
@@ -1124,7 +1124,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if(!nodesEquals(n1.getArrayBracketPairsAfterType(), n2.getArrayBracketPairsAfterType())){
+		if(!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())){
 			return false;
 		}
 		

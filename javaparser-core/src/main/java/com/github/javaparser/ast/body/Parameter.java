@@ -92,7 +92,7 @@ public final class Parameter extends Node implements
                      EnumSet<Modifier> modifiers, 
                      List<AnnotationExpr> annotations, 
                      Type elementType,
-                     List<ArrayBracketPair> arrayBracketPairsAfterType,
+                     List<ArrayBracketPair> arrayBracketPairsAfterElementType,
                      boolean isVarArgs, 
                      VariableDeclaratorId id) {
         super(range);
@@ -101,7 +101,7 @@ public final class Parameter extends Node implements
         setId(id);
         setElementType(elementType);
         setVarArgs(isVarArgs);
-        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
+        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
     @Override
@@ -117,7 +117,7 @@ public final class Parameter extends Node implements
     @Override
     public Type getType() {
         return wrapInArrayTypes(elementType,
-                getArrayBracketPairsAfterType(),
+                getArrayBracketPairsAfterElementType(),
                 getId().getArrayBracketPairsAfterId());
     }
 
@@ -129,7 +129,7 @@ public final class Parameter extends Node implements
     public Parameter setType(Type type) {
         Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         setElementType(unwrapped.a);
-        setArrayBracketPairsAfterType(unwrapped.b);
+        setArrayBracketPairsAfterElementType(unwrapped.b);
         getId().setArrayBracketPairsAfterId(null);
         return this;
     }
@@ -212,14 +212,13 @@ public final class Parameter extends Node implements
         return this;
     }
 
-    @Override
-    public List<ArrayBracketPair> getArrayBracketPairsAfterType() {
+    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
         return arrayBracketPairsAfterType;
     }
 
     @Override
-    public Parameter setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+    public Parameter setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
         this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;

@@ -51,9 +51,9 @@ public interface NodeWithElementType<T> {
      */
     T setElementType(Type<?> elementType);
 
-    List<ArrayBracketPair> getArrayBracketPairsAfterType();
+    List<ArrayBracketPair> getArrayBracketPairsAfterElementType();
 
-    T setArrayBracketPairsAfterType(List<ArrayBracketPair> arrayBracketPairsAfterType);
+    T setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType);
 
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
