@@ -22,7 +22,7 @@
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.Node;
-import java.util.LinkdedList;
+import java.util.LinkedList;
 import java.util.Queue;
 
 /**
