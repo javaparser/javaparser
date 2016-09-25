@@ -25,9 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrayBrackets;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -36,9 +35,7 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class PrimitiveType extends Type<PrimitiveType> implements
-		NodeWithAnnotations<PrimitiveType>,
-		NodeWithArrayBrackets<PrimitiveType> {
+public final class PrimitiveType extends Type<PrimitiveType> implements NodeWithAnnotations<PrimitiveType> {
 
 	public static final PrimitiveType BYTE_TYPE = new PrimitiveType(Primitive.Byte);
 
@@ -86,8 +83,6 @@ public final class PrimitiveType extends Type<PrimitiveType> implements
 
 	private Primitive type;
 
-	private List<ArrayBracketPair> arrayBracketPairs;
-
 	public PrimitiveType() {
 	}
 
@@ -120,19 +115,4 @@ public final class PrimitiveType extends Type<PrimitiveType> implements
 		this.type = type;
 	}
 
-	/**
-	 * @return the array brackets directly after a type.
-	 */
-	@Override
-	public List<ArrayBracketPair> getArrayBracketPairs() {
-		arrayBracketPairs = ensureNotNull(arrayBracketPairs);
-		return arrayBracketPairs;
-	}
-
-	@Override
-	public PrimitiveType setArrayBracketPairs(List<ArrayBracketPair> arrayBracketPairs) {
-		this.arrayBracketPairs = arrayBracketPairs;
-		setAsParentNodeOf(arrayBracketPairs);
-		return this;
-	}
 }

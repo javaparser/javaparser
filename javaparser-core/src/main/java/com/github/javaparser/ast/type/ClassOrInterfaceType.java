@@ -24,10 +24,8 @@ package com.github.javaparser.ast.type;
 import java.util.List;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrayBrackets;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -37,18 +35,13 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements
-        NodeWithName<ClassOrInterfaceType>,
-        NodeWithAnnotations<ClassOrInterfaceType>,
-        NodeWithArrayBrackets<ClassOrInterfaceType> {
+public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements NodeWithName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 
     private String name;
 
     private TypeArguments typeArguments = TypeArguments.EMPTY;
-
-    private List<ArrayBracketPair> arrayBracketPairs;
 
     public ClassOrInterfaceType() {
     }
@@ -131,21 +124,5 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     public void setTypeArguments(TypeArguments typeArguments) {
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments.getTypeArguments());
-    }
-
-    /**
-     * @return the array brackets directly after a type.
-     */
-    @Override
-    public List<ArrayBracketPair> getArrayBracketPairs() {
-        arrayBracketPairs = ensureNotNull(arrayBracketPairs);
-        return arrayBracketPairs;
-    }
-
-    @Override
-    public ClassOrInterfaceType setArrayBracketPairs(List<ArrayBracketPair> arrayBracketPairs) {
-        this.arrayBracketPairs = arrayBracketPairs;
-        setAsParentNodeOf(arrayBracketPairs);
-        return this;
     }
 }
