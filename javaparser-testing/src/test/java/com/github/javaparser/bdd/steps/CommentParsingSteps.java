@@ -317,7 +317,7 @@ public class CommentParsingSteps {
 		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition -1,
                 MethodDeclaration.class);
-        Comment commentUnderTest = methodUnderTest.getElementType().getComment();
+        Comment commentUnderTest = methodUnderTest.getType().getComment();
         assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
     }
 

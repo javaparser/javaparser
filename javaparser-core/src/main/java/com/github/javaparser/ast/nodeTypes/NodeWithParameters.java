@@ -84,7 +84,7 @@ public interface NodeWithParameters<T> {
      */
     default Parameter getParamByType(String type) {
         return getParameters().stream()
-                .filter(p -> p.getElementType().toString().equals(type)).findFirst().orElse(null);
+                .filter(p -> p.getType().toString().equals(type)).findFirst().orElse(null);
     }
 
     /**
@@ -95,6 +95,6 @@ public interface NodeWithParameters<T> {
      */
     default Parameter getParamByType(Class<?> type) {
         return getParameters().stream()
-                .filter(p -> p.getElementType().toString().equals(type.getSimpleName())).findFirst().orElse(null);
+                .filter(p -> p.getType().toString().equals(type.getSimpleName())).findFirst().orElse(null);
     }
 }

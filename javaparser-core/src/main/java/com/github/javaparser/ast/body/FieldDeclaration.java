@@ -66,34 +66,34 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public FieldDeclaration() {
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, VariableDeclarator variable) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, VariableDeclarator variable) {
         setModifiers(modifiers);
-        setElementType(type);
+        setElementType(elementType);
         List<VariableDeclarator> aux = new ArrayList<>();
         aux.add(variable);
         setVariables(aux);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, List<VariableDeclarator> variables) {
         setModifiers(modifiers);
-        setElementType(type);
+        setElementType(elementType);
         setVariables(variables);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
+    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
                             List<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
-        setElementType(type);
+        setElementType(elementType);
         setVariables(variables);
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
                             List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);
-        setElementType(type);
+        setElementType(elementType);
         setVariables(variables);
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
@@ -197,14 +197,15 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
 
-        String fieldName = getVariables().get(0).getId().getName();
+        VariableDeclarator variable = getVariables().get(0);
+        String fieldName = variable.getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         if (parentClass != null)
             getter = parentClass.addMethod("get" + fieldNameUpper, PUBLIC);
         else
             getter = parentEnum.addMethod("get" + fieldNameUpper, PUBLIC);
-        getter.setElementType(getElementType());
+        getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
         blockStmt.addStatement(new ReturnStmt(name(fieldName)));
@@ -228,7 +229,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
 
-        String fieldName = getVariables().get(0).getId().getName();
+        VariableDeclarator variable = getVariables().get(0);
+        String fieldName = variable.getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;
@@ -236,8 +238,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
             setter = parentClass.addMethod("set" + fieldNameUpper, PUBLIC);
         else
             setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
-        setter.setElementType(VOID_TYPE);
-        setter.getParameters().add(new Parameter(getElementType(), new VariableDeclaratorId(fieldName)));
+        setter.setType(VOID_TYPE);
+        setter.getParameters().add(new Parameter(variable.getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
         blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
