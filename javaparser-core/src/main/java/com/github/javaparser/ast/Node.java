@@ -29,6 +29,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.visitor.*;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,10 +50,7 @@ public abstract class Node implements Cloneable {
     private List<Node> childrenNodes = new LinkedList<>();
     private List<Comment> orphanComments = new LinkedList<>();
 
-    /**
-     * This attribute can store additional information from semantic analysis.
-     */
-    private Object data;
+    private IdentityHashMap<MetaDataKey<?>, Object> metaData = null;
 
     private Comment comment;
 
@@ -98,15 +96,6 @@ public abstract class Node implements Cloneable {
      */
     public final Comment getComment() {
         return comment;
-    }
-
-    /**
-     * Use this to retrieve additional information associated to this node.
-     *
-     * @return data property
-     */
-    public final Object getData() {
-        return data;
     }
 
     /**
@@ -187,15 +176,6 @@ public abstract class Node implements Cloneable {
      */
     public final void setBlockComment(String comment) {
         setComment(new BlockComment(comment));
-    }
-
-    /**
-     * Use this to store additional information to this node.
-     *
-     * @param data to be set
-     */
-    public final void setData(final Object data) {
-        this.data = data;
     }
 
     /**
@@ -369,4 +349,42 @@ public abstract class Node implements Cloneable {
         return nodes;
     }
 
+    /**
+     * Gets metadata for this component using the given key.
+     *
+     * @param <M>
+     *            The type of the metadata.
+     *
+     * @param key
+     *            The key for the data
+     * @return The metadata or null of no metadata was found for the given key
+     * @see MetaDataKey
+     */
+    public <M> M getMetaData(final MetaDataKey<M> key) {
+        if (metaData == null) {
+            return null;
+        }
+        return (M) metaData.get(key);
+    }
+
+    /**
+     * Sets the metadata for this component using the given key. 
+     * For information on creating MetaDataKeys, see {@link MetaDataKey}.
+     *
+     * @param <M>
+     *            The type of the metadata
+     *
+     * @param key
+     *            The singleton key for the metadata
+     * @param object
+     *            The metadata object
+     * @throws IllegalArgumentException
+     * @see MetaDataKey
+     */
+    public <M> void setMetaData(MetaDataKey<M> key, M object) {
+        if (metaData == null) {
+            metaData = new IdentityHashMap<>();
+        }
+        metaData.put(key, object);
+    }
 }
