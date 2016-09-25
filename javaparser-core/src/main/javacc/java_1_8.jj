@@ -1672,15 +1672,15 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	List<ReferenceType> throws_ = null;
 	BlockStmt block = null;
 	Position begin = modifier.begin;
-	Type throwType;
+	ReferenceType throwType;
 }
 {
   // Modifiers already matched in the caller!
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   type = ResultType() { begin = begin.orIfInvalid(type.getBegin()); }
   name = Name() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, (ReferenceType)throwType); }
-    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, (ReferenceType)throwType); })* ]
+  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
   { 
         Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
