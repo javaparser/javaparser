@@ -2,6 +2,8 @@ package com.github.javaparser;
 
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.EOL;
+
 /**
  * Thrown when parsing problems occur during parsing with the static methods on JavaParser.
  */
@@ -17,7 +19,7 @@ public class ParseProblemException extends RuntimeException {
     private static String createMessage(List<Problem> problems){
         StringBuilder message = new StringBuilder();
         for(Problem problem: problems){
-            message.append(problem.toString()).append("\n");
+            message.append(problem.toString()).append(EOL);
         }
         return message.toString();
     }

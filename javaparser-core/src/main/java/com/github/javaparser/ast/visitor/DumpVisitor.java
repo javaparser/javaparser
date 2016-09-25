@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
 /**
@@ -99,7 +100,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 
 		public void printLn() {
-			buf.append(System.getProperty("line.separator"));
+			buf.append(EOL);
 			indented = false;
 		}
 

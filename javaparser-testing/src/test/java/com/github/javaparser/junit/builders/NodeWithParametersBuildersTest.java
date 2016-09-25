@@ -1,5 +1,6 @@
 package com.github.javaparser.junit.builders;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class NodeWithParametersBuildersTest {
 		addMethod.addParameter(int.class, "yay");
 		Parameter myNewParam = addMethod.addAndGetParameter(List.class, "myList");
 		assertEquals(1, cu.getImports().size());
-		assertEquals("import " + List.class.getName() + ";" + System.getProperty("line.separator"), cu.getImports().get(0).toString());
+		assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImports().get(0).toString());
 		assertEquals(2, addMethod.getParameters().size());
 		assertEquals("yay", addMethod.getParameters().get(0).getName());
 		assertEquals("List", addMethod.getParameters().get(1).getElementType().toString());

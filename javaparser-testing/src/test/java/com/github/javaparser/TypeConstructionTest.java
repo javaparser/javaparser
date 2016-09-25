@@ -1,25 +1,22 @@
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
 import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.ast.type.ArrayType.arrayOf;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -45,9 +42,9 @@ public class TypeConstructionTest {
 
     @Test
     public void getVariableDeclarationWithArrays() {
-        ExpressionStmt variableDeclarationStatement = (ExpressionStmt)parseStatement("@C int @A[] @B[] a @X[] @Y[];");
-        VariableDeclarationExpr variableDeclarationExpr= (VariableDeclarationExpr) variableDeclarationStatement.getExpression();
-        
+        ExpressionStmt variableDeclarationStatement = (ExpressionStmt) parseStatement("@C int @A[] @B[] a @X[] @Y[];");
+        VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarationStatement.getExpression();
+
         ArrayType arrayType1 = (ArrayType) variableDeclarationExpr.getVariables().get(0).getType();
         ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
         ArrayType arrayType3 = (ArrayType) arrayType2.getComponentType();
@@ -95,8 +92,8 @@ public class TypeConstructionTest {
 
     @Test
     public void setVariableDeclarationWithArrays() {
-        ExpressionStmt variableDeclarationStatement = (ExpressionStmt)parseStatement("@C int @A[] @B[] a @X[] @Y[];");
-        VariableDeclarationExpr variableDeclarationExpr= (VariableDeclarationExpr) variableDeclarationStatement.getExpression();
+        ExpressionStmt variableDeclarationStatement = (ExpressionStmt) parseStatement("@C int @A[] @B[] a @X[] @Y[];");
+        VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarationStatement.getExpression();
 
         variableDeclarationExpr.getVariables().get(0).setType(arrayOf(arrayOf(PrimitiveType.INT_TYPE)));
         assertEquals("@C int a[][];", variableDeclarationStatement.toString());
@@ -115,7 +112,7 @@ public class TypeConstructionTest {
         MethodDeclaration method = (MethodDeclaration) parseClassBodyDeclaration("int[][] a()[][] {}");
         method.setType(arrayOf(arrayOf(new ClassOrInterfaceType("Blob"))));
 
-        assertEquals("Blob[][] a() {\n}", method.toString());
+        assertEquals("Blob[][] a() {" + EOL + "}", method.toString());
     }
 
     @Test
@@ -123,6 +120,6 @@ public class TypeConstructionTest {
         MethodDeclaration method = (MethodDeclaration) parseClassBodyDeclaration("void a(int[][] a[][]) {};");
         method.getParameters().get(0).setType(arrayOf(arrayOf(new ClassOrInterfaceType("Blob"))));
 
-        assertEquals("void a(Blob[][] a) {\n}", method.toString());
+        assertEquals("void a(Blob[][] a) {" + EOL + "}", method.toString());
     }
 }
