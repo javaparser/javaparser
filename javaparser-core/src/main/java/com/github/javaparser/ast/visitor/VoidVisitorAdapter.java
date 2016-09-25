@@ -713,7 +713,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
 		n.getElementType().accept(this, arg);
-		for (final VariableDeclarator v : n.getVars()) {
+		for (final VariableDeclarator v : n.getVariables()) {
 			v.accept(this, arg);
 		}
 	}

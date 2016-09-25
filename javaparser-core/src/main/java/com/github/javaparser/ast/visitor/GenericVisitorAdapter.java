@@ -1562,7 +1562,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 				return result;
 			}
 		}
-		for (final VariableDeclarator v : n.getVars()) {
+		for (final VariableDeclarator v : n.getVariables()) {
 			{
 				R result = v.accept(this, arg);
 				if (result != null) {

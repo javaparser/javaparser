@@ -1027,7 +1027,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		}
 		n.setElementType(type);
 
-		final List<VariableDeclarator> vars = n.getVars();
+		final List<VariableDeclarator> vars = n.getVariables();
 		for (int i = 0; i < vars.size();) {
 			final VariableDeclarator decl = (VariableDeclarator)
 				vars.get(i).accept(this, arg);

@@ -55,9 +55,11 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
     @SafeVarargs
     public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
         for (int i = arrayBracketPairLists.length - 1; i >= 0; i--) {
-            List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
-            for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
-                type = new ArrayType(type, arrayBracketPairList.get(j).getAnnotations());
+            final List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
+            if (arrayBracketPairList != null) {
+                for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
+                    type = new ArrayType(type, arrayBracketPairList.get(j).getAnnotations());
+                }
             }
         }
         return type;
@@ -72,7 +74,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>();
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
-            arrayBracketPairs.add(0, new ArrayBracketPair(Range.UNKNOWN, arrayType.getAnnotations()));
+            arrayBracketPairs.add(new ArrayBracketPair(Range.UNKNOWN, arrayType.getAnnotations()));
             type = arrayType.getComponentType();
         }
         return new Pair<>(type, arrayBracketPairs);

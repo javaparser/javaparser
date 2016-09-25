@@ -21,7 +21,7 @@ public class TypeConstructionTest {
     public void getFieldDeclarationWithArrays() {
         FieldDeclaration fieldDeclaration = (FieldDeclaration) parseClassBodyDeclaration("@C int @A[] @B[] a @X[] @Y[];");
 
-        ArrayType arrayType1 = (ArrayType) fieldDeclaration.getVariables().get(0).getId().getType();
+        ArrayType arrayType1 = (ArrayType) fieldDeclaration.getVariables().get(0).getType();
         ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
         ArrayType arrayType3 = (ArrayType) arrayType2.getComponentType();
         ArrayType arrayType4 = (ArrayType) arrayType3.getComponentType();
@@ -69,7 +69,7 @@ public class TypeConstructionTest {
     @Test
     public void setFieldDeclarationWithArrays() {
         FieldDeclaration fieldDeclaration = (FieldDeclaration) parseClassBodyDeclaration("int[][] a[][];");
-        fieldDeclaration.getVariables().get(0).getId().setType(arrayOf(arrayOf(new ClassOrInterfaceType("Blob"))));
+        fieldDeclaration.getVariables().get(0).setType(arrayOf(arrayOf(new ClassOrInterfaceType("Blob"))));
 
         assertEquals("Blob a[][];", fieldDeclaration.toString());
     }

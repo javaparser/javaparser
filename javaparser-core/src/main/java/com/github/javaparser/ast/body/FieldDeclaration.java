@@ -38,10 +38,8 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
@@ -54,7 +52,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements
         NodeWithJavaDoc<FieldDeclaration>,
         NodeWithElementType<FieldDeclaration>,
-        NodeWithModifiers<FieldDeclaration> {
+        NodeWithModifiers<FieldDeclaration>,
+        NodeWithVariables<VariableDeclarationExpr> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
@@ -155,6 +154,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         return modifiers;
     }
 
+    @Override
     public List<VariableDeclarator> getVariables() {
         variables = ensureNotNull(variables);
         return variables;
@@ -166,6 +166,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         return this;
     }
 
+    @Override
     public void setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);

@@ -88,14 +88,20 @@ public final class Parameter extends Node implements
         setElementType(elementType);
     }
 
-    public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
-                     boolean isVarArgs, VariableDeclaratorId id) {
+    public Parameter(final Range range, 
+                     EnumSet<Modifier> modifiers, 
+                     List<AnnotationExpr> annotations, 
+                     Type elementType,
+                     List<ArrayBracketPair> arrayBracketPairsAfterType,
+                     boolean isVarArgs, 
+                     VariableDeclaratorId id) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setId(id);
         setElementType(elementType);
         setVarArgs(isVarArgs);
+        setArrayBracketPairsAfterType(arrayBracketPairsAfterType);
     }
 
     @Override

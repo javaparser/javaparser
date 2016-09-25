@@ -122,22 +122,19 @@ public final class VariableDeclarator extends Node implements
 
     @Override
     public Type getType() {
-        Type elementType = findElementType().getElementType();
+        NodeWithElementType<?> elementType = getParentNodeOfType(NodeWithElementType.class);
 
-        return wrapInArrayTypes(elementType,
-                ((NodeWithElementType<?>) elementType).getArrayBracketPairsAfterType(),
+        return wrapInArrayTypes(elementType.getElementType(),
+                elementType.getArrayBracketPairsAfterType(),
                 getId().getArrayBracketPairsAfterId());
-    }
-
-    private NodeWithElementType<?> findElementType() {
-        return getParentNodeOfType(NodeWithElementType.class);
     }
 
     @Override
     public VariableDeclarator setType(Type type) {
         Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
-        NodeWithElementType<?> nodeWithElementType = findElementType();
+        NodeWithElementType<?> nodeWithElementType = getParentNodeOfType(NodeWithElementType.class);
         nodeWithElementType.setElementType(unwrapped.a);
+        nodeWithElementType.setArrayBracketPairsAfterType(null);
         getId().setArrayBracketPairsAfterId(unwrapped.b);
         return this;
     }

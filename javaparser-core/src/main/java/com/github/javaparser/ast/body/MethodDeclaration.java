@@ -382,6 +382,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
      * @return the array brackets in this position: <code>int abc()[] {...}</code>
      */
     public List<ArrayBracketPair> getArrayBracketPairsAfterParameterList() {
+        arrayBracketPairsAfterParameterList = ensureNotNull(arrayBracketPairsAfterParameterList);
         return arrayBracketPairsAfterParameterList;
     }
 

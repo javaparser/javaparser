@@ -134,14 +134,14 @@ final class ASTParser {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
 	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), null);
-	       	    List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
+	       	    List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
 	        } else {
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
 		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), null);
-	        List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
+	        List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
 	        ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
@@ -156,16 +156,6 @@ final class ASTParser {
 	    return ret;
     }
     
-    private ReferenceType juggleArrayTypes(Range range, Type type, int arrayCount, List<List<AnnotationExpr>> arrayAnnotations) {
-        if (arrayCount == 0) {
-            return (ReferenceType) type;
-        }
-        for (int i = arrayAnnotations.size() - 1; i >= 0; i--) {
-            type = new ArrayType(range, type, arrayAnnotations.get(i));
-        }
-        return (ArrayType) type;
-    }
-
     private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<List<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
         List<ArrayCreationLevel> levels = new ArrayList<ArrayCreationLevel>();
         
@@ -1746,9 +1736,9 @@ List<Parameter> InferredLambdaParameters():
 }
 {
    ","
-  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));}
+  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));}
   (
-    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id)); }
+    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id)); }
   )*
   { return ret;  }
 }
@@ -1764,8 +1754,9 @@ Parameter FormalParameter():
   modifier = Modifiers() type = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
 
   {
-	Position begin = modifier.begin.orIfInvalid(type.getBegin());
-    return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, isVarArg, id);
+        Position begin = modifier.begin.orIfInvalid(type.getBegin());
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, typeListPair.b, isVarArg, id);
   }
 }
 
@@ -2497,7 +2488,7 @@ Expression PrimaryPrefix():
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
 	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), null);
-	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id);
+	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id);
 	  		  		  }
 
 	  		  		}
@@ -2826,15 +2817,15 @@ VariableDeclarationExpr VariableDeclarationExpression():
 {
 	ModifierHolder modifier;
 	Type type;
-	List<VariableDeclarator> vars = new LinkedList<VariableDeclarator>();
+	List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
 	VariableDeclarator var;
 }
 {
-  modifier = Modifiers() type = Type() var = VariableDeclarator() { vars.add(var); } ( "," var = VariableDeclarator() { vars.add(var); } )*
+  modifier = Modifiers() type = Type() var = VariableDeclarator() { variables.add(var); } ( "," var = VariableDeclarator() { variables.add(var); } )*
   {
         Position begin=modifier.begin.orIfInvalid(type.getBegin());
         Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, vars, typeListPair.b);
+        return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
   }
 }
 
@@ -3159,26 +3150,26 @@ TryStmt TryStatement():
 
 List<VariableDeclarationExpr> ResourceSpecification() :
 {
-  List<VariableDeclarationExpr> vars;
+  List<VariableDeclarationExpr> variables;
 }
 {
   "("
-  vars = Resources()
+  variables = Resources()
   (LOOKAHEAD(2) ";")?
   ")"
-  { return vars; }
+  { return variables; }
 }
 
 
 List<VariableDeclarationExpr> Resources() :
 {
-	List<VariableDeclarationExpr> vars = new LinkedList<VariableDeclarationExpr>();
+	List<VariableDeclarationExpr> variables = new LinkedList<VariableDeclarationExpr>();
 	VariableDeclarationExpr var;
 }
 {
   /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
-  var = VariableDeclarationExpression() {vars.add(var);} (LOOKAHEAD(2) ";" var = VariableDeclarationExpression() {vars.add(var);})*
-  { return vars; }
+  var = VariableDeclarationExpression() {variables.add(var);} (LOOKAHEAD(2) ";" var = VariableDeclarationExpression() {variables.add(var);})*
+  { return variables; }
 }
 
 

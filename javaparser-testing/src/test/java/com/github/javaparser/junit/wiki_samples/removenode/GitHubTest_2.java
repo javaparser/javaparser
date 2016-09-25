@@ -53,7 +53,7 @@ class MyVisitor_2 extends ModifierVisitorAdapter {
     public Node visit(VariableDeclarationExpr declarationExpr, Object args) {
         super.visit(declarationExpr, args);
 
-        if (declarationExpr.getVars().isEmpty()) {
+        if (declarationExpr.getVariables().isEmpty()) {
             return null;
         }
 

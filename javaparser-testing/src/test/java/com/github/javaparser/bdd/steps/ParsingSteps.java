@@ -32,7 +32,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
 
@@ -42,8 +41,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.TokenMgrException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -175,7 +172,7 @@ public class ParsingSteps {
                                                                      String expectedBody) {
         ExpressionStmt statement = (ExpressionStmt) getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) statement.getExpression();
-        VariableDeclarator variableDeclarator = variableDeclarationExpr.getVars().get(0);
+        VariableDeclarator variableDeclarator = variableDeclarationExpr.getVariables().get(0);
         MethodCallExpr methodCallExpr = (MethodCallExpr) variableDeclarator.getInit();
         CastExpr castExpr = (CastExpr) methodCallExpr.getArgs().get(0);
         LambdaExpr lambdaExpr = (LambdaExpr) castExpr.getExpr();
