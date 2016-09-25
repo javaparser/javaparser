@@ -14,8 +14,7 @@ public class GitHubTest {
 		FileInputStream file = new FileInputStream("forGitHubTest.java");
 		CompilationUnit cu = getCompilationUnit(file);
 		String result = cu.toString();
-		new TreeVisitor().visitBreadthFirst(cu);	
-		System.out.println(cu.toString());
+		new MyVisitor().visitBreadthFirst(cu);	
 	}
 
 	public static CompilationUnit getCompilationUnit(InputStream in) {
@@ -31,5 +30,11 @@ public class GitHubTest {
 			e.printStackTrace();
 		}
 		return null;
+	}
+}
+
+public class MyVisitor extends TreeVisitor {
+	public void process(Node node) {
+		System.out.println(node.toString());
 	}
 }
