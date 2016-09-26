@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -41,7 +42,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ObjectCreationExpr extends Expression {
+public final class ObjectCreationExpr extends Expression implements NodeWithTypeArguments<ObjectCreationExpr> {
 
 	private Expression scope;
 

@@ -1731,6 +1731,17 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
 	@Override
+	public R visit(TypeArguments typeArguments, A arg) {
+		for(Type<?> type: typeArguments.getTypeArguments()){
+			R result = type.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
 	public R visit(final BlockComment n, final A arg) {
 		return null;
 	}

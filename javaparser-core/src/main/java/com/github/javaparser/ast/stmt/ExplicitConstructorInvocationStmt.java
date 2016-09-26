@@ -23,6 +23,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -34,7 +35,7 @@ import static com.github.javaparser.utils.Utils.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ExplicitConstructorInvocationStmt extends Statement {
+public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 
 	private List<Type> typeArgs;
 

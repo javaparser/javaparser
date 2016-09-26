@@ -21,25 +21,32 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
-public class TypeArguments {
-    public static final TypeArguments EMPTY = withArguments(Collections.<Type>emptyList());
-
-    private final List<Type> typeArguments;
+public class TypeArguments extends Node {
+    private List<Type<?>> typeArguments;
     private final boolean usesDiamondOperator;
 
-    private TypeArguments(List<Type> typeArguments, boolean usesDiamondOperator) {
-        this.typeArguments = ensureNotNull(typeArguments);
+    public TypeArguments(List<Type<?>> typeArguments, boolean usesDiamondOperator) {
+        this.typeArguments = typeArguments;
         this.usesDiamondOperator = usesDiamondOperator;
     }
 
-    public List<Type> getTypeArguments() {
+    public List<Type<?>> getTypeArguments() {
+        typeArguments = ensureNotNull(typeArguments);
         return typeArguments;
+    }
+
+    public TypeArguments setTypeArguments(final List<Type<?>> typeArguments) {
+        this.typeArguments = typeArguments;
+        setAsParentNodeOf(this.typeArguments);
+        return this;
     }
 
     public boolean isUsingDiamondOperator() {
@@ -47,10 +54,22 @@ public class TypeArguments {
     }
 
     public static TypeArguments withDiamondOperator() {
-        return new TypeArguments(Collections.<Type>emptyList(), true);
+        return new TypeArguments(Collections.<Type<?>>emptyList(), true);
     }
 
-    public static TypeArguments withArguments(List<Type> typeArguments) {
+    public static TypeArguments withArguments(List<Type<?>> typeArguments) {
         return new TypeArguments(typeArguments, false);
+    }
+
+    public static TypeArguments empty(){
+        return withArguments(Collections.<Type<?>>emptyList());
+    }
+
+    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
     }
 }

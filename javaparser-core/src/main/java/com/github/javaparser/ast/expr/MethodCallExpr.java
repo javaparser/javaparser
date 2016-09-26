@@ -22,6 +22,8 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.TypeArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -34,7 +36,7 @@ import static com.github.javaparser.utils.Utils.*;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodCallExpr extends Expression {
+public final class MethodCallExpr extends Expression implements NodeWithTypeArguments<MethodCallExpr> {
 
 	private Expression scope;
 
@@ -58,7 +60,7 @@ public final class MethodCallExpr extends Expression {
 		setArgs(args);
 	}
 
-	public MethodCallExpr(final Range range, final Expression scope, final List<Type> typeArgs, final String name, final List<Expression> args) {
+	public MethodCallExpr(final Range range, final Expression scope, final TypeArguments typeArgs, final String name, final List<Expression> args) {
 		super(range);
 		setScope(scope);
 		setTypeArgs(typeArgs);

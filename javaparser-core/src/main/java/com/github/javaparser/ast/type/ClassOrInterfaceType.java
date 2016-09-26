@@ -39,7 +39,7 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
 
     private String name;
 
-    private TypeArguments typeArguments = TypeArguments.EMPTY;
+    private TypeArguments typeArguments = TypeArguments.empty();
 
     public ClassOrInterfaceType() {
     }
@@ -77,7 +77,7 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
         return scope;
     }
 
-    public List<Type> getTypeArgs() {
+    public List<Type<?>> getTypeArgs() {
         return typeArguments.getTypeArguments();
     }
 
@@ -115,7 +115,7 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
      * Allows you to set the generic arguments
      * @param typeArgs The list of types of the generics
      */
-    public void setTypeArgs(final List<Type> typeArgs) {
+    public void setTypeArgs(final List<Type<?>> typeArgs) {
         setTypeArguments(TypeArguments.withArguments(typeArgs));
     }
 

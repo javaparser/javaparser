@@ -25,11 +25,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -1242,7 +1238,13 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		return new TypeExpr(n.getRange(), t);
 	}
 
-    public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {
+	@Override
+	public Node visit(TypeArguments typeArguments, Object arg) {
+		List<Type<?>> typeArguments_ = visit(typeArguments.getTypeArguments(), arg);
+		return new TypeArguments(typeArguments_, typeArguments.isUsingDiamondOperator());
+	}
+
+	public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {
         if (_nodes == null)
             return null;
         List<T> r = new ArrayList<>(_nodes.size());

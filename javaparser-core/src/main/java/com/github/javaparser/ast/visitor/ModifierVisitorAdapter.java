@@ -24,11 +24,7 @@ package com.github.javaparser.ast.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -376,6 +372,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		if (n.getScope() != null) {
 			n.setScope((ClassOrInterfaceType) n.getScope().accept(this, arg));
 		}
+		// TODO there should be more visits to type arguments here
 		final List<Type> typeArgs = n.getTypeArgs();
 		if (typeArgs != null) {
 			for (int i = 0; i < typeArgs.size(); i++) {
@@ -1134,11 +1131,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	@Override
 	public Node visit(final MethodReferenceExpr n, final A arg) {
 		visitComment(n, arg);
-		final List<Type> types = n.getTypeArguments().getTypeArguments();
-		for (int i = 0; i < types.size(); i++) {
-			n.getTypeArguments().getTypeArguments().set(i,
-					(Type) n.getTypeArguments().getTypeArguments().get(i).accept(this, arg));
-		}
+		n.setTypeArguments((TypeArguments)n.getTypeArguments().accept(this, arg));
 		if (n.getScope() != null) {
 			n.setScope((Expression)n.getScope().accept(this, arg));
 		}
@@ -1150,6 +1143,16 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		visitComment(n, arg);
 		if (n.getType() != null) {
 			n.setType((Type)n.getType().accept(this, arg));
+		}
+		return n;
+	}
+
+	@Override
+	public Node visit(TypeArguments n, A arg) {
+		final List<Type<?>> types = n.getTypeArguments();
+		for (int i = 0; i < types.size(); i++) {
+			n.getTypeArguments().set(i,
+					(Type) n.getTypeArguments().get(i).accept(this, arg));
 		}
 		return n;
 	}
