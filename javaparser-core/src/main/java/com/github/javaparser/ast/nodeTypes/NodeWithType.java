@@ -60,4 +60,10 @@ public interface NodeWithType<T> {
         ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
         return setType(new ClassOrInterfaceType(typeClass.getSimpleName()));
     }
+
+    default T setType(final String type) {
+        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
+        return setType(classOrInterfaceType);
+    }
+
 }

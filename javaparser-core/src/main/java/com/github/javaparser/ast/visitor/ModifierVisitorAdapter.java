@@ -1149,7 +1149,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	public Node visit(final TypeExpr n, final A arg) {
 		visitComment(n, arg);
 		if (n.getType() != null) {
-			n.setType((Type)n.getType().accept(this, arg));
+            n.setType((Type<?>) n.getType().accept(this, arg));
 		}
 		return n;
 	}

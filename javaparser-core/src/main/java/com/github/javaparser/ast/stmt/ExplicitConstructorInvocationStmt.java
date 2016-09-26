@@ -21,6 +21,10 @@
  
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
