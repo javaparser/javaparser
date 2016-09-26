@@ -30,7 +30,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -89,6 +94,7 @@ import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -235,6 +241,21 @@ public class DumpVisitor implements VoidVisitor<Object> {
 				annotation.accept(this, arg);
 				printer.print(" ");
 			}
+		}
+	}
+
+	private void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Object arg) {
+		List<Type<?>> typeArguments = nodeWithTypeArguments.getTypeArguments();
+		if (!isNullOrEmpty(typeArguments)) {
+			printer.print("<");
+			for (final Iterator<Type<?>> i = typeArguments.iterator(); i.hasNext(); ) {
+				final Type<?> t = i.next();
+				t.accept(this, arg);
+				if (i.hasNext()) {
+					printer.print(", ");
+				}
+			}
+			printer.print(">");
 		}
 	}
 
@@ -441,7 +462,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		if (n.isUsingDiamondOperator()) {
 			printer.print("<>");
 		} else {
-			n.getTypeArguments().accept(this, arg);
+			printTypeArgs(n, arg);
 		}
 	}
 
@@ -913,7 +934,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			n.getScope().accept(this, arg);
 			printer.print(".");
 		}
-		n.getTypeArguments().accept(this, arg);
+		printTypeArgs(n, arg);
 		printer.print(n.getName());
 		printArguments(n.getArgs(), arg);
 	}
@@ -928,8 +949,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 		printer.print("new ");
 
-		n.getTypeArguments().accept(this, arg);
-		if (!isNullOrEmpty(n.getTypeArgs())) {
+		printTypeArgs(n, arg);
+		if (!isNullOrEmpty(n.getTypeArguments())) {
 			printer.print(" ");
 		}
 
@@ -1094,14 +1115,14 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		if (n.isThis()) {
-			n.getTypeArguments().accept(this, arg);
+			printTypeArgs(n, arg);
 			printer.print("this");
 		} else {
 			if (n.getExpr() != null) {
 				n.getExpr().accept(this, arg);
 				printer.print(".");
 			}
-			n.getTypeArguments().accept(this, arg);
+			printTypeArgs(n, arg);
 			printer.print("super");
 		}
 		printArguments(n.getArgs(), arg);
@@ -1634,7 +1655,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 
 		printer.print("::");
-		n.getTypeArguments().accept(this, arg);
+		printTypeArgs(n, arg);
 		if (identifier != null) {
 			printer.print(identifier);
 		}
@@ -1647,19 +1668,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		if (n.getType() != null) {
 			n.getType().accept(this, arg);
 		}
-	}
-
-	@Override
-	public void visit(TypeArguments typeArguments, Object arg) {
-		printer.print("<");
-		for (final Iterator<Type<?>> i = typeArguments.getTypeArguments().iterator(); i.hasNext(); ) {
-			final Type t = i.next();
-			t.accept(this, arg);
-			if (i.hasNext()) {
-				printer.print(", ");
-			}
-		}
-		printer.print(">");
 	}
 
 	private void printOrphanCommentsBeforeThisChildNode(final Node node) {

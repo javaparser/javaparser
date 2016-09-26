@@ -40,7 +40,7 @@ public interface NodeWithType<T> {
      * 
      * @return the type
      */
-    Type getType();
+    Type<?> getType();
 
     /**
      * Sets the type
@@ -48,7 +48,7 @@ public interface NodeWithType<T> {
      * @param type the type
      * @return this
      */
-    T setType(Type type);
+    T setType(Type<?> type);
 
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed

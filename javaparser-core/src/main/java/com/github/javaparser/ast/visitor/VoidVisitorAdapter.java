@@ -23,7 +23,10 @@ package com.github.javaparser.ast.visitor;
 
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -256,8 +259,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
-		if (n.getTypeArgs() != null) {
-			for (final Type t : n.getTypeArgs()) {
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
 				t.accept(this, arg);
 			}
 		}
@@ -382,8 +385,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (!n.isThis() && n.getExpr() != null) {
 			n.getExpr().accept(this, arg);
 		}
-		if (n.getTypeArgs() != null) {
-			for (final Type t : n.getTypeArgs()) {
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
 				t.accept(this, arg);
 			}
 		}
@@ -506,8 +509,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
-		if (n.getTypeArgs() != null) {
-			for (final Type t : n.getTypeArgs()) {
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
 				t.accept(this, arg);
 			}
 		}
@@ -567,8 +570,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
-		if (n.getTypeArgs() != null) {
-			for (final Type t : n.getTypeArgs()) {
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
 				t.accept(this, arg);
 			}
 		}
@@ -796,11 +799,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(MethodReferenceExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
-	    if (n.getTypeArguments().getTypeArguments() != null) {
-		    for (final Type t : n.getTypeArguments().getTypeArguments()) {
-			    t.accept(this, arg);
-		    }
-	    }
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
+				t.accept(this, arg);
+			}
+		}
         if (n.getScope() != null) {
             n.getScope().accept(this, arg);
         }
@@ -814,14 +817,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         }
     }
 
-	@Override
-	public void visit(TypeArguments typeArguments, A arg) {
-		for(Type<?> type: typeArguments.getTypeArguments()) {
-			type.accept(this, arg);
-		}
-	}
-
-	private void visitComment(final Comment n, final A arg) {
+    private void visitComment(final Comment n, final A arg) {
 		if (n != null) {
 			n.accept(this, arg);
 		}

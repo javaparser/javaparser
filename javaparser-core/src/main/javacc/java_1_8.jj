@@ -153,11 +153,6 @@ final class ASTParser {
 	    return ret;
     }
 
-    private TypeArguments createTypeArguments(List<Type> typeArgs) {
-        boolean usesDiamondOperator = typeArgs != null && typeArgs.isEmpty();
-        return usesDiamondOperator ? TypeArguments.withDiamondOperator() : TypeArguments.withArguments(typeArgs);
-    }
-    
     static final class GTToken extends Token {
         int realKind = ASTParserConstants.GT;
 
@@ -1782,7 +1777,7 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	boolean isThis = false;
 	List<Expression> args;
 	Expression expr = null;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Position begin = INVALID;
 }
 {
@@ -1894,7 +1889,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 {
 	ClassOrInterfaceType ret;
 	String name;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Position begin;
 	List<AnnotationExpr> annotations = null;
 }
@@ -1902,13 +1897,13 @@ ClassOrInterfaceType ClassOrInterfaceType():
   <IDENTIFIER> {begin=tokenBegin();} { name = token.image; }
   [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
   {
-      ret = new ClassOrInterfaceType(range(begin, tokenEnd()),null, name, createTypeArguments(typeArgs.list));
+      ret = new ClassOrInterfaceType(range(begin, tokenEnd()),null, name, typeArgs.list);
   }
   (
 	  LOOKAHEAD(2) "." annotations = Annotations()  <IDENTIFIER> { name = token.image; }
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
 	  {
-	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, createTypeArguments(typeArgs.list));
+	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, typeArgs.list);
 	    ret.setAnnotations(annotations);
 	    annotations = null;
       }
@@ -1916,9 +1911,9 @@ ClassOrInterfaceType ClassOrInterfaceType():
   { return ret; }
 }
 
-RangedList<Type> TypeArguments():
+RangedList<Type<?>> TypeArguments():
 {
-	RangedList<Type> ret = new RangedList<Type>(new LinkedList<Type>());
+	RangedList<Type<?>> ret = new RangedList<Type<?>>(new LinkedList<Type<?>>());
 	Type type;
 }
 {
@@ -2050,7 +2045,7 @@ Expression Expression():
 	AssignExpr.Operator op;
 	Expression value;
 	Statement lambdaBody = null;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 }
 {
   ret = ConditionalExpression()
@@ -2078,7 +2073,7 @@ Expression Expression():
    }
  |  "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
  {
-   ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs.list), token.image);
+   ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
  }
    )
   ]
@@ -2409,7 +2404,7 @@ Expression PrimaryPrefix():
 {
 	Expression ret = null;
 	NameExpr name;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	List<Expression> args = null;
 	List<Parameter> params = null;
 	boolean hasArgs = false;
@@ -2445,7 +2440,7 @@ Expression PrimaryPrefix():
 	 |
 		"::" [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
 		{
-		  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs.list), token.image);
+		  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
 		}
 	  )
 	|
@@ -2483,7 +2478,7 @@ Expression PrimaryPrefix():
 	  type = ResultType() "::" [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
 		{
 		  ret = new TypeExpr(type.getRange(), type);
-		  ret = new MethodReferenceExpr(ret.getRange(), ret, createTypeArguments(typeArgs.list), token.image);
+		  ret = new MethodReferenceExpr(ret.getRange(), ret, typeArgs.list, token.image);
 		}
 
 	|
@@ -2519,7 +2514,7 @@ Expression PrimarySuffix(Expression scope):
 Expression PrimarySuffixWithoutSuper(Expression scope):
 {
 	Expression ret;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	List<Expression> args = null;
 	boolean hasArgs = false;
 	NameExpr name;
@@ -2632,7 +2627,7 @@ Expression AllocationExpression(Expression scope):
 	ArrayCreationExpr arrayExpr;
 	Type type;
 	Object[] arr;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	List<BodyDeclaration<?>> anonymousBody = null;
 	List<Expression> args;
 	Position begin;
@@ -2864,7 +2859,7 @@ ExpressionStmt StatementExpression():
 	Expression expr;
 	AssignExpr.Operator op;
 	Expression value;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Statement lambdaBody;
 }
 {
@@ -2880,7 +2875,7 @@ ExpressionStmt StatementExpression():
 	    "--" { expr = new UnaryExpr(range(expr.getBegin(), tokenEnd()), expr, UnaryExpr.Operator.posDecrement);  }
 	  |
 	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin(), tokenEnd()), expr, value, op); }
-	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin(), tokenEnd()), expr, createTypeArguments(typeArgs.list), token.image); 	  }
+	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
 
 	 |
 	   "->" lambdaBody = LambdaBody()

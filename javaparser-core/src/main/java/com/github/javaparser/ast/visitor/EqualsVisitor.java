@@ -23,7 +23,11 @@ package com.github.javaparser.ast.visitor;
 
 import java.util.List;
 
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -613,7 +617,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
@@ -888,7 +892,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 
@@ -1008,7 +1012,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 
@@ -1044,7 +1048,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 
@@ -1184,7 +1188,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 
@@ -1474,7 +1478,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         if (!nodeEquals(n1.getScope(), n2.getScope())) {
             return false;
         }
-	    if (!nodesEquals(n1.getTypeArguments().getTypeArguments(), n2.getTypeArguments().getTypeArguments())) {
+	    if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
         if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
@@ -1491,19 +1495,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         }
         return true;
     }
-
-	@Override
-	public Boolean visit(TypeArguments n, Node arg) {
-		TypeArguments n2 = (TypeArguments) arg;
-		if (!nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
-			return false;
-		}
-
-		if (n.isUsingDiamondOperator() != n2.isUsingDiamondOperator()) {
-			return false;
-		}
-		return true;
-	}
 
 	private boolean arraysAnnotationsEquals(NodeWithArrays<?> n1, NodeWithArrays<?> n2) {
 		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();

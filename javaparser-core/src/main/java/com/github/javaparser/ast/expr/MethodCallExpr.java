@@ -22,7 +22,6 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -40,9 +39,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 
 	private Expression scope;
 
-	private List<Type> typeArgs;
+    private List<Type<?>> typeArguments;
 
-	private NameExpr name;
+    private NameExpr name;
 
 	private List<Expression> args;
 
@@ -60,10 +59,10 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 		setArgs(args);
 	}
 
-	public MethodCallExpr(final Range range, final Expression scope, final TypeArguments typeArgs, final String name, final List<Expression> args) {
+	public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String name, final List<Expression> args) {
 		super(range);
 		setScope(scope);
-		setTypeArgs(typeArgs);
+		setTypeArguments(typeArguments);
 		setName(name);
 		setArgs(args);
 	}
@@ -112,11 +111,6 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 		return scope;
 	}
 
-	public List<Type> getTypeArgs() {
-        typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
-	}
-
 	public void setArgs(final List<Expression> args) {
 		this.args = args;
 		setAsParentNodeOf(this.args);
@@ -136,8 +130,15 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 		setAsParentNodeOf(this.scope);
 	}
 
-	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
-	}
+    @Override
+    public List<Type<?>> getTypeArguments() {
+        return typeArguments;
+    }
+
+    @Override
+    public MethodCallExpr setTypeArguments(final List<Type<?>> types) {
+        this.typeArguments = types;
+        setAsParentNodeOf(this.typeArguments);
+        return this;
+    }
 }

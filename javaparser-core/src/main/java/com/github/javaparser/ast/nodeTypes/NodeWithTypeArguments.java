@@ -21,13 +21,61 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.TypeArguments;
+import com.github.javaparser.ast.type.Type;
+
+import java.util.*;
+
+import static com.github.javaparser.utils.Utils.arrayToList;
 
 /**
- * A node having type arguments
+ * A node that can have type arguments.
+ * <pre>
+ *     new X();        --> typeArguments == null
+ *     new X&lt;>();      --> typeArguments.types = [], typeArguments.diamondOperator=true 
+ *     new X&lt;C,D>();   --> typeArguments.types = [C,D], typeArguments.diamondOperator=false 
+ * </pre>
  */
 public interface NodeWithTypeArguments<T> {
-    TypeArguments getTypeArguments();
+    /**
+     * @return the types that can be found in the type arguments: &lt;String, Integer>.
+     */
+    List<Type<?>> getTypeArguments();
 
-    T setTypeArguments(TypeArguments type);
+    /**
+     * Allows you to set the generic arguments
+     * @param typeArguments The list of types of the generics
+     */
+    T setTypeArguments(List<Type<?>> typeArguments);
+
+    /**
+     * @return whether the type arguments look like &lt;>.
+     */
+    default boolean isUsingDiamondOperator() {
+        if(getTypeArguments()==null){
+            return false;
+        }
+        return getTypeArguments().isEmpty();
+    }
+
+    /**
+     * Sets the type arguments to &lt>.
+     */
+    default T setDiamondOperator() {
+        final List<Type<?>> empty = new LinkedList<>();
+        setTypeArguments(empty);
+        return (T) this;
+    }
+
+    /**
+     * Removes all type arguments, including the surrounding &lt;>.
+     */
+    default T removeTypeArguments() {
+        setTypeArguments((List<Type<?>>) null);
+        return (T) this;
+    }
+
+    default T setTypeArguments(Type<?>... typeArguments) {
+        setTypeArguments(arrayToList(typeArguments));
+        return (T) this;
+    }
 }

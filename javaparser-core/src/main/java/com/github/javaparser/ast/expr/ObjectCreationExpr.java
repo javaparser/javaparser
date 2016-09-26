@@ -48,9 +48,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
 
 	private ClassOrInterfaceType type;
 
-	private List<Type> typeArgs;
+    private List<Type<?>> typeArguments;
 
-	private List<Expression> args;
+    private List<Expression> args;
 
     // This can be null, to indicate there is no body
     private List<BodyDeclaration<?>> anonymousClassBody;
@@ -71,12 +71,12 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
 	}
 
 	public ObjectCreationExpr(final Range range,
-			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
+			final Expression scope, final ClassOrInterfaceType type, final List<Type<?>> typeArguments,
                               final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
 		super(range);
 		setScope(scope);
 		setType(type);
-		setTypeArgs(typeArgs);
+		setTypeArguments(typeArguments);
 		setArgs(args);
 		setAnonymousClassBody(anonymousBody);
 	}
@@ -109,11 +109,6 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
 		return type;
 	}
 
-	public List<Type> getTypeArgs() {
-		typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
-	}
-
     public void setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
 		this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
@@ -134,8 +129,15 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
 		setAsParentNodeOf(this.type);
 	}
 
-	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
-	}
+    @Override
+    public List<Type<?>> getTypeArguments() {
+        return typeArguments;
+    }
+
+    @Override
+    public ObjectCreationExpr setTypeArguments(final List<Type<?>> types) {
+        this.typeArguments = types;
+        setAsParentNodeOf(this.typeArguments);
+        return this;
+    }
 }
