@@ -50,7 +50,7 @@ public abstract class Node implements Cloneable {
     private List<Node> childrenNodes = new LinkedList<>();
     private List<Comment> orphanComments = new LinkedList<>();
 
-    private IdentityHashMap<MetaDataKey<?>, Object> metaData = null;
+    private IdentityHashMap<UserDataKey<?>, Object> userData = null;
 
     private Comment comment;
 
@@ -350,41 +350,41 @@ public abstract class Node implements Cloneable {
     }
 
     /**
-     * Gets metadata for this component using the given key.
+     * Gets user data for this component using the given key.
      *
      * @param <M>
-     *            The type of the metadata.
+     *            The type of the user data.
      *
      * @param key
      *            The key for the data
-     * @return The metadata or null of no metadata was found for the given key
-     * @see MetaDataKey
+     * @return The user data or null of no user data was found for the given key
+     * @see UserDataKey
      */
-    public <M> M getMetaData(final MetaDataKey<M> key) {
-        if (metaData == null) {
+    public <M> M getUserData(final UserDataKey<M> key) {
+        if (userData == null) {
             return null;
         }
-        return (M) metaData.get(key);
+        return (M) userData.get(key);
     }
 
     /**
-     * Sets the metadata for this component using the given key. 
-     * For information on creating MetaDataKeys, see {@link MetaDataKey}.
+     * Sets user data for this component using the given key.
+     * For information on creating UserDataKey, see {@link UserDataKey}.
      *
      * @param <M>
-     *            The type of the metadata
+     *            The type of user data
      *
      * @param key
-     *            The singleton key for the metadata
+     *            The singleton key for the user data
      * @param object
-     *            The metadata object
+     *            The user data object
      * @throws IllegalArgumentException
-     * @see MetaDataKey
+     * @see UserDataKey
      */
-    public <M> void setMetaData(MetaDataKey<M> key, M object) {
-        if (metaData == null) {
-            metaData = new IdentityHashMap<>();
+    public <M> void setUserData(UserDataKey<M> key, M object) {
+        if (userData == null) {
+            userData = new IdentityHashMap<>();
         }
-        metaData.put(key, object);
+        userData.put(key, object);
     }
 }
