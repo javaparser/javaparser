@@ -1,0 +1,17 @@
+class MethodCalls {
+	
+	public MethodCalls getSelf()
+	{
+		return this;
+	}
+
+	public void foo()
+	{
+	}
+	
+	void bar()
+	{
+		getSelf().getSelf().foo();
+	}
+
+}

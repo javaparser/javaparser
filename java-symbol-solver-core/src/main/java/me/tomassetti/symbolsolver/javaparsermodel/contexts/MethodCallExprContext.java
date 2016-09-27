@@ -176,17 +176,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     }
                 } else {
                     throw e;
-
                 }
             }
         } else {
-            if (wrappedNode.getParentNode() instanceof MethodCallExpr) {
-                MethodCallExpr parent = (MethodCallExpr) wrappedNode.getParentNode();
-                if (parent.getScope() == wrappedNode) {
-                    return getParent().getParent().solveMethodAsUsage(name, parameterTypes, typeSolver);
-                }
-            }
             Context parentContext = getParent();
+            while (parentContext instanceof MethodCallExprContext) {
+                parentContext = parentContext.getParent();
+            }
             return parentContext.solveMethodAsUsage(name, parameterTypes, typeSolver);
         }
     }
