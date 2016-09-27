@@ -1,0 +1,15 @@
+enum AccessEnumMemberThroughThis {
+
+	CONSTANT("constant");
+
+	private String label;
+
+	public String getLabel() {
+		return this.label;
+	}
+
+	public String getLabel2() {
+		return this.getLabel();
+	}
+
+}

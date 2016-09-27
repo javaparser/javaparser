@@ -45,13 +45,13 @@ public final class Navigator {
         return type;
     }
     
-    public static Optional<TypeDeclaration<?>> findType(TypeDeclaration td, String qualifiedName) {
+    public static Optional<TypeDeclaration<?>> findType(TypeDeclaration<?> td, String qualifiedName) {
         final String typeName = getOuterTypeName(qualifiedName);
         
         Optional<TypeDeclaration<?>> type = Optional.empty();
         for (Node n: td.getChildrenNodes()) {
-            if (n instanceof TypeDeclaration && ((TypeDeclaration)n).getName().equals(typeName)) {
-                type = Optional.of((TypeDeclaration)n);
+            if (n instanceof TypeDeclaration && ((TypeDeclaration<?>)n).getName().equals(typeName)) {
+                type = Optional.of((TypeDeclaration<?>)n);
                 break;
             }
         }
@@ -82,9 +82,9 @@ public final class Navigator {
         return (EnumDeclaration) res.get();
     }
 
-    public static MethodDeclaration demandMethod(ClassOrInterfaceDeclaration cd, String name) {
+    public static MethodDeclaration demandMethod(TypeDeclaration<?> cd, String name) {
         MethodDeclaration found = null;
-        for (BodyDeclaration bd : cd.getMembers()) {
+        for (BodyDeclaration<?> bd : cd.getMembers()) {
             if (bd instanceof MethodDeclaration) {
                 MethodDeclaration md = (MethodDeclaration) bd;
                 if (md.getName().equals(name)) {
@@ -102,7 +102,7 @@ public final class Navigator {
     }
 
     public static VariableDeclarator demandField(ClassOrInterfaceDeclaration cd, String name) {
-        for (BodyDeclaration bd : cd.getMembers()) {
+        for (BodyDeclaration<?> bd : cd.getMembers()) {
             if (bd instanceof FieldDeclaration) {
                 FieldDeclaration fd = (FieldDeclaration) bd;
                 for (VariableDeclarator vd : fd.getVariables()) {
