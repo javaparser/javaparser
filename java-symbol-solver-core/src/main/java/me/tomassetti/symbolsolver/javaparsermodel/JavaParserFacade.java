@@ -534,6 +534,9 @@ public class JavaParserFacade {
         if (node instanceof ClassOrInterfaceDeclaration) {
             JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
             return new ReferenceTypeUsageImpl(classDeclaration, typeSolver);
+        } else if (node instanceof EnumDeclaration) {
+            JavaParserEnumDeclaration enumDeclaration = new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
+            return new ReferenceTypeUsageImpl(enumDeclaration, typeSolver);
         } else {
             return getTypeOfThisIn(node.getParentNode());
         }

@@ -1,4 +1,4 @@
-class AccessFieldThroughThis {
+class AccessClassMemberThroughThis {
 
 	private String label;
 
@@ -10,8 +10,8 @@ class AccessFieldThroughThis {
 		return label;
 	}
 
-    public String getLabel2() {
-        return this.label;
-    }
+	public String getLabel2() {
+		return this.label;
+	}
 
 }
