@@ -21,14 +21,14 @@
  
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
+import java.util.List;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -37,7 +37,7 @@ public final class FieldAccessExpr extends Expression {
 
 	private Expression scope;
 
-	private List<Type> typeArgs;
+    private List<Type<?>> typeArgs;
 
 	private NameExpr field;
 
@@ -49,7 +49,8 @@ public final class FieldAccessExpr extends Expression {
 		setField(field);
 	}
 
-	public FieldAccessExpr(final Range range, final Expression scope, final List<Type> typeArgs, final String field) {
+    public FieldAccessExpr(final Range range, final Expression scope, final List<Type<?>> typeArgs,
+                           final String field) {
 		super(range);
 		setScope(scope);
 		setTypeArgs(typeArgs);
@@ -76,7 +77,7 @@ public final class FieldAccessExpr extends Expression {
 		return scope;
 	}
 
-	public List<Type> getTypeArgs() {
+    public List<Type<?>> getTypeArgs() {
         typeArgs = ensureNotNull(typeArgs);
         return typeArgs;
 	}
@@ -95,7 +96,7 @@ public final class FieldAccessExpr extends Expression {
 		setAsParentNodeOf(this.scope);
 	}
 
-	public void setTypeArgs(final List<Type> typeArgs) {
+    public void setTypeArgs(final List<Type<?>> typeArgs) {
 		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
 	}

@@ -153,7 +153,7 @@ final class ASTParser {
 	    return ret;
     }
 
-    private TypeArguments createTypeArguments(List<Type> typeArgs) {
+    private TypeArguments createTypeArguments(List<Type<?>> typeArgs) {
         boolean usesDiamondOperator = typeArgs != null && typeArgs.isEmpty();
         return usesDiamondOperator ? TypeArguments.withDiamondOperator() : TypeArguments.withArguments(typeArgs);
     }
@@ -1782,7 +1782,7 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	boolean isThis = false;
 	List<Expression> args;
 	Expression expr = null;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Position begin = INVALID;
 }
 {
@@ -1894,7 +1894,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 {
 	ClassOrInterfaceType ret;
 	String name;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Position begin;
 	List<AnnotationExpr> annotations = null;
 }
@@ -1916,9 +1916,9 @@ ClassOrInterfaceType ClassOrInterfaceType():
   { return ret; }
 }
 
-RangedList<Type> TypeArguments():
+RangedList<Type<?>> TypeArguments():
 {
-	RangedList<Type> ret = new RangedList<Type>(new LinkedList<Type>());
+	RangedList<Type<?>> ret = new RangedList<Type<?>>(new LinkedList<Type<?>>());
 	Type type;
 }
 {
@@ -2050,7 +2050,7 @@ Expression Expression():
 	AssignExpr.Operator op;
 	Expression value;
 	Statement lambdaBody = null;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 }
 {
   ret = ConditionalExpression()
@@ -2409,7 +2409,7 @@ Expression PrimaryPrefix():
 {
 	Expression ret = null;
 	NameExpr name;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	List<Expression> args = null;
 	List<Parameter> params = null;
 	boolean hasArgs = false;
@@ -2519,7 +2519,7 @@ Expression PrimarySuffix(Expression scope):
 Expression PrimarySuffixWithoutSuper(Expression scope):
 {
 	Expression ret;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	List<Expression> args = null;
 	boolean hasArgs = false;
 	NameExpr name;
@@ -2632,7 +2632,7 @@ Expression AllocationExpression(Expression scope):
 	ArrayCreationExpr arrayExpr;
 	Type type;
 	Object[] arr;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	List<BodyDeclaration<?>> anonymousBody = null;
 	List<Expression> args;
 	Position begin;
@@ -2864,7 +2864,7 @@ ExpressionStmt StatementExpression():
 	Expression expr;
 	AssignExpr.Operator op;
 	Expression value;
-	RangedList<Type> typeArgs = new RangedList<Type>(null);
+	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Statement lambdaBody;
 }
 {
