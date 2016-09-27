@@ -3,7 +3,7 @@
   <parent>
     <groupId>me.tomassetti</groupId>
     <artifactId>java-symbol-solver-parent</artifactId>
-    <version>0.3</version>
+    <version>0.4-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -59,7 +59,7 @@
       <dependency>
           <groupId>me.tomassetti</groupId>
           <artifactId>java-symbol-solver-model</artifactId>
-          <version>0.3</version>
+          <version>0.4-SNAPSHOT</version>
       </dependency>
       <dependency>
           <groupId>com.javaslang</groupId>
