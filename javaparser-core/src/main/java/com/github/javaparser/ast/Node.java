@@ -23,6 +23,7 @@ package com.github.javaparser.ast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -390,8 +391,8 @@ public abstract class Node implements Cloneable {
                     Object object = f.get(parentNode);
                     if (object == null)
                         continue;
-                    if (List.class.isAssignableFrom(object.getClass())) {
-                        List<?> l = (List<?>) object;
+                    if (Collection.class.isAssignableFrom(object.getClass())) {
+                        Collection<?> l = (Collection<?>) object;
                         success &= l.remove(this);
                     } else if (object == this) {
                         f.set(parentNode, null);
