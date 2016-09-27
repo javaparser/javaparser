@@ -7,6 +7,7 @@ import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.VoidTypeUsage;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 public class JavassistFactory {
@@ -16,7 +17,11 @@ public class JavassistFactory {
             if (ctClazz.isArray()) {
                 return new ArrayTypeUsage(typeUsageFor(ctClazz.getComponentType(), typeSolver));
             } else if (ctClazz.isPrimitive()) {
-                return PrimitiveTypeUsage.byName(ctClazz.getName());
+                if (ctClazz.getName().equals("void")) {
+                    return VoidTypeUsage.INSTANCE;
+                } else {
+                    return PrimitiveTypeUsage.byName(ctClazz.getName());
+                }
             } else {
                 if (ctClazz.isInterface()) {
                     return new ReferenceTypeUsageImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver), typeSolver);
