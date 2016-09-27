@@ -9,7 +9,7 @@
   <groupId>me.tomassetti</groupId>
   <artifactId>java-symbol-solver-parent</artifactId>
   <packaging>pom</packaging>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.3</version>
   <name>java-symbol-solver-parent</name>
   <url>https://github.com/ftomassetti/java-symbol-solver</url>
   <description>A Symbol Solver for Java, built on top of JavaParser</description>
