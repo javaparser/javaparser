@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.resolution;
 
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
@@ -219,6 +220,23 @@ public class MethodResolutionLogic {
         return true;
     }
 
+    private static List<MethodDeclaration> getMethodsWithoutDuplicates(List<MethodDeclaration> methods) {
+        Set<MethodDeclaration> s = new TreeSet<MethodDeclaration>(new Comparator<MethodDeclaration>() {
+            @Override
+            public int compare(MethodDeclaration m1, MethodDeclaration m2) {
+                if (m1 instanceof JavaParserMethodDeclaration && m2 instanceof JavaParserMethodDeclaration &&
+                    ((JavaParserMethodDeclaration)m1).getWrappedNode().equals(((JavaParserMethodDeclaration)m2).getWrappedNode())) {
+                    return 0;
+                } 
+                return 1;
+            }
+        });
+        s.addAll(methods);
+        List<MethodDeclaration> res = new ArrayList<>();
+        res.addAll(s);
+        return res;
+    }
+    
     /**
      * @param methods    we expect the methods to be ordered such that inherited methods are later in the list
      * @param name
@@ -227,7 +245,7 @@ public class MethodResolutionLogic {
      * @return
      */
     public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
-        List<MethodDeclaration> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, paramTypes, typeSolver)).collect(Collectors.toList());
+        List<MethodDeclaration> applicableMethods = getMethodsWithoutDuplicates(methods).stream().filter((m) -> isApplicable(m, name, paramTypes, typeSolver)).collect(Collectors.toList());
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }

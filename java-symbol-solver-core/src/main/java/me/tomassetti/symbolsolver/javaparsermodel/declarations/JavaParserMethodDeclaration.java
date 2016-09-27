@@ -2,6 +2,8 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -39,7 +41,14 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     @Override
     public TypeDeclaration declaringType() {
         if (wrappedNode.getParentNode() instanceof ClassOrInterfaceDeclaration) {
-            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) wrappedNode.getParentNode(), typeSolver);
+            ClassOrInterfaceDeclaration parent = (ClassOrInterfaceDeclaration) wrappedNode.getParentNode();
+            if (parent.isInterface()) {
+                return new JavaParserInterfaceDeclaration(parent, typeSolver);
+            } else {
+                return new JavaParserClassDeclaration(parent, typeSolver);
+            }
+        } else if (wrappedNode.getParentNode() instanceof EnumDeclaration) {
+            return new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode(), typeSolver);
         } else {
             throw new UnsupportedOperationException();
         }
