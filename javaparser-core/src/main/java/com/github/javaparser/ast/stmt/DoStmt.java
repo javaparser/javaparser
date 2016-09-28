@@ -74,8 +74,9 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         return this;
 	}
 
-	public void setCondition(final Expression condition) {
+	public DoStmt setCondition(final Expression condition) {
 		this.condition = condition;
 		setAsParentNodeOf(this.condition);
+		return this;
 	}
 }

@@ -21,16 +21,16 @@
  
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * <p>
@@ -119,9 +119,10 @@ public final class TypeParameter extends Node implements NodeWithName<TypeParame
 	 * @param typeBound
 	 *            the typeBound to set
 	 */
-	public void setTypeBound(final List<ClassOrInterfaceType> typeBound) {
+	public TypeParameter setTypeBound(final List<ClassOrInterfaceType> typeBound) {
 		this.typeBound = typeBound;
 		setAsParentNodeOf(typeBound);
+		return this;
 	}
 
     public List<AnnotationExpr> getAnnotations() {
@@ -129,8 +130,9 @@ public final class TypeParameter extends Node implements NodeWithName<TypeParame
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationExpr> annotations) {
+    public TypeParameter setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
 	    setAsParentNodeOf(this.annotations);
+		return this;
     }
 }

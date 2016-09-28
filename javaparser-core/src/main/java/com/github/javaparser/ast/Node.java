@@ -126,15 +126,17 @@ public abstract class Node implements Cloneable {
     /**
      * Sets the begin position of this node in the source file.
      */
-    public void setBegin(Position begin) {
+    public Node setBegin(Position begin) {
         range = range.withBegin(begin);
+        return this;
     }
 
     /**
      * Sets the end position of this node in the source file.
      */
-    public void setEnd(Position end) {
+    public Node setEnd(Position end) {
         range = range.withEnd(end);
+        return this;
     }
 
     /**
@@ -147,8 +149,9 @@ public abstract class Node implements Cloneable {
     /**
      * @param range the range of characters in the source code that this node covers.
      */
-    public void setRange(Range range) {
+    public Node setRange(Range range) {
         this.range = range;
+        return this;
     }
 
     /**
@@ -156,7 +159,7 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setComment(final Comment comment) {
+    public final Node setComment(final Comment comment) {
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
@@ -167,6 +170,7 @@ public abstract class Node implements Cloneable {
         if (comment != null) {
             this.comment.setCommentedNode(this);
         }
+        return this;
     }
 
 
@@ -176,8 +180,8 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setLineComment(String comment) {
-        setComment(new LineComment(comment));
+    public final Node setLineComment(String comment) {
+        return setComment(new LineComment(comment));
     }
 
     /**
@@ -185,8 +189,8 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setBlockComment(String comment) {
-        setComment(new BlockComment(comment));
+    public final Node setBlockComment(String comment) {
+        return setComment(new BlockComment(comment));
     }
 
     /**
@@ -194,8 +198,9 @@ public abstract class Node implements Cloneable {
      *
      * @param data to be set
      */
-    public final void setData(final Object data) {
+    public final Node setData(final Object data) {
         this.data = data;
+        return this;
     }
 
     /**

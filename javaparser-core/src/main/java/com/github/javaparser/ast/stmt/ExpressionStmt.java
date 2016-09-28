@@ -58,8 +58,9 @@ public final class ExpressionStmt extends Statement {
 		return expr;
 	}
 
-	public void setExpression(final Expression expr) {
+	public ExpressionStmt setExpression(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
+		return this;
 	}
 }

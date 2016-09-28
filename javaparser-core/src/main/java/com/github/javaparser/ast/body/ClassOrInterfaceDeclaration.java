@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.TypeParameter;
@@ -35,6 +30,11 @@ import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -143,8 +143,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
-    public void setInterface(final boolean interface_) {
+    public ClassOrInterfaceDeclaration setInterface(final boolean interface_) {
         this.interface_ = interface_;
+        return this;
     }
 
     /**
@@ -152,9 +153,10 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @param typeParameters a null value is currently treated as an empty list. This behavior could change
      *            in the future, so please avoid passing null
      */
-    public void setTypeParameters(final List<TypeParameter> typeParameters) {
+    public ClassOrInterfaceDeclaration setTypeParameters(final List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
         setAsParentNodeOf(this.typeParameters);
+        return this;
     }
 
    

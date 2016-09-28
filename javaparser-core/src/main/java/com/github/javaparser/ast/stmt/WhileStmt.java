@@ -74,8 +74,9 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         return this;
 	}
 
-	public void setCondition(final Expression condition) {
+	public WhileStmt setCondition(final Expression condition) {
 		this.condition = condition;
 		setAsParentNodeOf(this.condition);
+		return this;
 	}
 }

@@ -21,13 +21,6 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -37,6 +30,13 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -169,8 +169,9 @@ public final class VariableDeclarationExpr extends Expression
         return this;
     }
 
-    public void setVars(final List<VariableDeclarator> vars) {
+    public VariableDeclarationExpr setVars(final List<VariableDeclarator> vars) {
         this.vars = vars;
         setAsParentNodeOf(this.vars);
+        return this;
     }
 }

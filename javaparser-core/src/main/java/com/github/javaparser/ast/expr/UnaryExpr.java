@@ -75,12 +75,14 @@ public final class UnaryExpr extends Expression {
 		return op;
 	}
 
-	public void setExpr(final Expression expr) {
+	public UnaryExpr setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
+		return this;
 	}
 
-	public void setOperator(final Operator op) {
+	public UnaryExpr setOperator(final Operator op) {
 		this.op = op;
+		return this;
 	}
 }

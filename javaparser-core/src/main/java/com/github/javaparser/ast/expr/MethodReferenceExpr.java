@@ -70,25 +70,28 @@ public class MethodReferenceExpr extends Expression {
         return scope;
     }
 
-    public void setScope(Expression scope) {
+    public MethodReferenceExpr setScope(Expression scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
     public TypeArguments getTypeArguments() {
         return typeArguments;
     }
 
-    public void setTypeArguments(TypeArguments typeArguments) {
+    public MethodReferenceExpr setTypeArguments(TypeArguments typeArguments) {
         this.typeArguments = typeArguments;
+        return this;
     }
 
     public String getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
+    public MethodReferenceExpr setIdentifier(String identifier) {
         this.identifier = identifier;
+        return this;
     }
 
 }

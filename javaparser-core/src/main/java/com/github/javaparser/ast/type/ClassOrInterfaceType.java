@@ -21,14 +21,14 @@
 
 package com.github.javaparser.ast.type;
 
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -106,21 +106,23 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
         return this;
     }
 
-    public void setScope(final ClassOrInterfaceType scope) {
+    public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
     /**
      * Allows you to set the generic arguments
      * @param typeArgs The list of types of the generics
      */
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
-        setTypeArguments(TypeArguments.withArguments(typeArgs));
+    public ClassOrInterfaceType setTypeArgs(final List<Type<?>> typeArgs) {
+        return setTypeArguments(TypeArguments.withArguments(typeArgs));
     }
 
-    public void setTypeArguments(TypeArguments typeArguments) {
+    public ClassOrInterfaceType setTypeArguments(TypeArguments typeArguments) {
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments.getTypeArguments());
+        return this;
     }
 }

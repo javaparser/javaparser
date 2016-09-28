@@ -21,14 +21,14 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -82,22 +82,26 @@ public final class FieldAccessExpr extends Expression {
         return typeArgs;
 	}
 
-	public void setField(final String field) {
+	public FieldAccessExpr setField(final String field) {
 		setFieldExpr(new NameExpr(field));
+		return this;
 	}
 
-	public void setFieldExpr(NameExpr field) {
+	public FieldAccessExpr setFieldExpr(NameExpr field) {
 		this.field = field;
 		setAsParentNodeOf(this.field);
+		return this;
 	}
 
-	public void setScope(final Expression scope) {
+	public FieldAccessExpr setScope(final Expression scope) {
 		this.scope = scope;
 		setAsParentNodeOf(this.scope);
+		return this;
 	}
 
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
+    public FieldAccessExpr setTypeArgs(final List<Type<?>> typeArgs) {
 		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
+		return this;
 	}
 }

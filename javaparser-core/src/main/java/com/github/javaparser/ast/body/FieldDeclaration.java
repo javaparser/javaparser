@@ -21,14 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.Modifier.*;
-import static com.github.javaparser.ast.type.VoidType.*;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -42,9 +34,16 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -171,9 +170,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return this;
     }
 
-    public void setVariables(List<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
+        return this;
     }
 
     @Override

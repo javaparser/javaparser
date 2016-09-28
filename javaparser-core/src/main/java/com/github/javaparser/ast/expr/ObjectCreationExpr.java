@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -33,6 +28,11 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * Defines constructor call expression.
@@ -126,19 +126,22 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return typeArgs;
     }
 
-    public void setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
+    public ObjectCreationExpr setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
         this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
+        return this;
     }
 
-    public void setArgs(final List<Expression> args) {
+    public ObjectCreationExpr setArgs(final List<Expression> args) {
         this.args = args;
         setAsParentNodeOf(this.args);
+        return this;
     }
 
-    public void setScope(final Expression scope) {
+    public ObjectCreationExpr setScope(final Expression scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
     @Override
@@ -150,8 +153,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return this;
     }
 
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
+    public ObjectCreationExpr setTypeArgs(final List<Type<?>> typeArgs) {
         this.typeArgs = typeArgs;
         setAsParentNodeOf(this.typeArgs);
+        return this;
     }
 }
