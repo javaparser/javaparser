@@ -87,7 +87,7 @@ public class MethodResolutionLogic {
     }
 
     public static boolean isAssignableMatchTypeParameters(ReferenceTypeUsage expected, ReferenceTypeUsage actual,
-                                                           Map<String, TypeUsage> matchedParameters) {
+                                                          Map<String, TypeUsage> matchedParameters) {
         if (actual.getQualifiedName().equals(expected.getQualifiedName())) {
             return isAssignableMatchTypeParametersMatchingQName(expected, actual, matchedParameters);
         } else {
@@ -118,7 +118,14 @@ public class MethodResolutionLogic {
                 String expectedParamName = expectedParam.asTypeParameter().getName();
                 if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
                     if (matchedParameters.containsKey(expectedParamName)) {
-                        throw new UnsupportedOperationException("We should check if they are compatible");
+                        TypeUsage matchedParameter = matchedParameters.get(expectedParamName);
+                        if (matchedParameter.isAssignableBy(actualParam)) {
+                            return true;
+                        } else if (actualParam.isAssignableBy(matchedParameter)) {
+                            matchedParameters.put(expectedParamName, actualParam);
+                            return true;
+                        }
+                        return false;
                     } else {
                         matchedParameters.put(expectedParamName, actualParam);
                     }

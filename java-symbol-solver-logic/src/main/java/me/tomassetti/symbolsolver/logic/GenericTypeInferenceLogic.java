@@ -41,14 +41,17 @@ public class GenericTypeInferenceLogic {
         } else if (formalType.isReferenceType()) {
             ReferenceTypeUsage formalTypeAsReference = formalType.asReferenceTypeUsage();
             if (actualType.isReferenceType()) {
-                int i = 0;
-                for (TypeUsage formalTypeParameter : formalTypeAsReference.parameters()) {
-                    if (!actualType.isReferenceType()) {
-                        throw new UnsupportedOperationException(actualType.describe() + " " + formalTypeAsReference.describe());
-                    }
-                    consider(map, formalTypeParameter, actualType.asReferenceTypeUsage().parameters().get(i));
-                    i++;
+                if (formalTypeAsReference.getQualifiedName().equals(actualType.asReferenceTypeUsage().getQualifiedName())) {
+                	int i = 0;
+	                for (TypeUsage formalTypeParameter : formalTypeAsReference.parameters()) {
+	                    if (!actualType.isReferenceType()) {
+	                        throw new UnsupportedOperationException(actualType.describe() + " " + formalTypeAsReference.describe());
+	                    }
+	                    consider(map, formalTypeParameter, actualType.asReferenceTypeUsage().parameters().get(i));
+	                    i++;
+                	}
                 }
+                // TODO: consider cases where the actual type extends or implements the formal type. Here the number and order of type parameters can be different.
             } else if (actualType.isTypeVariable()) {
                 // nothing to do
             } else if (actualType.isWildcard()) {
