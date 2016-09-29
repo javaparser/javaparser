@@ -6,6 +6,8 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
@@ -31,6 +33,13 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
+    }
+
+    @Override
+    public String toString() {
+        return "JavaParserEnumDeclaration{" +
+                "wrappedNode=" + wrappedNode +
+                '}';
     }
 
     @Override
@@ -291,7 +300,18 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public List<ReferenceTypeUsage> getAllAncestors() {
-        throw new UnsupportedOperationException();
+        List<ReferenceTypeUsage> ancestors = new ArrayList<>();
+        if (wrappedNode.getImplements() != null) {
+            for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
+                SymbolReference<TypeDeclaration> implementedDeclRef = solveType(implementedType.getName(), typeSolver);
+                if (!implementedDeclRef.isSolved()) {
+                    throw new UnsolvedSymbolException(implementedType.getName());
+                }
+                ancestors.add(new ReferenceTypeUsageImpl(implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
+                ancestors.addAll(implementedDeclRef.getCorrespondingDeclaration().getAllAncestors());
+            }
+        }
+        return ancestors;
     }
 
     @Override

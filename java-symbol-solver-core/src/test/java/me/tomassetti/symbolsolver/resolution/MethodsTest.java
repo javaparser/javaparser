@@ -4,10 +4,12 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
 
@@ -16,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class MethodsTest extends AbstractTest{
 
     @Test
-    public void accessMethodThroughSuper() throws ParseException {
+    public void solveMethodAccessThroughSuper() throws ParseException {
         CompilationUnit cu = parseSample("AccessThroughSuper");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "methodTest");
@@ -25,5 +27,16 @@ public class MethodsTest extends AbstractTest{
 
         TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
+    }
+    
+    @Test
+    public void solveMethodWithClassExpressionAsParameter() throws ParseException {
+        CompilationUnit cu = parseSample("ClassExpression");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExpression");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "noneOf");
+
+        MethodUsage methodUsage = JavaParserFacade.get(new JreTypeSolver()).solveMethodAsUsage(expression);
+        assertEquals("noneOf", methodUsage.getName());
     }
 }

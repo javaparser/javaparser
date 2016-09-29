@@ -19,6 +19,7 @@ import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 
@@ -407,6 +408,9 @@ public class JavaParserFacade {
             } else {
                 throw new UnsupportedOperationException(node.getClass().getCanonicalName());
             }
+        } else if (node instanceof ClassExpr) {
+            // This implementation does not regard the actual type argument of the ClassExpr.
+            return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Class.class, typeSolver), typeSolver);
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
