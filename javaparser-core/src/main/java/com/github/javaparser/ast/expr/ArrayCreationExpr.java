@@ -115,14 +115,16 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return this;
     }
 
-    public void setDimensions(List<Expression> dimensions) {
+    public ArrayCreationExpr setDimensions(List<Expression> dimensions) {
         this.dimensions = dimensions;
 		setAsParentNodeOf(this.dimensions);
+	return this;
     }
 
-    public void setInitializer(ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr setInitializer(ArrayInitializerExpr initializer) {
         this.initializer = initializer;
 		setAsParentNodeOf(this.initializer);
+	return this;
     }
 
     @Override

@@ -183,8 +183,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         return typeParameters;
     }
 
-    public void setArrayCount(final int arrayCount) {
+    public MethodDeclaration setArrayCount(final int arrayCount) {
         this.arrayCount = arrayCount;
+	return this;
     }
 
     @Override

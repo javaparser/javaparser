@@ -56,8 +56,9 @@ public final class ThisExpr extends Expression {
 		return classExpr;
 	}
 
-	public void setClassExpr(final Expression classExpr) {
+	public ThisExpr setClassExpr(final Expression classExpr) {
 		this.classExpr = classExpr;
 		setAsParentNodeOf(this.classExpr);
+		return this;
 	}
 }

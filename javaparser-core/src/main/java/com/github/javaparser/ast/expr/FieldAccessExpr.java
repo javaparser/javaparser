@@ -82,22 +82,26 @@ public final class FieldAccessExpr extends Expression {
         return typeArgs;
 	}
 
-	public void setField(final String field) {
+	public FieldAccessExpr setField(final String field) {
 		setFieldExpr(new NameExpr(field));
+		return this;
 	}
 
-	public void setFieldExpr(NameExpr field) {
+	public FieldAccessExpr setFieldExpr(NameExpr field) {
 		this.field = field;
 		setAsParentNodeOf(this.field);
+		return this;
 	}
 
-	public void setScope(final Expression scope) {
+	public FieldAccessExpr setScope(final Expression scope) {
 		this.scope = scope;
 		setAsParentNodeOf(this.scope);
+		return this;
 	}
 
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
+    public FieldAccessExpr setTypeArgs(final List<Type<?>> typeArgs) {
 		this.typeArgs = typeArgs;
 		setAsParentNodeOf(this.typeArgs);
+		return this;
 	}
 }

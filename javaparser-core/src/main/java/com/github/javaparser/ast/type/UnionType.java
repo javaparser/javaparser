@@ -29,7 +29,7 @@ public class UnionType extends Type<UnionType> implements NodeWithAnnotations<Un
         return elements;
     }
 
-    public void setElements(List<ReferenceType> elements) {
+    public UnionType setElements(List<ReferenceType> elements) {
         if (this.elements != null) {
             for (ReferenceType element : elements){
                 element.setParentNode(null);
@@ -37,6 +37,7 @@ public class UnionType extends Type<UnionType> implements NodeWithAnnotations<Un
         }
         this.elements = elements;
         setAsParentNodeOf(this.elements);
+	return this;
     }
 
     @Override

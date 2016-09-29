@@ -69,7 +69,8 @@ public class StringLiteralExpr extends LiteralExpr {
 		return value;
 	}
 
-	public final void setValue(final String value) {
+	public final StringLiteralExpr setValue(final String value) {
 		this.value = value;
+		return this;
 	}
 }

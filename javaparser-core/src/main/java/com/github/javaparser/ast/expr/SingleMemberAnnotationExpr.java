@@ -58,8 +58,9 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 		return memberValue;
 	}
 
-	public void setMemberValue(final Expression memberValue) {
+	public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
 		this.memberValue = memberValue;
 		setAsParentNodeOf(this.memberValue);
+		return this;
 	}
 }

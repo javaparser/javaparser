@@ -169,8 +169,9 @@ public final class VariableDeclarationExpr extends Expression
         return this;
     }
 
-    public void setVars(final List<VariableDeclarator> vars) {
+    public VariableDeclarationExpr setVars(final List<VariableDeclarator> vars) {
         this.vars = vars;
         setAsParentNodeOf(this.vars);
+	return this;
     }
 }

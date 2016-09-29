@@ -146,11 +146,12 @@ public final class ImportDeclaration extends Node {
      *            <code>true</code> if this import is asterisk
      * @throws UnsupportedOperationException when setting true on an empty import declaration
      */
-    public void setAsterisk(boolean asterisk) {
+    public ImportDeclaration setAsterisk(boolean asterisk) {
         if (isEmptyImportDeclaration && asterisk) {
             throw new UnsupportedOperationException("Empty import cannot have asterisk");
         }
         this.asterisk = asterisk;
+	return this;
     }
 
     /**
@@ -160,12 +161,13 @@ public final class ImportDeclaration extends Node {
      *            the name to set
      * @throws UnsupportedOperationException when invoked on an empty import declaration
      */
-    public void setName(NameExpr name) {
+    public ImportDeclaration setName(NameExpr name) {
         if (isEmptyImportDeclaration) {
             throw new UnsupportedOperationException("Empty import cannot have name");
         }
         this.name = name;
         setAsParentNodeOf(this.name);
+	return this;
     }
 
     /**
@@ -175,11 +177,12 @@ public final class ImportDeclaration extends Node {
      *            <code>true</code> if this import is static
      * @throws UnsupportedOperationException when setting true on an empty import declaration
      */
-    public void setStatic(boolean static_) {
+    public ImportDeclaration setStatic(boolean static_) {
         if (isEmptyImportDeclaration && static_) {
             throw new UnsupportedOperationException("Empty import cannot be static");
         }
         this.static_ = static_;
+	return this;
     }
 
 }

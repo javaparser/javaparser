@@ -171,9 +171,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return this;
     }
 
-    public void setVariables(List<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
+	return this;
     }
 
     @Override

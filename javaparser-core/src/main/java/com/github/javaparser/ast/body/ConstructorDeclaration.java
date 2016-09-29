@@ -178,9 +178,10 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         return this;
     }
 
-    public void setTypeParameters(List<TypeParameter> typeParameters) {
+    public ConstructorDeclaration setTypeParameters(List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
         setAsParentNodeOf(this.typeParameters);
+	return this;
     }
 
     /**

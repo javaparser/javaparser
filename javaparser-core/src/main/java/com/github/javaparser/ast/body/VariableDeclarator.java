@@ -90,14 +90,16 @@ public final class VariableDeclarator extends Node {
         return init;
     }
 
-    public void setId(VariableDeclaratorId id) {
+    public VariableDeclarator setId(VariableDeclaratorId id) {
         this.id = id;
         setAsParentNodeOf(this.id);
+	return this;
     }
 
-    public void setInit(Expression init) {
+    public VariableDeclarator setInit(Expression init) {
         this.init = init;
         setAsParentNodeOf(this.init);
+	return this;
     }
 
     /**
@@ -105,8 +107,9 @@ public final class VariableDeclarator extends Node {
      * 
      * @param init
      */
-    public void setInit(String init) {
+    public VariableDeclarator setInit(String init) {
         this.init = new NameExpr(init);
         setAsParentNodeOf(this.init);
+	return this;
     }
 }

@@ -57,8 +57,9 @@ public final class TypeDeclarationStmt extends Statement {
 		return typeDecl;
 	}
 
-	public void setTypeDeclaration(final TypeDeclaration typeDecl) {
+	public TypeDeclarationStmt setTypeDeclaration(final TypeDeclaration typeDecl) {
 		this.typeDecl = typeDecl;
 		setAsParentNodeOf(this.typeDecl);
+		return this;
 	}
 }

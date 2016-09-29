@@ -68,8 +68,9 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
         return name;
     }
 
-    public void setArrayCount(int arrayCount) {
+    public VariableDeclaratorId setArrayCount(int arrayCount) {
         this.arrayCount = arrayCount;
+	return this;
     }
 
     @Override

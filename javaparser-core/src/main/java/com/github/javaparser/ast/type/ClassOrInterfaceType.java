@@ -106,21 +106,24 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
         return this;
     }
 
-    public void setScope(final ClassOrInterfaceType scope) {
+    public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+	return this;
     }
 
     /**
      * Allows you to set the generic arguments
      * @param typeArgs The list of types of the generics
      */
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
+    public ClassOrInterfaceType setTypeArgs(final List<Type<?>> typeArgs) {
         setTypeArguments(TypeArguments.withArguments(typeArgs));
+	return this;
     }
 
-    public void setTypeArguments(TypeArguments typeArguments) {
+    public ClassOrInterfaceType setTypeArguments(TypeArguments typeArguments) {
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments.getTypeArguments());
+	return this;
     }
 }
