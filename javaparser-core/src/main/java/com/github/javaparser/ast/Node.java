@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.*;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,10 +51,7 @@ public abstract class Node implements Cloneable {
     private List<Node> childrenNodes = new LinkedList<>();
     private List<Comment> orphanComments = new LinkedList<>();
 
-    /**
-     * This attribute can store additional information from semantic analysis.
-     */
-    private Object data;
+    private IdentityHashMap<UserDataKey<?>, Object> userData = null;
 
     private Comment comment;
 
@@ -99,15 +97,6 @@ public abstract class Node implements Cloneable {
      */
     public final Comment getComment() {
         return comment;
-    }
-
-    /**
-     * Use this to retrieve additional information associated to this node.
-     *
-     * @return data property
-     */
-    public final Object getData() {
-        return data;
     }
 
     /**
@@ -188,15 +177,6 @@ public abstract class Node implements Cloneable {
      */
     public final void setBlockComment(String comment) {
         setComment(new BlockComment(comment));
-    }
-
-    /**
-     * Use this to store additional information to this node.
-     *
-     * @param data to be set
-     */
-    public final void setData(final Object data) {
-        this.data = data;
     }
 
     /**
@@ -370,4 +350,42 @@ public abstract class Node implements Cloneable {
         return nodes;
     }
 
+    /**
+     * Gets user data for this component using the given key.
+     *
+     * @param <M>
+     *            The type of the user data.
+     *
+     * @param key
+     *            The key for the data
+     * @return The user data or null of no user data was found for the given key
+     * @see UserDataKey
+     */
+    public <M> M getUserData(final UserDataKey<M> key) {
+        if (userData == null) {
+            return null;
+        }
+        return (M) userData.get(key);
+    }
+
+    /**
+     * Sets user data for this component using the given key.
+     * For information on creating UserDataKey, see {@link UserDataKey}.
+     *
+     * @param <M>
+     *            The type of user data
+     *
+     * @param key
+     *            The singleton key for the user data
+     * @param object
+     *            The user data object
+     * @throws IllegalArgumentException
+     * @see UserDataKey
+     */
+    public <M> void setUserData(UserDataKey<M> key, M object) {
+        if (userData == null) {
+            userData = new IdentityHashMap<>();
+        }
+        userData.put(key, object);
+    }
 }
