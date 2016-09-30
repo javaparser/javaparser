@@ -32,10 +32,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -92,18 +88,21 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 		return isThis;
 	}
 
-	public void setArgs(final List<Expression> args) {
+	public ExplicitConstructorInvocationStmt setArgs(final List<Expression> args) {
 		this.args = args;
 		setAsParentNodeOf(this.args);
+		return this;
 	}
 
-	public void setExpr(final Expression expr) {
+	public ExplicitConstructorInvocationStmt setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
+		return this;
 	}
 
-	public void setThis(final boolean isThis) {
+	public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
 		this.isThis = isThis;
+		return this;
 	}
 
     @Override

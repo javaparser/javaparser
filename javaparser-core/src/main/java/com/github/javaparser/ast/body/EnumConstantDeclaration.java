@@ -30,7 +30,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -96,14 +95,16 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return name;
     }
 
-    public void setArgs(List<Expression> args) {
+    public EnumConstantDeclaration setArgs(List<Expression> args) {
         this.args = args;
 		setAsParentNodeOf(this.args);
+        return this;
     }
 
-    public void setClassBody(List<BodyDeclaration<?>> classBody) {
+    public EnumConstantDeclaration setClassBody(List<BodyDeclaration<?>> classBody) {
         this.classBody = classBody;
 		setAsParentNodeOf(this.classBody);
+        return this;
     }
 
     @Override

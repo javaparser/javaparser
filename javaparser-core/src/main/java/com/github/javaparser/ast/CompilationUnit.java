@@ -29,7 +29,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -149,7 +148,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Sets the list of comments of this compilation unit.
-     * 
+     *
      * @param comments
      *            the list of comments
      */
@@ -160,36 +159,39 @@ public final class CompilationUnit extends Node {
     /**
      * Sets the list of imports of this compilation unit. The list is initially
      * <code>null</code>.
-     * 
+     *
      * @param imports
      *            the list of imports
      */
-    public void setImports(List<ImportDeclaration> imports) {
+    public CompilationUnit setImports(List<ImportDeclaration> imports) {
         this.imports = imports;
         setAsParentNodeOf(this.imports);
+        return this;
     }
 
     /**
      * Sets or clear the package declarations of this compilation unit.
-     * 
+     *
      * @param pakage
      *            the pakage declaration to set or <code>null</code> to default
      *            package
      */
-    public void setPackage(PackageDeclaration pakage) {
+    public CompilationUnit setPackage(PackageDeclaration pakage) {
         this.pakage = pakage;
         setAsParentNodeOf(this.pakage);
+        return this;
     }
 
     /**
      * Sets the list of types declared in this compilation unit.
-     * 
+     *
      * @param types
      *            the lis of types
      */
-    public void setTypes(List<TypeDeclaration<?>> types) {
+    public CompilationUnit setTypes(List<TypeDeclaration<?>> types) {
         this.types = types;
         setAsParentNodeOf(this.types);
+        return this;
     }
 
     /**

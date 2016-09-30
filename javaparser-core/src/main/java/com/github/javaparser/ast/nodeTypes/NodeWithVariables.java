@@ -21,17 +21,10 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
-
-import static com.github.javaparser.ast.expr.NameExpr.name;
 
 /**
  * A node which has a list of variables.
@@ -39,5 +32,5 @@ import static com.github.javaparser.ast.expr.NameExpr.name;
 public interface NodeWithVariables<T> {
     List<VariableDeclarator> getVariables();
 
-    void setVariables(List<VariableDeclarator> variables);
+    FieldDeclaration setVariables(List<VariableDeclarator> variables);
 }
