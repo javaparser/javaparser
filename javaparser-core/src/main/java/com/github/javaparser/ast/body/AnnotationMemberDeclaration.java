@@ -115,9 +115,10 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return type;
     }
 
-    public void setDefaultValue(Expression defaultValue) {
+    public AnnotationMemberDeclaration setDefaultValue(Expression defaultValue) {
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
+	return this;
     }
 
     @Override

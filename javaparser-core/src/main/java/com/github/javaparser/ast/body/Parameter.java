@@ -115,8 +115,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
         return this;
     }
 
-    public void setVarArgs(boolean isVarArgs) {
+    public Parameter setVarArgs(boolean isVarArgs) {
         this.isVarArgs = isVarArgs;
+	return this;
     }
     /**
      * @return the list returned could be immutable (in that case it will be empty)
@@ -169,9 +170,10 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
         return this;
     }
 
-    public void setId(VariableDeclaratorId id) {
+    public Parameter setId(VariableDeclaratorId id) {
         this.id = id;
         setAsParentNodeOf(this.id);
+	return this;
     }
 
     @Override

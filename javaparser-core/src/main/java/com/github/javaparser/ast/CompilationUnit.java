@@ -163,9 +163,10 @@ public final class CompilationUnit extends Node {
      * @param imports
      *            the list of imports
      */
-    public void setImports(List<ImportDeclaration> imports) {
+    public CompilationUnit setImports(List<ImportDeclaration> imports) {
         this.imports = imports;
         setAsParentNodeOf(this.imports);
+	return this;
     }
 
     /**
@@ -175,9 +176,10 @@ public final class CompilationUnit extends Node {
      *            the pakage declaration to set or <code>null</code> to default
      *            package
      */
-    public void setPackage(PackageDeclaration pakage) {
+    public CompilationUnit setPackage(PackageDeclaration pakage) {
         this.pakage = pakage;
         setAsParentNodeOf(this.pakage);
+	return this;
     }
 
     /**
@@ -186,9 +188,10 @@ public final class CompilationUnit extends Node {
      * @param types
      *            the lis of types
      */
-    public void setTypes(List<TypeDeclaration<?>> types) {
+    public CompilationUnit setTypes(List<TypeDeclaration<?>> types) {
         this.types = types;
         setAsParentNodeOf(this.types);
+	return this;
     }
 
     /**

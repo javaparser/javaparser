@@ -109,8 +109,9 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 		return type.toBoxedType();
 	}
 
-	public void setType(final Primitive type) {
+	public PrimitiveType setType(final Primitive type) {
 		this.type = type;
+		return this;
 	}
 
 }

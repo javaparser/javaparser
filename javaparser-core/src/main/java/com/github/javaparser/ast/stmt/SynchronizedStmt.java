@@ -79,14 +79,16 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
      * @param block
      */
     @Deprecated
-    public void setBlock(final BlockStmt block) {
+    public SynchronizedStmt setBlock(final BlockStmt block) {
         this.block = block;
         setAsParentNodeOf(this.block);
+	return this;
     }
 
-    public void setExpr(final Expression expr) {
+    public SynchronizedStmt setExpr(final Expression expr) {
         this.expr = expr;
         setAsParentNodeOf(this.expr);
+	return this;
     }
 
     @Override

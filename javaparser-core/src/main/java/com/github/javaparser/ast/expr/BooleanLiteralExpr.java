@@ -58,7 +58,8 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         return value;
     }
 
-    public void setValue(boolean value) {
+    public BooleanLiteralExpr setValue(boolean value) {
         this.value = value;
+	return this;
     }
 }

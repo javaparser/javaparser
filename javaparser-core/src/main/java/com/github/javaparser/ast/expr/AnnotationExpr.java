@@ -40,8 +40,9 @@ public abstract class AnnotationExpr extends Expression {
 		return name;
 	}
 
-	public void setName(NameExpr name) {
+	public AnnotationExpr setName(NameExpr name) {
 		this.name = name;
 		setAsParentNodeOf(name);
+		return this;
 	}
 }

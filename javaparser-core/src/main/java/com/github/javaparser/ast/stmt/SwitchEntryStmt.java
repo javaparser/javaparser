@@ -75,9 +75,10 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return stmts;
 	}
 
-	public void setLabel(final Expression label) {
+	public SwitchEntryStmt setLabel(final Expression label) {
 		this.label = label;
 		setAsParentNodeOf(this.label);
+		return this;
 	}
 
 	@Override

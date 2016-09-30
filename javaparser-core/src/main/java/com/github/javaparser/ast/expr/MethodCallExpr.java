@@ -114,27 +114,33 @@ public final class MethodCallExpr extends Expression {
         return typeArgs;
     }
 
-    public void setArgs(final List<Expression> args) {
+    public MethodCallExpr setArgs(final List<Expression> args) {
         this.args = args;
         setAsParentNodeOf(this.args);
+	return this;
     }
 
-    public void setName(final String name) {
+    public MethodCallExpr setName(final String name) {
         setNameExpr(new NameExpr(name));
+	return this;
     }
 
-    public void setNameExpr(NameExpr name) {
+    public MethodCallExpr setNameExpr(NameExpr name) {
         this.name = name;
         setAsParentNodeOf(this.name);
+	return this;
+
     }
 
-    public void setScope(final Expression scope) {
+    public MethodCallExpr setScope(final Expression scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+	return this;
     }
 
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
+    public MethodCallExpr setTypeArgs(final List<Type<?>> typeArgs) {
         this.typeArgs = typeArgs;
         setAsParentNodeOf(this.typeArgs);
+	return this;
     }
 }

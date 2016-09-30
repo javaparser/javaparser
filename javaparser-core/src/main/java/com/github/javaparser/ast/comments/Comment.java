@@ -64,8 +64,9 @@ public abstract class Comment extends Node {
      * @param content
      *            the text of the comment to set
      */
-    public void setContent(String content) {
+    public Comment setContent(String content) {
         this.content = content;
+	return this;
     }
 
     public boolean isLineComment()
@@ -86,11 +87,11 @@ public abstract class Comment extends Node {
         return this.commentedNode;
     }
 
-    public void setCommentedNode(Node commentedNode)
+    public Comment setCommentedNode(Node commentedNode)
     {
         if (commentedNode==null) {
             this.commentedNode = null;
-            return;
+            return this;
         }
         if (commentedNode==this) {
             throw new IllegalArgumentException();
@@ -99,6 +100,7 @@ public abstract class Comment extends Node {
             throw new IllegalArgumentException();
         }
         this.commentedNode = commentedNode;
+	return this;
     }
 
     public boolean isOrphan()

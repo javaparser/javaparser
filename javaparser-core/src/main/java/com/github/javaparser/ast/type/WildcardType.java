@@ -70,14 +70,16 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
 		return sup;
 	}
 
-	public void setExtends(final ReferenceType ext) {
+	public WildcardType setExtends(final ReferenceType ext) {
 		this.ext = ext;
 		setAsParentNodeOf(this.ext);
+		return this;
 	}
 
-	public void setSuper(final ReferenceType sup) {
+	public WildcardType setSuper(final ReferenceType sup) {
 		this.sup = sup;
 		setAsParentNodeOf(this.sup);
+		return this;
 	}
 
 }
