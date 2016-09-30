@@ -53,7 +53,6 @@
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <!-- here the phase you need -->
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy-resources</goal>

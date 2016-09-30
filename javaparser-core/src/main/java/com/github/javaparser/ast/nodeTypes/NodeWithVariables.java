@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
  * 
@@ -18,20 +18,26 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
-package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
+package com.github.javaparser.ast.nodeTypes;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+
+import java.lang.annotation.Annotation;
+import java.util.List;
+
+import static com.github.javaparser.ast.expr.NameExpr.name;
 
 /**
- * @author Julio Vilmar Gesser
+ * A node which has a list of variables.
  */
-public abstract class ReferenceType<T extends ReferenceType> extends Type<T> {
+public interface NodeWithVariables<T> {
+    List<VariableDeclarator> getVariables();
 
-    public ReferenceType() {
-	}
-
-	public ReferenceType(final Range range) {
-		super(range);
-	}
+    void setVariables(List<VariableDeclarator> variables);
 }

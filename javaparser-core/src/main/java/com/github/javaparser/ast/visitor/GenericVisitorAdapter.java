@@ -79,7 +79,6 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -101,37 +100,13 @@ import com.github.javaparser.ast.stmt.SynchronizedStmt;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
+import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
-
-import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A> {
-
-	private R visitArraysAnnotations(NodeWithArrays<?> n, A arg) {
-		for(List<AnnotationExpr> aux: n.getArraysAnnotations()) {
-			if (aux != null) {
-				for (AnnotationExpr annotation : aux) {
-					R result = annotation.accept(this, arg);
-					if (result != null) {
-						return result;
-					}
-				}
-			}
-		}
-		return null;
-	}
 
 	@Override
 	public R visit(final AnnotationDeclaration n, final A arg) {
@@ -211,25 +186,15 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	public R visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n, arg);
 		{
-			R result = visitArraysAnnotations(n, arg);
-			if (result != null) {
-				return result;
-			}
-		}
-		{
 			R result = n.getType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
 		}
-		if (n.getDimensions() != null) {
-			for (final Expression dim : n.getDimensions()) {
-				{
-					R result = dim.accept(this, arg);
-					if (result != null) {
-						return result;
-					}
-				}
+		for(ArrayCreationLevel level: n.getLevels()){
+			R result = level.accept(this, arg);
+			if (result != null) {
+				return result;
 			}
 		}
 		if (n.getInitializer() != null) {
@@ -370,7 +335,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getCatchBlock().accept(this, arg);
+			R result = n.getBody().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -808,7 +773,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getElementType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1079,7 +1044,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getElementType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1235,7 +1200,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getElementType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1274,14 +1239,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	}
 
 	@Override
-	public R visit(final ReferenceType n, final A arg) {
+	public R visit(ArrayType n, A arg) {
 		visitComment(n, arg);
-		{
-			R result = visitArraysAnnotations(n, arg);
-			if (result != null) {
-				return result;
-			}
-		}
 		for (final AnnotationExpr a : n.getAnnotations()) {
 			R result = a.accept(this, arg);
 			if (result != null) {
@@ -1289,7 +1248,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getComponentType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1297,7 +1256,27 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		return null;
 	}
 
-    @Override
+	@Override
+	public R visit(ArrayCreationLevel n, A arg) {
+		visitComment(n, arg);
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			R result = a.accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		{
+			if(n.getDimension()!=null) {
+				R result = n.getDimension().accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
     public R visit(final IntersectionType n, final A arg) {
 		visitComment(n, arg);
 		for (final AnnotationExpr a : n.getAnnotations()) {
@@ -1448,7 +1427,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getBlock().accept(this, arg);
+			R result = n.getBody().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
@@ -1578,12 +1557,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 			}
 		}
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getElementType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}
 		}
-		for (final VariableDeclarator v : n.getVars()) {
+		for (final VariableDeclarator v : n.getVariables()) {
 			{
 				R result = v.accept(this, arg);
 				if (result != null) {
@@ -1729,6 +1708,19 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		}
 		return null;
     }
+
+	@Override
+	public R visit(ArrayBracketPair n, A arg) {
+		for (final AnnotationExpr a : n.getAnnotations()) {
+			{
+				R result = a.accept(this, arg);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public R visit(final BlockComment n, final A arg) {

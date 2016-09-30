@@ -21,11 +21,14 @@
  
 package com.github.javaparser.ast.comments;
 
+import com.github.javaparser.utils.Utils;
+
 import java.io.*;
 import java.util.*;
 
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.Range.range;
+import static com.github.javaparser.utils.Utils.*;
 
 /**
  * This parser cares exclusively about comments.
@@ -173,7 +176,7 @@ public class CommentsParser {
                         }
                         state = State.CODE;
                     } else {
-                        currentContent.append(c == '\r' ? System.getProperty("line.separator") : c);
+                        currentContent.append(c == '\r' ? EOL : c);
                     }
                     break;
                 case IN_STRING:

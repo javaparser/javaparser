@@ -21,12 +21,10 @@
  
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -125,7 +123,9 @@ public interface GenericVisitor<R, A> {
 
 	R visit(PrimitiveType n, A arg);
 
-	R visit(ReferenceType n, A arg);
+	R visit(ArrayType n, A arg);
+	
+	R visit(ArrayCreationLevel n, A arg);
 
     R visit(IntersectionType n, A arg);
 
@@ -252,4 +252,6 @@ public interface GenericVisitor<R, A> {
     R visit(MethodReferenceExpr n, A arg);
 
     R visit(TypeExpr n, A arg);
+
+	R visit(ArrayBracketPair arrayBracketPair, A arg);
 }
