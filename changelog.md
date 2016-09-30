@@ -72,3 +72,26 @@ Version 2.3.0
 * Improved documentation
 * AST: lists are now lazy initialized
 
+Version 2.1.0-SNAPSHOT
+-------------
+* Features
+  * [#75 performance improvement for `PositionUtils.sortByBeginPosition`](https://github.com/javaparser/javaparser/issues/75)
+  * [#64 In getDeclarationAsString parameter names should be optional](https://github.com/javaparser/javaparser/issues/64)
+* Bugfixes
+  * [#79 Fix NPE in `ConstructorDeclaration.getDeclarationAsString`](https://github.com/javaparser/javaparser/pull/79)
+  * [#86 Add missing functions to ModifierVisitorAdapter](https://github.com/javaparser/javaparser/pull/86)
+  * [#82 set LambdaExpr as parent of its child nodes](https://github.com/javaparser/javaparser/issues/82)
+  * [#87 implement `setJavadoc` and `getJavadoc` at various classes](https://github.com/javaparser/javaparser/issues/87)
+  * [#96 Fixed encoding issue in `Javaparser.parse`](https://github.com/javaparser/javaparser/pull/96)
+  * [#85 Casting a lambda expression causes a parsing failure](https://github.com/javaparser/javaparser/issues/85)
+  * [#88 `MethodReferenceExpr` and `TypeExpr` don't set themselves as parents](https://github.com/javaparser/javaparser/issues/88)
+* Internal
+  * [#89 CommentsParser.State contains unused fields](https://github.com/javaparser/javaparser/issues/89)
+  * Switched from drone.io to [Travis](https://travis-ci.org/javaparser/javaparser)
+  * [#105 Enforce compiling the library for a certain Java version](https://github.com/javaparser/javaparser/pull/105)
+
+[Code changes](https://github.com/javaparser/javaparser/compare/javaparser-parent-2.0.0...master)
+
+Version 2.0.0
+-------------
+* support Java 8
