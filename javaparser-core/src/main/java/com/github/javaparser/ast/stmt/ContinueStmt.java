@@ -56,7 +56,8 @@ public final class ContinueStmt extends Statement {
 		return id;
 	}
 
-	public void setId(final String id) {
+	public ContinueStmt setId(final String id) {
 		this.id = id;
+		return this;
 	}
 }

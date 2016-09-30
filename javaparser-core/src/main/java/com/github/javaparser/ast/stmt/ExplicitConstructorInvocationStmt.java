@@ -21,10 +21,6 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -92,18 +88,21 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 		return isThis;
 	}
 
-	public void setArgs(final List<Expression> args) {
+	public ExplicitConstructorInvocationStmt setArgs(final List<Expression> args) {
 		this.args = args;
 		setAsParentNodeOf(this.args);
+		return this;
 	}
 
-	public void setExpr(final Expression expr) {
+	public ExplicitConstructorInvocationStmt setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
+		return this;
 	}
 
-	public void setThis(final boolean isThis) {
+	public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
 		this.isThis = isThis;
+		return this;
 	}
 
     @Override

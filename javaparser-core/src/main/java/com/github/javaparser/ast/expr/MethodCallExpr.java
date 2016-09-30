@@ -21,15 +21,15 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -114,18 +114,21 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 		setAsParentNodeOf(this.args);
 	}
 
-    public void setName(final String name) {
+    public MethodCallExpr setName(final String name) {
         setNameExpr(new NameExpr(name));
+        return this;
     }
 
-    public void setNameExpr(NameExpr name) {
+    public MethodCallExpr setNameExpr(NameExpr name) {
         this.name = name;
         setAsParentNodeOf(this.name);
+        return this;
     }
 
-    public void setScope(final Expression scope) {
+    public MethodCallExpr setScope(final Expression scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
     @Override

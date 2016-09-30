@@ -41,6 +41,13 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -183,6 +190,7 @@ public final class VariableDeclarationExpr extends Expression implements
     public void setVariables(final List<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
+        return this;
     }
 
     public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {

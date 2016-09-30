@@ -99,9 +99,10 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
         return this;
     }
 
-    public void setScope(final ClassOrInterfaceType scope) {
+    public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
     @Override

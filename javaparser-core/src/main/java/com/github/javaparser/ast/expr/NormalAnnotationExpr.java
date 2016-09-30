@@ -30,6 +30,10 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -66,9 +70,10 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         return pairs;
     }
 
-    public void setPairs(final List<MemberValuePair> pairs) {
+    public NormalAnnotationExpr setPairs(final List<MemberValuePair> pairs) {
         this.pairs = pairs;
         setAsParentNodeOf(this.pairs);
+        return this;
     }
 
     /**

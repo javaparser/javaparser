@@ -75,9 +75,10 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return scope;
     }
 
-    public void setScope(Expression scope) {
+    public MethodReferenceExpr setScope(Expression scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
     @Override
@@ -96,8 +97,9 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
+    public MethodReferenceExpr setIdentifier(String identifier) {
         this.identifier = identifier;
+        return this;
     }
 
 }

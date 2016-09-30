@@ -94,14 +94,16 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
      * @param catchBlock
      */
     @Deprecated
-	public void setCatchBlock(final BlockStmt catchBlock) {
+	public CatchClause setCatchBlock(final BlockStmt catchBlock) {
 		this.catchBlock = catchBlock;
 		setAsParentNodeOf(this.catchBlock);
+        return this;
 	}
 
-	public void setParam(final Parameter param) {
+	public CatchClause setParam(final Parameter param) {
 		this.param = param;
 		setAsParentNodeOf(this.param);
+        return this;
 	}
 
     @Override

@@ -21,9 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
@@ -37,6 +34,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import java.util.EnumSet;
+import java.util.List;
+
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -134,8 +134,9 @@ public final class Parameter extends Node implements
         return this;
     }
 
-    public void setVarArgs(boolean isVarArgs) {
+    public Parameter setVarArgs(boolean isVarArgs) {
         this.isVarArgs = isVarArgs;
+        return this;
     }
     /**
      * @return the list returned could be immutable (in that case it will be empty)

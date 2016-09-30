@@ -21,16 +21,14 @@
  
 package com.github.javaparser.ast.type;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
+
+import java.util.HashMap;
 
 /**
  * @author Julio Vilmar Gesser
@@ -111,8 +109,9 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 		return type.toBoxedType();
 	}
 
-	public void setType(final Primitive type) {
+	public PrimitiveType setType(final Primitive type) {
 		this.type = type;
+		return this;
 	}
 
 }

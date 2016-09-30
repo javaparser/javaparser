@@ -96,17 +96,20 @@ public final class BinaryExpr extends Expression {
         return right;
     }
 
-    public void setLeft(Expression left) {
+    public BinaryExpr setLeft(Expression left) {
         this.left = left;
 		setAsParentNodeOf(this.left);
+        return this;
     }
 
-    public void setOperator(Operator op) {
+    public BinaryExpr setOperator(Operator op) {
         this.op = op;
+        return this;
     }
 
-    public void setRight(Expression right) {
+    public BinaryExpr setRight(Expression right) {
         this.right = right;
 		setAsParentNodeOf(this.right);
+        return this;
     }
 }

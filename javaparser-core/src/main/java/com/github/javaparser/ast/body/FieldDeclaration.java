@@ -46,6 +46,14 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -170,6 +178,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public void setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
+        return this;
     }
 
     @Override
