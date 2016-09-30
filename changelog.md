@@ -63,3 +63,13 @@ Version 3.0.0-alpha.2
 * 157 a new parser frontend, check https://github.com/javaparser/javaparser/pull/447 for explanations
 * 435 more builder methods like 400 and 405
 * 111 440 443 444 445 446 bugs & cleanups
+
+Version 3.0.0-alpha.3
+------------------
+* 112 237 466 465 461 460 458 457 fundamentally changes how we deal with arrays. It is explained in the last post of https://github.com/javaparser/javaparser/issues/237
+* 472 456 makes the "data" field on every node more structured.
+* 477 468 refactor TypeArguments. You will find that TypeArguments is no longer a type, it is just a list in some nodes.
+* 482 adds the "nodeTypes" packages to the osgi export.
+* 479 476 makes all setters on nodes return this so they become chainable.
+* 473 437 clean up CloneVisitor.
+
