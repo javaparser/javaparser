@@ -220,8 +220,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
-		if (n.getTypeArgs() != null) {
-			for (final Type t : n.getTypeArgs()) {
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
 				t.accept(this, arg);
 			}
 		}
@@ -346,8 +346,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (!n.isThis() && n.getExpr() != null) {
 			n.getExpr().accept(this, arg);
 		}
-		if (n.getTypeArgs() != null) {
-			for (final Type t : n.getTypeArgs()) {
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
 				t.accept(this, arg);
 			}
 		}
@@ -470,8 +470,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
-		if (n.getTypeArgs() != null) {
-			for (final Type t : n.getTypeArgs()) {
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
 				t.accept(this, arg);
 			}
 		}
@@ -531,8 +531,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		if (n.getScope() != null) {
 			n.getScope().accept(this, arg);
 		}
-		if (n.getTypeArgs() != null) {
-			for (final Type t : n.getTypeArgs()) {
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
 				t.accept(this, arg);
 			}
 		}
@@ -769,11 +769,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(MethodReferenceExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
-	    if (n.getTypeArguments().getTypeArguments() != null) {
-		    for (final Type t : n.getTypeArguments().getTypeArguments()) {
-			    t.accept(this, arg);
-		    }
-	    }
+		if (n.getTypeArguments() != null) {
+			for (final Type t : n.getTypeArguments()) {
+				t.accept(this, arg);
+			}
+		}
         if (n.getScope() != null) {
             n.getScope().accept(this, arg);
         }

@@ -28,6 +28,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -158,11 +159,12 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-    private void printTypeArgs(final List<Type<?>> args, final Object arg) {
-		if (!isNullOrEmpty(args)) {
+	private void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Object arg) {
+		List<Type<?>> typeArguments = nodeWithTypeArguments.getTypeArguments();
+		if (!isNullOrEmpty(typeArguments)) {
 			printer.print("<");
-            for (final Iterator<Type<?>> i = args.iterator(); i.hasNext();) {
-                final Type<?> t = i.next();
+			for (final Iterator<Type<?>> i = typeArguments.iterator(); i.hasNext(); ) {
+				final Type<?> t = i.next();
 				t.accept(this, arg);
 				if (i.hasNext()) {
 					printer.print(", ");
@@ -365,7 +367,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		if (n.isUsingDiamondOperator()) {
 			printer.print("<>");
 		} else {
-			printTypeArgs(n.getTypeArgs(), arg);
+			printTypeArgs(n, arg);
 		}
 	}
 
@@ -841,7 +843,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			n.getScope().accept(this, arg);
 			printer.print(".");
 		}
-		printTypeArgs(n.getTypeArgs(), arg);
+		printTypeArgs(n, arg);
 		printer.print(n.getName());
 		printArguments(n.getArgs(), arg);
 	}
@@ -856,8 +858,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 		printer.print("new ");
 
-		printTypeArgs(n.getTypeArgs(), arg);
-		if (!isNullOrEmpty(n.getTypeArgs())) {
+		printTypeArgs(n, arg);
+		if (!isNullOrEmpty(n.getTypeArguments())) {
 			printer.print(" ");
 		}
 
@@ -1028,14 +1030,14 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		if (n.isThis()) {
-			printTypeArgs(n.getTypeArgs(), arg);
+			printTypeArgs(n, arg);
 			printer.print("this");
 		} else {
 			if (n.getExpr() != null) {
 				n.getExpr().accept(this, arg);
 				printer.print(".");
 			}
-			printTypeArgs(n.getTypeArgs(), arg);
+			printTypeArgs(n, arg);
 			printer.print("super");
 		}
 		printArguments(n.getArgs(), arg);
@@ -1571,7 +1573,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 
 		printer.print("::");
-		printTypeArgs(n.getTypeArguments().getTypeArguments(), arg);
+		printTypeArgs(n, arg);
 		if (identifier != null) {
 			printer.print(identifier);
 		}

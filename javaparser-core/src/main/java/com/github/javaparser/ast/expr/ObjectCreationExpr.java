@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -43,13 +44,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ObjectCreationExpr extends Expression implements NodeWithType<ObjectCreationExpr> {
+public final class ObjectCreationExpr extends Expression implements 
+        NodeWithTypeArguments<ObjectCreationExpr>,
+        NodeWithType<ObjectCreationExpr> {
 
     private Expression scope;
 
     private ClassOrInterfaceType type;
 
-    private List<Type<?>> typeArgs;
+    private List<Type<?>> typeArguments;
 
     private List<Expression> args;
 
@@ -72,16 +75,16 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         setArgs(args);
     }
 
-    public ObjectCreationExpr(final Range range,
-                              final Expression scope, final ClassOrInterfaceType type, final List<Type<?>> typeArgs,
+	public ObjectCreationExpr(final Range range,
+			final Expression scope, final ClassOrInterfaceType type, final List<Type<?>> typeArguments,
                               final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
-        super(range);
-        setScope(scope);
-        setType(type);
-        setTypeArgs(typeArgs);
-        setArgs(args);
-        setAnonymousClassBody(anonymousBody);
-    }
+		super(range);
+		setScope(scope);
+		setType(type);
+		setTypeArguments(typeArguments);
+		setArgs(args);
+		setAnonymousClassBody(anonymousBody);
+	}
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -121,11 +124,6 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return type;
     }
 
-    public List<Type<?>> getTypeArgs() {
-        typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
-    }
-
     public void setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
         this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
@@ -150,8 +148,15 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return this;
     }
 
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
-        this.typeArgs = typeArgs;
-        setAsParentNodeOf(this.typeArgs);
+    @Override
+    public List<Type<?>> getTypeArguments() {
+        return typeArguments;
+    }
+
+    @Override
+    public ObjectCreationExpr setTypeArguments(final List<Type<?>> types) {
+        this.typeArguments = types;
+        setAsParentNodeOf(this.typeArguments);
+        return this;
     }
 }
