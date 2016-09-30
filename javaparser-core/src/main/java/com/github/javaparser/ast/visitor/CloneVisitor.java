@@ -173,7 +173,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(ClassOrInterfaceDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg);
 		List<ClassOrInterfaceType> extendsList = visit(_n.getExtends(), _arg);
@@ -191,7 +190,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(EnumDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		List<ClassOrInterfaceType> implementsList = visit(_n.getImplements(), _arg);
 		List<EnumConstantDeclaration> entries = visit(_n.getEntries(), _arg);
@@ -208,7 +206,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(EmptyTypeDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		EmptyTypeDeclaration r = new EmptyTypeDeclaration(
@@ -220,7 +217,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(EnumConstantDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
         List<BodyDeclaration<?>> classBody = visit(_n.getClassBody(), _arg);
@@ -236,7 +232,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(AnnotationDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
         List<BodyDeclaration<?>> members = visit(_n.getMembers(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
@@ -251,7 +246,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(AnnotationMemberDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		Type<?> type_ = cloneNodes(_n.getType(), _arg);
 		Expression defaultValue = cloneNodes(_n.getDefaultValue(), _arg);
@@ -267,7 +261,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(FieldDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations_ = visit(_n.getAnnotations(), _arg);
 		Type<?> elementType_ = cloneNodes(_n.getElementType(), _arg);
 		List<VariableDeclarator> variables_ = visit(_n.getVariables(), _arg);
@@ -317,7 +310,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(ConstructorDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg);
 		List<Parameter> parameters = visit(_n.getParameters(), _arg);
@@ -335,7 +327,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(MethodDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		List<AnnotationExpr> annotations_ = visit(_n.getAnnotations(), _arg);
 		List<TypeParameter> typeParameters_ = visit(_n.getTypeParameters(), _arg);
 		Type<?> type_ = cloneNodes(_n.getElementType(), _arg);
@@ -387,7 +378,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(EmptyMemberDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		EmptyMemberDeclaration r = new EmptyMemberDeclaration(
@@ -399,7 +389,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(InitializerDeclaration _n, Object _arg) {
-		JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg);
 		BlockStmt block = cloneNodes(_n.getBlock(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
