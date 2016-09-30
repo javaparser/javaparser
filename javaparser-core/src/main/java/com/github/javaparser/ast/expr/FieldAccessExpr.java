@@ -29,8 +29,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -77,7 +75,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 		return scope;
 	}
 
-	public void setField(final String field) {
+	public FieldAccessExpr setField(final String field) {
 		setFieldExpr(new NameExpr(field));
 		return this;
 	}

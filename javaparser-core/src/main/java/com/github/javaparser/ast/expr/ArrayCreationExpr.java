@@ -89,7 +89,7 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return type;
     }
 
-    public void setInitializer(ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr setInitializer(ArrayInitializerExpr initializer) {
         this.initializer = initializer;
 		setAsParentNodeOf(this.initializer);
         return this;

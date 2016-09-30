@@ -21,9 +21,7 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.ast.type.VoidType.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.ArrayList;
@@ -38,7 +36,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
@@ -46,13 +43,8 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -61,7 +53,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         NodeWithJavaDoc<FieldDeclaration>,
         NodeWithElementType<FieldDeclaration>,
         NodeWithModifiers<FieldDeclaration>,
-        NodeWithVariables<VariableDeclarationExpr> {
+        NodeWithVariables<FieldDeclaration> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
@@ -175,7 +167,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
-    public void setVariables(List<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
         return this;

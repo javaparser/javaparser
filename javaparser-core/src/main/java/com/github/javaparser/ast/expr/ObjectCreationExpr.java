@@ -124,7 +124,7 @@ public final class ObjectCreationExpr extends Expression implements
         return type;
     }
 
-    public void setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
+    public ObjectCreationExpr setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
         this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
         return this;
