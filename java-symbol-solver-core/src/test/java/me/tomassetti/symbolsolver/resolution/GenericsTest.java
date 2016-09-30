@@ -21,6 +21,7 @@ import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import org.junit.Test;
 
+import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
@@ -454,6 +455,21 @@ public class GenericsTest extends AbstractTest{
 
         assertEquals(false, typeUsage.isTypeVariable());
         assertEquals("boolean", typeUsage.describe());
+    }
+    
+    @Test
+    public void methodWithGenericParameterTypes() throws ParseException {
+        CompilationUnit cu = parseSample("GenericCollectionWithExtension");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodCallExpr methodCall = Navigator.findMethodCall(method, "foo");
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        MethodUsage methodUsage = javaParserFacade.solveMethodAsUsage(methodCall);
+
+        assertEquals("foo", methodUsage.getName());
     }
 
     @Test

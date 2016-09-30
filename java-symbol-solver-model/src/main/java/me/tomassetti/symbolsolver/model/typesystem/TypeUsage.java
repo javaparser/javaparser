@@ -107,7 +107,10 @@ public interface TypeUsage {
     ///
     /// Relation with other types
     ///
-
+    
+    /**
+     * This method checks if ThisType t = new OtherType() would compile.
+     */
     boolean isAssignableBy(TypeUsage other);
 
 }

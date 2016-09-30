@@ -45,6 +45,9 @@ public class ReferenceTypeUsageImpl extends ReferenceTypeUsage {
         throw new UnsupportedOperationException(this.typeDeclaration.getClass().getCanonicalName());
     }
 
+    /**
+     * This method checks if ThisType t = new OtherType() would compile.
+     */
     @Override
     public boolean isAssignableBy(TypeUsage other) {
         if (other instanceof NullTypeUsage) {

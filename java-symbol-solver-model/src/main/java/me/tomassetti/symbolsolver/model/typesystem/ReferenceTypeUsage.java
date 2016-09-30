@@ -270,7 +270,10 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
     public boolean isTypeVariable() {
         return typeDeclaration.isTypeVariable();
     }
-
+    
+    /**
+     * This method checks if ThisType t = new OtherType() would compile.
+     */
     @Override
     public abstract boolean isAssignableBy(TypeUsage other);
 
