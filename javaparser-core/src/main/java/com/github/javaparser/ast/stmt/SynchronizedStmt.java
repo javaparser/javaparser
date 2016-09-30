@@ -84,9 +84,10 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         setAsParentNodeOf(this.block);
     }
 
-    public void setExpr(final Expression expr) {
+    public SynchronizedStmt setExpr(final Expression expr) {
         this.expr = expr;
         setAsParentNodeOf(this.expr);
+        return this;
     }
 
     @Override

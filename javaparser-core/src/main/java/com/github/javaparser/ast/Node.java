@@ -26,7 +26,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.*;
 
 import java.util.ArrayList;
@@ -116,15 +115,17 @@ public abstract class Node implements Cloneable {
     /**
      * Sets the begin position of this node in the source file.
      */
-    public void setBegin(Position begin) {
+    public Node setBegin(Position begin) {
         range = range.withBegin(begin);
+        return this;
     }
 
     /**
      * Sets the end position of this node in the source file.
      */
-    public void setEnd(Position end) {
+    public Node setEnd(Position end) {
         range = range.withEnd(end);
+        return this;
     }
 
     /**
@@ -137,8 +138,9 @@ public abstract class Node implements Cloneable {
     /**
      * @param range the range of characters in the source code that this node covers.
      */
-    public void setRange(Range range) {
+    public Node setRange(Range range) {
         this.range = range;
+        return this;
     }
 
     /**
@@ -146,7 +148,7 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setComment(final Comment comment) {
+    public final Node setComment(final Comment comment) {
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
@@ -157,6 +159,7 @@ public abstract class Node implements Cloneable {
         if (comment != null) {
             this.comment.setCommentedNode(this);
         }
+        return this;
     }
 
 
@@ -166,8 +169,9 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setLineComment(String comment) {
+    public final Node setLineComment(String comment) {
         setComment(new LineComment(comment));
+        return this;
     }
 
     /**
@@ -175,8 +179,9 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setBlockComment(String comment) {
+    public final Node setBlockComment(String comment) {
         setComment(new BlockComment(comment));
+        return this;
     }
 
     /**
@@ -286,7 +291,7 @@ public abstract class Node implements Cloneable {
      *
      * @param parentNode node to be set as parent
      */
-    public void setParentNode(Node parentNode) {
+    public Node setParentNode(Node parentNode) {
         // remove from old parent, if any
         if (this.parentNode != null) {
             this.parentNode.childrenNodes.remove(this);
@@ -296,20 +301,23 @@ public abstract class Node implements Cloneable {
         if (this.parentNode != null) {
             this.parentNode.childrenNodes.add(this);
         }
+        return this;
     }
 
-    protected void setAsParentNodeOf(List<? extends Node> childNodes) {
+    protected Node setAsParentNodeOf(List<? extends Node> childNodes) {
         if (childNodes != null) {
             for (Node current : childNodes) {
                 current.setParentNode(this);
             }
         }
+        return this;
     }
 
-    protected void setAsParentNodeOf(Node childNode) {
+    protected Node setAsParentNodeOf(Node childNode) {
         if (childNode != null) {
             childNode.setParentNode(this);
         }
+        return this;
     }
 
     public static final int ABSOLUTE_BEGIN_LINE = -1;
@@ -382,10 +390,11 @@ public abstract class Node implements Cloneable {
      * @throws IllegalArgumentException
      * @see UserDataKey
      */
-    public <M> void setUserData(UserDataKey<M> key, M object) {
+    public <M> Node setUserData(UserDataKey<M> key, M object) {
         if (userData == null) {
             userData = new IdentityHashMap<>();
         }
         userData.put(key, object);
+        return this;
     }
 }

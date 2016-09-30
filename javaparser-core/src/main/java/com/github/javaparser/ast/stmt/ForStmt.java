@@ -101,18 +101,21 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
 	}
 
-	public void setCompare(final Expression compare) {
+	public ForStmt setCompare(final Expression compare) {
 		this.compare = compare;
 		setAsParentNodeOf(this.compare);
+		return this;
 	}
 
-	public void setInit(final List<Expression> init) {
+	public ForStmt setInit(final List<Expression> init) {
 		this.init = init;
 		setAsParentNodeOf(this.init);
+		return this;
 	}
 
-	public void setUpdate(final List<Expression> update) {
+	public ForStmt setUpdate(final List<Expression> update) {
 		this.update = update;
 		setAsParentNodeOf(this.update);
+		return this;
 	}
 }

@@ -74,13 +74,15 @@ public final class SwitchStmt extends Statement {
 		return selector;
 	}
 
-	public void setEntries(final List<SwitchEntryStmt> entries) {
+	public SwitchStmt setEntries(final List<SwitchEntryStmt> entries) {
 		this.entries = entries;
 		setAsParentNodeOf(this.entries);
+		return this;
 	}
 
-	public void setSelector(final Expression selector) {
+	public SwitchStmt setSelector(final Expression selector) {
 		this.selector = selector;
 		setAsParentNodeOf(this.selector);
+		return this;
 	}
 }

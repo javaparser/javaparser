@@ -101,22 +101,25 @@ public final class VariableDeclarator extends Node implements
         return init;
     }
 
-    public void setId(VariableDeclaratorId id) {
+    public VariableDeclarator setId(VariableDeclaratorId id) {
         this.id = id;
         setAsParentNodeOf(this.id);
+        return this;
     }
 
-    public void setInit(Expression init) {
+    public VariableDeclarator setInit(Expression init) {
         this.init = init;
         setAsParentNodeOf(this.init);
+        return this;
     }
 
     /**
      * Will create a {@link NameExpr} with the init param
      */
-    public void setInit(String init) {
+    public VariableDeclarator setInit(String init) {
         this.init = new NameExpr(init);
         setAsParentNodeOf(this.init);
+        return this;
     }
 
 

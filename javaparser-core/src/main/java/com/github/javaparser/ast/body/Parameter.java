@@ -134,8 +134,9 @@ public final class Parameter extends Node implements
         return this;
     }
 
-    public void setVarArgs(boolean isVarArgs) {
+    public Parameter setVarArgs(boolean isVarArgs) {
         this.isVarArgs = isVarArgs;
+        return this;
     }
     /**
      * @return the list returned could be immutable (in that case it will be empty)

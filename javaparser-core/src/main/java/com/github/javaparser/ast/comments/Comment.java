@@ -60,12 +60,13 @@ public abstract class Comment extends Node {
 
     /**
      * Sets the text of the comment.
-     * 
+     *
      * @param content
      *            the text of the comment to set
      */
-    public void setContent(String content) {
+    public Comment setContent(String content) {
         this.content = content;
+        return this;
     }
 
     public boolean isLineComment()

@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
@@ -180,9 +181,10 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public void setVariables(final List<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(final List<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
+        return null;
     }
 
     public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {

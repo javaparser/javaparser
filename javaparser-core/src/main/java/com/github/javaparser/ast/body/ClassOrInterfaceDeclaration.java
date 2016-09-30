@@ -143,8 +143,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
-    public void setInterface(final boolean interface_) {
+    public ClassOrInterfaceDeclaration setInterface(final boolean interface_) {
         this.interface_ = interface_;
+        return this;
     }
 
     /**
@@ -152,9 +153,10 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @param typeParameters a null value is currently treated as an empty list. This behavior could change
      *            in the future, so please avoid passing null
      */
-    public void setTypeParameters(final List<TypeParameter> typeParameters) {
+    public ClassOrInterfaceDeclaration setTypeParameters(final List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
         setAsParentNodeOf(this.typeParameters);
+        return this;
     }
 
    
