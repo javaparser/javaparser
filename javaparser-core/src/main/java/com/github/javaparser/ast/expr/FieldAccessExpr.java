@@ -26,6 +26,7 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -33,11 +34,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class FieldAccessExpr extends Expression {
+public final class FieldAccessExpr extends Expression implements NodeWithTypeArguments<FieldAccessExpr> {
 
 	private Expression scope;
 
-    private List<Type<?>> typeArgs;
+	private List<Type<?>> typeArguments;
 
 	private NameExpr field;
 
@@ -49,11 +50,10 @@ public final class FieldAccessExpr extends Expression {
 		setField(field);
 	}
 
-    public FieldAccessExpr(final Range range, final Expression scope, final List<Type<?>> typeArgs,
-                           final String field) {
+	public FieldAccessExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String field) {
 		super(range);
 		setScope(scope);
-		setTypeArgs(typeArgs);
+		setTypeArguments(typeArguments);
 		setField(field);
 	}
 
@@ -77,11 +77,6 @@ public final class FieldAccessExpr extends Expression {
 		return scope;
 	}
 
-    public List<Type<?>> getTypeArgs() {
-        typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
-	}
-
 	public void setField(final String field) {
 		setFieldExpr(new NameExpr(field));
 	}
@@ -96,8 +91,16 @@ public final class FieldAccessExpr extends Expression {
 		setAsParentNodeOf(this.scope);
 	}
 
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
-		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
+
+	@Override
+	public List<Type<?>> getTypeArguments() {
+		return typeArguments;
+	}
+
+	@Override
+	public FieldAccessExpr setTypeArguments(final List<Type<?>> types) {
+		this.typeArguments = types;
+		setAsParentNodeOf(this.typeArguments);
+		return this;
 	}
 }

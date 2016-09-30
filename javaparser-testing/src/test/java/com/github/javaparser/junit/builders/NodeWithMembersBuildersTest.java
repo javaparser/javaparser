@@ -3,7 +3,6 @@ package com.github.javaparser.junit.builders;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -12,7 +11,6 @@ import org.junit.Test;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -20,7 +18,6 @@ import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
 
 public class NodeWithMembersBuildersTest {
 	CompilationUnit cu;
@@ -100,9 +97,7 @@ public class NodeWithMembersBuildersTest {
 		classDeclaration.addMethod("foo", Modifier.PUBLIC);
 		MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
 		ClassOrInterfaceType type = new ClassOrInterfaceType("List");
-		ArrayList<Type<?>> typeArguments = new ArrayList<>();
-		typeArguments.add(new ClassOrInterfaceType("String"));
-		type.setTypeArguments(TypeArguments.withArguments(typeArguments));
+		type.setTypeArguments(new ClassOrInterfaceType("String"));
 		MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", Modifier.PUBLIC).addParameter(type, "overload");
 		MethodDeclaration addMethod3 = classDeclaration.addMethod("foo2", Modifier.PUBLIC).addParameter(int.class, "overload");
 

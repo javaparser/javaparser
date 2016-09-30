@@ -27,18 +27,23 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ExplicitConstructorInvocationStmt extends Statement {
+public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 
-    private List<Type<?>> typeArgs;
+    private List<Type<?>> typeArguments;
 
-	private boolean isThis;
+    private boolean isThis;
 
 	private Expression expr;
 
@@ -55,10 +60,10 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 	}
 
 	public ExplicitConstructorInvocationStmt(Range range,
-                                             final List<Type<?>> typeArgs, final boolean isThis,
+	                                         final List<Type<?>> typeArguments, final boolean isThis,
 	                                         final Expression expr, final List<Expression> args) {
 		super(range);
-		setTypeArgs(typeArgs);
+		setTypeArguments(typeArguments);
 		setThis(isThis);
 		setExpr(expr);
 		setArgs(args);
@@ -83,11 +88,6 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 		return expr;
 	}
 
-    public List<Type<?>> getTypeArgs() {
-        typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
-	}
-
 	public boolean isThis() {
 		return isThis;
 	}
@@ -106,8 +106,15 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 		this.isThis = isThis;
 	}
 
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
-		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
-	}
+    @Override
+    public List<Type<?>> getTypeArguments() {
+        return typeArguments;
+    }
+
+    @Override
+    public ExplicitConstructorInvocationStmt setTypeArguments(final List<Type<?>> types) {
+        this.typeArguments = types;
+        setAsParentNodeOf(this.typeArguments);
+        return this;
+    }
 }

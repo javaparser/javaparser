@@ -337,12 +337,12 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		if (n.getScope() != null) {
 			n.setScope((ClassOrInterfaceType) n.getScope().accept(this, arg));
 		}
-        final List<Type<?>> typeArgs = n.getTypeArgs();
-		if (typeArgs != null) {
-			for (int i = 0; i < typeArgs.size(); i++) {
-                typeArgs.set(i, (Type<?>) typeArgs.get(i).accept(this, arg));
+		final List<Type<?>> typeArguments = n.getTypeArguments();
+		if (typeArguments != null) {
+			for (int i = 0; i < typeArguments.size(); i++) {
+				typeArguments.set(i, (Type<?>) typeArguments.get(i).accept(this, arg));
 			}
-			removeNulls(typeArgs);
+			removeNulls(typeArguments);
 		}
 		return n;
 	}
@@ -523,13 +523,13 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		if (!n.isThis() && n.getExpr() != null) {
 			n.setExpr((Expression) n.getExpr().accept(this, arg));
 		}
-        final List<Type<?>> typeArgs = n.getTypeArgs();
-		if (typeArgs != null) {
-			for (int i = 0; i < typeArgs.size(); i++) {
-                typeArgs.set(i, (Type<?>) typeArgs.get(i).accept(this, arg));
-			}
-			removeNulls(typeArgs);
-		}
+        final List<Type<?>> typeArguments = n.getTypeArguments();
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                typeArguments.set(i, (Type<?>) typeArguments.get(i).accept(this, arg));
+            }
+            removeNulls(typeArguments);
+        }
 		final List<Expression> args = n.getArgs();
 		if (args != null) {
 			for (int i = 0; i < args.size(); i++) {
@@ -697,13 +697,13 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		if (n.getScope() != null) {
 			n.setScope((Expression) n.getScope().accept(this, arg));
 		}
-        final List<Type<?>> typeArgs = n.getTypeArgs();
-		if (typeArgs != null) {
-			for (int i = 0; i < typeArgs.size(); i++) {
-                typeArgs.set(i, (Type<?>) typeArgs.get(i).accept(this, arg));
-			}
-			removeNulls(typeArgs);
-		}
+        final List<Type<?>> typeArguments = n.getTypeArguments();
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                typeArguments.set(i, (Type<?>) typeArguments.get(i).accept(this, arg));
+            }
+            removeNulls(typeArguments);
+        }
 		final List<Expression> args = n.getArgs();
 		if (args != null) {
 			for (int i = 0; i < args.size(); i++) {
@@ -779,13 +779,13 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		if (n.getScope() != null) {
 			n.setScope((Expression) n.getScope().accept(this, arg));
 		}
-        final List<Type<?>> typeArgs = n.getTypeArgs();
-		if (typeArgs != null) {
-			for (int i = 0; i < typeArgs.size(); i++) {
-                typeArgs.set(i, (Type<?>) typeArgs.get(i).accept(this, arg));
-			}
-			removeNulls(typeArgs);
-		}
+        final List<Type<?>> typeArguments = n.getTypeArguments();
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                typeArguments.set(i, (Type<?>) typeArguments.get(i).accept(this, arg));
+            }
+            removeNulls(typeArguments);
+        }
 		n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
 		final List<Expression> args = n.getArgs();
 		if (args != null) {
@@ -1105,10 +1105,10 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override
 	public Node visit(final MethodReferenceExpr n, final A arg) {
 		visitComment(n, arg);
-        final List<Type<?>> types = n.getTypeArguments().getTypeArguments();
+		final List<Type<?>> types = n.getTypeArguments();
 		for (int i = 0; i < types.size(); i++) {
-			n.getTypeArguments().getTypeArguments().set(i,
-                    (Type<?>) n.getTypeArguments().getTypeArguments().get(i).accept(this, arg));
+			n.getTypeArguments().set(i,
+					(Type<?>) n.getTypeArguments().get(i).accept(this, arg));
 		}
 		if (n.getScope() != null) {
 			n.setScope((Expression)n.getScope().accept(this, arg));
