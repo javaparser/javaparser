@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.Arrays;
@@ -198,7 +199,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageName(String name) {
-        setPackage(new PackageDeclaration(NameExpr.create(name)));
+        setPackage(new PackageDeclaration(name(name)));
         return this;
     }
 
@@ -242,7 +243,7 @@ public final class CompilationUnit extends Node {
         if (getImports().stream().anyMatch(i -> i.getName().toString().equals(name)))
             return this;
         else {
-            ImportDeclaration importDeclaration = new ImportDeclaration(NameExpr.create(name), isStatic,
+            ImportDeclaration importDeclaration = new ImportDeclaration(name(name), isStatic,
                     isAsterisk);
             getImports().add(importDeclaration);
             importDeclaration.setParentNode(this);

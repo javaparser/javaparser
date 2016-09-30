@@ -73,7 +73,7 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 	 *            qualified name
 	 * @return instanceof {@link NameExpr}
 	 */
-	public static NameExpr create(String qualifiedName) {
+	public static NameExpr name(String qualifiedName) {
 		String[] split = qualifiedName.split("\\.");
 		NameExpr ret = new NameExpr(split[0]);
 		for (int i = 1; i < split.length; i++) {

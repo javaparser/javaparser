@@ -16,7 +16,7 @@ public interface ParseContext<R> {
 	ParseContext<CompilationUnit> COMPILATION_UNIT = ASTParser::CompilationUnit;
 	ParseContext<BlockStmt> BLOCK = ASTParser::Block;
 	ParseContext<List<Statement>> STATEMENTS = ASTParser::Statements;
-	ParseContext<Statement> STATEMENT = ASTParser::Statement;
+	ParseContext<Statement> STATEMENT = ASTParser::BlockStatement;
 	ParseContext<ImportDeclaration> IMPORT_DECLARATION= ASTParser::ImportDeclaration;
 	ParseContext<Expression> EXPRESSION = ASTParser::Expression;
 	ParseContext<AnnotationExpr> ANNOTATION = ASTParser::Annotation;

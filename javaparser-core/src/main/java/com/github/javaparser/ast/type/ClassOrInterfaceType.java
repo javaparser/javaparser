@@ -35,7 +35,7 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> implements 
+public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements 
         NodeWithName<ClassOrInterfaceType>, 
         NodeWithAnnotations<ClassOrInterfaceType>,
         NodeWithTypeArguments<ClassOrInterfaceType> {
