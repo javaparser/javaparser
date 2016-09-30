@@ -22,16 +22,27 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.Pair;
+
+import java.util.List;
+
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarator extends Node {
+public final class VariableDeclarator extends Node implements
+        NodeWithType<VariableDeclarator> {
 
     private VariableDeclaratorId id;
 
@@ -102,11 +113,32 @@ public final class VariableDeclarator extends Node {
 
     /**
      * Will create a {@link NameExpr} with the init param
-     * 
-     * @param init
      */
     public void setInit(String init) {
         this.init = new NameExpr(init);
         setAsParentNodeOf(this.init);
+    }
+
+
+    @Override
+    public Type getType() {
+        NodeWithElementType<?> elementType = getParentNodeOfType(NodeWithElementType.class);
+
+        return wrapInArrayTypes(elementType.getElementType(),
+                elementType.getArrayBracketPairsAfterElementType(),
+                getId().getArrayBracketPairsAfterId());
+    }
+
+    @Override
+    public VariableDeclarator setType(Type type) {
+        Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
+        NodeWithElementType<?> nodeWithElementType = getParentNodeOfType(NodeWithElementType.class);
+        if (nodeWithElementType == null) {
+            throw new IllegalStateException("Cannot set type without a parent");
+        }
+        nodeWithElementType.setElementType(unwrapped.a);
+        nodeWithElementType.setArrayBracketPairsAfterElementType(null);
+        getId().setArrayBracketPairsAfterId(unwrapped.b);
+        return this;
     }
 }

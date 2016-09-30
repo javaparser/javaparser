@@ -19,16 +19,16 @@
  * GNU Lesser General Public License for more details.
  */
  
-package com.github.javaparser.ast;
+package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -44,7 +44,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * </pre>
  * @author Julio Vilmar Gesser
  */
-public final class TypeParameter extends Node implements NodeWithName<TypeParameter> {
+public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithName<TypeParameter> {
 
 	private String name;
 
@@ -129,8 +129,9 @@ public final class TypeParameter extends Node implements NodeWithName<TypeParame
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationExpr> annotations) {
+    public TypeParameter setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
 	    setAsParentNodeOf(this.annotations);
+		return this;
     }
 }

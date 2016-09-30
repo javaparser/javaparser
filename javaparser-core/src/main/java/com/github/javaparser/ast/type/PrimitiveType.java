@@ -30,6 +30,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -90,7 +92,7 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 
 	public PrimitiveType(Range range, final Primitive type) {
 		super(range);
-		this.type = type;
+		setType(type);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

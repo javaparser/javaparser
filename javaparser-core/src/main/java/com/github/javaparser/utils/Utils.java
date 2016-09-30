@@ -36,6 +36,7 @@ import java.util.List;
  * @author Federico Tomassetti
  */
 public class Utils {
+	public static final String EOL = System.getProperty("line.separator");
 	public static <T> List<T> ensureNotNull(List<T> list) {
 		return list == null ? new ArrayList<T>() : list;
 	}

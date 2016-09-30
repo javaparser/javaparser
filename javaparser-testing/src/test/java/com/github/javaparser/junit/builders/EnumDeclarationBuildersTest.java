@@ -1,5 +1,6 @@
 package com.github.javaparser.junit.builders;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 import java.util.function.Function;
@@ -29,7 +30,7 @@ public class EnumDeclarationBuildersTest {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addImplements(Function.class);
         assertEquals(1, cu.getImports().size());
-        assertEquals("import " + Function.class.getName() + ";" + System.getProperty("line.separator"),
+        assertEquals("import " + Function.class.getName() + ";" + EOL,
                 cu.getImports().get(0).toString());
         assertEquals(1, testEnum.getImplements().size());
         assertEquals(Function.class.getSimpleName(), testEnum.getImplements().get(0).getName());

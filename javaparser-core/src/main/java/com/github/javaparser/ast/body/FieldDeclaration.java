@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.VoidType.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
@@ -30,66 +31,71 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
-        implements NodeWithJavaDoc<FieldDeclaration>, NodeWithType<FieldDeclaration>,
-        NodeWithModifiers<FieldDeclaration> {
+public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements
+        NodeWithJavaDoc<FieldDeclaration>,
+        NodeWithElementType<FieldDeclaration>,
+        NodeWithModifiers<FieldDeclaration>,
+        NodeWithVariables<VariableDeclarationExpr> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private Type type;
+    private Type elementType;
 
     private List<VariableDeclarator> variables;
+
+    private List<ArrayBracketPair> arrayBracketPairsAfterElementType;
 
     public FieldDeclaration() {
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, VariableDeclarator variable) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, VariableDeclarator variable) {
         setModifiers(modifiers);
-        setType(type);
+        setElementType(elementType);
         List<VariableDeclarator> aux = new ArrayList<>();
         aux.add(variable);
         setVariables(aux);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, List<VariableDeclarator> variables) {
         setModifiers(modifiers);
-        setType(type);
+        setElementType(elementType);
         setVariables(variables);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
                             List<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
-        setType(type);
+        setElementType(elementType);
         setVariables(variables);
+        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
-                            List<VariableDeclarator> variables) {
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
+                            List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);
-        setType(type);
+        setElementType(elementType);
         setVariables(variables);
+        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
     /**
@@ -149,10 +155,6 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
     }
 
     @Override
-    public Type getType() {
-        return type;
-    }
-
     public List<VariableDeclarator> getVariables() {
         variables = ensureNotNull(variables);
         return variables;
@@ -165,12 +167,6 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
     }
 
     @Override
-    public FieldDeclaration setType(Type type) {
-        this.type = type;
-        setAsParentNodeOf(this.type);
-        return this;
-    }
-
     public void setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
@@ -201,17 +197,18 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
 
-        String fieldName = getVariables().get(0).getId().getName();
+        VariableDeclarator variable = getVariables().get(0);
+        String fieldName = variable.getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         if (parentClass != null)
             getter = parentClass.addMethod("get" + fieldNameUpper, PUBLIC);
         else
             getter = parentEnum.addMethod("get" + fieldNameUpper, PUBLIC);
-        getter.setType(getType());
+        getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
-        blockStmt.addStatement(new ReturnStmt(NameExpr.create(fieldName)));
+        blockStmt.addStatement(new ReturnStmt(name(fieldName)));
         return getter;
     }
 
@@ -232,7 +229,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
 
-        String fieldName = getVariables().get(0).getId().getName();
+        VariableDeclarator variable = getVariables().get(0);
+        String fieldName = variable.getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;
@@ -241,11 +239,38 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         else
             setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
         setter.setType(VOID_TYPE);
-        setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
+        setter.getParameters().add(new Parameter(variable.getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
         blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
         return setter;
     }
 
+
+    @Override
+    public Type getElementType() {
+        return elementType;
+    }
+
+    @Override
+    public FieldDeclaration setElementType(final Type elementType) {
+        this.elementType = elementType;
+        setAsParentNodeOf(this.elementType);
+        return this;
+    }
+
+    /**
+     * @return the array brackets in this position: <code>class C { int[] abc; }</code>
+     */
+    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
+        arrayBracketPairsAfterElementType = ensureNotNull(arrayBracketPairsAfterElementType);
+        return arrayBracketPairsAfterElementType;
+    }
+
+    @Override
+    public FieldDeclaration setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterElementType = arrayBracketPairsAfterType;
+        setAsParentNodeOf(arrayBracketPairsAfterType);
+        return this;
+    }
 }

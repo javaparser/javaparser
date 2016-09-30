@@ -112,6 +112,24 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
+    @Override
+    public void visit(LambdaExpr n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(MethodReferenceExpr n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(TypeExpr n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
     @Override public void visit(final CharLiteralExpr n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
@@ -340,12 +358,25 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
-    @Override public void visit(final ReferenceType n, final Object arg) {
+    @Override
+    public void visit(ArrayType n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(ArrayCreationLevel n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
 
     @Override public void visit(final IntersectionType n, final Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(UnionType n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
@@ -441,6 +472,12 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final WildcardType n, final Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(UnknownType n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }

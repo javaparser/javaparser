@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
@@ -76,7 +77,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
      * @return this, the {@link NormalAnnotationExpr}
      */
     public NormalAnnotationExpr addPair(String key, String value) {
-        return addPair(key, NameExpr.create(value));
+        return addPair(key, name(value));
     }
 
     /**

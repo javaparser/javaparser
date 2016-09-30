@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
@@ -120,7 +121,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     public EnumConstantDeclaration addArgument(String valueExpr) {
-        getArgs().add(NameExpr.create(valueExpr));
+        getArgs().add(name(valueExpr));
         return this;
     }
 }

@@ -29,7 +29,7 @@ import java.util.List;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -210,7 +210,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
             if (includingParameterName) {
                 sb.append(param.toStringWithoutComments());
             } else {
-                sb.append(param.getType().toStringWithoutComments());
+                sb.append(param.getElementType().toStringWithoutComments());
             }
         }
         sb.append(")");
