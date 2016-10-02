@@ -341,23 +341,20 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 			return new JavaParserClassDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
 		}
 
-		//return SymbolReference.unsolved(TypeDeclaration.class);
 		return getContext().getParent().solveType(name, typeSolver);
 	}
 
 	@Override
-	public List<ReferenceTypeUsage> getAllAncestors() {
+	public List<ReferenceTypeUsage> getAncestors() {
 		List<ReferenceTypeUsage> ancestors = new ArrayList<>();
 		ReferenceTypeUsageImpl superclass = getSuperClass();
 		if (superclass != null) {
 			ancestors.add(superclass);
-			ancestors.addAll(superclass.getAllAncestors());
 		}
 		if (wrappedNode.getImplements() != null) {
 			for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
 				ReferenceTypeUsageImpl ancestor = toTypeUsage(implemented, typeSolver);
 				ancestors.add(ancestor);
-				ancestors.addAll(ancestor.getAllAncestors());
 			}
 		}
 		return ancestors;

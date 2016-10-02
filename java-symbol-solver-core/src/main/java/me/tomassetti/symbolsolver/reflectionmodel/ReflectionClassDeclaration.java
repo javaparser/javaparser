@@ -63,16 +63,16 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors() {
+    public List<ReferenceTypeUsage> getAncestors() {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (getSuperClass() != null) {
             ReferenceTypeUsageImpl superClass = getSuperClass();
             ancestors.add(superClass);
-            ancestors.addAll(getSuperClass().getAllAncestors());
+        } else {
             ReferenceTypeUsageImpl object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
             ancestors.add(object);
         }
-        ancestors.addAll(getAllInterfaces().stream().map((i) -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
+        ancestors.addAll(getInterfaces().stream().map((i) -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
         for (int i = 0; i < ancestors.size(); i++) {
             ReferenceTypeUsage ancestor = ancestors.get(i);
             if (ancestor.hasName() && ancestor.getQualifiedName().equals(Object.class.getCanonicalName())) {

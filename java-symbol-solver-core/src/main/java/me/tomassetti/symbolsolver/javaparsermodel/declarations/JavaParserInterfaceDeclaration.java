@@ -302,34 +302,32 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
         }
 
-        return SymbolReference.unsolved(TypeDeclaration.class);
+        return getContext().getParent().solveType(name, typeSolver);
     }
 
-    @Override
-    public List<ReferenceTypeUsage> getAllAncestors() {
+	@Override
+	public List<ReferenceTypeUsage> getAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
         if (wrappedNode.getExtends() != null) {
             for (ClassOrInterfaceType extended : wrappedNode.getExtends()) {
-                SymbolReference<TypeDeclaration> superclass = solveType(extended.getName(), typeSolver);
-                if (!superclass.isSolved()) {
+                SymbolReference<TypeDeclaration> ancestor = solveType(extended.getName(), typeSolver);
+                if (!ancestor.isSolved()) {
                     throw new UnsolvedSymbolException(extended.getName());
                 }
-                ancestors.add(new ReferenceTypeUsageImpl(superclass.getCorrespondingDeclaration(), typeSolver));
-                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors());
+                ancestors.add(new ReferenceTypeUsageImpl(ancestor.getCorrespondingDeclaration(), typeSolver));
             }
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
-                SymbolReference<TypeDeclaration> superclass = solveType(implemented.getName(), typeSolver);
-                if (!superclass.isSolved()) {
+                SymbolReference<TypeDeclaration> ancestor = solveType(implemented.getName(), typeSolver);
+                if (!ancestor.isSolved()) {
                     throw new UnsolvedSymbolException(implemented.getName());
                 }
-                ancestors.add(new ReferenceTypeUsageImpl(superclass.getCorrespondingDeclaration(), typeSolver));
-                ancestors.addAll(superclass.getCorrespondingDeclaration().getAllAncestors());
+                ancestors.add(new ReferenceTypeUsageImpl(ancestor.getCorrespondingDeclaration(), typeSolver));
             }
         }
         return ancestors;
-    }
+	}
 
     @Override
     public List<TypeParameter> getTypeParameters() {

@@ -1,10 +1,17 @@
 class Super {
     protected boolean k;
     private static char m;
-
 }
 
-class A extends Super {
+interface SuperSuperInterface {
+    public int o;
+}
+
+interface SuperInterface extends SuperSuperInterface {
+    public int p;
+}
+
+class A extends Super implements SuperInterface {
 
     private int i;
     private static long j;
@@ -23,6 +30,10 @@ class A extends Super {
 
     public void foo4(){
         return m;
+    }
+
+    public void foo5(){
+        return o;
     }
 
 }

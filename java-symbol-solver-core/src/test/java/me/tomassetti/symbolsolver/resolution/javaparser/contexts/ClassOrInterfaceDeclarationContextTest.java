@@ -106,7 +106,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
     }
 
     @Test
-    public void solveSymbolReferringToInehritedInstanceField() throws ParseException {
+    public void solveSymbolReferringToInheritedInstanceField() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -114,6 +114,17 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("k", new DummyTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("boolean", ref.getCorrespondingDeclaration().getType().describe());
+    }
+    
+    @Test
+    public void solveSymbolReferringToInterfaceInheritedInstanceField() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithSymbols");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
+
+        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("o", new DummyTypeSolver());
+        assertEquals(true, ref.isSolved());
+        assertEquals("int", ref.getCorrespondingDeclaration().getType().describe());
     }
 
     @Test
@@ -160,7 +171,7 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
     }
 
     @Test
-    public void solveSymbolAsValueReferringToInehritedInstanceField() throws ParseException {
+    public void solveSymbolAsValueReferringToInheritedInstanceField() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -168,6 +179,17 @@ public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
         Optional<Value> ref = context.solveSymbolAsValue("k", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
         assertEquals("boolean", ref.get().getUsage().describe());
+    }
+    
+    @Test
+    public void solveSymbolAsValueReferringToInterfaceInheritedInstanceField() throws ParseException {
+        CompilationUnit cu = parseSample("ClassWithSymbols");
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
+
+        Optional<Value> ref = context.solveSymbolAsValue("o", new DummyTypeSolver());
+        assertEquals(true, ref.isPresent());
+        assertEquals("int", ref.get().getUsage().describe());
     }
 
     @Test

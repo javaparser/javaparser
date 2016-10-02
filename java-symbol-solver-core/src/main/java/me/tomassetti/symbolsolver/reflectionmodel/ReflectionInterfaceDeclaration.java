@@ -245,17 +245,15 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors() {
+    public List<ReferenceTypeUsage> getAncestors() {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (clazz.getSuperclass() != null) {
             ReferenceTypeUsageImpl superclass = new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
             ancestors.add(superclass);
-            ancestors.addAll(superclass.getAllAncestors());
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
             ReferenceTypeUsageImpl interfazeDecl = new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(interfaze, typeSolver), typeSolver);
             ancestors.add(interfazeDecl);
-            ancestors.addAll(interfazeDecl.getAllAncestors());
         }
         for (int i = 0; i < ancestors.size(); i++) {
             if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {

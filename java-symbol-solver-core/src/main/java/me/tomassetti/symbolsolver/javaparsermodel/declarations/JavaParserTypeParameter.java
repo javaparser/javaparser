@@ -146,7 +146,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors() {
+    public List<ReferenceTypeUsage> getAncestors() {
         throw new UnsupportedOperationException();
     }
 

@@ -299,7 +299,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors() {
+    public List<ReferenceTypeUsage> getAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
@@ -308,7 +308,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
                     throw new UnsolvedSymbolException(implementedType.getName());
                 }
                 ancestors.add(new ReferenceTypeUsageImpl(implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
-                ancestors.addAll(implementedDeclRef.getCorrespondingDeclaration().getAllAncestors());
             }
         }
         return ancestors;

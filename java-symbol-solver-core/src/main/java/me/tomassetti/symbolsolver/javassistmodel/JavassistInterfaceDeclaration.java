@@ -217,13 +217,12 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors() {
+    public List<ReferenceTypeUsage> getAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
                 ReferenceTypeUsage superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver()).asReferenceTypeUsage();
                 ancestors.add(superInterfaze);
-                ancestors.addAll(superInterfaze.getAllAncestors());
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);

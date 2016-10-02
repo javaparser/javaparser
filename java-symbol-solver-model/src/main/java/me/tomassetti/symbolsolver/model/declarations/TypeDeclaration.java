@@ -7,6 +7,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -66,7 +67,16 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
      */
     SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
 
-    List<ReferenceTypeUsage> getAllAncestors();
+    List<ReferenceTypeUsage> getAncestors();
+    
+    default List<ReferenceTypeUsage> getAllAncestors() {
+    	List<ReferenceTypeUsage> ancestors = new ArrayList<>();
+    	for (ReferenceTypeUsage ancestor : getAncestors()) {
+    		ancestors.add(ancestor);
+    		ancestors.addAll(ancestor.getAllAncestors());
+    	}
+    	return ancestors;
+    }
 
     Set<MethodDeclaration> getDeclaredMethods();
 

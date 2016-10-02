@@ -210,13 +210,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAllAncestors() {
+    public List<ReferenceTypeUsage> getAncestors() {
         List<ReferenceTypeUsage> ancestors = new LinkedList<>();
         if (getSuperClass() != null) {
             ancestors.add(getSuperClass());
-            ancestors.addAll(getSuperClass().getAllAncestors());
         }
-        ancestors.addAll(getAllInterfaces().stream().map(i -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
+        ancestors.addAll(getInterfaces().stream().map(i -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
         return ancestors;
     }
 

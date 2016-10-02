@@ -3,10 +3,13 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
@@ -50,13 +53,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then among inherited fields
-        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && !wrappedNode.getExtends().isEmpty()) {
-            String superClassName = wrappedNode.getExtends().get(0).getName();
-            SymbolReference<TypeDeclaration> superClass = solveType(superClassName, typeSolver);
-            if (!superClass.isSolved()) {
-                throw new UnsolvedTypeException(this, superClassName);
-            }
-            SymbolReference ref = superClass.getCorrespondingDeclaration().getContext().solveSymbol(name, typeSolver);
+        for (ReferenceTypeUsage ancestor : getDeclaration().getAncestors()) {
+            SymbolReference ref = ancestor.getTypeDeclaration().getContext().solveSymbol(name, typeSolver);
             if (ref.isSolved()) {
                 return ref;
             }
@@ -82,13 +80,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then among inherited fields
-        if (!wrappedNode.isInterface() && wrappedNode.getExtends() != null && !wrappedNode.getExtends().isEmpty()) {
-            String superClassName = wrappedNode.getExtends().get(0).getName();
-            SymbolReference<TypeDeclaration> superClass = solveType(superClassName, typeSolver);
-            if (!superClass.isSolved()) {
-                throw new UnsolvedTypeException(this, superClassName);
-            }
-            Optional<Value> ref = superClass.getCorrespondingDeclaration().getContext().solveSymbolAsValue(name, typeSolver);
+        for (ReferenceTypeUsage ancestor : getDeclaration().getAncestors()) {
+            Optional<Value> ref = ancestor.getTypeDeclaration().getContext().solveSymbolAsValue(name, typeSolver);
             if (ref.isPresent()) {
                 return ref;
             }
