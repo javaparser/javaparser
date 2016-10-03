@@ -30,7 +30,7 @@ public class ParseResult<T> {
     /**
      * Used when parsing failed completely with an exception.
      */
-    public ParseResult(Throwable throwable) {
+    ParseResult(Throwable throwable) {
         this(Optional.empty(), singletonList(new Problem(throwable.getMessage(), Optional.empty(), Optional.of(throwable))), Optional.empty());
     }
 
