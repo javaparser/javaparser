@@ -3,6 +3,7 @@ package com.github.javaparser;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.singletonList;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -17,7 +18,7 @@ public class ParseProblemException extends RuntimeException {
     private final List<Problem> problems;
 
     ParseProblemException(List<Problem> problems) {
-        super(createMessage(problems));
+        super(createMessage(assertNotNull(problems)));
         this.problems = problems;
     }
 

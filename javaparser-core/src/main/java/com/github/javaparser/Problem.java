@@ -2,6 +2,8 @@ package com.github.javaparser;
 
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * A problem that was encountered during parsing.
  */
@@ -11,9 +13,9 @@ public class Problem {
     private final Optional<Throwable> cause;
 
     Problem(String message, Optional<Range> range, Optional<Throwable> cause) {
-        this.message = message;
-        this.range = range;
-        this.cause = cause;
+        this.message = assertNotNull(message);
+        this.range = assertNotNull(range);
+        this.cause = assertNotNull(cause);
     }
 
     @Override

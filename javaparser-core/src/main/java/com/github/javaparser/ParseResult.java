@@ -3,6 +3,7 @@ package com.github.javaparser;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.singletonList;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -22,9 +23,9 @@ public class ParseResult<T> {
      * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
     ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens) {
-        this.result = result;
-        this.problems = problems;
-        this.tokens = tokens;
+        this.result = assertNotNull(result);
+        this.problems = assertNotNull(problems);
+        this.tokens = assertNotNull(tokens);
     }
 
     /**
