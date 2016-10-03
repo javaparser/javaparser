@@ -11,6 +11,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import java.util.List;
 
 /**
+ * The start production for JavaParser.
  * Tells JavaParser what piece of Java code it can expect.
  * For example,
  * COMPILATION_UNIT indicates a complete Java file,

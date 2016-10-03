@@ -19,7 +19,7 @@ public class ParseResult<T> {
      * General constructor.
      * @param result the AST, or empty if it wasn't created.
      * @param problems a list of encountered parsing problems.
-     * @param tokens the complete list of tokens that were parsed.
+     * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
     ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens) {
         this.result = result;
@@ -49,7 +49,7 @@ public class ParseResult<T> {
     }
 
     /**
-     * @return the complete list of tokens that were parsed.
+     * @return the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
     public Optional<List<Token>> getTokens() {
         return tokens;
