@@ -41,6 +41,9 @@ public class ParseResult<T> {
         return problems.isEmpty() && result.isPresent();
     }
 
+    /**
+     * @return the list of encountered parsing problems. Empty when no problems were encountered.
+     */
     public List<Problem> getProblems() {
         return problems;
     }

@@ -32,16 +32,13 @@ import com.github.javaparser.ast.stmt.Statement;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ASTParser.tokenRange;
-import static com.github.javaparser.ParseContext.*;
+import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.Utils.providerToString;
-import static java.util.Collections.singletonList;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -80,7 +77,7 @@ public final class JavaParser {
 	 * @param <N>      the subclass of Node that is the result of parsing in the context.
 	 * @return the parse result and a collection of encountered problems.
 	 */
-	public <N> ParseResult<N> parseStructure(ParseContext<N> context, Provider provider) {
+	public <N> ParseResult<N> parseStructure(ParseStart<N> context, Provider provider) {
 		final ASTParser parser = getParserForProvider(provider);
 		try {
 			N resultNode = context.parse(parser);
@@ -280,7 +277,7 @@ public final class JavaParser {
 		return simplifiedParse(STATEMENT, provider(statement));
 	}
 
-	private static <T> T simplifiedParse(ParseContext<T> context, Provider provider) {
+	private static <T> T simplifiedParse(ParseStart<T> context, Provider provider) {
 		ParseResult<T> result = new JavaParser(new ParserConfiguration()).parseStructure(context, provider);
 		if (result.isSuccessful()) {
 			return result.getResult().get();
