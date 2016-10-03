@@ -178,6 +178,18 @@ public class GenericsTest extends AbstractTest{
     }
 
     @Test
+    public void resolveUsageOfMethodOfGenericClass() throws ParseException {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodCalls.Derived");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "caller");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "callee");
+
+        MethodUsage methodUsage = JavaParserFacade.get(new JreTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("callee", methodUsage.getName());
+    }
+
+    @Test
     public void resolveElementOfList() throws ParseException {
         CompilationUnit cu = parseSample("ElementOfList");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ElementOfList");

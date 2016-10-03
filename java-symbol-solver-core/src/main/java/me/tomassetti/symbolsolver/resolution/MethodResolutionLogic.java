@@ -74,7 +74,9 @@ public class MethodResolutionLogic {
                         matchedParameters);
             }
             if (!isAssignableWithoutSubstitution) {
-                for (TypeParameter tp : method.getTypeParameters()) {
+                List<TypeParameter> typeParameters = method.getTypeParameters();
+                typeParameters.addAll(method.declaringType().getTypeParameters());
+                for (TypeParameter tp : typeParameters) {
                     expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                 }
 

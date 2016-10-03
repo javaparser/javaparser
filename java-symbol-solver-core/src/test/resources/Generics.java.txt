@@ -25,3 +25,22 @@ public final class SomeCollection<A> {
     }
 
 }
+
+public final class GenericMethodCalls {
+
+    public class Base <T> {
+
+        public void callee(T data) {
+        }
+
+    }
+
+    public class Derived extends Base<String> {
+
+        public void caller() {
+            callee("test");
+        }
+
+    }
+
+}
