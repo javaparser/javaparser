@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
@@ -34,6 +35,10 @@ import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -95,14 +100,16 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return name;
     }
 
-    public void setArgs(List<Expression> args) {
+    public EnumConstantDeclaration setArgs(List<Expression> args) {
         this.args = args;
 		setAsParentNodeOf(this.args);
+        return this;
     }
 
-    public void setClassBody(List<BodyDeclaration<?>> classBody) {
+    public EnumConstantDeclaration setClassBody(List<BodyDeclaration<?>> classBody) {
         this.classBody = classBody;
 		setAsParentNodeOf(this.classBody);
+        return this;
     }
 
     @Override
@@ -120,7 +127,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     public EnumConstantDeclaration addArgument(String valueExpr) {
-        getArgs().add(NameExpr.create(valueExpr));
+        getArgs().add(name(valueExpr));
         return this;
     }
 }

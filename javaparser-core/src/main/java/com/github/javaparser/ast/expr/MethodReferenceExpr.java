@@ -22,9 +22,14 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypeArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -36,11 +41,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Raquel Pau
  *
  */
-public class MethodReferenceExpr extends Expression {
+public class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr> {
 
     private Expression scope;
 
-    private TypeArguments typeArguments;
+    private List<Type<?>> typeArguments;
 
     private String identifier;
 
@@ -48,7 +53,7 @@ public class MethodReferenceExpr extends Expression {
     }
 
     public MethodReferenceExpr(Range range, Expression scope,
-                               TypeArguments typeArguments, String identifier) {
+                               List<Type<?>> typeArguments, String identifier) {
         super(range);
         setIdentifier(identifier);
         setScope(scope);
@@ -70,25 +75,31 @@ public class MethodReferenceExpr extends Expression {
         return scope;
     }
 
-    public void setScope(Expression scope) {
+    public MethodReferenceExpr setScope(Expression scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
-    public TypeArguments getTypeArguments() {
+    @Override
+    public List<Type<?>> getTypeArguments() {
         return typeArguments;
     }
 
-    public void setTypeArguments(TypeArguments typeArguments) {
-        this.typeArguments = typeArguments;
+    @Override
+    public MethodReferenceExpr setTypeArguments(final List<Type<?>> types) {
+        this.typeArguments = types;
+        setAsParentNodeOf(this.typeArguments);
+        return this;
     }
 
     public String getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
+    public MethodReferenceExpr setIdentifier(String identifier) {
         this.identifier = identifier;
+        return this;
     }
 
 }

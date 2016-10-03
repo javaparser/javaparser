@@ -26,9 +26,7 @@ import com.github.javaparser.Provider;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Any kind of utility.
@@ -36,6 +34,7 @@ import java.util.List;
  * @author Federico Tomassetti
  */
 public class Utils {
+	public static final String EOL = System.getProperty("line.separator");
 	public static <T> List<T> ensureNotNull(List<T> list) {
 		return list == null ? new ArrayList<T>() : list;
 	}
@@ -87,4 +86,15 @@ public class Utils {
 
 		return result.toString();
 	}
+
+	/**
+	 * Puts varargs in a mutable list.
+     * This does not have the disadvantage of Arrays#asList that it has a static size. 
+	 */
+	public static <T> List<T> arrayToList(T[] array){
+		List<T> list = new LinkedList<>();
+		Collections.addAll(list, array);
+		return list;
+	}
+
 }

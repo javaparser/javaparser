@@ -67,9 +67,10 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
 		return type;
 	}
 
-	public void setExpr(final Expression expr) {
+	public InstanceOfExpr setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
+		return this;
 	}
 
 	@Override

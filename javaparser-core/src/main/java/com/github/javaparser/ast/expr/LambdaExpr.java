@@ -61,18 +61,20 @@ public class LambdaExpr extends Expression {
         return parameters;
 	}
 
-	public void setParameters(List<Parameter> parameters) {
+	public LambdaExpr setParameters(List<Parameter> parameters) {
 		this.parameters = parameters;
 		setAsParentNodeOf(this.parameters);
+		return this;
 	}
 
 	public Statement getBody() {
 		return body;
 	}
 
-	public void setBody(Statement body) {
+	public LambdaExpr setBody(Statement body) {
 		this.body = body;
 		setAsParentNodeOf(this.body);
+		return this;
 	}
 
 	@Override
@@ -89,8 +91,9 @@ public class LambdaExpr extends Expression {
 		return parametersEnclosed;
 	}
 
-	public void setParametersEnclosed(boolean parametersEnclosed) {
+	public LambdaExpr setParametersEnclosed(boolean parametersEnclosed) {
 		this.parametersEnclosed = parametersEnclosed;
+		return this;
 	}
 
 }

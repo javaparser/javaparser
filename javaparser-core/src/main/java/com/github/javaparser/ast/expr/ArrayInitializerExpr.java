@@ -63,8 +63,9 @@ public final class ArrayInitializerExpr extends Expression {
         return values;
     }
 
-    public void setValues(List<Expression> values) {
+    public ArrayInitializerExpr setValues(List<Expression> values) {
         this.values = values;
 		setAsParentNodeOf(this.values);
+        return this;
     }
 }

@@ -25,7 +25,13 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+
+import static com.github.javaparser.ast.expr.NameExpr.*;
 
 /**
  * An element which can be the target of annotations.
@@ -46,7 +52,7 @@ public interface NodeWithAnnotations<T> {
      */
     public default NormalAnnotationExpr addAnnotation(String name) {
         NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                NameExpr.create(name), null);
+                name(name), null);
         getAnnotations().add(normalAnnotationExpr);
         normalAnnotationExpr.setParentNode((Node) this);
         return normalAnnotationExpr;
@@ -72,7 +78,7 @@ public interface NodeWithAnnotations<T> {
     @SuppressWarnings("unchecked")
     public default T addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                NameExpr.create(name));
+                name(name));
         getAnnotations().add(markerAnnotationExpr);
         markerAnnotationExpr.setParentNode((Node) this);
         return (T) this;
@@ -93,12 +99,13 @@ public interface NodeWithAnnotations<T> {
      * Annotates this with a single member annotation
      * 
      * @param name the name of the annotation
+     * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */
     @SuppressWarnings("unchecked")
     public default T addSingleMemberAnnotation(String name, String value) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                NameExpr.create(name), NameExpr.create(value));
+                name(name), name(value));
         getAnnotations().add(singleMemberAnnotationExpr);
         singleMemberAnnotationExpr.setParentNode((Node) this);
         return (T) this;
@@ -108,6 +115,7 @@ public interface NodeWithAnnotations<T> {
      * Annotates this with a single member annotation and automatically add the import
      * 
      * @param clazz the class of the annotation
+     * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */
     public default T addSingleMemberAnnotation(Class<? extends Annotation> clazz,

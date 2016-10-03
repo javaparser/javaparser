@@ -56,7 +56,8 @@ public final class BreakStmt extends Statement {
 		return id;
 	}
 
-	public void setId(final String id) {
+	public BreakStmt setId(final String id) {
 		this.id = id;
+		return this;
 	}
 }

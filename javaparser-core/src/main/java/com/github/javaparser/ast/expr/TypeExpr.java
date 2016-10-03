@@ -34,11 +34,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public class TypeExpr extends Expression implements NodeWithType<TypeExpr> {
 
-    private Type type;
+    private Type<?> type;
 
     public TypeExpr(){}
 
-    public TypeExpr(Range range, Type type) {
+    public TypeExpr(Range range, Type<?> type) {
         super(range);
         setType(type);
     }
@@ -54,12 +54,12 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr> {
     }
 
     @Override
-    public Type getType() {
+    public Type<?> getType() {
         return type;
     }
 
     @Override
-    public TypeExpr setType(Type type) {
+    public TypeExpr setType(Type<?> type) {
         this.type = type;
         setAsParentNodeOf(this.type);
         return this;

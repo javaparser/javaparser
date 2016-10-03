@@ -21,25 +21,30 @@
 
 package com.github.javaparser.ast.type;
 
-import java.util.List;
-
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> implements NodeWithName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType> {
+public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements 
+        NodeWithName<ClassOrInterfaceType>, 
+        NodeWithAnnotations<ClassOrInterfaceType>,
+        NodeWithTypeArguments<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 
     private String name;
 
-    private TypeArguments typeArguments = TypeArguments.EMPTY;
+    private List<Type<?>> typeArguments;
 
     public ClassOrInterfaceType() {
     }
@@ -53,7 +58,7 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
         setName(name);
     }
 
-    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final TypeArguments typeArguments) {
+    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final List<Type<?>> typeArguments) {
         super(range);
         setScope(scope);
         setName(name);
@@ -77,18 +82,6 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
         return scope;
     }
 
-    public List<Type> getTypeArgs() {
-        return typeArguments.getTypeArguments();
-    }
-
-    public TypeArguments getTypeArguments() {
-        return typeArguments;
-    }
-
-    public boolean isUsingDiamondOperator() {
-        return typeArguments.isUsingDiamondOperator();
-    }
-
     public boolean isBoxedType() {
         return PrimitiveType.unboxMap.containsKey(name);
     }
@@ -106,21 +99,21 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
         return this;
     }
 
-    public void setScope(final ClassOrInterfaceType scope) {
+    public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
-    /**
-     * Allows you to set the generic arguments
-     * @param typeArgs The list of types of the generics
-     */
-    public void setTypeArgs(final List<Type> typeArgs) {
-        setTypeArguments(TypeArguments.withArguments(typeArgs));
+    @Override
+    public List<Type<?>> getTypeArguments() {
+        return typeArguments;
     }
 
-    public void setTypeArguments(TypeArguments typeArguments) {
-        this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments.getTypeArguments());
+    @Override
+    public ClassOrInterfaceType setTypeArguments(final List<Type<?>> types) {
+        this.typeArguments = types;
+        setAsParentNodeOf(this.typeArguments);
+        return this;
     }
 }

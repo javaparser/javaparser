@@ -21,8 +21,16 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.*;
 
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -30,101 +38,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayAccessExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.LongLiteralMinValueExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.MemberValuePair;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.QualifiedNameExpr;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.SuperExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.TypeExpr;
-import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
 /**
  * Dumps the AST to formatted Java source code.
@@ -185,7 +101,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 
 		public void printLn() {
-			buf.append(System.getProperty("line.separator"));
+			buf.append(EOL);
 			indented = false;
 		}
 
@@ -243,11 +159,12 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	private void printTypeArgs(final List<Type> args, final Object arg) {
-		if (!isNullOrEmpty(args)) {
+	private void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Object arg) {
+		List<Type<?>> typeArguments = nodeWithTypeArguments.getTypeArguments();
+		if (!isNullOrEmpty(typeArguments)) {
 			printer.print("<");
-			for (final Iterator<Type> i = args.iterator(); i.hasNext(); ) {
-				final Type t = i.next();
+			for (final Iterator<Type<?>> i = typeArguments.iterator(); i.hasNext(); ) {
+				final Type<?> t = i.next();
 				t.accept(this, arg);
 				if (i.hasNext()) {
 					printer.print(", ");
@@ -288,16 +205,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	private void printJavaComment(final Comment javacomment, final Object arg) {
 		if (javacomment != null) {
 			javacomment.accept(this, arg);
-		}
-	}
-
-	private void printArrayBraces(NodeWithArrays<?> n, Object arg) {
-		List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
-		for (int i = 0; i < n.getArrayCount(); i++) {
-			if (arraysAnnotations != null && i < arraysAnnotations.size()) {
-				printAnnotations(arraysAnnotations.get(i), true, arg);
-			}
-			printer.print("[]");
 		}
 	}
 
@@ -460,7 +367,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		if (n.isUsingDiamondOperator()) {
 			printer.print("<>");
 		} else {
-			printTypeArgs(n.getTypeArgs(), arg);
+			printTypeArgs(n, arg);
 		}
 	}
 
@@ -517,16 +424,30 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override
-	public void visit(final ReferenceType n, final Object arg) {
-		printJavaComment(n.getComment(), arg);
-		if (!isNullOrEmpty(n.getAnnotations())) {
-			for (AnnotationExpr ae : n.getAnnotations()) {
-				ae.accept(this, arg);
-				printer.print(" ");
-			}
+    public void visit(final ArrayType n, final Object arg) {
+        final List<ArrayType> arrayTypeBuffer = new LinkedList<>();
+        Type type = n;
+        while (type instanceof ArrayType) {
+            final ArrayType arrayType = (ArrayType) type;
+            arrayTypeBuffer.add(arrayType);
+            type = arrayType.getComponentType();
+        }
+
+        type.accept(this, arg);
+        for (ArrayType arrayType : arrayTypeBuffer) {
+            printAnnotations(arrayType.getAnnotations(), true, arg);
+            printer.print("[]");
+        }
+    }
+
+	@Override
+	public void visit(final ArrayCreationLevel n, final Object arg) {
+		printAnnotations(n.getAnnotations(), true, arg);
+		printer.print("[");
+		if (n.getDimension() != null) {
+			n.getDimension().accept(this, arg);
 		}
-		n.getType().accept(this, arg);
-		printArrayBraces(n, arg);
+		printer.print("]");
 	}
 
 	@Override
@@ -586,7 +507,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printMemberAnnotations(n.getAnnotations(), arg);
 		printModifiers(n.getModifiers());
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterElementType()){
+			pair.accept(this, arg);
+		}
 
 		printer.print(" ");
 		for (final Iterator<VariableDeclarator> i = n.getVariables().iterator(); i.hasNext(); ) {
@@ -614,8 +538,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final VariableDeclaratorId n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print(n.getName());
-		for (int i = 0; i < n.getArrayCount(); i++) {
-			printer.print("[]");
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterId()){
+			pair.accept(this, arg);
 		}
 	}
 
@@ -658,23 +582,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printer.print("new ");
 		n.getType().accept(this, arg);
-		List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
-		if (!isNullOrEmpty(n.getDimensions())) {
-			int j = 0;
-			for (final Expression dim : n.getDimensions()) {
-				if (arraysAnnotations != null && j < arraysAnnotations.size()) {
-					printAnnotations(arraysAnnotations.get(j), true, arg);
-				}
-				printer.print("[");
-				dim.accept(this, arg);
-				printer.print("]");
-				j++;
-			}
-			printArrayBraces(n, arg);
-
+		for (ArrayCreationLevel level : n.getLevels()) {
+			level.accept(this, arg);
 		}
 		if (n.getInitializer() != null) {
-			printArrayBraces(n, arg);
 			printer.print(" ");
 			n.getInitializer().accept(this, arg);
 		}
@@ -932,7 +843,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			n.getScope().accept(this, arg);
 			printer.print(".");
 		}
-		printTypeArgs(n.getTypeArgs(), arg);
+		printTypeArgs(n, arg);
 		printer.print(n.getName());
 		printArguments(n.getArgs(), arg);
 	}
@@ -947,8 +858,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 		printer.print("new ");
 
-		printTypeArgs(n.getTypeArgs(), arg);
-		if (!isNullOrEmpty(n.getTypeArgs())) {
+		printTypeArgs(n, arg);
+		if (!isNullOrEmpty(n.getTypeArguments())) {
 			printer.print(" ");
 		}
 
@@ -1056,7 +967,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			printer.print(" ");
 		}
 
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterElementType()){
+			pair.accept(this, arg);
+		}
 		printer.print(" ");
 		printer.print(n.getName());
 
@@ -1072,8 +986,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 		printer.print(")");
 
-		for (int i = 0; i < n.getArrayCount(); i++) {
-			printer.print("[]");
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterParameterList()){
+			pair.accept(this, arg);
 		}
 
 		if (!isNullOrEmpty(n.getThrows())) {
@@ -1099,8 +1013,11 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printAnnotations(n.getAnnotations(), false, arg);
 		printModifiers(n.getModifiers());
-		if (n.getType() != null) {
-			n.getType().accept(this, arg);
+		if (n.getElementType() != null) {
+			n.getElementType().accept(this, arg);
+		}
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterElementType()){
+			pair.accept(this, arg);
 		}
 		if (n.isVarArgs()) {
 			printer.print("...");
@@ -1113,14 +1030,14 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		if (n.isThis()) {
-			printTypeArgs(n.getTypeArgs(), arg);
+			printTypeArgs(n, arg);
 			printer.print("this");
 		} else {
 			if (n.getExpr() != null) {
 				n.getExpr().accept(this, arg);
 				printer.print(".");
 			}
-			printTypeArgs(n.getTypeArgs(), arg);
+			printTypeArgs(n, arg);
 			printer.print("super");
 		}
 		printArguments(n.getArgs(), arg);
@@ -1133,10 +1050,13 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printAnnotations(n.getAnnotations(), false, arg);
 		printModifiers(n.getModifiers());
 
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
+		for(ArrayBracketPair pair: n.getArrayBracketPairsAfterElementType()){
+			pair.accept(this, arg);
+		}
 		printer.print(" ");
 
-		for (final Iterator<VariableDeclarator> i = n.getVars().iterator(); i.hasNext(); ) {
+		for (final Iterator<VariableDeclarator> i = n.getVariables().iterator(); i.hasNext(); ) {
 			final VariableDeclarator v = i.next();
 			v.accept(this, arg);
 			if (i.hasNext()) {
@@ -1461,7 +1381,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print("synchronized (");
 		n.getExpr().accept(this, arg);
 		printer.print(") ");
-		n.getBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	@Override
@@ -1506,7 +1426,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(" catch (");
 		n.getParam().accept(this, arg);
 		printer.print(") ");
-		n.getCatchBlock().accept(this, arg);
+		n.getBody().accept(this, arg);
 
 	}
 
@@ -1653,7 +1573,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 
 		printer.print("::");
-		printTypeArgs(n.getTypeArguments().getTypeArguments(), arg);
+		printTypeArgs(n, arg);
 		if (identifier != null) {
 			printer.print(identifier);
 		}
@@ -1666,6 +1586,12 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		if (n.getType() != null) {
 			n.getType().accept(this, arg);
 		}
+	}
+
+	@Override
+	public void visit(ArrayBracketPair arrayBracketPair, Object arg) {
+		printAnnotations(arrayBracketPair.getAnnotations(), true, arg);
+		printer.print("[]");
 	}
 
 	private void printOrphanCommentsBeforeThisChildNode(final Node node) {

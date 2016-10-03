@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -49,16 +50,18 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     public CatchClause(final Parameter param, final BlockStmt catchBlock) {
         setParam(param);
-        setCatchBlock(catchBlock);
+        setBody(catchBlock);
     }
 
     public CatchClause(final Range range,
-                       final EnumSet<Modifier> exceptModifier, final List<AnnotationExpr> exceptAnnotations,
-                       final Type exceptTypes,
-                       final VariableDeclaratorId exceptId, final BlockStmt catchBlock) {
+                       final EnumSet<Modifier> exceptModifier, 
+                       final List<AnnotationExpr> exceptAnnotations,
+                       final Type exceptType,
+                       final VariableDeclaratorId exceptId, 
+                       final BlockStmt catchBlock) {
         super(range);
-        setParam(new Parameter(range, exceptModifier, exceptAnnotations, exceptTypes, false, exceptId));
-        setCatchBlock(catchBlock);
+        setParam(new Parameter(range, exceptModifier, exceptAnnotations, exceptType, null, false, exceptId));
+        setBody(catchBlock);
     }
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -71,8 +74,6 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     /**
      * Use {@link #getBody()} instead
-     * 
-     * @return
      */
     @Deprecated
 	public BlockStmt getCatchBlock() {
@@ -93,14 +94,16 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
      * @param catchBlock
      */
     @Deprecated
-	public void setCatchBlock(final BlockStmt catchBlock) {
+	public CatchClause setCatchBlock(final BlockStmt catchBlock) {
 		this.catchBlock = catchBlock;
 		setAsParentNodeOf(this.catchBlock);
+        return this;
 	}
 
-	public void setParam(final Parameter param) {
+	public CatchClause setParam(final Parameter param) {
 		this.param = param;
 		setAsParentNodeOf(this.param);
+        return this;
 	}
 
     @Override

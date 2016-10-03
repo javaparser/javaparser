@@ -21,14 +21,10 @@
  
 package com.github.javaparser.ast.visitor;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -87,7 +83,6 @@ import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -109,16 +104,8 @@ import com.github.javaparser.ast.stmt.SynchronizedStmt;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
+import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
 
 /**
  * This visitor adapter can be used to save time when some specific nodes needs
@@ -127,7 +114,7 @@ import com.github.javaparser.ast.type.WildcardType;
  * 
  * @author Julio Vilmar Gesser
  */
-public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
+public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	private void removeNulls(final List<?> list) {
 		for (int i = list.size() - 1; i >= 0; i--) {
@@ -135,28 +122,6 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 				list.remove(i);
 			}
 		}
-	}
-
-	private void visitArraysAnnotations(NodeWithArrays<?> n, A arg) {
-		/* TODO this code always keeps annotations for the same amount of array indexes, since we can't see if
-		 the user wants to say "I want no annotations on this array index" or "I don't want this array index anymore"
-		  */
-		List<List<AnnotationExpr>> result = new ArrayList<>();
-		for (List<AnnotationExpr> aux : n.getArraysAnnotations()) {
-			if (aux == null) {
-				result.add(null);
-			} else {
-				List<AnnotationExpr> l = new ArrayList<>();
-				for (AnnotationExpr annotation : aux) {
-					AnnotationExpr newAnnotationExpr = (AnnotationExpr) annotation.accept(this, arg);
-					if (newAnnotationExpr != null) {
-						l.add(newAnnotationExpr);
-					}
-				}
-				result.add(l);
-			}
-		}
-		n.setArraysAnnotations(result);
 	}
 
 	@Override public Node visit(final AnnotationDeclaration n, final A arg) {
@@ -208,16 +173,12 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	@Override public Node visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setType((Type) n.getType().accept(this, arg));
-		if (n.getDimensions() != null) {
-			final List<Expression> dimensions = n.getDimensions();
-			if (dimensions != null) {
-				for (int i = 0; i < dimensions.size(); i++) {
-					dimensions.set(i, (Expression) dimensions.get(i).accept(this, arg));
-				}
-				removeNulls(dimensions);
-			}
+
+		final List<ArrayCreationLevel> values = n.getLevels();
+		for (int i = 0; i < values.size(); i++) {
+			values.set(i, (ArrayCreationLevel) values.get(i).accept(this, arg));
 		}
-		visitArraysAnnotations(n, arg);
+		removeNulls(values);
 
 		if (n.getInitializer() != null) {
 			n.setInitializer((ArrayInitializerExpr) n.getInitializer().accept(this, arg));
@@ -320,7 +281,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	@Override public Node visit(final CatchClause n, final A arg) {
 		visitComment(n, arg);
 		n.setParam((Parameter)n.getParam().accept(this, arg));
-		n.setCatchBlock((BlockStmt) n.getCatchBlock().accept(this, arg));
+		n.setBody((BlockStmt) n.getBody().accept(this, arg));
 		return n;
 
 	}
@@ -376,12 +337,12 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		if (n.getScope() != null) {
 			n.setScope((ClassOrInterfaceType) n.getScope().accept(this, arg));
 		}
-		final List<Type> typeArgs = n.getTypeArgs();
-		if (typeArgs != null) {
-			for (int i = 0; i < typeArgs.size(); i++) {
-				typeArgs.set(i, (Type) typeArgs.get(i).accept(this, arg));
+		final List<Type<?>> typeArguments = n.getTypeArguments();
+		if (typeArguments != null) {
+			for (int i = 0; i < typeArguments.size(); i++) {
+				typeArguments.set(i, (Type<?>) typeArguments.get(i).accept(this, arg));
 			}
-			removeNulls(typeArgs);
+			removeNulls(typeArguments);
 		}
 		return n;
 	}
@@ -562,13 +523,13 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		if (!n.isThis() && n.getExpr() != null) {
 			n.setExpr((Expression) n.getExpr().accept(this, arg));
 		}
-		final List<Type> typeArgs = n.getTypeArgs();
-		if (typeArgs != null) {
-			for (int i = 0; i < typeArgs.size(); i++) {
-				typeArgs.set(i, (Type) typeArgs.get(i).accept(this, arg));
-			}
-			removeNulls(typeArgs);
-		}
+        final List<Type<?>> typeArguments = n.getTypeArguments();
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                typeArguments.set(i, (Type<?>) typeArguments.get(i).accept(this, arg));
+            }
+            removeNulls(typeArguments);
+        }
 		final List<Expression> args = n.getArgs();
 		if (args != null) {
 			for (int i = 0; i < args.size(); i++) {
@@ -608,7 +569,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(annotations);
 		}
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setElementType((Type) n.getElementType().accept(this, arg));
 		final List<VariableDeclarator> variables = n.getVariables();
 		for (int i = 0; i < variables.size(); i++) {
 			variables.set(i, (VariableDeclarator) variables.get(i).accept(this, arg));
@@ -736,13 +697,13 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		if (n.getScope() != null) {
 			n.setScope((Expression) n.getScope().accept(this, arg));
 		}
-		final List<Type> typeArgs = n.getTypeArgs();
-		if (typeArgs != null) {
-			for (int i = 0; i < typeArgs.size(); i++) {
-				typeArgs.set(i, (Type) typeArgs.get(i).accept(this, arg));
-			}
-			removeNulls(typeArgs);
-		}
+        final List<Type<?>> typeArguments = n.getTypeArguments();
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                typeArguments.set(i, (Type<?>) typeArguments.get(i).accept(this, arg));
+            }
+            removeNulls(typeArguments);
+        }
 		final List<Expression> args = n.getArgs();
 		if (args != null) {
 			for (int i = 0; i < args.size(); i++) {
@@ -769,7 +730,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			}
 			removeNulls(typeParameters);
 		}
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setElementType((Type) n.getElementType().accept(this, arg));
 		final List<Parameter> parameters = n.getParameters();
 		if (parameters != null) {
 			for (int i = 0; i < parameters.size(); i++) {
@@ -818,13 +779,13 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		if (n.getScope() != null) {
 			n.setScope((Expression) n.getScope().accept(this, arg));
 		}
-		final List<Type> typeArgs = n.getTypeArgs();
-		if (typeArgs != null) {
-			for (int i = 0; i < typeArgs.size(); i++) {
-				typeArgs.set(i, (Type) typeArgs.get(i).accept(this, arg));
-			}
-			removeNulls(typeArgs);
-		}
+        final List<Type<?>> typeArguments = n.getTypeArguments();
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                typeArguments.set(i, (Type<?>) typeArguments.get(i).accept(this, arg));
+            }
+            removeNulls(typeArguments);
+        }
 		n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
 		final List<Expression> args = n.getArgs();
 		if (args != null) {
@@ -860,7 +821,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setElementType((Type) n.getElementType().accept(this, arg));
 		return n;
 	}
 	
@@ -876,15 +837,25 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 		return n;
 	}
 
-	@Override public Node visit(final ReferenceType n, final A arg) {
+	@Override
+	public Node visit(ArrayType n, A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
-		visitArraysAnnotations(n, arg);
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setComponentType((Type) n.getComponentType().accept(this, arg));
 		return n;
 	}
 
-    @Override
+	@Override
+	public Node visit(ArrayCreationLevel n, A arg) {
+		visitComment(n, arg);
+		visitAnnotations(n, arg);
+		if(n.getDimension()!=null) {
+			n.setDimension((Expression) n.getDimension().accept(this, arg));
+		}
+		return n;
+	}
+
+	@Override
     public Node visit(final IntersectionType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
@@ -972,7 +943,7 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	@Override public Node visit(final SynchronizedStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setExpr((Expression) n.getExpr().accept(this, arg));
-		n.setBlock((BlockStmt) n.getBlock().accept(this, arg));
+		n.setBody((BlockStmt) n.getBody().accept(this, arg));
 		return n;
 	}
 
@@ -1050,13 +1021,13 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 			removeNulls(annotations);
 		}
 
-		final Type type = (Type) n.getType().accept(this, arg);
+		final Type type = (Type) n.getElementType().accept(this, arg);
 		if (type == null) {
 			return null;
 		}
-		n.setType(type);
+		n.setElementType(type);
 
-		final List<VariableDeclarator> vars = n.getVars();
+		final List<VariableDeclarator> vars = n.getVariables();
 		for (int i = 0; i < vars.size();) {
 			final VariableDeclarator decl = (VariableDeclarator)
 				vars.get(i).accept(this, arg);
@@ -1134,10 +1105,10 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	@Override
 	public Node visit(final MethodReferenceExpr n, final A arg) {
 		visitComment(n, arg);
-		final List<Type> types = n.getTypeArguments().getTypeArguments();
+		final List<Type<?>> types = n.getTypeArguments();
 		for (int i = 0; i < types.size(); i++) {
-			n.getTypeArguments().getTypeArguments().set(i,
-					(Type) n.getTypeArguments().getTypeArguments().get(i).accept(this, arg));
+			n.getTypeArguments().set(i,
+					(Type<?>) n.getTypeArguments().get(i).accept(this, arg));
 		}
 		if (n.getScope() != null) {
 			n.setScope((Expression)n.getScope().accept(this, arg));
@@ -1149,8 +1120,14 @@ public abstract class ModifierVisitorAdapter<A> implements GenericVisitor<Node, 
 	public Node visit(final TypeExpr n, final A arg) {
 		visitComment(n, arg);
 		if (n.getType() != null) {
-			n.setType((Type)n.getType().accept(this, arg));
+            n.setType((Type<?>) n.getType().accept(this, arg));
 		}
+		return n;
+	}
+
+	@Override
+	public Node visit(ArrayBracketPair n, A arg) {
+		visitAnnotations(n, arg);
 		return n;
 	}
 

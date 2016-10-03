@@ -23,11 +23,8 @@ package com.github.javaparser.ast.visitor;
 
 import java.util.List;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -45,7 +42,6 @@ import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ArrayAccessExpr;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.ArrayInitializerExpr;
@@ -81,7 +77,6 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.BreakStmt;
@@ -103,14 +98,7 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -436,7 +424,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
 			return false;
 		}
 
@@ -444,6 +432,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
+		if(!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())){
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -464,7 +456,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	@Override public Boolean visit(final VariableDeclaratorId n1, final Node arg) {
 		final VariableDeclaratorId n2 = (VariableDeclaratorId) arg;
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
+		if(!nodesEquals(n1.getArrayBracketPairsAfterId(), n2.getArrayBracketPairsAfterId())){
 			return false;
 		}
 
@@ -520,7 +512,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
+		if(!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())){
+			return false;
+		}
+
+		if(!nodesEquals(n1.getArrayBracketPairsAfterParameterList(), n2.getArrayBracketPairsAfterParameterList())){
 			return false;
 		}
 
@@ -528,7 +524,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
 			return false;
 		}
 
@@ -559,7 +555,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	
 	@Override public Boolean visit(final Parameter n1, final Node arg) {
 		final Parameter n2 = (Parameter) arg;
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
+			return false;
+		}
+
+		if(!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())){
 			return false;
 		}
 
@@ -617,12 +617,14 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
+
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -638,25 +640,33 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return true;
 	}
 
-	@Override public Boolean visit(final ReferenceType n1, final Node arg) {
-		final ReferenceType n2 = (ReferenceType) arg;
+	@Override
+	public Boolean visit(ArrayType n1, Node arg) {
+		final ArrayType n2 = (ArrayType) arg;
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
-			return false;
-		}
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getComponentType(), n2.getComponentType())) {
 			return false;
 		}
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
-		if (!arraysAnnotationsEquals(n1, n2)) {
+		return true;
+	}
+
+	@Override
+	public Boolean visit(ArrayCreationLevel n1, Node arg) {
+		final ArrayCreationLevel n2 = (ArrayCreationLevel) arg;
+
+		if (!nodeEquals(n1.getDimension(), n2.getDimension())) {
+			return false;
+		}
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
 		return true;
 	}
 
-    @Override public Boolean visit(final IntersectionType n1, final Node arg) {
+	@Override public Boolean visit(final IntersectionType n1, final Node arg) {
         final IntersectionType n2 = (IntersectionType) arg;
 
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
@@ -760,23 +770,15 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	@Override public Boolean visit(final ArrayCreationExpr n1, final Node arg) {
 		final ArrayCreationExpr n2 = (ArrayCreationExpr) arg;
 
-		if (n1.getArrayCount() != n2.getArrayCount()) {
-			return false;
-		}
-
 		if (!nodeEquals(n1.getType(), n2.getType())) {
 			return false;
 		}
 
+		if (!nodesEquals(n1.getLevels(), n2.getLevels())) {
+			return false;
+		}
+
 		if (!nodeEquals(n1.getInitializer(), n2.getInitializer())) {
-			return false;
-		}
-
-		if (!nodesEquals(n1.getDimensions(), n2.getDimensions())) {
-			return false;
-		}
-
-		if (!arraysAnnotationsEquals(n1, n2)) {
 			return false;
 		}
 
@@ -892,7 +894,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 
@@ -1012,7 +1014,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 
@@ -1048,7 +1050,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 
@@ -1114,14 +1116,18 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getVars(), n2.getVars())) {
+		if (!nodesEquals(n1.getVariables(), n2.getVariables())) {
 			return false;
 		}
 
+		if(!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())){
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -1188,7 +1194,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getTypeArgs(), n2.getTypeArgs())) {
+		if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
 			return false;
 		}
 
@@ -1414,7 +1420,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getBlock(), n2.getBlock())) {
+		if (!nodeEquals(n1.getBody(), n2.getBody())) {
 			return false;
 		}
 
@@ -1450,7 +1456,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getCatchBlock(), n2.getCatchBlock())) {
+		if (!nodeEquals(n1.getBody(), n2.getBody())) {
 			return false;
 		}
 
@@ -1478,7 +1484,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         if (!nodeEquals(n1.getScope(), n2.getScope())) {
             return false;
         }
-	    if (!nodesEquals(n1.getTypeArguments().getTypeArguments(), n2.getTypeArguments().getTypeArguments())) {
+	    if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
         if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
@@ -1496,26 +1502,13 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         return true;
     }
 
-	private boolean arraysAnnotationsEquals(NodeWithArrays<?> n1, NodeWithArrays<?> n2) {
-		List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations();
-		List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations();
-
-		if (n1a != null && n2a != null) {
-			if (n1a.size() != n2a.size()) {
-				return false;
-			} else {
-				int i = 0;
-				for (List<AnnotationExpr> aux : n1a) {
-					if (!nodesEquals(aux, n2a.get(i))) {
-						return false;
-					}
-					i++;
-				}
-			}
-		} else if (n1a != n2a) {
+	@Override
+	public Boolean visit(ArrayBracketPair n1, Node arg) {
+		ArrayBracketPair n2 = (ArrayBracketPair) arg;
+		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
+
 		return true;
 	}
-
 }

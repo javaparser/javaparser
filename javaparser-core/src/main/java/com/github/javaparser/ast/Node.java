@@ -26,9 +26,11 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.*;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,10 +51,7 @@ public abstract class Node implements Cloneable {
     private List<Node> childrenNodes = new LinkedList<>();
     private List<Comment> orphanComments = new LinkedList<>();
 
-    /**
-     * This attribute can store additional information from semantic analysis.
-     */
-    private Object data;
+    private IdentityHashMap<UserDataKey<?>, Object> userData = null;
 
     private Comment comment;
 
@@ -101,15 +100,6 @@ public abstract class Node implements Cloneable {
     }
 
     /**
-     * Use this to retrieve additional information associated to this node.
-     *
-     * @return data property
-     */
-    public final Object getData() {
-        return data;
-    }
-
-    /**
      * The begin position of this node in the source file.
      */
     public Position getBegin() {
@@ -126,15 +116,17 @@ public abstract class Node implements Cloneable {
     /**
      * Sets the begin position of this node in the source file.
      */
-    public void setBegin(Position begin) {
+    public Node setBegin(Position begin) {
         range = range.withBegin(begin);
+        return this;
     }
 
     /**
      * Sets the end position of this node in the source file.
      */
-    public void setEnd(Position end) {
+    public Node setEnd(Position end) {
         range = range.withEnd(end);
+        return this;
     }
 
     /**
@@ -147,8 +139,9 @@ public abstract class Node implements Cloneable {
     /**
      * @param range the range of characters in the source code that this node covers.
      */
-    public void setRange(Range range) {
+    public Node setRange(Range range) {
         this.range = range;
+        return this;
     }
 
     /**
@@ -156,7 +149,7 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setComment(final Comment comment) {
+    public final Node setComment(final Comment comment) {
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
@@ -167,6 +160,7 @@ public abstract class Node implements Cloneable {
         if (comment != null) {
             this.comment.setCommentedNode(this);
         }
+        return this;
     }
 
 
@@ -176,8 +170,8 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setLineComment(String comment) {
-        setComment(new LineComment(comment));
+    public final Node setLineComment(String comment) {
+        return setComment(new LineComment(comment));
     }
 
     /**
@@ -185,17 +179,8 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final void setBlockComment(String comment) {
-        setComment(new BlockComment(comment));
-    }
-
-    /**
-     * Use this to store additional information to this node.
-     *
-     * @param data to be set
-     */
-    public final void setData(final Object data) {
-        this.data = data;
+    public final Node setBlockComment(String comment) {
+        return setComment(new BlockComment(comment));
     }
 
     /**
@@ -369,4 +354,42 @@ public abstract class Node implements Cloneable {
         return nodes;
     }
 
+    /**
+     * Gets user data for this component using the given key.
+     *
+     * @param <M>
+     *            The type of the user data.
+     *
+     * @param key
+     *            The key for the data
+     * @return The user data or null of no user data was found for the given key
+     * @see UserDataKey
+     */
+    public <M> M getUserData(final UserDataKey<M> key) {
+        if (userData == null) {
+            return null;
+        }
+        return (M) userData.get(key);
+    }
+
+    /**
+     * Sets user data for this component using the given key.
+     * For information on creating UserDataKey, see {@link UserDataKey}.
+     *
+     * @param <M>
+     *            The type of user data
+     *
+     * @param key
+     *            The singleton key for the user data
+     * @param object
+     *            The user data object
+     * @throws IllegalArgumentException
+     * @see UserDataKey
+     */
+    public <M> void setUserData(UserDataKey<M> key, M object) {
+        if (userData == null) {
+            userData = new IdentityHashMap<>();
+        }
+        userData.put(key, object);
+    }
 }

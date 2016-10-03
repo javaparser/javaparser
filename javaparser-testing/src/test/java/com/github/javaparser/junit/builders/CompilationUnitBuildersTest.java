@@ -1,5 +1,6 @@
 package com.github.javaparser.junit.builders;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -38,9 +39,9 @@ public class CompilationUnitBuildersTest {
 		assertEquals(2, cu.getImports().size());
 		cu.addImport("myImport");
 		assertEquals(3, cu.getImports().size());
-		assertEquals("import " + Map.class.getName() + ";" + System.getProperty("line.separator"), cu.getImports().get(0).toString());
-		assertEquals("import " + List.class.getName() + ";" + System.getProperty("line.separator"), cu.getImports().get(1).toString());
-		assertEquals("import myImport;" + System.getProperty("line.separator"), cu.getImports().get(2).toString());
+		assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImports().get(0).toString());
+		assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImports().get(1).toString());
+		assertEquals("import myImport;" + EOL, cu.getImports().get(2).toString());
 	}
 
     @Test
