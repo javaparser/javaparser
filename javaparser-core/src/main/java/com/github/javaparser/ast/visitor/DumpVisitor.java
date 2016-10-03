@@ -278,8 +278,11 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			if (n.isAsterisk()) {
 				printer.print(".*");
 			}
+			printer.printLn(";");
+		} else {
+			//eclipse organize imports add blank line
+			printer.printLn("");
 		}
-		printer.printLn(";");
 
 		printOrphanCommentsEnding(n);
 	}
