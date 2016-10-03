@@ -1,6 +1,5 @@
 package com.github.javaparser;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,22 +9,52 @@ import static java.util.Collections.singletonList;
  * The results given when parsing with an instance of JavaParser.
  */
 public class ParseResult<T> {
-    public final Optional<T> result;
-    public final List<Problem> problems;
-    public final Optional<List<Token>> tokens;
+    private final Optional<T> result;
+    private final List<Problem> problems;
+    private final Optional<List<Token>> tokens;
 
-    public ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens) {
+    /**
+     * General constructor.
+     * @param result the AST, or empty if it wasn't created.
+     * @param problems a list of encountered parsing problems.
+     * @param tokens the complete list of tokens that were parsed.
+     */
+    ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens) {
         this.result = result;
         this.problems = problems;
         this.tokens = tokens;
     }
 
+    /**
+     * Used when parsing failed completely with an exception.
+     */
     public ParseResult(Throwable throwable) {
         this(Optional.empty(), singletonList(new Problem(throwable.getMessage(), Optional.empty(), Optional.of(throwable))), Optional.empty());
     }
 
+    /**
+     * @return if parsing was successful, meaning no errors of any kind were encountered.
+     */
     public boolean isSuccessful() {
-        return problems.isEmpty();
+        return problems.isEmpty() && result.isPresent();
+    }
+
+    public List<Problem> getProblems() {
+        return problems;
+    }
+
+    /**
+     * @return the complete list of tokens that were parsed.
+     */
+    public Optional<List<Token>> getTokens() {
+        return tokens;
+    }
+
+    /**
+     * @return the AST of the parsed source code, or empty if parsing failed completely.
+     */
+    public Optional<T> getResult() {
+        return result;
     }
 
     @Override

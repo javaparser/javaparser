@@ -6,9 +6,9 @@ import java.util.Optional;
  * A problem that was encountered during parsing.
  */
 public class Problem {
-    public final String message;
-    public final Optional<Range> range;
-    public final Optional<Throwable> cause;
+    private final String message;
+    private final Optional<Range> range;
+    private final Optional<Throwable> cause;
 
     Problem(String message, Optional<Range> range, Optional<Throwable> cause) {
         this.message = message;
@@ -21,5 +21,17 @@ public class Problem {
         StringBuilder str = new StringBuilder(message);
         range.ifPresent(r -> str.append(" ").append(r));
         return str.toString();
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Optional<Range> getRange() {
+        return range;
+    }
+
+    public Optional<Throwable> getCause() {
+        return cause;
     }
 }

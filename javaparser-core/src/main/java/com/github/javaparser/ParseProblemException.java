@@ -12,14 +12,14 @@ public class ParseProblemException extends RuntimeException {
     /**
      * The problems that were encountered during parsing
      */
-    public final List<Problem> problems;
+    private final List<Problem> problems;
 
-    public ParseProblemException(List<Problem> problems) {
+    ParseProblemException(List<Problem> problems) {
         super(createMessage(problems));
         this.problems = problems;
     }
 
-    public ParseProblemException(Throwable throwable) {
+    ParseProblemException(Throwable throwable) {
         this(singletonList(new Problem(throwable.getMessage(), Optional.empty(), Optional.of(throwable))));
     }
 
@@ -29,5 +29,9 @@ public class ParseProblemException extends RuntimeException {
             message.append(problem.toString()).append("\n");
         }
         return message.toString();
+    }
+
+    public List<Problem> getProblems() {
+        return problems;
     }
 }

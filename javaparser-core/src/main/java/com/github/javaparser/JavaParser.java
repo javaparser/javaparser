@@ -283,9 +283,9 @@ public final class JavaParser {
 	private static <T> T simplifiedParse(ParseContext<T> context, Provider provider) {
 		ParseResult<T> result = new JavaParser(new ParserConfiguration()).parseStructure(context, provider);
 		if (result.isSuccessful()) {
-			return result.result.get();
+			return result.getResult().get();
 		}
-		throw new ParseProblemException(result.problems);
+		throw new ParseProblemException(result.getProblems());
 	}
 
     private static CompilationUnit simplifiedParse(Provider provider, boolean considerComments) {
@@ -296,9 +296,9 @@ public final class JavaParser {
             result = new JavaParser(new ParserConfiguration()).parseStructure(COMPILATION_UNIT, provider);
         }
         if (result.isSuccessful()) {
-            return result.result.get();
+            return result.getResult().get();
         }
-        throw new ParseProblemException(result.problems);
+        throw new ParseProblemException(result.getProblems());
     }
 
 	/**
