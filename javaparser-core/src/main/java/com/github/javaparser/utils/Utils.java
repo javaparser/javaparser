@@ -43,6 +43,13 @@ public class Utils {
 		return collection == null || collection.isEmpty();
 	}
 
+	public static <T> T assertNotNull(T o) {
+		if (o == null) {
+			throw new NullPointerException("Assertion failed.");
+		}
+		return o;
+	}
+
 	/**
 	 * @return string with ASCII characters 10 and 13 replaced by the text "\n" and "\r".
 	 */

@@ -32,16 +32,13 @@ import com.github.javaparser.ast.stmt.Statement;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ASTParser.tokenRange;
-import static com.github.javaparser.ParseContext.*;
+import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.Utils.providerToString;
-import static java.util.Collections.singletonList;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -80,15 +77,15 @@ public final class JavaParser {
 	 * @param <N>      the subclass of Node that is the result of parsing in the context.
 	 * @return the parse result and a collection of encountered problems.
 	 */
-	public <N> ParseResult<N> parseStructure(ParseContext<N> context, Provider provider) {
+	public <N> ParseResult<N> parseStructure(ParseStart<N> context, Provider provider) {
 		final ASTParser parser = getParserForProvider(provider);
 		try {
 			N resultNode = context.parse(parser);
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, astParser.getTokens());
+			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
 		} catch (ParseException e) {
-			return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))), new LinkedList<>());
+			return new ParseResult<>(e);
         } catch (TokenMgrException e) {
-            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), Range.UNKNOWN)), new LinkedList<>());
+            return new ParseResult<>(e);
 		} finally {
 			try {
 				provider.close();
@@ -112,11 +109,11 @@ public final class JavaParser {
 			final CompilationUnit resultNode = COMPILATION_UNIT.parse(parser);
 			commentsInserter.insertComments(resultNode, sourceCode);
 
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, astParser.getTokens());
+			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
 		} catch (ParseException e) {
-            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))), new LinkedList<>());
+            return new ParseResult<>(e);
         } catch (TokenMgrException e) {
-            return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), Range.UNKNOWN)), new LinkedList<>());
+            return new ParseResult<>(e);
         } catch (IOException e) {
             // The commentsInserter won't throw an IOException since it's reading from a String.
 			throw new AssertionError("Unreachable code");
@@ -280,12 +277,12 @@ public final class JavaParser {
 		return simplifiedParse(STATEMENT, provider(statement));
 	}
 
-	private static <T> T simplifiedParse(ParseContext<T> context, Provider provider) {
+	private static <T> T simplifiedParse(ParseStart<T> context, Provider provider) {
 		ParseResult<T> result = new JavaParser(new ParserConfiguration()).parseStructure(context, provider);
 		if (result.isSuccessful()) {
-			return result.result.get();
+			return result.getResult().get();
 		}
-		throw new ParseProblemException(result.problems);
+		throw new ParseProblemException(result.getProblems());
 	}
 
     private static CompilationUnit simplifiedParse(Provider provider, boolean considerComments) {
@@ -296,9 +293,9 @@ public final class JavaParser {
             result = new JavaParser(new ParserConfiguration()).parseStructure(COMPILATION_UNIT, provider);
         }
         if (result.isSuccessful()) {
-            return result.result.get();
+            return result.getResult().get();
         }
-        throw new ParseProblemException(result.problems);
+        throw new ParseProblemException(result.getProblems());
     }
 
 	/**

@@ -52,7 +52,6 @@ import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.utils.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
@@ -126,7 +125,7 @@ final class ASTParser {
     }
 
     private void addProblem(String message) {
-        problems.add(new Problem(message + ": \"" + token.image, tokenRange()));
+        problems.add(new Problem(message + ": \"" + token.image, Optional.of(tokenRange()), Optional.empty()));
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {
@@ -1504,7 +1503,6 @@ List<ClassOrInterfaceType> TypeBound():
 {
 	List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
 	ClassOrInterfaceType cit;
-	List<AnnotationExpr> annotations;
 }
 {
    "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
