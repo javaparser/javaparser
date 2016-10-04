@@ -14,9 +14,10 @@ apply plugin: 'io.codearte.nexus-staging'
 
 allprojects  {
   apply plugin: 'java'
+  apply plugin: 'idea'
 
   group = 'me.tomassetti'
-  version = '0.2.0-SNAPSHOT'
+  version = '0.4.0-SNAPSHOT'
 }
 
 subprojects {

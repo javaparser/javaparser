@@ -10,3 +10,10 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'org.easymock', name: 'easymock', version:'3.3.1'
 }
+
+idea {
+    module {
+        excludeDirs += file('src/test/resources/javaparser_expected_output')
+        excludeDirs += file('src/test/resources/javaparser_src')
+    }
+}
