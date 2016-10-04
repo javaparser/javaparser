@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.Arrays;
@@ -31,15 +32,20 @@ import java.util.stream.Collectors;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.ClassUtils;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * <p>
@@ -152,7 +158,7 @@ public final class CompilationUnit extends Node {
      * @param comments
      *            the list of comments
      */
-    public void setComments(List<Comment> comments) {
+    public CompilationUnit setComments(List<Comment> comments) {
         throw new RuntimeException("Not implemented!");
     }
 
@@ -163,9 +169,10 @@ public final class CompilationUnit extends Node {
      * @param imports
      *            the list of imports
      */
-    public void setImports(List<ImportDeclaration> imports) {
+    public CompilationUnit setImports(List<ImportDeclaration> imports) {
         this.imports = imports;
         setAsParentNodeOf(this.imports);
+        return this;
     }
 
     /**
@@ -175,9 +182,10 @@ public final class CompilationUnit extends Node {
      *            the pakage declaration to set or <code>null</code> to default
      *            package
      */
-    public void setPackage(PackageDeclaration pakage) {
+    public CompilationUnit setPackage(PackageDeclaration pakage) {
         this.pakage = pakage;
         setAsParentNodeOf(this.pakage);
+        return this;
     }
 
     /**
@@ -186,9 +194,10 @@ public final class CompilationUnit extends Node {
      * @param types
      *            the lis of types
      */
-    public void setTypes(List<TypeDeclaration<?>> types) {
+    public CompilationUnit setTypes(List<TypeDeclaration<?>> types) {
         this.types = types;
         setAsParentNodeOf(this.types);
+        return this;
     }
 
     /**
@@ -198,7 +207,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageName(String name) {
-        setPackage(new PackageDeclaration(NameExpr.create(name)));
+        setPackage(new PackageDeclaration(name(name)));
         return this;
     }
 
@@ -242,7 +251,7 @@ public final class CompilationUnit extends Node {
         if (getImports().stream().anyMatch(i -> i.getName().toString().equals(name)))
             return this;
         else {
-            ImportDeclaration importDeclaration = new ImportDeclaration(NameExpr.create(name), isStatic,
+            ImportDeclaration importDeclaration = new ImportDeclaration(name(name), isStatic,
                     isAsterisk);
             getImports().add(importDeclaration);
             importDeclaration.setParentNode(this);

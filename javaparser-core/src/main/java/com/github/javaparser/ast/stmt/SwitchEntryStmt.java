@@ -21,15 +21,15 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -75,9 +75,10 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return stmts;
 	}
 
-	public void setLabel(final Expression label) {
+	public SwitchEntryStmt setLabel(final Expression label) {
 		this.label = label;
 		setAsParentNodeOf(this.label);
+		return this;
 	}
 
 	@Override

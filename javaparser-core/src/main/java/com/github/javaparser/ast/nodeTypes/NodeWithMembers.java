@@ -72,12 +72,14 @@ public interface NodeWithMembers<T> {
      */
     default FieldDeclaration addField(Type<?> type, String name, Modifier... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
-        fieldDeclaration.getVariables().add(new VariableDeclarator(new VariableDeclaratorId(name)));
+        fieldDeclaration.setParentNode((Node) this);
+        VariableDeclarator variable = new VariableDeclarator(new VariableDeclaratorId(name));
+        fieldDeclaration.getVariables().add(variable);
+        variable.setParentNode(fieldDeclaration);
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        fieldDeclaration.setType(type);
+        variable.setType(type);
         getMembers().add(fieldDeclaration);
-        fieldDeclaration.setParentNode((Node) this);
         return fieldDeclaration;
     }
 
@@ -107,8 +109,6 @@ public interface NodeWithMembers<T> {
     /**
      * Add a public field to this
      * 
-     * @param typeClass the type of the field
-     *
      * @param typeClass the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created

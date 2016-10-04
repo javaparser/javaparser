@@ -52,8 +52,10 @@ import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.utils.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
+import static com.github.javaparser.ast.type.ArrayType.*;
 
 /**
  * <p>This class was generated automatically by javacc, do not edit.</p>
@@ -123,22 +125,22 @@ final class ASTParser {
     }
 
     private void addProblem(String message) {
-        problems.add(new Problem(message + ": \"" + token.image, tokenRange()));
+        problems.add(new Problem(message + ": \"" + token.image, Optional.of(tokenRange()), Optional.empty()));
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {
 	    if (ret instanceof EnclosedExpr) {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
-	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), 0);
-	       	    List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
+	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), null);
+	       	    List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
 	        } else {
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
-		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), 0);
-	        List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));
+		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), null);
+	        List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
 	        ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
@@ -152,12 +154,17 @@ final class ASTParser {
 	    }
 	    return ret;
     }
-
-    private TypeArguments createTypeArguments(List<Type<?>> typeArgs) {
-        boolean usesDiamondOperator = typeArgs != null && typeArgs.isEmpty();
-        return usesDiamondOperator ? TypeArguments.withDiamondOperator() : TypeArguments.withArguments(typeArgs);
-    }
     
+    private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<List<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
+        List<ArrayCreationLevel> levels = new ArrayList<ArrayCreationLevel>();
+        
+        for(int i = 0; i < arrayAnnotations.size(); i++){
+            levels.add(new ArrayCreationLevel(range, dimensions.get(i), arrayAnnotations.get(i)));
+        }
+        return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
+    }
+
+
     static final class GTToken extends Token {
         int realKind = ASTParserConstants.GT;
 
@@ -1382,7 +1389,6 @@ List<ClassOrInterfaceType> ExtendsList(boolean isInterface):
    boolean extendsMoreThanOne = false;
    List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
-   List<AnnotationExpr> annotations = null;
 }
 {
    "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
@@ -1497,7 +1503,6 @@ List<ClassOrInterfaceType> TypeBound():
 {
 	List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
 	ClassOrInterfaceType cit;
-	List<AnnotationExpr> annotations;
 }
 {
    "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
@@ -1554,7 +1559,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	      LOOKAHEAD( [ TypeParameters() ] <IDENTIFIER> "(" )
 	      ret = ConstructorDeclaration(modifier)
 	    |
-	      LOOKAHEAD( Type() <IDENTIFIER> ( "[" "]" )* ( "," | "=" | ";" ) )
+	      LOOKAHEAD( Type() <IDENTIFIER> ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
 	      ret = FieldDeclaration(modifier)
 	    |
 	      ret = MethodDeclaration(modifier)
@@ -1596,10 +1601,11 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
           val = VariableDeclarator() { variables.add(val); }
   ( "," val = VariableDeclarator() { variables.add(val); } )* ";"
 
-  { 
-	Position begin = modifier.begin.orIfInvalid(type.getBegin());
-  	return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, variables);
-  }
+    { 
+        Position begin = modifier.begin.orIfInvalid(type.getBegin());
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
+    }
 }
 
 VariableDeclarator VariableDeclarator():
@@ -1615,12 +1621,13 @@ VariableDeclarator VariableDeclarator():
 VariableDeclaratorId VariableDeclaratorId():
 {
 	String name;
-	int arrayCount = 0;
 	Position begin;
+	ArrayBracketPair arrayBracketPair;
+	List<ArrayBracketPair> arrayBracketPairs = null;
 }
 {
-  <IDENTIFIER> { name = token.image; begin=tokenBegin();}  ( "[" "]" { arrayCount++; } )*
-  { return new VariableDeclaratorId(range(begin, tokenEnd()),name, arrayCount); }
+  <IDENTIFIER> { name = token.image; begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+  { return new VariableDeclaratorId(range(begin, tokenEnd()),name, arrayBracketPairs); }
 }
 
 Expression VariableInitializer():
@@ -1653,7 +1660,8 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	Type type;
 	NameExpr name;
 	List<Parameter> parameters;
-	int arrayCount = 0;
+	ArrayBracketPair arrayBracketPair;
+	List<ArrayBracketPair> arrayBracketPairs = null;
 	List<ReferenceType> throws_ = null;
 	BlockStmt block = null;
 	Position begin = modifier.begin;
@@ -1663,14 +1671,13 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
   // Modifiers already matched in the caller!
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   type = ResultType() { begin = begin.orIfInvalid(type.getBegin()); }
-  name = Name() parameters = FormalParameters() ( "[" "]" { arrayCount++; } )*
+  name = Name() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
     ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
   { 
-      MethodDeclaration tmp = new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, null, parameters, arrayCount, throws_, block);
-      tmp.setNameExpr(name);
-      return tmp;
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, parameters, arrayBracketPairs, throws_, block);
   }
 }
 
@@ -1722,9 +1729,9 @@ List<Parameter> InferredLambdaParameters():
 }
 {
    ","
-  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id));}
+  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));}
   (
-    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id)); }
+    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id)); }
   )*
   { return ret;  }
 }
@@ -1740,8 +1747,9 @@ Parameter FormalParameter():
   modifier = Modifiers() type = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
 
   {
-	Position begin = modifier.begin.orIfInvalid(type.getBegin());
-    return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, isVarArg, id);
+        Position begin = modifier.begin.orIfInvalid(type.getBegin());
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, typeListPair.b, isVarArg, id);
   }
 }
 
@@ -1847,17 +1855,27 @@ Type Type():
 ReferenceType ReferenceType():
 {
 	Type type;
-	int arrayCount = 0;
-	List<AnnotationExpr> annotations = null;
-	List<List<AnnotationExpr>> accum= null;
+	ArrayBracketPair arrayBracketPair;
+	List<ArrayBracketPair> arrayBracketPairs = null;
 }
 {
   (
-   type = PrimitiveType() ( LOOKAHEAD(2) annotations = Annotations()  "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )+
+   type = PrimitiveType() ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
   |
-   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { arrayCount++; accum = add(accum, annotations); annotations= null;} )*
+   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
-  { return new ReferenceType(range(type.getBegin(), tokenEnd()), type, arrayCount, null, accum); }
+  { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
+}
+
+ArrayBracketPair ArrayBracketPair():
+{
+    List<AnnotationExpr> annotations = null;
+    Position begin = INVALID;
+}
+{
+    annotations = Annotations()
+    "[" { begin = begin.orIfInvalid(tokenBegin()); } "]"
+    { return new ArrayBracketPair(range(begin, tokenEnd()), annotations); }
 }
 
 IntersectionType IntersectionType():
@@ -1902,13 +1920,13 @@ ClassOrInterfaceType ClassOrInterfaceType():
   <IDENTIFIER> {begin=tokenBegin();} { name = token.image; }
   [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
   {
-      ret = new ClassOrInterfaceType(range(begin, tokenEnd()),null, name, createTypeArguments(typeArgs.list));
+      ret = new ClassOrInterfaceType(range(begin, tokenEnd()),null, name, typeArgs.list);
   }
   (
 	  LOOKAHEAD(2) "." annotations = Annotations()  <IDENTIFIER> { name = token.image; }
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
 	  {
-	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, createTypeArguments(typeArgs.list));
+	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, typeArgs.list);
 	    ret.setAnnotations(annotations);
 	    annotations = null;
       }
@@ -2078,7 +2096,7 @@ Expression Expression():
    }
  |  "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
  {
-   ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs.list), token.image);
+   ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
  }
    )
   ]
@@ -2445,7 +2463,7 @@ Expression PrimaryPrefix():
 	 |
 		"::" [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
 		{
-		  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, createTypeArguments(typeArgs.list), token.image);
+		  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
 		}
 	  )
 	|
@@ -2462,8 +2480,8 @@ Expression PrimaryPrefix():
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
-	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), 0);
-	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), false, id);
+	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), null);
+	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id);
 	  		  		  }
 
 	  		  		}
@@ -2483,7 +2501,7 @@ Expression PrimaryPrefix():
 	  type = ResultType() "::" [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
 		{
 		  ret = new TypeExpr(type.getRange(), type);
-		  ret = new MethodReferenceExpr(ret.getRange(), ret, createTypeArguments(typeArgs.list), token.image);
+		  ret = new MethodReferenceExpr(ret.getRange(), ret, typeArgs.list, token.image);
 		}
 
 	|
@@ -2629,9 +2647,7 @@ List<Expression> ArgumentList():
 Expression AllocationExpression(Expression scope):
 {
 	Expression ret;
-	ArrayCreationExpr arrayExpr;
 	Type type;
-	Object[] arr;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	List<BodyDeclaration<?>> anonymousBody = null;
 	List<Expression> args;
@@ -2644,35 +2660,12 @@ Expression AllocationExpression(Expression scope):
   annotations = Annotations() 
   (
 	  type = PrimitiveType() {type.setAnnotations(annotations); }
-	  arr = ArrayDimsAndInits()
-	  {
-	    arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);
-	    arrayExpr.setArraysAnnotations((List)arr[2]);
-	  	if (arr[0] instanceof Integer) {
-	  	    arrayExpr.setArrayCount(((Integer)arr[0]).intValue());
-	  	    arrayExpr.setInitializer((ArrayInitializerExpr)arr[1]);
-	  	} else {
-	  	    arrayExpr.setArrayCount(((Integer)arr[1]).intValue());
-	  	    arrayExpr.setDimensions((List)arr[0]);
-	  	}
-	  	ret = arrayExpr;
-	  }
+	  ret = ArrayCreation(begin, type)
 	|
 	 [ typeArgs = TypeArguments() annotations = Annotations() ]
 	  type = AnnotatedClassOrInterfaceType()
       (
-	      arr = ArrayDimsAndInits() {arrayExpr = new ArrayCreationExpr(range(begin, tokenEnd()), type, null, 0);	  }
-		  {
-		    arrayExpr.setArraysAnnotations((List)arr[2]);
-		  	if (arr[0] instanceof Integer) {
-			  	arrayExpr.setArrayCount(((Integer)arr[0]).intValue());
-		  	    arrayExpr.setInitializer((ArrayInitializerExpr)arr[1]);
-		  	} else {
-			  	arrayExpr.setArrayCount(((Integer)arr[1]).intValue());
-		  	    arrayExpr.setDimensions((List)arr[0]);
-		  	}
-		  	ret = arrayExpr;
-		  }
+	      ret = ArrayCreation(begin, type)
 	  |
 	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
 	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
@@ -2685,27 +2678,27 @@ Expression AllocationExpression(Expression scope):
  * The third LOOKAHEAD specification below is to parse to PrimarySuffix
  * if there is an expression between the "[...]".
  */
-// TODO fix the horrible return type.
-Object[] ArrayDimsAndInits():
+ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
-	Object[] ret = new Object[3];
-	Expression expr;
+	Expression expr = null;
+	ArrayInitializerExpr arrayInitializerExpr = null;
 	List<Expression> inits = null;
-	int i = 0;
 	List<List<AnnotationExpr>> accum = null;
 	List<AnnotationExpr> annotations = null;
 }
-{
-  annotations = Annotations() 
-  (
-	  LOOKAHEAD(2)
-	  ( LOOKAHEAD(2) "[" expr = Expression() { accum = add(accum, annotations); inits = add(inits, expr); } "]" )+ ( LOOKAHEAD(2) annotations = Annotations() "[" "]" { i++; } )* {  accum = add(accum, annotations); annotations=null; ret[0] = inits; ret[1] = i; }
-	|
-	  ( "[" "]" { i++; } )+ expr = ArrayInitializer() { accum = add(accum, annotations);ret[0] = i; ret[1] = expr; }
-  )
-  { ret[2]=accum; return ret; }
+{ 
+    (
+        annotations = Annotations() 
+        "[" 
+        (expr = Expression())? 
+            { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
+        "]" 
+    )+ 
+    (arrayInitializerExpr = ArrayInitializer())? 
+    {  
+        return juggleArrayCreation(range(begin, tokenEnd()), type, inits, accum, arrayInitializerExpr);
+    }
 }
-
 
 /*
  * Statement syntax follows.
@@ -2817,14 +2810,15 @@ VariableDeclarationExpr VariableDeclarationExpression():
 {
 	ModifierHolder modifier;
 	Type type;
-	List<VariableDeclarator> vars = new LinkedList<VariableDeclarator>();
+	List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
 	VariableDeclarator var;
 }
 {
-  modifier = Modifiers() type = Type() var = VariableDeclarator() { vars.add(var); } ( "," var = VariableDeclarator() { vars.add(var); } )*
+  modifier = Modifiers() type = Type() var = VariableDeclarator() { variables.add(var); } ( "," var = VariableDeclarator() { variables.add(var); } )*
   {
-    Position begin=modifier.begin.orIfInvalid(type.getBegin());
-    return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, vars);
+        Position begin=modifier.begin.orIfInvalid(type.getBegin());
+        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
   }
 }
 
@@ -2880,7 +2874,7 @@ ExpressionStmt StatementExpression():
 	    "--" { expr = new UnaryExpr(range(expr.getBegin(), tokenEnd()), expr, UnaryExpr.Operator.posDecrement);  }
 	  |
 	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin(), tokenEnd()), expr, value, op); }
-	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin(), tokenEnd()), expr, createTypeArguments(typeArgs.list), token.image); 	  }
+	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
 
 	 |
 	   "->" lambdaBody = LambdaBody()
@@ -3149,26 +3143,26 @@ TryStmt TryStatement():
 
 List<VariableDeclarationExpr> ResourceSpecification() :
 {
-  List<VariableDeclarationExpr> vars;
+  List<VariableDeclarationExpr> variables;
 }
 {
   "("
-  vars = Resources()
+  variables = Resources()
   (LOOKAHEAD(2) ";")?
   ")"
-  { return vars; }
+  { return variables; }
 }
 
 
 List<VariableDeclarationExpr> Resources() :
 {
-	List<VariableDeclarationExpr> vars = new LinkedList<VariableDeclarationExpr>();
+	List<VariableDeclarationExpr> variables = new LinkedList<VariableDeclarationExpr>();
 	VariableDeclarationExpr var;
 }
 {
   /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
-  var = VariableDeclarationExpression() {vars.add(var);} (LOOKAHEAD(2) ";" var = VariableDeclarationExpression() {vars.add(var);})*
-  { return vars; }
+  var = VariableDeclarationExpression() {variables.add(var);} (LOOKAHEAD(2) ";" var = VariableDeclarationExpression() {variables.add(var);})*
+  { return variables; }
 }
 
 

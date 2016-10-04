@@ -64,12 +64,14 @@ public final class LabeledStmt extends Statement {
 		return stmt;
 	}
 
-	public void setLabel(final String label) {
+	public LabeledStmt setLabel(final String label) {
 		this.label = label;
+		return this;
 	}
 
-	public void setStmt(final Statement stmt) {
+	public LabeledStmt setStmt(final Statement stmt) {
 		this.stmt = stmt;
 		setAsParentNodeOf(this.stmt);
+		return this;
 	}
 }

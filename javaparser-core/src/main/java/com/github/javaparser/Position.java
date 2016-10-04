@@ -23,6 +23,8 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * A position in a source file. Lines and columns start counting at 1.
  */
@@ -84,6 +86,7 @@ public class Position implements Comparable<Position> {
 	}
 	
 	public boolean isAfter(Position position) {
+		assertNotNull(position);
 		if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
 		if (line > position.line) {
 			return true;
@@ -95,6 +98,7 @@ public class Position implements Comparable<Position> {
 	}
 
 	public boolean isBefore(Position position) {
+		assertNotNull(position);
 		if (position.line == Node.ABSOLUTE_END_LINE) return true;
 		if (line < position.line) {
 			return true;
@@ -106,6 +110,7 @@ public class Position implements Comparable<Position> {
 
 	@Override
 	public int compareTo(Position o) {
+		assertNotNull(o);
 		if (isBefore(o)) {
 			return -1;
 		}

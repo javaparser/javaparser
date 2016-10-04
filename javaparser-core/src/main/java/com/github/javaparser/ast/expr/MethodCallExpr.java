@@ -21,23 +21,24 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodCallExpr extends Expression {
+public final class MethodCallExpr extends Expression implements NodeWithTypeArguments<MethodCallExpr> {
 
     private Expression scope;
 
-    private List<Type<?>> typeArgs;
+    private List<Type<?>> typeArguments;
 
     private NameExpr name;
 
@@ -57,14 +58,13 @@ public final class MethodCallExpr extends Expression {
         setArgs(args);
     }
 
-    public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArgs, final String name,
-                          final List<Expression> args) {
-        super(range);
-        setScope(scope);
-        setTypeArgs(typeArgs);
-        setName(name);
-        setArgs(args);
-    }
+	public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String name, final List<Expression> args) {
+		super(range);
+		setScope(scope);
+		setTypeArguments(typeArguments);
+		setName(name);
+		setArgs(args);
+	}
 
     /**
      * Adds the given argument to the method call.
@@ -109,32 +109,37 @@ public final class MethodCallExpr extends Expression {
         return scope;
     }
 
-    public List<Type<?>> getTypeArgs() {
-        typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
-    }
+	public void setArgs(final List<Expression> args) {
+		this.args = args;
+		setAsParentNodeOf(this.args);
+	}
 
-    public void setArgs(final List<Expression> args) {
-        this.args = args;
-        setAsParentNodeOf(this.args);
-    }
-
-    public void setName(final String name) {
+    public MethodCallExpr setName(final String name) {
         setNameExpr(new NameExpr(name));
+        return this;
     }
 
-    public void setNameExpr(NameExpr name) {
+    public MethodCallExpr setNameExpr(NameExpr name) {
         this.name = name;
         setAsParentNodeOf(this.name);
+        return this;
     }
 
-    public void setScope(final Expression scope) {
+    public MethodCallExpr setScope(final Expression scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
+        return this;
     }
 
-    public void setTypeArgs(final List<Type<?>> typeArgs) {
-        this.typeArgs = typeArgs;
-        setAsParentNodeOf(this.typeArgs);
+    @Override
+    public List<Type<?>> getTypeArguments() {
+        return typeArguments;
+    }
+
+    @Override
+    public MethodCallExpr setTypeArguments(final List<Type<?>> types) {
+        this.typeArguments = types;
+        setAsParentNodeOf(this.typeArguments);
+        return this;
     }
 }

@@ -89,17 +89,20 @@ public final class AssignExpr extends Expression {
         return value;
     }
 
-    public void setOperator(Operator op) {
+    public AssignExpr setOperator(Operator op) {
         this.op = op;
+        return this;
     }
 
-    public void setTarget(Expression target) {
+    public AssignExpr setTarget(Expression target) {
         this.target = target;
 		setAsParentNodeOf(this.target);
+        return this;
     }
 
-    public void setValue(Expression value) {
+    public AssignExpr setValue(Expression value) {
         this.value = value;
 		setAsParentNodeOf(this.value);
+        return this;
     }
 }
