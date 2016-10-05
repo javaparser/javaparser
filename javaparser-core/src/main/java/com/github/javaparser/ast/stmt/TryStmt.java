@@ -90,23 +90,27 @@ public final class TryStmt extends Statement {
         return resources;
 	}
 
-	public void setCatchs(final List<CatchClause> catchs) {
+	public TryStmt setCatchs(final List<CatchClause> catchs) {
 		this.catchs = catchs;
 		setAsParentNodeOf(this.catchs);
+		return this;
 	}
 
-	public void setFinallyBlock(final BlockStmt finallyBlock) {
+	public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
 		this.finallyBlock = finallyBlock;
 		setAsParentNodeOf(this.finallyBlock);
+		return this;
 	}
 
-	public void setTryBlock(final BlockStmt tryBlock) {
+	public TryStmt setTryBlock(final BlockStmt tryBlock) {
 		this.tryBlock = tryBlock;
 		setAsParentNodeOf(this.tryBlock);
+		return this;
 	}
 	
-	public void setResources(List<VariableDeclarationExpr> resources) {
+	public TryStmt setResources(List<VariableDeclarationExpr> resources) {
 		this.resources = resources;
 		setAsParentNodeOf(this.resources);
+		return this;
 	}
 }

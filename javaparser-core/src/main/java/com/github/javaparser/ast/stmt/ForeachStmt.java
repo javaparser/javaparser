@@ -102,13 +102,15 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         return this;
 	}
 
-	public void setIterable(final Expression iterable) {
+	public ForeachStmt setIterable(final Expression iterable) {
 		this.iterable = iterable;
 		setAsParentNodeOf(this.iterable);
+		return this;
 	}
 
-	public void setVariable(final VariableDeclarationExpr var) {
+	public ForeachStmt setVariable(final VariableDeclarationExpr var) {
 		this.var = var;
 		setAsParentNodeOf(this.var);
+		return this;
 	}
 }

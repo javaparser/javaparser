@@ -47,7 +47,7 @@ public class IntersectionType extends Type<IntersectionType> implements NodeWith
         return elements;
     }
 
-    public void setElements(List<ReferenceType> elements) {
+    public IntersectionType setElements(List<ReferenceType> elements) {
         if (this.elements != null) {
             for (ReferenceType element : elements){
                 element.setParentNode(null);
@@ -55,5 +55,6 @@ public class IntersectionType extends Type<IntersectionType> implements NodeWith
         }
         this.elements = elements;
         setAsParentNodeOf(this.elements);
+        return this;
     }
 }

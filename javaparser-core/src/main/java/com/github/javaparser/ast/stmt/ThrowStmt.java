@@ -57,8 +57,9 @@ public final class ThrowStmt extends Statement {
 		return expr;
 	}
 
-	public void setExpr(final Expression expr) {
+	public ThrowStmt setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
+		return this;
 	}
 }

@@ -21,9 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -36,6 +33,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -115,9 +115,10 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return type;
     }
 
-    public void setDefaultValue(Expression defaultValue) {
+    public AnnotationMemberDeclaration setDefaultValue(Expression defaultValue) {
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
+        return this;
     }
 
     @Override

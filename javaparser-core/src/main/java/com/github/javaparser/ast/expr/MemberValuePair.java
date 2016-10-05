@@ -73,8 +73,9 @@ public final class MemberValuePair extends Node implements NodeWithName<MemberVa
         return this;
 	}
 
-	public void setValue(final Expression value) {
+	public MemberValuePair setValue(final Expression value) {
 		this.value = value;
 		setAsParentNodeOf(this.value);
+		return this;
 	}
 }

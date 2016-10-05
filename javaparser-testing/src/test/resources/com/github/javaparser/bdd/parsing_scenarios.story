@@ -462,6 +462,12 @@ public class Example {
 }
 Then no errors are reported
 
+Scenario: alternative [] placings
+Given a CompilationUnit
+When the following source is parsed:
+class I{int[]bar(int[]x[])[]{return new int[][]{};}}
+Then no errors are reported
+
 Scenario: try requires resources, a finally or a catch (issue 442)
 Given the class:
 class A {
@@ -472,3 +478,12 @@ class A {
 }
 Then the Java parser cannot parse it because of a parse error
 
+
+Scenario: Partially dimensioned arrays are fine
+Given a CompilationUnit
+When the following source is parsed:
+class X {
+    int a = new int @A [10] @A [20] @A [] [];
+    int b = new int @A [] @A []{{1}};
+}
+Then no errors are reported

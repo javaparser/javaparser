@@ -69,9 +69,10 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr>
         return type;
     }
 
-    public void setExpr(Expression expr) {
+    public CastExpr setExpr(Expression expr) {
         this.expr = expr;
 		setAsParentNodeOf(this.expr);
+        return this;
     }
 
     @Override

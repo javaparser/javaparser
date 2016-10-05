@@ -32,7 +32,7 @@ public interface NodeWithThrowable<T> {
      */
     default T addThrows(Class<? extends Throwable> clazz) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
-        return addThrows(new ReferenceType(new ClassOrInterfaceType(clazz.getSimpleName())));
+        return addThrows(new ClassOrInterfaceType(clazz.getSimpleName()));
     }
 
     /**
