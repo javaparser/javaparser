@@ -240,23 +240,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
-        final ImportDeclaration importDeclaration;
-        if (isStatic) {
-            if (isAsterisk) {
-                // TODO
-                importDeclaration = new StaticImportOnDemandDeclaration();
-            } else {
-                // TODO
-                importDeclaration = new SingleStaticImportDeclaration();
-            }
-        } else {
-            if (isAsterisk) {
-                // TODO
-                importDeclaration = new TypeImportOnDemandDeclaration();
-            } else {
-                importDeclaration = new SingleTypeImportDeclaration().setType(new ClassOrInterfaceType(name));
-            }
-        }
+        final ImportDeclaration importDeclaration = ImportDeclaration.create(Range.UNKNOWN, name(name), isStatic, isAsterisk);
         if (getImports().stream().anyMatch(i -> i.toString().equals(importDeclaration.toString())))
             return this;
         else {
