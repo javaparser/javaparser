@@ -36,7 +36,6 @@ public class MethodResolutionLogic {
     }
 
     public static boolean isApplicable(MethodDeclaration method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
-        List<TypeUsage> originalParamTypes = paramTypes;
         if (!method.getName().equals(name)) {
             return false;
         }
