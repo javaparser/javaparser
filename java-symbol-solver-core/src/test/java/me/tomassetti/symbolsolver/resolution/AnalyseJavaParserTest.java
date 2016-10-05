@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.resolution;
 
 import com.github.javaparser.ParseException;
 import me.tomassetti.symbolsolver.SourceFileInfoExtractor;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -65,10 +66,12 @@ public class AnalyseJavaParserTest {
         String[] expectedLines = expected.split("\n");
 
         for (int i=0; i<Math.min(outputLines.length, expectedLines.length); i++) {
-            assertEquals("Line " + (i+1) + " of " + path + " is different from what is expected", expectedLines[i], outputLines[i]);
+            assertEquals("Line " + (i+1) + " of " + path + " is different from what is expected", expectedLines[i].trim(), outputLines[i].trim());
         }
 
         assertEquals(expectedLines.length, outputLines.length);
+        
+        JavaParserFacade.clearInstances();
 
         // If we need to update the file uncomment these lines
         //PrintWriter writer = new PrintWriter(dstFile.getAbsoluteFile(), "UTF-8");
