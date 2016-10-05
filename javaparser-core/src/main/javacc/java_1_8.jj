@@ -49,6 +49,7 @@ import java.util.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -1243,20 +1244,10 @@ CompilationUnit CompilationUnit():
 }
 {
   [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() {begin = begin.orIfInvalid(pakage.getBegin());} ]
-  ( in = ImportDeclaration()      { begin = begin.orIfInvalid(in.getBegin()); imports = add(imports, in); } |
-    in = EmptyImportDeclaration() { begin = begin.orIfInvalid(in.getBegin()); imports = add(imports, in); } )*
+  ( in = ImportDeclaration()      { begin = begin.orIfInvalid(in.getBegin()); imports = add(imports, in); } )*
   ( tn = TypeDeclaration() { begin = begin.orIfInvalid(tn.getBegin()); types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
   { return new CompilationUnit(begin.invalid() ? Range.UNKNOWN : range(begin, tokenEnd()), pakage, imports, types); }
-}
-
-ImportDeclaration EmptyImportDeclaration():
-{
-	Position begin;
-}
-{
-    ";" {begin = tokenBegin();} 
-    { return ImportDeclaration.createEmptyDeclaration(range(begin, tokenEnd())); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -1273,17 +1264,24 @@ PackageDeclaration PackageDeclaration():
 
 ImportDeclaration ImportDeclaration():
 {
-	NameExpr name;
-	boolean isStatic = false;
-	boolean isAsterisk = false;
-	Position begin;
+    NameExpr name;
+    boolean isStatic = false;
+    boolean isAsterisk = false;
+    Position begin;
+    ImportDeclaration ret;
 }
 {
-  "import" {begin = tokenBegin();} 
-  [ "static" { isStatic = true; } ] 
-  name = Name() 
-  [ "." "*" { isAsterisk = true; } ] ";"
-  { return new ImportDeclaration(range(begin, tokenEnd()),name, isStatic, isAsterisk); }
+    (
+        "import" {begin = tokenBegin();} 
+        [ "static" { isStatic = true; } ] 
+        name = Name() 
+        [ "." "*" { isAsterisk = true; } ] ";"
+        { ret = ImportDeclaration.create(range(begin, tokenEnd()), name, isStatic, isAsterisk); }
+    |
+        ";" {begin = tokenBegin();} 
+        { ret = new EmptyImportDeclaration(range(begin, tokenEnd())); }
+    )    
+    { return ret; }
 }
 
 /*

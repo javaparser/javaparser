@@ -28,10 +28,9 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
-import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -810,18 +809,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 				if (result != null) {
 					return result;
 				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public R visit(final ImportDeclaration n, final A arg) {
-		visitComment(n, arg);
-		{
-			R result = n.getName().accept(this, arg);
-			if (result != null) {
-				return result;
 			}
 		}
 		return null;
@@ -1651,6 +1638,60 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 				if (result != null) {
 					return result;
 				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(EmptyImportDeclaration n, A arg) {
+		visitComment(n, arg);
+		return null;
+	}
+
+	@Override
+	public R visit(SingleStaticImportDeclaration n, A arg) {
+		visitComment(n, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(SingleTypeImportDeclaration n, A arg) {
+		visitComment(n, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(StaticImportOnDemandDeclaration n, A arg) {
+		visitComment(n, arg);
+		{
+			R result = n.getType().accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public R visit(TypeImportOnDemandDeclaration n, A arg) {
+		visitComment(n, arg);
+		{
+			R result = n.getName().accept(this, arg);
+			if (result != null) {
+				return result;
 			}
 		}
 		return null;

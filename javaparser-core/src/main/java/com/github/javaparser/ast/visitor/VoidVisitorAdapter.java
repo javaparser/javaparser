@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -412,11 +413,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		}
 	}
 
-	@Override public void visit(final ImportDeclaration n, final A arg) {
-		visitComment(n.getComment(), arg);
-		n.getName().accept(this, arg);
-	}
-
 	@Override public void visit(final InitializerDeclaration n, final A arg) {
 		visitComment(n.getComment(), arg);
 		n.getBlock().accept(this, arg);
@@ -790,6 +786,36 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 	@Override
 	public void visit(ArrayBracketPair n, A arg) {
 		visitAnnotations(n, arg);
+	}
+
+	@Override
+	public void visit(EmptyImportDeclaration n, A arg) {
+		visitComment(n.getComment(), arg);
+		
+	}
+
+	@Override
+	public void visit(SingleStaticImportDeclaration n, A arg) {
+		visitComment(n.getComment(), arg);
+		n.getType().accept(this, arg);
+	}
+
+	@Override
+	public void visit(SingleTypeImportDeclaration n, A arg) {
+		visitComment(n.getComment(), arg);
+		n.getType().accept(this, arg);
+	}
+
+	@Override
+	public void visit(StaticImportOnDemandDeclaration n, A arg) {
+		visitComment(n.getComment(), arg);
+		n.getType().accept(this, arg);
+	}
+
+	@Override
+	public void visit(TypeImportOnDemandDeclaration n, A arg) {
+		visitComment(n.getComment(), arg);
+		n.getName().accept(this, arg);
 	}
 
 	private void visitComment(final Comment n, final A arg) {

@@ -62,4 +62,8 @@ public final class QualifiedNameExpr extends NameExpr {
 		setAsParentNodeOf(this.qualifier);
 		return this;
 	}
+
+    public String getQualifiedName() {
+        return qualifier.getQualifiedName() + "." + getName();
+    }
 }

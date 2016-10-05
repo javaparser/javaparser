@@ -24,6 +24,7 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -76,8 +77,6 @@ public interface GenericVisitor<R, A> {
 	R visit(CompilationUnit n, A arg);
 
 	R visit(PackageDeclaration n, A arg);
-
-	R visit(ImportDeclaration n, A arg);
 
 	R visit(TypeParameter n, A arg);
 
@@ -253,5 +252,15 @@ public interface GenericVisitor<R, A> {
 
     R visit(TypeExpr n, A arg);
 
-	R visit(ArrayBracketPair arrayBracketPair, A arg);
+	R visit(ArrayBracketPair n, A arg);
+
+	R visit(EmptyImportDeclaration n, A arg);
+
+	R visit(SingleStaticImportDeclaration n, A arg);
+
+	R visit(SingleTypeImportDeclaration n, A arg);
+
+	R visit(StaticImportOnDemandDeclaration n, A arg);
+
+	R visit(TypeImportOnDemandDeclaration n, A arg);
 }
