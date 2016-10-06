@@ -25,14 +25,12 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.CommentsCollection;
-import com.github.javaparser.ast.comments.CommentsParser;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+
+import static com.github.javaparser.ast.Node.*;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -46,25 +44,12 @@ class CommentsInserter {
     CommentsInserter(ParserConfiguration configuration) {
         this.configuration = configuration;
     }
-
-    /**
-     * Adds the comments found in the source code of a compilation unit to that compilation unit.
-     * @param cu an already created compilation unit
-     * @param cuSourceCode the source code of the compilation unit. It will be parsed to find comments.
-     */
-    public void insertComments(CompilationUnit cu, String cuSourceCode) throws IOException {
-        CommentsParser commentsParser = new CommentsParser();
-        CommentsCollection allComments = commentsParser.parse(cuSourceCode);
-
-        insertCommentsInCu(cu, allComments);
-    }
-
+    
     /**
      * Comments are attributed to the thing the comment and are removed from
      * allComments.
      */
-    private void insertCommentsInCu(CompilationUnit cu,
-            CommentsCollection commentsCollection) {
+    void insertComments(CompilationUnit cu, CommentsCollection commentsCollection) {
         if (commentsCollection.size() == 0)
             return;
 
@@ -76,16 +61,16 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        List<Comment> comments = commentsCollection.getAll();
-        PositionUtils.sortByBeginPosition(comments);
+        Set<Comment> comments = commentsCollection.getAll();
         List<Node> children = cu.getChildrenNodes();
         PositionUtils.sortByBeginPosition(children);
 
+        Comment firstComment = comments.iterator().next();
         if (cu.getPackage() != null
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                        comments.get(0), children.get(0)))) {
-            cu.setComment(comments.get(0));
-            comments.remove(0);
+                firstComment, children.get(0)))) {
+            cu.setComment(firstComment);
+            comments.remove(firstComment);
         }
 
         insertCommentsInNode(cu, comments);
@@ -95,8 +80,7 @@ class CommentsInserter {
      * This method try to attributes the nodes received to child of the node. It
      * returns the node that were not attributed.
      */
-    private void insertCommentsInNode(Node node,
-            List<Comment> commentsToAttribute) {
+    private void insertCommentsInNode(Node node, Set<Comment> commentsToAttribute) {
         if (commentsToAttribute.isEmpty())
             return;
 
@@ -112,7 +96,7 @@ class CommentsInserter {
         PositionUtils.sortByBeginPosition(children);
 
         for (Node child : children) {
-            List<Comment> commentsInsideChild = new LinkedList<Comment>();
+            Set<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
             for (Comment c : commentsToAttribute) {
                 if (PositionUtils.nodeContains(child, c,
                         configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)) {
@@ -142,8 +126,8 @@ class CommentsInserter {
         // at this point I create an ordered list of all remaining comments and
         // children
         Comment previousComment = null;
-        attributedComments = new LinkedList<Comment>();
-        List<Node> childrenAndComments = new LinkedList<Node>();
+        attributedComments = new LinkedList<>();
+        List<Node> childrenAndComments = new LinkedList<>();
         childrenAndComments.addAll(children);
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
@@ -177,8 +161,7 @@ class CommentsInserter {
         }
     }
 
-    private boolean attributeLineCommentToNodeOrChild(Node node,
-            LineComment lineComment) {
+    private boolean attributeLineCommentToNodeOrChild(Node node, LineComment lineComment) {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
         if (node.getBegin().line == lineComment.getBegin().line

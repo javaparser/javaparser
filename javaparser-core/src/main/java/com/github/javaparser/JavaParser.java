@@ -51,6 +51,14 @@ public final class JavaParser {
 	private ASTParser astParser = null;
 
 	/**
+	 * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods on this class.
+	 * Creating an instance will reduce setup time between parsing files.
+	 */
+	public JavaParser() {
+		this(new ParserConfiguration());
+	}
+
+	/**
 	 * Instantiate the parser. Note that parsing can also be done with the static methods on this class.
 	 * Creating an instance will reduce setup time between parsing files.
 	 */
@@ -81,7 +89,7 @@ public final class JavaParser {
 		final ASTParser parser = getParserForProvider(provider);
 		try {
 			N resultNode = context.parse(parser);
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
+			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()), Optional.empty());
 		} catch (ParseException e) {
 			return new ParseResult<>(e);
         } catch (TokenMgrException e) {
@@ -107,9 +115,9 @@ public final class JavaParser {
 			final String sourceCode = providerToString(provider);
             final ASTParser parser = getParserForProvider(provider(sourceCode));
 			final CompilationUnit resultNode = COMPILATION_UNIT.parse(parser);
-			commentsInserter.insertComments(resultNode, sourceCode);
+			commentsInserter.insertComments(resultNode, astParser.getCommentsCollection());
 
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
+			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()), Optional.of(astParser.getCommentsCollection()));
 		} catch (ParseException e) {
             return new ParseResult<>(e);
         } catch (TokenMgrException e) {

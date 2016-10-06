@@ -21,29 +21,43 @@
 
 package com.github.javaparser.ast.comments;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 
 /**
  * Set of comments produced by CommentsParser.
  */
 public class CommentsCollection {
-    private List<LineComment> lineComments = new LinkedList<LineComment>();
-    private List<BlockComment> blockComments = new LinkedList<BlockComment>();
-    private List<JavadocComment> javadocComments = new LinkedList<JavadocComment>();
+    private Set<LineComment> lineComments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
+    private Set<BlockComment> blockComments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
+    private Set<JavadocComment> javadocComments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
 
-    public List<LineComment> getLineComments(){
+    public Set<LineComment> getLineComments(){
         return lineComments;
     }
 
-    public List<BlockComment> getBlockComments(){
+    public Set<BlockComment> getBlockComments(){
         return blockComments;
     }
 
-    public List<JavadocComment> getJavadocComments(){
+    public Set<JavadocComment> getJavadocComments(){
         return javadocComments;
     }
 
+    public void addComment(Comment comment) {
+        if (comment instanceof BlockComment) {
+            addComment((BlockComment) comment);
+        } else if (comment instanceof LineComment) {
+            addComment((LineComment) comment);
+        } else if (comment instanceof JavadocComment) {
+            addComment((JavadocComment) comment);
+        } else {
+            throw new IllegalStateException("This is not a comment I know.");
+        }
+    }
+    
     public void addComment(LineComment lineComment){
         this.lineComments.add(lineComment);
     }
@@ -70,16 +84,16 @@ public class CommentsCollection {
         return false;
     }
 
-    public List<Comment> getAll(){
-        List<Comment> comments = new LinkedList<Comment>();
+    public Set<Comment> getAll(){
+        Set<Comment> comments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
         comments.addAll(lineComments);
         comments.addAll(blockComments);
         comments.addAll(javadocComments);
         return comments;
     }
 
-    public int size(){
-        return lineComments.size()+blockComments.size()+javadocComments.size();
+    public int size() {
+        return lineComments.size() + blockComments.size() + javadocComments.size();
     }
 
     public CommentsCollection minus(CommentsCollection other){
