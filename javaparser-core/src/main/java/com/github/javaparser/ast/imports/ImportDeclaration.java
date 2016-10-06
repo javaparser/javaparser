@@ -54,7 +54,7 @@ public abstract class ImportDeclaration extends Node {
     }
 
     /**
-     * Factory method for the subclasses of this class.
+     * Factory method for import declarations.
      *
      * @param range      the range the import declaration covers. Range.UNKNOWN if not known.
      * @param name       the qualified name of the import.
