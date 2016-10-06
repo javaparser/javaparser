@@ -30,7 +30,7 @@ import com.github.javaparser.utils.PositionUtils;
 
 import java.util.*;
 
-import static com.github.javaparser.ast.Node.*;
+import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -46,22 +46,22 @@ class CommentsInserter {
     }
     
     /**
-     * Comments are attributed to the thing the comment and are removed from
-     * allComments.
+     * Comments are attributed to the thing they comment and are removed from
+     * the commentsCollection.
      */
     void insertComments(CompilationUnit cu, CommentsCollection commentsCollection) {
         if (commentsCollection.size() == 0)
             return;
 
-        // I should sort all the direct children and the comments, if a comment
-        // is the first thing then it
-        // a comment to the CompilationUnit
-        // FIXME if there is no package it could be also a comment to the
-        // following class...
+        /* I should sort all the direct children and the comments, if a comment
+         is the first thing then it
+         a comment to the CompilationUnit */
+
+        // FIXME if there is no package it could be also a comment to the following class...
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        Set<Comment> comments = commentsCollection.getAll();
+        Set<Comment> comments = commentsCollection.getComments();
         List<Node> children = cu.getChildrenNodes();
         PositionUtils.sortByBeginPosition(children);
 
@@ -107,9 +107,8 @@ class CommentsInserter {
             insertCommentsInNode(child, commentsInsideChild);
         }
 
-        // I can attribute in line comments to elements preceeding them, if
-        // there
-        // is something contained in their line
+        /* I can attribute in line comments to elements preceeding them, if
+         there is something contained in their line */
         List<Comment> attributedComments = new LinkedList<Comment>();
         for (Comment comment : commentsToAttribute) {
             if (comment.isLineComment()) {
@@ -123,8 +122,8 @@ class CommentsInserter {
             }
         }
 
-        // at this point I create an ordered list of all remaining comments and
-        // children
+        /* at this point I create an ordered list of all remaining comments and
+         children */
         Comment previousComment = null;
         attributedComments = new LinkedList<>();
         List<Node> childrenAndComments = new LinkedList<>();

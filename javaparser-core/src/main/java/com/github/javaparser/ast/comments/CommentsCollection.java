@@ -21,98 +21,83 @@
 
 package com.github.javaparser.ast.comments;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 
 /**
- * Set of comments produced by CommentsParser.
+ * The comments contained in a certain parsed piece of source code.
  */
 public class CommentsCollection {
-    private Set<LineComment> lineComments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
-    private Set<BlockComment> blockComments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
-    private Set<JavadocComment> javadocComments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
+    private final Set<Comment> comments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
 
-    public Set<LineComment> getLineComments(){
-        return lineComments;
+    public CommentsCollection() {
     }
 
-    public Set<BlockComment> getBlockComments(){
-        return blockComments;
+    public CommentsCollection(Collection<Comment> commentsToCopy) {
+        comments.addAll(commentsToCopy);
     }
 
-    public Set<JavadocComment> getJavadocComments(){
-        return javadocComments;
+    public Set<LineComment> getLineComments() {
+        return comments.stream()
+                .filter(comment -> comment instanceof LineComment)
+                .map(comment -> (LineComment) comment)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(NODE_BY_BEGIN_POSITION)));
+    }
+
+    public Set<BlockComment> getBlockComments() {
+        return comments.stream()
+                .filter(comment -> comment instanceof BlockComment)
+                .map(comment -> (BlockComment) comment)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(NODE_BY_BEGIN_POSITION)));
+    }
+
+    public Set<JavadocComment> getJavadocComments() {
+        return comments.stream()
+                .filter(comment -> comment instanceof JavadocComment)
+                .map(comment -> (JavadocComment) comment)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(NODE_BY_BEGIN_POSITION)));
     }
 
     public void addComment(Comment comment) {
-        if (comment instanceof BlockComment) {
-            addComment((BlockComment) comment);
-        } else if (comment instanceof LineComment) {
-            addComment((LineComment) comment);
-        } else if (comment instanceof JavadocComment) {
-            addComment((JavadocComment) comment);
-        } else {
-            throw new IllegalStateException("This is not a comment I know.");
-        }
-    }
-    
-    public void addComment(LineComment lineComment){
-        this.lineComments.add(lineComment);
+        comments.add(comment);
     }
 
-    public void addComment(BlockComment blockComment){
-        this.blockComments.add(blockComment);
-    }
-
-    public void addComment(JavadocComment javadocComment){
-        this.javadocComments.add(javadocComment);
-    }
-
-    public boolean contains(Comment comment){
-        for (Comment c : getAll()){
+    public boolean contains(Comment comment) {
+        for (Comment c : getComments()) {
             // we tolerate a difference of one element in the end column:
             // it depends how \r and \n are calculated...
-            if ( c.getBegin().line==comment.getBegin().line &&
-                 c.getBegin().column==comment.getBegin().column &&
-                 c.getEnd().line==comment.getEnd().line &&
-                 Math.abs(c.getEnd().column-comment.getEnd().column)<2 ){
+            if (c.getBegin().line == comment.getBegin().line &&
+                    c.getBegin().column == comment.getBegin().column &&
+                    c.getEnd().line == comment.getEnd().line &&
+                    Math.abs(c.getEnd().column - comment.getEnd().column) < 2) {
                 return true;
             }
         }
         return false;
     }
 
-    public Set<Comment> getAll(){
-        Set<Comment> comments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
-        comments.addAll(lineComments);
-        comments.addAll(blockComments);
-        comments.addAll(javadocComments);
+    public Set<Comment> getComments() {
         return comments;
     }
 
     public int size() {
-        return lineComments.size() + blockComments.size() + javadocComments.size();
+        return comments.size();
     }
 
-    public CommentsCollection minus(CommentsCollection other){
+    public CommentsCollection minus(CommentsCollection other) {
         CommentsCollection result = new CommentsCollection();
-        for (LineComment comment : lineComments){
-            if (!other.contains(comment)){
-                result.lineComments.add(comment);
-            }
-        }
-        for (BlockComment comment : blockComments){
-            if (!other.contains(comment)){
-                result.blockComments.add(comment);
-            }
-        }
-        for (JavadocComment comment : javadocComments){
-            if (!other.contains(comment)){
-                result.javadocComments.add(comment);
-            }
-        }
+        result.comments.addAll(
+                comments.stream()
+                        .filter(comment -> !other.contains(comment))
+                        .collect(Collectors.toList()));
         return result;
+    }
+
+    public CommentsCollection copy() {
+        return new CommentsCollection(comments);
     }
 }

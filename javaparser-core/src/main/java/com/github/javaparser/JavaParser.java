@@ -24,6 +24,7 @@ package com.github.javaparser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -115,9 +116,10 @@ public final class JavaParser {
 			final String sourceCode = providerToString(provider);
             final ASTParser parser = getParserForProvider(provider(sourceCode));
 			final CompilationUnit resultNode = COMPILATION_UNIT.parse(parser);
-			commentsInserter.insertComments(resultNode, astParser.getCommentsCollection());
+            final CommentsCollection comments = astParser.getCommentsCollection();
+            commentsInserter.insertComments(resultNode, comments.copy());
 
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()), Optional.of(astParser.getCommentsCollection()));
+			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()), Optional.of(comments));
 		} catch (ParseException e) {
             return new ParseResult<>(e);
         } catch (TokenMgrException e) {
