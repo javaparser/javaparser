@@ -45,6 +45,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.bdd.TestUtils.getSampleStream;
@@ -69,13 +70,13 @@ public class CommentParsingSteps {
     @When("read sample \"$sampleName\" using encoding \"$encoding\"")
     public void givenTheClassWithEncoding(String sampleName, String encoding) throws IOException {
         sourceUnderTest = null;
-        ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parseFull(provider(getSampleStream(sampleName), Charset.forName(encoding)));
+        ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parse(COMPILATION_UNIT, provider(getSampleStream(sampleName), Charset.forName(encoding)));
         commentsCollection = parseResult.getCommentsCollection().orElse(new CommentsCollection());
     }
 
     @When("the class is parsed by the comment parser")
     public void whenTheClassIsParsedByTheCommentParser() throws IOException {
-        ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parseFull(provider(sourceUnderTest));
+        ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parse(COMPILATION_UNIT, provider(sourceUnderTest));
         commentsCollection = parseResult.getCommentsCollection().orElse(new CommentsCollection());
     }
 
@@ -91,12 +92,12 @@ public class CommentParsingSteps {
 
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() {
-        compilationUnit = new JavaParser(configuration).parseFull(provider(sourceUnderTest)).getResult().get();
+        compilationUnit = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest)).getResult().get();
     }
 
     @Then("the Java parser cannot parse it because of lexical errors")
     public void javaParserCannotParseBecauseOfLexicalErrors() {
-        ParseResult<CompilationUnit> result = new JavaParser(configuration).parseFull(provider(sourceUnderTest));
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest));
         if(result.isSuccessful()){
             fail("Lexical error expected");
         }

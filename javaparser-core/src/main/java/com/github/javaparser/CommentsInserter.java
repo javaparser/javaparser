@@ -24,7 +24,6 @@ package com.github.javaparser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
 
@@ -49,8 +48,8 @@ class CommentsInserter {
      * Comments are attributed to the thing they comment and are removed from
      * the commentsCollection.
      */
-    void insertComments(CompilationUnit cu, CommentsCollection commentsCollection) {
-        if (commentsCollection.size() == 0)
+    private void insertComments(CompilationUnit cu, TreeSet<Comment> comments) {
+        if (comments.isEmpty())
             return;
 
         /* I should sort all the direct children and the comments, if a comment
@@ -61,7 +60,6 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        Set<Comment> comments = commentsCollection.getComments();
         List<Node> children = cu.getChildrenNodes();
         PositionUtils.sortByBeginPosition(children);
 
@@ -72,17 +70,19 @@ class CommentsInserter {
             cu.setComment(firstComment);
             comments.remove(firstComment);
         }
-
-        insertCommentsInNode(cu, comments);
     }
 
     /**
      * This method try to attributes the nodes received to child of the node. It
      * returns the node that were not attributed.
      */
-    private void insertCommentsInNode(Node node, Set<Comment> commentsToAttribute) {
+    void insertComments(Node node, TreeSet<Comment> commentsToAttribute) {
         if (commentsToAttribute.isEmpty())
             return;
+        
+        if(node instanceof CompilationUnit){
+            insertComments((CompilationUnit)node, commentsToAttribute);
+        }
 
         // the comments can:
         // 1) Inside one of the child, then it is the child that have to
@@ -96,7 +96,7 @@ class CommentsInserter {
         PositionUtils.sortByBeginPosition(children);
 
         for (Node child : children) {
-            Set<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
+            TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
             for (Comment c : commentsToAttribute) {
                 if (PositionUtils.nodeContains(child, c,
                         configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)) {
@@ -104,12 +104,12 @@ class CommentsInserter {
                 }
             }
             commentsToAttribute.removeAll(commentsInsideChild);
-            insertCommentsInNode(child, commentsInsideChild);
+            insertComments(child, commentsInsideChild);
         }
 
         /* I can attribute in line comments to elements preceeding them, if
          there is something contained in their line */
-        List<Comment> attributedComments = new LinkedList<Comment>();
+        List<Comment> attributedComments = new LinkedList<>();
         for (Comment comment : commentsToAttribute) {
             if (comment.isLineComment()) {
                 for (Node child : children) {

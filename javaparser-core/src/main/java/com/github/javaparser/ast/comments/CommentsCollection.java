@@ -32,7 +32,7 @@ import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
  * The comments contained in a certain parsed piece of source code.
  */
 public class CommentsCollection {
-    private final Set<Comment> comments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
+    private final TreeSet<Comment> comments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
 
     public CommentsCollection() {
     }
@@ -80,7 +80,7 @@ public class CommentsCollection {
         return false;
     }
 
-    public Set<Comment> getComments() {
+    public TreeSet<Comment> getComments() {
         return comments;
     }
 
