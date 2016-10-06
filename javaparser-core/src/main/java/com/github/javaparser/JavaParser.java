@@ -82,10 +82,8 @@ public final class JavaParser {
 		try {
 			N resultNode = context.parse(parser);
 			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			return new ParseResult<>(e);
-        } catch (TokenMgrException e) {
-            return new ParseResult<>(e);
 		} finally {
 			try {
 				provider.close();
@@ -110,13 +108,11 @@ public final class JavaParser {
 			commentsInserter.insertComments(resultNode, sourceCode);
 
 			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
-		} catch (ParseException e) {
-            return new ParseResult<>(e);
-        } catch (TokenMgrException e) {
-            return new ParseResult<>(e);
-        } catch (IOException e) {
-            // The commentsInserter won't throw an IOException since it's reading from a String.
+		} catch (IOException e) {
+			// The commentsInserter won't throw an IOException since it's reading from a String.
 			throw new AssertionError("Unreachable code");
+		} catch (Exception e) {
+            return new ParseResult<>(e);
 		} finally {
 			try {
 				provider.close();
