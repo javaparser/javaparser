@@ -1,4 +1,6 @@
 class MethodCalls {
+
+	public int member;
 	
 	public MethodCalls getSelf()
 	{
@@ -9,9 +11,14 @@ class MethodCalls {
 	{
 	}
 	
-	void bar()
+	void bar1()
 	{
 		getSelf().getSelf().foo();
+	}
+
+	int bar2()
+	{
+		return getSelf().m;
 	}
 
 }

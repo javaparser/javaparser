@@ -9,12 +9,10 @@ import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.*;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -29,19 +27,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class MethodCallExprContextTest extends AbstractTest {
 
-    private TypeSolver typeSolver;
-
-    @Before
-    public void setup() {
-        typeSolver = new JreTypeSolver();
-    }
-
     @Test
     public void solveNestedMethodCallExprContextWithoutScope() throws ParseException {
         CompilationUnit cu = parseSample("MethodCalls");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar1");
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "foo");
         
         File src = new File("src/test/resources");
