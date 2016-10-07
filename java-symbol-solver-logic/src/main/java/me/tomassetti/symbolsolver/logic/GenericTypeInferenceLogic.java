@@ -71,6 +71,10 @@ public class GenericTypeInferenceLogic {
             }
         } else if (formalType.isPrimitive()) {
             // nothing to do
+        } else if (formalType.isArray()) {
+            if (actualType.isArray()) {
+                consider(map, formalType.asArrayTypeUsage().getComponentType(), actualType.asArrayTypeUsage().getComponentType());
+            }
         } else {
             throw new UnsupportedOperationException(formalType.describe());
         }
