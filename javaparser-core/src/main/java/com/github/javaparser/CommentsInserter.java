@@ -46,7 +46,7 @@ class CommentsInserter {
     
     /**
      * Comments are attributed to the thing they comment and are removed from
-     * the commentsCollection.
+     * the comments.
      */
     private void insertComments(CompilationUnit cu, TreeSet<Comment> comments) {
         if (comments.isEmpty())
