@@ -59,4 +59,22 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
     default String getQualifiedName() {
         return declaringType().getQualifiedName()+ "." + this.getName();
     }
+
+    default String getSignature() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(getName());
+        sb.append("(");
+        for (int i=0; i<getNoParams(); i++) {
+            if (i != 0) {
+                sb.append(", ");
+            }
+            sb.append(getParam(i).getType().describe());
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
+    default String getQualifiedSignature() {
+        return declaringType().getQualifiedName()+ "." + this.getSignature();
+    }
 }
