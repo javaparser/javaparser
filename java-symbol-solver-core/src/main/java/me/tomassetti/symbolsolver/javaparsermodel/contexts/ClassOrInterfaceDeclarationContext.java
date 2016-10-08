@@ -158,9 +158,13 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             }
         }
 
-        SymbolReference<MethodDeclaration> parentSolution = getParent().solveMethod(name, parameterTypes, typeSolver);
-        if (parentSolution.isSolved()) {
-            candidateMethods.add(parentSolution.getCorrespondingDeclaration());
+        // We want to avoid infinite recursion when a class is using its own method
+        // see issue #75
+        if (candidateMethods.isEmpty()) {
+            SymbolReference<MethodDeclaration> parentSolution = getParent().solveMethod(name, parameterTypes, typeSolver);
+            if (parentSolution.isSolved()) {
+                candidateMethods.add(parentSolution.getCorrespondingDeclaration());
+            }
         }
 
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, parameterTypes, typeSolver);
