@@ -200,6 +200,16 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope() != null) {
+            // consider static methods
+            if (wrappedNode.getScope() instanceof NameExpr) {
+                NameExpr scopeAsName = (NameExpr)wrappedNode.getScope();
+                SymbolReference symbolReference = this.solveType(scopeAsName.getName(), typeSolver);
+                if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
+                    TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
+                    return typeDeclaration.solveMethod(name, parameterTypes);
+                }
+            }
+
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {

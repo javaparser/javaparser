@@ -20,7 +20,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import me.tomassetti.symbolsolver.resolution.*;
+import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 
 import java.util.*;
@@ -219,7 +219,7 @@ public class JavaParserFacade {
             logger.finest("getType on name expr " + node);
             Optional<me.tomassetti.symbolsolver.model.resolution.Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
             if (!value.isPresent()) {
-                throw new UnsolvedSymbolException("FOO Solving " + node, nameExpr.getName());
+                throw new UnsolvedSymbolException("Solving " + node, nameExpr.getName());
             } else {
                 return value.get().getUsage();
             }

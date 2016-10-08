@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
@@ -142,7 +143,12 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         return JavaParserFacade.get(typeSolver).getType(wrappedNode);
     }*/
 
-	/**
+    @Override
+    public TypeDeclaration asType() {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName()+": wrapping "+ this.getWrappedNode().getClass().getCanonicalName());
+    }
+
+    /**
 	 * Returns the JavaParser node associated with this JavaParserSymbolDeclaration.
 	 *
 	 * @return A visitable JavaParser node wrapped by this object.
