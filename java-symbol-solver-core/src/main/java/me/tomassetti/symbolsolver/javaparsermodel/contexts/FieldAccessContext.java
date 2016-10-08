@@ -40,7 +40,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveMethod(name, parameterTypes, typeSolver);
     }
 
     @Override

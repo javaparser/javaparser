@@ -36,7 +36,6 @@ public class MethodResolutionLogic {
     }
 
     public static boolean isApplicable(MethodDeclaration method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
-        List<TypeUsage> originalParamTypes = paramTypes;
         if (!method.getName().equals(name)) {
             return false;
         }
@@ -188,7 +187,10 @@ public class MethodResolutionLogic {
             TypeUsage expectedType = method.getParamType(i, typeSolver);
             TypeUsage expectedTypeWithoutSubstitutions = expectedType;
             TypeUsage actualType = paramTypes.get(i);
-            for (TypeParameter tp : method.getDeclaration().getTypeParameters()) {
+            
+            List<TypeParameter> typeParameters = method.getDeclaration().getTypeParameters();
+            typeParameters.addAll(method.declaringType().getTypeParameters());
+            for (TypeParameter tp : typeParameters) {
                 if (tp.getBounds(typeSolver).isEmpty()) {
                     //expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                     expectedType = expectedType.replaceParam(tp.getName(), WildcardUsage.extendsBound(new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
@@ -206,7 +208,7 @@ public class MethodResolutionLogic {
                 }
             }
             TypeUsage expectedType2 = expectedTypeWithoutSubstitutions;
-            for (TypeParameter tp : method.getDeclaration().getTypeParameters()) {
+            for (TypeParameter tp : typeParameters) {
                 if (tp.getBounds(typeSolver).isEmpty()) {
                     expectedType2 = expectedType2.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                 } else if (tp.getBounds(typeSolver).size() == 1) {
