@@ -15,5 +15,7 @@ idea {
     module {
         excludeDirs += file('src/test/resources/javaparser_expected_output')
         excludeDirs += file('src/test/resources/javaparser_src')
+        excludeDirs += file('src/test/resources/javaparser_new_src')
+        excludeDirs += file('src/test/resources/javaparser_methodcalls_expected_output')
     }
 }

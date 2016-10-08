@@ -68,7 +68,7 @@ public class AnalyseNewJavaParserTest {
         sourceFileInfoExtractor.solveMethodCalls(sourceFile);
         String output = outErrStream.toString();
 
-        String path = "src/test/resources/javaparser_methodcalls_expected_output/" + fileName.replaceAll("/", "_")+ ".txt";
+        String path = adaptPath(new File("src/test/resources/javaparser_methodcalls_expected_output")).getPath()+ "/" + fileName.replaceAll("/", "_")+ ".txt";
         File dstFile = new File(path);
 
         if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)){

@@ -129,9 +129,9 @@ public class SourceFileInfoExtractor {
 
     private String toString(SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> methodDeclarationSymbolReference) {
         if (methodDeclarationSymbolReference.isSolved()) {
-            return "UNSOLVED";
-        } else {
             return methodDeclarationSymbolReference.getCorrespondingDeclaration().getQualifiedSignature();
+        } else {
+            return "UNSOLVED";
         }
     }
 
