@@ -28,6 +28,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -262,24 +263,6 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		n.getQualifier().accept(this, arg);
 		printer.print(".");
 		printer.print(n.getName());
-
-		printOrphanCommentsEnding(n);
-	}
-
-	@Override
-	public void visit(final ImportDeclaration n, final Object arg) {
-		printJavaComment(n.getComment(), arg);
-		if (!n.isEmptyImportDeclaration()) {
-			printer.print("import ");
-			if (n.isStatic()) {
-				printer.print("static ");
-			}
-			n.getName().accept(this, arg);
-			if (n.isAsterisk()) {
-				printer.print(".*");
-			}
-		}
-		printer.printLn(";");
 
 		printOrphanCommentsEnding(n);
 	}
@@ -1592,6 +1575,49 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(ArrayBracketPair arrayBracketPair, Object arg) {
 		printAnnotations(arrayBracketPair.getAnnotations(), true, arg);
 		printer.print("[]");
+	}
+
+	@Override
+	public void visit(EmptyImportDeclaration n, Object arg) {
+		printer.printLn(";");
+	}
+
+	@Override
+	public void visit(SingleStaticImportDeclaration n, Object arg) {
+		printJavaComment(n.getComment(), arg);
+		printer.print("import static ");
+		n.getType().accept(this, arg);
+		printer.print(".");
+		printer.print(n.getStaticMember());
+		printer.printLn(";");
+		printOrphanCommentsEnding(n);
+	}
+
+	@Override
+	public void visit(SingleTypeImportDeclaration n, Object arg) {
+		printJavaComment(n.getComment(), arg);
+		printer.print("import ");
+		n.getType().accept(this, arg);
+		printer.printLn(";");
+		printOrphanCommentsEnding(n);
+	}
+
+	@Override
+	public void visit(StaticImportOnDemandDeclaration n, Object arg) {
+		printJavaComment(n.getComment(), arg);
+		printer.print("import static ");
+		n.getType().accept(this, arg);
+		printer.printLn(".*;");
+		printOrphanCommentsEnding(n);
+	}
+
+	@Override
+	public void visit(TypeImportOnDemandDeclaration n, Object arg) {
+		printJavaComment(n.getComment(), arg);
+		printer.print("import ");
+		n.getName().accept(this, arg);
+		printer.printLn(".*;");
+		printOrphanCommentsEnding(n);
 	}
 
 	private void printOrphanCommentsBeforeThisChildNode(final Node node) {

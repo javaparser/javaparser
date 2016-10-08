@@ -215,12 +215,40 @@ Then it is dumped to:
 while (true) {
 }
 
-Scenario: we can parse imports
+Scenario: we can parse static on demand imports
 Given the import:
 import static a.b.c.Abc.*;
 When the import is parsed by the Java parser
 Then it is dumped to:
 import static a.b.c.Abc.*;
+
+Scenario: we can parse static type imports
+Given the import:
+import static a.b.c.Abc;
+When the import is parsed by the Java parser
+Then it is dumped to:
+import static a.b.c.Abc;
+
+Scenario: we can parse on demand imports
+Given the import:
+import a.b.c.*;
+When the import is parsed by the Java parser
+Then it is dumped to:
+import a.b.c.*;
+
+Scenario: we can parse type imports
+Given the import:
+import a.b.c.Abc;
+When the import is parsed by the Java parser
+Then it is dumped to:
+import a.b.c.Abc;
+
+Scenario: we can parse empty imports
+Given the import:
+;
+When the import is parsed by the Java parser
+Then it is dumped to:
+;
 
 Scenario: we can parse annotations
 Given the annotation:

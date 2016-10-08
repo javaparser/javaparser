@@ -24,6 +24,7 @@ package com.github.javaparser.ast.visitor;
 import java.util.List;
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -631,12 +632,6 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ImportDeclaration n, final A arg) {
-		visitComment(n, arg);
-		n.setName((NameExpr) n.getName().accept(this, arg));
-		return n;
-	}
-
 	@Override public Node visit(final InitializerDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setBlock((BlockStmt) n.getBlock().accept(this, arg));
@@ -1129,6 +1124,40 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	public Node visit(ArrayBracketPair n, A arg) {
 		visitAnnotations(n, arg);
 		return n;
+	}
+
+    @Override
+	public Node visit(EmptyImportDeclaration n, A arg) {
+        visitComment(n, arg);
+        return n;
+	}
+
+	@Override
+	public Node visit(SingleStaticImportDeclaration n, A arg) {
+        visitComment(n, arg);
+        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
+        return n;
+	}
+
+	@Override
+	public Node visit(SingleTypeImportDeclaration n, A arg) {
+        visitComment(n, arg);
+        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
+        return n;
+	}
+
+	@Override
+	public Node visit(StaticImportOnDemandDeclaration n, A arg) {
+        visitComment(n, arg);
+        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
+        return n;
+	}
+
+	@Override
+	public Node visit(TypeImportOnDemandDeclaration n, A arg) {
+        visitComment(n, arg);
+        n.setName((NameExpr) n.getName().accept(this, arg));
+        return n;
 	}
 
 	@Override
