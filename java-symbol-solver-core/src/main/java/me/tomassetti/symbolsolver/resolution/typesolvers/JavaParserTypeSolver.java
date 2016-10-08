@@ -9,7 +9,10 @@ import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -20,6 +23,8 @@ public class JavaParserTypeSolver implements TypeSolver {
     private File srcDir;
 
     private TypeSolver parent;
+
+    private Map<String, CompilationUnit> parsedFiles = new HashMap<String, CompilationUnit>();
 
     public JavaParserTypeSolver(File srcDir) {
         this.srcDir = srcDir;
@@ -41,6 +46,14 @@ public class JavaParserTypeSolver implements TypeSolver {
     @Override
     public void setParent(TypeSolver parent) {
         this.parent = parent;
+    }
+
+
+    private CompilationUnit parse(File srcFile) throws FileNotFoundException {
+        if (!parsedFiles.containsKey(srcFile.getAbsolutePath())) {
+            parsedFiles.put(srcFile.getAbsolutePath(), JavaParser.parse(srcFile));
+        }
+        return parsedFiles.get(srcFile.getAbsolutePath());
     }
 
     @Override
@@ -68,7 +81,7 @@ public class JavaParserTypeSolver implements TypeSolver {
                         }
                         typeName += nameElements[j];
                     }
-                    CompilationUnit compilationUnit = JavaParser.parse(srcFile);
+                    CompilationUnit compilationUnit = parse(srcFile);
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName);
                     if (!astTypeDeclaration.isPresent()) {
                         return SymbolReference.unsolved(TypeDeclaration.class);
