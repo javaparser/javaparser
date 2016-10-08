@@ -22,6 +22,8 @@
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.Node;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Iterate over all the nodes in (a part of) the AST.
@@ -37,6 +39,23 @@ public abstract class TreeVisitor {
 		process(node);
 		for (Node child : node.getChildrenNodes()) {
 			visitDepthFirst(child);
+		}
+	}
+	
+	/**
+	* https://en.wikipedia.org/wiki/Breadth-first_search
+	*
+	* @param node the start node, and the first one that is passed to process(node).
+	*/
+	public void visitBreadthFirst(Node node) {
+		Queue<Node> queue = new LinkedList<>();
+		queue.offer(node);
+		while (queue.size() > 0) {
+			Node head = queue.peek();
+			for (Node child : head.getChildrenNodes()) {
+				queue.offer(child);
+			}
+			process(queue.poll());
 		}
 	}
 
