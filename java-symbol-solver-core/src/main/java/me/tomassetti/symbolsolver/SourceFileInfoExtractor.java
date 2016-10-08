@@ -10,12 +10,14 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.Statement;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,6 +110,31 @@ public class SourceFileInfoExtractor {
         }
     }
 
+    private void solveMethodCalls(Node node) {
+        if (node instanceof MethodCallExpr) {
+            out.println("  Line " + node.getBegin().line + ") " + node + " ==> " + toString((MethodCallExpr)node));
+        }
+        for (Node child : node.getChildrenNodes()) {
+            solveMethodCalls(child);
+        }
+    }
+
+    private String toString(MethodCallExpr node) {
+        try {
+            return toString(JavaParserFacade.get(typeSolver).solve(node));
+        } catch (Exception e) {
+            return "ERROR";
+        }
+    }
+
+    private String toString(SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> methodDeclarationSymbolReference) {
+        if (methodDeclarationSymbolReference.isSolved()) {
+            return "UNSOLVED";
+        } else {
+            return methodDeclarationSymbolReference.getCorrespondingDeclaration().getQualifiedSignature();
+        }
+    }
+
     public void solve(File file) throws IOException, ParseException {
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
@@ -120,6 +147,22 @@ public class SourceFileInfoExtractor {
                 }
                 CompilationUnit cu = JavaParser.parse(file);
                 solve(cu);
+            }
+        }
+    }
+
+    public void solveMethodCalls(File file) throws IOException, ParseException {
+        if (file.isDirectory()) {
+            for (File f : file.listFiles()) {
+                solveMethodCalls(f);
+            }
+        } else {
+            if (file.getName().endsWith(".java")) {
+                if (printFileName) {
+                    out.println("- parsing " + file.getAbsolutePath());
+                }
+                CompilationUnit cu = JavaParser.parse(file);
+                solveMethodCalls(cu);
             }
         }
     }
