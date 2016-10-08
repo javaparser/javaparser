@@ -1,4 +1,4 @@
-package com.github.javaparser.junit.visitor;
+package com.github.javaparser.junit.ast.visitor;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.After;

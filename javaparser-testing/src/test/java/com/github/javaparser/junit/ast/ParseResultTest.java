@@ -1,5 +1,9 @@
-package com.github.javaparser;
+package com.github.javaparser.junit.ast;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.Utils;
 import org.junit.Test;

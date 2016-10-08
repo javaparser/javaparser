@@ -48,7 +48,7 @@ public abstract class TreeVisitor {
 	* @param node the start node, and the first one that is passed to process(node).
 	*/
 	public void visitBreadthFirst(Node node) {
-		Queue<Node> queue = new LinkedList<Node>();
+		Queue<Node> queue = new LinkedList<>();
 		queue.offer(node);
 		while (queue.size() > 0) {
 			Node head = queue.peek();
