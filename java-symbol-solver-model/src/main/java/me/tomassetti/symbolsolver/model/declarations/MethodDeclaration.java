@@ -55,4 +55,8 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
     boolean isPrivate();
 
     boolean isPackageProtected();
+
+    default String getQualifiedName() {
+        return declaringType().getQualifiedName()+ "." + this.getName();
+    }
 }
