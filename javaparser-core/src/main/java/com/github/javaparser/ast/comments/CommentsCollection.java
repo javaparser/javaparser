@@ -21,84 +21,83 @@
 
 package com.github.javaparser.ast.comments;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 
 /**
- * Set of comments produced by CommentsParser.
+ * The comments contained in a certain parsed piece of source code.
  */
 public class CommentsCollection {
-    private List<LineComment> lineComments = new LinkedList<LineComment>();
-    private List<BlockComment> blockComments = new LinkedList<BlockComment>();
-    private List<JavadocComment> javadocComments = new LinkedList<JavadocComment>();
+    private final TreeSet<Comment> comments = new TreeSet<>(NODE_BY_BEGIN_POSITION);
 
-    public List<LineComment> getLineComments(){
-        return lineComments;
+    public CommentsCollection() {
     }
 
-    public List<BlockComment> getBlockComments(){
-        return blockComments;
+    public CommentsCollection(Collection<Comment> commentsToCopy) {
+        comments.addAll(commentsToCopy);
     }
 
-    public List<JavadocComment> getJavadocComments(){
-        return javadocComments;
+    public Set<LineComment> getLineComments() {
+        return comments.stream()
+                .filter(comment -> comment instanceof LineComment)
+                .map(comment -> (LineComment) comment)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(NODE_BY_BEGIN_POSITION)));
     }
 
-    public void addComment(LineComment lineComment){
-        this.lineComments.add(lineComment);
+    public Set<BlockComment> getBlockComments() {
+        return comments.stream()
+                .filter(comment -> comment instanceof BlockComment)
+                .map(comment -> (BlockComment) comment)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(NODE_BY_BEGIN_POSITION)));
     }
 
-    public void addComment(BlockComment blockComment){
-        this.blockComments.add(blockComment);
+    public Set<JavadocComment> getJavadocComments() {
+        return comments.stream()
+                .filter(comment -> comment instanceof JavadocComment)
+                .map(comment -> (JavadocComment) comment)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(NODE_BY_BEGIN_POSITION)));
     }
 
-    public void addComment(JavadocComment javadocComment){
-        this.javadocComments.add(javadocComment);
+    public void addComment(Comment comment) {
+        comments.add(comment);
     }
 
-    public boolean contains(Comment comment){
-        for (Comment c : getAll()){
+    public boolean contains(Comment comment) {
+        for (Comment c : getComments()) {
             // we tolerate a difference of one element in the end column:
             // it depends how \r and \n are calculated...
-            if ( c.getBegin().line==comment.getBegin().line &&
-                 c.getBegin().column==comment.getBegin().column &&
-                 c.getEnd().line==comment.getEnd().line &&
-                 Math.abs(c.getEnd().column-comment.getEnd().column)<2 ){
+            if (c.getBegin().line == comment.getBegin().line &&
+                    c.getBegin().column == comment.getBegin().column &&
+                    c.getEnd().line == comment.getEnd().line &&
+                    Math.abs(c.getEnd().column - comment.getEnd().column) < 2) {
                 return true;
             }
         }
         return false;
     }
 
-    public List<Comment> getAll(){
-        List<Comment> comments = new LinkedList<Comment>();
-        comments.addAll(lineComments);
-        comments.addAll(blockComments);
-        comments.addAll(javadocComments);
+    public TreeSet<Comment> getComments() {
         return comments;
     }
 
-    public int size(){
-        return lineComments.size()+blockComments.size()+javadocComments.size();
+    public int size() {
+        return comments.size();
     }
 
-    public CommentsCollection minus(CommentsCollection other){
+    public CommentsCollection minus(CommentsCollection other) {
         CommentsCollection result = new CommentsCollection();
-        for (LineComment comment : lineComments){
-            if (!other.contains(comment)){
-                result.lineComments.add(comment);
-            }
-        }
-        for (BlockComment comment : blockComments){
-            if (!other.contains(comment)){
-                result.blockComments.add(comment);
-            }
-        }
-        for (JavadocComment comment : javadocComments){
-            if (!other.contains(comment)){
-                result.javadocComments.add(comment);
-            }
-        }
+        result.comments.addAll(
+                comments.stream()
+                        .filter(comment -> !other.contains(comment))
+                        .collect(Collectors.toList()));
         return result;
+    }
+
+    public CommentsCollection copy() {
+        return new CommentsCollection(comments);
     }
 }

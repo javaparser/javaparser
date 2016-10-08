@@ -24,6 +24,7 @@ package com.github.javaparser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -32,13 +33,11 @@ import com.github.javaparser.ast.stmt.Statement;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.Utils.providerToString;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -49,6 +48,14 @@ public final class JavaParser {
 	private final CommentsInserter commentsInserter;
 
 	private ASTParser astParser = null;
+
+	/**
+	 * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods on this class.
+	 * Creating an instance will reduce setup time between parsing files.
+	 */
+	public JavaParser() {
+		this(new ParserConfiguration());
+	}
 
 	/**
 	 * Instantiate the parser. Note that parsing can also be done with the static methods on this class.
@@ -68,20 +75,23 @@ public final class JavaParser {
 	}
 
 	/**
-	 * Parses source code without comments.
+	 * Parses source code.
 	 * It takes the source code from a Provider.
-	 * The context indicates what can be found in the source code (compilation unit, block, import...)
+	 * The start indicates what can be found in the source code (compilation unit, block, import...)
 	 *
-	 * @param context  refer to the constants in ParseContext to see what can be parsed.
-	 * @param provider refer to Providers to see how you can read source
-	 * @param <N>      the subclass of Node that is the result of parsing in the context.
-	 * @return the parse result and a collection of encountered problems.
-	 */
-	public <N> ParseResult<N> parseStructure(ParseStart<N> context, Provider provider) {
-		final ASTParser parser = getParserForProvider(provider);
+     * @param start    refer to the constants in ParseStart to see what can be parsed.
+     * @param provider refer to Providers to see how you can read source.
+     * @param <N>      the subclass of Node that is the result of parsing in the start.
+     * @return the parse result, a collection of encountered problems, and some extra data.
+     */
+	public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
 		try {
-			N resultNode = context.parse(parser);
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
+            final ASTParser parser = getParserForProvider(provider);
+			N resultNode = start.parse(parser);
+            final CommentsCollection comments = astParser.getCommentsCollection();
+            commentsInserter.insertComments(resultNode, comments.copy().getComments());
+            
+			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()), Optional.of(astParser.getCommentsCollection()));
 		} catch (ParseException e) {
 			return new ParseResult<>(e);
         } catch (TokenMgrException e) {
@@ -96,41 +106,6 @@ public final class JavaParser {
 	}
 
 	/**
-	 * Parses a compilation unit and its comments.
-	 * It takes the source code from a Provider.
-	 *
-	 * @param provider refer to Providers to see how you can read source
-	 * @return the parse result and a collection of encountered problems.
-	 */
-	public ParseResult<CompilationUnit> parseFull(Provider provider) {
-		try {
-			final String sourceCode = providerToString(provider);
-            final ASTParser parser = getParserForProvider(provider(sourceCode));
-			final CompilationUnit resultNode = COMPILATION_UNIT.parse(parser);
-			commentsInserter.insertComments(resultNode, sourceCode);
-
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()));
-		} catch (ParseException e) {
-            return new ParseResult<>(e);
-        } catch (TokenMgrException e) {
-            return new ParseResult<>(e);
-        } catch (IOException e) {
-            // The commentsInserter won't throw an IOException since it's reading from a String.
-			throw new AssertionError("Unreachable code");
-		} finally {
-			try {
-				provider.close();
-			} catch (IOException e) {
-				// Since we're done parsing and have our result, we don't care about any errors.
-			}
-		}
-	}
-
-	public static CompilationUnit parse(final InputStream in, final Charset encoding) {
-		return parse(in, encoding, true);
-	}
-
-	/**
 	 * Parses the Java code contained in the {@link InputStream} and returns a
 	 * {@link CompilationUnit} that represents it.
 	 *
@@ -139,8 +114,8 @@ public final class JavaParser {
 	 * @return CompilationUnit representing the Java source code
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static CompilationUnit parse(final InputStream in, Charset encoding, boolean considerComments) {
-		return simplifiedParse(provider(in, encoding), considerComments);
+	public static CompilationUnit parse(final InputStream in, Charset encoding) {
+		return simplifiedParse(COMPILATION_UNIT, provider(in, encoding));
 	}
 
 	/**
@@ -153,11 +128,7 @@ public final class JavaParser {
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
 	public static CompilationUnit parse(final InputStream in) {
-		return parse(in, UTF8, true);
-	}
-
-	public static CompilationUnit parse(final File file, final Charset encoding) throws FileNotFoundException {
-		return simplifiedParse(provider(file, encoding), true);
+		return parse(in, UTF8);
 	}
 
 	/**
@@ -168,9 +139,10 @@ public final class JavaParser {
 	 * @param encoding encoding of the source code
 	 * @return CompilationUnit representing the Java source code
 	 * @throws ParseProblemException if the source code has parser errors
+     * @throws FileNotFoundException the file was not found
 	 */
-	public static CompilationUnit parse(final File file, final Charset encoding, boolean considerComments) throws FileNotFoundException {
-		return simplifiedParse(provider(file, encoding), considerComments);
+	public static CompilationUnit parse(final File file, final Charset encoding) throws FileNotFoundException {
+		return simplifiedParse(COMPILATION_UNIT, provider(file, encoding));
 	}
 
 	/**
@@ -184,12 +156,7 @@ public final class JavaParser {
 	 * @throws FileNotFoundException the file was not found
 	 */
 	public static CompilationUnit parse(final File file) throws FileNotFoundException {
-		return simplifiedParse(provider(file), true);
-	}
-
-
-	public static CompilationUnit parse(final Path path, final Charset encoding) throws IOException {
-		return simplifiedParse(provider(path, encoding), true);
+		return simplifiedParse(COMPILATION_UNIT, provider(file));
 	}
 
 	/**
@@ -202,8 +169,8 @@ public final class JavaParser {
 	 * @throws IOException the path could not be accessed
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static CompilationUnit parse(final Path path, final Charset encoding, boolean considerComments) throws IOException {
-		return simplifiedParse(provider(path, encoding), considerComments);
+	public static CompilationUnit parse(final Path path, final Charset encoding) throws IOException {
+		return simplifiedParse(COMPILATION_UNIT, provider(path, encoding));
 	}
 
 	/**
@@ -217,15 +184,19 @@ public final class JavaParser {
 	 * @throws IOException the path could not be accessed
 	 */
 	public static CompilationUnit parse(final Path path) throws IOException {
-		return simplifiedParse(provider(path), true);
+		return simplifiedParse(COMPILATION_UNIT, provider(path));
 	}
 
+    /**
+     * Parses Java code from a Reader and returns a
+     * {@link CompilationUnit} that represents it.<br>
+     *
+     * @param reader the reader containing Java source code
+     * @return CompilationUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     */
 	public static CompilationUnit parse(final Reader reader) {
-		return parse(reader, true);
-	}
-
-	public static CompilationUnit parse(final Reader reader, boolean considerComments) {
-		return simplifiedParse(provider(reader), considerComments);
+		return simplifiedParse(COMPILATION_UNIT, provider(reader));
 	}
 
 	/**
@@ -233,24 +204,11 @@ public final class JavaParser {
 	 * {@link CompilationUnit} that represents it.
 	 *
 	 * @param code             Java source code
-	 * @param considerComments parse or ignore comments
-	 * @return CompilationUnit representing the Java source code
-	 * @throws ParseProblemException if the source code has parser errors
-	 */
-	public static CompilationUnit parse(String code, boolean considerComments) {
-		return simplifiedParse(provider(code), considerComments);
-	}
-
-	/**
-	 * Parses the Java code contained in code and returns a
-	 * {@link CompilationUnit} that represents it.
-	 *
-	 * @param code Java source code
 	 * @return CompilationUnit representing the Java source code
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
 	public static CompilationUnit parse(String code) {
-		return parse(code, true);
+		return simplifiedParse(COMPILATION_UNIT, provider(code));
 	}
 
 	/**
@@ -277,37 +235,12 @@ public final class JavaParser {
 		return simplifiedParse(STATEMENT, provider(statement));
 	}
 
-	private static <T> T simplifiedParse(ParseStart<T> context, Provider provider) {
-		ParseResult<T> result = new JavaParser(new ParserConfiguration()).parseStructure(context, provider);
+	private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
+		ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider);
 		if (result.isSuccessful()) {
 			return result.getResult().get();
 		}
 		throw new ParseProblemException(result.getProblems());
-	}
-
-    private static CompilationUnit simplifiedParse(Provider provider, boolean considerComments) {
-        final ParseResult<CompilationUnit> result;
-        if (considerComments) {
-            result = new JavaParser(new ParserConfiguration()).parseFull(provider);
-        } else {
-            result = new JavaParser(new ParserConfiguration()).parseStructure(COMPILATION_UNIT, provider);
-        }
-        if (result.isSuccessful()) {
-            return result.getResult().get();
-        }
-        throw new ParseProblemException(result.getProblems());
-    }
-
-	/**
-	 * Parses the Java statements contained in a {@link String} and returns a
-	 * list of {@link Statement} that represents it.
-	 *
-	 * @param statements {@link String} containing Java statements
-	 * @return list of Statement representing the Java statement
-	 * @throws ParseProblemException if the source code has parser errors
-	 */
-	public static List<Statement> parseStatements(final String statements) {
-		return simplifiedParse(STATEMENTS, provider(statements));
 	}
 
 	/**
