@@ -28,6 +28,8 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.QualifiedNameExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * <p>
  * This class is a base class for classes representing import declarations. Imports are optional for the
@@ -54,7 +56,7 @@ public abstract class ImportDeclaration extends Node {
     }
 
     /**
-     * Factory method for the subclasses of this class.
+     * Factory method for import declarations.
      *
      * @param range      the range the import declaration covers. Range.UNKNOWN if not known.
      * @param name       the qualified name of the import.
@@ -62,13 +64,14 @@ public abstract class ImportDeclaration extends Node {
      * @param isAsterisk whether the import is on demand.
      */
     public static ImportDeclaration create(Range range, NameExpr name, boolean isStatic, boolean isAsterisk) {
+        assertNotNull(range);
+        assertNotNull(name);
         if (isStatic) {
             if (isAsterisk) {
                 return new StaticImportOnDemandDeclaration(range, new ClassOrInterfaceType(name.getQualifiedName()));
             } else {
                 if (!(name instanceof QualifiedNameExpr)) {
-                    // TODO make this appear in problems
-                    throw new RuntimeException("import static name has only one identifier: ");
+                    throw new IllegalArgumentException("import static name has only one identifier.");
                 }
                 String staticMember = name.getName();
                 QualifiedNameExpr qualifiedName = (QualifiedNameExpr) name;

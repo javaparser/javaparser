@@ -94,8 +94,6 @@ public final class JavaParser {
 			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()), Optional.of(astParser.getCommentsCollection()));
 		} catch (ParseException e) {
 			return new ParseResult<>(e);
-        } catch (TokenMgrException e) {
-            return new ParseResult<>(e);
 		} finally {
 			try {
 				provider.close();
