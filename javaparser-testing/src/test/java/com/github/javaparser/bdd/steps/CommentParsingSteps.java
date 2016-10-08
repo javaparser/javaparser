@@ -95,7 +95,7 @@ public class CommentParsingSteps {
         compilationUnit = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest)).getResult().get();
     }
 
-    @Then("the Java parser cannot parse it because of lexical errors")
+    @Then("the Java parser cannot parse it because of an error")
     public void javaParserCannotParseBecauseOfLexicalErrors() {
         ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest));
         if(result.isSuccessful()){

@@ -22,6 +22,7 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
@@ -92,7 +93,7 @@ public final class JavaParser {
             commentsInserter.insertComments(resultNode, comments.copy().getComments());
             
 			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()), Optional.of(astParser.getCommentsCollection()));
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			return new ParseResult<>(e);
 		} finally {
 			try {

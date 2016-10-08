@@ -183,7 +183,7 @@ Then the total number of comments is 0
 Given the class:
 /*/
 class Foo {}
-Then the Java parser cannot parse it because of lexical errors
+Then the Java parser cannot parse it because of an error
 
 Scenario: Should recognize /*/ inside a block comment
 
