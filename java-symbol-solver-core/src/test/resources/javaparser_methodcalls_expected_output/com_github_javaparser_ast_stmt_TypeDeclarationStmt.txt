@@ -1,0 +1,5 @@
+  Line 40) setTypeDeclaration(typeDecl) ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt.setTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration)
+  Line 45) setTypeDeclaration(typeDecl) ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt.setTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration)
+  Line 49) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.stmt.TypeDeclarationStmt, A)
+  Line 53) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.stmt.TypeDeclarationStmt, A)
+  Line 62) setAsParentNodeOf(this.typeDecl) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

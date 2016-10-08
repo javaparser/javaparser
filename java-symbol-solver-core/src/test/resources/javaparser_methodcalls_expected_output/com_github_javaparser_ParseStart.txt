@@ -1,0 +1,2 @@
+  Line 28) p.ClassOrInterfaceBodyDeclaration(false) ==> com.github.javaparser.ASTParser.ClassOrInterfaceBodyDeclaration(boolean)
+  Line 29) p.ClassOrInterfaceBodyDeclaration(true) ==> com.github.javaparser.ASTParser.ClassOrInterfaceBodyDeclaration(boolean)

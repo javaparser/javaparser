@@ -1,0 +1,7 @@
+  Line 54) getTypeArguments() ==> ERROR
+  Line 57) getTypeArguments().isEmpty() ==> java.util.List.isEmpty()
+  Line 57) getTypeArguments() ==> ERROR
+  Line 65) setTypeArguments(empty) ==> ERROR
+  Line 73) setTypeArguments((List<Type<?>>) null) ==> ERROR
+  Line 78) setTypeArguments(arrayToList(typeArguments)) ==> ERROR
+  Line 78) arrayToList(typeArguments) ==> ERROR

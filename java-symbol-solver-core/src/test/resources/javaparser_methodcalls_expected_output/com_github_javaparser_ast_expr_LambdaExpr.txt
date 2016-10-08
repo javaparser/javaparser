@@ -1,0 +1,8 @@
+  Line 54) setParameters(parameters) ==> com.github.javaparser.ast.expr.LambdaExpr.setParameters(java.util.List<com.github.javaparser.ast.body.Parameter>)
+  Line 55) setBody(body) ==> com.github.javaparser.ast.expr.LambdaExpr.setBody(com.github.javaparser.ast.stmt.Statement)
+  Line 56) setParametersEnclosed(parametersEnclosed) ==> com.github.javaparser.ast.expr.LambdaExpr.setParametersEnclosed(boolean)
+  Line 60) ensureNotNull(parameters) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
+  Line 66) setAsParentNodeOf(this.parameters) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)
+  Line 76) setAsParentNodeOf(this.body) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
+  Line 82) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.LambdaExpr, A)
+  Line 87) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.LambdaExpr, A)

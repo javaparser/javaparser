@@ -1,0 +1,6 @@
+  Line 44) setStmts(stmts) ==> com.github.javaparser.ast.stmt.BlockStmt.setStmts(java.util.List<com.github.javaparser.ast.stmt.Statement>)
+  Line 49) setStmts(stmts) ==> com.github.javaparser.ast.stmt.BlockStmt.setStmts(java.util.List<com.github.javaparser.ast.stmt.Statement>)
+  Line 54) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.stmt.BlockStmt, A)
+  Line 59) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.stmt.BlockStmt, A)
+  Line 64) ensureNotNull(stmts) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
+  Line 71) setAsParentNodeOf(this.stmts) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)

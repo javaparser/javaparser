@@ -1,0 +1,4 @@
+  Line 32) EnumSet.of(this) ==> UNSOLVED
+  Line 36) modifiers.contains(Modifier.PUBLIC) ==> ERROR
+  Line 38) modifiers.contains(Modifier.PROTECTED) ==> ERROR
+  Line 40) modifiers.contains(Modifier.PRIVATE) ==> ERROR

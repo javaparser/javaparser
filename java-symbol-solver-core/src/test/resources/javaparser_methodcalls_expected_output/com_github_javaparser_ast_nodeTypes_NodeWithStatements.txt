@@ -1,0 +1,11 @@
+  Line 18) getStmts().add(statement) ==> java.util.List.add(E)
+  Line 18) getStmts() ==> ERROR
+  Line 19) statement.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
+  Line 25) getStmts().add(index, statement) ==> java.util.List.add(int, E)
+  Line 25) getStmts() ==> ERROR
+  Line 26) statement.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
+  Line 32) expr.setParentNode(statement) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
+  Line 33) addStatement(statement) ==> ERROR
+  Line 37) addStatement(new NameExpr(statement)) ==> ERROR
+  Line 42) expr.setParentNode(stmt) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
+  Line 43) addStatement(index, stmt) ==> ERROR
