@@ -83,7 +83,7 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         }
 
         assertEquals(expectedLines.length, outputLines.length);
-        
+
         JavaParserFacade.clearInstances();
     }
 
