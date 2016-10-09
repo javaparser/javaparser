@@ -7,6 +7,14 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
  * @author Federico Tomassetti
  */
 public class Value {
+    @Override
+    public String toString() {
+        return "Value{" +
+                "typeUsage=" + typeUsage +
+                ", name='" + name + '\'' +
+                ", field=" + field +
+                '}';
+    }
 
     private TypeUsage typeUsage;
     private String name;

@@ -1,7 +1,7 @@
-  Line 25) getModifiers().addAll(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)))) ==> ERROR
+  Line 25) getModifiers().addAll(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)))) ==> java.util.AbstractCollection.addAll(java.util.Collection<? extends E>)
   Line 25) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
-  Line 25) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
-  Line 25) Arrays.stream(modifiers) ==> UNSOLVED
+  Line 25) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
+  Line 25) Arrays.stream(modifiers) ==> java.util.Arrays.stream(T[])
   Line 26) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 26) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
   Line 31) getModifiers().contains(Modifier.STATIC) ==> java.util.AbstractCollection.contains(java.lang.Object)

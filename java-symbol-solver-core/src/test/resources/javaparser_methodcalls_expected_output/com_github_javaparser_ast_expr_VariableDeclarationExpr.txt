@@ -8,17 +8,17 @@
   Line 77) setElementType(elementType) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.setElementType(com.github.javaparser.ast.type.Type)
   Line 78) setVariables(singletonList(new VariableDeclarator(variableName))) ==> UNSOLVED
   Line 78) singletonList(new VariableDeclarator(variableName)) ==> java.util.Collections.singletonList(T)
-  Line 79) setModifiers(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)))) ==> ERROR
-  Line 79) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
-  Line 79) Arrays.stream(modifiers) ==> UNSOLVED
+  Line 79) setModifiers(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)))) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.setModifiers(java.util.EnumSet<com.github.javaparser.ast.Modifier>)
+  Line 79) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
+  Line 79) Arrays.stream(modifiers) ==> java.util.Arrays.stream(T[])
   Line 80) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 80) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
   Line 84) setElementType(elementType) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.setElementType(com.github.javaparser.ast.type.Type)
   Line 85) setVariables(singletonList(var)) ==> UNSOLVED
   Line 85) singletonList(var) ==> java.util.Collections.singletonList(T)
-  Line 86) setModifiers(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)))) ==> ERROR
-  Line 86) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
-  Line 86) Arrays.stream(modifiers) ==> UNSOLVED
+  Line 86) setModifiers(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)))) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.setModifiers(java.util.EnumSet<com.github.javaparser.ast.Modifier>)
+  Line 86) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
+  Line 86) Arrays.stream(modifiers) ==> java.util.Arrays.stream(T[])
   Line 87) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 87) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
   Line 91) setElementType(elementType) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.setElementType(com.github.javaparser.ast.type.Type)
