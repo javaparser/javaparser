@@ -406,7 +406,7 @@ public abstract class Node implements Cloneable {
     public boolean remove() {
         if (parentNode == null)
             return false;
-        boolean success = parentNode.childrenNodes.remove(this);
+        boolean success = false;
         Class<?> parentClass = parentNode.getClass();
         while (parentClass != Object.class) {
             for (Field f : parentClass.getDeclaredFields()) {
@@ -417,7 +417,8 @@ public abstract class Node implements Cloneable {
                         continue;
                     if (Collection.class.isAssignableFrom(object.getClass())) {
                         Collection<?> l = (Collection<?>) object;
-                        success &= l.remove(this);
+                        boolean remove = l.remove(this);
+                        success |= remove;
                     } else if (Optional.class.equals(f.getType())) {
                         Optional<?> opt = (Optional<?>) object;
                         if (opt.isPresent())
@@ -425,7 +426,7 @@ public abstract class Node implements Cloneable {
                                 f.set(parentNode, Optional.empty());
                     } else if (object == this) {
                         f.set(parentNode, null);
-                        success &= true;
+                        success |= true;
                     }
                 } catch (IllegalArgumentException | IllegalAccessException e) {
                     throw new RuntimeException("Error while removing " + getClass().getSimpleName(), e);
@@ -433,6 +434,7 @@ public abstract class Node implements Cloneable {
             }
             parentClass = parentClass.getSuperclass();
         }
+        setParentNode(null);
         return success;
     }
 }

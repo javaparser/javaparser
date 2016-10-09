@@ -43,4 +43,25 @@ public interface NodeWithStatements<T> {
         return addStatement(index, stmt);
     }
 
+    public default <A extends Statement> A addAndGetStatement(A statement) {
+        getStmts().add(statement);
+        statement.setParentNode((Node) this);
+        return statement;
+    }
+
+    public default Statement addAndGetStatement(int index, final Statement statement) {
+        getStmts().add(index, statement);
+        statement.setParentNode((Node) this);
+        return statement;
+    }
+
+    public default ExpressionStmt addAndGetStatement(Expression expr) {
+        ExpressionStmt statement = new ExpressionStmt(expr);
+        expr.setParentNode(statement);
+        return addAndGetStatement(statement);
+    }
+
+    public default ExpressionStmt addAndGetStatement(String statement) {
+        return addAndGetStatement(new NameExpr(statement));
+    }
 }
