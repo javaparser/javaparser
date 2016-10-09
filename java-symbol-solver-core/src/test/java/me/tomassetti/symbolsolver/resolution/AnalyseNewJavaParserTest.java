@@ -44,7 +44,7 @@ public class AnalyseNewJavaParserTest {
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
         sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
-        //sourceFileInfoExtractor.setVerbose(true);
+        sourceFileInfoExtractor.setVerbose(true);
         return sourceFileInfoExtractor;
     }
 
@@ -106,8 +106,13 @@ public class AnalyseNewJavaParserTest {
     }
 
     @Test
-    public void parsePositionUtils() throws IOException, ParseException {
+    public void parseCommentsInserter() throws IOException, ParseException {
         parse("com/github/javaparser/CommentsInserter");
+    }
+
+    @Test
+    public void parsePositionUtils() throws IOException, ParseException {
+        parse("com/github/javaparser/utils/PositionUtils");
     }
 
     @Test
@@ -274,7 +279,6 @@ public class AnalyseNewJavaParserTest {
     public void parseUtils() throws IOException, ParseException {
         parse("com/github/javaparser/utils/ClassUtils");
         parse("com/github/javaparser/utils/Pair");
-        parse("com/github/javaparser/utils/PositionUtils");
     }
 
     @Test
