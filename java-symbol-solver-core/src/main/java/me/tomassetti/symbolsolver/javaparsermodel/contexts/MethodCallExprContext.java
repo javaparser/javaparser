@@ -219,6 +219,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             } else if (typeOfScope.isArray() && typeOfScope.asArrayTypeUsage().getComponentType().isReferenceType()) {
                 return typeOfScope.asArrayTypeUsage().getComponentType().asReferenceTypeUsage().solveMethod(name, parameterTypes);
+            } else if (typeOfScope.isTypeVariable()) {
+                for (TypeParameter.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
+                    SymbolReference<MethodDeclaration> res = bound.getType().asReferenceTypeUsage().solveMethod(name, parameterTypes);
+                    if (res.isSolved()) {
+                        return res;
+                    }
+                }
+                return SymbolReference.unsolved(MethodDeclaration.class);
             } else {
                 return typeOfScope.asReferenceTypeUsage().solveMethod(name, parameterTypes);
             }

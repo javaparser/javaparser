@@ -11,10 +11,10 @@
   Line 139) nodeEquals(nodes1.get(i), nodes2.get(i)) ==> com.github.javaparser.ast.visitor.EqualsVisitor.nodeEquals(T, T)
   Line 139) nodes1.get(i) ==> java.util.List.get(int)
   Line 139) nodes2.get(i) ==> java.util.List.get(int)
-  Line 153) n1.getClass() ==> ERROR
-  Line 153) n2.getClass() ==> ERROR
+  Line 153) n1.getClass() ==> java.lang.Object.getClass()
+  Line 153) n2.getClass() ==> java.lang.Object.getClass()
   Line 156) commonNodeEquality(n1, n2) ==> com.github.javaparser.ast.visitor.EqualsVisitor.commonNodeEquality(com.github.javaparser.ast.Node, com.github.javaparser.ast.Node)
-  Line 159) n1.accept(this, n2) ==> ERROR
+  Line 159) n1.accept(this, n2) ==> com.github.javaparser.ast.Node.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)
   Line 169) n1.equals(n2) ==> java.lang.Object.equals(java.lang.Object)
   Line 175) nodeEquals(n1.getPackage(), n2.getPackage()) ==> com.github.javaparser.ast.visitor.EqualsVisitor.nodeEquals(T, T)
   Line 175) n1.getPackage() ==> com.github.javaparser.ast.CompilationUnit.getPackage()

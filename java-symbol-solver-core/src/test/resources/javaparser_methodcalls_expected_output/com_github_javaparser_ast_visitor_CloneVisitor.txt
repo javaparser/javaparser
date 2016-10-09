@@ -687,4 +687,4 @@
   Line 1278) _nodes.size() ==> java.util.List.size()
   Line 1280) cloneNodes(n, _arg) ==> com.github.javaparser.ast.visitor.CloneVisitor.cloneNodes(T, java.lang.Object)
   Line 1282) r.add(rN) ==> java.util.List.add(E)
-  Line 1291) _node.accept(this, _arg) ==> ERROR
+  Line 1291) _node.accept(this, _arg) ==> com.github.javaparser.ast.Node.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)

@@ -41,7 +41,7 @@ public class TypeParameterUsage implements TypeUsage {
 
     @Override
     public boolean isArray() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     @Override
