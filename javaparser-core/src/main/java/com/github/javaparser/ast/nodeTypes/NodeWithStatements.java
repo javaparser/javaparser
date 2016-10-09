@@ -9,38 +9,59 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
 public interface NodeWithStatements<T> {
-    public List<Statement> getStmts();
+    List<Statement> getStmts();
 
-    public T setStmts(final List<Statement> stmts);
+    T setStmts(final List<Statement> stmts);
 
     @SuppressWarnings("unchecked")
-    public default T addStatement(Statement statement) {
+    default T addStatement(Statement statement) {
         getStmts().add(statement);
         statement.setParentNode((Node) this);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public default T addStatement(int index, final Statement statement) {
+    default T addStatement(int index, final Statement statement) {
         getStmts().add(index, statement);
         statement.setParentNode((Node) this);
         return (T) this;
     }
 
-    public default T addStatement(Expression expr) {
+    default T addStatement(Expression expr) {
         ExpressionStmt statement = new ExpressionStmt(expr);
         expr.setParentNode(statement);
         return addStatement(statement);
     }
 
-    public default T addStatement(String statement) {
+    default T addStatement(String statement) {
         return addStatement(new NameExpr(statement));
     }
 
-    public default T addStatement(int index, final Expression expr) {
+    default T addStatement(int index, final Expression expr) {
         Statement stmt = new ExpressionStmt(expr);
         expr.setParentNode(stmt);
         return addStatement(index, stmt);
     }
 
+    default <A extends Statement> A addAndGetStatement(A statement) {
+        getStmts().add(statement);
+        statement.setParentNode((Node) this);
+        return statement;
+    }
+
+    default Statement addAndGetStatement(int index, final Statement statement) {
+        getStmts().add(index, statement);
+        statement.setParentNode((Node) this);
+        return statement;
+    }
+
+    default ExpressionStmt addAndGetStatement(Expression expr) {
+        ExpressionStmt statement = new ExpressionStmt(expr);
+        expr.setParentNode(statement);
+        return addAndGetStatement(statement);
+    }
+
+    default ExpressionStmt addAndGetStatement(String statement) {
+        return addAndGetStatement(new NameExpr(statement));
+    }
 }

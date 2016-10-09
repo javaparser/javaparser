@@ -21,11 +21,12 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.type.Type;
-
-import java.util.*;
-
 import static com.github.javaparser.utils.Utils.arrayToList;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import com.github.javaparser.ast.type.Type;
 
 /**
  * A node that can have type arguments.
@@ -60,6 +61,7 @@ public interface NodeWithTypeArguments<T> {
     /**
      * Sets the type arguments to &lt>.
      */
+    @SuppressWarnings("unchecked")
     default T setDiamondOperator() {
         final List<Type<?>> empty = new LinkedList<>();
         setTypeArguments(empty);
@@ -69,11 +71,13 @@ public interface NodeWithTypeArguments<T> {
     /**
      * Removes all type arguments, including the surrounding &lt;>.
      */
+    @SuppressWarnings("unchecked")
     default T removeTypeArguments() {
         setTypeArguments((List<Type<?>>) null);
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
     default T setTypeArguments(Type<?>... typeArguments) {
         setTypeArguments(arrayToList(typeArguments));
         return (T) this;
