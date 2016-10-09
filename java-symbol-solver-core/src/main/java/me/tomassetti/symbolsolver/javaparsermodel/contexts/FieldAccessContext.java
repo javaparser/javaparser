@@ -9,6 +9,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
+import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExpr> {
+
+    private static final String ARRAY_LENGTH_FIELD_NAME = "length";
 
     public FieldAccessContext(FieldAccessExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -48,6 +51,9 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         Expression scope = wrappedNode.getScope();
         if (wrappedNode.getFieldExpr().toString().equals(name)) {
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
+            if (typeOfScope.isArray() && name.equals(ARRAY_LENGTH_FIELD_NAME)) {
+                return Optional.of(new Value(PrimitiveTypeUsage.INT, ARRAY_LENGTH_FIELD_NAME, false));
+            }
             if (typeOfScope.isReferenceType()) {
                 Optional<TypeUsage> typeUsage = typeOfScope.asReferenceTypeUsage().getFieldType(name);
                 if (typeUsage.isPresent()) {

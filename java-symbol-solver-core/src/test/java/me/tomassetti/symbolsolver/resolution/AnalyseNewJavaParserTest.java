@@ -44,6 +44,7 @@ public class AnalyseNewJavaParserTest {
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
         sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
+        //sourceFileInfoExtractor.setVerbose(true);
         return sourceFileInfoExtractor;
     }
 
@@ -97,6 +98,11 @@ public class AnalyseNewJavaParserTest {
         assertEquals(expectedLines.length, outputLines.length);
         
         JavaParserFacade.clearInstances();
+    }
+
+    @Test
+    public void parseUtilsUtils() throws IOException, ParseException {
+        parse("com/github/javaparser/utils/Utils");
     }
 
     @Test
@@ -269,7 +275,6 @@ public class AnalyseNewJavaParserTest {
         parse("com/github/javaparser/utils/ClassUtils");
         parse("com/github/javaparser/utils/Pair");
         parse("com/github/javaparser/utils/PositionUtils");
-        parse("com/github/javaparser/utils/Utils");
     }
 
     @Test
