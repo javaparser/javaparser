@@ -5,11 +5,11 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
 public interface NodeWithBody<T> {
-    public Statement getBody();
+    Statement getBody();
 
-    public T setBody(final Statement body);
+    T setBody(final Statement body);
 
-    public default BlockStmt createBlockStatementAsBody() {
+    default BlockStmt createBlockStatementAsBody() {
         BlockStmt b = new BlockStmt();
         b.setParentNode((Node) this);
         setBody(b);
