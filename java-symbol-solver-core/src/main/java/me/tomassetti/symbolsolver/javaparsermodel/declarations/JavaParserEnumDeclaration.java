@@ -195,7 +195,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         if (this.wrappedNode.getEntries() != null) {
             for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
                 if (member.getName().equals(name)) {
-                    return new JavaParserFieldDeclaration(member);
+                    return new JavaParserFieldDeclaration(member, typeSolver);
                 }
             }
         }
@@ -286,7 +286,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         if (this.wrappedNode.getEntries() != null) {
             for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
-				fields.add(new JavaParserFieldDeclaration(member));
+				fields.add(new JavaParserFieldDeclaration(member, typeSolver));
             }
         }
 

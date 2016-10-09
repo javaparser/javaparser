@@ -52,19 +52,19 @@
   Line 308) sb.append(accessSpecifier.getCodeRepresenation()) ==> java.lang.StringBuilder.append(java.lang.String)
   Line 308) accessSpecifier.getCodeRepresenation() ==> com.github.javaparser.ast.AccessSpecifier.getCodeRepresenation()
   Line 309) sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ") ==> java.lang.StringBuilder.append(java.lang.String)
-  Line 310) getModifiers().contains(Modifier.STATIC) ==> ERROR
+  Line 310) getModifiers().contains(Modifier.STATIC) ==> java.util.AbstractCollection.contains(java.lang.Object)
   Line 310) getModifiers() ==> com.github.javaparser.ast.body.MethodDeclaration.getModifiers()
   Line 311) sb.append("static ") ==> java.lang.StringBuilder.append(java.lang.String)
-  Line 313) getModifiers().contains(Modifier.ABSTRACT) ==> ERROR
+  Line 313) getModifiers().contains(Modifier.ABSTRACT) ==> java.util.AbstractCollection.contains(java.lang.Object)
   Line 313) getModifiers() ==> com.github.javaparser.ast.body.MethodDeclaration.getModifiers()
   Line 314) sb.append("abstract ") ==> java.lang.StringBuilder.append(java.lang.String)
-  Line 316) getModifiers().contains(Modifier.FINAL) ==> ERROR
+  Line 316) getModifiers().contains(Modifier.FINAL) ==> java.util.AbstractCollection.contains(java.lang.Object)
   Line 316) getModifiers() ==> com.github.javaparser.ast.body.MethodDeclaration.getModifiers()
   Line 317) sb.append("final ") ==> java.lang.StringBuilder.append(java.lang.String)
-  Line 319) getModifiers().contains(Modifier.NATIVE) ==> ERROR
+  Line 319) getModifiers().contains(Modifier.NATIVE) ==> java.util.AbstractCollection.contains(java.lang.Object)
   Line 319) getModifiers() ==> com.github.javaparser.ast.body.MethodDeclaration.getModifiers()
   Line 320) sb.append("native ") ==> java.lang.StringBuilder.append(java.lang.String)
-  Line 322) getModifiers().contains(Modifier.SYNCHRONIZED) ==> ERROR
+  Line 322) getModifiers().contains(Modifier.SYNCHRONIZED) ==> java.util.AbstractCollection.contains(java.lang.Object)
   Line 322) getModifiers() ==> com.github.javaparser.ast.body.MethodDeclaration.getModifiers()
   Line 323) sb.append("synchronized ") ==> java.lang.StringBuilder.append(java.lang.String)
   Line 327) sb.append(getElementType().toStringWithoutComments()) ==> java.lang.StringBuilder.append(java.lang.String)

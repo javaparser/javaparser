@@ -1,4 +1,4 @@
   Line 32) EnumSet.of(this) ==> UNSOLVED
-  Line 36) modifiers.contains(Modifier.PUBLIC) ==> ERROR
-  Line 38) modifiers.contains(Modifier.PROTECTED) ==> ERROR
-  Line 40) modifiers.contains(Modifier.PRIVATE) ==> ERROR
+  Line 36) modifiers.contains(Modifier.PUBLIC) ==> java.util.AbstractCollection.contains(java.lang.Object)
+  Line 38) modifiers.contains(Modifier.PROTECTED) ==> java.util.AbstractCollection.contains(java.lang.Object)
+  Line 40) modifiers.contains(Modifier.PRIVATE) ==> java.util.AbstractCollection.contains(java.lang.Object)

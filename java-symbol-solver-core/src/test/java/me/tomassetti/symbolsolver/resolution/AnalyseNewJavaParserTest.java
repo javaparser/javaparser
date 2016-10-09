@@ -66,11 +66,11 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         assertTrue("No failures expected when analyzing " + path, 0 == sourceFileInfoExtractor.getKo());
         assertTrue("No UnsupportedOperationException expected when analyzing " + path, 0 == sourceFileInfoExtractor.getUnsupported());
 
-        if (!dstFile.exists()) {
+        if (/*!dstFile.exists() ||*/ false) {
             // If we need to update the file uncomment these lines
-            //PrintWriter writer = new PrintWriter(dstFile.getAbsoluteFile(), "UTF-8");
-            //writer.print(output);
-            //writer.close();
+            PrintWriter writer = new PrintWriter(dstFile.getAbsoluteFile(), "UTF-8");
+            writer.print(output);
+            writer.close();
         }
 
         String expected = readFile(dstFile);
