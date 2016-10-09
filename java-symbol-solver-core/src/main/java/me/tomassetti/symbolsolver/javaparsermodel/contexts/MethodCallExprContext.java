@@ -55,7 +55,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<TypeUsage> actualParamTypes) {
         if (methodUsage.getDeclaration().hasVariadicParameter()) {
-            if (actualParamTypes.size() == methodUsage.getDeclaration().getNoParams()) {
+            if (actualParamTypes.size() == methodUsage.getDeclaration().getNoParams() || methodUsage.getDeclaration().getLastParam().isVariadic()) {
                 TypeUsage expectedType = methodUsage.getDeclaration().getLastParam().getType();
                 TypeUsage actualType = actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
@@ -69,7 +69,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             } else {
                 // ok, then it needs to be wrapped
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(String.format("Unable to resolve the type parameters in a MethodUsage. Actual params: %s, Method Declaration: %s. MethodUsage: %s",
+                        actualParamTypes, methodUsage.getDeclaration(), methodUsage));
             }
         }
         Map<String, TypeUsage> matchedTypeParameters = new HashMap<>();
