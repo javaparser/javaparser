@@ -115,7 +115,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public String toString() {
-        return "MethodCallExprContext{}";
+        return "MethodCallExprContext{wrapped=" + wrappedNode+ "}";
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(TypeParameterUsage tp, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
