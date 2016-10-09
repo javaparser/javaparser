@@ -337,7 +337,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         @Override
         public TypeDeclaration declaringType() {
-            throw new UnsupportedOperationException();
+            return JavaParserEnumDeclaration.this;
         }
 
         @Override
