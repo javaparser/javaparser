@@ -57,7 +57,7 @@
   Line 235) fieldName.length() ==> java.lang.String.length()
   Line 239) parentClass.addMethod("set" + fieldNameUpper, PUBLIC) ==> UNSOLVED
   Line 241) parentEnum.addMethod("set" + fieldNameUpper, PUBLIC) ==> UNSOLVED
-  Line 242) setter.setType(VOID_TYPE) ==> ERROR
+  Line 242) setter.setType(VOID_TYPE) ==> com.github.javaparser.ast.body.MethodDeclaration.setType(com.github.javaparser.ast.type.Type)
   Line 243) setter.getParameters().add(new Parameter(variable.getType(), new VariableDeclaratorId(fieldName))) ==> java.util.List.add(E)
   Line 243) setter.getParameters() ==> com.github.javaparser.ast.body.MethodDeclaration.getParameters()
   Line 243) variable.getType() ==> com.github.javaparser.ast.body.VariableDeclarator.getType()

@@ -1,16 +1,16 @@
   Line 17) addParameter(new Parameter(type, new VariableDeclaratorId(name))) ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.addParameter(com.github.javaparser.ast.body.Parameter)
   Line 21) ((Node) this).tryAddImportToParentCompilationUnit(paramClass) ==> com.github.javaparser.ast.Node.tryAddImportToParentCompilationUnit(java.lang.Class<?>)
-  Line 22) addParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name) ==> ERROR
+  Line 22) addParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name) ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.addParameter(com.github.javaparser.ast.type.Type, java.lang.String)
   Line 22) paramClass.getSimpleName() ==> java.lang.Class.getSimpleName()
-  Line 32) addParameter(new ClassOrInterfaceType(className), name) ==> ERROR
+  Line 32) addParameter(new ClassOrInterfaceType(className), name) ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.addParameter(com.github.javaparser.ast.type.Type, java.lang.String)
   Line 37) getParameters().add(parameter) ==> java.util.List.add(E)
   Line 37) getParameters() ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParameters()
   Line 38) parameter.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
   Line 43) addAndGetParameter(new Parameter(type, new VariableDeclaratorId(name))) ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.body.Parameter)
   Line 47) ((Node) this).tryAddImportToParentCompilationUnit(paramClass) ==> com.github.javaparser.ast.Node.tryAddImportToParentCompilationUnit(java.lang.Class<?>)
-  Line 48) addAndGetParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name) ==> ERROR
+  Line 48) addAndGetParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name) ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.type.Type, java.lang.String)
   Line 48) paramClass.getSimpleName() ==> java.lang.Class.getSimpleName()
-  Line 59) addAndGetParameter(new ClassOrInterfaceType(className), name) ==> ERROR
+  Line 59) addAndGetParameter(new ClassOrInterfaceType(className), name) ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.type.Type, java.lang.String)
   Line 63) getParameters().add(parameter) ==> java.util.List.add(E)
   Line 63) getParameters() ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParameters()
   Line 64) parameter.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)

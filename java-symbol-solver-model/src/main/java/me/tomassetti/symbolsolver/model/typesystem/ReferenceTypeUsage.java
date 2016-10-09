@@ -292,7 +292,8 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         }
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             if (this.parameters().size() != other.parameters().size()) {
-                throw new IllegalStateException();
+                // one have the type not specified so they are compatible
+                return true;
             }
             for (int i = 0; i < parameters().size(); i++) {
                 TypeUsage thisParam = parameters().get(i);

@@ -590,7 +590,7 @@
   Line 980) n.getFinallyBlock().accept(this, arg) ==> com.github.javaparser.ast.stmt.BlockStmt.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)
   Line 980) n.getFinallyBlock() ==> com.github.javaparser.ast.stmt.TryStmt.getFinallyBlock()
   Line 986) visitComment(n, arg) ==> com.github.javaparser.ast.visitor.ModifierVisitorAdapter.visitComment(com.github.javaparser.ast.Node, A)
-  Line 987) n.setTypeDeclaration((TypeDeclaration<?>) n.getTypeDeclaration().accept(this, arg)) ==> ERROR
+  Line 987) n.setTypeDeclaration((TypeDeclaration<?>) n.getTypeDeclaration().accept(this, arg)) ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt.setTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration)
   Line 987) n.getTypeDeclaration().accept(this, arg) ==> com.github.javaparser.ast.Node.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)
   Line 987) n.getTypeDeclaration() ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt.getTypeDeclaration()
   Line 992) visitComment(n, arg) ==> com.github.javaparser.ast.visitor.ModifierVisitorAdapter.visitComment(com.github.javaparser.ast.Node, A)

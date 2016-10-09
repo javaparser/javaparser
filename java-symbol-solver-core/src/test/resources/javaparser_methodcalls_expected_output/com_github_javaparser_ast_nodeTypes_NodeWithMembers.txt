@@ -11,7 +11,7 @@
   Line 79) Arrays.stream(modifiers) ==> UNSOLVED
   Line 80) toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 80) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
-  Line 81) variable.setType(type) ==> ERROR
+  Line 81) variable.setType(type) ==> com.github.javaparser.ast.body.VariableDeclarator.setType(com.github.javaparser.ast.type.Type)
   Line 82) getMembers().add(fieldDeclaration) ==> java.util.List.add(E)
   Line 82) getMembers() ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.getMembers()
   Line 94) addField(typeClass, name, Modifier.PRIVATE) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addField(java.lang.Class<?>, java.lang.String, com.github.javaparser.ast.Modifier)
@@ -21,7 +21,7 @@
   Line 140) addField(typeClass, name, Modifier.PROTECTED) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addField(java.lang.Class<?>, java.lang.String, com.github.javaparser.ast.Modifier)
   Line 152) addField(type, name, Modifier.PROTECTED) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addField(java.lang.String, java.lang.String, com.github.javaparser.ast.Modifier)
   Line 164) methodDeclaration.setName(methodName) ==> com.github.javaparser.ast.body.MethodDeclaration.setName(java.lang.String)
-  Line 165) methodDeclaration.setType(VOID_TYPE) ==> ERROR
+  Line 165) methodDeclaration.setType(VOID_TYPE) ==> com.github.javaparser.ast.body.MethodDeclaration.setType(com.github.javaparser.ast.type.Type)
   Line 166) methodDeclaration.setModifiers(Arrays.stream(modifiers).collect(toCollection(() -> EnumSet.noneOf(Modifier.class)))) ==> ERROR
   Line 166) Arrays.stream(modifiers).collect(toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
   Line 166) Arrays.stream(modifiers) ==> UNSOLVED
