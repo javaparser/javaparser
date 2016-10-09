@@ -21,21 +21,12 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.imports.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.ClassUtils;
@@ -45,6 +36,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -248,11 +240,10 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
-        if (getImports().stream().anyMatch(i -> i.getName().toString().equals(name)))
+        final ImportDeclaration importDeclaration = ImportDeclaration.create(Range.UNKNOWN, name(name), isStatic, isAsterisk);
+        if (getImports().stream().anyMatch(i -> i.toString().equals(importDeclaration.toString())))
             return this;
         else {
-            ImportDeclaration importDeclaration = new ImportDeclaration(name(name), isStatic,
-                    isAsterisk);
             getImports().add(importDeclaration);
             importDeclaration.setParentNode(this);
             return this;

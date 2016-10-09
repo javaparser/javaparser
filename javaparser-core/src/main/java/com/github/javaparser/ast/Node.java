@@ -34,11 +34,9 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.ast.visitor.DumpVisitor;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.visitor.*;
+
+import java.util.*;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -50,6 +48,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public abstract class Node implements Cloneable {
+    /**
+     * This can be used to sort nodes on position.
+     */
+    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> a.getBegin().compareTo(b.getBegin());
+
     private Range range;
 
     private Node parentNode;

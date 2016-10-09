@@ -377,7 +377,7 @@ class A {
         world";
     }
 }
-Then the Java parser cannot parse it because of lexical errors
+Then the Java parser cannot parse it because of an error
 
 Scenario: Chars with unescaped newlines are illegal (issue 211)
 Given the class:
@@ -387,7 +387,7 @@ class A {
 ';
     }
 }
-Then the Java parser cannot parse it because of lexical errors
+Then the Java parser cannot parse it because of an error
 
 Scenario: Diamond Operator information is exposed
 
@@ -476,7 +476,7 @@ class A {
         }
     }
 }
-Then the Java parser cannot parse it because of a parse error
+Then the Java parser cannot parse it because of an error
 
 
 Scenario: Partially dimensioned arrays are fine

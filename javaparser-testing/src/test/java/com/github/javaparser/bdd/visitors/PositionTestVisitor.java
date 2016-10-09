@@ -27,6 +27,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -126,6 +127,42 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
 
     @Override
     public void visit(TypeExpr n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(ArrayBracketPair n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(EmptyImportDeclaration n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(SingleStaticImportDeclaration n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(SingleTypeImportDeclaration n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(StaticImportOnDemandDeclaration n, Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(TypeImportOnDemandDeclaration n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
@@ -243,11 +280,6 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final IfStmt n, final Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override public void visit(final ImportDeclaration n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }

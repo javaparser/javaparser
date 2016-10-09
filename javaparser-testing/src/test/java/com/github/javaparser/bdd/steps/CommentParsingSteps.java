@@ -33,7 +33,6 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.DumpVisitor;
-import com.github.javaparser.bdd.TestUtils;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -42,9 +41,14 @@ import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Iterator;
+import java.util.Set;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
+import static com.github.javaparser.bdd.TestUtils.getSampleStream;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
@@ -66,12 +70,14 @@ public class CommentParsingSteps {
     @When("read sample \"$sampleName\" using encoding \"$encoding\"")
     public void givenTheClassWithEncoding(String sampleName, String encoding) throws IOException {
         sourceUnderTest = null;
-        commentsCollection = new CommentsParser().parse(TestUtils.getSampleStream(sampleName), encoding);
+        ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parse(COMPILATION_UNIT, provider(getSampleStream(sampleName), Charset.forName(encoding)));
+        commentsCollection = parseResult.getCommentsCollection().orElse(new CommentsCollection());
     }
 
     @When("the class is parsed by the comment parser")
     public void whenTheClassIsParsedByTheCommentParser() throws IOException {
-        commentsCollection = new CommentsParser().parse(sourceUnderTest);
+        ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parse(COMPILATION_UNIT, provider(sourceUnderTest));
+        commentsCollection = parseResult.getCommentsCollection().orElse(new CommentsCollection());
     }
 
     @When("the do not consider annotations as node start for code attribution is $value on the Java parser")
@@ -86,12 +92,12 @@ public class CommentParsingSteps {
 
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() {
-        compilationUnit = new JavaParser(configuration).parseFull(provider(sourceUnderTest)).getResult().get();
+        compilationUnit = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest)).getResult().get();
     }
 
-    @Then("the Java parser cannot parse it because of lexical errors")
+    @Then("the Java parser cannot parse it because of an error")
     public void javaParserCannotParseBecauseOfLexicalErrors() {
-        ParseResult<CompilationUnit> result = new JavaParser(configuration).parseFull(provider(sourceUnderTest));
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest));
         if(result.isSuccessful()){
             fail("Lexical error expected");
         }
@@ -102,23 +108,33 @@ public class CommentParsingSteps {
         assertThat(commentsCollection.size(), is(expectedCount));
     }
 
+    private <T extends Comment> T getCommentAt(Set<T> set, int index) {
+        Iterator<T> iterator = set.iterator();
+        T comment = null;
+        while (index >= 0) {
+            comment = iterator.next();
+            index--;
+        }
+        return comment;
+    }
+    
     @Then("line comment $position is \"$expectedContent\"")
     public void thenLineCommentIs(int position, String expectedContent) {
-        LineComment lineCommentUnderTest = commentsCollection.getLineComments().get(position-1);
+        LineComment lineCommentUnderTest = getCommentAt(commentsCollection.getLineComments(), position - 1);
 
         assertThat(lineCommentUnderTest.getContent(), is(expectedContent));
     }
 
     @Then("block comment $position is \"$expectedContent\"")
     public void thenBlockCommentIs(int position, String expectedContent) {
-        BlockComment lineCommentUnderTest = commentsCollection.getBlockComments().get(position - 1);
+        BlockComment lineCommentUnderTest = getCommentAt(commentsCollection.getBlockComments(), position - 1);
 
         assertThat(lineCommentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
     }
 
     @Then("Javadoc comment $position is \"$expectedContent\"")
     public void thenJavadocCommentIs(int position, String expectedContent) {
-        JavadocComment commentUnderTest = commentsCollection.getJavadocComments().get(position- 1);
+        JavadocComment commentUnderTest = getCommentAt(commentsCollection.getJavadocComments(), position- 1);
 
         assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
     }
@@ -128,7 +144,7 @@ public class CommentParsingSteps {
         int index = 0;
         for(Parameters exampleRow : examplesTable.getRowsAsParameters()){
             Comment expectedLineComment = toComment(exampleRow, new LineComment());
-            Comment lineCommentUnderTest = commentsCollection.getLineComments().get(index);
+            Comment lineCommentUnderTest = getCommentAt(commentsCollection.getLineComments(), index);
 
             assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
             assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));
@@ -143,7 +159,7 @@ public class CommentParsingSteps {
         int index = 0;
         for(Parameters exampleRow : examplesTable.getRowsAsParameters()){
             Comment expectedLineComment = toComment(exampleRow, new BlockComment());
-            Comment lineCommentUnderTest = commentsCollection.getBlockComments().get(index);
+            Comment lineCommentUnderTest = getCommentAt(commentsCollection.getBlockComments(), index);
 
             assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
             assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));
@@ -158,7 +174,7 @@ public class CommentParsingSteps {
         int index = 0;
         for(Parameters exampleRow : examplesTable.getRowsAsParameters()){
             Comment expectedLineComment = toComment(exampleRow, new BlockComment());
-            Comment lineCommentUnderTest = commentsCollection.getJavadocComments().get(index);
+            Comment lineCommentUnderTest = getCommentAt(commentsCollection.getJavadocComments(), index);
 
             assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
             assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));

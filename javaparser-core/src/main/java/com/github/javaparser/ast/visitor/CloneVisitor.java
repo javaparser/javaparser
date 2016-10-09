@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -130,19 +131,6 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		PackageDeclaration r = new PackageDeclaration(
 				_n.getRange(),
 				annotations, name
-		);
-		r.setComment(comment);
-		return r;
-	}
-
-	@Override
-	public Node visit(ImportDeclaration _n, Object _arg) {
-		NameExpr name = cloneNodes(_n.getName(), _arg);
-		Comment comment = cloneNodes(_n.getComment(), _arg);
-
-		ImportDeclaration r = new ImportDeclaration(
-				_n.getRange(),
-				name, _n.isStatic(), _n.isAsterisk()
 		);
 		r.setComment(comment);
 		return r;
@@ -1270,6 +1258,66 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 
 		return new ArrayBracketPair(_n.getRange(), annotations);
+	}
+
+	@Override
+	public Node visit(EmptyImportDeclaration _n, Object _arg) {
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+		return new EmptyImportDeclaration(_n.getRange()).setComment(comment);
+	}
+
+	@Override
+	public Node visit(SingleStaticImportDeclaration _n, Object _arg) {
+		ClassOrInterfaceType type_ = cloneNodes(_n.getType(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+
+		SingleStaticImportDeclaration r = new SingleStaticImportDeclaration(
+				_n.getRange(),
+				type_,
+				_n.getStaticMember()
+		);
+		r.setComment(comment);
+		return r;
+	}
+
+	@Override
+	public Node visit(SingleTypeImportDeclaration _n, Object _arg) {
+        ClassOrInterfaceType type_ = cloneNodes(_n.getType(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		SingleTypeImportDeclaration r = new SingleTypeImportDeclaration(
+				_n.getRange(),
+                type_
+		);
+		r.setComment(comment);
+		return r;
+	}
+
+	@Override
+	public Node visit(StaticImportOnDemandDeclaration _n, Object _arg) {
+        ClassOrInterfaceType type_ = cloneNodes(_n.getType(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		StaticImportOnDemandDeclaration r = new StaticImportOnDemandDeclaration(
+				_n.getRange(),
+                type_
+		);
+		r.setComment(comment);
+		return r;
+	}
+
+	@Override
+	public Node visit(TypeImportOnDemandDeclaration _n, Object _arg) {
+		NameExpr name = cloneNodes(_n.getName(), _arg);
+		Comment comment = cloneNodes(_n.getComment(), _arg);
+
+		TypeImportOnDemandDeclaration r = new TypeImportOnDemandDeclaration(
+				_n.getRange(),
+				name
+		);
+		r.setComment(comment);
+		return r;
 	}
 
 	public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {
