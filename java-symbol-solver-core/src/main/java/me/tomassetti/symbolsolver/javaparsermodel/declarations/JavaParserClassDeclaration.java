@@ -130,6 +130,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 	}
 
 	@Override
+	public boolean hasDirectlyAnnotation(String canonicalName) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public boolean isInterface() {
 		return wrappedNode.isInterface();
 	}

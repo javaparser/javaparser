@@ -10,7 +10,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
-import me.tomassetti.symbolsolver.resolution.AbstractTest;
+import me.tomassetti.symbolsolver.resolution.AbstractResolutionTest;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class SymbolResolutionTest extends AbstractTest {
+public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void getTypeOfField() throws ParseException {

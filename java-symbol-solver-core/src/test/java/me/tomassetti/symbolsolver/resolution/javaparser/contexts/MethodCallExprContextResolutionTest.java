@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Malte Langkabel
  */
-public class MethodCallExprContextTest extends AbstractTest {
+public class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveNestedMethodCallExprContextWithoutScope() throws ParseException {
@@ -35,7 +35,7 @@ public class MethodCallExprContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar1");
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "foo");
         
-        File src = new File("src/test/resources");
+        File src = adaptPath(new File("src/test/resources"));
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new JreTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));

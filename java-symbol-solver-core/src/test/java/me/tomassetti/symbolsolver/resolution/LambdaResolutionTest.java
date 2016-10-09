@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class LambdaTest extends AbstractTest {
+public class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void lambdaMapParameter() throws ParseException {

@@ -10,13 +10,13 @@ import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.resolution.AbstractTest;
+import me.tomassetti.symbolsolver.resolution.AbstractResolutionTest;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class JavaParserTypeParameterTest extends AbstractTest {
+public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void declaredOnMethodPositiveCase() throws ParseException {

@@ -43,6 +43,11 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(ctClass.getDeclaredMethods())
                 .map(m -> new JavassistMethodDeclaration(m, typeSolver()))

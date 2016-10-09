@@ -23,7 +23,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author Federico Tomassetti
  */
-public class EnumDeclarationContextTest extends AbstractTest {
+public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 

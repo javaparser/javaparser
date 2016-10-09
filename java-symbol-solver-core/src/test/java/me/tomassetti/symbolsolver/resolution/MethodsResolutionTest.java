@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class MethodsTest extends AbstractTest{
+public class MethodsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveMethodAccessThroughSuper() throws ParseException {

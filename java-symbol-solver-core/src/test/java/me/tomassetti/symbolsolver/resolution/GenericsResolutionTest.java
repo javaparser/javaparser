@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-public class GenericsTest extends AbstractTest{
+public class GenericsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void resolveFieldWithGenericTypeToString() throws ParseException {

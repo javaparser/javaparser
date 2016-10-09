@@ -237,7 +237,7 @@ public class JavaParserFacade {
                 int pos = JavaParserSymbolDeclaration.getParamPos(node);
                 SymbolReference<MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr);
                 if (!refMethod.isSolved()) {
-                    throw new UnsolvedSymbolException(callExpr.getName());
+                    throw new UnsolvedSymbolException(node.getParentNode().toString(), callExpr.getName());
                 }
                 logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
@@ -536,8 +536,7 @@ public class JavaParserFacade {
     public TypeUsage getTypeOfThisIn(Node node) {
         // TODO consider static methods
         if (node instanceof ClassOrInterfaceDeclaration) {
-            JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-            return new ReferenceTypeUsageImpl(classDeclaration, typeSolver);
+            return new ReferenceTypeUsageImpl(getTypeDeclaration((ClassOrInterfaceDeclaration) node), typeSolver);
         } else if (node instanceof EnumDeclaration) {
             JavaParserEnumDeclaration enumDeclaration = new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
             return new ReferenceTypeUsageImpl(enumDeclaration, typeSolver);

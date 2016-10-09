@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.resolution;
 
 import com.github.javaparser.ParseException;
-import me.tomassetti.symbolsolver.SourceFileInfoExtractor;
+import me.tomassetti.symbolsolver.*;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -19,22 +19,9 @@ import static org.junit.Assert.assertTrue;
 /**
  * We analize a more recent version of JavaParser, after the project moved to Java 8.
  */
-public class AnalyseNewJavaParserTest {
+public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
 
     private static final File src = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core"));
-
-    private static File adaptPath(File path) {
-        if (path.exists()) {
-            return path;
-        } else {
-            File underJavaParserCore = new File("java-symbol-solver-core/" + path.getPath());
-            if (underJavaParserCore.exists()) {
-                return underJavaParserCore;
-            } else {
-                throw new IllegalArgumentException();
-            }
-        }
-    }
 
     private static SourceFileInfoExtractor getSourceFileInfoExtractor() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();

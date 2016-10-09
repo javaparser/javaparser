@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.google.common.collect.ImmutableSet;
+import me.tomassetti.symbolsolver.AbstractTest;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -13,17 +14,17 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-public class JavaParserClassDeclarationTest {
+public class JavaParserClassDeclarationTest extends AbstractTest {
 
     private TypeSolver typeSolver;
 
     @Before
     public void setup() {
-        File src = new File("src/test/resources/javaparser_src/proper_source");
+        File src = adaptPath(new File("src/test/resources/javaparser_src/proper_source"));
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new JreTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
-        combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/generated")));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/javaparser_src/generated"))));
         typeSolver = combinedTypeSolver;
     }
 

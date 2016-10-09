@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class VariadicTest extends AbstractTest{
+public class VariadicResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void issue7() throws ParseException {

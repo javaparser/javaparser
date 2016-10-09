@@ -1,18 +1,16 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
-import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
@@ -62,7 +60,7 @@ public class ReferenceTypeUsageImpl extends ReferenceTypeUsage {
             }
         }
         if (other instanceof LambdaArgumentTypeUsagePlaceholder) {
-            return this.getQualifiedName().equals(Predicate.class.getCanonicalName()) || this.getQualifiedName().equals(Function.class.getCanonicalName());
+            return this.getTypeDeclaration().hasAnnotation(FunctionalInterface.class.getCanonicalName());
         } else if (other instanceof ReferenceTypeUsageImpl) {
             ReferenceTypeUsageImpl otherRef = (ReferenceTypeUsageImpl) other;
             if (compareConsideringTypeParameters(otherRef)) {

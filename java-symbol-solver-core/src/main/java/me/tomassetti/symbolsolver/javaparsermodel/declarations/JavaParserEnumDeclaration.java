@@ -89,6 +89,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean canBeAssignedTo(TypeDeclaration other) {
         // Enums cannot be extended
         if (other.getQualifiedName().equals(this.getQualifiedName())) {

@@ -32,7 +32,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author Federico Tomassetti
  */
-public class ClassOrInterfaceDeclarationContextTest extends AbstractTest {
+public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 

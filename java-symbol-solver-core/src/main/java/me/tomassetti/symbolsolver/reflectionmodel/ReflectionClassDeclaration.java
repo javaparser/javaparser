@@ -277,6 +277,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return this;
     }
 
+    @Override
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        throw new UnsupportedOperationException();
+    }
+
     /*@Override
     public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
         if (getQualifiedName().equals(other.getQualifiedName())) {

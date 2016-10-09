@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
-public class StatementContextTest extends AbstractTest {
+public class StatementContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void resolveLocalVariableInParentOfParent() throws ParseException {

@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-public class FieldsTest extends AbstractTest{
+public class FieldsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void accessClassFieldThroughThis() throws ParseException {

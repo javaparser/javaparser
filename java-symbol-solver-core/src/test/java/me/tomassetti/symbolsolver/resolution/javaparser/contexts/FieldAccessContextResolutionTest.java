@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Malte Langkabel
  */
-public class FieldAccessContextTest extends AbstractTest {
+public class FieldAccessContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveMethodCallInFieldAccessContext() throws ParseException {

@@ -14,7 +14,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class QualifiedNameTest extends AbstractTest {
+public class QualifiedNameResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void resolveLocalVariableInParentOfParent() throws ParseException {

@@ -1,28 +1,28 @@
   Line 25) getModifiers().addAll(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)))) ==> ERROR
-  Line 25) getModifiers() ==> ERROR
+  Line 25) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 25) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
   Line 25) Arrays.stream(modifiers) ==> UNSOLVED
-  Line 26) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> UNSOLVED
+  Line 26) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 26) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
   Line 31) getModifiers().contains(Modifier.STATIC) ==> ERROR
-  Line 31) getModifiers() ==> ERROR
+  Line 31) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 35) getModifiers().contains(Modifier.ABSTRACT) ==> ERROR
-  Line 35) getModifiers() ==> ERROR
+  Line 35) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 39) getModifiers().contains(Modifier.FINAL) ==> ERROR
-  Line 39) getModifiers() ==> ERROR
+  Line 39) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 43) getModifiers().contains(Modifier.NATIVE) ==> ERROR
-  Line 43) getModifiers() ==> ERROR
+  Line 43) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 47) getModifiers().contains(Modifier.PRIVATE) ==> ERROR
-  Line 47) getModifiers() ==> ERROR
+  Line 47) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 51) getModifiers().contains(Modifier.PROTECTED) ==> ERROR
-  Line 51) getModifiers() ==> ERROR
+  Line 51) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 55) getModifiers().contains(Modifier.PUBLIC) ==> ERROR
-  Line 55) getModifiers() ==> ERROR
+  Line 55) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 59) getModifiers().contains(Modifier.STRICTFP) ==> ERROR
-  Line 59) getModifiers() ==> ERROR
+  Line 59) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 63) getModifiers().contains(Modifier.SYNCHRONIZED) ==> ERROR
-  Line 63) getModifiers() ==> ERROR
+  Line 63) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 67) getModifiers().contains(Modifier.TRANSIENT) ==> ERROR
-  Line 67) getModifiers() ==> ERROR
+  Line 67) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()
   Line 71) getModifiers().contains(Modifier.VOLATILE) ==> ERROR
-  Line 71) getModifiers() ==> ERROR
+  Line 71) getModifiers() ==> com.github.javaparser.ast.nodeTypes.NodeWithModifiers.getModifiers()

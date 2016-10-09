@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Malte Langkabel
  */
-public class LambdaExprContextTest extends AbstractTest {
+public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 

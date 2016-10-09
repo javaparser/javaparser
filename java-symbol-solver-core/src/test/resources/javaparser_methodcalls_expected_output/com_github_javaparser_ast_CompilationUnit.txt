@@ -42,7 +42,7 @@
   Line 269) addClass(name, Modifier.PUBLIC) ==> com.github.javaparser.ast.CompilationUnit.addClass(java.lang.String, com.github.javaparser.ast.Modifier)
   Line 281) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
   Line 281) Arrays.stream(modifiers) ==> UNSOLVED
-  Line 282) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> UNSOLVED
+  Line 282) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 282) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
   Line 284) getTypes().add(classOrInterfaceDeclaration) ==> java.util.List.add(E)
   Line 284) getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
@@ -50,7 +50,7 @@
   Line 296) addInterface(name, Modifier.PUBLIC) ==> com.github.javaparser.ast.CompilationUnit.addInterface(java.lang.String, com.github.javaparser.ast.Modifier)
   Line 308) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
   Line 308) Arrays.stream(modifiers) ==> UNSOLVED
-  Line 309) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> UNSOLVED
+  Line 309) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 309) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
   Line 311) getTypes().add(classOrInterfaceDeclaration) ==> java.util.List.add(E)
   Line 311) getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
@@ -58,7 +58,7 @@
   Line 323) addEnum(name, Modifier.PUBLIC) ==> com.github.javaparser.ast.CompilationUnit.addEnum(java.lang.String, com.github.javaparser.ast.Modifier)
   Line 334) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
   Line 334) Arrays.stream(modifiers) ==> UNSOLVED
-  Line 335) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> UNSOLVED
+  Line 335) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 335) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
   Line 336) getTypes().add(enumDeclaration) ==> java.util.List.add(E)
   Line 336) getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
@@ -66,7 +66,7 @@
   Line 348) addAnnotationDeclaration(name, Modifier.PUBLIC) ==> com.github.javaparser.ast.CompilationUnit.addAnnotationDeclaration(java.lang.String, com.github.javaparser.ast.Modifier)
   Line 359) Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))) ==> ERROR
   Line 359) Arrays.stream(modifiers) ==> UNSOLVED
-  Line 360) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> UNSOLVED
+  Line 360) Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)
   Line 360) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
   Line 361) getTypes().add(annotationDeclaration) ==> java.util.List.add(E)
   Line 361) getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()

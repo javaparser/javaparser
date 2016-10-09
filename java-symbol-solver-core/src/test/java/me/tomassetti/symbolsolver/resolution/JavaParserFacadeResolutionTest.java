@@ -13,7 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
-public class JavaParserFacadeTest extends AbstractTest {
+public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void typeDeclarationSuperClassImplicitlyIncludeObject() throws ParseException {

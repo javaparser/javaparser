@@ -17,7 +17,7 @@ import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class EnumTest extends AbstractTest {
+public class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void switchOnEnum() throws ParseException {
