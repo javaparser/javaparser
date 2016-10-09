@@ -27,13 +27,18 @@ import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.DumpVisitor;
+import com.github.javaparser.ast.visitor.EqualsVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -352,6 +357,7 @@ public abstract class Node implements Cloneable {
         }
         return nodes;
     }
+
     /**
      * Gets user data for this component using the given key.
      *
@@ -390,6 +396,7 @@ public abstract class Node implements Cloneable {
         }
         userData.put(key, object);
     }
+
     /**
      * Try to remove this node from the parent
      * 
@@ -411,6 +418,11 @@ public abstract class Node implements Cloneable {
                     if (Collection.class.isAssignableFrom(object.getClass())) {
                         Collection<?> l = (Collection<?>) object;
                         success &= l.remove(this);
+                    } else if (Optional.class.equals(f.getType())) {
+                        Optional<?> opt = (Optional<?>) object;
+                        if (opt.isPresent())
+                            if (opt.get() == this)
+                                f.set(parentNode, Optional.empty());
                     } else if (object == this) {
                         f.set(parentNode, null);
                         success &= true;
