@@ -92,7 +92,7 @@
   Line 254) p.getType() ==> com.github.javaparser.ast.body.Parameter.getType()
   Line 255) toSet() ==> java.util.stream.Collectors.toSet()
   Line 256) Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet()) ==> ERROR
-  Line 256) Stream.of(paramTypes).map(Class::getSimpleName) ==> ERROR
+  Line 256) Stream.of(paramTypes).map(Class::getSimpleName) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 256) Stream.of(paramTypes) ==> java.util.stream.Stream.of(T[]...)
   Line 256) toSet() ==> java.util.stream.Collectors.toSet()
   Line 257) toList() ==> java.util.stream.Collectors.toList()

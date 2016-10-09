@@ -10,8 +10,8 @@
   Line 125) printer.getSource() ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.getSource()
   Line 129) modifiers.size() ==> java.util.AbstractCollection.size()
   Line 130) printer.print(modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) + " ") ==> ERROR
-  Line 130) modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) ==> ERROR
-  Line 130) modifiers.stream().map(Modifier::getLib) ==> ERROR
+  Line 130) modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
+  Line 130) modifiers.stream().map(Modifier::getLib) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 130) modifiers.stream() ==> ERROR
   Line 130) Collectors.joining(" ") ==> java.util.stream.Collectors.joining(java.lang.CharSequence)
   Line 135) printer.printLn() ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.printLn()
