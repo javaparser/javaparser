@@ -1,6 +1,14 @@
+Version 3.0.0-alpha.4
+------------------
+* 463 471 nodes can now be removed easily
+* 491 import handling changed. Instead of "ImportDeclaration", we now have the four types of import as described in the JLS. [See issue](https://github.com/javaparser/javaparser/pull/491)
+* 452 355 474 494 various improvements
+* 493 492 485 Simplify the JavaParser interface
+
+
 Version 3.0.0-alpha.3
 ------------------
-* 112 237 466 465 461 460 458 457 fundamentally changes how we deal with arrays. It is explained in the last post of https://github.com/javaparser/javaparser/issues/237
+* 112 237 466 465 461 460 458 457 fundamentally changes how we deal with arrays. [It is explained in the last post here](https://github.com/javaparser/javaparser/issues/237)
 * 472 456 makes the "data" field on every node more structured.
 * 477 468 refactor TypeArguments. You will find that TypeArguments is no longer a type, it is just a list in some nodes.
 * 482 adds the "nodeTypes" packages to the osgi export.
