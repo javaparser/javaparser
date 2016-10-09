@@ -118,13 +118,18 @@ public class JavaParserFacade {
         List<TypeUsage> params = new LinkedList<>();
         List<LambdaArgumentTypeUsagePlaceholder> placeholders = new LinkedList<>();
         int i = 0;
-        for (Expression expression : methodCallExpr.getArgs()) {
-            if (expression instanceof LambdaExpr) {
+        for (Expression parameterValue : methodCallExpr.getArgs()) {
+            if (parameterValue instanceof LambdaExpr) {
                 LambdaArgumentTypeUsagePlaceholder placeholder = new LambdaArgumentTypeUsagePlaceholder(i);
                 params.add(placeholder);
                 placeholders.add(placeholder);
             } else {
-                params.add(JavaParserFacade.get(typeSolver).getType(expression));
+                try {
+                    params.add(JavaParserFacade.get(typeSolver).getType(parameterValue));
+                } catch (Exception e){
+                    throw new RuntimeException(String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
+                            methodCallExpr, parameterValue), e);
+                }
             }
             i++;
         }
@@ -509,7 +514,11 @@ public class JavaParserFacade {
         if (call.getArgs() != null) {
             for (Expression param : call.getArgs()) {
                 //getTypeConcrete(Node node, boolean solveLambdas)
-                params.add(getType(param, false));
+                try {
+                    params.add(getType(param, false));
+                } catch (Exception e) {
+                    throw new RuntimeException(String.format("Error calculating the type of parameter %s of method call %s", param, call), e);
+                }
                 //params.add(getTypeConcrete(param, false));
             }
         }

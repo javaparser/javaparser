@@ -130,6 +130,7 @@ public class SourceFileInfoExtractor {
             return toString(JavaParserFacade.get(typeSolver).solve(node));
         } catch (Exception e) {
             if (verbose) {
+                System.err.println("Error resolving call at L"+node.getBegin().line + ": "+node);
                 e.printStackTrace();
             }
             return "ERROR";
