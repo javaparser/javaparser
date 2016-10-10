@@ -254,4 +254,6 @@ public interface VoidVisitor<A> {
     void visit(TypeExpr n, A arg);
 
 	void visit(ArrayBracketPair arrayBracketPair, A arg);
+
+	void visit(NodeList<? extends Node> n, A arg);
 }

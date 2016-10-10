@@ -238,8 +238,8 @@ public abstract class Node implements Cloneable {
         return childrenNodes;
     }
 
-    public boolean contains(Node other) {
-        return range.contains(other.range);
+    public <N extends Node> boolean containsWithin(N other) {
+        return range.contains(other.getRange());
     }
 
     public void addOrphanComment(Comment comment) {

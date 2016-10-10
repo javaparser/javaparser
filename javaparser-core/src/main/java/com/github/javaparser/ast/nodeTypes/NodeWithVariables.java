@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 
@@ -30,7 +31,7 @@ import java.util.List;
  * A node which has a list of variables.
  */
 public interface NodeWithVariables<T> {
-    List<VariableDeclarator> getVariables();
+    NodeList<VariableDeclarator> getVariables();
 
-    T setVariables(List<VariableDeclarator> variables);
+    T setVariables(NodeList<VariableDeclarator> variables);
 }

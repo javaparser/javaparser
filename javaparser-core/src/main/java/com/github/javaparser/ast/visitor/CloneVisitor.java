@@ -263,7 +263,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(FieldDeclaration _n, Object _arg) {
 		List<AnnotationExpr> annotations_ = visit(_n.getAnnotations(), _arg);
 		Type<?> elementType_ = cloneNodes(_n.getElementType(), _arg);
-		List<VariableDeclarator> variables_ = visit(_n.getVariables(), _arg);
+		NodeList<VariableDeclarator> variables_ = visit(_n.getVariables(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
         List<ArrayBracketPair> arrayBracketPairsAfterType_ = visit(_n.getArrayBracketPairsAfterElementType(), _arg);
 
@@ -878,7 +878,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(VariableDeclarationExpr _n, Object _arg) {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 		Type<?> type_ = cloneNodes(_n.getElementType(), _arg);
-		List<VariableDeclarator> vars = visit(_n.getVariables(), _arg);
+		NodeList<VariableDeclarator> vars = visit(_n.getVariables(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
         List<ArrayBracketPair> arrayBracketPairsAfterType_ = visit(_n.getArrayBracketPairsAfterElementType(), _arg);
 
@@ -1270,6 +1270,18 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg);
 
 		return new ArrayBracketPair(_n.getRange(), annotations);
+	}
+
+	@Override
+	public <X extends Node> NodeList<X> visit(NodeList<X> n, Object arg) {
+		NodeList<X> newNodes = new NodeList<X>(n.getRange(), n.getParentNode());
+		for (Node node : n) {
+			X resultNode = (X) node.accept(this, arg);
+			if(resultNode!=null){
+				newNodes.add(resultNode);
+			}
+		}
+		return newNodes;
 	}
 
 	public <T extends Node> List<T> visit(List<T> _nodes, Object _arg) {

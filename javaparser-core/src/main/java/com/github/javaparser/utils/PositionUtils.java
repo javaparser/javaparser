@@ -34,7 +34,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
 
 public final class PositionUtils {
 
@@ -113,9 +112,9 @@ public final class PositionUtils {
 
     public static boolean nodeContains(Node container, Node contained, boolean ignoringAnnotations){
         if (!ignoringAnnotations || PositionUtils.getLastAnnotation(container)==null){
-            return container.contains(contained);
+            return container.containsWithin(contained);
         }
-        if (!container.contains(contained)){
+        if (!container.containsWithin(contained)){
             return false;
         }
         // if the node is contained, but it comes immediately after the annotations,

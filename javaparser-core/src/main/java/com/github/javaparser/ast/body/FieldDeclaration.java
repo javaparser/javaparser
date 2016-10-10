@@ -31,6 +31,7 @@ import java.util.List;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
@@ -59,7 +60,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     private Type elementType;
 
-    private List<VariableDeclarator> variables;
+    private NodeList<VariableDeclarator> variables;
 
     private List<ArrayBracketPair> arrayBracketPairsAfterElementType;
 
@@ -69,19 +70,17 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, VariableDeclarator variable) {
         setModifiers(modifiers);
         setElementType(elementType);
-        List<VariableDeclarator> aux = new ArrayList<>();
-        aux.add(variable);
-        setVariables(aux);
+        setVariables(new NodeList<VariableDeclarator>(this).add(variable));
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, List<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, NodeList<VariableDeclarator> variables) {
         setModifiers(modifiers);
         setElementType(elementType);
         setVariables(variables);
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                            List<VariableDeclarator> variables) {
+                            NodeList<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
         setElementType(elementType);
@@ -90,7 +89,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
-                            List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
+                            NodeList<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);
         setElementType(elementType);
@@ -111,9 +110,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      */
     public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type,
                                                           VariableDeclarator variable) {
-        List<VariableDeclarator> variables = new ArrayList<>();
-        variables.add(variable);
-        return new FieldDeclaration(modifiers, type, variables);
+        return new FieldDeclaration(modifiers, type, new NodeList<VariableDeclarator>().add(variable));
     }
 
     /**
@@ -155,8 +152,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
-    public List<VariableDeclarator> getVariables() {
-        variables = ensureNotNull(variables);
+    public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }
 
@@ -167,7 +163,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
-    public FieldDeclaration setVariables(List<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(NodeList<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
         return this;
