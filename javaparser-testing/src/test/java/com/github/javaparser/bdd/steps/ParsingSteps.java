@@ -40,6 +40,8 @@ import java.util.Map;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.*;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -48,24 +50,6 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
@@ -160,7 +144,8 @@ public class ParsingSteps {
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition is called $expectedName")
     public void thenLambdaInClassIsCalled(int statementPosition, int methodPosition, int classPosition, String expectedName) {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0).getChildrenNodes().get(1);
+        VariableDeclarationExpr expression = (VariableDeclarationExpr) ((ExpressionStmt) statement).getExpression();
+        VariableDeclarator variableDeclarator = expression.getVariables().get(0);
         assertThat(variableDeclarator.getId().getName(), is(expectedName));
     }
 
@@ -263,7 +248,8 @@ public class ParsingSteps {
 
     private LambdaExpr getLambdaExprInStatementInMethodInClass(int statementPosition, int methodPosition, int classPosition) {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        VariableDeclarator variableDeclarator = (VariableDeclarator)statement.getChildrenNodes().get(0).getChildrenNodes().get(1);
+        VariableDeclarationExpr expression = (VariableDeclarationExpr) ((ExpressionStmt) statement).getExpression();
+        VariableDeclarator variableDeclarator = expression.getVariables().get(0);
         return (LambdaExpr) variableDeclarator.getInit();
     }
 

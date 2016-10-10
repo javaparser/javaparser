@@ -1707,6 +1707,17 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		return null;
 	}
 
+	@Override
+	public R visit(NodeList n, A arg) {
+		for (final Object v : n) {
+			R result = ((Node) v).accept(this, arg);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
 	private void visitComment(Node n, A arg) {
 		if(n.getComment()!=null){
 			Comment result = (Comment) n.getComment().accept(this, arg);

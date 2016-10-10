@@ -60,7 +60,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     private Type elementType;
 
-    private NodeList<VariableDeclarator> variables;
+    private NodeList<VariableDeclarator> variables = new NodeList<>();
 
     private List<ArrayBracketPair> arrayBracketPairsAfterElementType;
 

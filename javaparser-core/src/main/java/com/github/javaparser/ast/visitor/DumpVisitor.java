@@ -1578,9 +1578,9 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override
-	public void visit(NodeList<? extends Node> n, Object arg) {
-		for(Node node: n){
-			node.accept(this, arg);
+	public void visit(NodeList n, Object arg) {
+		for(Object node: n){
+            ((Node)node).accept(this, arg);
 		}
 	}
 

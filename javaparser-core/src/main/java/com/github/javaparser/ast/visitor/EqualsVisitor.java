@@ -1449,7 +1449,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return true;
 	}
 
-	@Override
+    @Override
 	public Boolean visit(EmptyImportDeclaration n1, Node arg) {
 		return true;
 	}
@@ -1500,7 +1500,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	}
 
     @Override
-    public Boolean visit(NodeList<? extends Node> n, Node arg) {
+    public Boolean visit(NodeList n, Node arg) {
         return nodesEquals((NodeList<Node>) n, (NodeList<Node>) arg);
     }
 }

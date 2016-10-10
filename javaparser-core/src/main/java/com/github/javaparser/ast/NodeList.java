@@ -89,4 +89,8 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
         innerList.remove(index);
         return this;
     }
+
+    public boolean isEmpty() {
+        return innerList.isEmpty();
+    }
 }
