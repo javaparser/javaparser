@@ -21,18 +21,22 @@
 
 package com.github.javaparser.ast;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.*;
 
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -44,6 +48,11 @@ import java.util.List;
  * @author Julio Vilmar Gesser
  */
 public abstract class Node implements Cloneable {
+    /**
+     * This can be used to sort nodes on position.
+     */
+    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> a.getBegin().compareTo(b.getBegin());
+
     private Range range;
 
     private Node parentNode;
@@ -162,8 +171,6 @@ public abstract class Node implements Cloneable {
         }
         return this;
     }
-
-
 
     /**
      * Use this to store additional information to this node.
@@ -391,5 +398,46 @@ public abstract class Node implements Cloneable {
             userData = new IdentityHashMap<>();
         }
         userData.put(key, object);
+    }
+
+    /**
+     * Try to remove this node from the parent
+     * 
+     * @return true if removed, false otherwise
+     * @throws RuntimeException if it fails in an unexpected way
+     */
+    public boolean remove() {
+        if (parentNode == null)
+            return false;
+        boolean success = false;
+        Class<?> parentClass = parentNode.getClass();
+        while (parentClass != Object.class) {
+            for (Field f : parentClass.getDeclaredFields()) {
+                f.setAccessible(true);
+                try {
+                    Object object = f.get(parentNode);
+                    if (object == null)
+                        continue;
+                    if (Collection.class.isAssignableFrom(object.getClass())) {
+                        Collection<?> l = (Collection<?>) object;
+                        boolean remove = l.remove(this);
+                        success |= remove;
+                    } else if (Optional.class.equals(f.getType())) {
+                        Optional<?> opt = (Optional<?>) object;
+                        if (opt.isPresent())
+                            if (opt.get() == this)
+                                f.set(parentNode, Optional.empty());
+                    } else if (object == this) {
+                        f.set(parentNode, null);
+                        success |= true;
+                    }
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    throw new RuntimeException("Error while removing " + getClass().getSimpleName(), e);
+                }
+            }
+            parentClass = parentClass.getSuperclass();
+        }
+        setParentNode(null);
+        return success;
     }
 }

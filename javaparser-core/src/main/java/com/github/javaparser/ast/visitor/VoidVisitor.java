@@ -24,6 +24,7 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -76,8 +77,6 @@ public interface VoidVisitor<A> {
 	void visit(CompilationUnit n, A arg);
 
 	void visit(PackageDeclaration n, A arg);
-
-	void visit(ImportDeclaration n, A arg);
 
 	void visit(TypeParameter n, A arg);
 
@@ -256,4 +255,14 @@ public interface VoidVisitor<A> {
 	void visit(ArrayBracketPair arrayBracketPair, A arg);
 
 	void visit(NodeList n, A arg);
+
+	void visit(EmptyImportDeclaration n, A arg);
+
+	void visit(SingleStaticImportDeclaration n, A arg);
+
+	void visit(SingleTypeImportDeclaration n, A arg);
+
+	void visit(StaticImportOnDemandDeclaration n, A arg);
+
+	void visit(TypeImportOnDemandDeclaration n, A arg);
 }

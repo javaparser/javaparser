@@ -21,6 +21,8 @@
 
 package com.github.javaparser.bdd.steps;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static java.lang.String.format;
@@ -36,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -330,23 +334,11 @@ public class ParsingSteps {
         assertEquals(expectedValue, expr.getType().isUsingDiamondOperator());
     }
 
-    @Then("the Java parser cannot parse it because of lexical errors")
+    @Then("the Java parser cannot parse it because of an error")
     public void javaParserCannotParseBecauseOfLexicalErrors() {
-        try {
-            JavaParser.parse(sourceUnderTest);
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider(sourceUnderTest));
+        if(result.isSuccessful()) {
             fail("Lexical error expected");
-        } catch (ParseProblemException e) {
-            // ok
-        }
-    }
-
-    @Then("the Java parser cannot parse it because of a parse error")
-    public void javaParserCannotParseBecauseOfAParseError() {
-        try {
-            JavaParser.parse(sourceUnderTest);
-            fail("Parse error expected");
-        } catch (ParseProblemException e) {
-            // ok
         }
     }
 

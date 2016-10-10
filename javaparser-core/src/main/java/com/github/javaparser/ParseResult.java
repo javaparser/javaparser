@@ -1,5 +1,7 @@
 package com.github.javaparser;
 
+import com.github.javaparser.ast.comments.CommentsCollection;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ public class ParseResult<T> {
     private final Optional<T> result;
     private final List<Problem> problems;
     private final Optional<List<Token>> tokens;
+    private final Optional<CommentsCollection> commentsCollection;
 
     /**
      * General constructor.
@@ -22,7 +25,8 @@ public class ParseResult<T> {
      * @param problems a list of encountered parsing problems.
      * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
-    ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens) {
+    ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens, Optional<CommentsCollection> commentsCollection) {
+        this.commentsCollection = assertNotNull(commentsCollection);
         this.result = assertNotNull(result);
         this.problems = assertNotNull(problems);
         this.tokens = assertNotNull(tokens);
@@ -32,7 +36,7 @@ public class ParseResult<T> {
      * Used when parsing failed completely with an exception.
      */
     ParseResult(Throwable throwable) {
-        this(Optional.empty(), singletonList(new Problem(throwable.getMessage(), Optional.empty(), Optional.of(throwable))), Optional.empty());
+        this(Optional.empty(), singletonList(new Problem(throwable.getMessage(), Optional.empty(), Optional.of(throwable))), Optional.empty(), Optional.empty());
     }
 
     /**
@@ -54,6 +58,13 @@ public class ParseResult<T> {
      */
     public Optional<List<Token>> getTokens() {
         return tokens;
+    }
+
+    /**
+     * @return the complete collection of comments encountered while parsing.
+     */
+    public Optional<CommentsCollection> getCommentsCollection() {
+        return commentsCollection;
     }
 
     /**

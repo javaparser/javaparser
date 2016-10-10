@@ -82,4 +82,7 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 		return ret;
 	}
 
+	public String getQualifiedName() {
+        return name;
+    }
 }

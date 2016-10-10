@@ -54,11 +54,11 @@ Then block comment 4 is " comment put randomly in class:    another orphan.    I
 Then block comment 5 is " a comment lost inside a compilation unit. It is orphan, I am sure you got this one  "
 Then the block comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
-|3|1|3|82|
-|4|1|4|25|
-|7|5|7|30|
-|10|5|13|32|
-|17|1|17|89|
+|3|1|3|81|
+|4|1|4|24|
+|7|5|7|29|
+|10|5|13|31|
+|17|1|17|88|
 
 
 Scenario: A Class With Javadoc Comments is processed by the Comments Parser
@@ -80,8 +80,8 @@ Then Javadoc comment 1 is " a proper javadoc comment "
 Then Javadoc comment 2 is " a floating javadoc comment "
 Then the Javadoc comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
-|3|1|3|32|
-|10|1|10|34|
+|3|1|3|31|
+|10|1|10|33|
 
 
 
@@ -145,11 +145,11 @@ Then the line comments have the following positions:
 |19|5|19|21|
 Then the block comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
-|1|1|1|27|
-|11|5|13|7|
+|1|1|1|26|
+|11|5|13|6|
 Then the Javadoc comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
-|15|5|17|8|
+|15|5|17|7|
 
 Scenario: A method containing two consecutive line comments is parsed correctly
 
@@ -183,7 +183,7 @@ Then the total number of comments is 0
 Given the class:
 /*/
 class Foo {}
-Then the Java parser cannot parse it because of lexical errors
+Then the Java parser cannot parse it because of an error
 
 Scenario: Should recognize /*/ inside a block comment
 
@@ -248,6 +248,7 @@ public class b {
 
     public void m1() {
         String s = "\\\\" // out of the string";
+        ;
     }
 
     /**
@@ -266,6 +267,7 @@ public class b {
 
     public void m1() {
         String s = "\\\\\" // still in string";
+        ;
     }
 
     /**

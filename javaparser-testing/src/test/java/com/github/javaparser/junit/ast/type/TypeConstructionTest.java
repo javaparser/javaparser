@@ -1,4 +1,4 @@
-package com.github.javaparser;
+package com.github.javaparser.junit.ast.type;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;

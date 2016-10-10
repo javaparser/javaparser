@@ -28,6 +28,9 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.imports.*;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
 import java.util.List;
@@ -143,16 +146,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
-			return false;
-		}
-
-		return true;
-	}
-
-	@Override public Boolean visit(final ImportDeclaration n1, final Node arg) {
-		final ImportDeclaration n2 = (ImportDeclaration) arg;
-
-		if (!nodeEquals(n1.getName(), n2.getName())) {
 			return false;
 		}
 
@@ -1452,6 +1445,56 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
 			return false;
 		}
+
+		return true;
+	}
+
+	@Override
+	public Boolean visit(EmptyImportDeclaration n1, Node arg) {
+		return true;
+	}
+
+    @Override
+    public Boolean visit(SingleStaticImportDeclaration n1, Node arg) {
+        final SingleStaticImportDeclaration n2 = (SingleStaticImportDeclaration) arg;
+
+        if (!nodeEquals(n1.getType(), n2.getType())) {
+            return false;
+        }
+
+        if (!objEquals(n1.getStaticMember(), n2.getStaticMember())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public Boolean visit(SingleTypeImportDeclaration n1, Node arg) {
+        final SingleTypeImportDeclaration n2 = (SingleTypeImportDeclaration) arg;
+        if (!nodeEquals(n1.getType(), n2.getType())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public Boolean visit(StaticImportOnDemandDeclaration n1, Node arg) {
+        final StaticImportOnDemandDeclaration n2 = (StaticImportOnDemandDeclaration) arg;
+        if (!nodeEquals(n1.getType(), n2.getType())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public Boolean visit(TypeImportOnDemandDeclaration n1, Node arg) {
+        final TypeImportOnDemandDeclaration n2 = (TypeImportOnDemandDeclaration) arg;
+        if (!nodeEquals(n1.getName(), n2.getName())) {
+            return false;
+        }
 
 		return true;
 	}

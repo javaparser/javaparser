@@ -1,9 +1,14 @@
-package com.github.javaparser;
+package com.github.javaparser.junit.ast;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.Utils;
 import org.junit.Test;
 
+import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.Utils.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,7 +18,7 @@ public class ParseResultTest {
 
     @Test
     public void whenParsingSucceedsThenWeGetResultsAndNoProblems() {
-        ParseResult<CompilationUnit> result = javaParser.parseFull(provider("class X{}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{}"));
 
         assertThat(result.getResult().isPresent()).isTrue();
         assertThat(result.getProblems()).isEmpty();
@@ -24,7 +29,7 @@ public class ParseResultTest {
 
     @Test
     public void whenParsingFailsThenWeGetProblemsAndNoResults() {
-        ParseResult<CompilationUnit> result = javaParser.parseFull(provider("class {"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class {"));
 
         assertThat(result.getResult().isPresent()).isFalse();
         assertThat(result.getProblems().size()).isEqualTo(1);

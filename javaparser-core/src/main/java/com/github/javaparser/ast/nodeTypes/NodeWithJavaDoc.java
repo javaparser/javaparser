@@ -41,7 +41,7 @@ public interface NodeWithJavaDoc<T> {
      * @param comment to be set
      */
     @SuppressWarnings("unchecked")
-    public default T setJavaDocComment(String comment) {
+    default T setJavaDocComment(String comment) {
         ((Node) this).setComment(new JavadocComment(comment));
         return (T) this;
     }
