@@ -255,5 +255,5 @@ public interface GenericVisitor<R, A> {
 
 	R visit(ArrayBracketPair arrayBracketPair, A arg);
 
-	<X extends Node> NodeList<X> visit(NodeList<X> n, A arg);
+	R visit(NodeList n, A arg);
 }

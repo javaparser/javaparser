@@ -78,4 +78,15 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
         // TODO take care of "Iterator.remove"
         return innerList.iterator();
     }
+
+    public NodeList<N> set(int index, N element) {
+        setAsParentNodeOf(element);
+        innerList.set(index, element);
+        return this;
+    }
+
+    public NodeList<N> remove(int index) {
+        innerList.remove(index);
+        return this;
+    }
 }

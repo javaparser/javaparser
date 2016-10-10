@@ -1594,6 +1594,13 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print("[]");
 	}
 
+	@Override
+	public void visit(NodeList<? extends Node> n, Object arg) {
+		for(Node node: n){
+			node.accept(this, arg);
+		}
+	}
+
 	private void printOrphanCommentsBeforeThisChildNode(final Node node) {
 		if (node instanceof Comment) return;
 

@@ -1592,7 +1592,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 {
 	Type type;
-	List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
+	NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
 	VariableDeclarator val;
 }
 {
@@ -2810,7 +2810,7 @@ VariableDeclarationExpr VariableDeclarationExpression():
 {
 	ModifierHolder modifier;
 	Type type;
-	List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
+	NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
 	VariableDeclarator var;
 }
 {
