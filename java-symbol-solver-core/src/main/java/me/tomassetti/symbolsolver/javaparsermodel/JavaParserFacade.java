@@ -6,7 +6,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.*;
 import javaslang.Tuple2;
-import me.tomassetti.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.*;
 import me.tomassetti.symbolsolver.logic.FunctionalInterfaceLogic;
 import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
@@ -73,7 +72,7 @@ public class JavaParserFacade {
             if (solved.isPresent()) {
                 return solved.get();
             } else {
-                throw new RuntimeException(String.format("In the context %s I cannot solved the given generic type: %s", context, typeUsage.describe()));
+                throw new UnsolvedSymbolException(context, typeUsage.describe());
             }
         } else if (typeUsage.isWildcard()) {
             if (typeUsage.asWildcard().isExtends() || typeUsage.asWildcard().isSuper()) {
@@ -217,33 +216,6 @@ public class JavaParserFacade {
         return Optional.empty();
     }
 
-    private MethodUsage resolveMethodRef(MethodReferenceExpr methodReferenceExpr) {
-        if (methodReferenceExpr.getScope() instanceof TypeExpr) {
-            TypeExpr nameExpr = (TypeExpr)methodReferenceExpr.getScope();
-            if (!(nameExpr.getType() instanceof ReferenceType)) { throw new UnsupportedOperationException(nameExpr.getType().getClass().getCanonicalName()); }
-            ReferenceType referenceType = (ReferenceType)nameExpr.getType();
-            if (referenceType.getArrayCount() != 0) { throw new UnsupportedOperationException("Arrays not supported in this context");}
-
-            if (!(referenceType.getType() instanceof ClassOrInterfaceType)) { throw new UnsupportedOperationException(referenceType.getType().getClass().getCanonicalName());}
-            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)referenceType.getType();
-            SymbolReference<TypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(methodReferenceExpr.getScope(), typeSolver).solveType(classOrInterfaceType.getName(), typeSolver);
-            if (typeDeclarationSymbolReference.isSolved()) {
-                List<MethodUsage> methods = typeDeclarationSymbolReference.getCorrespondingDeclaration().getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList());
-                if (methods.size() == 0) {
-                    throw new me.tomassetti.symbolsolver.model.resolution.UnsolvedSymbolException("Method "+methodReferenceExpr.getIdentifier()+" in "+typeDeclarationSymbolReference.getCorrespondingDeclaration());
-                } else if (methods.size() > 1) {
-                    throw new RuntimeException("Ambiguous method reference "+methodReferenceExpr.getIdentifier()+" in "+typeDeclarationSymbolReference.getCorrespondingDeclaration());
-                } else {
-                    return methods.get(0);
-                }
-            } else {
-                throw new me.tomassetti.symbolsolver.model.resolution.UnsolvedSymbolException(classOrInterfaceType.getName(), typeSolver);
-            }
-        } else {
-            throw new UnsupportedOperationException(methodReferenceExpr.getScope().getClass().getCanonicalName() + " "+methodReferenceExpr);
-        }
-    }
-
     /**
      * Should return more like a TypeApplication: a TypeDeclaration and possible parameters or array modifiers.
      *
@@ -334,38 +306,20 @@ public class JavaParserFacade {
                     //lambdas
                     Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
                     if (functionalMethod.isPresent()) {
-                        if (node instanceof MethodReferenceExpr) {
-                            MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) node;
+                        LambdaExpr lambdaExpr = (LambdaExpr)node;
 
-                            List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
-
-                            MethodUsage methodUsage =  resolveMethodRef(methodReferenceExpr);
-
-
-                            TypeUsage actualType = methodUsage.returnType();
+                        List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
+                        if (lambdaExpr.getBody() instanceof ExpressionStmt) {
+                            ExpressionStmt expressionStmt = (ExpressionStmt)lambdaExpr.getBody();
+                            TypeUsage actualType = getType (expressionStmt.getExpression());
                             TypeUsage formalType = functionalMethod.get().returnType();
                             formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                             Map<String, TypeUsage> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
                             for (String typeName : inferredTypes.keySet()) {
                                 result = result.replaceParam(typeName, inferredTypes.get(typeName));
                             }
-
                         } else {
-                            LambdaExpr lambdaExpr = (LambdaExpr) node;
-
-                            List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
-                            if (lambdaExpr.getBody() instanceof ExpressionStmt) {
-                                ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
-                                TypeUsage actualType = getType(expressionStmt.getExpression());
-                                TypeUsage formalType = functionalMethod.get().returnType();
-                                formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
-                                Map<String, TypeUsage> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-                                for (String typeName : inferredTypes.keySet()) {
-                                    result = result.replaceParam(typeName, inferredTypes.get(typeName));
-                                }
-                            } else {
-                                throw new UnsupportedOperationException();
-                            }
+                            throw new UnsupportedOperationException();
                         }
                     }
 
