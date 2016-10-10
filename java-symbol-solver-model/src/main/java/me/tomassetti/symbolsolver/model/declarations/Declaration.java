@@ -48,7 +48,7 @@ public interface Declaration {
     }
 
     default TypeDeclaration asType() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
     default MethodDeclaration asMethod() {

@@ -8,8 +8,10 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -115,10 +117,16 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
                 //MethodDeclaration methodCalled = JavaParserFacade.get(typeSolver).solve()
                 throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
             } else {
+                TypeUsage rawType = null;
                 if (parameter.getType() instanceof PrimitiveType) {
-                    return PrimitiveTypeUsage.byName(((PrimitiveType) parameter.getType()).getType().name());
+                    rawType = PrimitiveTypeUsage.byName(((PrimitiveType) parameter.getType()).getType().name());
                 } else {
-                    return JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), wrappedNode);
+                    rawType = JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), wrappedNode);
+                }
+                if (parameter.isVarArgs()) {
+                    return new ArrayTypeUsage(rawType);
+                } else {
+                    return rawType;
                 }
             }
         } else if (wrappedNode instanceof VariableDeclarator) {
@@ -142,7 +150,12 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         return JavaParserFacade.get(typeSolver).getType(wrappedNode);
     }*/
 
-	/**
+    @Override
+    public TypeDeclaration asType() {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName()+": wrapping "+ this.getWrappedNode().getClass().getCanonicalName());
+    }
+
+    /**
 	 * Returns the JavaParser node associated with this JavaParserSymbolDeclaration.
 	 *
 	 * @return A visitable JavaParser node wrapped by this object.

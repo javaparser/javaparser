@@ -11,31 +11,27 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.Type;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
+import me.tomassetti.symbolsolver.AbstractTest;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import me.tomassetti.symbolsolver.resolution.typesolvers.DummyTypeSolver;
-import me.tomassetti.symbolsolver.resolution.typesolvers.JarTypeSolver;
-import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import org.junit.Test;
-import static org.easymock.EasyMock.*;
-
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.typesolvers.*;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
-public class ContextTest {
+public class ContextTest extends AbstractTest {
 
     private CompilationUnit parseSample(String sampleName) throws ParseException {
         InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
@@ -190,7 +186,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes");
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
 
@@ -209,7 +205,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream");
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream);
@@ -298,7 +294,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr call = Navigator.findMethodCall(method, "getTypes");
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
@@ -315,7 +311,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes");
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetTypes);
 
@@ -331,7 +327,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream");
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToStream);
 
@@ -345,7 +341,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter");
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToFilter);
 
@@ -360,7 +356,7 @@ public class ContextTest {
         MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter");
         Expression lambdaExpr = callToFilter.getArgs().get(0);
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         TypeUsage typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
 
@@ -375,7 +371,7 @@ public class ContextTest {
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
         Expression referenceToT = callToGetName.getScope();
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         TypeUsage typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
 
@@ -389,7 +385,7 @@ public class ContextTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
 
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetName);
 

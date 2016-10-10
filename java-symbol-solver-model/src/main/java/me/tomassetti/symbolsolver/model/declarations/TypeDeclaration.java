@@ -115,4 +115,13 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
     default InterfaceDeclaration asInterface() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
+
+    boolean hasDirectlyAnnotation(String canonicalName);
+
+    default boolean hasAnnotation(String canonicalName) {
+        if (hasDirectlyAnnotation(canonicalName)) {
+            return true;
+        }
+        return getAllAncestors().stream().anyMatch(it -> it.asReferenceTypeUsage().getTypeDeclaration().hasDirectlyAnnotation(canonicalName));
+    }
 }

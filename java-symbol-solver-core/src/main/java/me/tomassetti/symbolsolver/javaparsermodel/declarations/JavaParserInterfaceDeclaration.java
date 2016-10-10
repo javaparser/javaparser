@@ -89,6 +89,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return this;
     }
 
+    @Override
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        throw new UnsupportedOperationException();
+    }
+
     public boolean isInterface() {
         return true;
     }

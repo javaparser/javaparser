@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.javassistmodel;
 
 import com.google.common.collect.ImmutableSet;
+import me.tomassetti.symbolsolver.AbstractTest;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JarTypeSolver;
@@ -13,13 +14,13 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class JavassistClassDeclarationTest {
+public class JavassistClassDeclarationTest extends AbstractTest {
 
     private TypeSolver typeSolver;
 
     @Before
     public void setup() throws IOException {
-        String pathToJar = "src/test/resources/javaparser-core-2.1.0.jar";
+        String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new JreTypeSolver());
     }
 

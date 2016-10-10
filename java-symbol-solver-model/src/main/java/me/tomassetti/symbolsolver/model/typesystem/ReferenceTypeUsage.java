@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
@@ -7,10 +8,11 @@ import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import javaslang.Tuple2;
 
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
@@ -33,6 +35,9 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
     }
 
     public ReferenceTypeUsage(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters, TypeSolver typeSolver) {
+        if (typeSolver == null) {
+            throw new IllegalArgumentException("typeSolver should not be null");
+        }
         this.typeDeclaration = typeDeclaration;
         this.typeParameters = typeParameters;
         if (this.typeDeclaration.isTypeVariable()) {
@@ -287,7 +292,8 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         }
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             if (this.parameters().size() != other.parameters().size()) {
-                throw new IllegalStateException();
+                // one have the type not specified so they are compatible
+                return true;
             }
             for (int i = 0; i < parameters().size(); i++) {
                 TypeUsage thisParam = parameters().get(i);

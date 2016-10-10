@@ -164,14 +164,26 @@ public class MethodResolutionLogic {
             return new ArrayTypeUsage(replaceTypeParam(typeUsage.asArrayTypeUsage().getComponentType(), tp, typeSolver));
         } else if (typeUsage.isReferenceType()) {
             ReferenceTypeUsage result = typeUsage.asReferenceTypeUsage();
-            int i =0;
+            int i = 0;
             for (TypeUsage typeParam : result.parameters()) {
                 result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceTypeUsage();
                 i++;
             }
             return result;
+        } else if (typeUsage.isWildcard()) {
+            if (typeUsage.describe().equals(tp.getName())) {
+                List<TypeParameter.Bound> bounds = tp.getBounds(typeSolver);
+                if (bounds.size() > 1) {
+                    throw new UnsupportedOperationException();
+                } else if (bounds.size() == 1) {
+                    return bounds.get(0).getType();
+                } else {
+                    return new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+                }
+            }
+            return typeUsage;
         } else {
-            throw new UnsupportedOperationException(typeUsage.getClass().getCanonicalName());
+            throw new UnsupportedOperationException("Replacing "+typeUsage+ ", param "+tp+" with "+typeUsage.getClass().getCanonicalName());
         }
     }
 

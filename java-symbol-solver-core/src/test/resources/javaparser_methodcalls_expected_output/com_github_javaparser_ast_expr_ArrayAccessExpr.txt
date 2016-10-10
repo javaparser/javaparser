@@ -1,0 +1,8 @@
+  Line 41) setName(name) ==> com.github.javaparser.ast.expr.ArrayAccessExpr.setName(com.github.javaparser.ast.expr.Expression)
+  Line 42) setIndex(index) ==> com.github.javaparser.ast.expr.ArrayAccessExpr.setIndex(com.github.javaparser.ast.expr.Expression)
+  Line 47) setName(name) ==> com.github.javaparser.ast.expr.ArrayAccessExpr.setName(com.github.javaparser.ast.expr.Expression)
+  Line 48) setIndex(index) ==> com.github.javaparser.ast.expr.ArrayAccessExpr.setIndex(com.github.javaparser.ast.expr.Expression)
+  Line 53) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.ArrayAccessExpr, A)
+  Line 58) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.ArrayAccessExpr, A)
+  Line 71) setAsParentNodeOf(this.index) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
+  Line 77) setAsParentNodeOf(this.name) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

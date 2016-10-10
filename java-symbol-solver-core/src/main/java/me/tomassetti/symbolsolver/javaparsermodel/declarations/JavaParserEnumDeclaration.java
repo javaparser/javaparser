@@ -89,6 +89,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean canBeAssignedTo(TypeDeclaration other) {
         // Enums cannot be extended
         if (other.getQualifiedName().equals(this.getQualifiedName())) {
@@ -190,7 +195,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         if (this.wrappedNode.getEntries() != null) {
             for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
                 if (member.getName().equals(name)) {
-                    return new JavaParserFieldDeclaration(member);
+                    return new JavaParserFieldDeclaration(member, typeSolver);
                 }
             }
         }
@@ -281,7 +286,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         if (this.wrappedNode.getEntries() != null) {
             for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
-				fields.add(new JavaParserFieldDeclaration(member));
+				fields.add(new JavaParserFieldDeclaration(member, typeSolver));
             }
         }
 
@@ -332,7 +337,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         @Override
         public TypeDeclaration declaringType() {
-            throw new UnsupportedOperationException();
+            return JavaParserEnumDeclaration.this;
         }
 
         @Override

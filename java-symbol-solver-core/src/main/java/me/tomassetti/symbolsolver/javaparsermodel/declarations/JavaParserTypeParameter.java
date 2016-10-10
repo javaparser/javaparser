@@ -156,6 +156,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<TypeParameter> getTypeParameters() {
         return Collections.emptyList();
     }
@@ -174,4 +179,9 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 	{
 		return wrappedNode;
 	}
+
+    @Override
+    public String toString() {
+        return "JPTypeParameter(" + wrappedNode.getName() +", bounds=" + wrappedNode.getTypeBound()+ ")";
+    }
 }

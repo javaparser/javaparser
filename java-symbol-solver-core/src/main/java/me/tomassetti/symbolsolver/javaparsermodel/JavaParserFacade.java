@@ -20,7 +20,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import me.tomassetti.symbolsolver.resolution.*;
+import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 
 import java.util.*;
@@ -111,20 +111,29 @@ public class JavaParserFacade {
         }
     }
 
+    public SymbolReference<MethodDeclaration> solve(MethodCallExpr methodCallExpr) {
+        return solve(methodCallExpr, true);
+    }
+
     /**
      * Given a method call find out to which method declaration it corresponds.
      */
-    public SymbolReference<MethodDeclaration> solve(MethodCallExpr methodCallExpr) {
+    public SymbolReference<MethodDeclaration> solve(MethodCallExpr methodCallExpr, boolean solveLambdas) {
         List<TypeUsage> params = new LinkedList<>();
         List<LambdaArgumentTypeUsagePlaceholder> placeholders = new LinkedList<>();
         int i = 0;
-        for (Expression expression : methodCallExpr.getArgs()) {
-            if (expression instanceof LambdaExpr) {
+        for (Expression parameterValue : methodCallExpr.getArgs()) {
+            if (parameterValue instanceof LambdaExpr || parameterValue instanceof MethodReferenceExpr) {
                 LambdaArgumentTypeUsagePlaceholder placeholder = new LambdaArgumentTypeUsagePlaceholder(i);
                 params.add(placeholder);
                 placeholders.add(placeholder);
             } else {
-                params.add(JavaParserFacade.get(typeSolver).getType(expression));
+                try {
+                    params.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
+                } catch (Exception e){
+                    throw new RuntimeException(String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
+                            methodCallExpr, parameterValue), e);
+                }
             }
             i++;
         }
@@ -219,7 +228,7 @@ public class JavaParserFacade {
             logger.finest("getType on name expr " + node);
             Optional<me.tomassetti.symbolsolver.model.resolution.Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName(), nameExpr);
             if (!value.isPresent()) {
-                throw new UnsolvedSymbolException("FOO Solving " + node, nameExpr.getName());
+                throw new UnsolvedSymbolException("Solving " + node, nameExpr.getName());
             } else {
                 return value.get().getUsage();
             }
@@ -237,9 +246,54 @@ public class JavaParserFacade {
                 int pos = JavaParserSymbolDeclaration.getParamPos(node);
                 SymbolReference<MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr);
                 if (!refMethod.isSolved()) {
-                    throw new UnsolvedSymbolException(callExpr.getName());
+                    throw new UnsolvedSymbolException(node.getParentNode().toString(), callExpr.getName());
                 }
                 logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
+                //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
+                if (solveLambdas) {
+                    TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+                    // We need to replace the type variables
+                    Context ctx = JavaParserFactory.getContext(node, typeSolver);
+                    result = solveGenericTypes(result, ctx, typeSolver);
+
+                    //We should find out which is the functional method (e.g., apply) and replace the params of the
+                    //solveLambdas with it, to derive so the values. We should also consider the value returned by the
+                    //lambdas
+                    Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
+                    if (functionalMethod.isPresent()) {
+                        LambdaExpr lambdaExpr = (LambdaExpr) node;
+
+                        List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
+                        if (lambdaExpr.getBody() instanceof ExpressionStmt) {
+                            ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
+                            TypeUsage actualType = getType(expressionStmt.getExpression());
+                            TypeUsage formalType = functionalMethod.get().returnType();
+                            formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
+                            Map<String, TypeUsage> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+                            for (String typeName : inferredTypes.keySet()) {
+                                result = result.replaceParam(typeName, inferredTypes.get(typeName));
+                            }
+                        } else {
+                            throw new UnsupportedOperationException();
+                        }
+                    }
+
+                    return result;
+                } else {
+                    return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+                }
+            } else {
+                throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
+            }
+        } else if (node instanceof MethodReferenceExpr) {
+            if (node.getParentNode() instanceof MethodCallExpr) {
+                MethodCallExpr callExpr = (MethodCallExpr) node.getParentNode();
+                int pos = JavaParserSymbolDeclaration.getParamPos(node);
+                SymbolReference<MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr, false);
+                if (!refMethod.isSolved()) {
+                    throw new UnsolvedSymbolException(node.getParentNode().toString(), callExpr.getName());
+                }
+                logger.finest("getType on method reference expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
                 if (solveLambdas) {
                     TypeUsage result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
@@ -274,7 +328,7 @@ public class JavaParserFacade {
                     return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
                 }
             } else {
-                throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
+                throw new UnsupportedOperationException("The type of a method reference expr depends on the position and its return value");
             }
         } else if (node instanceof VariableDeclarator) {
             if (node.getParentNode() instanceof FieldDeclaration) {
@@ -509,7 +563,11 @@ public class JavaParserFacade {
         if (call.getArgs() != null) {
             for (Expression param : call.getArgs()) {
                 //getTypeConcrete(Node node, boolean solveLambdas)
-                params.add(getType(param, false));
+                try {
+                    params.add(getType(param, false));
+                } catch (Exception e) {
+                    throw new RuntimeException(String.format("Error calculating the type of parameter %s of method call %s", param, call), e);
+                }
                 //params.add(getTypeConcrete(param, false));
             }
         }
@@ -517,7 +575,7 @@ public class JavaParserFacade {
         Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName(), params, typeSolver);
         if (!methodUsage.isPresent()) {
             throw new RuntimeException("Method '" + call.getName() + "' cannot be resolved in context "
-                    + call + " (line: " + call.getRange().begin.line + ") " + context);
+                    + call + " (line: " + call.getRange().begin.line + ") " + context+". Parameter types: "+ params);
         }
         return methodUsage.get();
     }
@@ -536,8 +594,7 @@ public class JavaParserFacade {
     public TypeUsage getTypeOfThisIn(Node node) {
         // TODO consider static methods
         if (node instanceof ClassOrInterfaceDeclaration) {
-            JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-            return new ReferenceTypeUsageImpl(classDeclaration, typeSolver);
+            return new ReferenceTypeUsageImpl(getTypeDeclaration((ClassOrInterfaceDeclaration) node), typeSolver);
         } else if (node instanceof EnumDeclaration) {
             JavaParserEnumDeclaration enumDeclaration = new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
             return new ReferenceTypeUsageImpl(enumDeclaration, typeSolver);

@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.resolution;
 
 import com.github.javaparser.ParseException;
+import me.tomassetti.symbolsolver.AbstractTest;
 import me.tomassetti.symbolsolver.SourceFileInfoExtractor;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -15,15 +16,15 @@ import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
-public class AnalyseJavaParserTest {
+public class AnalyseJavaParserTest extends AbstractTest {
 
-    private static final File src = new File("src/test/resources/javaparser_src/proper_source");
+    private static final File src = adaptPath(new File("src/test/resources/javaparser_src/proper_source"));
 
     private SourceFileInfoExtractor getSourceFileInfoExtractor() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new JreTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
-        combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/javaparser_src/generated")));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/javaparser_src/generated"))));
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
         sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
@@ -51,7 +52,7 @@ public class AnalyseJavaParserTest {
         String output = outErrStream.toString();
 
         String path = "src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_")+ ".txt";
-        File dstFile = new File(path);
+        File dstFile = adaptPath(new File(path));
 
         if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)){
             System.err.println(output);

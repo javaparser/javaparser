@@ -8,7 +8,7 @@ import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.Declaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.resolution.AbstractTest;
+import me.tomassetti.symbolsolver.resolution.AbstractResolutionTest;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class FindingAllFields extends AbstractTest {
+public class FindingAllFields extends AbstractResolutionTest {
 
     @Test
     public void findAllInheritedFields() throws ParseException {

@@ -9,13 +9,13 @@ import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.AbstractTest;
+import me.tomassetti.symbolsolver.resolution.AbstractResolutionTest;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class Issue18 extends AbstractTest {
+public class Issue18 extends AbstractResolutionTest {
 
     @Test
     public void typeDeclarationSuperClassImplicitlyIncludeObject() throws ParseException {

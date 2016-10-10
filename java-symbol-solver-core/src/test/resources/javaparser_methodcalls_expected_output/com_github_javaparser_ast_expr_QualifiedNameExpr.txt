@@ -1,0 +1,5 @@
+  Line 40) setQualifier(scope) ==> com.github.javaparser.ast.expr.QualifiedNameExpr.setQualifier(com.github.javaparser.ast.expr.NameExpr)
+  Line 45) setQualifier(scope) ==> com.github.javaparser.ast.expr.QualifiedNameExpr.setQualifier(com.github.javaparser.ast.expr.NameExpr)
+  Line 49) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.QualifiedNameExpr, A)
+  Line 53) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.QualifiedNameExpr, A)
+  Line 62) setAsParentNodeOf(this.qualifier) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

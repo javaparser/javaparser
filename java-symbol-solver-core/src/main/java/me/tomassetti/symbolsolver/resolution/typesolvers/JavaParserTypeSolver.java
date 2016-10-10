@@ -58,6 +58,10 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<TypeDeclaration> tryToSolveType(String name) {
+        if (!srcDir.exists() || !srcDir.isDirectory()) {
+            throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir.getAbsolutePath());
+        }
+
         // TODO support enums
         // TODO support interfaces
     	

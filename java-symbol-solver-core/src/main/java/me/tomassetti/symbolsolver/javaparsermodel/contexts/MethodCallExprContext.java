@@ -65,11 +65,15 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
                 if (!expectedType.isAssignableBy(actualType)) {
                     // ok, then it needs to be wrapped
-                    throw new UnsupportedOperationException();
+                    throw new UnsupportedOperationException(String.format("Unable to resolve the type parameters in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                            expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
                 }
             } else {
+                // TODO fix
+                return methodUsage;
                 // ok, then it needs to be wrapped
-                throw new UnsupportedOperationException();
+                //throw new UnsupportedOperationException(String.format("Unable to resolve the type parameters in a MethodUsage. Actual params: %s, Method Declaration: %s. MethodUsage: %s",
+                //        actualParamTypes, methodUsage.getDeclaration(), methodUsage));
             }
         }
         Map<String, TypeUsage> matchedTypeParameters = new HashMap<>();
@@ -115,7 +119,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public String toString() {
-        return "MethodCallExprContext{}";
+        return "MethodCallExprContext{wrapped=" + wrappedNode+ "}";
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(TypeParameterUsage tp, String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
@@ -200,6 +204,16 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope() != null) {
+            // consider static methods
+            if (wrappedNode.getScope() instanceof NameExpr) {
+                NameExpr scopeAsName = (NameExpr)wrappedNode.getScope();
+                SymbolReference symbolReference = this.solveType(scopeAsName.getName(), typeSolver);
+                if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
+                    TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
+                    return typeDeclaration.solveMethod(name, parameterTypes);
+                }
+            }
+
             TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
@@ -209,6 +223,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             } else if (typeOfScope.isArray() && typeOfScope.asArrayTypeUsage().getComponentType().isReferenceType()) {
                 return typeOfScope.asArrayTypeUsage().getComponentType().asReferenceTypeUsage().solveMethod(name, parameterTypes);
+            } else if (typeOfScope.isTypeVariable()) {
+                for (TypeParameter.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
+                    SymbolReference<MethodDeclaration> res = bound.getType().asReferenceTypeUsage().solveMethod(name, parameterTypes);
+                    if (res.isSolved()) {
+                        return res;
+                    }
+                }
+                return SymbolReference.unsolved(MethodDeclaration.class);
             } else {
                 return typeOfScope.asReferenceTypeUsage().solveMethod(name, parameterTypes);
             }

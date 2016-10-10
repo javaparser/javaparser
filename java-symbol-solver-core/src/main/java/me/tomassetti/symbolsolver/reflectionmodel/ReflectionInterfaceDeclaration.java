@@ -18,6 +18,7 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
@@ -301,6 +302,16 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public InterfaceDeclaration asInterface() {
         return this;
+    }
+
+    @Override
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        for (Annotation a : clazz.getDeclaredAnnotations()) {
+            if (a.annotationType().getCanonicalName().equals(canonicalName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

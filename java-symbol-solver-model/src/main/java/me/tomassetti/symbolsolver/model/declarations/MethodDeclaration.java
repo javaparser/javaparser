@@ -68,7 +68,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
             if (i != 0) {
                 sb.append(", ");
             }
-            sb.append(getParam(i).getType().describe());
+            sb.append(getParam(i).describeType());
         }
         sb.append(")");
         return sb.toString();

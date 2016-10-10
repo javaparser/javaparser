@@ -1,0 +1,5 @@
+  Line 23) setAnnotations(annotations) ==> com.github.javaparser.ast.ArrayBracketPair.setAnnotations(java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>)
+  Line 27) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.ArrayBracketPair, A)
+  Line 31) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.ArrayBracketPair, A)
+  Line 35) ensureNotNull(annotations) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
+  Line 40) setAsParentNodeOf(annotations) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)
