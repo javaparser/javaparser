@@ -291,7 +291,7 @@ TOKEN_MGR_DECLS :
                     commentText = commentText.substring(0, commentText.length() - 1);
                 }
                 range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-                LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
+                LineComment comment = new LineComment(range, commentText.substring(2));
                 commentsCollection.addComment(comment);
             } else {
                 throw new AssertionError("Didn't expect to get here. Please file a bug report. [" + commentText + "]");

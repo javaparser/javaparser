@@ -26,6 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
+import com.github.javaparser.utils.Utils;
 
 import java.util.*;
 
@@ -60,7 +61,7 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        List<Node> children = cu.getChildrenNodes();
+        List<Node> children = Utils.copyList(cu.getChildrenNodes());
         PositionUtils.sortByBeginPosition(children);
 
         Comment firstComment = comments.iterator().next();
@@ -92,7 +93,7 @@ class CommentsInserter {
         // if they preceed a child they are assigned to it, otherweise they
         // remain "orphans"
 
-        List<Node> children = node.getChildrenNodes();
+        List<Node> children = Utils.copyList(node.getChildrenNodes());
         PositionUtils.sortByBeginPosition(children);
 
         for (Node child : children) {

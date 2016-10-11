@@ -39,6 +39,7 @@ import java.util.Optional;
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -86,6 +87,8 @@ public final class JavaParser {
      * @return the parse result, a collection of encountered problems, and some extra data.
      */
 	public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+		assertNotNull(start);
+		assertNotNull(provider);
 		try {
             final ASTParser parser = getParserForProvider(provider);
 			N resultNode = start.parse(parser);
