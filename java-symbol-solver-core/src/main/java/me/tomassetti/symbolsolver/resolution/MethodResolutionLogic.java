@@ -250,13 +250,20 @@ public class MethodResolutionLogic {
                 if (m1 instanceof JavaParserMethodDeclaration && m2 instanceof JavaParserMethodDeclaration &&
                     ((JavaParserMethodDeclaration)m1).getWrappedNode().equals(((JavaParserMethodDeclaration)m2).getWrappedNode())) {
                     return 0;
-                } 
+                }
                 return 1;
             }
         });
         s.addAll(methods);
         List<MethodDeclaration> res = new ArrayList<>();
-        res.addAll(s);
+        Set<String> usedSignatures = new HashSet<>();
+        for (MethodDeclaration md : methods) {
+            String signature = md.getQualifiedSignature();
+            if (!usedSignatures.contains(signature)) {
+                usedSignatures.add(signature);
+                res.add(md);
+            }
+        }
         return res;
     }
     

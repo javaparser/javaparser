@@ -12,7 +12,7 @@
   Line 130) printer.print(modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) + " ") ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.print(java.lang.String)
   Line 130) modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 130) modifiers.stream().map(Modifier::getLib) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
-  Line 130) modifiers.stream() ==> ERROR
+  Line 130) modifiers.stream() ==> java.util.Collection.stream()
   Line 130) Collectors.joining(" ") ==> java.util.stream.Collectors.joining(java.lang.CharSequence)
   Line 135) printer.printLn() ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.printLn()
   Line 136) member.accept(this, arg) ==> com.github.javaparser.ast.Node.accept(com.github.javaparser.ast.visitor.VoidVisitor<A>, A)
