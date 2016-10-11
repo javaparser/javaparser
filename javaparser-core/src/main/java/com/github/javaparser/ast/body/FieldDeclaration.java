@@ -79,7 +79,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setVariables(variables);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
+    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
                             NodeList<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
@@ -88,7 +88,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType,
                             NodeList<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);

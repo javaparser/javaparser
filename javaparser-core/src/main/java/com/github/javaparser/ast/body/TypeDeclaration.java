@@ -30,6 +30,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -58,7 +59,7 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 		setModifiers(modifiers);
 	}
 
-	public TypeDeclaration(List<AnnotationExpr> annotations,
+	public TypeDeclaration(NodeList<AnnotationExpr> annotations,
                            EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {
 		super(annotations);
@@ -67,7 +68,7 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 		setMembers(members);
 	}
 
-	public TypeDeclaration(Range range, List<AnnotationExpr> annotations,
+	public TypeDeclaration(Range range, NodeList<AnnotationExpr> annotations,
                            EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {
 		super(range, annotations);

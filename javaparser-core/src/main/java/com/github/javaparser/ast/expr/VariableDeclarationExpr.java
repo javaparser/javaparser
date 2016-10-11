@@ -22,8 +22,8 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
-import static java.util.Collections.*;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -54,7 +54,7 @@ public final class VariableDeclarationExpr extends Expression implements
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     private Type elementType;
 
@@ -102,7 +102,8 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     public VariableDeclarationExpr(final Range range,
-                                   final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
+                                   final EnumSet<Modifier> modifiers,
+                                   final NodeList<AnnotationExpr> annotations,
                                    final Type elementType,
                                    final NodeList<VariableDeclarator> variables,
                                    final List<ArrayBracketPair> arrayBracketPairsAfterType) {
@@ -134,8 +135,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
@@ -161,8 +161,8 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public VariableDeclarationExpr setAnnotations(final List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+    public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
     }

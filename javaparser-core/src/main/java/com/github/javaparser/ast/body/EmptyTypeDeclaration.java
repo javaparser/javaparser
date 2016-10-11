@@ -28,17 +28,19 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.ast.NodeList.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
 public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclaration> {
 
     public EmptyTypeDeclaration() {
-        super(null, EnumSet.noneOf(Modifier.class), null, null);
+        super(emptyNodeList(), EnumSet.noneOf(Modifier.class), null, null);
     }
 
     public EmptyTypeDeclaration(Range range) {
-        super(range, null, EnumSet.noneOf(Modifier.class), null, null);
+        super(range, emptyNodeList(), EnumSet.noneOf(Modifier.class), null, null);
     }
 
     @Override

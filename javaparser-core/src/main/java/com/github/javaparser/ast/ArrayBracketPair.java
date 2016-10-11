@@ -2,23 +2,20 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * In, for example, <code>int[] a[];</code> there are two ArrayBracketPair objects,
  * one for the [] after int, one for the [] after a.
  */
 public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayBracketPair> {
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-    public ArrayBracketPair(Range range, List<AnnotationExpr> annotations) {
+    public ArrayBracketPair(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
         setAnnotations(annotations);
     }
@@ -31,14 +28,13 @@ public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayB
 		v.visit(this, arg);
     }
 
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-    public ArrayBracketPair setAnnotations(List<AnnotationExpr> annotations) {
+    public ArrayBracketPair setAnnotations(NodeList<AnnotationExpr> annotations) {
         setAsParentNodeOf(annotations);
-        this.annotations = annotations;
+        this.annotations = assertNotNull(annotations);
         return this;
     }
 }

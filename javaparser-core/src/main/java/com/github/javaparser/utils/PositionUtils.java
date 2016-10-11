@@ -24,10 +24,10 @@ package com.github.javaparser.utils;
 import static java.lang.Integer.signum;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -45,8 +45,16 @@ public final class PositionUtils {
         sortByBeginPosition(nodes, false);
     }
 
+    public static <T extends Node> void sortByBeginPosition(NodeList<T> nodes){
+        sortByBeginPosition(nodes, false);
+    }
+
     public static <T extends Node> void sortByBeginPosition(List<T> nodes, final boolean ignoringAnnotations){
         Collections.sort(nodes, (o1, o2) -> PositionUtils.compare(o1, o2, ignoringAnnotations));
+    }
+
+    public static <T extends Node> void sortByBeginPosition(NodeList<T> nodes, final boolean ignoringAnnotations){
+        nodes.sort((o1, o2) -> PositionUtils.compare(o1, o2, ignoringAnnotations));
     }
 
     public static boolean areInOrder(Node a, Node b){
@@ -77,8 +85,7 @@ public final class PositionUtils {
 
     public static AnnotationExpr getLastAnnotation(Node node) {
         if (node instanceof NodeWithAnnotations){
-            List<AnnotationExpr> annotations = new LinkedList<>();
-            annotations.addAll(((NodeWithAnnotations<?>) node).getAnnotations());
+            NodeList<AnnotationExpr> annotations = NodeList.nodeList(((NodeWithAnnotations<?>) node).getAnnotations());
             if (annotations.isEmpty()){
                 return null;
             }

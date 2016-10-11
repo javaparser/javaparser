@@ -28,6 +28,8 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.ast.NodeList.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -42,13 +44,13 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     public InitializerDeclaration(boolean isStatic, BlockStmt block) {
-        super(null);
+        super(emptyNodeList());
         setStatic(isStatic);
         setBlock(block);
     }
 
     public InitializerDeclaration(Range range, boolean isStatic, BlockStmt block) {
-        super(range, null);
+        super(range, emptyNodeList());
         setStatic(isStatic);
         setBlock(block);
     }

@@ -83,24 +83,12 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
 	private void visitAnnotations(NodeWithAnnotations<?> n, A arg) {
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 	}
 
 	@Override public Node visit(final AnnotationMemberDeclaration n, final A arg) {
 		visitComment(n, arg);
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setType((Type) n.getType().accept(this, arg));
 		if (n.getDefaultValue() != null) {
 			n.setDefaultValue((Expression) n.getDefaultValue().accept(this, arg));
@@ -324,13 +312,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final ConstructorDeclaration n, final A arg) {
 		visitComment(n, arg);
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		final List<TypeParameter> typeParameters = n.getTypeParameters();
 		if (typeParameters != null) {
 			for (int i = 0; i < typeParameters.size(); i++) {
@@ -406,13 +388,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final EnumConstantDeclaration n, final A arg) {
 		visitComment(n, arg);
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		final List<Expression> args = n.getArgs();
 		if (args != null) {
 			for (int i = 0; i < args.size(); i++) {
@@ -432,13 +408,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final EnumDeclaration n, final A arg) {
 		visitComment(n, arg);
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		final List<ClassOrInterfaceType> implementz = n.getImplements();
 		if (implementz != null) {
 			for (int i = 0; i < implementz.size(); i++) {
@@ -507,13 +477,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final FieldDeclaration n, final A arg) {
 		visitComment(n, arg);
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setElementType((Type) n.getElementType().accept(this, arg));
         n.setVariables((NodeList<VariableDeclarator>)n.getVariables().accept(this, arg));
 		return n;
@@ -651,13 +615,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final MethodDeclaration n, final A arg) {
 		visitComment(n, arg);
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		final List<TypeParameter> typeParameters = n.getTypeParameters();
 		if (typeParameters != null) {
 			for (int i = 0; i < typeParameters.size(); i++) {
@@ -741,13 +699,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final PackageDeclaration n, final A arg) {
 		visitComment(n, arg);
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setName((NameExpr) n.getName().accept(this, arg));
 		return n;
 	}
@@ -948,13 +900,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final VariableDeclarationExpr n, final A arg) {
 		visitComment(n, arg);
-		final List<AnnotationExpr> annotations = n.getAnnotations();
-		if (annotations != null) {
-			for (int i = 0; i < annotations.size(); i++) {
-				annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg));
-			}
-			removeNulls(annotations);
-		}
+		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 
 		final Type type = (Type) n.getElementType().accept(this, arg);
 		if (type == null) {

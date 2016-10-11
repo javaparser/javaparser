@@ -4,9 +4,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -42,10 +40,22 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
     }
 
     public static <X extends Node> NodeList<X> nodeList(X... nodes) {
-        NodeList<X> nodeList = new NodeList<>();
+        final NodeList<X> nodeList = new NodeList<>();
         for(X node: nodes) {
             nodeList.add(node);
         }
+        return nodeList;
+    }
+
+    public static <X extends Node> NodeList<X> nodeList(Collection<X> nodes) {
+        final NodeList<X> nodeList = new NodeList<>();
+        nodeList.innerList.addAll(nodes);
+        return nodeList;
+    }
+
+    public static <X extends Node> NodeList<X> nodeList(NodeList<X> nodes) {
+        final NodeList<X> nodeList = new NodeList<>();
+        nodeList.innerList.addAll(nodes.innerList);
         return nodeList;
     }
 
@@ -92,5 +102,17 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
 
     public boolean isEmpty() {
         return innerList.isEmpty();
+    }
+
+    public void sort(Comparator<? super N> comparator) {
+        Collections.sort(innerList, comparator);
+    }
+
+    public void addAll(NodeList<N> annotations) {
+        innerList.addAll(annotations.innerList);
+    }
+
+    public static <X extends Node> NodeList<X> emptyNodeList() {
+        return new NodeList<X>();
     }
 }

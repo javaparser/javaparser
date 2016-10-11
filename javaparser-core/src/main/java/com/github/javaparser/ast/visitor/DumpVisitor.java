@@ -139,24 +139,26 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	private void printMemberAnnotations(final List<AnnotationExpr> annotations, final Object arg) {
-		if (!isNullOrEmpty(annotations)) {
-			for (final AnnotationExpr a : annotations) {
-				a.accept(this, arg);
-				printer.printLn();
-			}
+	private void printMemberAnnotations(final NodeList<AnnotationExpr> annotations, final Object arg) {
+		if(annotations.isEmpty()){
+			return;
+		}
+		for (final AnnotationExpr a : annotations) {
+			a.accept(this, arg);
+			printer.printLn();
 		}
 	}
 
-	private void printAnnotations(final List<AnnotationExpr> annotations, boolean prefixWithASpace, final Object arg) {
-		if (!isNullOrEmpty(annotations)) {
-			if(prefixWithASpace){
-				printer.print(" ");
-			}
-			for (AnnotationExpr annotation : annotations) {
-				annotation.accept(this, arg);
-				printer.print(" ");
-			}
+	private void printAnnotations(final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace, final Object arg) {
+		if(annotations.isEmpty()){
+			return;
+		}
+		if (prefixWithASpace) {
+			printer.print(" ");
+		}
+		for (AnnotationExpr annotation : annotations) {
+			annotation.accept(this, arg);
+			printer.print(" ");
 		}
 	}
 

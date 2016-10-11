@@ -7,9 +7,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
@@ -18,9 +16,9 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
  */
 public class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
     private Expression dimension;
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-    public ArrayCreationLevel(Range range, Expression dimension, List<AnnotationExpr> annotations) {
+    public ArrayCreationLevel(Range range, Expression dimension, NodeList<AnnotationExpr> annotations) {
         super(range);
         setDimension(dimension);
         setAnnotations(annotations);
@@ -43,14 +41,13 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return dimension;
     }
 
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-    public ArrayCreationLevel setAnnotations(List<AnnotationExpr> annotations) {
+    public ArrayCreationLevel setAnnotations(NodeList<AnnotationExpr> annotations) {
         setAsParentNodeOf(annotations);
-        this.annotations = annotations;
+        this.annotations = assertNotNull(annotations);
         return this;
     }
 }

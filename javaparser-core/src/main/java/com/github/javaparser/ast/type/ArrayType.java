@@ -2,6 +2,7 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -9,8 +10,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import static com.github.javaparser.ast.NodeList.*;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -19,12 +21,12 @@ import java.util.List;
 public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnotations<ArrayType> {
     private Type componentType;
 
-    public ArrayType(Type componentType, List<AnnotationExpr> annotations) {
+    public ArrayType(Type componentType, NodeList<AnnotationExpr> annotations) {
         setComponentType(componentType);
         setAnnotations(annotations);
     }
 
-    public ArrayType(Range range, Type componentType, List<AnnotationExpr> annotations) {
+    public ArrayType(Range range, Type componentType, NodeList<AnnotationExpr> annotations) {
         super(range);
         setComponentType(componentType);
         setAnnotations(annotations);
@@ -81,6 +83,6 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
     }
     
     public static ArrayType arrayOf(Type type, AnnotationExpr... annotations) {
-        return new ArrayType(type, Arrays.asList(annotations));
+        return new ArrayType(type, nodeList(annotations));
     }
 }

@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.ArrayType;
@@ -37,6 +38,7 @@ import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import java.util.EnumSet;
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -55,7 +57,7 @@ public final class Parameter extends Node implements
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     private VariableDeclaratorId id;
 
@@ -89,8 +91,8 @@ public final class Parameter extends Node implements
     }
 
     public Parameter(final Range range, 
-                     EnumSet<Modifier> modifiers, 
-                     List<AnnotationExpr> annotations, 
+                     EnumSet<Modifier> modifiers,
+                     NodeList<AnnotationExpr> annotations,
                      Type elementType,
                      List<ArrayBracketPair> arrayBracketPairsAfterElementType,
                      boolean isVarArgs, 
@@ -142,8 +144,7 @@ public final class Parameter extends Node implements
      * @return the list returned could be immutable (in that case it will be empty)
      */
     @Override
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
@@ -183,8 +184,8 @@ public final class Parameter extends Node implements
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Parameter setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+    public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+        this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
     }

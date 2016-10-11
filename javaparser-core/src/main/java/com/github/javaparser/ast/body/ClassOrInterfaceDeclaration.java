@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
@@ -61,7 +62,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
-                                       final List<AnnotationExpr> annotations, final boolean isInterface,
+                                       final NodeList<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,
                                        final List<ClassOrInterfaceType> extendsList,
@@ -75,7 +76,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
-                                       final List<AnnotationExpr> annotations, final boolean isInterface,
+                                       final NodeList<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,
                                        final List<ClassOrInterfaceType> extendsList,
