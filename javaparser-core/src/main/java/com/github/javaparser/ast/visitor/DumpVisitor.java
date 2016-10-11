@@ -219,10 +219,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			n.getPackage().accept(this, arg);
 		}
 
-		if (!isNullOrEmpty(n.getImports())) {
-			for (final ImportDeclaration i : n.getImports()) {
-				i.accept(this, arg);
-			}
+		n.getImports().accept(this, arg);
+		if(!n.getImports().isEmpty()){
 			printer.printLn();
 		}
 

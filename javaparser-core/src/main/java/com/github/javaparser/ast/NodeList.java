@@ -1,5 +1,6 @@
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -9,6 +10,7 @@ import java.util.stream.Stream;
 
 /**
  * A node that is a list of nodes.
+ *
  * @param <N> the type of nodes contained.
  */
 public class NodeList<N extends Node> extends Node implements Iterable<N> {
@@ -29,6 +31,23 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
 
     public NodeList<N> add(N node) {
         setAsParentNodeOf(node);
+        // Expand the NodeList's range to include the new node.
+        if (getRange() == Range.UNKNOWN) {
+            setRange(node.getRange());
+        } else {
+            Position nodeBegin = node.getBegin();
+            if (nodeBegin.valid()) {
+                if(nodeBegin.isBefore(getBegin())){
+                    setBegin(nodeBegin);
+                }
+            }
+            Position nodeEnd = node.getEnd();
+            if (nodeEnd.valid()) {
+                if(nodeEnd.isAfter(getEnd())){
+                    setEnd(nodeEnd);
+                }
+            }
+        }
         innerList.add(node);
         return this;
     }
@@ -41,7 +60,7 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
 
     public static <X extends Node> NodeList<X> nodeList(X... nodes) {
         final NodeList<X> nodeList = new NodeList<>();
-        for(X node: nodes) {
+        for (X node : nodes) {
             nodeList.add(node);
         }
         return nodeList;
@@ -67,11 +86,13 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
         return innerList.stream();
     }
 
-    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
-    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 

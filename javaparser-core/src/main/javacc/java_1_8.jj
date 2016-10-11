@@ -1279,7 +1279,7 @@ TOKEN :
 CompilationUnit CompilationUnit():
 {
 	PackageDeclaration pakage = null;
-	List<ImportDeclaration> imports = null;
+	NodeList<ImportDeclaration> imports = new NodeList<ImportDeclaration>();
 	ImportDeclaration in = null;
 	List<TypeDeclaration<?>> types = null;
 	TypeDeclaration tn = null;
