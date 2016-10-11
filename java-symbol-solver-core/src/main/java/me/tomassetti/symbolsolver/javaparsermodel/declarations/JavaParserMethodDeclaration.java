@@ -126,6 +126,9 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             actualParamType = correspondingFormalType.get(0);
         }
         if (formalParamType.isReferenceType() && actualParamType.isReferenceType()) {
+            if (actualParamType.asReferenceTypeUsage().isRawType()) {
+                return;
+            }
             List<TypeUsage> formalTypeParams = formalParamType.asReferenceTypeUsage().parameters();
             List<TypeUsage> actualTypeParams = actualParamType.asReferenceTypeUsage().parameters();
             if (formalTypeParams.size() != actualTypeParams.size()) {

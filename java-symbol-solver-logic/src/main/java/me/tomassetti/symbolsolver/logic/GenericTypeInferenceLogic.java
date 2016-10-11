@@ -39,17 +39,21 @@ public class GenericTypeInferenceLogic {
             }
             map.put(formalType.asTypeParameter().getName(), actualType);
         } else if (formalType.isReferenceType()) {
-            ReferenceTypeUsage formalTypeAsReference = formalType.asReferenceTypeUsage();
             if (actualType.isReferenceType()) {
-                if (formalTypeAsReference.getQualifiedName().equals(actualType.asReferenceTypeUsage().getQualifiedName())) {
-                	int i = 0;
-	                for (TypeUsage formalTypeParameter : formalTypeAsReference.parameters()) {
-	                    if (!actualType.isReferenceType()) {
-	                        throw new UnsupportedOperationException(actualType.describe() + " " + formalTypeAsReference.describe());
-	                    }
-	                    consider(map, formalTypeParameter, actualType.asReferenceTypeUsage().parameters().get(i));
-	                    i++;
-                	}
+                ReferenceTypeUsage formalTypeAsReference = formalType.asReferenceTypeUsage();
+            	ReferenceTypeUsage actualTypeAsReference = actualType.asReferenceTypeUsage();
+                if (formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
+                    if (!formalTypeAsReference.parameters().isEmpty()) {
+                        if (actualTypeAsReference.isRawType()) {
+                            // nothing to do
+                        } else {
+                            int i = 0;
+                            for (TypeUsage formalTypeParameter : formalTypeAsReference.parameters()) {
+                                consider(map, formalTypeParameter, actualTypeAsReference.parameters().get(i));
+                                i++;
+                            }
+                        }
+                    }
                 }
                 // TODO: consider cases where the actual type extends or implements the formal type. Here the number and order of type parameters can be different.
             } else if (actualType.isTypeVariable()) {

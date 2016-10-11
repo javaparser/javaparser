@@ -291,9 +291,11 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
             return true;
         }
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
-            if (this.parameters().size() != other.parameters().size()) {
-                // one have the type not specified so they are compatible
+            if (this.isRawType() || other.isRawType()) {
                 return true;
+            }
+            if (this.parameters().size() != other.parameters().size()) {
+                throw new IllegalStateException();
             }
             for (int i = 0; i < parameters().size(); i++) {
                 TypeUsage thisParam = parameters().get(i);
@@ -346,6 +348,11 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
     }
 
     public abstract Set<MethodUsage> getDeclaredMethods();
+    
+    public boolean isRawType() {
+    	return (!typeDeclaration.getTypeParameters().isEmpty() && 
+    			typeParameters.isEmpty());
+    }
 
     public List<Tuple2<TypeParameter, TypeUsage>> getTypeParametersMap() {
         List<Tuple2<TypeParameter, TypeUsage>> typeParametersMap = new ArrayList<>();
