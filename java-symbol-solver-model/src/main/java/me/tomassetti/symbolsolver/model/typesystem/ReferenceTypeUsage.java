@@ -303,7 +303,7 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
                 if (!thisParam.equals(otherParam)) {
                     if (thisParam instanceof WildcardUsage) {
                         WildcardUsage thisParamAsWildcard = (WildcardUsage) thisParam;
-                        if (thisParamAsWildcard.isSuper() && thisParamAsWildcard.getBoundedType().equals(otherParam)) {
+                        if (thisParamAsWildcard.isSuper() && otherParam.isAssignableBy(thisParamAsWildcard.getBoundedType())) {
                             // ok
                         } else if (thisParamAsWildcard.isExtends() && thisParamAsWildcard.getBoundedType().isAssignableBy(otherParam)) {
                             // ok
