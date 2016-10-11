@@ -2,16 +2,16 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
+import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.*;
 import me.tomassetti.symbolsolver.model.typesystem.*;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
-import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +30,16 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             throw new UnsupportedOperationException(name);
         }
         TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-        return typeOfScope.asReferenceTypeUsage().getGenericParameterByName(name);
+        Optional<TypeUsage> res = typeOfScope.asReferenceTypeUsage().getGenericParameterByName(name);
+        /*if (res.isPresent()) {
+            return res;
+        } else {
+            for (Expression param : this.wrappedNode.getArgs()) {
+                System.out.println(JavaParserFacade.get(typeSolver).getType(param));
+            }
+            throw new UnsupportedOperationException();
+        }*/
+        return res;
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(ReferenceTypeUsage refType, String name,
