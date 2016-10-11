@@ -23,6 +23,7 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
@@ -128,7 +129,16 @@ class CommentsInserter {
         Comment previousComment = null;
         attributedComments = new LinkedList<>();
         List<Node> childrenAndComments = new LinkedList<>();
-        childrenAndComments.addAll(children);
+        for (Node child : children) {
+            // Avoid attributing comments to a meaningless container.
+            if (child instanceof NodeList) {
+                for (Node subChild : (NodeList<Node>) child) {
+                    childrenAndComments.add(subChild);
+                }
+            } else {
+                childrenAndComments.add(child);
+            }
+        }
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
                 configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution);

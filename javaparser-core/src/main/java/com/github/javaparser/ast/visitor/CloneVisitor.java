@@ -114,7 +114,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(CompilationUnit _n, Object _arg) {
 		PackageDeclaration package_ = cloneNodes(_n.getPackage(), _arg);
 		NodeList<ImportDeclaration> imports = (NodeList<ImportDeclaration>)_n.getImports().accept(this, _arg);
-        List<TypeDeclaration<?>> types = visit(_n.getTypes(), _arg);
+		NodeList<TypeDeclaration<?>> types = (NodeList<TypeDeclaration<?>>)_n.getTypes().accept(this, _arg);
 
 		return new CompilationUnit(
 				_n.getRange(),

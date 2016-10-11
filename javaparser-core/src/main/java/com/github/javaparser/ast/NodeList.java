@@ -52,10 +52,10 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
         return this;
     }
 
-    public NodeList<N> remove(N node) {
-        innerList.remove(node);
+    public boolean remove(Node node) {
+        boolean remove = innerList.remove(node);
         node.setParentNode(null);
-        return this;
+        return remove;
     }
 
     public static <X extends Node> NodeList<X> nodeList(X... nodes) {
@@ -68,13 +68,17 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
 
     public static <X extends Node> NodeList<X> nodeList(Collection<X> nodes) {
         final NodeList<X> nodeList = new NodeList<>();
-        nodeList.innerList.addAll(nodes);
+        for (X node : nodes) {
+            nodeList.add(node);
+        }
         return nodeList;
     }
 
     public static <X extends Node> NodeList<X> nodeList(NodeList<X> nodes) {
         final NodeList<X> nodeList = new NodeList<>();
-        nodeList.innerList.addAll(nodes.innerList);
+        for (X node : nodes) {
+            nodeList.add(node);
+        }
         return nodeList;
     }
 
@@ -129,11 +133,13 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
         Collections.sort(innerList, comparator);
     }
 
-    public void addAll(NodeList<N> annotations) {
-        innerList.addAll(annotations.innerList);
+    public void addAll(NodeList<N> otherList) {
+        for (N node : otherList) {
+            add(node);
+        }
     }
 
     public static <X extends Node> NodeList<X> emptyNodeList() {
-        return new NodeList<X>();
+        return new NodeList<>();
     }
 }

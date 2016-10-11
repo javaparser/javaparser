@@ -416,6 +416,7 @@ public abstract class Node implements Cloneable {
      * @throws RuntimeException if it fails in an unexpected way
      */
     public boolean remove() {
+        Node parentNode = this.parentNode;
         if (parentNode == null)
             return false;
         boolean success = false;
@@ -431,6 +432,9 @@ public abstract class Node implements Cloneable {
                         Collection<?> l = (Collection<?>) object;
                         boolean remove = l.remove(this);
                         success |= remove;
+                    } else if (NodeList.class.isAssignableFrom(object.getClass())) {
+                        NodeList<Node> l = (NodeList<Node>) object;
+                        success |= l.remove(this);
                     } else if (Optional.class.equals(f.getType())) {
                         Optional<?> opt = (Optional<?>) object;
                         if (opt.isPresent())

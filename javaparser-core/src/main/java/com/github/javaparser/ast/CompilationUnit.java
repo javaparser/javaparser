@@ -35,6 +35,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
@@ -62,19 +63,19 @@ public final class CompilationUnit extends Node {
 
     private NodeList<ImportDeclaration> imports = new NodeList<>();
 
-    private List<TypeDeclaration<?>> types;
+    private NodeList<TypeDeclaration<?>> types = emptyNodeList();
 
     public CompilationUnit() {
     }
 
-    public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
+    public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
         setPackage(pakage);
         setImports(imports);
         setTypes(types);
     }
 
     public CompilationUnit(Range range, PackageDeclaration pakage, NodeList<ImportDeclaration> imports,
-                           List<TypeDeclaration<?>> types) {
+                           NodeList<TypeDeclaration<?>> types) {
         super(range);
         setPackage(pakage);
         setImports(imports);
@@ -138,8 +139,7 @@ public final class CompilationUnit extends Node {
      * @see EmptyTypeDeclaration
      * @see EnumDeclaration
      */
-    public List<TypeDeclaration<?>> getTypes() {
-        types = ensureNotNull(types);
+    public NodeList<TypeDeclaration<?>> getTypes() {
         return types;
     }
 
@@ -185,8 +185,8 @@ public final class CompilationUnit extends Node {
      * @param types
      *            the lis of types
      */
-    public CompilationUnit setTypes(List<TypeDeclaration<?>> types) {
-        this.types = types;
+    public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
+        this.types = assertNotNull(types);
         setAsParentNodeOf(this.types);
         return this;
     }

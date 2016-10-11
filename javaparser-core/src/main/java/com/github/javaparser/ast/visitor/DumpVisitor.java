@@ -224,13 +224,11 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			printer.printLn();
 		}
 
-		if (!isNullOrEmpty(n.getTypes())) {
-			for (final Iterator<TypeDeclaration<?>> i = n.getTypes().iterator(); i.hasNext(); ) {
-				i.next().accept(this, arg);
+		for (final Iterator<TypeDeclaration<?>> i = n.getTypes().iterator(); i.hasNext(); ) {
+			i.next().accept(this, arg);
+			printer.printLn();
+			if (i.hasNext()) {
 				printer.printLn();
-				if (i.hasNext()) {
-					printer.printLn();
-				}
 			}
 		}
 

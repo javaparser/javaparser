@@ -286,13 +286,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			n.setPackage((PackageDeclaration) n.getPackage().accept(this, arg));
 		}
 		n.setImports((NodeList<ImportDeclaration> )n.getImports().accept(this, arg));
-        final List<TypeDeclaration<?>> types = n.getTypes();
-		if (types != null) {
-			for (int i = 0; i < types.size(); i++) {
-                types.set(i, (TypeDeclaration<?>) types.get(i).accept(this, arg));
-			}
-			removeNulls(types);
-		}
+		n.setTypes((NodeList<TypeDeclaration<?>> )n.getTypes().accept(this, arg));
 		return n;
 	}
 
