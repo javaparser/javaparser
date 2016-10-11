@@ -21,6 +21,7 @@
  
 package com.github.javaparser.bdd.steps;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,11 +29,11 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
@@ -40,10 +41,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -139,7 +136,7 @@ public class ManipulationSteps {
     public void whenAClassCalledIsAddedToTheCompilationUnit(String className) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
 		TypeDeclaration<?> type = new ClassOrInterfaceDeclaration(EnumSet.of(Modifier.PUBLIC), false, "CreateClass");
-        compilationUnit.setTypes(Arrays.asList(type));
+        compilationUnit.setTypes(nodeList(type));
         state.put("cu1", compilationUnit);
     }
 

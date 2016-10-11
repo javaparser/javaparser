@@ -21,8 +21,9 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
-import static java.util.Collections.*;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
@@ -52,11 +54,11 @@ public final class VariableDeclarationExpr extends Expression implements
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     private Type elementType;
 
-    private List<VariableDeclarator> variables;
+    private NodeList<VariableDeclarator> variables;
 
     private List<ArrayBracketPair> arrayBracketPairsAfterType;
 
@@ -65,44 +67,45 @@ public final class VariableDeclarationExpr extends Expression implements
 
     public VariableDeclarationExpr(final Type elementType, String variableName) {
         setElementType(elementType);
-        setVariables(singletonList(new VariableDeclarator(variableName)));
+        setVariables(nodeList(new VariableDeclarator(variableName)));
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var) {
         setElementType(elementType);
-        setVariables(singletonList(var));
+        setVariables(nodeList(var));
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName, Modifier... modifiers) {
         setElementType(elementType);
-        setVariables(singletonList(new VariableDeclarator(variableName)));
+        setVariables(nodeList(new VariableDeclarator(variableName)));
         setModifiers(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var, Modifier... modifiers) {
         setElementType(elementType);
-        setVariables(singletonList(var));
+        setVariables(nodeList(var));
         setModifiers(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
     }
 
-    public VariableDeclarationExpr(final Type elementType, final List<VariableDeclarator> variables) {
+    public VariableDeclarationExpr(final Type elementType, final NodeList<VariableDeclarator> variables) {
         setElementType(elementType);
         setVariables(variables);
     }
 
     public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type elementType,
-                                   final List<VariableDeclarator> variables) {
+                                   final NodeList<VariableDeclarator> variables) {
         setModifiers(modifiers);
         setElementType(elementType);
         setVariables(variables);
     }
 
     public VariableDeclarationExpr(final Range range,
-                                   final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
+                                   final EnumSet<Modifier> modifiers,
+                                   final NodeList<AnnotationExpr> annotations,
                                    final Type elementType,
-                                   final List<VariableDeclarator> variables,
+                                   final NodeList<VariableDeclarator> variables,
                                    final List<ArrayBracketPair> arrayBracketPairsAfterType) {
         super(range);
         setModifiers(modifiers);
@@ -132,8 +135,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
@@ -154,14 +156,13 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public List<VariableDeclarator> getVariables() {
-        variables = ensureNotNull(variables);
+    public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }
 
     @Override
-    public VariableDeclarationExpr setAnnotations(final List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+    public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
     }
@@ -180,7 +181,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public VariableDeclarationExpr setVariables(final List<VariableDeclarator> variables) {
+    public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
         return this;

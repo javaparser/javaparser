@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -68,7 +69,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         setName(name);
     }
 
-    public ConstructorDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                                   List<TypeParameter> typeParameters,
                                   String name, List<Parameter> parameters, List<ReferenceType> throws_,
                                   BlockStmt block) {
@@ -82,7 +83,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
-                                  List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
+                                  NodeList<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         super(range, annotations);
         setModifiers(modifiers);

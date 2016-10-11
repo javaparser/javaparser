@@ -22,7 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -48,7 +49,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
 	private String name;
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
 	private List<ClassOrInterfaceType> typeBound;
 
@@ -66,7 +67,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 		setTypeBound(typeBound);
 	}
 
-	public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
+	public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
 		this(range, name, typeBound);
 		setTypeBound(typeBound);
 		setAnnotations(annotations);
@@ -125,13 +126,14 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 		return this;
 	}
 
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+	@Override
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-    public TypeParameter setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+	@Override
+    public TypeParameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+		this.annotations = assertNotNull(annotations);
 	    setAsParentNodeOf(this.annotations);
 		return this;
     }

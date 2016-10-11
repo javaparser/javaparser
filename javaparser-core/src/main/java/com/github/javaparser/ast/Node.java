@@ -38,6 +38,8 @@ import com.github.javaparser.ast.visitor.*;
 
 import java.util.*;
 
+import static java.util.Collections.*;
+
 /**
  * Abstract class for all nodes of the AST.
  *
@@ -241,12 +243,19 @@ public abstract class Node implements Cloneable {
         return null;
     }
 
+    /**
+     * Contains all nodes that have this node set as their parent.
+     * You can add nodes to it by setting a node's parent to this node.
+     * You can remove nodes from it by setting a child node's parent to something other than this node.
+     *
+     * @return all nodes that have this node as their parent.
+     */
     public List<Node> getChildrenNodes() {
-        return childrenNodes;
+        return unmodifiableList(childrenNodes);
     }
 
-    public boolean contains(Node other) {
-        return range.contains(other.range);
+    public <N extends Node> boolean containsWithin(N other) {
+        return range.contains(other.getRange());
     }
 
     public void addOrphanComment(Comment comment) {
@@ -407,6 +416,7 @@ public abstract class Node implements Cloneable {
      * @throws RuntimeException if it fails in an unexpected way
      */
     public boolean remove() {
+        Node parentNode = this.parentNode;
         if (parentNode == null)
             return false;
         boolean success = false;
@@ -422,6 +432,9 @@ public abstract class Node implements Cloneable {
                         Collection<?> l = (Collection<?>) object;
                         boolean remove = l.remove(this);
                         success |= remove;
+                    } else if (NodeList.class.isAssignableFrom(object.getClass())) {
+                        NodeList<Node> l = (NodeList<Node>) object;
+                        success |= l.remove(this);
                     } else if (Optional.class.equals(f.getType())) {
                         Optional<?> opt = (Optional<?>) object;
                         if (opt.isPresent())

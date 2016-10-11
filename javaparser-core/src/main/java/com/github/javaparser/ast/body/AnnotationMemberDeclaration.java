@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -35,13 +36,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
-import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration>
-        implements NodeWithJavaDoc<AnnotationMemberDeclaration>, NodeWithName<AnnotationMemberDeclaration>,
+public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavaDoc<AnnotationMemberDeclaration>, NodeWithName<AnnotationMemberDeclaration>,
         NodeWithType<AnnotationMemberDeclaration>, NodeWithModifiers<AnnotationMemberDeclaration> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
@@ -62,7 +61,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type, String name,
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, String name,
                                        Expression defaultValue) {
         super(annotations);
         setModifiers(modifiers);
@@ -71,7 +70,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+    public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type,
                                        String name, Expression defaultValue) {
         super(range, annotations);
         setModifiers(modifiers);

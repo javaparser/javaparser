@@ -54,6 +54,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
+import static com.github.javaparser.utils.Utils.*;
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ASTParser.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
@@ -79,6 +81,14 @@ final class ASTParser {
     	return list;
     }
 
+    private <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
+    	if (list == null) {
+    		list = new NodeList<T>();
+    	}
+    	list.add(obj);
+    	return list;
+    }
+
     private <T> List<T> add(int pos, List<T> list, T obj) {
     	if (list == null) {
     		list = new LinkedList<T>();
@@ -89,12 +99,12 @@ final class ASTParser {
 
 	private class ModifierHolder {
 		final EnumSet<Modifier> modifiers;
-		final List<AnnotationExpr> annotations;
+		final NodeList<AnnotationExpr> annotations;
 		final Position begin;
 
-		public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations) {
+		public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations) {
 			this.begin = begin;
-			this.modifiers = modifiers;
+			this.modifiers = assertNotNull(modifiers);
 			this.annotations = annotations;
 		}
 	}
@@ -139,14 +149,14 @@ final class ASTParser {
 	        Expression inner = ((EnclosedExpr) ret).getInner();
 	        if (inner != null && inner instanceof NameExpr) {
 	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), null);
-	       	    List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
+	       	    List<Parameter> params = add(new LinkedList<Parameter>(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), new NodeList<AnnotationExpr>(), new UnknownType(), null, false, id));
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
 	        } else {
 	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
 	        }
 	    } else if (ret instanceof NameExpr) {
 		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), null);
-	        List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
+	        List<Parameter> params = add(new LinkedList<Parameter>(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), new NodeList<AnnotationExpr>(), new UnknownType(), null, false, id));
 	        ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
 	    } else if (ret instanceof LambdaExpr) {
 	        ((LambdaExpr) ret).setBody(lambdaBody);
@@ -161,7 +171,7 @@ final class ASTParser {
 	    return ret;
     }
     
-    private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<List<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
+    private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
         List<ArrayCreationLevel> levels = new ArrayList<ArrayCreationLevel>();
         
         for(int i = 0; i < arrayAnnotations.size(); i++){
@@ -291,7 +301,7 @@ TOKEN_MGR_DECLS :
                     commentText = commentText.substring(0, commentText.length() - 1);
                 }
                 range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-                LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
+                LineComment comment = new LineComment(range, commentText.substring(2));
                 commentsCollection.addComment(comment);
             } else {
                 throw new AssertionError("Didn't expect to get here. Please file a bug report. [" + commentText + "]");
@@ -1269,9 +1279,9 @@ TOKEN :
 CompilationUnit CompilationUnit():
 {
 	PackageDeclaration pakage = null;
-	List<ImportDeclaration> imports = null;
+	NodeList<ImportDeclaration> imports = emptyNodeList();
 	ImportDeclaration in = null;
-	List<TypeDeclaration<?>> types = null;
+	NodeList<TypeDeclaration<?>> types = emptyNodeList();
 	TypeDeclaration tn = null;
 	Position begin = INVALID;
 }
@@ -1285,7 +1295,7 @@ CompilationUnit CompilationUnit():
 
 PackageDeclaration PackageDeclaration():
 {
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	NameExpr name;
 	Position begin;
 }
@@ -1327,7 +1337,7 @@ ModifierHolder Modifiers():
 {
 	Position begin = INVALID;
     EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
-    List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     AnnotationExpr ann;
 }
 {
@@ -1481,7 +1491,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 
 EnumConstantDeclaration EnumConstantDeclaration():
 {
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	AnnotationExpr ann;
 	String name;
 	List<Expression> args = null;
@@ -1507,7 +1517,7 @@ RangedList<TypeParameter> TypeParameters():
 {
 	RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new LinkedList<TypeParameter>());
 	TypeParameter tp;
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
    "<" { ret.beginAt(tokenBegin()); }
@@ -1623,7 +1633,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 {
 	Type type;
-	List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
+	NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
 	VariableDeclarator val;
 }
 {
@@ -1714,7 +1724,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 
 ReferenceType ReferenceTypeWithAnnotations():
 {
-	List<AnnotationExpr> annotations;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	ReferenceType type;
 }
 {
@@ -1760,7 +1770,7 @@ List<Parameter> InferredLambdaParameters():
 }
 {
    ","
-  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));}
+  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), null, false, id));}
   (
     "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id)); }
   )*
@@ -1900,7 +1910,7 @@ ReferenceType ReferenceType():
 
 ArrayBracketPair ArrayBracketPair():
 {
-    List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     Position begin = INVALID;
 }
 {
@@ -1923,7 +1933,7 @@ IntersectionType IntersectionType():
 
 ClassOrInterfaceType AnnotatedClassOrInterfaceType():
 {
-	List<AnnotationExpr> annotations;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	ClassOrInterfaceType cit;
 }
 {
@@ -1945,7 +1955,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 	String name;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Position begin;
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
   <IDENTIFIER> {begin=tokenBegin();} { name = token.image; }
@@ -1982,7 +1992,7 @@ RangedList<Type<?>> TypeArguments():
 Type TypeArgument():
 {
 	Type ret;
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
  annotations = Annotations() 
@@ -1999,7 +2009,7 @@ WildcardType Wildcard():
 	ReferenceType ext = null;
 	ReferenceType sup = null;
 	Position begin;
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
    "?" {begin=tokenBegin();}
@@ -2409,7 +2419,7 @@ Expression CastExpression():
 	ReferenceType referenceType;
 	PrimitiveType primitiveType;
 	Position begin = INVALID;
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	List<ReferenceType> typesOfMultiCast = null;
 }
 {
@@ -2512,7 +2522,7 @@ Expression PrimaryPrefix():
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
 	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), null);
-	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id);
+	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), null, false, id);
 	  		  		  }
 
 	  		  		}
@@ -2683,7 +2693,7 @@ Expression AllocationExpression(Expression scope):
 	List<BodyDeclaration<?>> anonymousBody = null;
 	List<Expression> args;
 	Position begin;
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
   "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin();} }
@@ -2714,8 +2724,8 @@ ArrayCreationExpr ArrayCreation(Position begin, Type type):
 	Expression expr = null;
 	ArrayInitializerExpr arrayInitializerExpr = null;
 	List<Expression> inits = null;
-	List<List<AnnotationExpr>> accum = null;
-	List<AnnotationExpr> annotations = null;
+	List<NodeList<AnnotationExpr>> accum = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 { 
     (
@@ -2841,7 +2851,7 @@ VariableDeclarationExpr VariableDeclarationExpression():
 {
 	ModifierHolder modifier;
 	Type type;
-	List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
+	NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
 	VariableDeclarator var;
 }
 {
@@ -3221,9 +3231,9 @@ void RSIGNEDSHIFT():
 
 /* Annotation syntax follows. */
 
-List<AnnotationExpr> Annotations():
+NodeList<AnnotationExpr> Annotations():
 {
-	List<AnnotationExpr> annotations = null;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	AnnotationExpr annotation;
 }
 {

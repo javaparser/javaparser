@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -30,7 +31,7 @@ public class MethodChanger_2 {
     }
 
     private static void changeMethods(CompilationUnit cu) {
-		List<TypeDeclaration<?>> types = cu.getTypes();
+		NodeList<TypeDeclaration<?>> types = cu.getTypes();
 		for (TypeDeclaration<?> type : types) {
 			List<BodyDeclaration<?>> members = type.getMembers();
 			for (BodyDeclaration<?> member : members) {

@@ -27,18 +27,14 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -59,7 +55,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         setName(name);
     }
 
-    public EnumConstantDeclaration(List<AnnotationExpr> annotations, String name, List<Expression> args,
+    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, String name, List<Expression> args,
                                    List<BodyDeclaration<?>> classBody) {
         super(annotations);
         setName(name);
@@ -67,7 +63,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         setClassBody(classBody);
     }
 
-    public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> args,
+    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, String name, List<Expression> args,
                                    List<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);

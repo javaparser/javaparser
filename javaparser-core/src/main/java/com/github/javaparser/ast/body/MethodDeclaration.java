@@ -32,12 +32,12 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
@@ -102,7 +102,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, 
-                             final List<AnnotationExpr> annotations,
+                             final NodeList<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, 
                              final Type elementType,
                              final List<ArrayBracketPair> arrayBracketPairsAfterElementType,
@@ -125,7 +125,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     public MethodDeclaration(Range range,
                              final EnumSet<Modifier> modifiers, 
-                             final List<AnnotationExpr> annotations,
+                             final NodeList<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, 
                              final Type elementType,
                              final List<ArrayBracketPair> arrayBracketPairsAfterElementType,

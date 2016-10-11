@@ -24,17 +24,16 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
-import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
-import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -55,7 +54,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     public CatchClause(final Range range,
                        final EnumSet<Modifier> exceptModifier, 
-                       final List<AnnotationExpr> exceptAnnotations,
+                       final NodeList<AnnotationExpr> exceptAnnotations,
                        final Type exceptType,
                        final VariableDeclaratorId exceptId, 
                        final BlockStmt catchBlock) {

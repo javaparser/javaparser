@@ -23,9 +23,11 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
+import com.github.javaparser.utils.Utils;
 
 import java.util.*;
 
@@ -60,13 +62,13 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        List<Node> children = cu.getChildrenNodes();
+        List<Node> children = Utils.copyList(cu.getChildrenNodes());
         PositionUtils.sortByBeginPosition(children);
 
         Comment firstComment = comments.iterator().next();
         if (cu.getPackage() != null
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                firstComment, children.get(0)))) {
+                firstComment, cu.getPackage()))) {
             cu.setComment(firstComment);
             comments.remove(firstComment);
         }
@@ -92,7 +94,7 @@ class CommentsInserter {
         // if they preceed a child they are assigned to it, otherweise they
         // remain "orphans"
 
-        List<Node> children = node.getChildrenNodes();
+        List<Node> children = Utils.copyList(node.getChildrenNodes());
         PositionUtils.sortByBeginPosition(children);
 
         for (Node child : children) {
@@ -127,7 +129,16 @@ class CommentsInserter {
         Comment previousComment = null;
         attributedComments = new LinkedList<>();
         List<Node> childrenAndComments = new LinkedList<>();
-        childrenAndComments.addAll(children);
+        for (Node child : children) {
+            // Avoid attributing comments to a meaningless container.
+            if (child instanceof NodeList) {
+                for (Node subChild : (NodeList<Node>) child) {
+                    childrenAndComments.add(subChild);
+                }
+            } else {
+                childrenAndComments.add(child);
+            }
+        }
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
                 configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution);

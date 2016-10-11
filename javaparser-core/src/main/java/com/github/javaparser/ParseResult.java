@@ -36,7 +36,16 @@ public class ParseResult<T> {
      * Used when parsing failed completely with an exception.
      */
     ParseResult(Throwable throwable) {
-        this(Optional.empty(), singletonList(new Problem(throwable.getMessage(), Optional.empty(), Optional.of(throwable))), Optional.empty(), Optional.empty());
+        this(Optional.empty(), singletonList(
+                new Problem(createMessage(throwable), Optional.empty(), Optional.of(throwable))), Optional.empty(), Optional.empty());
+    }
+
+    private static String createMessage(Throwable throwable) {
+        String message = throwable.getMessage();
+        if (message == null) {
+            return throwable.getClass().getSimpleName();
+        }
+        return message;
     }
 
     /**

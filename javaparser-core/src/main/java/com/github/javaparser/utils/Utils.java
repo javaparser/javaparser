@@ -104,4 +104,12 @@ public class Utils {
 		return list;
 	}
 
+	public static <T> List<T> copyList(List<T> originalList) {
+		if (originalList == null) {
+			return null;
+		}
+		final List<T> newList = new ArrayList<>();
+		newList.addAll(originalList);
+		return newList;
+	}
 }

@@ -24,9 +24,9 @@ package com.github.javaparser.ast.nodeTypes;
 import static com.github.javaparser.ast.expr.NameExpr.name;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
@@ -39,9 +39,9 @@ import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
  * @since July 2014
  */
 public interface NodeWithAnnotations<T> {
-    List<AnnotationExpr> getAnnotations();
+    NodeList<AnnotationExpr> getAnnotations();
 
-    T setAnnotations(List<AnnotationExpr> annotations);
+    T setAnnotations(NodeList<AnnotationExpr> annotations);
 
     /**
      * Annotates this

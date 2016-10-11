@@ -26,7 +26,6 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.imports.*;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.ClassUtils;
@@ -36,7 +35,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.name;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -60,21 +61,21 @@ public final class CompilationUnit extends Node {
 
     private PackageDeclaration pakage;
 
-    private List<ImportDeclaration> imports;
+    private NodeList<ImportDeclaration> imports = new NodeList<>();
 
-    private List<TypeDeclaration<?>> types;
+    private NodeList<TypeDeclaration<?>> types = emptyNodeList();
 
     public CompilationUnit() {
     }
 
-    public CompilationUnit(PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
+    public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
         setPackage(pakage);
         setImports(imports);
         setTypes(types);
     }
 
-    public CompilationUnit(Range range, PackageDeclaration pakage, List<ImportDeclaration> imports,
-                           List<TypeDeclaration<?>> types) {
+    public CompilationUnit(Range range, PackageDeclaration pakage, NodeList<ImportDeclaration> imports,
+                           NodeList<TypeDeclaration<?>> types) {
         super(range);
         setPackage(pakage);
         setImports(imports);
@@ -113,8 +114,7 @@ public final class CompilationUnit extends Node {
      * 
      * @return the list of imports or <code>null</code> if there is no import
      */
-    public List<ImportDeclaration> getImports() {
-        imports = ensureNotNull(imports);
+    public NodeList<ImportDeclaration> getImports() {
         return imports;
     }
 
@@ -139,8 +139,7 @@ public final class CompilationUnit extends Node {
      * @see EmptyTypeDeclaration
      * @see EnumDeclaration
      */
-    public List<TypeDeclaration<?>> getTypes() {
-        types = ensureNotNull(types);
+    public NodeList<TypeDeclaration<?>> getTypes() {
         return types;
     }
 
@@ -161,8 +160,8 @@ public final class CompilationUnit extends Node {
      * @param imports
      *            the list of imports
      */
-    public CompilationUnit setImports(List<ImportDeclaration> imports) {
-        this.imports = imports;
+    public CompilationUnit setImports(NodeList<ImportDeclaration> imports) {
+        this.imports = assertNotNull(imports);
         setAsParentNodeOf(this.imports);
         return this;
     }
@@ -186,8 +185,8 @@ public final class CompilationUnit extends Node {
      * @param types
      *            the lis of types
      */
-    public CompilationUnit setTypes(List<TypeDeclaration<?>> types) {
-        this.types = types;
+    public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
+        this.types = assertNotNull(types);
         setAsParentNodeOf(this.types);
         return this;
     }

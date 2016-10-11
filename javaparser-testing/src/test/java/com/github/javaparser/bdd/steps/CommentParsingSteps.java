@@ -92,7 +92,8 @@ public class CommentParsingSteps {
 
     @When("the class is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() {
-        compilationUnit = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest)).getResult().get();
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest));
+        compilationUnit = result.getResult().get();
     }
 
     @Then("the Java parser cannot parse it because of an error")

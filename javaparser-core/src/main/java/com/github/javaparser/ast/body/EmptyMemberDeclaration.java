@@ -27,6 +27,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.ast.NodeList.*;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -34,11 +36,11 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
         implements NodeWithJavaDoc<EmptyMemberDeclaration> {
 
     public EmptyMemberDeclaration() {
-        super(null);
+        super(emptyNodeList());
     }
 
     public EmptyMemberDeclaration(Range range) {
-        super(range, null);
+        super(range, emptyNodeList());
     }
 
     @Override

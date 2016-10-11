@@ -25,11 +25,10 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <p>
@@ -46,7 +45,7 @@ import java.util.List;
  */
 public final class PackageDeclaration extends Node implements NodeWithAnnotations<PackageDeclaration> {
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     private NameExpr name;
 
@@ -57,12 +56,12 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
         setName(name);
     }
 
-    public PackageDeclaration(List<AnnotationExpr> annotations, NameExpr name) {
+    public PackageDeclaration(NodeList<AnnotationExpr> annotations, NameExpr name) {
         setAnnotations(annotations);
         setName(name);
     }
 
-    public PackageDeclaration(Range range, List<AnnotationExpr> annotations, NameExpr name) {
+    public PackageDeclaration(Range range, NodeList<AnnotationExpr> annotations, NameExpr name) {
         super(range);
         setAnnotations(annotations);
         setName(name);
@@ -84,8 +83,7 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
      * 
      * @return list of annotations or <code>null</code>
      */
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = Utils.ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
@@ -109,8 +107,8 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
      * @param annotations
      *            the annotations to set
      */
-    public PackageDeclaration setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+    public PackageDeclaration setAnnotations(NodeList<AnnotationExpr> annotations) {
+        this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
     }

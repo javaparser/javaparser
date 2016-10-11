@@ -27,6 +27,8 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -70,6 +72,18 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		}
 		for (int i = 0; i < nodes1.size(); i++) {
 			if (!nodeEquals(nodes1.get(i), nodes2.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public <N extends Node> boolean nodesEquals(NodeList<N> n1, NodeList<N> n2) {
+		if (n1.size() != n2.size()) {
+			return false;
+		}
+		for (int i = 0; i < n1.size(); i++) {
+			if (!nodeEquals(n1.get(i), n2.get(i))) {
 				return false;
 			}
 		}
@@ -1435,7 +1449,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return true;
 	}
 
-	@Override
+    @Override
 	public Boolean visit(EmptyImportDeclaration n1, Node arg) {
 		return true;
 	}
@@ -1482,6 +1496,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
             return false;
         }
 
-        return true;
+		return true;
+	}
+
+    @Override
+    public Boolean visit(NodeList n, Node arg) {
+        return nodesEquals((NodeList<Node>) n, (NodeList<Node>) arg);
     }
 }

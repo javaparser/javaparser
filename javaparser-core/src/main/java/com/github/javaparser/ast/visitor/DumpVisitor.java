@@ -139,24 +139,26 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	private void printMemberAnnotations(final List<AnnotationExpr> annotations, final Object arg) {
-		if (!isNullOrEmpty(annotations)) {
-			for (final AnnotationExpr a : annotations) {
-				a.accept(this, arg);
-				printer.printLn();
-			}
+	private void printMemberAnnotations(final NodeList<AnnotationExpr> annotations, final Object arg) {
+		if(annotations.isEmpty()){
+			return;
+		}
+		for (final AnnotationExpr a : annotations) {
+			a.accept(this, arg);
+			printer.printLn();
 		}
 	}
 
-	private void printAnnotations(final List<AnnotationExpr> annotations, boolean prefixWithASpace, final Object arg) {
-		if (!isNullOrEmpty(annotations)) {
-			if(prefixWithASpace){
-				printer.print(" ");
-			}
-			for (AnnotationExpr annotation : annotations) {
-				annotation.accept(this, arg);
-				printer.print(" ");
-			}
+	private void printAnnotations(final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace, final Object arg) {
+		if(annotations.isEmpty()){
+			return;
+		}
+		if (prefixWithASpace) {
+			printer.print(" ");
+		}
+		for (AnnotationExpr annotation : annotations) {
+			annotation.accept(this, arg);
+			printer.print(" ");
 		}
 	}
 
@@ -217,20 +219,16 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			n.getPackage().accept(this, arg);
 		}
 
-		if (!isNullOrEmpty(n.getImports())) {
-			for (final ImportDeclaration i : n.getImports()) {
-				i.accept(this, arg);
-			}
+		n.getImports().accept(this, arg);
+		if(!n.getImports().isEmpty()){
 			printer.printLn();
 		}
 
-		if (!isNullOrEmpty(n.getTypes())) {
-			for (final Iterator<TypeDeclaration<?>> i = n.getTypes().iterator(); i.hasNext(); ) {
-				i.next().accept(this, arg);
+		for (final Iterator<TypeDeclaration<?>> i = n.getTypes().iterator(); i.hasNext(); ) {
+			i.next().accept(this, arg);
+			printer.printLn();
+			if (i.hasNext()) {
 				printer.printLn();
-				if (i.hasNext()) {
-					printer.printLn();
-				}
 			}
 		}
 
@@ -1575,6 +1573,13 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(ArrayBracketPair arrayBracketPair, Object arg) {
 		printAnnotations(arrayBracketPair.getAnnotations(), true, arg);
 		printer.print("[]");
+	}
+
+	@Override
+	public void visit(NodeList n, Object arg) {
+		for(Object node: n){
+            ((Node)node).accept(this, arg);
+		}
 	}
 
 	@Override

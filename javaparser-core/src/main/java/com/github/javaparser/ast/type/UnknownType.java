@@ -21,6 +21,7 @@
  
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -50,12 +51,12 @@ public final class UnknownType extends Type<UnknownType> {
     }
 
     @Override
-    public List<AnnotationExpr> getAnnotations() {
+    public NodeList<AnnotationExpr> getAnnotations() {
         throw new IllegalStateException("Inferred lambda types cannot be annotated.");
     }
 
     @Override
-    public UnknownType setAnnotations(List<AnnotationExpr> annotations) {
+    public UnknownType setAnnotations(NodeList<AnnotationExpr> annotations) {
         throw new IllegalStateException("Inferred lambda types cannot be annotated.");
     }
 

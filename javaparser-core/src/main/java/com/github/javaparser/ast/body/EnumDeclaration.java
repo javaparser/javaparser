@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -51,7 +52,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
         super(modifiers, name);
     }
 
-    public EnumDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+    public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
                            List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
@@ -59,7 +60,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
         setEntries(entries);
     }
 
-    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
                            List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
