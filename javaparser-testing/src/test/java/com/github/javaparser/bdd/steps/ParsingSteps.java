@@ -172,7 +172,7 @@ public class ParsingSteps {
     public void thenLambdaInStatementInMethodInClassBlockStatementIsNull(int statementPosition, int methodPosition, int classPosition) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
-        assertThat(blockStmt.getStmts(), is(empty()));
+        assertEquals(true, blockStmt.getStmts().isEmpty());
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition has parameters with non-null type")

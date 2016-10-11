@@ -61,7 +61,7 @@ public final class CompilationUnit extends Node {
 
     private PackageDeclaration pakage;
 
-    private NodeList<ImportDeclaration> imports = new NodeList<>();
+    private NodeList<ImportDeclaration> imports = emptyNodeList();
 
     private NodeList<TypeDeclaration<?>> types = emptyNodeList();
 

@@ -2,6 +2,7 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -30,6 +31,12 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
     }
 
     public NodeList<N> add(N node) {
+        own(node);
+        innerList.add(node);
+        return this;
+    }
+
+    private void own(N node) {
         setAsParentNodeOf(node);
         // Expand the NodeList's range to include the new node.
         if (getRange() == Range.UNKNOWN) {
@@ -48,8 +55,6 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
                 }
             }
         }
-        innerList.add(node);
-        return this;
     }
 
     public boolean remove(Node node) {
@@ -141,5 +146,11 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
 
     public static <X extends Node> NodeList<X> emptyNodeList() {
         return new NodeList<>();
+    }
+
+    public NodeList<N> add(int index, N node) {
+        own(node);
+        innerList.add(index, node);
+        return this;
     }
 }

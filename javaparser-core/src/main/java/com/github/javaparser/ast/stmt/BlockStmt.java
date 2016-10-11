@@ -21,11 +21,14 @@
 
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -35,16 +38,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
 
-    private List<Statement> stmts;
+    private NodeList<Statement> stmts = emptyNodeList();
 
     public BlockStmt() {
     }
 
-    public BlockStmt(final List<Statement> stmts) {
+    public BlockStmt(final NodeList<Statement> stmts) {
         setStmts(stmts);
     }
 
-    public BlockStmt(final Range range, final List<Statement> stmts) {
+    public BlockStmt(final Range range, final NodeList<Statement> stmts) {
         super(range);
         setStmts(stmts);
     }
@@ -60,14 +63,13 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
-    public List<Statement> getStmts() {
-        stmts = ensureNotNull(stmts);
+    public NodeList<Statement> getStmts() {
         return stmts;
     }
 
     @Override
-    public BlockStmt setStmts(final List<Statement> stmts) {
-        this.stmts = stmts;
+    public BlockStmt setStmts(final NodeList<Statement> stmts) {
+        this.stmts = assertNotNull(stmts);
         setAsParentNodeOf(this.stmts);
         return this;
     }

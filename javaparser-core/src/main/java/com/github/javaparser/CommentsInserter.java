@@ -115,6 +115,9 @@ class CommentsInserter {
         for (Comment comment : commentsToAttribute) {
             if (comment.isLineComment()) {
                 for (Node child : children) {
+                    if(child instanceof NodeList) {
+                        continue;
+                    }
                     if (child.getEnd().line == comment.getBegin().line
                         && attributeLineCommentToNodeOrChild(child,
                                 comment.asLineComment())) {

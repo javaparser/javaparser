@@ -983,7 +983,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(BlockStmt _n, Object _arg) {
-		List<Statement> stmts = visit(_n.getStmts(), _arg);
+		NodeList<Statement> stmts = (NodeList<Statement>)_n.getStmts().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		BlockStmt r = new BlockStmt(
@@ -1046,7 +1046,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(SwitchEntryStmt _n, Object _arg) {
 		Expression label = cloneNodes(_n.getLabel(), _arg);
-		List<Statement> stmts = visit(_n.getStmts(), _arg);
+		NodeList<Statement> stmts = (NodeList<Statement>)_n.getStmts().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		SwitchEntryStmt r = new SwitchEntryStmt(

@@ -97,6 +97,14 @@ final class ASTParser {
     	return list;
     }
 
+    private <T extends Node> NodeList<T> add(int pos, NodeList<T> list, T obj) {
+    	if (list == null) {
+    		list = new NodeList<T>();
+    	}
+    	list.add(pos, obj);
+    	return list;
+    }
+
 	private class ModifierHolder {
 		final EnumSet<Modifier> modifiers;
 		final NodeList<AnnotationExpr> annotations;
@@ -1801,7 +1809,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	List<Parameter> parameters;
 	List<ReferenceType> throws_ = null;
 	ExplicitConstructorInvocationStmt exConsInv = null;
-	List<Statement> stmts;
+	NodeList<Statement> stmts = emptyNodeList();
     Position begin = modifier.begin;
 	Position blockBegin = INVALID;
 	ReferenceType throwType;
@@ -1853,9 +1861,9 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
   { return new ExplicitConstructorInvocationStmt(range(begin, tokenEnd()),typeArgs.list, isThis, expr, args); }
 }
 
-List<Statement> Statements():
+NodeList<Statement> Statements():
 {
-	List<Statement> ret = null;
+	NodeList<Statement> ret = emptyNodeList();
 	Statement stmt;
 }
 {
@@ -2811,7 +2819,7 @@ LabeledStmt LabeledStatement():
 
 BlockStmt Block():
 {
-	List<Statement> stmts;
+	NodeList<Statement> stmts = emptyNodeList();
 	Position begin;
 }
 {
@@ -2946,7 +2954,7 @@ SwitchStmt SwitchStatement():
 SwitchEntryStmt SwitchEntry():
 {
 	Expression label = null;
-	List<Statement> stmts;
+	NodeList<Statement> stmts;
 	Position begin;
 }
 {

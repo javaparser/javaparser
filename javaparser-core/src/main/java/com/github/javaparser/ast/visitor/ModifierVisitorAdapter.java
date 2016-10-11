@@ -176,13 +176,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final BlockStmt n, final A arg) {
 		visitComment(n, arg);
-		final List<Statement> stmts = n.getStmts();
-		if (stmts != null) {
-			for (int i = 0; i < stmts.size(); i++) {
-				stmts.set(i, (Statement) stmts.get(i).accept(this, arg));
-			}
-			removeNulls(stmts);
-		}
+		n.setStmts((NodeList<Statement>) n.getStmts().accept(this, arg));
 		return n;
 	}
 
@@ -791,13 +785,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		if (n.getLabel() != null) {
 			n.setLabel((Expression) n.getLabel().accept(this, arg));
 		}
-		final List<Statement> stmts = n.getStmts();
-		if (stmts != null) {
-			for (int i = 0; i < stmts.size(); i++) {
-				stmts.set(i, (Statement) stmts.get(i).accept(this, arg));
-			}
-			removeNulls(stmts);
-		}
+		n.setStmts((NodeList<Statement>) n.getStmts().accept(this, arg));
 		return n;
 	}
 

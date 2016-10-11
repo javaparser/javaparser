@@ -1,17 +1,16 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
 public interface NodeWithStatements<T> {
-    List<Statement> getStmts();
+    NodeList<Statement> getStmts();
 
-    T setStmts(final List<Statement> stmts);
+    T setStmts(final NodeList<Statement> stmts);
 
     @SuppressWarnings("unchecked")
     default T addStatement(Statement statement) {

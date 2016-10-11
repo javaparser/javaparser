@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -29,6 +30,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -38,18 +41,18 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 
 	private Expression label;
 
-	private List<Statement> stmts;
+	private NodeList<Statement> stmts = emptyNodeList();
 
 	public SwitchEntryStmt() {
 	}
 
-	public SwitchEntryStmt(final Expression label, final List<Statement> stmts) {
+	public SwitchEntryStmt(final Expression label, final NodeList<Statement> stmts) {
 		setLabel(label);
 		setStmts(stmts);
 	}
 
 	public SwitchEntryStmt(Range range, final Expression label,
-	                       final List<Statement> stmts) {
+	                       final NodeList<Statement> stmts) {
 		super(range);
 		setLabel(label);
 		setStmts(stmts);
@@ -70,8 +73,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 	}
 
 	@Override
-    public List<Statement> getStmts() {
-        stmts = ensureNotNull(stmts);
+    public NodeList<Statement> getStmts() {
         return stmts;
 	}
 
@@ -82,8 +84,8 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 	}
 
 	@Override
-    public SwitchEntryStmt setStmts(final List<Statement> stmts) {
-		this.stmts = stmts;
+    public SwitchEntryStmt setStmts(final NodeList<Statement> stmts) {
+		this.stmts = assertNotNull(stmts);
 		setAsParentNodeOf(this.stmts);
         return this;
 	}
