@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -162,12 +163,31 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
+    private TypeUsage usingParameterTypesFromScope(TypeUsage scope, TypeUsage type) {
+        if (type.isReferenceType()) {
+            for (Tuple2<TypeParameter, TypeUsage> entry : type.asReferenceTypeUsage().getTypeParametersMap()) {
+                if (entry._1.declaredOnClass() && scope.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName()).isPresent()) {
+                    type = type.replaceParam(entry._1.getName(), scope.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName()).get());
+                }
+            }
+            return type;
+        } else {
+            return type;
+        }
+    }
+
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         // TODO consider call of static methods
         if (wrappedNode.getScope() != null) {
             try {
                 TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+                // we can replace the parameter types from the scope into the parameters
+
+                for (int i=0;i<parameterTypes.size();i++) {
+                    parameterTypes.set(i, usingParameterTypesFromScope(typeOfScope, parameterTypes.get(i)));
+                }
+
                 return solveMethodAsUsage(typeOfScope, name, parameterTypes, typeSolver, this);
             } catch (UnsolvedSymbolException e) {
                 // ok, maybe it was instead a static access, so let's look for a type
