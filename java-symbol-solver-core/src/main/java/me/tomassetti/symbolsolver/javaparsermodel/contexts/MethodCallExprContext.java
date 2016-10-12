@@ -243,7 +243,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             }
 
-            TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+            TypeUsage typeOfScope = null;
+            try {
+                typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+            } catch (Exception e) {
+                throw new RuntimeException(String.format("Issur calculating the type of the scope of " + this), e);
+            }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
                     return typeOfScope.asWildcard().getBoundedType().asReferenceTypeUsage().solveMethod(name, parameterTypes);

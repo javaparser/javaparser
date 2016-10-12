@@ -16,6 +16,7 @@ import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
@@ -39,6 +40,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
+            int index = 0;
             for (ValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
                     if (wrappedNode.getParentNode() instanceof MethodCallExpr) {
@@ -60,9 +62,28 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             throw new UnsupportedOperationException();
                         }
 
-                        Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(JavaParserFacade.get(typeSolver).convert(declaratorType, declaratorType));
-                        if (functionalMethod.isPresent() && functionalMethod.get().getNoParams() == 1) {
-                            TypeUsage lambdaType = functionalMethod.get().getParamType(0, typeSolver);
+                        TypeUsage t = JavaParserFacade.get(typeSolver).convert(declaratorType, declaratorType);
+                        Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
+                        if (functionalMethod.isPresent()) {
+                            TypeUsage lambdaType = functionalMethod.get().getParamType(index, typeSolver);
+
+                            // Replace parameter from declarator
+                            if (lambdaType.isReferenceType()) {
+                                for (Tuple2<TypeParameter, TypeUsage> entry : lambdaType.asReferenceTypeUsage().getTypeParametersMap()) {
+                                    if (entry._2.isTypeVariable() && entry._2.asTypeParameter().declaredOnClass()) {
+                                        Optional<TypeUsage> ot = t.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName());
+                                        if (ot.isPresent()) {
+                                            lambdaType = lambdaType.replaceParam(entry._1.getName(), ot.get());
+                                        }
+                                    }
+                                }
+                            } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnClass()) {
+                                Optional<TypeUsage> ot = t.asReferenceTypeUsage().getGenericParameterByName(lambdaType.asTypeParameter().getName());
+                                if (ot.isPresent()) {
+                                    lambdaType = ot.get();
+                                }
+                            }
+
                             Value value = new Value(lambdaType, name, false);
                             return Optional.of(value);
                         } else {
@@ -72,6 +93,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         throw new UnsupportedOperationException();
                     }
                 }
+                index++;
             } 
         }
 
