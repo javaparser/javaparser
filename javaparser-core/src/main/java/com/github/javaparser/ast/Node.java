@@ -35,6 +35,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.utils.PositionUtils;
 
 import java.util.*;
 
@@ -252,6 +253,23 @@ public abstract class Node implements Cloneable {
      */
     public List<Node> getChildrenNodes() {
         return unmodifiableList(childrenNodes);
+    }
+
+    @Deprecated
+    public List<Node> makeSpecialChildrenList() {
+        List<Node> children = new ArrayList<>();
+        for (Node childNode : getChildrenNodes()) {
+            // Avoid attributing comments to NodeLists by pretending they don't exist.
+            if (childNode instanceof NodeList) {
+                for (Node subChildNode : ((NodeList<Node>) childNode)) {
+                    children.add(subChildNode);
+                }
+            } else {
+                children.add(childNode);
+            }
+        }
+        PositionUtils.sortByBeginPosition(children);
+        return children;
     }
 
     public <N extends Node> boolean containsWithin(N other) {

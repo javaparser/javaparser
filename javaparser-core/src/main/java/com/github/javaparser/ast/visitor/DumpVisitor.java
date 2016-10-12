@@ -1629,9 +1629,12 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		if (node instanceof Comment) return;
 
 		Node parent = node.getParentNode();
+		while (parent != null && parent instanceof NodeList) {
+			parent = parent.getParentNode();
+		}
 		if (parent == null) return;
 		List<Node> everything = new LinkedList<>();
-		everything.addAll(parent.getChildrenNodes());
+		everything.addAll(parent.makeSpecialChildrenList());
 		sortByBeginPosition(everything);
 		int positionOfTheChild = -1;
 		for (int i = 0; i < everything.size(); i++) {

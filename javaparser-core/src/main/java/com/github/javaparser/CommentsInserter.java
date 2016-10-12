@@ -62,8 +62,7 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        List<Node> children = Utils.copyList(cu.getChildrenNodes());
-        PositionUtils.sortByBeginPosition(children);
+        List<Node> children = cu.makeSpecialChildrenList();
 
         Comment firstComment = comments.iterator().next();
         if (cu.getPackage() != null
@@ -94,8 +93,7 @@ class CommentsInserter {
         // if they preceed a child they are assigned to it, otherweise they
         // remain "orphans"
 
-        List<Node> children = Utils.copyList(node.getChildrenNodes());
-        PositionUtils.sortByBeginPosition(children);
+        List<Node> children = node.makeSpecialChildrenList();
 
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
@@ -115,9 +113,6 @@ class CommentsInserter {
         for (Comment comment : commentsToAttribute) {
             if (comment.isLineComment()) {
                 for (Node child : children) {
-                    if(child instanceof NodeList) {
-                        continue;
-                    }
                     if (child.getEnd().line == comment.getBegin().line
                         && attributeLineCommentToNodeOrChild(child,
                                 comment.asLineComment())) {
@@ -134,13 +129,7 @@ class CommentsInserter {
         List<Node> childrenAndComments = new LinkedList<>();
         for (Node child : children) {
             // Avoid attributing comments to a meaningless container.
-            if (child instanceof NodeList) {
-                for (Node subChild : (NodeList<Node>) child) {
-                    childrenAndComments.add(subChild);
-                }
-            } else {
-                childrenAndComments.add(child);
-            }
+            childrenAndComments.add(child);
         }
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
