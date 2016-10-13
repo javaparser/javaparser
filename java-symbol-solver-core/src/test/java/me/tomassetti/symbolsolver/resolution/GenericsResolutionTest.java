@@ -44,7 +44,6 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(true, symbolReference.isPresent());
         assertEquals("s", symbolReference.get().getName());
-        assertEquals(true, symbolReference.get().isField());
 
         Type type = symbolReference.get().getUsage();
         assertEquals(1, type.asReferenceTypeUsage().parameters().size());
@@ -62,7 +61,6 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(true, symbolReference.isPresent());
         assertEquals("g", symbolReference.get().getName());
-        assertEquals(true, symbolReference.get().isField());
 
         Type type = symbolReference.get().getUsage();
         assertEquals(1, type.asReferenceTypeUsage().parameters().size());
@@ -80,7 +78,6 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(true, symbolReference.isPresent());
         assertEquals("i", symbolReference.get().getName());
-        assertEquals(true, symbolReference.get().isField());
 
         Type type = symbolReference.get().getUsage();
         assertEquals(1, type.asReferenceTypeUsage().parameters().size());
@@ -98,7 +95,6 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(true, symbolReference.isPresent());
         assertEquals("a", symbolReference.get().getName());
-        assertEquals(true, symbolReference.get().isField());
 
         Type type = symbolReference.get().getUsage();
         assertEquals(true, type.isTypeVariable());
@@ -116,7 +112,6 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(true, symbolReference.isPresent());
         assertEquals("as", symbolReference.get().getName());
-        assertEquals(true, symbolReference.get().isField());
 
         Type type = symbolReference.get().getUsage();
         assertEquals(false, type.isTypeVariable());

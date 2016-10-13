@@ -35,10 +35,6 @@ public class Value {
         return name;
     }
 
-    public boolean isField() {
-        return field;
-    }
-
     public Type getUsage() {
         return type;
     }
