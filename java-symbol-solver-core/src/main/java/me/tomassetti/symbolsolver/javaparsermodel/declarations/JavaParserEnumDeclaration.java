@@ -21,6 +21,7 @@ import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionFactory;
 
 import java.io.Serializable;
 import java.util.*;
@@ -306,6 +307,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     @Override
     public List<ReferenceTypeUsage> getAncestors() {
         List<ReferenceTypeUsage> ancestors = new ArrayList<>();
+        ReferenceTypeUsage enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceTypeUsage();
+        enumClass = enumClass.replaceParam("E", new ReferenceTypeUsageImpl(this, typeSolver)).asReferenceTypeUsage();
+        ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
                 SymbolReference<TypeDeclaration> implementedDeclRef = solveType(implementedType.getName(), typeSolver);
