@@ -7,15 +7,6 @@ import me.tomassetti.symbolsolver.model.typesystem.Type;
  * @author Federico Tomassetti
  */
 public class Value {
-    @Override
-    public String toString() {
-        return "Value{" +
-                "typeUsage=" + type +
-                ", name='" + name + '\'' +
-                ", field=" + field +
-                '}';
-    }
-
     private Type type;
     private String name;
     private boolean field;
@@ -29,6 +20,15 @@ public class Value {
     public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
         Type type = decl.getType();
         return new Value(type, decl.getName(), decl.isField());
+    }
+
+    @Override
+    public String toString() {
+        return "Value{" +
+                "typeUsage=" + type +
+                ", name='" + name + '\'' +
+                ", field=" + field +
+                '}';
     }
 
     public String getName() {
