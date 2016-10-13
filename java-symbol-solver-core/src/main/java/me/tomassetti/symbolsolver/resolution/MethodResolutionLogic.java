@@ -54,7 +54,11 @@ public class MethodResolutionLogic {
                         expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                     }
                     if (!expectedType.isAssignableBy(actualType)) {
-                        paramTypes = groupVariadicParamValues(paramTypes, pos, method.getLastParam().getType());
+                        if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayTypeUsage().getComponentType())) {
+                            paramTypes.set(pos, actualType.asArrayTypeUsage().getComponentType());
+                        } else {
+                            paramTypes = groupVariadicParamValues(paramTypes, pos, method.getLastParam().getType());
+                        }
                     }
                 } // else it is already assignable, nothing to do
             } else {
@@ -89,6 +93,11 @@ public class MethodResolutionLogic {
                     if (actualType.isWildcard() && withWildcardTolerance && !expectedType.isPrimitive()) {
                         needForWildCardTolerance = true;
                         continue;
+                    }
+                    if (method.hasVariadicParameter() && i == method.getNoParams() -1) {
+                        if (new ArrayTypeUsage(expectedType).isAssignableBy(actualType)) {
+                            continue;
+                        }
                     }
                     return false;
                 }

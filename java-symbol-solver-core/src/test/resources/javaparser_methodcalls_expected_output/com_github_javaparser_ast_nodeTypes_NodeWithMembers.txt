@@ -1,7 +1,7 @@
   Line 49) ((Node) this).tryAddImportToParentCompilationUnit(typeClass) ==> com.github.javaparser.ast.Node.tryAddImportToParentCompilationUnit(java.lang.Class<?>)
-  Line 50) addField(typeClass.getSimpleName(), name, modifiers) ==> UNSOLVED
+  Line 50) addField(typeClass.getSimpleName(), name, modifiers) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addField(java.lang.String, java.lang.String, com.github.javaparser.ast.Modifier...)
   Line 50) typeClass.getSimpleName() ==> java.lang.Class.getSimpleName()
-  Line 62) addField(new ClassOrInterfaceType(type), name, modifiers) ==> UNSOLVED
+  Line 62) addField(new ClassOrInterfaceType(type), name, modifiers) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addField(com.github.javaparser.ast.type.Type<?>, java.lang.String, com.github.javaparser.ast.Modifier...)
   Line 75) fieldDeclaration.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
   Line 77) fieldDeclaration.getVariables().add(variable) ==> java.util.List.add(E)
   Line 77) fieldDeclaration.getVariables() ==> com.github.javaparser.ast.body.FieldDeclaration.getVariables()
