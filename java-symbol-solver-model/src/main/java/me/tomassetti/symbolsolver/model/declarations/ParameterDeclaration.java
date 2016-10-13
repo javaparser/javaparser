@@ -15,11 +15,6 @@ public interface ParameterDeclaration extends ValueDeclaration {
     boolean isVariadic();
 
     default String describeType() {
-        if (isVariadic()) {
-            return getType().describe() + "...";
-        } else {
-            return getType().describe();
-        }
-
+        return getType().describe() + (isVariadic() ? "..." : "");
     }
 }

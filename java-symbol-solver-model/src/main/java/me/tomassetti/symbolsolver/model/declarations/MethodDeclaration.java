@@ -24,9 +24,12 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
 
     ParameterDeclaration getParam(int i);
 
+    /**
+     * The last parameter can be variadic and sometimes it needs to be handled in a special way.
+     */
     default ParameterDeclaration getLastParam() {
         if (getNoParams() == 0) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("This method has no parameters, therefore it has no a last parameter");
         }
         return getParam(getNoParams() - 1);
     }
@@ -44,8 +47,8 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
     }
 
     /**
-     * Create the MethodUsage corresponding to this declaration with all generic types solved in the given
-     * context.
+     * Create the MethodUsage corresponding to this declaration with all generic types
+     * solved in the given context.
      */
     @Deprecated
     MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes);

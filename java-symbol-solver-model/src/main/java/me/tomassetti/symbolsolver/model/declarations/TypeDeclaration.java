@@ -19,6 +19,7 @@ import java.util.Set;
  * @author Federico Tomassetti
  */
 public interface TypeDeclaration extends Declaration, TypeParametrized {
+
     String getQualifiedName();
 
     @Deprecated

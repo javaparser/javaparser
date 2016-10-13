@@ -15,8 +15,14 @@ public interface InterfaceDeclaration extends TypeDeclaration, TypeParametrized 
         return true;
     }
 
+    /**
+     * Return the list of interfaces extended directly by this one.
+     */
     List<InterfaceDeclaration> getInterfacesExtended();
 
+    /**
+     * Return the list of interfaces extended directly or indirectly by this one.
+     */
     default List<InterfaceDeclaration> getAllInterfacesExtended() {
         List<InterfaceDeclaration> interfaces = new ArrayList<>();
         for (InterfaceDeclaration interfaceDeclaration : getInterfacesExtended()) {
