@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface InterfaceDeclaration extends TypeDeclaration, TypeParametrized {
+public interface InterfaceDeclaration extends TypeDeclaration, TypeParametrizable {
 
     @Override
     default boolean isInterface() {

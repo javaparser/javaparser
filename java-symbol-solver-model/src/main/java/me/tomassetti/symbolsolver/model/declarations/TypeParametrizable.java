@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface TypeParametrized {
+public interface TypeParametrizable {
 
     List<TypeParameter> getTypeParameters();
 

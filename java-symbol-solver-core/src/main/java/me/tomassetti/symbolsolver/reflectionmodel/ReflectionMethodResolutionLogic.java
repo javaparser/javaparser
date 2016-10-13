@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeParametrized;
+import me.tomassetti.symbolsolver.model.declarations.TypeParametrizable;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
@@ -21,16 +21,16 @@ class ReflectionMethodResolutionLogic {
 
     static Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<TypeUsage> typeParameterValues,
-                                                    TypeParametrized typeParametrized, Class clazz) {
-        if (typeParameterValues.size() != typeParametrized.getTypeParameters().size()) {
+                                                    TypeParametrizable typeParametrizable, Class clazz) {
+        if (typeParameterValues.size() != typeParametrizable.getTypeParameters().size()) {
             //if (typeParameterValues.size() != 0){
             //    throw new UnsupportedOperationException("I have solved parameters for " + clazz.getCanonicalName() +". Values given are: "+typeParameterValues);
             //}
             // if it is zero we are going to ignore them
-            if (!typeParametrized.getTypeParameters().isEmpty()) {
+            if (!typeParametrizable.getTypeParameters().isEmpty()) {
                 // Parameters not specified, so default to Object
                 typeParameterValues = new ArrayList<>();
-                for (int i = 0; i < typeParametrized.getTypeParameters().size(); i++) {
+                for (int i = 0; i < typeParametrizable.getTypeParameters().size(); i++) {
                     typeParameterValues.add(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
                 }
             }
@@ -41,7 +41,7 @@ class ReflectionMethodResolutionLogic {
                 MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
                 MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
                 int i = 0;
-                for (TypeParameter tp : typeParametrized.getTypeParameters()) {
+                for (TypeParameter tp : typeParametrizable.getTypeParameters()) {
                     methodUsage = methodUsage.replaceNameParam(tp.getName(), typeParameterValues.get(i));
                     i++;
                 }
@@ -55,7 +55,7 @@ class ReflectionMethodResolutionLogic {
         final List<TypeUsage> finalTypeParameterValues = typeParameterValues;
         parameterTypes = parameterTypes.stream().map((pt) -> {
             int i = 0;
-            for (TypeParameter tp : typeParametrized.getTypeParameters()) {
+            for (TypeParameter tp : typeParametrizable.getTypeParameters()) {
                 pt = pt.replaceParam(tp.getName(), finalTypeParameterValues.get(i));
                 i++;
             }

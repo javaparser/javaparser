@@ -18,7 +18,7 @@ import java.util.Set;
  *
  * @author Federico Tomassetti
  */
-public interface TypeDeclaration extends Declaration, TypeParametrized {
+public interface TypeDeclaration extends Declaration, TypeParametrizable {
 
     String getQualifiedName();
 

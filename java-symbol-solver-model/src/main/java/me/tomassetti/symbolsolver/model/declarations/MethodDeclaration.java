@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface MethodDeclaration extends Declaration, TypeParametrized {
+public interface MethodDeclaration extends Declaration, TypeParametrizable {
 
     /**
      * The type in which the method is declared.
