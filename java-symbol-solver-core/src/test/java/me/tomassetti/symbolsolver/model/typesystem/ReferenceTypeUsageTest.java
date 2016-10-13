@@ -33,7 +33,7 @@ public class ReferenceTypeUsageTest {
         string = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         listOfA = new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()), typeSolver)), typeSolver);
+                ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver);
         listOfStrings = new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);

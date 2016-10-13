@@ -39,7 +39,7 @@ public class PrimitiveTypeUsageTest {
         arrayOfBooleans = new ArrayTypeUsage(PrimitiveTypeUsage.BOOLEAN);
         arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()), typeSolver)), typeSolver));
+                ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
         
         booleanBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
         characterBox = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);

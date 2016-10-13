@@ -46,7 +46,7 @@ class ReflectionMethodResolutionLogic {
                     i++;
                 }
                 for (TypeParameter methodTypeParameter : methodDeclaration.getTypeParameters()) {
-                    methodUsage = methodUsage.replaceNameParam(methodTypeParameter.getName(), new TypeParameterUsage(methodTypeParameter, typeSolver));
+                    methodUsage = methodUsage.replaceNameParam(methodTypeParameter.getName(), new TypeParameterUsage(methodTypeParameter));
                 }
                 methods.add(methodUsage);
             }

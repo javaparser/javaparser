@@ -564,10 +564,10 @@ public class JavaParserFacade {
             }
             if (typeDeclaration.isTypeVariable()) {
                 if (typeDeclaration instanceof TypeParameter) {
-                    return new TypeParameterUsage((TypeParameter) typeDeclaration, typeSolver);
+                    return new TypeParameterUsage((TypeParameter) typeDeclaration);
                 } else {
                     JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) typeDeclaration;
-                    return new TypeParameterUsage(javaParserTypeVariableDeclaration.asTypeParameter(), typeSolver);
+                    return new TypeParameterUsage(javaParserTypeVariableDeclaration.asTypeParameter());
                 }
             } else {
                 return new ReferenceTypeUsageImpl(typeDeclaration, typeParameters, typeSolver);

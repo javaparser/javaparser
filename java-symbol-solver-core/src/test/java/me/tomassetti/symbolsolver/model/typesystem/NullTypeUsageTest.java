@@ -30,7 +30,7 @@ public class NullTypeUsageTest {
         arrayOfBooleans = new ArrayTypeUsage(PrimitiveTypeUsage.BOOLEAN);
         arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsageImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()), typeSolver)), typeSolver));
+                ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
     }
 
     @Test

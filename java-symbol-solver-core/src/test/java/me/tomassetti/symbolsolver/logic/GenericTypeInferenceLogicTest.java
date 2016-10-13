@@ -32,7 +32,7 @@ public class GenericTypeInferenceLogicTest {
         TypeParameter a = EasyMock.createMock(TypeParameter.class);
         EasyMock.expect(a.getName()).andReturn("A").anyTimes();
         EasyMock.replay(a);
-        TypeParameterUsage aUsage = new TypeParameterUsage(a, typeSolver);
+        TypeParameterUsage aUsage = new TypeParameterUsage(a);
         assertEquals(ImmutableMap.of("A", string), GenericTypeInferenceLogic.inferGenericTypes(
                 ImmutableList.of(new Tuple2<TypeUsage, TypeUsage>(aUsage, string))));
     }
@@ -51,9 +51,9 @@ public class GenericTypeInferenceLogicTest {
         EasyMock.replay(a);
         EasyMock.replay(b);
         EasyMock.replay(c);
-        TypeParameterUsage aUsage = new TypeParameterUsage(a, typeSolver);
-        TypeParameterUsage bUsage = new TypeParameterUsage(b, typeSolver);
-        TypeParameterUsage cUsage = new TypeParameterUsage(c, typeSolver);
+        TypeParameterUsage aUsage = new TypeParameterUsage(a);
+        TypeParameterUsage bUsage = new TypeParameterUsage(b);
+        TypeParameterUsage cUsage = new TypeParameterUsage(c);
         assertEquals(ImmutableMap.of("A", string, "B", object, "C", string), GenericTypeInferenceLogic.inferGenericTypes(
                 ImmutableList.of(new Tuple2<TypeUsage, TypeUsage>(aUsage, string),
                         new Tuple2<TypeUsage, TypeUsage>(bUsage, object),

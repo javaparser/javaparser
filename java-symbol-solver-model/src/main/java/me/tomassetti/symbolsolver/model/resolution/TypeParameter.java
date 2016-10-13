@@ -3,7 +3,6 @@ package me.tomassetti.symbolsolver.model.resolution;
 import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -53,30 +52,6 @@ public interface TypeParameter {
     String getQNameOfDeclaringClass();
 
     List<Bound> getBounds(TypeSolver typeSolver);
-
-    default List<Bound> getExtendsBounds(TypeSolver typeSolver) {
-        return getBounds(typeSolver).stream().filter(b -> b.isExtends()).collect(Collectors.toList());
-    }
-
-    default List<Bound> getSuperBounds(TypeSolver typeSolver) {
-        return getBounds(typeSolver).stream().filter(b -> b.isSuper()).collect(Collectors.toList());
-    }
-
-    default String describe(TypeSolver typeSolver) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getName());
-        List<Bound> extendsBounds = getExtendsBounds(typeSolver);
-        if (!extendsBounds.isEmpty()) {
-            sb.append(" extends ");
-            sb.append(String.join(", ", extendsBounds.stream().map(b -> b.getType().describe()).collect(Collectors.toList())));
-        }
-        List<Bound> superBounds = getSuperBounds(typeSolver);
-        if (!superBounds.isEmpty()) {
-            sb.append(" super ");
-            sb.append(String.join(", ", superBounds.stream().map(b -> b.getType().describe()).collect(Collectors.toList())));
-        }
-        return sb.toString();
-    }
 
     class Bound {
         private boolean extendsBound;

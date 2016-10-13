@@ -1,16 +1,16 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class WildcardUsageTest {
 
@@ -45,7 +45,7 @@ public class WildcardUsageTest {
         superBar = WildcardUsage.superBound(bar);
         extendsFoo = WildcardUsage.extendsBound(foo);
         extendsBar = WildcardUsage.extendsBound(bar);
-        a = new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()), typeSolver);
+        a = new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()));
         superA = WildcardUsage.superBound(a);
         extendsA = WildcardUsage.extendsBound(a);
         superString = WildcardUsage.superBound(string);
