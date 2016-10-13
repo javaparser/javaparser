@@ -3,7 +3,6 @@ package me.tomassetti.symbolsolver.resolution;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -74,6 +73,7 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
         assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().size());
         assertEquals(true, typeUsage.asReferenceTypeUsage().parameters().get(0).isTypeVariable());
         assertEquals("T", typeUsage.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
+        assertEquals("com.github.javaparser.utils.PositionUtils.sortByBeginPosition(java.util.List<T>).T", typeUsage.asReferenceTypeUsage().parameters().get(0).asTypeParameter().qualifiedName());
         assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).size());
         TypeParameter.Bound bound = typeUsage.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).get(0);
         assertEquals(true, bound.isExtends());
