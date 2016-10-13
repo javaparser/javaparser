@@ -35,12 +35,12 @@
   Line 203) fieldName.toUpperCase() ==> java.lang.String.toUpperCase()
   Line 203) fieldName.substring(1, fieldName.length()) ==> java.lang.String.substring(int, int)
   Line 203) fieldName.length() ==> java.lang.String.length()
-  Line 206) parentClass.addMethod("get" + fieldNameUpper, PUBLIC) ==> UNSOLVED
-  Line 208) parentEnum.addMethod("get" + fieldNameUpper, PUBLIC) ==> UNSOLVED
+  Line 206) parentClass.addMethod("get" + fieldNameUpper, PUBLIC) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addMethod(java.lang.String, com.github.javaparser.ast.Modifier...)
+  Line 208) parentEnum.addMethod("get" + fieldNameUpper, PUBLIC) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addMethod(java.lang.String, com.github.javaparser.ast.Modifier...)
   Line 209) getter.setType(variable.getType()) ==> com.github.javaparser.ast.body.MethodDeclaration.setType(com.github.javaparser.ast.type.Type)
   Line 209) variable.getType() ==> com.github.javaparser.ast.body.VariableDeclarator.getType()
   Line 211) getter.setBody(blockStmt) ==> com.github.javaparser.ast.body.MethodDeclaration.setBody(com.github.javaparser.ast.stmt.BlockStmt)
-  Line 212) blockStmt.addStatement(new ReturnStmt(name(fieldName))) ==> UNSOLVED
+  Line 212) blockStmt.addStatement(new ReturnStmt(name(fieldName))) ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.addStatement(com.github.javaparser.ast.stmt.Statement)
   Line 212) name(fieldName) ==> com.github.javaparser.ast.expr.NameExpr.name(java.lang.String)
   Line 225) getVariables().size() ==> java.util.List.size()
   Line 225) getVariables() ==> com.github.javaparser.ast.body.FieldDeclaration.getVariables()
@@ -55,14 +55,14 @@
   Line 235) fieldName.toUpperCase() ==> java.lang.String.toUpperCase()
   Line 235) fieldName.substring(1, fieldName.length()) ==> java.lang.String.substring(int, int)
   Line 235) fieldName.length() ==> java.lang.String.length()
-  Line 239) parentClass.addMethod("set" + fieldNameUpper, PUBLIC) ==> UNSOLVED
-  Line 241) parentEnum.addMethod("set" + fieldNameUpper, PUBLIC) ==> UNSOLVED
+  Line 239) parentClass.addMethod("set" + fieldNameUpper, PUBLIC) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addMethod(java.lang.String, com.github.javaparser.ast.Modifier...)
+  Line 241) parentEnum.addMethod("set" + fieldNameUpper, PUBLIC) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addMethod(java.lang.String, com.github.javaparser.ast.Modifier...)
   Line 242) setter.setType(VOID_TYPE) ==> com.github.javaparser.ast.body.MethodDeclaration.setType(com.github.javaparser.ast.type.Type)
   Line 243) setter.getParameters().add(new Parameter(variable.getType(), new VariableDeclaratorId(fieldName))) ==> java.util.List.add(E)
   Line 243) setter.getParameters() ==> com.github.javaparser.ast.body.MethodDeclaration.getParameters()
   Line 243) variable.getType() ==> com.github.javaparser.ast.body.VariableDeclarator.getType()
   Line 245) setter.setBody(blockStmt2) ==> com.github.javaparser.ast.body.MethodDeclaration.setBody(com.github.javaparser.ast.stmt.BlockStmt)
-  Line 246) blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign)) ==> UNSOLVED
+  Line 246) blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign)) ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.addStatement(com.github.javaparser.ast.expr.Expression)
   Line 259) setAsParentNodeOf(this.elementType) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
   Line 267) ensureNotNull(arrayBracketPairsAfterElementType) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
   Line 274) setAsParentNodeOf(arrayBracketPairsAfterType) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)

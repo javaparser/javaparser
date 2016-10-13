@@ -170,7 +170,7 @@
   Line 362) printer.print(" ") ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.print(java.lang.String)
   Line 365) printer.print(n.getName()) ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.print(java.lang.String)
   Line 365) n.getName() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getName()
-  Line 367) n.isUsingDiamondOperator() ==> UNSOLVED
+  Line 367) n.isUsingDiamondOperator() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.isUsingDiamondOperator()
   Line 368) printer.print("<>") ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.print(java.lang.String)
   Line 370) printTypeArgs(n, arg) ==> com.github.javaparser.ast.visitor.DumpVisitor.printTypeArgs(com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments<?>, java.lang.Object)
   Line 376) printJavaComment(n.getComment(), arg) ==> com.github.javaparser.ast.visitor.DumpVisitor.printJavaComment(com.github.javaparser.ast.comments.Comment, java.lang.Object)

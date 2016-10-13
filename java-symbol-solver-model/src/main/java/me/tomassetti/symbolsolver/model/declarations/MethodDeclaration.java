@@ -77,4 +77,6 @@ public interface MethodDeclaration extends Declaration, TypeParametrized {
     default String getQualifiedSignature() {
         return declaringType().getQualifiedName()+ "." + this.getSignature();
     }
+
+    boolean isDefaultMethod();
 }

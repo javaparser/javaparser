@@ -118,4 +118,9 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         return !Modifier.isPrivate(method.getModifiers()) && !Modifier.isProtected(method.getModifiers()) && !Modifier.isPublic(method.getModifiers());
     }
 
+    @Override
+    public boolean isDefaultMethod() {
+        return method.isDefault();
+    }
+
 }

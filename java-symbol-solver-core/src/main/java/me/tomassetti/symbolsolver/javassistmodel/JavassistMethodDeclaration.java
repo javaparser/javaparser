@@ -29,6 +29,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public boolean isDefaultMethod() {
+        return ctMethod.getDeclaringClass().isInterface() && !isAbstract();
+    }
+
+    @Override
     public String toString() {
         return "JavassistMethodDeclaration{" +
                 "ctMethod=" + ctMethod +

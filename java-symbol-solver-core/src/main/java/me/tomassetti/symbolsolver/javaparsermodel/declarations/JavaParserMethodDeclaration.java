@@ -238,7 +238,12 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         throw new UnsupportedOperationException();
     }
 
-	/**
+    @Override
+    public boolean isDefaultMethod() {
+        return wrappedNode.isDefault();
+    }
+
+    /**
 	 * Returns the JavaParser node associated with this JavaParserMethodDeclaration.
 	 *
 	 * @return A visitable JavaParser node wrapped by this object.

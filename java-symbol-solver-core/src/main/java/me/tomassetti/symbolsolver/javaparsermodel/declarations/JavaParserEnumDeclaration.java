@@ -380,6 +380,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         @Override
+        public boolean isDefaultMethod() {
+            return false;
+        }
+
+        @Override
         public String getName() {
             return "values";
         }
