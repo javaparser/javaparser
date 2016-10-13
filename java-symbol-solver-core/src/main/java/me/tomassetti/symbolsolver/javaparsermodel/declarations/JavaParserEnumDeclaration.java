@@ -80,11 +80,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
     public boolean isType() {
         return true;
     }

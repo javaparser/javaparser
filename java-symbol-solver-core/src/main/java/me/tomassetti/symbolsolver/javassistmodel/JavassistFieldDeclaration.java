@@ -38,11 +38,6 @@ public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.mod
     }
 
     @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
     public boolean isType() {
         return false;
     }

@@ -56,11 +56,6 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
     public boolean isType() {
         return false;
     }

@@ -49,11 +49,6 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
     public String toString() {
         return "ReflectionMethodDeclaration{" +
                 "method=" + method +

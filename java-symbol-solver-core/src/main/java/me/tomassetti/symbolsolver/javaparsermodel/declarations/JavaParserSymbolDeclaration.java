@@ -95,11 +95,6 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public boolean isVariable() {
-        return variable;
-    }
-
-    @Override
     public boolean isType() {
         return false;
     }

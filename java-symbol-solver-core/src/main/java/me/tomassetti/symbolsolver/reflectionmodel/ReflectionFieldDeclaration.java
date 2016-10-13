@@ -55,11 +55,6 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
     public boolean isType() {
         return false;
     }
