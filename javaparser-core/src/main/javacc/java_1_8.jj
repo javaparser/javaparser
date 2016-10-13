@@ -153,30 +153,30 @@ final class ASTParser {
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {
-	    if (ret instanceof EnclosedExpr) {
-	        Expression inner = ((EnclosedExpr) ret).getInner();
-	        if (inner != null && inner instanceof NameExpr) {
-	            VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), null);
-	       	    List<Parameter> params = add(new LinkedList<Parameter>(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), new NodeList<AnnotationExpr>(), new UnknownType(), null, false, id));
-	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
-	        } else {
-	            ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
-	        }
-	    } else if (ret instanceof NameExpr) {
-		    VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), null);
-	        List<Parameter> params = add(new LinkedList<Parameter>(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), new NodeList<AnnotationExpr>(), new UnknownType(), null, false, id));
-	        ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
-	    } else if (ret instanceof LambdaExpr) {
-	        ((LambdaExpr) ret).setBody(lambdaBody);
-	        ret.setEnd(lambdaBody.getEnd());
+        if (ret instanceof EnclosedExpr) {
+            Expression inner = ((EnclosedExpr) ret).getInner();
+            if (inner != null && inner instanceof NameExpr) {
+                VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr) inner).getName(), emptyNodeList());
+                List<Parameter> params = add(new LinkedList<Parameter>(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), new NodeList<AnnotationExpr>(), new UnknownType(), emptyNodeList(), false, id));
+                ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
+            } else {
+                ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
+            }
+        } else if (ret instanceof NameExpr) {
+            VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr) ret).getName(), emptyNodeList());
+            List<Parameter> params = add(new LinkedList<Parameter>(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), new NodeList<AnnotationExpr>(), new UnknownType(), emptyNodeList(), false, id));
+            ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
+        } else if (ret instanceof LambdaExpr) {
+            ((LambdaExpr) ret).setBody(lambdaBody);
+            ret.setEnd(lambdaBody.getEnd());
         } else if (ret instanceof CastExpr) {
-            CastExpr castExpr = (CastExpr)ret;
+            CastExpr castExpr = (CastExpr) ret;
             Expression inner = generateLambda(castExpr.getExpr(), lambdaBody);
             castExpr.setExpr(inner);
-	    } else {
-	        addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
-	    }
-	    return ret;
+        } else {
+            addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
+        }
+        return ret;
     }
     
     private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
@@ -1652,7 +1652,7 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 
     { 
         Position begin = modifier.begin.orIfInvalid(type.getBegin());
-        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        Pair<Type, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
         return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
     }
 }
@@ -1672,7 +1672,7 @@ VariableDeclaratorId VariableDeclaratorId():
 	String name;
 	Position begin;
 	ArrayBracketPair arrayBracketPair;
-	List<ArrayBracketPair> arrayBracketPairs = null;
+	NodeList<ArrayBracketPair> arrayBracketPairs = emptyNodeList();
 }
 {
   <IDENTIFIER> { name = token.image; begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
@@ -1710,7 +1710,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	NameExpr name;
 	List<Parameter> parameters;
 	ArrayBracketPair arrayBracketPair;
-	List<ArrayBracketPair> arrayBracketPairs = null;
+	NodeList<ArrayBracketPair> arrayBracketPairs = emptyNodeList();
 	List<ReferenceType> throws_ = null;
 	BlockStmt block = null;
 	Position begin = modifier.begin;
@@ -1725,7 +1725,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
   { 
-        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        Pair<Type, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
         return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, parameters, arrayBracketPairs, throws_, block);
   }
 }
@@ -1778,9 +1778,9 @@ List<Parameter> InferredLambdaParameters():
 }
 {
    ","
-  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), null, false, id));}
+  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), emptyNodeList(), false, id));}
   (
-    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id)); }
+    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), emptyNodeList(), false, id)); }
   )*
   { return ret;  }
 }
@@ -1797,7 +1797,7 @@ Parameter FormalParameter():
 
   {
         Position begin = modifier.begin.orIfInvalid(type.getBegin());
-        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        Pair<Type, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
         return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, typeListPair.b, isVarArg, id);
   }
 }
@@ -1905,7 +1905,7 @@ ReferenceType ReferenceType():
 {
 	Type type;
 	ArrayBracketPair arrayBracketPair;
-	List<ArrayBracketPair> arrayBracketPairs = null;
+	NodeList<ArrayBracketPair> arrayBracketPairs = emptyNodeList();
 }
 {
   (
@@ -2529,8 +2529,8 @@ Expression PrimaryPrefix():
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
-	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), null);
-	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), null, false, id);
+	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), emptyNodeList());
+	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), emptyNodeList(), false, id);
 	  		  		  }
 
 	  		  		}
@@ -2866,7 +2866,7 @@ VariableDeclarationExpr VariableDeclarationExpression():
   modifier = Modifiers() type = Type() var = VariableDeclarator() { variables.add(var); } ( "," var = VariableDeclarator() { variables.add(var); } )*
   {
         Position begin=modifier.begin.orIfInvalid(type.getBegin());
-        Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
+        Pair<Type, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
         return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
   }
 }

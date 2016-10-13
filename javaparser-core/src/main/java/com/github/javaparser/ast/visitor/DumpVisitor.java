@@ -1634,13 +1634,15 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 		if (parent == null) return;
 		List<Node> everything = new LinkedList<>();
-		everything.addAll(parent.makeSpecialChildrenList());
+		everything.addAll(parent.getBackwardsCompatibleChildrenNodes());
 		sortByBeginPosition(everything);
 		int positionOfTheChild = -1;
 		for (int i = 0; i < everything.size(); i++) {
 			if (everything.get(i) == node) positionOfTheChild = i;
 		}
-		if (positionOfTheChild == -1) throw new RuntimeException("My index not found!!! " + node);
+		if (positionOfTheChild == -1) {
+			throw new AssertionError("I am not a child of my parent.");
+		}
 		int positionOfPreviousChild = -1;
 		for (int i = positionOfTheChild - 1; i >= 0 && positionOfPreviousChild == -1; i--) {
 			if (!(everything.get(i) instanceof Comment)) positionOfPreviousChild = i;

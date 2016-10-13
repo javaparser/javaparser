@@ -23,11 +23,9 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
-import com.github.javaparser.utils.Utils;
 
 import java.util.*;
 
@@ -62,7 +60,7 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        List<Node> children = cu.makeSpecialChildrenList();
+        List<Node> children = cu.getBackwardsCompatibleChildrenNodes();
 
         Comment firstComment = comments.iterator().next();
         if (cu.getPackage() != null
@@ -93,7 +91,7 @@ class CommentsInserter {
         // if they preceed a child they are assigned to it, otherweise they
         // remain "orphans"
 
-        List<Node> children = node.makeSpecialChildrenList();
+        List<Node> children = node.getBackwardsCompatibleChildrenNodes();
 
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);

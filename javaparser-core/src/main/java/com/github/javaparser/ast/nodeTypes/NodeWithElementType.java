@@ -24,6 +24,7 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -51,9 +52,9 @@ public interface NodeWithElementType<T> {
      */
     T setElementType(Type<?> elementType);
 
-    List<ArrayBracketPair> getArrayBracketPairsAfterElementType();
+    NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType();
 
-    T setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType);
+    T setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType);
 
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed

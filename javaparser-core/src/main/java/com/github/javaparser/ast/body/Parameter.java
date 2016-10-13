@@ -34,12 +34,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import java.util.EnumSet;
-import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -61,7 +60,7 @@ public final class Parameter extends Node implements
 
     private VariableDeclaratorId id;
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType = emptyNodeList();
 
     public Parameter() {
     }
@@ -94,7 +93,7 @@ public final class Parameter extends Node implements
                      EnumSet<Modifier> modifiers,
                      NodeList<AnnotationExpr> annotations,
                      Type elementType,
-                     List<ArrayBracketPair> arrayBracketPairsAfterElementType,
+                     NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                      boolean isVarArgs, 
                      VariableDeclaratorId id) {
         super(range);
@@ -103,7 +102,7 @@ public final class Parameter extends Node implements
         setId(id);
         setElementType(elementType);
         setVarArgs(isVarArgs);
-        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
+        setArrayBracketPairsAfterElementType(assertNotNull(arrayBracketPairsAfterElementType));
     }
 
     @Override
@@ -129,10 +128,10 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setType(Type type) {
-        Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
+        Pair<Type, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         setElementType(unwrapped.a);
         setArrayBracketPairsAfterElementType(unwrapped.b);
-        getId().setArrayBracketPairsAfterId(null);
+        getId().setArrayBracketPairsAfterId(emptyNodeList());
         return this;
     }
 
@@ -214,14 +213,13 @@ public final class Parameter extends Node implements
         return this;
     }
 
-    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
+    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
     @Override
-    public Parameter setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+    public Parameter setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }

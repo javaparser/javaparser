@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
@@ -36,6 +37,7 @@ import com.github.javaparser.utils.Pair;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 
 /**
@@ -134,13 +136,13 @@ public final class VariableDeclarator extends Node implements
 
     @Override
     public VariableDeclarator setType(Type type) {
-        Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
+        Pair<Type, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         NodeWithElementType<?> nodeWithElementType = getParentNodeOfType(NodeWithElementType.class);
         if (nodeWithElementType == null) {
             throw new IllegalStateException("Cannot set type without a parent");
         }
         nodeWithElementType.setElementType(unwrapped.a);
-        nodeWithElementType.setArrayBracketPairsAfterElementType(null);
+        nodeWithElementType.setArrayBracketPairsAfterElementType(emptyNodeList());
         getId().setArrayBracketPairsAfterId(unwrapped.b);
         return this;
     }

@@ -253,7 +253,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Type<?> elementType_ = cloneNodes(_n.getElementType(), _arg);
 		NodeList<VariableDeclarator> variables_ = (NodeList<VariableDeclarator>)_n.getVariables().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
-        List<ArrayBracketPair> arrayBracketPairsAfterType_ = visit(_n.getArrayBracketPairsAfterElementType(), _arg);
+        NodeList<ArrayBracketPair> arrayBracketPairsAfterType_ = (NodeList<ArrayBracketPair>)_n.getArrayBracketPairsAfterElementType().accept(this, _arg);
 
         FieldDeclaration r = new FieldDeclaration(
 				_n.getRange(),
@@ -285,7 +285,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(VariableDeclaratorId _n, Object _arg) {
 		Comment comment = cloneNodes(_n.getComment(), _arg);
-		List<ArrayBracketPair> arrayBracketPairsAfterId_ = visit(_n.getArrayBracketPairsAfterId(), _arg);
+		NodeList<ArrayBracketPair> arrayBracketPairsAfterId_ = (NodeList<ArrayBracketPair>)_n.getArrayBracketPairsAfterId().accept(this, _arg);
 
 		VariableDeclaratorId r = new VariableDeclaratorId(
 				_n.getRange(),
@@ -323,8 +323,8 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<ReferenceType> throws_ = visit(_n.getThrows(), _arg);
 		BlockStmt block_ = cloneNodes(_n.getBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
-		List<ArrayBracketPair> arrayBracketPairsAfterElementType_ = visit(_n.getArrayBracketPairsAfterElementType(), _arg);
-		List<ArrayBracketPair> arrayBracketPairsAfterParameterList_ = visit(_n.getArrayBracketPairsAfterParameterList(), _arg);
+		NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType_ = (NodeList<ArrayBracketPair>)_n.getArrayBracketPairsAfterElementType().accept(this, _arg);
+		NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList_ = (NodeList<ArrayBracketPair>)_n.getArrayBracketPairsAfterParameterList().accept(this, _arg);
 
 		MethodDeclaration r = new MethodDeclaration(
 				_n.getRange(),
@@ -349,7 +349,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Type<?> type_ = cloneNodes(_n.getElementType(), _arg);
 		VariableDeclaratorId id = cloneNodes(_n.getId(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
-        List<ArrayBracketPair> arrayBracketPairsAfterType_ = visit(_n.getArrayBracketPairsAfterElementType(), _arg);
+		NodeList<ArrayBracketPair> arrayBracketPairsAfterType_ = (NodeList<ArrayBracketPair>)_n.getArrayBracketPairsAfterElementType().accept(this, _arg);
 
         Parameter r = new Parameter(
 				_n.getRange(),
@@ -868,7 +868,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Type<?> type_ = cloneNodes(_n.getElementType(), _arg);
 		NodeList<VariableDeclarator> variables_ = (NodeList<VariableDeclarator>)_n.getVariables().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
-        List<ArrayBracketPair> arrayBracketPairsAfterType_ = visit(_n.getArrayBracketPairsAfterElementType(), _arg);
+		NodeList<ArrayBracketPair> arrayBracketPairsAfterType_ = (NodeList<ArrayBracketPair>)_n.getArrayBracketPairsAfterElementType().accept(this, _arg);
 
 		VariableDeclarationExpr r = new VariableDeclarationExpr(
 				_n.getRange(),
@@ -1262,7 +1262,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(NodeList n, Object arg) {
-		NodeList<Node> newNodes = new NodeList<>(n.getRange(), n.getParentNode());
+		NodeList<Node> newNodes = new NodeList<>(n.getRange(), null);
 		for (Object node : n) {
 			Node resultNode = ((Node)node).accept(this, arg);
 			if(resultNode!=null){

@@ -24,13 +24,13 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -39,7 +39,7 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
 
     private String name;
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterId;
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterId = emptyNodeList();
 
     public VariableDeclaratorId() {
     }
@@ -48,10 +48,10 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
        setName(name);
     }
 
-    public VariableDeclaratorId(Range range, String name, List<ArrayBracketPair> arrayBracketPairsAfterId) {
+    public VariableDeclaratorId(Range range, String name, NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
         super(range);
         setName(name);
-        setArrayBracketPairsAfterId(arrayBracketPairsAfterId);
+        setArrayBracketPairsAfterId(assertNotNull(arrayBracketPairsAfterId));
     }
 
     @Override
@@ -75,13 +75,12 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
         return this;
     }
 
-    public List<ArrayBracketPair> getArrayBracketPairsAfterId() {
-        arrayBracketPairsAfterId = ensureNotNull(arrayBracketPairsAfterId);
+    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterId() {
         return arrayBracketPairsAfterId;
     }
 
-    public VariableDeclaratorId setArrayBracketPairsAfterId(List<ArrayBracketPair> arrayBracketPairsAfterId) {
-        this.arrayBracketPairsAfterId = arrayBracketPairsAfterId;
+    public VariableDeclaratorId setArrayBracketPairsAfterId(NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
+        this.arrayBracketPairsAfterId = assertNotNull(arrayBracketPairsAfterId);
         setAsParentNodeOf(arrayBracketPairsAfterId);
         return this;
     }

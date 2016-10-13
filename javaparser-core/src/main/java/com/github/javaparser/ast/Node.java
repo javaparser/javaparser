@@ -255,8 +255,15 @@ public abstract class Node implements Cloneable {
         return unmodifiableList(childrenNodes);
     }
 
+    /**
+     * Before 3.0.0.alpha-5, if we had a list of nodes, those nodes would not have the list
+     * as its parent, but the node containing the list.
+     * This method returns the children in that way: there are no lists, and all nodes that are
+     * in lists are directly in this list.
+     * @deprecated this will be gone in 3.0.0 release.
+     */
     @Deprecated
-    public List<Node> makeSpecialChildrenList() {
+    public List<Node> getBackwardsCompatibleChildrenNodes() {
         List<Node> children = new ArrayList<>();
         for (Node childNode : getChildrenNodes()) {
             // Avoid attributing comments to NodeLists by pretending they don't exist.

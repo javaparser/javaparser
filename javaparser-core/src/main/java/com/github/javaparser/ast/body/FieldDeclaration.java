@@ -21,7 +21,9 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.ArrayList;
@@ -60,9 +62,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     private Type elementType;
 
-    private NodeList<VariableDeclarator> variables = new NodeList<>();
+    private NodeList<VariableDeclarator> variables = emptyNodeList();
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterElementType;
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType = emptyNodeList();
 
     public FieldDeclaration() {
     }
@@ -79,7 +81,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setVariables(variables);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
+    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                             NodeList<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
@@ -89,7 +91,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType,
-                            NodeList<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
+                            NodeList<VariableDeclarator> variables, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);
         setElementType(elementType);
@@ -259,14 +261,13 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
      */
-    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        arrayBracketPairsAfterElementType = ensureNotNull(arrayBracketPairsAfterElementType);
+    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterElementType;
     }
 
     @Override
-    public FieldDeclaration setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterElementType = arrayBracketPairsAfterType;
+    public FieldDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterElementType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }

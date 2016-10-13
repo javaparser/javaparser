@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
@@ -58,9 +59,9 @@ public final class VariableDeclarationExpr extends Expression implements
 
     private Type elementType;
 
-    private NodeList<VariableDeclarator> variables;
+    private NodeList<VariableDeclarator> variables = emptyNodeList();
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType = emptyNodeList();
 
     public VariableDeclarationExpr() {
     }
@@ -106,7 +107,7 @@ public final class VariableDeclarationExpr extends Expression implements
                                    final NodeList<AnnotationExpr> annotations,
                                    final Type elementType,
                                    final NodeList<VariableDeclarator> variables,
-                                   final List<ArrayBracketPair> arrayBracketPairsAfterType) {
+                                   final NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
@@ -187,14 +188,13 @@ public final class VariableDeclarationExpr extends Expression implements
         return this;
     }
 
-    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
+    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
     @Override
-    public VariableDeclarationExpr setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+    public VariableDeclarationExpr setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }

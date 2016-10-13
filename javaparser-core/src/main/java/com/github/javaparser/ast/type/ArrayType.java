@@ -9,9 +9,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.github.javaparser.ast.NodeList.*;
 
 /**
@@ -55,9 +52,9 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
      * The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds to the rightmost ArrayBracketPair.
      */
     @SafeVarargs
-    public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
+    public static Type wrapInArrayTypes(Type type, NodeList<ArrayBracketPair>... arrayBracketPairLists) {
         for (int i = arrayBracketPairLists.length - 1; i >= 0; i--) {
-            final List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
+            final NodeList<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     type = new ArrayType(type, arrayBracketPairList.get(j).getAnnotations());
@@ -72,8 +69,8 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
      *
      * @return a pair of the element type, and the unwrapped ArrayTypes, if any.
      */
-    public static Pair<Type, List<ArrayBracketPair>> unwrapArrayTypes(Type type) {
-        final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>();
+    public static Pair<Type, NodeList<ArrayBracketPair>> unwrapArrayTypes(Type type) {
+        final NodeList<ArrayBracketPair> arrayBracketPairs = new NodeList<>();
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
             arrayBracketPairs.add(new ArrayBracketPair(Range.UNKNOWN, arrayType.getAnnotations()));

@@ -59,7 +59,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
                        final VariableDeclaratorId exceptId, 
                        final BlockStmt catchBlock) {
         super(range);
-        setParam(new Parameter(range, exceptModifier, exceptAnnotations, exceptType, null, false, exceptId));
+        setParam(new Parameter(range, exceptModifier, exceptAnnotations, exceptType, NodeList.emptyNodeList(), false, exceptId));
         setBody(catchBlock);
     }
 
