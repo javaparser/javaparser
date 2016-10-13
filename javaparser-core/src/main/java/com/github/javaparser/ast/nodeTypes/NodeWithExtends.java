@@ -1,14 +1,13 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 public interface NodeWithExtends<T> {
-    List<ClassOrInterfaceType> getExtends();
+    NodeList<ClassOrInterfaceType> getExtends();
 
-    T setExtends(final List<ClassOrInterfaceType> extendsList);
+    T setExtends(NodeList<ClassOrInterfaceType> extendsList);
 
     /**
      * Add an extends to this and automatically add the import

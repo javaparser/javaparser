@@ -22,30 +22,13 @@
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.imports.*;
-import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -234,20 +217,9 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			}
 			removeNulls(typeParameters);
 		}
-		final List<ClassOrInterfaceType> extendz = n.getExtends();
-		if (extendz != null) {
-			for (int i = 0; i < extendz.size(); i++) {
-				extendz.set(i, (ClassOrInterfaceType) extendz.get(i).accept(this, arg));
-			}
-			removeNulls(extendz);
-		}
-		final List<ClassOrInterfaceType> implementz = n.getImplements();
-		if (implementz != null) {
-			for (int i = 0; i < implementz.size(); i++) {
-				implementz.set(i, (ClassOrInterfaceType) implementz.get(i).accept(this, arg));
-			}
-			removeNulls(implementz);
-		}
+
+		n.setExtends((NodeList<ClassOrInterfaceType>) n.getExtends().accept(this, arg));
+		n.setImplements((NodeList<ClassOrInterfaceType>) n.getImplements().accept(this, arg));
         final List<BodyDeclaration<?>> members = n.getMembers();
 		if (members != null) {
 			for (int i = 0; i < members.size(); i++) {
@@ -391,13 +363,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override public Node visit(final EnumDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
-		final List<ClassOrInterfaceType> implementz = n.getImplements();
-		if (implementz != null) {
-			for (int i = 0; i < implementz.size(); i++) {
-				implementz.set(i, (ClassOrInterfaceType) implementz.get(i).accept(this, arg));
-			}
-			removeNulls(implementz);
-		}
+		n.setImplements((NodeList<ClassOrInterfaceType>) n.getImplements().accept(this, arg));
 		final List<EnumConstantDeclaration> entries = n.getEntries();
 		if (entries != null) {
 			for (int i = 0; i < entries.size(); i++) {

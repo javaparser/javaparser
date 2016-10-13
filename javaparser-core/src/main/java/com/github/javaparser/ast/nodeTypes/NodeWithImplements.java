@@ -3,12 +3,13 @@ package com.github.javaparser.ast.nodeTypes;
 import java.util.List;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 public interface NodeWithImplements<T> {
-    List<ClassOrInterfaceType> getImplements();
+    NodeList<ClassOrInterfaceType> getImplements();
 
-    T setImplements(List<ClassOrInterfaceType> implementsList);
+    T setImplements(NodeList<ClassOrInterfaceType> implementsList);
 
     /**
      * Add an implements to this

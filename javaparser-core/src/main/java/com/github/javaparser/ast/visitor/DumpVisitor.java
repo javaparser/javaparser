@@ -281,28 +281,28 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 		printTypeParameters(n.getTypeParameters(), arg);
 
-		if (!isNullOrEmpty(n.getExtends())) {
-			printer.print(" extends ");
-			for (final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator(); i.hasNext(); ) {
-				final ClassOrInterfaceType c = i.next();
-				c.accept(this, arg);
-				if (i.hasNext()) {
-					printer.print(", ");
-				}
-			}
-		}
-
-		if (!isNullOrEmpty(n.getImplements())) {
-			printer.print(" implements ");
-			for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext(); ) {
-				final ClassOrInterfaceType c = i.next();
-				c.accept(this, arg);
-				if (i.hasNext()) {
-					printer.print(", ");
-				}
-			}
-		}
-
+        if(!n.getExtends().isEmpty()) {
+            printer.print(" extends ");
+            for (final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator(); i.hasNext(); ) {
+                final ClassOrInterfaceType c = i.next();
+                c.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+        
+        if(!n.getImplements().isEmpty()) {
+            printer.print(" implements ");
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext(); ) {
+                final ClassOrInterfaceType c = i.next();
+                c.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+        
 		printer.printLn(" {");
 		printer.indent();
 		if (!isNullOrEmpty(n.getMembers())) {

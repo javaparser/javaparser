@@ -21,6 +21,8 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.NodeList.emptyNodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.EnumSet;
@@ -38,10 +40,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
-        implements NodeWithImplements<EnumDeclaration> {
+public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements 
+        NodeWithImplements<EnumDeclaration> {
 
-    private List<ClassOrInterfaceType> implementsList;
+    private NodeList<ClassOrInterfaceType> implementsList = emptyNodeList();
 
     private List<EnumConstantDeclaration> entries;
 
@@ -53,7 +55,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
-                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           NodeList<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
         setImplements(implementsList);
@@ -61,7 +63,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
     }
 
     public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
-                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           NodeList<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setImplements(implementsList);
@@ -85,8 +87,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
     }
 
     @Override
-    public List<ClassOrInterfaceType> getImplements() {
-        implementsList = ensureNotNull(implementsList);
+    public NodeList<ClassOrInterfaceType> getImplements() {
         return implementsList;
     }
 
@@ -97,8 +98,8 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
     }
 
     @Override
-    public EnumDeclaration setImplements(List<ClassOrInterfaceType> implementsList) {
-        this.implementsList = implementsList;
+    public EnumDeclaration setImplements(NodeList<ClassOrInterfaceType> implementsList) {
+        this.implementsList = assertNotNull(implementsList);
 		setAsParentNodeOf(this.implementsList);
         return this;
     }

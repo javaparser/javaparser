@@ -35,6 +35,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 import java.util.List;
 
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -48,9 +50,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     private List<TypeParameter> typeParameters;
 
     // Can contain more than one item if this is an interface
-    private List<ClassOrInterfaceType> extendsList;
+    private NodeList<ClassOrInterfaceType> extendsList = emptyNodeList();
 
-    private List<ClassOrInterfaceType> implementsList;
+    private NodeList<ClassOrInterfaceType> implementsList = emptyNodeList();
 
     public ClassOrInterfaceDeclaration() {
     }
@@ -65,8 +67,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,
-                                       final List<ClassOrInterfaceType> extendsList,
-                                       final List<ClassOrInterfaceType> implementsList,
+                                       final NodeList<ClassOrInterfaceType> extendsList,
+                                       final NodeList<ClassOrInterfaceType> implementsList,
                                        final List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
         setInterface(isInterface);
@@ -79,8 +81,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,
-                                       final List<ClassOrInterfaceType> extendsList,
-                                       final List<ClassOrInterfaceType> implementsList,
+                                       final NodeList<ClassOrInterfaceType> extendsList,
+                                       final NodeList<ClassOrInterfaceType> implementsList,
                                        final List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setInterface(isInterface);
@@ -99,14 +101,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         v.visit(this, arg);
     }
 
-    public List<ClassOrInterfaceType> getExtends() {
-        extendsList = ensureNotNull(extendsList);
+    public NodeList<ClassOrInterfaceType> getExtends() {
         return extendsList;
     }
 
     @Override
-    public List<ClassOrInterfaceType> getImplements() {
-        implementsList = ensureNotNull(implementsList);
+    public NodeList<ClassOrInterfaceType> getImplements() {
         return implementsList;
     }
 
@@ -126,8 +126,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @return
      */
     @Override
-    public ClassOrInterfaceDeclaration setExtends(final List<ClassOrInterfaceType> extendsList) {
-        this.extendsList = extendsList;
+    public ClassOrInterfaceDeclaration setExtends(final NodeList<ClassOrInterfaceType> extendsList) {
+        this.extendsList = assertNotNull(extendsList);
         setAsParentNodeOf(this.extendsList);
         return this;
     }
@@ -138,8 +138,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      *            in the future, so please avoid passing null
      */
     @Override
-    public ClassOrInterfaceDeclaration setImplements(final List<ClassOrInterfaceType> implementsList) {
-        this.implementsList = implementsList;
+    public ClassOrInterfaceDeclaration setImplements(final NodeList<ClassOrInterfaceType> implementsList) {
+        this.implementsList = assertNotNull(implementsList);
         setAsParentNodeOf(this.implementsList);
         return this;
     }
