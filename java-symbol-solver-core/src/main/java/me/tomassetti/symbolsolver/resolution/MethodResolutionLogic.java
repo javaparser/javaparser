@@ -74,6 +74,10 @@ public class MethodResolutionLogic {
         for (int i = 0; i < method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParam(i).getType();
             TypeUsage actualType = paramTypes.get(i);
+            if (expectedType.isTypeVariable() && expectedType.asTypeParameter().declaredOnMethod()) {
+                matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
+                continue;
+            }
             boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType) ||
                     (method.getParam(i).isVariadic() && new ArrayTypeUsage(expectedType).isAssignableBy(actualType));
             if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
@@ -330,6 +334,12 @@ public class MethodResolutionLogic {
 
     private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
+        if (methodA.getNoParams() < methodB.getNoParams()) {
+            return true;
+        }
+        if (methodA.getNoParams() > methodB.getNoParams()) {
+            return false;
+        }
         for (int i = 0; i < methodA.getNoParams(); i++) {
             TypeUsage tdA = methodA.getParam(i).getType();
             TypeUsage tdB = methodB.getParam(i).getType();
@@ -340,6 +350,11 @@ public class MethodResolutionLogic {
             // A is more specific
             if (tdA.isAssignableBy(tdB) && !tdB.isAssignableBy(tdA)) {
                 return false;
+            }
+            // if it matches a variadic and a not variadic I pick the not variatic
+            // FIXME
+            if (i == (methodA.getNoParams() -1) && tdA.arrayLevel() > tdB.arrayLevel()) {
+                return true;
             }
         }
         return oneMoreSpecificFound;

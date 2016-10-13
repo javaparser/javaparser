@@ -25,6 +25,14 @@ public interface TypeUsage {
         return false;
     }
 
+    default int arrayLevel() {
+        if (isArray()) {
+            return 1 + this.asArrayTypeUsage().getComponentType().arrayLevel();
+        } else {
+            return 0;
+        }
+    }
+
     /**
      * Is this a primitive type?
      */
