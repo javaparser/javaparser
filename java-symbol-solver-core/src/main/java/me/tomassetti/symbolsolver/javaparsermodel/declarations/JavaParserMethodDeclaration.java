@@ -115,6 +115,14 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         if (formalParamType instanceof WildcardUsage) {
             return;
         }
+        if (formalParamType.isArray() && actualParamType.isArray()) {
+            determineTypeParameters(
+                    determinedTypeParameters,
+                    formalParamType.asArrayTypeUsage().getComponentType(),
+                    actualParamType.asArrayTypeUsage().getComponentType(),
+                    typeSolver);
+            return;
+        }
         if (formalParamType.isReferenceType() && actualParamType.isReferenceType()
                 && !formalParamType.asReferenceTypeUsage().getQualifiedName().equals(actualParamType.asReferenceTypeUsage().getQualifiedName())) {
             List<ReferenceTypeUsage> ancestors = actualParamType.asReferenceTypeUsage().getAllAncestors();
