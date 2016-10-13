@@ -1,7 +1,7 @@
   Line 49) ((Node) this).tryAddImportToParentCompilationUnit(typeClass) ==> com.github.javaparser.ast.Node.tryAddImportToParentCompilationUnit(java.lang.Class<?>)
-  Line 50) addField(typeClass.getSimpleName(), name, modifiers) ==> UNSOLVED
+  Line 50) addField(typeClass.getSimpleName(), name, modifiers) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addField(java.lang.String, java.lang.String, com.github.javaparser.ast.Modifier...)
   Line 50) typeClass.getSimpleName() ==> java.lang.Class.getSimpleName()
-  Line 62) addField(new ClassOrInterfaceType(type), name, modifiers) ==> UNSOLVED
+  Line 62) addField(new ClassOrInterfaceType(type), name, modifiers) ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.addField(com.github.javaparser.ast.type.Type<?>, java.lang.String, com.github.javaparser.ast.Modifier...)
   Line 75) fieldDeclaration.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
   Line 77) fieldDeclaration.getVariables().add(variable) ==> java.util.List.add(E)
   Line 77) fieldDeclaration.getVariables() ==> com.github.javaparser.ast.body.FieldDeclaration.getVariables()
@@ -66,15 +66,15 @@
   Line 237) getMembers().stream().filter( m -> m instanceof MethodDeclaration && ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()).equals(Stream.of(paramTypes).collect(toSet()))) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
   Line 237) getMembers().stream() ==> java.util.Collection.stream()
   Line 237) getMembers() ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.getMembers()
-  Line 239) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())) ==> ERROR
-  Line 239) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()) ==> ERROR
+  Line 239) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())) ==> java.util.Set.equals(java.lang.Object)
+  Line 239) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 239) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 239) ((MethodDeclaration) m).getParameters().stream() ==> java.util.Collection.stream()
   Line 239) ((MethodDeclaration) m).getParameters() ==> com.github.javaparser.ast.body.MethodDeclaration.getParameters()
   Line 239) p.getType().toString() ==> com.github.javaparser.ast.Node.toString()
   Line 239) p.getType() ==> com.github.javaparser.ast.body.Parameter.getType()
   Line 240) toSet() ==> java.util.stream.Collectors.toSet()
-  Line 240) Stream.of(paramTypes).collect(toSet()) ==> ERROR
+  Line 240) Stream.of(paramTypes).collect(toSet()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 240) Stream.of(paramTypes) ==> java.util.stream.Stream.of(T[]...)
   Line 240) toSet() ==> java.util.stream.Collectors.toSet()
   Line 241) toList() ==> java.util.stream.Collectors.toList()
@@ -83,15 +83,15 @@
   Line 252) getMembers().stream().filter( m -> m instanceof MethodDeclaration && ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()).equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet()))) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
   Line 252) getMembers().stream() ==> java.util.Collection.stream()
   Line 252) getMembers() ==> com.github.javaparser.ast.nodeTypes.NodeWithMembers.getMembers()
-  Line 254) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()).equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())) ==> ERROR
-  Line 254) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()) ==> ERROR
+  Line 254) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()).equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())) ==> java.util.Set.equals(java.lang.Object)
+  Line 254) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()).collect(toSet()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 254) ((MethodDeclaration) m).getParameters().stream().map( p -> p.getType().toString()) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 254) ((MethodDeclaration) m).getParameters().stream() ==> java.util.Collection.stream()
   Line 254) ((MethodDeclaration) m).getParameters() ==> com.github.javaparser.ast.body.MethodDeclaration.getParameters()
   Line 254) p.getType().toString() ==> com.github.javaparser.ast.Node.toString()
   Line 254) p.getType() ==> com.github.javaparser.ast.body.Parameter.getType()
   Line 255) toSet() ==> java.util.stream.Collectors.toSet()
-  Line 256) Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet()) ==> ERROR
+  Line 256) Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 256) Stream.of(paramTypes).map(Class::getSimpleName) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 256) Stream.of(paramTypes) ==> java.util.stream.Stream.of(T[]...)
   Line 256) toSet() ==> java.util.stream.Collectors.toSet()

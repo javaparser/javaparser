@@ -27,6 +27,11 @@ public interface TypeParameter {
             }
 
             @Override
+            public String qualifiedName() {
+                return String.format("%s.%s", classQName, name);
+            }
+
+            @Override
             public String getQNameOfDeclaringClass() {
                 return classQName;
             }
@@ -49,6 +54,9 @@ public interface TypeParameter {
 
     boolean declaredOnMethod();
 
+    String qualifiedName();
+
+    @Deprecated
     String getQNameOfDeclaringClass();
 
     List<Bound> getBounds(TypeSolver typeSolver);

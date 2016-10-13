@@ -68,7 +68,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         TypeUsage type = javaParserFacade.getType(expression);
-        assertEquals("java.util.List<? super java.lang.String>", type.describe());
+        assertEquals("java.util.List<java.lang.String>", type.describe());
     }
 
 

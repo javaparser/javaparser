@@ -72,7 +72,8 @@ public class JavaParserFacade {
             if (solved.isPresent()) {
                 return solved.get();
             } else {
-                throw new UnsolvedSymbolException(context, typeUsage.describe());
+                //throw new UnsolvedSymbolException(context, String.format("Unable to solve generic type %s using context %s", typeUsage.describe(), context.toString()));
+                return typeUsage;
             }
         } else if (typeUsage.isWildcard()) {
             if (typeUsage.asWildcard().isExtends() || typeUsage.asWildcard().isSuper()) {
@@ -216,6 +217,34 @@ public class JavaParserFacade {
         return Optional.empty();
     }
 
+    private MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr) {
+        if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
+            throw new UnsupportedOperationException();
+        }
+        TypeExpr typeExpr = (TypeExpr)methodReferenceExpr.getScope();
+        if (!(typeExpr.getType() instanceof ReferenceType)) {
+            throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
+        }
+        ReferenceType referenceType = (ReferenceType)typeExpr.getType();
+        if (!(referenceType.getType() instanceof ClassOrInterfaceType)) {
+            throw new UnsupportedOperationException(referenceType.getType().getClass().getCanonicalName());
+        }
+        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)referenceType.getType();
+        SymbolReference<TypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName(), typeSolver);
+        if (!typeDeclarationSymbolReference.isSolved()) {
+            throw new UnsupportedOperationException();
+        }
+        List<MethodUsage> methodUsages = typeDeclarationSymbolReference.getCorrespondingDeclaration().getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList());
+        switch (methodUsages.size()) {
+            case 0:
+                throw new UnsupportedOperationException();
+            case 1:
+                return methodUsages.get(0);
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+
     /**
      * Should return more like a TypeApplication: a TypeDeclaration and possible parameters or array modifiers.
      *
@@ -306,20 +335,34 @@ public class JavaParserFacade {
                     //lambdas
                     Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
                     if (functionalMethod.isPresent()) {
-                        LambdaExpr lambdaExpr = (LambdaExpr)node;
+                        if (node instanceof MethodReferenceExpr) {
+                            MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) node;
 
-                        List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
-                        if (lambdaExpr.getBody() instanceof ExpressionStmt) {
-                            ExpressionStmt expressionStmt = (ExpressionStmt)lambdaExpr.getBody();
-                            TypeUsage actualType = getType (expressionStmt.getExpression());
+                            List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
+                            TypeUsage actualType = toMethodUsage(methodReferenceExpr).returnType();
                             TypeUsage formalType = functionalMethod.get().returnType();
                             formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                             Map<String, TypeUsage> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
                             for (String typeName : inferredTypes.keySet()) {
                                 result = result.replaceParam(typeName, inferredTypes.get(typeName));
                             }
+
                         } else {
-                            throw new UnsupportedOperationException();
+                            LambdaExpr lambdaExpr = (LambdaExpr) node;
+
+                            List<Tuple2<TypeUsage, TypeUsage>> formalActualTypePairs = new ArrayList<>();
+                            if (lambdaExpr.getBody() instanceof ExpressionStmt) {
+                                ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
+                                TypeUsage actualType = getType(expressionStmt.getExpression());
+                                TypeUsage formalType = functionalMethod.get().returnType();
+                                formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
+                                Map<String, TypeUsage> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+                                for (String typeName : inferredTypes.keySet()) {
+                                    result = result.replaceParam(typeName, inferredTypes.get(typeName));
+                                }
+                            } else {
+                                throw new UnsupportedOperationException();
+                            }
                         }
                     }
 

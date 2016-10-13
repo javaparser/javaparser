@@ -103,6 +103,16 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
+    public void parseModifier() throws IOException, ParseException {
+        parse("com/github/javaparser/ast/Modifier");
+    }
+
+    @Test
+    public void parseNodeWithMembers() throws IOException, ParseException {
+        parse("com/github/javaparser/ast/nodeTypes/NodeWithMembers");
+    }
+
+    @Test
     public void parseAstStmts() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/AssertStmt");
         parse("com/github/javaparser/ast/stmt/BlockStmt");
@@ -207,7 +217,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         parse("com/github/javaparser/ast/CompilationUnit");
         parse("com/github/javaparser/ast/Example");
         parse("com/github/javaparser/ast/ImportDeclaration");
-        parse("com/github/javaparser/ast/Modifier");
         parse("com/github/javaparser/ast/Node");
         parse("com/github/javaparser/ast/PackageDeclaration");
         parse("com/github/javaparser/ast/UserDataKey");
@@ -223,7 +232,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         parse("com/github/javaparser/ast/nodeTypes/NodeWithExtends");
         parse("com/github/javaparser/ast/nodeTypes/NodeWithImplements");
         parse("com/github/javaparser/ast/nodeTypes/NodeWithJavaDoc");
-        parse("com/github/javaparser/ast/nodeTypes/NodeWithMembers");
         parse("com/github/javaparser/ast/nodeTypes/NodeWithModifiers");
         parse("com/github/javaparser/ast/nodeTypes/NodeWithName");
         parse("com/github/javaparser/ast/nodeTypes/NodeWithParameters");

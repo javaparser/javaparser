@@ -38,7 +38,19 @@ public class JavassistTypeParameter implements TypeParameter {
 
     @Override
     public boolean declaredOnMethod() {
-        throw new UnsupportedOperationException();
+        return !declaredOnClass();
+    }
+
+    @Override
+    public String qualifiedName() {
+        if (this.declaredOnClass()) {
+            return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
+        } else {
+            //com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
+            //MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
+            //return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
+            throw new UnsupportedOperationException();
+        }
     }
 
     @Override

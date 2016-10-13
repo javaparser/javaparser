@@ -1,6 +1,6 @@
-  Line 46) a.getBegin().compareTo(b.getBegin()) ==> ERROR
-  Line 46) a.getBegin() ==> ERROR
-  Line 46) b.getBegin() ==> ERROR
+  Line 46) a.getBegin().compareTo(b.getBegin()) ==> com.github.javaparser.Position.compareTo(com.github.javaparser.Position)
+  Line 46) a.getBegin() ==> com.github.javaparser.ast.Node.getBegin()
+  Line 46) b.getBegin() ==> com.github.javaparser.ast.Node.getBegin()
   Line 121) range.withBegin(begin) ==> com.github.javaparser.Range.withBegin(com.github.javaparser.Position)
   Line 129) range.withEnd(end) ==> com.github.javaparser.Range.withEnd(com.github.javaparser.Position)
   Line 158) this.comment.setCommentedNode(null) ==> com.github.javaparser.ast.comments.Comment.setCommentedNode(com.github.javaparser.ast.Node)

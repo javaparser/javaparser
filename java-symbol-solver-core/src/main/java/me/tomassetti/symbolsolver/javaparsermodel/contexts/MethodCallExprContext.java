@@ -2,16 +2,17 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
+import javaslang.Tuple2;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
+import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.*;
 import me.tomassetti.symbolsolver.model.typesystem.*;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
-import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,16 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             throw new UnsupportedOperationException(name);
         }
         TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-        return typeOfScope.asReferenceTypeUsage().getGenericParameterByName(name);
+        Optional<TypeUsage> res = typeOfScope.asReferenceTypeUsage().getGenericParameterByName(name);
+        /*if (res.isPresent()) {
+            return res;
+        } else {
+            for (Expression param : this.wrappedNode.getArgs()) {
+                System.out.println(JavaParserFacade.get(typeSolver).getType(param));
+            }
+            throw new UnsupportedOperationException();
+        }*/
+        return res;
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(ReferenceTypeUsage refType, String name,
@@ -153,12 +163,31 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
+    private TypeUsage usingParameterTypesFromScope(TypeUsage scope, TypeUsage type) {
+        if (type.isReferenceType()) {
+            for (Tuple2<TypeParameter, TypeUsage> entry : type.asReferenceTypeUsage().getTypeParametersMap()) {
+                if (entry._1.declaredOnClass() && scope.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName()).isPresent()) {
+                    type = type.replaceParam(entry._1.getName(), scope.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName()).get());
+                }
+            }
+            return type;
+        } else {
+            return type;
+        }
+    }
+
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
         // TODO consider call of static methods
         if (wrappedNode.getScope() != null) {
             try {
                 TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+                // we can replace the parameter types from the scope into the parameters
+
+                for (int i=0;i<parameterTypes.size();i++) {
+                    parameterTypes.set(i, usingParameterTypesFromScope(typeOfScope, parameterTypes.get(i)));
+                }
+
                 return solveMethodAsUsage(typeOfScope, name, parameterTypes, typeSolver, this);
             } catch (UnsolvedSymbolException e) {
                 // ok, maybe it was instead a static access, so let's look for a type
@@ -214,7 +243,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             }
 
-            TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+            TypeUsage typeOfScope = null;
+            try {
+                typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+            } catch (Exception e) {
+                throw new RuntimeException(String.format("Issur calculating the type of the scope of " + this), e);
+            }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
                     return typeOfScope.asWildcard().getBoundedType().asReferenceTypeUsage().solveMethod(name, parameterTypes);

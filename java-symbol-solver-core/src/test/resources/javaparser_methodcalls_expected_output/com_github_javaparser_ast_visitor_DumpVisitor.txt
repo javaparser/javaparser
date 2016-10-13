@@ -9,10 +9,10 @@
   Line 118) createSourcePrinter() ==> com.github.javaparser.ast.visitor.DumpVisitor.createSourcePrinter()
   Line 125) printer.getSource() ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.getSource()
   Line 129) modifiers.size() ==> java.util.AbstractCollection.size()
-  Line 130) printer.print(modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) + " ") ==> ERROR
+  Line 130) printer.print(modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) + " ") ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.print(java.lang.String)
   Line 130) modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 130) modifiers.stream().map(Modifier::getLib) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
-  Line 130) modifiers.stream() ==> ERROR
+  Line 130) modifiers.stream() ==> java.util.Collection.stream()
   Line 130) Collectors.joining(" ") ==> java.util.stream.Collectors.joining(java.lang.CharSequence)
   Line 135) printer.printLn() ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.printLn()
   Line 136) member.accept(this, arg) ==> com.github.javaparser.ast.Node.accept(com.github.javaparser.ast.visitor.VoidVisitor<A>, A)
@@ -170,7 +170,7 @@
   Line 362) printer.print(" ") ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.print(java.lang.String)
   Line 365) printer.print(n.getName()) ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.print(java.lang.String)
   Line 365) n.getName() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getName()
-  Line 367) n.isUsingDiamondOperator() ==> UNSOLVED
+  Line 367) n.isUsingDiamondOperator() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.isUsingDiamondOperator()
   Line 368) printer.print("<>") ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter.print(java.lang.String)
   Line 370) printTypeArgs(n, arg) ==> com.github.javaparser.ast.visitor.DumpVisitor.printTypeArgs(com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments<?>, java.lang.Object)
   Line 376) printJavaComment(n.getComment(), arg) ==> com.github.javaparser.ast.visitor.DumpVisitor.printJavaComment(com.github.javaparser.ast.comments.Comment, java.lang.Object)

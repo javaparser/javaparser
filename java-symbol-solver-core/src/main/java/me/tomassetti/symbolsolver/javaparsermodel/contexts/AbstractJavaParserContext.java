@@ -88,10 +88,18 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 }
             }
             if (found) {
-                return JavaParserFactory.getContext(wrappedNode.getParentNode().getParentNode(), typeSolver);
+                Node notMethod = wrappedNode.getParentNode();
+                while (notMethod instanceof MethodCallExpr) {
+                    notMethod = notMethod.getParentNode();
+                }
+                return JavaParserFactory.getContext(notMethod, typeSolver);
             }
         }
-        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver);
+        Node notMethod = wrappedNode.getParentNode();
+        while (notMethod instanceof MethodCallExpr) {
+            notMethod = notMethod.getParentNode();
+        }
+        return JavaParserFactory.getContext(notMethod, typeSolver);
     }
 
 }

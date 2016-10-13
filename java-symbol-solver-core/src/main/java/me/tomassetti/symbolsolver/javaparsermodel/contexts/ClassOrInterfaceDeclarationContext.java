@@ -3,24 +3,24 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-
-import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.resolution.Value;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.Value;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
+import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
+import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +154,19 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             }
             SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().solveMethod(name, parameterTypes);
             if (res.isSolved()) {
+                candidateMethods.add(res.getCorrespondingDeclaration());
+            }
+        }
+
+        // Consider only default methods from interfaces
+        for (ClassOrInterfaceType implemented : this.wrappedNode.getImplements()) {
+            String interfaceClassName = implemented.getName();
+            SymbolReference<TypeDeclaration> superclass = solveType(interfaceClassName, typeSolver);
+            if (!superclass.isSolved()) {
+                throw new UnsolvedSymbolException(this, interfaceClassName);
+            }
+            SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().solveMethod(name, parameterTypes);
+            if (res.isSolved() && res.getCorrespondingDeclaration().isDefaultMethod()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
         }

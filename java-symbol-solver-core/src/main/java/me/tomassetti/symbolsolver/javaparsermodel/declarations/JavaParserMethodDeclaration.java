@@ -115,6 +115,14 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         if (formalParamType instanceof WildcardUsage) {
             return;
         }
+        if (formalParamType.isArray() && actualParamType.isArray()) {
+            determineTypeParameters(
+                    determinedTypeParameters,
+                    formalParamType.asArrayTypeUsage().getComponentType(),
+                    actualParamType.asArrayTypeUsage().getComponentType(),
+                    typeSolver);
+            return;
+        }
         if (formalParamType.isReferenceType() && actualParamType.isReferenceType()
                 && !formalParamType.asReferenceTypeUsage().getQualifiedName().equals(actualParamType.asReferenceTypeUsage().getQualifiedName())) {
             List<ReferenceTypeUsage> ancestors = actualParamType.asReferenceTypeUsage().getAllAncestors();
@@ -230,7 +238,12 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         throw new UnsupportedOperationException();
     }
 
-	/**
+    @Override
+    public boolean isDefaultMethod() {
+        return wrappedNode.isDefault();
+    }
+
+    /**
 	 * Returns the JavaParser node associated with this JavaParserMethodDeclaration.
 	 *
 	 * @return A visitable JavaParser node wrapped by this object.

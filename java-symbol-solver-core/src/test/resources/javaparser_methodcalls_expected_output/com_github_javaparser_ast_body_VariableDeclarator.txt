@@ -12,7 +12,7 @@
   Line 112) setAsParentNodeOf(this.init) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
   Line 121) setAsParentNodeOf(this.init) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
   Line 128) getParentNodeOfType(NodeWithElementType.class) ==> com.github.javaparser.ast.Node.getParentNodeOfType(java.lang.Class<T>)
-  Line 130) wrapInArrayTypes(elementType.getElementType(), elementType.getArrayBracketPairsAfterElementType(), getId().getArrayBracketPairsAfterId()) ==> UNSOLVED
+  Line 130) wrapInArrayTypes(elementType.getElementType(), elementType.getArrayBracketPairsAfterElementType(), getId().getArrayBracketPairsAfterId()) ==> com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes(com.github.javaparser.ast.type.Type, java.util.List<com.github.javaparser.ast.ArrayBracketPair>...)
   Line 130) elementType.getElementType() ==> com.github.javaparser.ast.nodeTypes.NodeWithElementType.getElementType()
   Line 131) elementType.getArrayBracketPairsAfterElementType() ==> com.github.javaparser.ast.nodeTypes.NodeWithElementType.getArrayBracketPairsAfterElementType()
   Line 132) getId().getArrayBracketPairsAfterId() ==> com.github.javaparser.ast.body.VariableDeclaratorId.getArrayBracketPairsAfterId()
