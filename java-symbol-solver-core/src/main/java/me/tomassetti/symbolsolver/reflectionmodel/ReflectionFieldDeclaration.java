@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Field;
 
@@ -10,7 +10,7 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
 
     private Field field;
     private TypeSolver typeSolver;
-    private TypeUsage type;
+    private Type type;
 
     public ReflectionFieldDeclaration(Field field, TypeSolver typeSolver) {
         this.field = field;
@@ -18,18 +18,18 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
         this.type = calcType();
     }
 
-    private ReflectionFieldDeclaration(Field field, TypeSolver typeSolver, TypeUsage type) {
+    private ReflectionFieldDeclaration(Field field, TypeSolver typeSolver, Type type) {
         this.field = field;
         this.typeSolver = typeSolver;
         this.type = type;
     }
 
     @Override
-    public TypeUsage getType() {
+    public Type getType() {
         return type;
     }
 
-    private TypeUsage calcType() {
+    private Type calcType() {
         // TODO consider interfaces, enums, primitive types, arrays
         return ReflectionFactory.typeUsageFor(field.getGenericType(), typeSolver);
     }
@@ -44,7 +44,7 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
         return true;
     }
 
-    public FieldDeclaration replaceType(TypeUsage fieldType) {
+    public FieldDeclaration replaceType(Type fieldType) {
         return new ReflectionFieldDeclaration(field, typeSolver, fieldType);
     }
 

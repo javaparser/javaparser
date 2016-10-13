@@ -13,9 +13,9 @@ import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.WildcardUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.typesystem.Wildcard;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,7 +55,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public TypeUsage getReturnType() {
+    public Type getReturnType() {
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), getContext());
     }
 
@@ -77,20 +77,20 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes) {
-        TypeUsage returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getReturnType(), typeSolver, context);
-        List<TypeUsage> params = new ArrayList<>();
+    public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
+        Type returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getReturnType(), typeSolver, context);
+        List<Type> params = new ArrayList<>();
         for (int i = 0; i < wrappedNode.getParameters().size(); i++) {
-            TypeUsage replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getParam(i).getType(), typeSolver, context);
+            Type replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getParam(i).getType(), typeSolver, context);
             params.add(replaced);
         }
 
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
-        Map<String, TypeUsage> determinedTypeParameters = new HashMap<>();
+        Map<String, Type> determinedTypeParameters = new HashMap<>();
         for (int i = 0; i < getNoParams(); i++) {
-            TypeUsage formalParamType = getParam(i).getType();
-            TypeUsage actualParamType = parameterTypes.get(i);
+            Type formalParamType = getParam(i).getType();
+            Type actualParamType = parameterTypes.get(i);
             determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
         }
 
@@ -101,7 +101,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);
     }
 
-    private void determineTypeParameters(Map<String, TypeUsage> determinedTypeParameters, TypeUsage formalParamType, TypeUsage actualParamType, TypeSolver typeSolver) {
+    private void determineTypeParameters(Map<String, Type> determinedTypeParameters, Type formalParamType, Type actualParamType, TypeSolver typeSolver) {
         if (actualParamType.isNull()) {
             return;
         }
@@ -112,7 +112,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             determinedTypeParameters.put(formalParamType.describe(), actualParamType);
             return;
         }
-        if (formalParamType instanceof WildcardUsage) {
+        if (formalParamType instanceof Wildcard) {
             return;
         }
         if (formalParamType.isArray() && actualParamType.isArray()) {
@@ -125,9 +125,9 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         }
         if (formalParamType.isReferenceType() && actualParamType.isReferenceType()
                 && !formalParamType.asReferenceTypeUsage().getQualifiedName().equals(actualParamType.asReferenceTypeUsage().getQualifiedName())) {
-            List<ReferenceTypeUsage> ancestors = actualParamType.asReferenceTypeUsage().getAllAncestors();
+            List<ReferenceType> ancestors = actualParamType.asReferenceTypeUsage().getAllAncestors();
             final String formalParamTypeQName = formalParamType.asReferenceTypeUsage().getQualifiedName();
-            List<TypeUsage> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+            List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
             if (correspondingFormalType.isEmpty()) {
                 throw new IllegalArgumentException();
             }
@@ -137,8 +137,8 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             if (formalParamType.asReferenceTypeUsage().isRawType() || actualParamType.asReferenceTypeUsage().isRawType()) {
                 return;
             }
-            List<TypeUsage> formalTypeParams = formalParamType.asReferenceTypeUsage().parameters();
-            List<TypeUsage> actualTypeParams = actualParamType.asReferenceTypeUsage().parameters();
+            List<Type> formalTypeParams = formalParamType.asReferenceTypeUsage().parameters();
+            List<Type> actualTypeParams = actualParamType.asReferenceTypeUsage().parameters();
             if (formalTypeParams.size() != actualTypeParams.size()) {
                 throw new UnsupportedOperationException();
             }
@@ -162,13 +162,13 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         return wrappedNode.getModifiers().contains(com.github.javaparser.ast.Modifier.PRIVATE);
     }
 
-    private Optional<TypeUsage> typeParamByName(String name, TypeSolver typeSolver, Context context) {
+    private Optional<Type> typeParamByName(String name, TypeSolver typeSolver, Context context) {
         int i = 0;
         if (wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
                 if (tp.getName().equals(name)) {
-                    TypeUsage typeUsage = JavaParserFacade.get(typeSolver).convertToUsage(this.wrappedNode.getParameters().get(i).getType(), context);
-                    return Optional.of(typeUsage);
+                    Type type = JavaParserFacade.get(typeSolver).convertToUsage(this.wrappedNode.getParameters().get(i).getType(), context);
+                    return Optional.of(type);
                 }
                 i++;
             }
@@ -176,28 +176,28 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         return Optional.empty();
     }
 
-    private TypeUsage replaceTypeParams(TypeUsage typeUsage, TypeSolver typeSolver, Context context) {
-        if (typeUsage.isTypeVariable()) {
-            TypeParameter typeParameter = typeUsage.asTypeParameter();
+    private Type replaceTypeParams(Type type, TypeSolver typeSolver, Context context) {
+        if (type.isTypeVariable()) {
+            TypeParameter typeParameter = type.asTypeParameter();
             if (typeParameter.declaredOnClass()) {
-                Optional<TypeUsage> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
+                Optional<Type> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
                 if (typeParam.isPresent()) {
-                    typeUsage = typeParam.get();
+                    type = typeParam.get();
                 }
             }
         }
 
-        if (typeUsage.isReferenceType()) {
-            for (int i = 0; i < typeUsage.asReferenceTypeUsage().parameters().size(); i++) {
-                TypeUsage replaced = replaceTypeParams(typeUsage.asReferenceTypeUsage().parameters().get(i), typeSolver, context);
+        if (type.isReferenceType()) {
+            for (int i = 0; i < type.asReferenceTypeUsage().parameters().size(); i++) {
+                Type replaced = replaceTypeParams(type.asReferenceTypeUsage().parameters().get(i), typeSolver, context);
                 // Identity comparison on purpose
-                if (replaced != typeUsage.asReferenceTypeUsage().parameters().get(i)) {
-                    typeUsage = typeUsage.asReferenceTypeUsage().replaceParam(i, replaced);
+                if (replaced != type.asReferenceTypeUsage().parameters().get(i)) {
+                    type = type.asReferenceTypeUsage().replaceParam(i, replaced);
                 }
             }
         }
 
-        return typeUsage;
+        return type;
     }
 
     @Override

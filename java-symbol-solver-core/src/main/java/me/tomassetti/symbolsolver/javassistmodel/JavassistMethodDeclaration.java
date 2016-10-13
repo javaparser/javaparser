@@ -9,7 +9,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -70,7 +70,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public TypeUsage getReturnType() {
+    public Type getReturnType() {
         try {
             return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
         } catch (NotFoundException e) {
@@ -106,7 +106,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes) {
+    public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
         throw new UnsupportedOperationException();
     }
 

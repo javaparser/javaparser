@@ -9,13 +9,13 @@ package me.tomassetti.symbolsolver.model.typesystem;
  *
  * @author Federico Tomassetti
  */
-public class WildcardUsage implements TypeUsage {
+public class Wildcard implements Type {
 
-    public static WildcardUsage UNBOUNDED = new WildcardUsage(null, null);
+    public static Wildcard UNBOUNDED = new Wildcard(null, null);
     private BoundType type;
-    private TypeUsage boundedType;
+    private Type boundedType;
 
-    private WildcardUsage(BoundType type, TypeUsage boundedType) {
+    private Wildcard(BoundType type, Type boundedType) {
         if (type == null && boundedType != null) {
             throw new IllegalArgumentException();
         }
@@ -34,19 +34,19 @@ public class WildcardUsage implements TypeUsage {
                 '}';
     }
 
-    public static WildcardUsage superBound(TypeUsage typeUsage) {
-        return new WildcardUsage(BoundType.SUPER, typeUsage);
+    public static Wildcard superBound(Type type) {
+        return new Wildcard(BoundType.SUPER, type);
     }
 
-    public static WildcardUsage extendsBound(TypeUsage typeUsage) {
-        return new WildcardUsage(BoundType.EXTENDS, typeUsage);
+    public static Wildcard extendsBound(Type type) {
+        return new Wildcard(BoundType.EXTENDS, type);
     }
 
     public boolean isWildcard() {
         return true;
     }
 
-    public WildcardUsage asWildcard() {
+    public Wildcard asWildcard() {
         return this;
     }
 
@@ -58,9 +58,9 @@ public class WildcardUsage implements TypeUsage {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof WildcardUsage)) return false;
+        if (!(o instanceof Wildcard)) return false;
 
-        WildcardUsage that = (WildcardUsage) o;
+        Wildcard that = (Wildcard) o;
 
         if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null) return false;
         if (type != that.type) return false;
@@ -96,7 +96,7 @@ public class WildcardUsage implements TypeUsage {
         return type == BoundType.EXTENDS;
     }
 
-    public TypeUsage getBoundedType() {
+    public Type getBoundedType() {
         if (boundedType == null) {
             throw new IllegalStateException();
         }
@@ -104,7 +104,7 @@ public class WildcardUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other) {
+    public boolean isAssignableBy(Type other) {
         if (boundedType == null) {
             //return other.isReferenceType() && other.asReferenceTypeUsage().getQualifiedName().equals(Object.class.getCanonicalName());
             return false;
@@ -118,19 +118,19 @@ public class WildcardUsage implements TypeUsage {
     }
 
     @Override
-    public TypeUsage replaceParam(String name, TypeUsage replaced) {
+    public Type replaceParam(String name, Type replaced) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
         if (boundedType == null) {
             return this;
         }
-        TypeUsage boundedTypeReplaced = boundedType.replaceParam(name, replaced);
+        Type boundedTypeReplaced = boundedType.replaceParam(name, replaced);
         if (boundedTypeReplaced == null) {
             throw new RuntimeException();
         }
         if (boundedTypeReplaced != boundedType) {
-            return new WildcardUsage(type, boundedTypeReplaced);
+            return new Wildcard(type, boundedTypeReplaced);
         } else {
             return this;
         }

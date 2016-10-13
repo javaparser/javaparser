@@ -12,9 +12,9 @@ import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         return getContext().solveMethod(name, parameterTypes, typeSolver());
     }
 
@@ -64,7 +64,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
@@ -107,8 +107,8 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     private Bound toBound(ClassOrInterfaceType classOrInterfaceType, TypeSolver typeSolver) {
-        TypeUsage typeUsage = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
-        Bound bound = Bound.extendsBound(typeUsage);
+        Type type = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
+        Bound bound = Bound.extendsBound(type);
         return bound;
     }
 
@@ -122,12 +122,12 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         throw new UnsupportedOperationException();
     }
 
-    public TypeUsage getUsage(Node node) {
+    public Type getUsage(Node node) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
+    public boolean isAssignableBy(Type type) {
         throw new UnsupportedOperationException();
     }
 
@@ -157,7 +157,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAncestors() {
+    public List<ReferenceType> getAncestors() {
         throw new UnsupportedOperationException();
     }
 

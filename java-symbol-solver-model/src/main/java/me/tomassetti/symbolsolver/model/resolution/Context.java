@@ -4,7 +4,7 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,7 @@ public interface Context {
 
     /* Type resolution */
 
-    default Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
+    default Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
         return Optional.empty();
     }
 
@@ -53,13 +53,13 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of parameters.
      */
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver);
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver);
 
     /**
      * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
      * resolved type variables.
      */
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
         SymbolReference<MethodDeclaration> methodSolved = solveMethod(name, parameterTypes, typeSolver);
         if (methodSolved.isSolved()) {
             MethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();

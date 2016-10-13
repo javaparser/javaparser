@@ -1,14 +1,12 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -19,37 +17,37 @@ public class WildcardUsageTest {
     class Bar extends Foo { }
 
     private TypeSolver typeSolver;
-    private ReferenceTypeUsageImpl foo;
-    private ReferenceTypeUsageImpl bar;
-    private ReferenceTypeUsageImpl object;
-    private ReferenceTypeUsageImpl string;
-    private WildcardUsage unbounded = WildcardUsage.UNBOUNDED;
-    private WildcardUsage superFoo;
-    private WildcardUsage superBar;
-    private WildcardUsage extendsFoo;
-    private WildcardUsage extendsBar;
-    private WildcardUsage superA;
-    private WildcardUsage extendsA;
-    private WildcardUsage superString;
-    private WildcardUsage extendsString;
-    private TypeParameterUsage a;
+    private ReferenceTypeImpl foo;
+    private ReferenceTypeImpl bar;
+    private ReferenceTypeImpl object;
+    private ReferenceTypeImpl string;
+    private Wildcard unbounded = Wildcard.UNBOUNDED;
+    private Wildcard superFoo;
+    private Wildcard superBar;
+    private Wildcard extendsFoo;
+    private Wildcard extendsBar;
+    private Wildcard superA;
+    private Wildcard extendsA;
+    private Wildcard superString;
+    private Wildcard extendsString;
+    private TypeParameter a;
 
     @Before
     public void setup() {
         typeSolver = new JreTypeSolver();
-        foo = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
-        bar = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
-        object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        string = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        superFoo = WildcardUsage.superBound(foo);
-        superBar = WildcardUsage.superBound(bar);
-        extendsFoo = WildcardUsage.extendsBound(foo);
-        extendsBar = WildcardUsage.extendsBound(bar);
-        a = new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()));
-        superA = WildcardUsage.superBound(a);
-        extendsA = WildcardUsage.extendsBound(a);
-        superString = WildcardUsage.superBound(string);
-        extendsString = WildcardUsage.extendsBound(string);
+        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
+        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
+        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        superFoo = Wildcard.superBound(foo);
+        superBar = Wildcard.superBound(bar);
+        extendsFoo = Wildcard.extendsBound(foo);
+        extendsBar = Wildcard.extendsBound(bar);
+        a = new TypeParameter(me.tomassetti.symbolsolver.model.resolution.TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()));
+        superA = Wildcard.superBound(a);
+        extendsA = Wildcard.extendsBound(a);
+        superString = Wildcard.superBound(string);
+        extendsString = Wildcard.extendsBound(string);
     }
 
     @Test

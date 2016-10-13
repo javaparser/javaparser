@@ -5,11 +5,10 @@ import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeParametrizable;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -19,8 +18,8 @@ import java.util.stream.Collectors;
 
 class ReflectionMethodResolutionLogic {
 
-    static Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver,
-                                                    Context invokationContext, List<TypeUsage> typeParameterValues,
+    static Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver,
+                                                    Context invokationContext, List<Type> typeParameterValues,
                                                     TypeParametrizable typeParametrizable, Class clazz) {
         if (typeParameterValues.size() != typeParametrizable.getTypeParameters().size()) {
             //if (typeParameterValues.size() != 0){
@@ -31,7 +30,7 @@ class ReflectionMethodResolutionLogic {
                 // Parameters not specified, so default to Object
                 typeParameterValues = new ArrayList<>();
                 for (int i = 0; i < typeParametrizable.getTypeParameters().size(); i++) {
-                    typeParameterValues.add(new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
+                    typeParameterValues.add(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
                 }
             }
         }
@@ -41,21 +40,21 @@ class ReflectionMethodResolutionLogic {
                 MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
                 MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
                 int i = 0;
-                for (TypeParameter tp : typeParametrizable.getTypeParameters()) {
+                for (me.tomassetti.symbolsolver.model.resolution.TypeParameter tp : typeParametrizable.getTypeParameters()) {
                     methodUsage = methodUsage.replaceNameParam(tp.getName(), typeParameterValues.get(i));
                     i++;
                 }
-                for (TypeParameter methodTypeParameter : methodDeclaration.getTypeParameters()) {
-                    methodUsage = methodUsage.replaceNameParam(methodTypeParameter.getName(), new TypeParameterUsage(methodTypeParameter));
+                for (me.tomassetti.symbolsolver.model.resolution.TypeParameter methodTypeParameter : methodDeclaration.getTypeParameters()) {
+                    methodUsage = methodUsage.replaceNameParam(methodTypeParameter.getName(), new TypeParameter(methodTypeParameter));
                 }
                 methods.add(methodUsage);
             }
 
         }
-        final List<TypeUsage> finalTypeParameterValues = typeParameterValues;
+        final List<Type> finalTypeParameterValues = typeParameterValues;
         parameterTypes = parameterTypes.stream().map((pt) -> {
             int i = 0;
-            for (TypeParameter tp : typeParametrizable.getTypeParameters()) {
+            for (me.tomassetti.symbolsolver.model.resolution.TypeParameter tp : typeParametrizable.getTypeParameters()) {
                 pt = pt.replaceParam(tp.getName(), finalTypeParameterValues.get(i));
                 i++;
             }

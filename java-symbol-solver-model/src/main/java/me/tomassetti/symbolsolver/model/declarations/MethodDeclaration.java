@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.model.resolution.Context;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrizable {
      */
     TypeDeclaration declaringType();
 
-    TypeUsage getReturnType();
+    Type getReturnType();
 
     int getNoParams();
 
@@ -51,7 +51,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrizable {
      * solved in the given context.
      */
     @Deprecated
-    MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes);
+    MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes);
 
     boolean isAbstract();
 

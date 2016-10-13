@@ -7,13 +7,12 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.type.PrimitiveType;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ArrayType;
+import me.tomassetti.symbolsolver.model.typesystem.PrimitiveType;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 
@@ -100,26 +99,26 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public TypeUsage getType() {
+    public Type getType() {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
             if (wrappedNode.getParentNode() instanceof LambdaExpr) {
                 int pos = getParamPos(parameter);
-                TypeUsage lambdaType = JavaParserFacade.get(typeSolver).getType(wrappedNode.getParentNode());
+                Type lambdaType = JavaParserFacade.get(typeSolver).getType(wrappedNode.getParentNode());
 
                 // TODO understand from the context to which method this corresponds
                 //MethodDeclaration methodDeclaration = JavaParserFacade.get(typeSolver).getMethodCalled
                 //MethodDeclaration methodCalled = JavaParserFacade.get(typeSolver).solve()
                 throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
             } else {
-                TypeUsage rawType = null;
-                if (parameter.getType() instanceof PrimitiveType) {
-                    rawType = PrimitiveTypeUsage.byName(((PrimitiveType) parameter.getType()).getType().name());
+                Type rawType = null;
+                if (parameter.getType() instanceof com.github.javaparser.ast.type.PrimitiveType) {
+                    rawType = PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) parameter.getType()).getType().name());
                 } else {
                     rawType = JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), wrappedNode);
                 }
                 if (parameter.isVarArgs()) {
-                    return new ArrayTypeUsage(rawType);
+                    return new ArrayType(rawType);
                 } else {
                     return rawType;
                 }

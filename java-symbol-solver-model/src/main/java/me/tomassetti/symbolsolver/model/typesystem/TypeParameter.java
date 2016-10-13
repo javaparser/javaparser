@@ -1,15 +1,13 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
-
 /**
  * @author Federico Tomassetti
  */
-public class TypeParameterUsage implements TypeUsage {
+public class TypeParameter implements Type {
 
-    private TypeParameter typeParameter;
+    private me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter;
 
-    public TypeParameterUsage(TypeParameter typeParameter) {
+    public TypeParameter(me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter) {
         this.typeParameter = typeParameter;
     }
 
@@ -25,7 +23,7 @@ public class TypeParameterUsage implements TypeUsage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TypeParameterUsage that = (TypeParameterUsage) o;
+        TypeParameter that = (TypeParameter) o;
 
         if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
         if (typeParameter.declaredOnClass() != that.typeParameter.declaredOnClass()) return false;
@@ -50,7 +48,7 @@ public class TypeParameterUsage implements TypeUsage {
     }
 
     @Override
-    public TypeUsage replaceParam(String name, TypeUsage replaced) {
+    public Type replaceParam(String name, Type replaced) {
         if (name.equals(typeParameter.getName())) {
             return replaced;
         } else {
@@ -69,7 +67,7 @@ public class TypeParameterUsage implements TypeUsage {
     }
 
     @Override
-    public TypeParameter asTypeParameter() {
+    public me.tomassetti.symbolsolver.model.resolution.TypeParameter asTypeParameter() {
         return typeParameter;
     }
 
@@ -79,7 +77,7 @@ public class TypeParameterUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other) {
+    public boolean isAssignableBy(Type other) {
         if (other.isTypeVariable()) {
             return describe().equals(other.describe());
         } else {

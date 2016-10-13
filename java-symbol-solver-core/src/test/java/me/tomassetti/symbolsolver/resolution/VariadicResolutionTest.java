@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
@@ -28,10 +28,10 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
         ReturnStmt stmt = (ReturnStmt)method.getBody().getStmts().get(0);
         Expression expression = stmt.getExpr();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
-        TypeUsage typeUsage = javaParserFacade.getType(expression);
-        assertEquals(true, typeUsage.isReferenceType());
-        assertEquals(List.class.getCanonicalName(), typeUsage.asReferenceTypeUsage().getQualifiedName());
-        assertEquals("java.util.List<java.lang.Long>", typeUsage.describe());
+        Type type = javaParserFacade.getType(expression);
+        assertEquals(true, type.isReferenceType());
+        assertEquals(List.class.getCanonicalName(), type.asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.util.List<java.lang.Long>", type.describe());
     }
 
 }

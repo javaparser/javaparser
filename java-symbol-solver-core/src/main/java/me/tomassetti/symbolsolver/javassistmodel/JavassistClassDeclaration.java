@@ -15,11 +15,11 @@ import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.*;
-import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import me.tomassetti.symbolsolver.javassistmodel.contexts.JavassistMethodContext;
 
 import java.util.*;
@@ -33,8 +33,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     private TypeSolver typeSolver;
 
     @Override
-    protected ReferenceTypeUsage object() {
-        return new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    protected ReferenceType object() {
+        return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
@@ -97,7 +97,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return ctClass.getName();
     }
 
-    private List<TypeUsage> parseTypeParameters(String signature, TypeSolver typeSolver, Context context, Context invokationContext) {
+    private List<Type> parseTypeParameters(String signature, TypeSolver typeSolver, Context context, Context invokationContext) {
         String originalSignature = signature;
         if (signature.contains("<")) {
             signature = signature.substring(signature.indexOf('<') + 1);
@@ -114,9 +114,9 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             if (signature.contains(">")) {
                 throw new UnsupportedOperationException();
             }
-            List<TypeUsage> typeUsages = new ArrayList<>();
-            typeUsages.add(new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext));
-            return typeUsages;
+            List<Type> types = new ArrayList<>();
+            types.add(new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext));
+            return types;
         } else {
             return Collections.emptyList();
         }
@@ -124,8 +124,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver,
-                                                    Context invokationContext, List<TypeUsage> typeParameterValues) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver,
+                                                    Context invokationContext, List<Type> typeParameterValues) {
 
         // TODO avoid bridge and synthetic methods
         for (CtMethod method : ctClass.getDeclaredMethods()) {
@@ -135,8 +135,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                 try {
                     if (method.getGenericSignature() != null) {
                         SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
-                        List<TypeUsage> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
-                        TypeUsage newReturnType = methodUsage.returnType();
+                        List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
+                        Type newReturnType = methodUsage.returnType();
                         for (int i = 0; i < parametersOfReturnType.size(); i++) {
                             newReturnType = newReturnType.asReferenceTypeUsage().replaceParam(i, parametersOfReturnType.get(i));
                         }
@@ -215,12 +215,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAncestors() {
-        List<ReferenceTypeUsage> ancestors = new LinkedList<>();
+    public List<ReferenceType> getAncestors() {
+        List<ReferenceType> ancestors = new LinkedList<>();
         if (getSuperClass() != null) {
             ancestors.add(getSuperClass());
         }
-        ancestors.addAll(getInterfaces().stream().map(i -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
+        ancestors.addAll(getInterfaces().stream().map(i -> new ReferenceTypeImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeImpl>toList()));
         return ancestors;
     }
 
@@ -230,7 +230,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             // TODO avoid bridge and synthetic methods
@@ -265,17 +265,17 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return MethodResolutionLogic.findMostApplicable(candidates, name, parameterTypes, typeSolver);
     }
 
-    public TypeUsage getUsage(Node node) {
-        return new ReferenceTypeUsageImpl(this, typeSolver);
+    public Type getUsage(Node node) {
+        return new ReferenceTypeImpl(this, typeSolver);
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
-        if (typeUsage.isNull()) {
+    public boolean isAssignableBy(Type type) {
+        if (type.isNull()) {
             return true;
         }
 
-        if (typeUsage instanceof LambdaArgumentTypeUsagePlaceholder) {
+        if (type instanceof LambdaArgumentTypePlaceholder) {
             if (ctClass.getName().equals(Predicate.class.getCanonicalName()) || ctClass.getName().equals(Function.class.getCanonicalName())) {
                 return true;
             } else {
@@ -284,16 +284,16 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
 
         // TODO look into generics
-        if (typeUsage.describe().equals(this.getQualifiedName())) {
+        if (type.describe().equals(this.getQualifiedName())) {
             return true;
         }
         try {
             if (this.ctClass.getSuperclass() != null
-                    && new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(typeUsage)) {
+                    && new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(type)) {
                     return true;
             }
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(typeUsage)) {
+                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(type)) {
                     return true;
                 }
             }
@@ -349,12 +349,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeUsageImpl getSuperClass() {
+    public ReferenceTypeImpl getSuperClass() {
         try {
             if (ctClass.getSuperclass() == null) {
-                return new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver());
+                return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver());
             }
-            return new ReferenceTypeUsageImpl(new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver).asClass(), typeSolver);
+            return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver).asClass(), typeSolver);
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }

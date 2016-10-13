@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.resolution;
 
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 
@@ -63,22 +63,22 @@ public interface TypeParameter {
 
     class Bound {
         private boolean extendsBound;
-        private TypeUsage type;
+        private Type type;
 
-        private Bound(boolean extendsBound, TypeUsage type) {
+        private Bound(boolean extendsBound, Type type) {
             this.extendsBound = extendsBound;
             this.type = type;
         }
 
-        public static Bound extendsBound(TypeUsage typeUsage) {
-            return new Bound(true, typeUsage);
+        public static Bound extendsBound(Type type) {
+            return new Bound(true, type);
         }
 
-        public static Bound superBound(TypeUsage typeUsage) {
-            return new Bound(false, typeUsage);
+        public static Bound superBound(Type type) {
+            return new Bound(false, type);
         }
 
-        public TypeUsage getType() {
+        public Type getType() {
             return type;
         }
 

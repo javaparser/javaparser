@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import com.google.common.collect.ImmutableList;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -14,113 +13,113 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class VoidTypeUsageTest {
+public class NullTypeTest {
 
-    private ArrayTypeUsage arrayOfBooleans;
-    private ArrayTypeUsage arrayOfListOfA;
-    private ReferenceTypeUsageImpl OBJECT;
-    private ReferenceTypeUsageImpl STRING;
+    private ArrayType arrayOfBooleans;
+    private ArrayType arrayOfListOfA;
+    private ReferenceTypeImpl OBJECT;
+    private ReferenceTypeImpl STRING;
     private TypeSolver typeSolver;
 
     @Before
     public void setup() {
         typeSolver = new JreTypeSolver();
-        OBJECT = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        STRING = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        arrayOfBooleans = new ArrayTypeUsage(PrimitiveTypeUsage.BOOLEAN);
-        arrayOfListOfA = new ArrayTypeUsage(new ReferenceTypeUsageImpl(
+        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        arrayOfBooleans = new ArrayType(PrimitiveType.BOOLEAN);
+        arrayOfListOfA = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeParameterUsage(TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+                ImmutableList.of(new TypeParameter(me.tomassetti.symbolsolver.model.resolution.TypeParameter.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
     }
 
     @Test
     public void testIsArray() {
-        assertEquals(false, VoidTypeUsage.INSTANCE.isArray());
+        assertEquals(false, NullType.INSTANCE.isArray());
     }
 
     @Test
     public void testIsPrimitive() {
-        assertEquals(false, VoidTypeUsage.INSTANCE.isPrimitive());
+        assertEquals(false, NullType.INSTANCE.isPrimitive());
     }
 
     @Test
     public void testIsNull() {
-        assertEquals(false, VoidTypeUsage.INSTANCE.isNull());
+        assertEquals(true, NullType.INSTANCE.isNull());
     }
 
     @Test
     public void testIsReference() {
-        assertEquals(false, VoidTypeUsage.INSTANCE.isReference());
+        assertEquals(true, NullType.INSTANCE.isReference());
     }
 
     @Test
     public void testIsReferenceType() {
-        assertEquals(false, VoidTypeUsage.INSTANCE.isReferenceType());
+        assertEquals(false, NullType.INSTANCE.isReferenceType());
     }
 
     @Test
     public void testIsVoid() {
-        assertEquals(true, VoidTypeUsage.INSTANCE.isVoid());
+        assertEquals(false, NullType.INSTANCE.isVoid());
     }
 
     @Test
     public void testIsTypeVariable() {
-        assertEquals(false, VoidTypeUsage.INSTANCE.isTypeVariable());
+        assertEquals(false, NullType.INSTANCE.isTypeVariable());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsReferenceTypeUsage() {
-        VoidTypeUsage.INSTANCE.asReferenceTypeUsage();
+        NullType.INSTANCE.asReferenceTypeUsage();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsTypeParameter() {
-        VoidTypeUsage.INSTANCE.asTypeParameter();
+        NullType.INSTANCE.asTypeParameter();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsArrayTypeUsage() {
-        VoidTypeUsage.INSTANCE.asArrayTypeUsage();
+        NullType.INSTANCE.asArrayTypeUsage();
     }
 
     @Test
     public void testAsDescribe() {
-        assertEquals("void", VoidTypeUsage.INSTANCE.describe());
+        assertEquals("null", NullType.INSTANCE.describe());
     }
 
     @Test
     public void testReplaceParam() {
-        assertTrue(VoidTypeUsage.INSTANCE == VoidTypeUsage.INSTANCE.replaceParam("A", OBJECT));
+        assertTrue(NullType.INSTANCE == NullType.INSTANCE.replaceParam("A", OBJECT));
     }
 
     @Test
     public void testIsAssignableBy() {
         try {
-            assertEquals(false, VoidTypeUsage.INSTANCE.isAssignableBy(NullTypeUsage.INSTANCE));
+            assertEquals(false, NullType.INSTANCE.isAssignableBy(NullType.INSTANCE));
             fail();
         } catch (UnsupportedOperationException e) {
 
         }
         try {
-            assertEquals(false, VoidTypeUsage.INSTANCE.isAssignableBy(OBJECT));
+            assertEquals(false, NullType.INSTANCE.isAssignableBy(OBJECT));
             fail();
         } catch (UnsupportedOperationException e) {
 
         }
         try {
-            assertEquals(false, VoidTypeUsage.INSTANCE.isAssignableBy(STRING));
+            assertEquals(false, NullType.INSTANCE.isAssignableBy(STRING));
             fail();
         } catch (UnsupportedOperationException e) {
 
         }
         try {
-            assertEquals(false, VoidTypeUsage.INSTANCE.isAssignableBy(PrimitiveTypeUsage.BOOLEAN));
+            assertEquals(false, NullType.INSTANCE.isAssignableBy(PrimitiveType.BOOLEAN));
             fail();
         } catch (UnsupportedOperationException e) {
 
         }
         try {
-            assertEquals(false, VoidTypeUsage.INSTANCE.isAssignableBy(VoidTypeUsage.INSTANCE));
+            assertEquals(false, NullType.INSTANCE.isAssignableBy(VoidType.INSTANCE));
             fail();
         } catch (UnsupportedOperationException e) {
 

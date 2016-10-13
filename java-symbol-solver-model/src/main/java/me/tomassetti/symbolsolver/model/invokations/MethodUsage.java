@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.model.invokations;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class MethodUsage {
     private MethodDeclaration declaration;
-    private List<TypeUsage> paramTypes = new ArrayList<>();
-    private TypeUsage returnType;
+    private List<Type> paramTypes = new ArrayList<>();
+    private Type returnType;
 
     public MethodUsage(MethodDeclaration declaration, TypeSolver typeSolver) {
         this.declaration = declaration;
@@ -25,13 +25,13 @@ public class MethodUsage {
         returnType = declaration.getReturnType();
     }
 
-    public MethodUsage(MethodDeclaration declaration, List<TypeUsage> paramTypes, TypeUsage returnType) {
+    public MethodUsage(MethodDeclaration declaration, List<Type> paramTypes, Type returnType) {
         this.declaration = declaration;
         this.paramTypes = paramTypes;
         this.returnType = returnType;
     }
 
-    private static TypeUsage replaceNameParam(String name, TypeUsage newValue, TypeUsage typeToBeExamined) {
+    private static Type replaceNameParam(String name, Type newValue, Type typeToBeExamined) {
         return typeToBeExamined.replaceParam(name, newValue);
     }
 
@@ -55,24 +55,24 @@ public class MethodUsage {
         return declaration.declaringType();
     }
 
-    public TypeUsage returnType() {
+    public Type returnType() {
         return returnType;
     }
 
-    public List<TypeUsage> getParamTypes() {
+    public List<Type> getParamTypes() {
         return paramTypes;
     }
 
-    public MethodUsage replaceParamType(int i, TypeUsage replaced) {
+    public MethodUsage replaceParamType(int i, Type replaced) {
         if (paramTypes.get(i) == replaced) {
             return this;
         }
-        List<TypeUsage> newParams = new LinkedList<>(paramTypes);
+        List<Type> newParams = new LinkedList<>(paramTypes);
         newParams.set(i, replaced);
         return new MethodUsage(declaration, newParams, returnType);
     }
 
-    public MethodUsage replaceReturnType(TypeUsage returnType) {
+    public MethodUsage replaceReturnType(Type returnType) {
         if (returnType == this.returnType) {
             return this;
         } else {
@@ -84,22 +84,22 @@ public class MethodUsage {
         return paramTypes.size();
     }
 
-    public TypeUsage getParamType(int i, TypeSolver typeSolver) {
+    public Type getParamType(int i, TypeSolver typeSolver) {
         return paramTypes.get(i);
     }
 
-    public MethodUsage replaceNameParam(String name, TypeUsage typeUsage) {
-        if (typeUsage == null) {
+    public MethodUsage replaceNameParam(String name, Type type) {
+        if (type == null) {
             throw new IllegalArgumentException();
         }
         // TODO if the method declaration has a type param with that name ignore this call
         MethodUsage res = this;
         for (int i = 0; i < paramTypes.size(); i++) {
-            TypeUsage originalParamType = paramTypes.get(i);
-            TypeUsage newParamType = originalParamType.replaceParam(name, typeUsage);
+            Type originalParamType = paramTypes.get(i);
+            Type newParamType = originalParamType.replaceParam(name, type);
             res = res.replaceParamType(i, newParamType);
         }
-        res = res.replaceReturnType(replaceNameParam(name, typeUsage, res.returnType));
+        res = res.replaceReturnType(replaceNameParam(name, type, res.returnType));
         return res;
     }
 

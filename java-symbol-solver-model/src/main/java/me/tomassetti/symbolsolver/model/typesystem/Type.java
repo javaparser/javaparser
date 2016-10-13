@@ -12,7 +12,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
  *
  * @author Federico Tomassetti
  */
-public interface TypeUsage {
+public interface Type {
 
     ///
     /// Relation with other types
@@ -78,11 +78,11 @@ public interface TypeUsage {
     /// Downcasting
     ///
 
-    default ArrayTypeUsage asArrayTypeUsage() {
+    default ArrayType asArrayTypeUsage() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
-    default ReferenceTypeUsage asReferenceTypeUsage() {
+    default ReferenceType asReferenceTypeUsage() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
@@ -90,11 +90,11 @@ public interface TypeUsage {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
-    default PrimitiveTypeUsage asPrimitive() {
+    default PrimitiveType asPrimitive() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
-    default WildcardUsage asWildcard() {
+    default Wildcard asWildcard() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
@@ -108,7 +108,7 @@ public interface TypeUsage {
     /// TypeParameters
     ///
 
-    default TypeUsage replaceParam(String name, TypeUsage replaced) {
+    default Type replaceParam(String name, Type replaced) {
         return this;
     }
 
@@ -119,6 +119,6 @@ public interface TypeUsage {
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */
-    boolean isAssignableBy(TypeUsage other);
+    boolean isAssignableBy(Type other);
 
 }

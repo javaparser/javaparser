@@ -11,9 +11,9 @@ import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
-import me.tomassetti.symbolsolver.model.typesystem.NullTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.NullType;
+import me.tomassetti.symbolsolver.model.typesystem.PrimitiveType;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.AbstractResolutionTest;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.DummyTypeSolver;
@@ -54,9 +54,9 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        Optional<TypeUsage> a = context.solveGenericType("A", new DummyTypeSolver());
-        Optional<TypeUsage> b = context.solveGenericType("B", new DummyTypeSolver());
-        Optional<TypeUsage> c = context.solveGenericType("C", new DummyTypeSolver());
+        Optional<Type> a = context.solveGenericType("A", new DummyTypeSolver());
+        Optional<Type> b = context.solveGenericType("B", new DummyTypeSolver());
+        Optional<Type> c = context.solveGenericType("C", new DummyTypeSolver());
 
         assertEquals(false, a.isPresent());
         assertEquals(false, b.isPresent());
@@ -68,7 +68,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        Optional<TypeUsage> d = context.solveGenericType("D", new DummyTypeSolver());
+        Optional<Type> d = context.solveGenericType("D", new DummyTypeSolver());
 
         assertEquals(false, d.isPresent());
     }
@@ -190,7 +190,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         typeSolver.add(new JreTypeSolver());
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertFalse", ImmutableList.of(PrimitiveTypeUsage.BOOLEAN), typeSolver);
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertFalse", ImmutableList.of(PrimitiveType.BOOLEAN), typeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("assertFalse", ref.getCorrespondingDeclaration().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
@@ -207,7 +207,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         typeSolver.add(new JreTypeSolver());
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(NullTypeUsage.INSTANCE, NullTypeUsage.INSTANCE), typeSolver);
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), typeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
         assertEquals(2, ref.getCorrespondingDeclaration().getNoParams());

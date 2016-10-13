@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
-import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -14,23 +14,23 @@ import java.util.Set;
 
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
-public class ReferenceTypeUsageImpl extends ReferenceTypeUsage {
+public class ReferenceTypeImpl extends ReferenceType {
 
     @Override
-    protected ReferenceTypeUsage create(TypeDeclaration typeDeclaration, List<TypeUsage> typeParametersCorrected, TypeSolver typeSolver) {
-        return new ReferenceTypeUsageImpl(typeDeclaration, typeParametersCorrected, typeSolver);
+    protected ReferenceType create(TypeDeclaration typeDeclaration, List<Type> typeParametersCorrected, TypeSolver typeSolver) {
+        return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected, typeSolver);
     }
 
     @Override
-    protected ReferenceTypeUsage create(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
-        return new ReferenceTypeUsageImpl(typeDeclaration, typeSolver);
+    protected ReferenceType create(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
     }
 
-    public ReferenceTypeUsageImpl(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    public ReferenceTypeImpl(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         super(typeDeclaration, typeSolver);
     }
 
-    public ReferenceTypeUsageImpl(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters, TypeSolver typeSolver) {
+    public ReferenceTypeImpl(TypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver) {
         super(typeDeclaration, typeParameters, typeSolver);
     }
 
@@ -47,8 +47,8 @@ public class ReferenceTypeUsageImpl extends ReferenceTypeUsage {
      * This method checks if ThisType t = new OtherType() would compile.
      */
     @Override
-    public boolean isAssignableBy(TypeUsage other) {
-        if (other instanceof NullTypeUsage) {
+    public boolean isAssignableBy(Type other) {
+        if (other instanceof NullType) {
             return !this.isPrimitive();
         }
         // consider boxing
@@ -59,14 +59,14 @@ public class ReferenceTypeUsageImpl extends ReferenceTypeUsage {
                 return isCorrespondingBoxingType(other.describe());
             }
         }
-        if (other instanceof LambdaArgumentTypeUsagePlaceholder) {
+        if (other instanceof LambdaArgumentTypePlaceholder) {
             return this.getTypeDeclaration().hasAnnotation(FunctionalInterface.class.getCanonicalName());
-        } else if (other instanceof ReferenceTypeUsageImpl) {
-            ReferenceTypeUsageImpl otherRef = (ReferenceTypeUsageImpl) other;
+        } else if (other instanceof ReferenceTypeImpl) {
+            ReferenceTypeImpl otherRef = (ReferenceTypeImpl) other;
             if (compareConsideringTypeParameters(otherRef)) {
                 return true;
             }
-            for (ReferenceTypeUsage otherAncestor : otherRef.getAllAncestors()) {
+            for (ReferenceType otherAncestor : otherRef.getAllAncestors()) {
                 if (compareConsideringTypeParameters(otherAncestor)) {
                     return true;
                 }

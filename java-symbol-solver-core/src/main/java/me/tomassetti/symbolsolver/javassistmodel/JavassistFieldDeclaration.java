@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.javassistmodel;
 
 import javassist.CtField;
 import javassist.NotFoundException;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.model.declarations.FieldDeclaration {
@@ -14,7 +14,7 @@ public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.mod
     }
 
     @Override
-    public TypeUsage getType() {
+    public Type getType() {
         try {
             return JavassistFactory.typeUsageFor(ctField.getType(), typeSolver);
         } catch (NotFoundException e) {

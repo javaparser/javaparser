@@ -4,8 +4,8 @@ import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +25,14 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     @Deprecated
     Context getContext();
 
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes);
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
 
     @Deprecated
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
     }
 
-    boolean isAssignableBy(TypeUsage typeUsage);
+    boolean isAssignableBy(Type type);
 
     default boolean canBeAssignedTo(TypeDeclaration other) {
         return other.isAssignableBy(this);
@@ -68,11 +68,11 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
      */
     SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
 
-    List<ReferenceTypeUsage> getAncestors();
+    List<ReferenceType> getAncestors();
     
-    default List<ReferenceTypeUsage> getAllAncestors() {
-    	List<ReferenceTypeUsage> ancestors = new ArrayList<>();
-    	for (ReferenceTypeUsage ancestor : getAncestors()) {
+    default List<ReferenceType> getAllAncestors() {
+    	List<ReferenceType> ancestors = new ArrayList<>();
+    	for (ReferenceType ancestor : getAncestors()) {
     		ancestors.add(ancestor);
     		ancestors.addAll(ancestor.getAllAncestors());
     	}

@@ -8,7 +8,7 @@ import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -68,14 +68,14 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
     public void nodesTypeIsCorrect() throws IOException, ParseException {
         CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
         NameExpr nodes = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName()!=null && it.getName().equals("nodes")).findFirst().get();
-        TypeUsage typeUsage = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
-        assertEquals("java.util.List<T>", typeUsage.describe());
-        assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().size());
-        assertEquals(true, typeUsage.asReferenceTypeUsage().parameters().get(0).isTypeVariable());
-        assertEquals("T", typeUsage.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
-        assertEquals("com.github.javaparser.utils.PositionUtils.sortByBeginPosition(java.util.List<T>).T", typeUsage.asReferenceTypeUsage().parameters().get(0).asTypeParameter().qualifiedName());
-        assertEquals(1, typeUsage.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).size());
-        TypeParameter.Bound bound = typeUsage.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).get(0);
+        Type type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
+        assertEquals("java.util.List<T>", type.describe());
+        assertEquals(1, type.asReferenceTypeUsage().parameters().size());
+        assertEquals(true, type.asReferenceTypeUsage().parameters().get(0).isTypeVariable());
+        assertEquals("T", type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
+        assertEquals("com.github.javaparser.utils.PositionUtils.sortByBeginPosition(java.util.List<T>).T", type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().qualifiedName());
+        assertEquals(1, type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).size());
+        TypeParameter.Bound bound = type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).get(0);
         assertEquals(true, bound.isExtends());
         assertEquals("com.github.javaparser.ast.Node", bound.getType().describe());
     }

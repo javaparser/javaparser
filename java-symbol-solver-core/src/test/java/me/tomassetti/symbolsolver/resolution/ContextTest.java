@@ -10,7 +10,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.AbstractTest;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -19,7 +18,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.typesolvers.*;
 import org.junit.Test;
 
@@ -235,10 +234,10 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
-        Type streamJavaParserType = method.getParameters().get(0).getType();
+        com.github.javaparser.ast.type.Type streamJavaParserType = method.getParameters().get(0).getType();
 
         TypeSolver typeSolver = new JreTypeSolver();
-        TypeUsage streamType = JavaParserFacade.get(typeSolver).convert(streamJavaParserType, method);
+        Type streamType = JavaParserFacade.get(typeSolver).convert(streamJavaParserType, method);
 
         assertEquals("java.util.stream.Stream<java.lang.String>",streamType.describe());
     }
@@ -251,7 +250,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "filter");
 
         TypeSolver typeSolver = new JreTypeSolver();
-        TypeUsage ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
+        Type ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
 
         assertEquals("java.util.stream.Stream<java.lang.String>", ref.describe());
         assertEquals(1, ref.asReferenceTypeUsage().parameters().size());
@@ -267,7 +266,7 @@ public class ContextTest extends AbstractTest {
 
         TypeSolver typeSolver = new JreTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        TypeUsage ref = javaParserFacade.getType(refToT);
+        Type ref = javaParserFacade.getType(refToT);
 
         assertEquals("? super java.lang.String", ref.describe());
     }
@@ -358,7 +357,7 @@ public class ContextTest extends AbstractTest {
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
-        TypeUsage typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
+        Type typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
 
         assertEquals("java.util.function.Predicate<com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.describe());
     }
@@ -373,7 +372,7 @@ public class ContextTest extends AbstractTest {
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
-        TypeUsage typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
+        Type typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
 
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", typeOfT.describe());
     }

@@ -2,18 +2,18 @@ package me.tomassetti.symbolsolver.javaparsermodel;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 /**
  * Placeholder used to represent a lambda argument type while it is being
  * calculated.
  */
-public class LambdaArgumentTypeUsagePlaceholder implements TypeUsage {
+public class LambdaArgumentTypePlaceholder implements Type {
 
     private int pos;
     private SymbolReference<MethodDeclaration> method;
 
-    public LambdaArgumentTypeUsagePlaceholder(int pos) {
+    public LambdaArgumentTypePlaceholder(int pos) {
         this.pos = pos;
     }
 
@@ -47,7 +47,7 @@ public class LambdaArgumentTypeUsagePlaceholder implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other) {
+    public boolean isAssignableBy(Type other) {
         throw new UnsupportedOperationException();
     }
 }

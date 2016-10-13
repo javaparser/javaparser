@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.logic;
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.InterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration implements ClassDeclaration {
 
-    protected abstract ReferenceTypeUsage object();
+    protected abstract ReferenceType object();
 
     @Override
     public boolean hasName() {
@@ -19,10 +19,10 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public final List<ReferenceTypeUsage> getAllSuperClasses() {
+    public final List<ReferenceType> getAllSuperClasses() {
         // TODO it could specify type parameters: they should appear
-        List<ReferenceTypeUsage> superclasses = new ArrayList<>();
-        ReferenceTypeUsage superClass = getSuperClass();
+        List<ReferenceType> superclasses = new ArrayList<>();
+        ReferenceType superClass = getSuperClass();
         if (superClass != null) {
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllAncestors());

@@ -7,7 +7,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -33,7 +33,7 @@ public class PrintExpressionType {
             super.visit(n, javaParserFacade);
             System.out.println(n.toString() + " has type " + javaParserFacade.getType(n).describe());
             if (javaParserFacade.getType(n).isReferenceType()) {
-                for (ReferenceTypeUsage ancestor : javaParserFacade.getType(n).asReferenceTypeUsage().getAllAncestors()) {
+                for (ReferenceType ancestor : javaParserFacade.getType(n).asReferenceTypeUsage().getAllAncestors()) {
                     //System.out.println("Ancestor " + ancestor.describe());
                 }
             }

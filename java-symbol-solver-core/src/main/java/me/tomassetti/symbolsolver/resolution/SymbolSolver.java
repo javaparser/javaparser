@@ -3,7 +3,6 @@ package me.tomassetti.symbolsolver.resolution;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -12,8 +11,8 @@ import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 
@@ -55,7 +54,7 @@ public class SymbolSolver {
         return solveType(name, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Context context) {
+    public MethodUsage solveMethod(String methodName, List<Type> params, Context context) {
         SymbolReference<MethodDeclaration> decl = context.solveMethod(methodName, params, typeSolver);
         if (!decl.isSolved()) {
             throw new UnsolvedSymbolException(context, methodName);
@@ -63,13 +62,13 @@ public class SymbolSolver {
         return new MethodUsage(decl.getCorrespondingDeclaration(), typeSolver);
     }
 
-    public MethodUsage solveMethod(String methodName, List<TypeUsage> params, Node node) {
+    public MethodUsage solveMethod(String methodName, List<Type> params, Node node) {
         return solveMethod(methodName, params, JavaParserFactory.getContext(node, typeSolver));
     }
 
     ;
 
-    public TypeDeclaration solveType(Type type) {
+    public TypeDeclaration solveType(com.github.javaparser.ast.type.Type type) {
         if (type instanceof ReferenceType) {
             ReferenceType referenceType = (ReferenceType) type;
             // TODO consider array modifiers
@@ -100,13 +99,13 @@ public class SymbolSolver {
         }
     }
 
-    public TypeUsage solveTypeUsage(String name, Context context) {
-        Optional<TypeUsage> genericType = context.solveGenericType(name, typeSolver);
+    public Type solveTypeUsage(String name, Context context) {
+        Optional<Type> genericType = context.solveGenericType(name, typeSolver);
         if (genericType.isPresent()) {
             return genericType.get();
         }
         TypeDeclaration typeDeclaration = typeSolver.solveType(name);
-        ReferenceTypeUsageImpl typeUsage = new ReferenceTypeUsageImpl(typeDeclaration, typeSolver);
+        ReferenceTypeImpl typeUsage = new ReferenceTypeImpl(typeDeclaration, typeSolver);
         return typeUsage;
     }
 }

@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable {
      * Note that only the Object class should not have a superclass and therefore
      * return null.
      */
-    ReferenceTypeUsage getSuperClass();
+    ReferenceType getSuperClass();
 
     /**
      * Return all the interfaces implemented directly by this class.
@@ -39,7 +39,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable {
      * Get all superclasses, with all the type parameters expressed as functions of the type parameters of this
      * declaration.
      */
-    List<ReferenceTypeUsage> getAllSuperClasses();
+    List<ReferenceType> getAllSuperClasses();
 
     /**
      * Get all interfaces, with all the type parameters expressed as functions of the type parameters of this
