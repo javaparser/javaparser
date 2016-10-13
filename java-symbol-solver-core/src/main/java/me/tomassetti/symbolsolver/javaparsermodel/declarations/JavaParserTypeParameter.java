@@ -85,17 +85,13 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public String qualifiedName() {
         if (this.declaredOnClass()) {
-            return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
+            throw new UnsupportedOperationException();
+            //return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
         } else {
             com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
             MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
             return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
         }
-    }
-
-    @Override
-    public String getQNameOfDeclaringClass() {
-        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -77,22 +77,13 @@ public class ReflectionTypeParameter implements TypeParameter {
     @Override
     public String qualifiedName() {
         if (this.declaredOnClass()) {
-            return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
+            return String.format("%s.%s", qNameOfDeclaringClass, getName());
         } else {
             throw new UnsupportedOperationException(typeVariable.getGenericDeclaration().getClass().getCanonicalName());
             //typeVariable.getGenericDeclaration()
             //com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
             //MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
             //return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
-        }
-    }
-
-    @Override
-    public String getQNameOfDeclaringClass() {
-        if (qNameOfDeclaringClass == null) {
-            throw new UnsupportedOperationException();
-        } else {
-            return qNameOfDeclaringClass;
         }
     }
 

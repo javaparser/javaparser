@@ -84,7 +84,7 @@ public class ReflectionClassDeclarationTest {
         assertEquals("E", bar.getSuperClass().parameters().get(0).asTypeParameter().getName());
         assertEquals(true, bar.getSuperClass().parameters().get(0).asTypeParameter().declaredOnClass());
         assertEquals(false, bar.getSuperClass().parameters().get(0).asTypeParameter().declaredOnMethod());
-        assertTrue(bar.getSuperClass().parameters().get(0).asTypeParameter().getQNameOfDeclaringClass().endsWith("Bar"));
+        assertTrue(bar.getSuperClass().parameters().get(0).asTypeParameter().qualifiedName().endsWith("Bar.E"));
     }
 
     @Test
