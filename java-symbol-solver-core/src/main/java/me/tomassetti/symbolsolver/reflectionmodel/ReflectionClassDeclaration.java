@@ -239,7 +239,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         for (ReferenceTypeUsage ancestor : getAllAncestors()) {
             if (ancestor.getTypeDeclaration().hasField(name)) {
-                return ancestor.getTypeDeclaration().getField(name).replaceType(ancestor.getFieldType(name).get());
+                ReflectionFieldDeclaration reflectionFieldDeclaration = (ReflectionFieldDeclaration)ancestor.getTypeDeclaration().getField(name);
+                return reflectionFieldDeclaration.replaceType(ancestor.getFieldType(name).get());
             }
         }
         throw new UnsolvedSymbolException("Field in " + this, name);

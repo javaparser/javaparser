@@ -44,7 +44,6 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
         return true;
     }
 
-    @Override
     public FieldDeclaration replaceType(TypeUsage fieldType) {
         return new ReflectionFieldDeclaration(field, typeSolver, fieldType);
     }
