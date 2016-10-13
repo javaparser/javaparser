@@ -29,7 +29,7 @@
   Line 177) name.getName() ==> com.github.javaparser.ast.expr.NameExpr.getName()
   Line 186) ensureNotNull(parameters) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
   Line 192) ensureNotNull(throws_) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
-  Line 198) wrapInArrayTypes(getElementType(), getArrayBracketPairsAfterElementType(), getArrayBracketPairsAfterParameterList()) ==> UNSOLVED
+  Line 198) wrapInArrayTypes(getElementType(), getArrayBracketPairsAfterElementType(), getArrayBracketPairsAfterParameterList()) ==> com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes(com.github.javaparser.ast.type.Type, java.util.List<com.github.javaparser.ast.ArrayBracketPair>...)
   Line 198) getElementType() ==> com.github.javaparser.ast.body.MethodDeclaration.getElementType()
   Line 199) getArrayBracketPairsAfterElementType() ==> com.github.javaparser.ast.body.MethodDeclaration.getArrayBracketPairsAfterElementType()
   Line 200) getArrayBracketPairsAfterParameterList() ==> com.github.javaparser.ast.body.MethodDeclaration.getArrayBracketPairsAfterParameterList()

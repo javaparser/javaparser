@@ -65,7 +65,8 @@ public class MethodResolutionLogic {
         for (int i = 0; i < method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParam(i).getType();
             TypeUsage actualType = paramTypes.get(i);
-            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType);
+            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType) ||
+                    (method.getParam(i).isVariadic() && new ArrayTypeUsage(expectedType).isAssignableBy(actualType));
             if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
                 isAssignableWithoutSubstitution = isAssignableMatchTypeParameters(
                         expectedType.asReferenceTypeUsage(),

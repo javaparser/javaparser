@@ -12,7 +12,7 @@
   Line 104) setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType) ==> com.github.javaparser.ast.body.Parameter.setArrayBracketPairsAfterElementType(java.util.List<com.github.javaparser.ast.ArrayBracketPair>)
   Line 109) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.body.Parameter, A)
   Line 114) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.body.Parameter, A)
-  Line 119) wrapInArrayTypes(elementType, getArrayBracketPairsAfterElementType(), getId().getArrayBracketPairsAfterId()) ==> UNSOLVED
+  Line 119) wrapInArrayTypes(elementType, getArrayBracketPairsAfterElementType(), getId().getArrayBracketPairsAfterId()) ==> com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes(com.github.javaparser.ast.type.Type, java.util.List<com.github.javaparser.ast.ArrayBracketPair>...)
   Line 120) getArrayBracketPairsAfterElementType() ==> com.github.javaparser.ast.body.Parameter.getArrayBracketPairsAfterElementType()
   Line 121) getId().getArrayBracketPairsAfterId() ==> com.github.javaparser.ast.body.VariableDeclaratorId.getArrayBracketPairsAfterId()
   Line 121) getId() ==> com.github.javaparser.ast.body.Parameter.getId()
