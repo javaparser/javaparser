@@ -1,6 +1,6 @@
   Line 46) sortByBeginPosition(nodes, false) ==> com.github.javaparser.utils.PositionUtils.sortByBeginPosition(java.util.List<T>, boolean)
   Line 50) Collections.sort(nodes, ( o1,  o2) -> PositionUtils.compare(o1, o2, ignoringAnnotations)) ==> java.util.Collections.sort(java.util.List<T>, java.util.Comparator<? super T>)
-  Line 50) PositionUtils.compare(o1, o2, ignoringAnnotations) ==> UNSOLVED
+  Line 50) PositionUtils.compare(o1, o2, ignoringAnnotations) ==> com.github.javaparser.utils.PositionUtils.compare(com.github.javaparser.ast.Node, com.github.javaparser.ast.Node, boolean)
   Line 54) areInOrder(a, b, false) ==> com.github.javaparser.utils.PositionUtils.areInOrder(com.github.javaparser.ast.Node, com.github.javaparser.ast.Node, boolean)
   Line 58) compare(a, b, ignoringAnnotations) ==> com.github.javaparser.utils.PositionUtils.compare(com.github.javaparser.ast.Node, com.github.javaparser.ast.Node, boolean)
   Line 63) signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b)) ==> java.lang.Integer.signum(int)

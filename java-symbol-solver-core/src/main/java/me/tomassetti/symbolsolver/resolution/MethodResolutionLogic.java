@@ -36,6 +36,10 @@ public class MethodResolutionLogic {
     }
 
     public static boolean isApplicable(MethodDeclaration method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
+        return isApplicable(method, name, paramTypes, typeSolver, false);
+    }
+
+    private static boolean isApplicable(MethodDeclaration method, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
         if (!method.getName().equals(name)) {
             return false;
         }
@@ -62,6 +66,7 @@ public class MethodResolutionLogic {
             return false;
         }
         Map<String, TypeUsage> matchedParameters = new HashMap<>();
+        boolean needForWildCardTolerance = false;
         for (int i = 0; i < method.getNoParams(); i++) {
             TypeUsage expectedType = method.getParam(i).getType();
             TypeUsage actualType = paramTypes.get(i);
@@ -81,11 +86,15 @@ public class MethodResolutionLogic {
                 }
 
                 if (!expectedType.isAssignableBy(actualType)) {
+                    if (actualType.isWildcard() && withWildcardTolerance && !expectedType.isPrimitive()) {
+                        needForWildCardTolerance = true;
+                        continue;
+                    }
                     return false;
                 }
             }
         }
-        return true;
+        return !withWildcardTolerance || needForWildCardTolerance;
     }
 
     public static boolean isAssignableMatchTypeParameters(ReferenceTypeUsage expected, ReferenceTypeUsage actual,
@@ -276,7 +285,15 @@ public class MethodResolutionLogic {
      * @return
      */
     public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver) {
-        List<MethodDeclaration> applicableMethods = getMethodsWithoutDuplicates(methods).stream().filter((m) -> isApplicable(m, name, paramTypes, typeSolver)).collect(Collectors.toList());
+        SymbolReference<MethodDeclaration> res = findMostApplicable(methods, name, paramTypes, typeSolver, false);
+        if (res.isSolved()) {
+            return res;
+        }
+        return findMostApplicable(methods, name, paramTypes, typeSolver, true);
+    }
+
+    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<TypeUsage> paramTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
+        List<MethodDeclaration> applicableMethods = getMethodsWithoutDuplicates(methods).stream().filter((m) -> isApplicable(m, name, paramTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }

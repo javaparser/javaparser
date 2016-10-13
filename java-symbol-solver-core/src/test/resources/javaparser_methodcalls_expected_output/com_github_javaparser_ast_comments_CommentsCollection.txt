@@ -30,5 +30,5 @@
   Line 94) comments.stream().filter( comment -> !other.contains(comment)).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 94) comments.stream().filter( comment -> !other.contains(comment)) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
   Line 94) comments.stream() ==> java.util.Collection.stream()
-  Line 95) other.contains(comment) ==> UNSOLVED
+  Line 95) other.contains(comment) ==> com.github.javaparser.ast.comments.CommentsCollection.contains(com.github.javaparser.ast.comments.Comment)
   Line 96) Collectors.toList() ==> java.util.stream.Collectors.toList()
