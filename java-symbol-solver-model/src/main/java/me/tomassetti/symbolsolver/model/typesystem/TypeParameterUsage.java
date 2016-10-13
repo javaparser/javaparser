@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.model.typesystem;
 
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 /**
  * @author Federico Tomassetti
@@ -8,9 +9,11 @@ import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 public class TypeParameterUsage implements TypeUsage {
 
     private TypeParameter typeParameter;
+    private TypeSolver typeSolver;
 
-    public TypeParameterUsage(TypeParameter typeParameter) {
+    public TypeParameterUsage(TypeParameter typeParameter, TypeSolver typeSolver) {
         this.typeParameter = typeParameter;
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class TypeParameterUsage implements TypeUsage {
 
     @Override
     public String describe() {
-        return typeParameter.getName();
+        return typeParameter.describe(typeSolver);
     }
 
     @Override

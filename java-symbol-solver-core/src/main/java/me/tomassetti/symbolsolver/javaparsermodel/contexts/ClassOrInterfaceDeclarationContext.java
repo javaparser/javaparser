@@ -93,7 +93,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)) {
-                return Optional.of(new TypeParameterUsage(new JavaParserTypeParameter(tp, typeSolver)));
+                return Optional.of(new TypeParameterUsage(new JavaParserTypeParameter(tp, typeSolver), typeSolver));
             }
         }
         return getParent().solveGenericType(name, typeSolver);

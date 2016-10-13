@@ -27,7 +27,7 @@ public class ReflectionFactory {
             TypeVariable tv = (TypeVariable) type;
             boolean declaredOnClass = ((TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
             me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter = new ReflectionTypeParameter(tv, declaredOnClass);
-            return new TypeParameterUsage(typeParameter);
+            return new TypeParameterUsage(typeParameter, typeSolver);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
             ReferenceTypeUsage rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceTypeUsage();

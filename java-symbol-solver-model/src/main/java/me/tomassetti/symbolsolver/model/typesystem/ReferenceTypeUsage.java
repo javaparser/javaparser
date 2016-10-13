@@ -27,7 +27,7 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
     protected TypeSolver typeSolver;
 
     public ReferenceTypeUsage(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
-        this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
+        this(typeDeclaration, deriveParams(typeDeclaration, typeSolver), typeSolver);
         if (this.typeDeclaration.isTypeVariable()) {
             throw new IllegalArgumentException();
         }
@@ -46,8 +46,8 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         this.typeSolver = typeSolver;
     }
 
-    private static List<TypeUsage> deriveParams(TypeDeclaration typeDeclaration) {
-        return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeParameterUsage(tp)).collect(Collectors.toList());
+    private static List<TypeUsage> deriveParams(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+        return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeParameterUsage(tp, typeSolver)).collect(Collectors.toList());
     }
 
     public ReferenceTypeUsage asReferenceTypeUsage() {
