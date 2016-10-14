@@ -70,7 +70,7 @@ public class NullTypeTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsReferenceTypeUsage() {
-        NullType.INSTANCE.asReferenceTypeUsage();
+        NullType.INSTANCE.asReferenceType();
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -80,7 +80,7 @@ public class NullTypeTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsArrayTypeUsage() {
-        NullType.INSTANCE.asArrayTypeUsage();
+        NullType.INSTANCE.asArrayType();
     }
 
     @Test

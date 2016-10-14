@@ -253,8 +253,8 @@ public class ContextTest extends AbstractTest {
         Type ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
 
         assertEquals("java.util.stream.Stream<java.lang.String>", ref.describe());
-        assertEquals(1, ref.asReferenceTypeUsage().typeParametersValues().size());
-        assertEquals("java.lang.String", ref.asReferenceTypeUsage().typeParametersValues().get(0).describe());
+        assertEquals(1, ref.asReferenceType().typeParametersValues().size());
+        assertEquals("java.lang.String", ref.asReferenceType().typeParametersValues().get(0).describe());
     }
 
     @Test
@@ -299,8 +299,8 @@ public class ContextTest extends AbstractTest {
 
         assertEquals("getTypes", methodUsage.getName());
         assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", methodUsage.returnType().describe());
-        assertEquals(1, methodUsage.returnType().asReferenceTypeUsage().typeParametersValues().size());
-        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().asReferenceTypeUsage().typeParametersValues().get(0).describe());
+        assertEquals(1, methodUsage.returnType().asReferenceType().typeParametersValues().size());
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().asReferenceType().typeParametersValues().get(0).describe());
     }
 
     @Test
@@ -315,8 +315,8 @@ public class ContextTest extends AbstractTest {
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetTypes);
 
         assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
-        assertEquals(1, filterUsage.returnType().asReferenceTypeUsage().typeParametersValues().size());
-        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", filterUsage.returnType().asReferenceTypeUsage().typeParametersValues().get(0).describe());
+        assertEquals(1, filterUsage.returnType().asReferenceType().typeParametersValues().size());
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", filterUsage.returnType().asReferenceType().typeParametersValues().get(0).describe());
     }
 
     @Test

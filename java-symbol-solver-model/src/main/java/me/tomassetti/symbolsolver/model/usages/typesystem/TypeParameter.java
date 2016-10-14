@@ -19,7 +19,7 @@ public class TypeParameter implements Type {
     }
 
     public String qualifiedName() {
-        return this.typeParameter.qualifiedName();
+        return this.typeParameter.getQualifiedName();
     }
 
     @Override

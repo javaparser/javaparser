@@ -84,7 +84,7 @@ public class ArrayTypeTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsReferenceTypeUsage() {
-        arrayOfBooleans.asReferenceTypeUsage();
+        arrayOfBooleans.asReferenceType();
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -99,9 +99,9 @@ public class ArrayTypeTest {
 
     @Test
     public void testAsArrayTypeUsage() {
-        assertTrue(arrayOfBooleans == arrayOfBooleans.asArrayTypeUsage());
-        assertTrue(arrayOfStrings == arrayOfStrings.asArrayTypeUsage());
-        assertTrue(arrayOfListOfA == arrayOfListOfA.asArrayTypeUsage());
+        assertTrue(arrayOfBooleans == arrayOfBooleans.asArrayType());
+        assertTrue(arrayOfStrings == arrayOfStrings.asArrayType());
+        assertTrue(arrayOfListOfA == arrayOfListOfA.asArrayType());
     }
 
     @Test
@@ -120,15 +120,15 @@ public class ArrayTypeTest {
                 ImmutableList.of(OBJECT), typeSolver));
         assertEquals(true, arrayOfListOfA.replaceParam("A", OBJECT).isArray());
         assertEquals(ImmutableList.of(OBJECT),
-                arrayOfListOfA.replaceParam("A", OBJECT).asArrayTypeUsage().getComponentType()
-                        .asReferenceTypeUsage().typeParametersValues());
+                arrayOfListOfA.replaceParam("A", OBJECT).asArrayType().getComponentType()
+                        .asReferenceType().typeParametersValues());
         assertEquals(new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                arrayOfListOfA.replaceParam("A", OBJECT).asArrayTypeUsage().getComponentType()
-                        .asReferenceTypeUsage().getTypeDeclaration());
+                arrayOfListOfA.replaceParam("A", OBJECT).asArrayType().getComponentType()
+                        .asReferenceType().getTypeDeclaration());
         assertEquals(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(OBJECT), typeSolver),
-                arrayOfListOfA.replaceParam("A", OBJECT).asArrayTypeUsage().getComponentType());
+                arrayOfListOfA.replaceParam("A", OBJECT).asArrayType().getComponentType());
         assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceParam("A", OBJECT));
         assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceParam("A", STRING));
         assertTrue(arrayOfListOfA == arrayOfListOfA.replaceParam("B", OBJECT));

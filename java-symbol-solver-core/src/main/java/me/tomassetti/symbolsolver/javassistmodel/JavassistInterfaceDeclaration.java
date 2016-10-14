@@ -102,7 +102,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
                         List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
                         Type newReturnType = methodUsage.returnType();
                         for (int i = 0; i < parametersOfReturnType.size(); i++) {
-                            newReturnType = newReturnType.asReferenceTypeUsage().replaceParam(i, parametersOfReturnType.get(i));
+                            newReturnType = newReturnType.asReferenceType().replaceParam(i, parametersOfReturnType.get(i));
                         }
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
                     }
@@ -220,7 +220,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         List<ReferenceType> ancestors = new ArrayList<>();
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                ReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver()).asReferenceTypeUsage();
+                ReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver()).asReferenceType();
                 ancestors.add(superInterfaze);
             }
         } catch (NotFoundException e) {
@@ -268,7 +268,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         } else {
             try {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, typeSolver)).collect(Collectors.toList());
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, ctClass.getName(), typeSolver)).collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);
             }

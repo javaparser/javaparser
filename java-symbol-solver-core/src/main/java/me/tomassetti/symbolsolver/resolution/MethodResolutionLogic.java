@@ -54,8 +54,8 @@ public class MethodResolutionLogic {
                         expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                     }
                     if (!expectedType.isAssignableBy(actualType)) {
-                        if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayTypeUsage().getComponentType())) {
-                            paramTypes.set(pos, actualType.asArrayTypeUsage().getComponentType());
+                        if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayType().getComponentType())) {
+                            paramTypes.set(pos, actualType.asArrayType().getComponentType());
                         } else {
                             paramTypes = groupVariadicParamValues(paramTypes, pos, method.getLastParam().getType());
                         }
@@ -82,8 +82,8 @@ public class MethodResolutionLogic {
                     (method.getParam(i).isVariadic() && new ArrayType(expectedType).isAssignableBy(actualType));
             if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
                 isAssignableWithoutSubstitution = isAssignableMatchTypeParameters(
-                        expectedType.asReferenceTypeUsage(),
-                        actualType.asReferenceTypeUsage(),
+                        expectedType.asReferenceType(),
+                        actualType.asReferenceType(),
                         matchedParameters);
             }
             if (!isAssignableWithoutSubstitution) {
@@ -184,12 +184,12 @@ public class MethodResolutionLogic {
         } else if (type.isPrimitive()) {
             return type;
         } else if (type.isArray()) {
-            return new ArrayType(replaceTypeParam(type.asArrayTypeUsage().getComponentType(), tp, typeSolver));
+            return new ArrayType(replaceTypeParam(type.asArrayType().getComponentType(), tp, typeSolver));
         } else if (type.isReferenceType()) {
-            ReferenceType result = type.asReferenceTypeUsage();
+            ReferenceType result = type.asReferenceType();
             int i = 0;
             for (Type typeParam : result.typeParametersValues()) {
-                result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceTypeUsage();
+                result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceType();
                 i++;
             }
             return result;

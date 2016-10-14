@@ -47,8 +47,8 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals("s", symbolReference.get().getName());
 
         Type type = symbolReference.get().getUsage();
-        assertEquals(1, type.asReferenceTypeUsage().typeParametersValues().size());
-        assertEquals("java.lang.String", type.asReferenceTypeUsage().typeParametersValues().get(0).describe());
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals("java.lang.String", type.asReferenceType().typeParametersValues().get(0).describe());
     }
 
     @Test
@@ -64,8 +64,8 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals("g", symbolReference.get().getName());
 
         Type type = symbolReference.get().getUsage();
-        assertEquals(1, type.asReferenceTypeUsage().typeParametersValues().size());
-        assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", type.asReferenceTypeUsage().typeParametersValues().get(0).describe());
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", type.asReferenceType().typeParametersValues().get(0).describe());
     }
 
     @Test
@@ -81,8 +81,8 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals("i", symbolReference.get().getName());
 
         Type type = symbolReference.get().getUsage();
-        assertEquals(1, type.asReferenceTypeUsage().typeParametersValues().size());
-        assertEquals("java.lang.Integer", type.asReferenceTypeUsage().typeParametersValues().get(0).describe());
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals("java.lang.Integer", type.asReferenceType().typeParametersValues().get(0).describe());
     }
 
     @Test
@@ -117,8 +117,8 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         Type type = symbolReference.get().getUsage();
         assertEquals(false, type.isTypeVariable());
         assertEquals("java.util.List<A>", type.describe());
-        assertEquals(1, type.asReferenceTypeUsage().typeParametersValues().size());
-        Type typeParam = type.asReferenceTypeUsage().typeParametersValues().get(0);
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        Type typeParam = type.asReferenceType().typeParametersValues().get(0);
         assertEquals(true, typeParam.isTypeVariable());
         assertEquals("A", typeParam.describe());
     }
@@ -150,9 +150,9 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("java.util.List<A>", type.describe());
-        assertEquals(1, type.asReferenceTypeUsage().typeParametersValues().size());
-        assertEquals(true, type.asReferenceTypeUsage().typeParametersValues().get(0).isTypeVariable());
-        assertEquals("A", type.asReferenceTypeUsage().typeParametersValues().get(0).describe());
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals(true, type.asReferenceType().typeParametersValues().get(0).isTypeVariable());
+        assertEquals("A", type.asReferenceType().typeParametersValues().get(0).describe());
     }
 
     @Test
@@ -168,9 +168,9 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("java.util.List<java.lang.String>", type.describe());
-        assertEquals(1, type.asReferenceTypeUsage().typeParametersValues().size());
-        assertEquals(false, type.asReferenceTypeUsage().typeParametersValues().get(0).isTypeVariable());
-        assertEquals("java.lang.String", type.asReferenceTypeUsage().typeParametersValues().get(0).describe());
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals(false, type.asReferenceType().typeParametersValues().get(0).isTypeVariable());
+        assertEquals("java.lang.String", type.asReferenceType().typeParametersValues().get(0).describe());
     }
 
     @Test
@@ -225,7 +225,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
         Type voidVisitorAdapterOfA = javaParserFacade.getType(thisRef);
-        List<ReferenceType> allAncestors = voidVisitorAdapterOfA.asReferenceTypeUsage().getAllAncestors();
+        List<ReferenceType> allAncestors = voidVisitorAdapterOfA.asReferenceType().getAllAncestors();
         assertEquals(2, allAncestors.size());
     }
 
@@ -262,14 +262,14 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         Context context = JavaParserFactory.getContext(call, typeSolver);
         List<Type> params = ImmutableList.of(javaParserFacade.getType(thisRef), javaParserFacade.getType(arg));
 
-        ReferenceType javadocType = javaParserFacade.getType(javadoc).asReferenceTypeUsage();
+        ReferenceType javadocType = javaParserFacade.getType(javadoc).asReferenceType();
 
         me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = javadocType.getTypeDeclaration();
 
         context = ContextHelper.getContext(typeDeclaration);
         List<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> methods = ((ClassOrInterfaceDeclarationContext)context).methodsByName("accept");
         me.tomassetti.symbolsolver.model.declarations.MethodDeclaration m;
-        if (methods.get(0).getParam(0).getType().asReferenceTypeUsage().getQualifiedName().equals("VoidVisitor")) {
+        if (methods.get(0).getParam(0).getType().asReferenceType().getQualifiedName().equals("VoidVisitor")) {
             m = methods.get(0);
         } else {
             m = methods.get(1);
@@ -413,7 +413,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         }
         Context context = JavaParserFactory.getContext(call, typeSolver);
 
-        ReferenceTypeUsage typeOfScope = javaParserFacade.getType(call.getScope()).asReferenceTypeUsage();
+        ReferenceTypeUsage typeOfScope = javaParserFacade.getType(call.getScope()).asReferenceType();
         me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = typeOfScope.getTypeDeclaration();
         List<TypeUsage> typeParametersValues = typeOfScope.typeParametersValues();
 
@@ -423,8 +423,8 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
                 me.tomassetti.symbolsolver.model.declarations.MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(m, typeSolver);
                 if (methods.size() == 0) {
                     // ok, e' il primo
-                    ReferenceTypeUsage paramType = methodDeclaration.getParam(0).getType(typeSolver).asReferenceTypeUsage();
-                    assertTrue(paramType.asReferenceTypeUsage().typeParametersValues().get(0).isWildcard());
+                    ReferenceTypeUsage paramType = methodDeclaration.getParam(0).getType(typeSolver).asReferenceType();
+                    assertTrue(paramType.asReferenceType().typeParametersValues().get(0).isWildcard());
                 }
                 MethodUsage mu = new MethodUsage(methodDeclaration, typeSolver);
                 int i = 0;

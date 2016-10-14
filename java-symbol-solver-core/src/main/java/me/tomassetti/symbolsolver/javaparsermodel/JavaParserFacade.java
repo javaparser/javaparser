@@ -94,8 +94,8 @@ public class JavaParserFacade {
             Type result = type;
             int i = 0;
             if (result.isReferenceType()) {
-                for (Type tp : type.asReferenceTypeUsage().typeParametersValues()) {
-                    result = result.asReferenceTypeUsage().replaceParam(i, solveGenericTypes(tp, context, typeSolver));
+                for (Type tp : type.asReferenceType().typeParametersValues()) {
+                    result = result.asReferenceType().replaceParam(i, solveGenericTypes(tp, context, typeSolver));
                     i++;
                 }
             }

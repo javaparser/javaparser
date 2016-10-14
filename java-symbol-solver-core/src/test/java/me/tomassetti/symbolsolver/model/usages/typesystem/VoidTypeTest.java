@@ -70,7 +70,7 @@ public class VoidTypeTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsReferenceTypeUsage() {
-        VoidType.INSTANCE.asReferenceTypeUsage();
+        VoidType.INSTANCE.asReferenceType();
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -80,7 +80,7 @@ public class VoidTypeTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsArrayTypeUsage() {
-        VoidType.INSTANCE.asArrayTypeUsage();
+        VoidType.INSTANCE.asArrayType();
     }
 
     @Test

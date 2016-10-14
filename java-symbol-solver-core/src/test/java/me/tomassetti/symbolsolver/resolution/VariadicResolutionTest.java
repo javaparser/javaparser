@@ -30,7 +30,7 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         Type type = javaParserFacade.getType(expression);
         assertEquals(true, type.isReferenceType());
-        assertEquals(List.class.getCanonicalName(), type.asReferenceTypeUsage().getQualifiedName());
+        assertEquals(List.class.getCanonicalName(), type.asReferenceType().getQualifiedName());
         assertEquals("java.util.List<java.lang.Long>", type.describe());
     }
 

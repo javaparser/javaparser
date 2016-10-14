@@ -27,7 +27,7 @@ public interface Type {
 
     default int arrayLevel() {
         if (isArray()) {
-            return 1 + this.asArrayTypeUsage().getComponentType().arrayLevel();
+            return 1 + this.asArrayType().getComponentType().arrayLevel();
         } else {
             return 0;
         }
@@ -78,11 +78,11 @@ public interface Type {
     /// Downcasting
     ///
 
-    default ArrayType asArrayTypeUsage() {
+    default ArrayType asArrayType() {
         throw new UnsupportedOperationException(String.format("%s is not an Array", this));
     }
 
-    default ReferenceType asReferenceTypeUsage() {
+    default ReferenceType asReferenceType() {
         throw new UnsupportedOperationException(String.format("%s is not a Reference Type", this));
     }
 

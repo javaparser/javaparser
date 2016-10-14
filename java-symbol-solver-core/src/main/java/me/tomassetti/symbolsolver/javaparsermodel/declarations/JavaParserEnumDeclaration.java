@@ -163,7 +163,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         if (type.isNull()) {
             return true;
         }
-        return type.isReferenceType() && type.asReferenceTypeUsage().getQualifiedName().equals(getQualifiedName());
+        return type.isReferenceType() && type.asReferenceType().getQualifiedName().equals(getQualifiedName());
     }
 
 
@@ -300,8 +300,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
-        ReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceTypeUsage();
-        enumClass = enumClass.replaceParam("E", new ReferenceTypeImpl(this, typeSolver)).asReferenceTypeUsage();
+        ReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
+        enumClass = enumClass.replaceParam("E", new ReferenceTypeImpl(this, typeSolver)).asReferenceType();
         ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {

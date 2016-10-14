@@ -113,6 +113,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
         if (hasDirectlyAnnotation(canonicalName)) {
             return true;
         }
-        return getAllAncestors().stream().anyMatch(it -> it.asReferenceTypeUsage().getTypeDeclaration().hasDirectlyAnnotation(canonicalName));
+        return getAllAncestors().stream().anyMatch(it -> it.asReferenceType().getTypeDeclaration().hasDirectlyAnnotation(canonicalName));
     }
 }

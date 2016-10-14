@@ -29,7 +29,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
 
     @Test

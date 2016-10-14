@@ -75,7 +75,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public String qualifiedName() {
+    public String getQualifiedName() {
         if (this.declaredOnClass()) {
             return String.format("%s.%s", qNameOfDeclaringClass, getName());
         } else {

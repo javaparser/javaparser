@@ -29,7 +29,7 @@ public class EnumResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());
-        assertEquals("SwitchOnEnum.MyEnum", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals("SwitchOnEnum.MyEnum", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
 
     @Test

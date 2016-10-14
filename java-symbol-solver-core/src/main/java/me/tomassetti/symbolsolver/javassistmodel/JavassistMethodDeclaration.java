@@ -122,7 +122,8 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
                 return Collections.emptyList();
             }
             SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
-            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp) -> new JavassistTypeParameter(jasTp, false, typeSolver)).collect(Collectors.toList());
+            String qualifier = this.getQualifiedName();
+            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp) -> new JavassistTypeParameter(jasTp, false, qualifier, typeSolver)).collect(Collectors.toList());
         } catch (BadBytecode badBytecode) {
             throw new RuntimeException(badBytecode);
         }

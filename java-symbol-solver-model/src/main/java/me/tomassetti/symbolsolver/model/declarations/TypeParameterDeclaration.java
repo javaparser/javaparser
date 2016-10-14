@@ -28,7 +28,7 @@ public interface TypeParameterDeclaration {
             }
 
             @Override
-            public String qualifiedName() {
+            public String getQualifiedName() {
                 return String.format("%s.%s", classQName, name);
             }
 
@@ -50,7 +50,7 @@ public interface TypeParameterDeclaration {
 
     boolean declaredOnMethod();
 
-    String qualifiedName();
+    String getQualifiedName();
 
     List<Bound> getBounds(TypeSolver typeSolver);
 

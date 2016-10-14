@@ -12,11 +12,13 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     private SignatureAttribute.TypeParameter wrapped;
     private boolean declaredOnClass;
     private TypeSolver typeSolver;
+    private String qualifier;
 
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, boolean declaredOnClass, TypeSolver typeSolver) {
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, boolean declaredOnClass, String qualifier, TypeSolver typeSolver) {
         this.wrapped = wrapped;
         this.declaredOnClass = declaredOnClass;
         this.typeSolver = typeSolver;
+        this.qualifier = qualifier;
     }
 
     @Override
@@ -42,18 +44,9 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public String qualifiedName() {
-        if (this.declaredOnClass()) {
-            throw new UnsupportedOperationException();
-            //return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
-        } else {
-            //com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
-            //MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
-            //return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
-            throw new UnsupportedOperationException();
-        }
+    public String getQualifiedName() {
+        return String.format("%s.%s", qualifier, getName());
     }
-
 
     @Override
     public List<TypeParameterDeclaration.Bound> getBounds(TypeSolver typeSolver) {

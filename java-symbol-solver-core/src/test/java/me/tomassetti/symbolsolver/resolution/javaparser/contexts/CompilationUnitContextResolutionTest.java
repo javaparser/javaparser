@@ -83,7 +83,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("out", typeSolver);
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("err", typeSolver);
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
 
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("java.lang.System.out", new JreTypeSolver());
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -211,8 +211,8 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
         assertEquals(2, ref.getCorrespondingDeclaration().getNoParams());
-        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(0).getType().asReferenceTypeUsage().getQualifiedName());
-        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(1).getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(0).getType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(1).getType().asReferenceType().getQualifiedName());
 
     }
 

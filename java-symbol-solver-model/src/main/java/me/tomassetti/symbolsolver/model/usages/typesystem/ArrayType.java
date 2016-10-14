@@ -29,7 +29,7 @@ public class ArrayType implements Type {
     }
 
     @Override
-    public ArrayType asArrayTypeUsage() {
+    public ArrayType asArrayType() {
         return this;
     }
 
@@ -65,7 +65,7 @@ public class ArrayType implements Type {
     @Override
     public boolean isAssignableBy(Type other) {
         if (other.isArray()) {
-            return baseType.isAssignableBy(other.asArrayTypeUsage().getComponentType());
+            return baseType.isAssignableBy(other.asArrayType().getComponentType());
         } else {
             return false;
         }

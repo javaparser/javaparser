@@ -63,13 +63,13 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+    public String getName() {
+        return wrappedNode.getName();
     }
 
     @Override
-    public String getName() {
-        return wrappedNode.getName();
+    public boolean isAssignableBy(TypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
@@ -83,10 +83,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public String qualifiedName() {
+    public String getQualifiedName() {
         if (this.declaredOnClass()) {
-            throw new UnsupportedOperationException();
-            //return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
+            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)wrappedNode.getParentNode();
+            TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
+            return String.format("%s.%s", typeDeclaration.getQualifiedName(), getName());
         } else {
             com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
             MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
@@ -106,11 +107,6 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         Type type = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
         Bound bound = Bound.extendsBound(type);
         return bound;
-    }
-
-    @Override
-    public String getQualifiedName() {
-        return getName();
     }
 
     public Context getContext() {

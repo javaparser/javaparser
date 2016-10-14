@@ -30,7 +30,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         if (wrappedNode.getFieldExpr().toString().equals(name)) {
             if (wrappedNode.getScope() instanceof ThisExpr) {
                 Type typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-                return typeOfThis.asReferenceTypeUsage().getTypeDeclaration().solveSymbol(name, typeSolver);
+                return typeOfThis.asReferenceType().getTypeDeclaration().solveSymbol(name, typeSolver);
             }
         }
         return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveSymbol(name, typeSolver);
@@ -55,7 +55,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                 return Optional.of(new Value(PrimitiveType.INT, ARRAY_LENGTH_FIELD_NAME, false));
             }
             if (typeOfScope.isReferenceType()) {
-                Optional<Type> typeUsage = typeOfScope.asReferenceTypeUsage().getFieldType(name);
+                Optional<Type> typeUsage = typeOfScope.asReferenceType().getFieldType(name);
                 if (typeUsage.isPresent()) {
                     return Optional.of(new Value(typeUsage.get(), name, true));
                 } else {
