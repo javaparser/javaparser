@@ -3,8 +3,8 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.body.Parameter;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ArrayType;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ArrayType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 public class JavaParserParameterDeclaration implements ParameterDeclaration {

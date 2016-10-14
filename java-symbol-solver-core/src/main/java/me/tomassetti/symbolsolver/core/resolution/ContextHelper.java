@@ -4,8 +4,8 @@ import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserEnumDec
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import me.tomassetti.symbolsolver.javassistmodel.JavassistMethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionMethodDeclaration;
 
 import java.util.List;

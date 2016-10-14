@@ -10,11 +10,11 @@ import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameter {
+public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameterDeclaration {
 
     private com.github.javaparser.ast.TypeParameter wrappedNode;
     private TypeSolver typeSolver;
@@ -167,7 +167,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<TypeParameter> getTypeParameters() {
+    public List<TypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
     }
 

@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
 import me.tomassetti.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -20,7 +20,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.DummyTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.*;
+import me.tomassetti.symbolsolver.model.usages.typesystem.*;
 import org.junit.Before;
 import org.junit.Test;
 

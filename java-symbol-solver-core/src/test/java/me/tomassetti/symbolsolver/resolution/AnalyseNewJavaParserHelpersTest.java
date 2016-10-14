@@ -6,9 +6,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -75,7 +75,7 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
         assertEquals("T", type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
         assertEquals("com.github.javaparser.utils.PositionUtils.sortByBeginPosition(java.util.List<T>).T", type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().qualifiedName());
         assertEquals(1, type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).size());
-        TypeParameter.Bound bound = type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).get(0);
+        TypeParameterDeclaration.Bound bound = type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).get(0);
         assertEquals(true, bound.isExtends());
         assertEquals("com.github.javaparser.ast.Node", bound.getType().describe());
     }

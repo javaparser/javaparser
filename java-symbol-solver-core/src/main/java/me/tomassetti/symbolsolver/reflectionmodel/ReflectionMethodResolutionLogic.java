@@ -1,14 +1,15 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeParametrizable;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameter;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -40,11 +41,11 @@ class ReflectionMethodResolutionLogic {
                 MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
                 MethodUsage methodUsage = new MethodUsage(methodDeclaration);
                 int i = 0;
-                for (me.tomassetti.symbolsolver.model.resolution.TypeParameter tp : typeParametrizable.getTypeParameters()) {
+                for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
                     methodUsage = methodUsage.replaceNameParam(tp.getName(), typeParameterValues.get(i));
                     i++;
                 }
-                for (me.tomassetti.symbolsolver.model.resolution.TypeParameter methodTypeParameter : methodDeclaration.getTypeParameters()) {
+                for (TypeParameterDeclaration methodTypeParameter : methodDeclaration.getTypeParameters()) {
                     methodUsage = methodUsage.replaceNameParam(methodTypeParameter.getName(), new TypeParameter(methodTypeParameter));
                 }
                 methods.add(methodUsage);
@@ -54,7 +55,7 @@ class ReflectionMethodResolutionLogic {
         final List<Type> finalTypeParameterValues = typeParameterValues;
         parameterTypes = parameterTypes.stream().map((pt) -> {
             int i = 0;
-            for (me.tomassetti.symbolsolver.model.resolution.TypeParameter tp : typeParametrizable.getTypeParameters()) {
+            for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
                 pt = pt.replaceParam(tp.getName(), finalTypeParameterValues.get(i));
                 i++;
             }

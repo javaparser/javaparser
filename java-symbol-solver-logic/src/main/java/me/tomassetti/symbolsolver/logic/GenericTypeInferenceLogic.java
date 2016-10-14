@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.logic;
 
 import javaslang.Tuple2;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.HashMap;
 import java.util.List;

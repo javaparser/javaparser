@@ -1,11 +1,14 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.TypeParametersMap;
+import me.tomassetti.symbolsolver.model.usages.TypeParametrized;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public abstract class ReferenceType implements Type {
+public abstract class ReferenceType implements Type, TypeParametrized {
 
     protected TypeDeclaration typeDeclaration;
     protected List<Type> typeParameters;
@@ -117,7 +120,7 @@ public abstract class ReferenceType implements Type {
             }
         }
         int i = 0;
-        for (me.tomassetti.symbolsolver.model.resolution.TypeParameter tp : typeDeclaration.getTypeParameters()) {
+        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
             if (tp.getName().equals(name)) {
                 return Optional.of(typeParameters.get(i));
             }
@@ -145,7 +148,7 @@ public abstract class ReferenceType implements Type {
      */
     public Optional<Type> getGenericParameterByName(String name) {
         int i = 0;
-        for (me.tomassetti.symbolsolver.model.resolution.TypeParameter tp : typeDeclaration.getTypeParameters()) {
+        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
             if (tp.getName().equals(name)) {
                 return Optional.of(this.typeParameters.get(i));
             }
@@ -219,7 +222,7 @@ public abstract class ReferenceType implements Type {
 
     public Type replaceTypeParams(Type type) {
         if (type.isTypeVariable()) {
-            me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter = type.asTypeParameter();
+            TypeParameterDeclaration typeParameter = type.asTypeParameter();
             if (typeParameter.declaredOnClass()) {
                 Optional<Type> typeParam = typeParamByName(typeParameter.getName());
                 if (typeParam.isPresent()) {
@@ -274,7 +277,7 @@ public abstract class ReferenceType implements Type {
     }
 
     @Override
-    public abstract me.tomassetti.symbolsolver.model.resolution.TypeParameter asTypeParameter();
+    public abstract TypeParameterDeclaration asTypeParameter();
 
     @Override
     public boolean isTypeVariable() {
@@ -359,11 +362,16 @@ public abstract class ReferenceType implements Type {
     			typeParameters.isEmpty());
     }
 
-    public List<Tuple2<me.tomassetti.symbolsolver.model.resolution.TypeParameter, Type>> getTypeParametersMap() {
-        List<Tuple2<me.tomassetti.symbolsolver.model.resolution.TypeParameter, Type>> typeParametersMap = new ArrayList<>();
+    public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
+        List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
         for (int i=0;i<typeDeclaration.getTypeParameters().size(); i++) {
             typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), parameters().get(i)));
         }
         return typeParametersMap;
+    }
+
+    @Override
+    public TypeParametersMap typeParametersMap() {
+        throw new UnsupportedOperationException();
     }
 }

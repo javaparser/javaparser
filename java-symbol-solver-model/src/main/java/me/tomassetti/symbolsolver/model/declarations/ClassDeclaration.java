@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 
 import java.util.List;
 

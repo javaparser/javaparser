@@ -3,11 +3,11 @@ package me.tomassetti.symbolsolver.resolution;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.*;
+import me.tomassetti.symbolsolver.model.usages.typesystem.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,7 +50,7 @@ public class MethodResolutionLogic {
                 Type expectedType = method.getLastParam().getType();
                 Type actualType = paramTypes.get(pos);
                 if (!expectedType.isAssignableBy(actualType)) {
-                    for (TypeParameter tp : method.getTypeParameters()) {
+                    for (TypeParameterDeclaration tp : method.getTypeParameters()) {
                         expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                     }
                     if (!expectedType.isAssignableBy(actualType)) {
@@ -87,9 +87,9 @@ public class MethodResolutionLogic {
                         matchedParameters);
             }
             if (!isAssignableWithoutSubstitution) {
-                List<TypeParameter> typeParameters = method.getTypeParameters();
+                List<TypeParameterDeclaration> typeParameters = method.getTypeParameters();
                 typeParameters.addAll(method.declaringType().getTypeParameters());
-                for (TypeParameter tp : typeParameters) {
+                for (TypeParameterDeclaration tp : typeParameters) {
                     expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                 }
 
@@ -168,10 +168,10 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    public static Type replaceTypeParam(Type type, TypeParameter tp, TypeSolver typeSolver) {
+    public static Type replaceTypeParam(Type type, TypeParameterDeclaration tp, TypeSolver typeSolver) {
         if (type.isTypeVariable()) {
             if (type.describe().equals(tp.getName())) {
-                List<TypeParameter.Bound> bounds = tp.getBounds(typeSolver);
+                List<TypeParameterDeclaration.Bound> bounds = tp.getBounds(typeSolver);
                 if (bounds.size() > 1) {
                     throw new UnsupportedOperationException();
                 } else if (bounds.size() == 1) {
@@ -195,7 +195,7 @@ public class MethodResolutionLogic {
             return result;
         } else if (type.isWildcard()) {
             if (type.describe().equals(tp.getName())) {
-                List<TypeParameter.Bound> bounds = tp.getBounds(typeSolver);
+                List<TypeParameterDeclaration.Bound> bounds = tp.getBounds(typeSolver);
                 if (bounds.size() > 1) {
                     throw new UnsupportedOperationException();
                 } else if (bounds.size() == 1) {
@@ -223,14 +223,14 @@ public class MethodResolutionLogic {
             Type expectedTypeWithoutSubstitutions = expectedType;
             Type actualType = paramTypes.get(i);
             
-            List<TypeParameter> typeParameters = method.getDeclaration().getTypeParameters();
+            List<TypeParameterDeclaration> typeParameters = method.getDeclaration().getTypeParameters();
             typeParameters.addAll(method.declaringType().getTypeParameters());
-            for (TypeParameter tp : typeParameters) {
+            for (TypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds(typeSolver).isEmpty()) {
                     //expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                     expectedType = expectedType.replaceParam(tp.getName(), Wildcard.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
                 } else if (tp.getBounds(typeSolver).size() == 1) {
-                    TypeParameter.Bound bound = tp.getBounds(typeSolver).get(0);
+                    TypeParameterDeclaration.Bound bound = tp.getBounds(typeSolver).get(0);
                     if (bound.isExtends()) {
                         //expectedType = expectedType.replaceParam(tp.getName(), bound.getType());
                         expectedType = expectedType.replaceParam(tp.getName(), Wildcard.extendsBound(bound.getType()));
@@ -243,11 +243,11 @@ public class MethodResolutionLogic {
                 }
             }
             Type expectedType2 = expectedTypeWithoutSubstitutions;
-            for (TypeParameter tp : typeParameters) {
+            for (TypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds(typeSolver).isEmpty()) {
                     expectedType2 = expectedType2.replaceParam(tp.getName(), new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                 } else if (tp.getBounds(typeSolver).size() == 1) {
-                    TypeParameter.Bound bound = tp.getBounds(typeSolver).get(0);
+                    TypeParameterDeclaration.Bound bound = tp.getBounds(typeSolver).get(0);
                     if (bound.isExtends()) {
                         expectedType2 = expectedType2.replaceParam(tp.getName(), bound.getType());
                     } else {

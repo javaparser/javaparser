@@ -5,9 +5,9 @@ import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserEnumDec
 import me.tomassetti.symbolsolver.javassistmodel.JavassistClassDeclaration;
 import me.tomassetti.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 

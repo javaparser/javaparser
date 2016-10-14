@@ -1,11 +1,11 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.HashSet;
@@ -35,7 +35,7 @@ public class ReferenceTypeImpl extends ReferenceType {
     }
 
     @Override
-    public TypeParameter asTypeParameter() {
+    public TypeParameterDeclaration asTypeParameter() {
         if (this.typeDeclaration instanceof JavaParserTypeVariableDeclaration) {
             JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) this.typeDeclaration;
             return javaParserTypeVariableDeclaration.asTypeParameter();

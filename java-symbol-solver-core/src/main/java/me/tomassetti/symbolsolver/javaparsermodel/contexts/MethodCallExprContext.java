@@ -8,11 +8,12 @@ import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.*;
-import me.tomassetti.symbolsolver.model.typesystem.*;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.*;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 
@@ -71,7 +72,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 Type expectedType = methodUsage.getDeclaration().getLastParam().getType();
                 Type actualType = actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
-                    for (me.tomassetti.symbolsolver.model.resolution.TypeParameter tp : methodUsage.getDeclaration().getTypeParameters()) {
+                    for (TypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                     }
                 }
@@ -135,7 +136,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(TypeParameter tp, String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext) {
-        for (me.tomassetti.symbolsolver.model.resolution.TypeParameter.Bound bound : tp.asTypeParameter().getBounds(typeSolver)) {
+        for (TypeParameterDeclaration.Bound bound : tp.asTypeParameter().getBounds(typeSolver)) {
             Optional<MethodUsage> methodUsage = solveMethodAsUsage(bound.getType(), name, parameterTypes, typeSolver, invokationContext);
             if (methodUsage.isPresent()) {
                 return methodUsage;
@@ -167,7 +168,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     private Type usingParameterTypesFromScope(Type scope, Type type) {
         if (type.isReferenceType()) {
-            for (Tuple2<me.tomassetti.symbolsolver.model.resolution.TypeParameter, Type> entry : type.asReferenceTypeUsage().getTypeParametersMap()) {
+            for (Tuple2<TypeParameterDeclaration, Type> entry : type.asReferenceTypeUsage().getTypeParametersMap()) {
                 if (entry._1.declaredOnClass() && scope.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName()).isPresent()) {
                     type = type.replaceParam(entry._1.getName(), scope.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName()).get());
                 }
@@ -260,7 +261,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else if (typeOfScope.isArray() && typeOfScope.asArrayTypeUsage().getComponentType().isReferenceType()) {
                 return typeOfScope.asArrayTypeUsage().getComponentType().asReferenceTypeUsage().solveMethod(name, parameterTypes);
             } else if (typeOfScope.isTypeVariable()) {
-                for (me.tomassetti.symbolsolver.model.resolution.TypeParameter.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
+                for (TypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
                     SymbolReference<MethodDeclaration> res = bound.getType().asReferenceTypeUsage().solveMethod(name, parameterTypes);
                     if (res.isSolved()) {
                         return res;

@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.javassistmodel;
 
 import javassist.CtClass;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 public class JavassistParameterDeclaration implements ParameterDeclaration {

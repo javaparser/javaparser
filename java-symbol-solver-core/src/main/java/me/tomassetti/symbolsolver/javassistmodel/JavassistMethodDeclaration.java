@@ -9,10 +9,10 @@ import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.core.resolution.Context;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 import java.lang.reflect.Modifier;
@@ -116,7 +116,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public List<TypeParameter> getTypeParameters() {
+    public List<TypeParameterDeclaration> getTypeParameters() {
         try {
             if (ctMethod.getGenericSignature() == null) {
                 return Collections.emptyList();

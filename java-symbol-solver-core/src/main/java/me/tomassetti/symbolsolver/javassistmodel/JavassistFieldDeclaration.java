@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.javassistmodel;
 import javassist.CtField;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.model.declarations.FieldDeclaration {

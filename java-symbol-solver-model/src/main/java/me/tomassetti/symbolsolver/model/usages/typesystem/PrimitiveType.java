@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 import com.google.common.collect.ImmutableList;
 

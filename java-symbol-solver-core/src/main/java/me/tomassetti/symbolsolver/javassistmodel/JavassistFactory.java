@@ -3,11 +3,11 @@ package me.tomassetti.symbolsolver.javassistmodel;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.ArrayType;
-import me.tomassetti.symbolsolver.model.typesystem.PrimitiveType;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
-import me.tomassetti.symbolsolver.model.typesystem.VoidType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ArrayType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.PrimitiveType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.VoidType;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 public class JavassistFactory {

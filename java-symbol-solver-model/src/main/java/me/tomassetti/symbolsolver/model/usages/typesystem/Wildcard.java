@@ -1,4 +1,4 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 /**
  * A wildcard can be:

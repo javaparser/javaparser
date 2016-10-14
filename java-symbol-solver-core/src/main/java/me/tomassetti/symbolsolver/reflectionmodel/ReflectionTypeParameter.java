@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 import java.lang.reflect.GenericDeclaration;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ReflectionTypeParameter implements TypeParameter {
+public class ReflectionTypeParameter implements TypeParameterDeclaration {
 
     private TypeVariable typeVariable;
     private boolean declaredOnClass;
@@ -31,9 +31,9 @@ public class ReflectionTypeParameter implements TypeParameter {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TypeParameter)) return false;
+        if (!(o instanceof TypeParameterDeclaration)) return false;
 
-        TypeParameter that = (TypeParameter) o;
+        TypeParameterDeclaration that = (TypeParameterDeclaration) o;
 
         if (!getName().equals(that.getName())) {
             return false;

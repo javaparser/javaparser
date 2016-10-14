@@ -1,6 +1,6 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 /**
  * A usage of a type. It could be a primitive type or a reference type (enum, class, interface).
@@ -86,7 +86,7 @@ public interface Type {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
-    default TypeParameter asTypeParameter() {
+    default TypeParameterDeclaration asTypeParameter() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 

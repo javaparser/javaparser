@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.logic;
 
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

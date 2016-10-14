@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.logic;
 
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;

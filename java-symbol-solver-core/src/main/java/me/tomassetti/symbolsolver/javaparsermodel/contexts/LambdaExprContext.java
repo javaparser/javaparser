@@ -14,9 +14,9 @@ import me.tomassetti.symbolsolver.logic.FunctionalInterfaceLogic;
 import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -68,7 +68,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
                             // Replace parameter from declarator
                             if (lambdaType.isReferenceType()) {
-                                for (Tuple2<TypeParameter, Type> entry : lambdaType.asReferenceTypeUsage().getTypeParametersMap()) {
+                                for (Tuple2<TypeParameterDeclaration, Type> entry : lambdaType.asReferenceTypeUsage().getTypeParametersMap()) {
                                     if (entry._2.isTypeVariable() && entry._2.asTypeParameter().declaredOnClass()) {
                                         Optional<Type> ot = t.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName());
                                         if (ot.isPresent()) {

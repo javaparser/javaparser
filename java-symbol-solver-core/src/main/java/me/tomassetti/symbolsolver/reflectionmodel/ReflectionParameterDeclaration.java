@@ -2,7 +2,7 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 public class ReflectionParameterDeclaration implements ParameterDeclaration {
     private Class<?> type;

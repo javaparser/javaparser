@@ -15,11 +15,11 @@ import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 
 import java.util.*;
@@ -388,7 +388,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 	}
 
 	@Override
-	public List<TypeParameter> getTypeParameters() {
+	public List<TypeParameterDeclaration> getTypeParameters() {
 		if (this.wrappedNode.getTypeParameters() == null) {
 			return Collections.emptyList();
 		} else {

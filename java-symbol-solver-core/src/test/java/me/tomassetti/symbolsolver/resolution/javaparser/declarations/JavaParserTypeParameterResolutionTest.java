@@ -8,7 +8,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.AbstractResolutionTest;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -27,7 +27,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
         MethodCallExpr callToFoo = (MethodCallExpr) Navigator.findReturnStmt(methodDecl).getExpr();
         me.tomassetti.symbolsolver.model.declarations.MethodDeclaration methodDeclaration = javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
-        for (TypeParameter tp : methodDeclaration.getTypeParameters()) {
+        for (TypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
             assertTrue(tp instanceof JavaParserTypeParameter);
             assertEquals("C", tp.getName());
             assertEquals(true, tp.declaredOnMethod());

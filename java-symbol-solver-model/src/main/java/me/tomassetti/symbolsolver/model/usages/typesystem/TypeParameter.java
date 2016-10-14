@@ -1,13 +1,15 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
+
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 /**
  * @author Federico Tomassetti
  */
 public class TypeParameter implements Type {
 
-    private me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter;
+    private TypeParameterDeclaration typeParameter;
 
-    public TypeParameter(me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter) {
+    public TypeParameter(TypeParameterDeclaration typeParameter) {
         this.typeParameter = typeParameter;
     }
 
@@ -16,6 +18,10 @@ public class TypeParameter implements Type {
         return "TypeUsageOfTypeParameter{" +
                 "typeParameter=" + typeParameter +
                 '}';
+    }
+
+    public String qualifiedName() {
+        return this.typeParameter.qualifiedName();
     }
 
     @Override
@@ -67,7 +73,7 @@ public class TypeParameter implements Type {
     }
 
     @Override
-    public me.tomassetti.symbolsolver.model.resolution.TypeParameter asTypeParameter() {
+    public TypeParameterDeclaration asTypeParameter() {
         return typeParameter;
     }
 

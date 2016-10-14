@@ -1,9 +1,10 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
-import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.*;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.*;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
 
 import java.lang.reflect.*;
 
@@ -28,7 +29,7 @@ public class ReflectionFactory {
         if (type instanceof TypeVariable) {
             TypeVariable tv = (TypeVariable) type;
             boolean declaredOnClass = ((TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
-            me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter = new ReflectionTypeParameter(tv, declaredOnClass);
+            TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass);
             return new TypeParameter(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;

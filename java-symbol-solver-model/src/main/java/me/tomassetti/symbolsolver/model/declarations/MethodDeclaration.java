@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 /**
  * A declaration of a method (either in an interface, a class, an enum or an annotation).

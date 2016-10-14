@@ -1,16 +1,17 @@
-package me.tomassetti.symbolsolver.model.resolution;
+package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.List;
 
 /**
  * @author Federico Tomassetti
  */
-public interface TypeParameter {
+public interface TypeParameterDeclaration {
 
-    static TypeParameter onClass(final String name, String classQName, List<Bound> bounds) {
-        return new TypeParameter() {
+    static TypeParameterDeclaration onClass(final String name, String classQName, List<Bound> bounds) {
+        return new TypeParameterDeclaration() {
             @Override
             public String getName() {
                 return name;

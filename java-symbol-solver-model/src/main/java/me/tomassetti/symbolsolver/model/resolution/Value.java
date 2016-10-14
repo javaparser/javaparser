@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.model.resolution;
 
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 /**
  * @author Federico Tomassetti

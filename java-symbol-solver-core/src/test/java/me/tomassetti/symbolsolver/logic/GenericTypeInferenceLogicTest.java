@@ -3,11 +3,12 @@ package me.tomassetti.symbolsolver.logic;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import javaslang.Tuple2;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameter;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.easymock.EasyMock;
@@ -28,7 +29,7 @@ public class GenericTypeInferenceLogicTest {
     public void inferGenericTypesTestSimpleCase() {
         TypeSolver typeSolver = new JreTypeSolver();
         ReferenceType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        me.tomassetti.symbolsolver.model.resolution.TypeParameter a = EasyMock.createMock(me.tomassetti.symbolsolver.model.resolution.TypeParameter.class);
+        TypeParameterDeclaration a = EasyMock.createMock(TypeParameterDeclaration.class);
         EasyMock.expect(a.getName()).andReturn("A").anyTimes();
         EasyMock.replay(a);
         TypeParameter aUsage = new TypeParameter(a);
@@ -41,9 +42,9 @@ public class GenericTypeInferenceLogicTest {
         TypeSolver typeSolver = new JreTypeSolver();
         ReferenceType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         ReferenceType object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        me.tomassetti.symbolsolver.model.resolution.TypeParameter a = EasyMock.createMock(me.tomassetti.symbolsolver.model.resolution.TypeParameter.class);
-        me.tomassetti.symbolsolver.model.resolution.TypeParameter b = EasyMock.createMock(me.tomassetti.symbolsolver.model.resolution.TypeParameter.class);
-        me.tomassetti.symbolsolver.model.resolution.TypeParameter c = EasyMock.createMock(me.tomassetti.symbolsolver.model.resolution.TypeParameter.class);
+        TypeParameterDeclaration a = EasyMock.createMock(TypeParameterDeclaration.class);
+        TypeParameterDeclaration b = EasyMock.createMock(TypeParameterDeclaration.class);
+        TypeParameterDeclaration c = EasyMock.createMock(TypeParameterDeclaration.class);
         EasyMock.expect(a.getName()).andReturn("A").anyTimes();
         EasyMock.expect(b.getName()).andReturn("B").anyTimes();
         EasyMock.expect(c.getName()).andReturn("C").anyTimes();

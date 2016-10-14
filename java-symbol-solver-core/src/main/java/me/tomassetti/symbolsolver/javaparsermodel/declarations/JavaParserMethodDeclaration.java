@@ -10,13 +10,13 @@ import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.core.resolution.Context;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
-import me.tomassetti.symbolsolver.model.typesystem.Wildcard;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Wildcard;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -173,7 +173,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     private Type replaceTypeParams(Type type, TypeSolver typeSolver, Context context) {
         if (type.isTypeVariable()) {
-            TypeParameter typeParameter = type.asTypeParameter();
+            TypeParameterDeclaration typeParameter = type.asTypeParameter();
             if (typeParameter.declaredOnClass()) {
                 Optional<Type> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
                 if (typeParam.isPresent()) {
@@ -216,7 +216,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public List<TypeParameter> getTypeParameters() {
+    public List<TypeParameterDeclaration> getTypeParameters() {
         if (this.wrappedNode.getTypeParameters() == null) {
             return Collections.emptyList();
         }

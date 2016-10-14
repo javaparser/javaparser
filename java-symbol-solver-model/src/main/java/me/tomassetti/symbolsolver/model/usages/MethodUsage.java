@@ -1,17 +1,20 @@
-package me.tomassetti.symbolsolver.model.invokations;
+package me.tomassetti.symbolsolver.model.usages;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * This is basically a MethodDeclaration with some TypeParameters defined.
+ * The defined TypeParameters can comes from the Method itself or from the surrounding types.
+ *
  * @author Federico Tomassetti
  */
-public class MethodUsage {
+public class MethodUsage implements TypeParametrized {
     private MethodDeclaration declaration;
     private List<Type> paramTypes = new ArrayList<>();
     private Type returnType;
@@ -102,4 +105,8 @@ public class MethodUsage {
         return res;
     }
 
+    @Override
+    public TypeParametersMap typeParametersMap() {
+        throw new UnsupportedOperationException();
+    }
 }
