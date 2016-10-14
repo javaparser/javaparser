@@ -119,7 +119,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.8</java.version>
+		<java.version>1.6</java.version>
 
 		<!-- Maven Plugins -->
 		<javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
