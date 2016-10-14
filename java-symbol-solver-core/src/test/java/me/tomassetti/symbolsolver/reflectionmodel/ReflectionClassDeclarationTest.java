@@ -125,7 +125,7 @@ public class ReflectionClassDeclarationTest {
         TypeSolver typeResolver = new JreTypeSolver();
         TypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<MethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> !m.isPrivate() && !m.isPackageProtected())
+                .filter(m -> m.accessLevel() != AccessLevel.PRIVATE && m.accessLevel() != AccessLevel.PACKAGE_PROTECTED)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
         assertEquals(67, methods.size());

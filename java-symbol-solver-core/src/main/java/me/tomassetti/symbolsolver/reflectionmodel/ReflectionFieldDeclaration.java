@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.Type;
@@ -56,5 +57,10 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
     @Override
     public boolean isType() {
         return false;
+    }
+
+    @Override
+    public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
     }
 }

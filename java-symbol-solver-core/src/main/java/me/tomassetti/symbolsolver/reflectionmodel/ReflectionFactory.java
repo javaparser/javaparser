@@ -1,5 +1,6 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.*;
 import me.tomassetti.symbolsolver.model.typesystem.Type;
@@ -78,6 +79,18 @@ public class ReflectionFactory {
             return Wildcard.UNBOUNDED;
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName() + " " + type);
+        }
+    }
+
+    static AccessLevel modifiersToAccessLevel(final int modifiers) {
+        if (Modifier.isPublic(modifiers)) {
+            return AccessLevel.PUBLIC;
+        } else if (Modifier.isProtected(modifiers)) {
+            return AccessLevel.PROTECTED;
+        } else if (Modifier.isPrivate(modifiers)) {
+            return AccessLevel.PRIVATE;
+        } else {
+            return AccessLevel.PACKAGE_PROTECTED;
         }
     }
 }

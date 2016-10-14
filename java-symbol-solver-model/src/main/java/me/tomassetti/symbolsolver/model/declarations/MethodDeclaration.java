@@ -7,7 +7,7 @@ import me.tomassetti.symbolsolver.model.typesystem.Type;
  *
  * @author Federico Tomassetti
  */
-public interface MethodDeclaration extends Declaration, TypeParametrizable {
+public interface MethodDeclaration extends Declaration, TypeParametrizable, HasAccessLevel {
 
     /**
      * The type in which the method is declared.
@@ -43,10 +43,6 @@ public interface MethodDeclaration extends Declaration, TypeParametrizable {
     }
 
     boolean isAbstract();
-
-    boolean isPrivate();
-
-    boolean isPackageProtected();
 
     default String getQualifiedName() {
         return declaringType().getQualifiedName()+ "." + this.getName();

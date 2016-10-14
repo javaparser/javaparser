@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable {
+public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, HasAccessLevel {
 
     /**
      * This method should always return true.

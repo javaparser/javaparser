@@ -359,4 +359,9 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 	{
 		return wrappedNode;
 	}
+
+    @Override
+    public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
+    }
 }

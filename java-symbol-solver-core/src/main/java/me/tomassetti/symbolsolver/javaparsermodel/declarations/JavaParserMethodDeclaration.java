@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -156,11 +157,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         return (wrappedNode.getBody() == null);
     }
 
-    @Override
-    public boolean isPrivate() {
-        return wrappedNode.getModifiers().contains(com.github.javaparser.ast.Modifier.PRIVATE);
-    }
-
     private Optional<Type> typeParamByName(String name, TypeSolver typeSolver, Context context) {
         int i = 0;
         if (wrappedNode.getTypeParameters() != null) {
@@ -228,11 +224,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isPackageProtected() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isDefaultMethod() {
         return wrappedNode.isDefault();
     }
@@ -246,4 +237,10 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 	{
 		return wrappedNode;
 	}
+
+    @Override
+    public AccessLevel accessLevel() {
+        // return wrappedNode.getModifiers().contains(com.github.javaparser.ast.Modifier.PRIVATE);
+        throw new UnsupportedOperationException();
+    }
 }

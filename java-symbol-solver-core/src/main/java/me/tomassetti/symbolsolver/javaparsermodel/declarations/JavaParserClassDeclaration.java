@@ -416,4 +416,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 	public com.github.javaparser.ast.body.ClassOrInterfaceDeclaration getWrappedNode() {
 		return wrappedNode;
 	}
+
+	@Override
+	public AccessLevel accessLevel() {
+		throw new UnsupportedOperationException();
+	}
 }

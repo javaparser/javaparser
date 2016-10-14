@@ -325,4 +325,9 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     protected TypeSolver typeSolver() {
         return typeSolver;
     }
+
+    @Override
+    public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
+    }
 }

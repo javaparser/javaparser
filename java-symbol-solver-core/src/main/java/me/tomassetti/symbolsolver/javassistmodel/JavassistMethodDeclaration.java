@@ -5,6 +5,7 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -115,16 +116,6 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(ctMethod.getModifiers());
-    }
-
-    @Override
-    public boolean isPackageProtected() {
-        return !Modifier.isPrivate(ctMethod.getModifiers()) && !Modifier.isProtected(ctMethod.getModifiers()) && !Modifier.isPublic(ctMethod.getModifiers());
-    }
-
-    @Override
     public List<TypeParameter> getTypeParameters() {
         try {
             if (ctMethod.getGenericSignature() == null) {
@@ -135,5 +126,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         } catch (BadBytecode badBytecode) {
             throw new RuntimeException(badBytecode);
         }
+    }
+
+    @Override
+    public AccessLevel accessLevel() {
+        // return !Modifier.isPrivate(ctMethod.getModifiers()) && !Modifier.isProtected(ctMethod.getModifiers()) && !Modifier.isPublic(ctMethod.getModifiers());
+        throw new UnsupportedOperationException();
     }
 }

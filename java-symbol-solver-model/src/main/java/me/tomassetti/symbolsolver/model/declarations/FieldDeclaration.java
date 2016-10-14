@@ -5,7 +5,7 @@ package me.tomassetti.symbolsolver.model.declarations;
  *
  * @author Federico Tomassetti
  */
-public interface FieldDeclaration extends ValueDeclaration {
+public interface FieldDeclaration extends ValueDeclaration, HasAccessLevel {
 
     @Override
     default boolean isField() {

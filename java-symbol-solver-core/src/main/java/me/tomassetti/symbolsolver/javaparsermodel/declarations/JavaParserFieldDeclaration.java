@@ -2,6 +2,7 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -69,4 +70,8 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
 		return wrappedNode;
 	}
 
+    @Override
+    public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
+    }
 }

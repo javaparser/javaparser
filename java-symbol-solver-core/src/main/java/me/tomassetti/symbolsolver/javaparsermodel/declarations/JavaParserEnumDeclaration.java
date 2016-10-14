@@ -367,16 +367,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         @Override
-        public boolean isPrivate() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean isPackageProtected() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
         public boolean isDefaultMethod() {
             return false;
         }
@@ -390,5 +380,15 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         public List<TypeParameter> getTypeParameters() {
             return Collections.emptyList();
         }
+
+        @Override
+        public AccessLevel accessLevel() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
     }
 }

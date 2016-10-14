@@ -432,4 +432,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             return 0;
         }
     }
+
+    @Override
+    public AccessLevel accessLevel() {
+        return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
+    }
 }

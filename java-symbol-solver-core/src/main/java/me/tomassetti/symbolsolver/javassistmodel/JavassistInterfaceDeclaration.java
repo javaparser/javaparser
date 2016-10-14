@@ -275,5 +275,8 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         }
     }
 
-
+    @Override
+    public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
+    }
 }

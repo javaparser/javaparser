@@ -1,6 +1,7 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -214,18 +215,13 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(method.getModifiers());
-    }
-
-    @Override
-    public boolean isPackageProtected() {
-        return !Modifier.isPrivate(method.getModifiers()) && !Modifier.isProtected(method.getModifiers()) && !Modifier.isPublic(method.getModifiers());
-    }
-
-    @Override
     public boolean isDefaultMethod() {
         return method.isDefault();
+    }
+
+    @Override
+    public AccessLevel accessLevel() {
+        return ReflectionFactory.modifiersToAccessLevel(this.method.getModifiers());
     }
 
 }
