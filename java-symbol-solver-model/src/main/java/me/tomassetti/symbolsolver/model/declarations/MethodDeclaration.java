@@ -25,7 +25,7 @@ public interface MethodDeclaration extends Declaration, TypeParametrizable, HasA
      */
     default ParameterDeclaration getLastParam() {
         if (getNoParams() == 0) {
-            throw new UnsupportedOperationException("This method has no parameters, therefore it has no a last parameter");
+            throw new UnsupportedOperationException("This method has no typeParametersValues, therefore it has no a last parameter");
         }
         return getParam(getNoParams() - 1);
     }

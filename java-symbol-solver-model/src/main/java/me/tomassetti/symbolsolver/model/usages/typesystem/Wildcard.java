@@ -26,20 +26,20 @@ public class Wildcard implements Type {
         this.boundedType = boundedType;
     }
 
-    @Override
-    public String toString() {
-        return "WildcardUsage{" +
-                "type=" + type +
-                ", boundedType=" + boundedType +
-                '}';
-    }
-
     public static Wildcard superBound(Type type) {
         return new Wildcard(BoundType.SUPER, type);
     }
 
     public static Wildcard extendsBound(Type type) {
         return new Wildcard(BoundType.EXTENDS, type);
+    }
+
+    @Override
+    public String toString() {
+        return "WildcardUsage{" +
+                "type=" + type +
+                ", boundedType=" + boundedType +
+                '}';
     }
 
     public boolean isWildcard() {

@@ -128,7 +128,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         // TODO avoid bridge and synthetic methods
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)) {
-                // TODO check parameters
+                // TODO check typeParametersValues
                 MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver));
                 try {
                     if (method.getGenericSignature() != null) {

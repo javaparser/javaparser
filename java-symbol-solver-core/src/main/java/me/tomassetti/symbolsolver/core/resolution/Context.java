@@ -54,7 +54,7 @@ public interface Context {
     /* Methods resolution */
 
     /**
-     * We find the method declaration which is the best match for the given name and list of parameters.
+     * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
     SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver);
 

@@ -70,12 +70,12 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
         NameExpr nodes = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName()!=null && it.getName().equals("nodes")).findFirst().get();
         Type type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
         assertEquals("java.util.List<T>", type.describe());
-        assertEquals(1, type.asReferenceTypeUsage().parameters().size());
-        assertEquals(true, type.asReferenceTypeUsage().parameters().get(0).isTypeVariable());
-        assertEquals("T", type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
-        assertEquals("com.github.javaparser.utils.PositionUtils.sortByBeginPosition(java.util.List<T>).T", type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().qualifiedName());
-        assertEquals(1, type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).size());
-        TypeParameterDeclaration.Bound bound = type.asReferenceTypeUsage().parameters().get(0).asTypeParameter().getBounds(TYPESOLVER).get(0);
+        assertEquals(1, type.asReferenceTypeUsage().typeParametersValues().size());
+        assertEquals(true, type.asReferenceTypeUsage().typeParametersValues().get(0).isTypeVariable());
+        assertEquals("T", type.asReferenceTypeUsage().typeParametersValues().get(0).asTypeParameter().getName());
+        assertEquals("com.github.javaparser.utils.PositionUtils.sortByBeginPosition(java.util.List<T>).T", type.asReferenceTypeUsage().typeParametersValues().get(0).asTypeParameter().qualifiedName());
+        assertEquals(1, type.asReferenceTypeUsage().typeParametersValues().get(0).asTypeParameter().getBounds(TYPESOLVER).size());
+        TypeParameterDeclaration.Bound bound = type.asReferenceTypeUsage().typeParametersValues().get(0).asTypeParameter().getBounds(TYPESOLVER).get(0);
         assertEquals(true, bound.isExtends());
         assertEquals("com.github.javaparser.ast.Node", bound.getType().describe());
     }

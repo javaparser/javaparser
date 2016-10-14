@@ -15,9 +15,7 @@ public class TypeParameter implements Type {
 
     @Override
     public String toString() {
-        return "TypeUsageOfTypeParameter{" +
-                "typeParameter=" + typeParameter +
-                '}';
+        return "TypeUsageOfTypeParameter{" + typeParameter + "}";
     }
 
     public String qualifiedName() {

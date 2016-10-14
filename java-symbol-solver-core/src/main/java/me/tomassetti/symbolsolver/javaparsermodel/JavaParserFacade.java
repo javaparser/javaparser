@@ -94,7 +94,7 @@ public class JavaParserFacade {
             Type result = type;
             int i = 0;
             if (result.isReferenceType()) {
-                for (Type tp : type.asReferenceTypeUsage().parameters()) {
+                for (Type tp : type.asReferenceTypeUsage().typeParametersValues()) {
                     result = result.asReferenceTypeUsage().replaceParam(i, solveGenericTypes(tp, context, typeSolver));
                     i++;
                 }
@@ -249,7 +249,7 @@ public class JavaParserFacade {
     }
 
     /**
-     * Should return more like a TypeApplication: a TypeDeclaration and possible parameters or array modifiers.
+     * Should return more like a TypeApplication: a TypeDeclaration and possible typeParametersValues or array modifiers.
      *
      * @return
      */
@@ -410,7 +410,7 @@ public class JavaParserFacade {
                     if (!typeAccessedStatically.isSolved()) {
                         throw e;
                     } else {
-                        // TODO here maybe we have to substitute type parameters
+                        // TODO here maybe we have to substitute type typeParametersValues
                         return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField()).getType();
                     }
                 } else {

@@ -4,7 +4,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 /**
  * A usage of a type. It could be a primitive type or a reference type (enum, class, interface).
- * In the later case it could take type parameters (other TypeUsages). It could also be a TypeVariable, like in:
+ * In the later case it could take type typeParametersValues (other TypeUsages). It could also be a TypeVariable, like in:
  * <p/>
  * class A<B> { }
  * <p/>
@@ -108,8 +108,14 @@ public interface Type {
     /// TypeParameters
     ///
 
+    @Deprecated
     default Type replaceParam(String name, Type replaced) {
         return this;
+    }
+
+
+    default Type replaceParam(TypeParameterDeclaration name, Type replaced) {
+        throw new UnsupportedOperationException();
     }
 
     ///

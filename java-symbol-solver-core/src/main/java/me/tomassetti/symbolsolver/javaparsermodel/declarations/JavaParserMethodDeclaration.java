@@ -137,8 +137,8 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             if (formalParamType.asReferenceTypeUsage().isRawType() || actualParamType.asReferenceTypeUsage().isRawType()) {
                 return;
             }
-            List<Type> formalTypeParams = formalParamType.asReferenceTypeUsage().parameters();
-            List<Type> actualTypeParams = actualParamType.asReferenceTypeUsage().parameters();
+            List<Type> formalTypeParams = formalParamType.asReferenceTypeUsage().typeParametersValues();
+            List<Type> actualTypeParams = actualParamType.asReferenceTypeUsage().typeParametersValues();
             if (formalTypeParams.size() != actualTypeParams.size()) {
                 throw new UnsupportedOperationException();
             }
@@ -183,10 +183,10 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         }
 
         if (type.isReferenceType()) {
-            for (int i = 0; i < type.asReferenceTypeUsage().parameters().size(); i++) {
-                Type replaced = replaceTypeParams(type.asReferenceTypeUsage().parameters().get(i), typeSolver, context);
+            for (int i = 0; i < type.asReferenceTypeUsage().typeParametersValues().size(); i++) {
+                Type replaced = replaceTypeParams(type.asReferenceTypeUsage().typeParametersValues().get(i), typeSolver, context);
                 // Identity comparison on purpose
-                if (replaced != type.asReferenceTypeUsage().parameters().get(i)) {
+                if (replaced != type.asReferenceTypeUsage().typeParametersValues().get(i)) {
                     type = type.asReferenceTypeUsage().replaceParam(i, replaced);
                 }
             }

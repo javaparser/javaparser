@@ -121,7 +121,7 @@ public class ArrayTypeTest {
         assertEquals(true, arrayOfListOfA.replaceParam("A", OBJECT).isArray());
         assertEquals(ImmutableList.of(OBJECT),
                 arrayOfListOfA.replaceParam("A", OBJECT).asArrayTypeUsage().getComponentType()
-                        .asReferenceTypeUsage().parameters());
+                        .asReferenceTypeUsage().typeParametersValues());
         assertEquals(new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 arrayOfListOfA.replaceParam("A", OBJECT).asArrayTypeUsage().getComponentType()
                         .asReferenceTypeUsage().getTypeDeclaration());

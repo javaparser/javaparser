@@ -55,9 +55,9 @@ public class ReferenceTypeTest {
     public void testDerivationOfTypeParameters() {
         JreTypeSolver typeSolver = new JreTypeSolver();
         ReferenceTypeImpl ref1 = new ReferenceTypeImpl(typeSolver.solveType(LinkedList.class.getCanonicalName()), typeSolver);
-        assertEquals(1, ref1.parameters().size());
-        assertEquals(true, ref1.parameters().get(0).isTypeVariable());
-        assertEquals("E", ref1.parameters().get(0).asTypeParameter().getName());
+        assertEquals(1, ref1.typeParametersValues().size());
+        assertEquals(true, ref1.typeParametersValues().get(0).isTypeVariable());
+        assertEquals("E", ref1.typeParametersValues().get(0).asTypeParameter().getName());
     }
 
     @Test
@@ -363,9 +363,9 @@ public class ReferenceTypeTest {
         assertEquals(true, ref.getFieldType("elements").isPresent());
         assertEquals(true, ref.getFieldType("elements").get().isReferenceType());
         assertEquals(List.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().getQualifiedName());
-        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().size());
-        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).isTypeVariable());
-        assertEquals("A", ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
+        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().size());
+        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().get(0).isTypeVariable());
+        assertEquals("A", ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().get(0).asTypeParameter().getName());
 
         ref = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)),
@@ -374,9 +374,9 @@ public class ReferenceTypeTest {
         assertEquals(true, ref.getFieldType("elements").isPresent());
         assertEquals(true, ref.getFieldType("elements").get().isReferenceType());
         assertEquals(List.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().getQualifiedName());
-        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().size());
-        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).isReferenceType());
-        assertEquals(String.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).asReferenceTypeUsage().getQualifiedName());
+        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().size());
+        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().get(0).isReferenceType());
+        assertEquals(String.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().get(0).asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test

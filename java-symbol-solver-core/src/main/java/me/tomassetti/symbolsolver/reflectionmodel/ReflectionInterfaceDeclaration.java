@@ -102,13 +102,13 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         Optional<MethodUsage> res =  ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
                 typeParameterValues, this, clazz);
         if (res.isPresent()) {
-            // We have to replace method type parameters here
+            // We have to replace method type typeParametersValues here
             List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
             MethodUsage methodUsage = res.get();
             int i=0;
             for (Type actualType : parameterTypes) {
                 Type formalType = methodUsage.getParamType(i);
-                // We need to replace the class type parameters (while we derive the method ones)
+                // We need to replace the class type typeParametersValues (while we derive the method ones)
 
                 formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                 i++;

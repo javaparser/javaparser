@@ -47,7 +47,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = pos(methodCallExpr, wrappedNode);
                         Type lambdaType = methodUsage.getParamTypes().get(i);
-                        Value value = new Value(lambdaType.asReferenceTypeUsage().parameters().get(0), name, false);
+                        Value value = new Value(lambdaType.asReferenceTypeUsage().typeParametersValues().get(0), name, false);
                         return Optional.of(value);
                     } else if (wrappedNode.getParentNode() instanceof VariableDeclarator) {
                         com.github.javaparser.ast.type.Type declaratorType = null;
@@ -118,7 +118,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             return Optional.empty();
         }
 
-        //return Optional.of(lambda.asReferenceTypeUsage().parameters().get(0));
+        //return Optional.of(lambda.asReferenceTypeUsage().typeParametersValues().get(0));
     }
 
     private int pos(MethodCallExpr callExpr, Expression param) {

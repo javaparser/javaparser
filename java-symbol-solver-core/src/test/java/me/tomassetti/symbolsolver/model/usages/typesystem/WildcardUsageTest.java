@@ -361,9 +361,9 @@ public class WildcardUsageTest {
         assertEquals(true, ref.getFieldType("elements").isPresent());
         assertEquals(true, ref.getFieldType("elements").get().isReferenceType());
         assertEquals(List.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().getQualifiedName());
-        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().size());
-        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).isTypeVariable());
-        assertEquals("A", ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).asTypeParameter().getName());
+        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().size());
+        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().get(0).isTypeVariable());
+        assertEquals("A", ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().get(0).asTypeParameter().getName());
 
         ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeUsage(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)),
@@ -372,9 +372,9 @@ public class WildcardUsageTest {
         assertEquals(true, ref.getFieldType("elements").isPresent());
         assertEquals(true, ref.getFieldType("elements").get().isReferenceType());
         assertEquals(List.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().getQualifiedName());
-        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().size());
-        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).isReferenceType());
-        assertEquals(String.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().parameters().get(0).asReferenceTypeUsage().getQualifiedName());
+        assertEquals(1, ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().size());
+        assertEquals(true, ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().get(0).isReferenceType());
+        assertEquals(String.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceTypeUsage().typeParametersValues().get(0).asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test

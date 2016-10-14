@@ -131,13 +131,13 @@ public class MethodResolutionLogic {
         if (!expected.getQualifiedName().equals(actual.getQualifiedName())) {
             return false;
         }
-        if (expected.parameters().size() != actual.parameters().size()) {
+        if (expected.typeParametersValues().size() != actual.typeParametersValues().size()) {
             throw new UnsupportedOperationException();
             //return true;
         }
-        for (int i = 0; i < expected.parameters().size(); i++) {
-            Type expectedParam = expected.parameters().get(i);
-            Type actualParam = actual.parameters().get(i);
+        for (int i = 0; i < expected.typeParametersValues().size(); i++) {
+            Type expectedParam = expected.typeParametersValues().get(i);
+            Type actualParam = actual.typeParametersValues().get(i);
             if (expectedParam.isTypeVariable()) {
                 String expectedParamName = expectedParam.asTypeParameter().getName();
                 if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
@@ -188,7 +188,7 @@ public class MethodResolutionLogic {
         } else if (type.isReferenceType()) {
             ReferenceType result = type.asReferenceTypeUsage();
             int i = 0;
-            for (Type typeParam : result.parameters()) {
+            for (Type typeParam : result.typeParametersValues()) {
                 result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceTypeUsage();
                 i++;
             }

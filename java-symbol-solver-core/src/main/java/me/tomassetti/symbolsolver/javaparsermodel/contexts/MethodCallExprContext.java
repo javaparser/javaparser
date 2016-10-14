@@ -49,7 +49,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(ReferenceType refType, String name,
                                                      List<Type> parameterTypes, TypeSolver typeSolver,
                                                      Context invokationContext) {
-        Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, parameterTypes, typeSolver, invokationContext, refType.parameters());
+        Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, parameterTypes, typeSolver, invokationContext, refType.typeParametersValues());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
             Type returnType = refType.replaceTypeParams(methodUsage.returnType());
@@ -78,14 +78,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
                 if (!expectedType.isAssignableBy(actualType)) {
                     // ok, then it needs to be wrapped
-                    throw new UnsupportedOperationException(String.format("Unable to resolve the type parameters in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                    throw new UnsupportedOperationException(String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
                             expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
                 }
             } else {
                 // TODO fix
                 return methodUsage;
                 // ok, then it needs to be wrapped
-                //throw new UnsupportedOperationException(String.format("Unable to resolve the type parameters in a MethodUsage. Actual params: %s, Method Declaration: %s. MethodUsage: %s",
+                //throw new UnsupportedOperationException(String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Actual params: %s, Method Declaration: %s. MethodUsage: %s",
                 //        actualParamTypes, methodUsage.getDeclaration(), methodUsage));
             }
         }
@@ -117,8 +117,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     matchedTypeParameters);
         } else if (expectedType.isReferenceType()) {
             int i = 0;
-            for (Type tp : expectedType.asReferenceTypeUsage().parameters()) {
-                matchTypeParameters(tp, actualType.asReferenceTypeUsage().parameters().get(i), matchedTypeParameters);
+            for (Type tp : expectedType.asReferenceTypeUsage().typeParametersValues()) {
+                matchTypeParameters(tp, actualType.asReferenceTypeUsage().typeParametersValues().get(i), matchedTypeParameters);
                 i++;
             }
         } else if (expectedType.isPrimitive()) {
@@ -185,7 +185,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (wrappedNode.getScope() != null) {
             try {
                 Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-                // we can replace the parameter types from the scope into the parameters
+                // we can replace the parameter types from the scope into the typeParametersValues
 
                 for (int i=0;i<parameterTypes.size();i++) {
                     parameterTypes.set(i, usingParameterTypesFromScope(typeOfScope, parameterTypes.get(i)));

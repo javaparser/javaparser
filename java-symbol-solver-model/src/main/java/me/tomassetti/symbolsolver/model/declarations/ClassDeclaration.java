@@ -20,7 +20,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, H
     }
 
     /**
-     * This is a ReferenceTypeUsage because it could contain type parameters.
+     * This is a ReferenceTypeUsage because it could contain type typeParametersValues.
      * For example: class A extends B<Integer, String>.
      * <p/>
      * Note that only the Object class should not have a superclass and therefore
@@ -36,13 +36,13 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, H
     List<ReferenceType> getInterfaces();
 
     /**
-     * Get all superclasses, with all the type parameters expressed as functions of the type parameters of this
+     * Get all superclasses, with all the type typeParametersValues expressed as functions of the type typeParametersValues of this
      * declaration.
      */
     List<ReferenceType> getAllSuperClasses();
 
     /**
-     * Get all interfaces, with all the type parameters expressed as functions of the type parameters of this
+     * Get all interfaces, with all the type typeParametersValues expressed as functions of the type typeParametersValues of this
      * declaration.
      */
     List<ReferenceType> getAllInterfaces();

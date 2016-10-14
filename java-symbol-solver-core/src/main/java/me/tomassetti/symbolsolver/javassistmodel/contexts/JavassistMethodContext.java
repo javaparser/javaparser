@@ -34,7 +34,7 @@ public class JavassistMethodContext implements Context {
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        // TODO consider generic parameters of the method
+        // TODO consider generic typeParametersValues of the method
         return getParent().solveGenericType(name, typeSolver);
     }
 
