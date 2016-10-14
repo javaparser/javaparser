@@ -94,6 +94,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean isInterface() {
         return true;
     }
