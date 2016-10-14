@@ -118,7 +118,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 if (map.get(key) == null) {
                     throw new IllegalArgumentException();
                 }
-                methodUsage = methodUsage.replaceNameParam(key, map.get(key));
+                methodUsage = methodUsage.replaceTypeParameterByName(key, map.get(key));
             }
             return Optional.of(methodUsage);
         } else {

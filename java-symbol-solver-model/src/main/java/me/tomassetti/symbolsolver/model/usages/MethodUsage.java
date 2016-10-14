@@ -36,7 +36,7 @@ public class MethodUsage implements TypeParametrized {
         this.returnType = returnType;
     }
 
-    private static Type replaceNameParam(String name, Type newValue, Type typeToBeExamined) {
+    private static Type replaceTypeParameterByName(String name, Type newValue, Type typeToBeExamined) {
         return typeToBeExamined.replaceParam(name, newValue);
     }
 
@@ -85,15 +85,22 @@ public class MethodUsage implements TypeParametrized {
         }
     }
 
+    /**
+     * Return the number of formal arguments accepted by this method.
+     */
     public int getNoParams() {
         return paramTypes.size();
     }
 
+    /**
+     * Return the type of the formal argument at the given position.
+     */
     public Type getParamType(int i) {
         return paramTypes.get(i);
     }
 
-    public MethodUsage replaceNameParam(String name, Type type) {
+    @Deprecated
+    public MethodUsage replaceTypeParameterByName(String name, Type type) {
         if (type == null) {
             throw new IllegalArgumentException();
         }
@@ -104,7 +111,7 @@ public class MethodUsage implements TypeParametrized {
             Type newParamType = originalParamType.replaceParam(name, type);
             res = res.replaceParamType(i, newParamType);
         }
-        res = res.replaceReturnType(replaceNameParam(name, type, res.returnType));
+        res = res.replaceReturnType(replaceTypeParameterByName(name, type, res.returnType));
         return res;
     }
 

@@ -154,7 +154,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             for (int i = 0; i < getTypeParameters().size(); i++) {
                 String nameToReplace = getTypeParameters().get(i).getName();
                 Type newValue = typeParameterValues.get(i);
-                methodUsage = methodUsage.replaceNameParam(nameToReplace, newValue);
+                methodUsage = methodUsage.replaceTypeParameterByName(nameToReplace, newValue);
             }
             methods.add(methodUsage);
         }
