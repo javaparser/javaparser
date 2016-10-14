@@ -1,9 +1,12 @@
-package me.tomassetti.symbolsolver.model.resolution;
+package me.tomassetti.symbolsolver.core.resolution;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.Value;
 import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
@@ -63,7 +66,7 @@ public interface Context {
         SymbolReference<MethodDeclaration> methodSolved = solveMethod(name, parameterTypes, typeSolver);
         if (methodSolved.isSolved()) {
             MethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
-            MethodUsage methodUsage = methodDeclaration.resolveTypeVariables(this, parameterTypes);
+            MethodUsage methodUsage = ContextHelper.resolveTypeVariables(this, methodDeclaration, parameterTypes);//methodDeclaration.resolveTypeVariables(this, parameterTypes);
             return Optional.of(methodUsage);
         } else {
             return Optional.empty();

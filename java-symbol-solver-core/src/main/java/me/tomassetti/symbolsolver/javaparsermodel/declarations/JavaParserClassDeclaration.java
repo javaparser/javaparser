@@ -13,7 +13,7 @@ import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -44,7 +44,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 		return getContext().solveMethod(name, parameterTypes, typeSolver());
 	}
 
-	@Override
 	public Context getContext() {
 		return JavaParserFactory.getContext(wrappedNode, typeSolver);
 	}

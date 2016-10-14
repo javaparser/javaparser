@@ -7,7 +7,7 @@ import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
@@ -39,7 +39,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         return getName();
     }
 
-    @Override
     public Context getContext() {
         throw new UnsupportedOperationException();
     }

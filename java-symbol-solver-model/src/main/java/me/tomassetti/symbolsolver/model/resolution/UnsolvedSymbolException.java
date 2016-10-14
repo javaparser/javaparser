@@ -15,12 +15,6 @@ public class UnsolvedSymbolException extends RuntimeException {
         this.name = name;
     }
 
-    public UnsolvedSymbolException(Context context, String name) {
-        super("Unsolved symbol in " + context + " : " + name);
-        this.context = context.toString();
-        this.name = name;
-    }
-
     public UnsolvedSymbolException(String context, String name) {
         super("Unsolved symbol in " + context + " : " + name);
         this.context = context;

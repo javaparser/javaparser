@@ -3,6 +3,7 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import javaslang.Tuple2;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
@@ -47,7 +48,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(ReferenceType refType, String name,
                                                      List<Type> parameterTypes, TypeSolver typeSolver,
                                                      Context invokationContext) {
-        Optional<MethodUsage> ref = refType.getTypeDeclaration().solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, refType.parameters());
+        Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, parameterTypes, typeSolver, invokationContext, refType.parameters());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
             Type returnType = refType.replaceTypeParams(methodUsage.returnType());

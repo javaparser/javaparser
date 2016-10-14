@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
@@ -9,7 +8,6 @@ import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -22,15 +20,15 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
 
     String getQualifiedName();
 
-    @Deprecated
-    Context getContext();
+    //@Deprecated
+    //Context getContext();
 
     SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
 
-    @Deprecated
+    /*@Deprecated
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
-    }
+    }*/
 
     boolean isAssignableBy(Type type);
 

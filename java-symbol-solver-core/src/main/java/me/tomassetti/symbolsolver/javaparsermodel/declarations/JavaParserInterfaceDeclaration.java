@@ -10,7 +10,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -53,7 +53,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return methods;
     }
 
-    @Override
     public Context getContext() {
         return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }

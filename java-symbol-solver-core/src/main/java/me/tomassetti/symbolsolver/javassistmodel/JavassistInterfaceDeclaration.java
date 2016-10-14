@@ -9,7 +9,7 @@ import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -58,7 +58,6 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         return ctClass.getName();
     }
 
-    @Override
     public Context getContext() {
         throw new UnsupportedOperationException();
     }
@@ -88,7 +87,6 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         }
     }
 
-    @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues) {
 

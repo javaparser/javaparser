@@ -11,7 +11,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -59,7 +59,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 		return methods;
     }
 
-    @Override
     public Context getContext() {
         return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
@@ -230,7 +229,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return getContext().solveMethod(name, parameterTypes, typeSolver);
     }
 
-    @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         if (name.equals("values") && parameterTypes.isEmpty()) {
             return Optional.of(new ValuesMethod().getUsage(null));
@@ -332,7 +330,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 		return wrappedNode;
 	}
 
-    private class ValuesMethod implements MethodDeclaration {
+    // Needed by ContextHelper
+    public class ValuesMethod implements MethodDeclaration {
 
         @Override
         public TypeDeclaration declaringType() {
@@ -358,7 +357,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
             throw new UnsupportedOperationException();
         }
 
-        @Override
         public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
             return new MethodUsage(this, typeSolver);
         }

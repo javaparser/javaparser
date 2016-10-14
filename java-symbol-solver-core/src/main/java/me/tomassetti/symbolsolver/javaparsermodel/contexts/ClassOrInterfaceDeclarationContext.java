@@ -79,7 +79,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
         // then among inherited fields
         for (ReferenceType ancestor : getDeclaration().getAncestors()) {
-            Optional<Value> ref = ancestor.getTypeDeclaration().getContext().solveSymbolAsValue(name, typeSolver);
+            Optional<Value> ref = ContextHelper.getContext(ancestor.getTypeDeclaration()).solveSymbolAsValue(name, typeSolver);
             if (ref.isPresent()) {
                 return ref;
             }

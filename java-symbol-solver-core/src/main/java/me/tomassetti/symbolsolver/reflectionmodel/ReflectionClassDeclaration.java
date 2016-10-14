@@ -1,11 +1,12 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
+import me.tomassetti.symbolsolver.core.resolution.Context;
+import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
+import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
-import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -13,8 +14,7 @@ import me.tomassetti.symbolsolver.model.typesystem.NullType;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import me.tomassetti.symbolsolver.model.typesystem.Type;
-import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -105,7 +105,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return clazz.getCanonicalName();
     }
 
-    @Override
     public Context getContext() {
         return new ClassOrInterfaceDeclarationContext(clazz);
     }
@@ -146,7 +145,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return new ReferenceTypeImpl(this, typeSolver);
     }
 
-    @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
@@ -162,13 +160,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-            Optional<MethodUsage> ref = superClass.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(superClass, name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
         }
         for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
-            Optional<MethodUsage> ref = interfaceDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(interfaceDeclaration, name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }

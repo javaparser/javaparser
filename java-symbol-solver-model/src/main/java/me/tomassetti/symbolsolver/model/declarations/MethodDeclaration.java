@@ -1,10 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
 import me.tomassetti.symbolsolver.model.typesystem.Type;
-import me.tomassetti.symbolsolver.model.resolution.Context;
-
-import java.util.List;
 
 /**
  * A declaration of a method (either in an interface, a class, an enum or an annotation).
@@ -46,12 +42,12 @@ public interface MethodDeclaration extends Declaration, TypeParametrizable {
         }
     }
 
-    /**
+    /*/**
      * Create the MethodUsage corresponding to this declaration with all generic types
      * solved in the given context.
-     */
+     *
     @Deprecated
-    MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes);
+    MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes);*/
 
     boolean isAbstract();
 

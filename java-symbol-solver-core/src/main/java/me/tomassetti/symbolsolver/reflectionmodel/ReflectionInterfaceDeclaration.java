@@ -7,7 +7,7 @@ import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -51,7 +51,6 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         return clazz.getCanonicalName();
     }
 
-    @Override
     public Context getContext() {
         return new ClassOrInterfaceDeclarationContext(clazz);
     }
@@ -99,7 +98,6 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         return clazz.hashCode();
     }
 
-    @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         Optional<MethodUsage> res =  ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
                 typeParameterValues, this, clazz);
