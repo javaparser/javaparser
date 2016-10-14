@@ -18,8 +18,10 @@ public class MethodUsage implements TypeParametrized {
     private MethodDeclaration declaration;
     private List<Type> paramTypes = new ArrayList<>();
     private Type returnType;
+    private TypeParametersMap typeParametersMap;
 
     public MethodUsage(MethodDeclaration declaration) {
+        this.typeParametersMap = new TypeParametersMap();
         this.declaration = declaration;
         for (int i = 0; i < declaration.getNoParams(); i++) {
             paramTypes.add(declaration.getParam(i).getType());
@@ -28,6 +30,7 @@ public class MethodUsage implements TypeParametrized {
     }
 
     public MethodUsage(MethodDeclaration declaration, List<Type> paramTypes, Type returnType) {
+        this.typeParametersMap = new TypeParametersMap();
         this.declaration = declaration;
         this.paramTypes = paramTypes;
         this.returnType = returnType;
@@ -107,6 +110,6 @@ public class MethodUsage implements TypeParametrized {
 
     @Override
     public TypeParametersMap typeParametersMap() {
-        throw new UnsupportedOperationException();
+        return typeParametersMap;
     }
 }

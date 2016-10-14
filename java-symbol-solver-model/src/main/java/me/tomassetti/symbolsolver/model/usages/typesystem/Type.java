@@ -79,23 +79,23 @@ public interface Type {
     ///
 
     default ArrayType asArrayTypeUsage() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(String.format("%s is not an Array", this));
     }
 
     default ReferenceType asReferenceTypeUsage() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(String.format("%s is not a Reference Type", this));
     }
 
     default TypeParameterDeclaration asTypeParameter() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(String.format("%s is not a Type parameter", this));
     }
 
     default PrimitiveType asPrimitive() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(String.format("%s is not a Primitive type", this));
     }
 
     default Wildcard asWildcard() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(String.format("%s is not a Wildcard", this));
     }
 
     ///

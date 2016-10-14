@@ -25,9 +25,7 @@ public class ArrayType implements Type {
 
     @Override
     public String toString() {
-        return "ArrayTypeUsage{" +
-                "baseType=" + baseType +
-                '}';
+        return "ArrayTypeUsage{" + baseType + "}";
     }
 
     @Override

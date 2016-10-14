@@ -25,9 +25,7 @@ public class SymbolReference<S extends Declaration> {
 
     @Override
     public String toString() {
-        return "SymbolReference{" +
-                "correspondingDeclaration=" + correspondingDeclaration +
-                '}';
+        return "SymbolReference{" + correspondingDeclaration + "}";
     }
 
     public S getCorrespondingDeclaration() {
