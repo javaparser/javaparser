@@ -94,7 +94,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)) {
                 // TODO check parameters
-                MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver), typeSolver);
+                MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver));
                 try {
                     if (method.getGenericSignature() != null) {
                         SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());

@@ -150,7 +150,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
-            MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+            MethodUsage methodUsage = new MethodUsage(methodDeclaration);
             for (int i = 0; i < getTypeParameters().size(); i++) {
                 String nameToReplace = getTypeParameters().get(i).getName();
                 Type newValue = typeParameterValues.get(i);

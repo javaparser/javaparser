@@ -90,7 +90,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
         Map<String, Type> matchedTypeParameters = new HashMap<>();
         for (int i=0;i<actualParamTypes.size();i++) {
-            Type expectedType = methodUsage.getParamType(i, typeSolver);
+            Type expectedType = methodUsage.getParamType(i);
             Type actualType = actualParamTypes.get(i);
             matchTypeParameters(expectedType, actualType, matchedTypeParameters);
         }
@@ -199,7 +199,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     if (ref.isSolved()) {
                         SymbolReference<MethodDeclaration> m = ref.getCorrespondingDeclaration().solveMethod(name, parameterTypes);
                         if (m.isSolved()) {
-                            MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration(), typeSolver);
+                            MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                             methodUsage = resolveMethodTypeParameters(methodUsage, parameterTypes);
                             return Optional.of(methodUsage);
                         } else {

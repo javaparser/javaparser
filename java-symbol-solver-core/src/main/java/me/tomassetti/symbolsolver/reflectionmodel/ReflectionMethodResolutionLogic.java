@@ -38,7 +38,7 @@ class ReflectionMethodResolutionLogic {
         for (Method method : clazz.getMethods()) {
             if (method.getName().equals(name) && !method.isBridge() && !method.isSynthetic()) {
                 MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
-                MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+                MethodUsage methodUsage = new MethodUsage(methodDeclaration);
                 int i = 0;
                 for (me.tomassetti.symbolsolver.model.resolution.TypeParameter tp : typeParametrizable.getTypeParameters()) {
                     methodUsage = methodUsage.replaceNameParam(tp.getName(), typeParameterValues.get(i));

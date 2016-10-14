@@ -2,7 +2,6 @@ package me.tomassetti.symbolsolver.model.invokations;
 
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.Type;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class MethodUsage {
     private List<Type> paramTypes = new ArrayList<>();
     private Type returnType;
 
-    public MethodUsage(MethodDeclaration declaration, TypeSolver typeSolver) {
+    public MethodUsage(MethodDeclaration declaration) {
         this.declaration = declaration;
         for (int i = 0; i < declaration.getNoParams(); i++) {
             paramTypes.add(declaration.getParam(i).getType());
@@ -84,7 +83,7 @@ public class MethodUsage {
         return paramTypes.size();
     }
 
-    public Type getParamType(int i, TypeSolver typeSolver) {
+    public Type getParamType(int i) {
         return paramTypes.get(i);
     }
 

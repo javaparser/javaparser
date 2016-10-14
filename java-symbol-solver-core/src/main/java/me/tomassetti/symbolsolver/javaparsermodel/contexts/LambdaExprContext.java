@@ -64,7 +64,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         Type t = JavaParserFacade.get(typeSolver).convert(declaratorType, declaratorType);
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
                         if (functionalMethod.isPresent()) {
-                            Type lambdaType = functionalMethod.get().getParamType(index, typeSolver);
+                            Type lambdaType = functionalMethod.get().getParamType(index);
 
                             // Replace parameter from declarator
                             if (lambdaType.isReferenceType()) {
@@ -109,7 +109,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
         List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
         for (int i=0;i<methodUsage.getDeclaration().getNoParams();i++){
-            formalActualTypePairs.add(new Tuple2<>(methodUsage.getDeclaration().getParam(i).getType(), methodUsage.getParamType(i, typeSolver)));
+            formalActualTypePairs.add(new Tuple2<>(methodUsage.getDeclaration().getParam(i).getType(), methodUsage.getParamType(i)));
         }
         Map<String, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
         if (map.containsKey(name)) {

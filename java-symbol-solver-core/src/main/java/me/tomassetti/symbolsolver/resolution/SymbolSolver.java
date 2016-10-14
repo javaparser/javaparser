@@ -59,7 +59,7 @@ public class SymbolSolver {
         if (!decl.isSolved()) {
             throw new UnsolvedSymbolException(context, methodName);
         }
-        return new MethodUsage(decl.getCorrespondingDeclaration(), typeSolver);
+        return new MethodUsage(decl.getCorrespondingDeclaration());
     }
 
     public MethodUsage solveMethod(String methodName, List<Type> params, Node node) {

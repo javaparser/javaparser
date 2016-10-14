@@ -42,13 +42,6 @@ public interface MethodDeclaration extends Declaration, TypeParametrizable {
         }
     }
 
-    /*/**
-     * Create the MethodUsage corresponding to this declaration with all generic types
-     * solved in the given context.
-     *
-    @Deprecated
-    MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes);*/
-
     boolean isAbstract();
 
     boolean isPrivate();

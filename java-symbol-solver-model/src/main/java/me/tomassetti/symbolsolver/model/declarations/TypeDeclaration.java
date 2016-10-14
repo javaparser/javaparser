@@ -20,15 +20,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
 
     String getQualifiedName();
 
-    //@Deprecated
-    //Context getContext();
-
     SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
-
-    /*@Deprecated
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
-        return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
-    }*/
 
     boolean isAssignableBy(Type type);
 

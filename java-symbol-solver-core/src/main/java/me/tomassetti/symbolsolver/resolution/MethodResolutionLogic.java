@@ -219,7 +219,7 @@ public class MethodResolutionLogic {
             return false;
         }
         for (int i = 0; i < method.getNoParams(); i++) {
-            Type expectedType = method.getParamType(i, typeSolver);
+            Type expectedType = method.getParamType(i);
             Type expectedTypeWithoutSubstitutions = expectedType;
             Type actualType = paramTypes.get(i);
             
@@ -363,8 +363,8 @@ public class MethodResolutionLogic {
     private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
         for (int i = 0; i < methodA.getNoParams(); i++) {
-            Type tdA = methodA.getParamType(i, typeSolver);
-            Type tdB = methodB.getParamType(i, typeSolver);
+            Type tdA = methodA.getParamType(i);
+            Type tdB = methodB.getParamType(i);
 
             boolean aIsAssignableByB = tdA.isAssignableBy(tdB);
             boolean bIsAssignableByA = tdB.isAssignableBy(tdA);

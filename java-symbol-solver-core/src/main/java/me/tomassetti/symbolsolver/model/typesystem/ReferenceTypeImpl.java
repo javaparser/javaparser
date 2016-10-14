@@ -93,7 +93,7 @@ public class ReferenceTypeImpl extends ReferenceType {
         // TODO replace variables
         Set<MethodUsage> methods = new HashSet<>();
         for (MethodDeclaration methodDeclaration : getTypeDeclaration().getDeclaredMethods()) {
-            MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+            MethodUsage methodUsage = new MethodUsage(methodDeclaration);
             methods.add(methodUsage);
         }
         return methods;

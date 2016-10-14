@@ -18,7 +18,7 @@ public abstract class AbstractTypeDeclaration implements TypeDeclaration {
         Set<MethodUsage> methods = new HashSet<>();
 
         for (MethodDeclaration methodDeclaration : getDeclaredMethods()) {
-            methods.add(new MethodUsage(methodDeclaration, typeSolver()));
+            methods.add(new MethodUsage(methodDeclaration));
         }
 
         for (ReferenceType ancestor : getAllAncestors()) {
