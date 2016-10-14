@@ -3,15 +3,16 @@ package com.github.javaparser.ast.nodeTypes;
 import java.util.List;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
 public interface NodeWithParameters<T> {
-    List<Parameter> getParameters();
+    NodeList<Parameter> getParameters();
 
-    T setParameters(List<Parameter> parameters);
+    T setParameters(NodeList<Parameter> parameters);
 
     default T addParameter(Type type, String name) {
         return addParameter(new Parameter(type, new VariableDeclaratorId(name)));
@@ -35,7 +36,6 @@ public interface NodeWithParameters<T> {
     @SuppressWarnings("unchecked")
     default T addParameter(Parameter parameter) {
         getParameters().add(parameter);
-        parameter.setParentNode((Node) this);
         return (T) this;
     }
 
@@ -61,7 +61,6 @@ public interface NodeWithParameters<T> {
 
     default Parameter addAndGetParameter(Parameter parameter) {
         getParameters().add(parameter);
-        parameter.setParentNode((Node) this);
         return parameter;
     }
 

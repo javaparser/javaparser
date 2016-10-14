@@ -227,7 +227,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(ConstructorDeclaration _n, Object _arg) {
 		NodeList<AnnotationExpr> annotations = (NodeList<AnnotationExpr>) _n.getAnnotations().accept(this, _arg);
 		List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg);
-		List<Parameter> parameters = visit(_n.getParameters(), _arg);
+		NodeList<Parameter> parameters= (NodeList<Parameter>) _n.getParameters().accept(this, _arg);
 		List<ReferenceType> throws_ = visit(_n.getThrows(), _arg);
 		BlockStmt block = cloneNodes(_n.getBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
@@ -246,7 +246,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<TypeParameter> typeParameters_ = visit(_n.getTypeParameters(), _arg);
 		Type<?> type_ = cloneNodes(_n.getElementType(), _arg);
         NameExpr nameExpr_ = cloneNodes(_n.getNameExpr(), _arg);
-        List<Parameter> parameters_ = visit(_n.getParameters(), _arg);
+		NodeList<Parameter> parameters_ = (NodeList<Parameter>) _n.getParameters().accept(this, _arg);
 		List<ReferenceType> throws_ = visit(_n.getThrows(), _arg);
 		BlockStmt block_ = cloneNodes(_n.getBody(), _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
@@ -1154,8 +1154,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(LambdaExpr _n, Object _arg) {
-
-		List<Parameter> lambdaParameters = visit(_n.getParameters(), _arg);
+		NodeList<Parameter> lambdaParameters = (NodeList<Parameter>) _n.getParameters().accept(this, _arg);
 
 		Statement body = cloneNodes(_n.getBody(), _arg);
 

@@ -262,13 +262,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			}
 			removeNulls(typeParameters);
 		}
-		final List<Parameter> parameters = n.getParameters();
-		if (parameters != null) {
-			for (int i = 0; i < parameters.size(); i++) {
-				parameters.set(i, (Parameter) parameters.get(i).accept(this, arg));
-			}
-			removeNulls(parameters);
-		}
+		n.setParameters((NodeList<Parameter>)n.getParameters().accept(this, arg));
 		final List<ReferenceType> throwz = n.getThrows();
 		if (throwz != null) {
 			for (int i = 0; i < throwz.size(); i++) {
@@ -548,13 +542,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			removeNulls(typeParameters);
 		}
 		n.setElementType((Type) n.getElementType().accept(this, arg));
-		final List<Parameter> parameters = n.getParameters();
-		if (parameters != null) {
-			for (int i = 0; i < parameters.size(); i++) {
-				parameters.set(i, (Parameter) parameters.get(i).accept(this, arg));
-			}
-			removeNulls(parameters);
-		}
+		n.setParameters((NodeList<Parameter>)n.getParameters().accept(this, arg));
 		final List<ReferenceType> throwz = n.getThrows();
 		if (throwz != null) {
 			for (int i = 0; i < throwz.size(); i++) {
@@ -872,11 +860,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override
 	public Node visit(final LambdaExpr n, final A arg) {
 		visitComment(n, arg);
-		final List<Parameter> parameters = n.getParameters();
-		for (int i = 0; i < parameters.size(); i++) {
-			parameters.set(i, (Parameter) parameters.get(i).accept(this, arg));
-		}
-		removeNulls(parameters);
+        n.setParameters((NodeList<Parameter>)n.getParameters().accept(this, arg));
 		if (n.getBody() != null) {
 			n.setBody((Statement) n.getBody().accept(this, arg));
 		}

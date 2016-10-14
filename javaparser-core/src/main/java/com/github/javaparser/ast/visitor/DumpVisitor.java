@@ -1514,19 +1514,17 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(LambdaExpr n, Object arg) {
 		printJavaComment(n.getComment(), arg);
 
-		final List<Parameter> parameters = n.getParameters();
+		final NodeList<Parameter> parameters = n.getParameters();
 		final boolean printPar = n.isParametersEnclosed();
 
 		if (printPar) {
 			printer.print("(");
 		}
-		if (parameters != null) {
-			for (Iterator<Parameter> i = parameters.iterator(); i.hasNext(); ) {
-				Parameter p = i.next();
-				p.accept(this, arg);
-				if (i.hasNext()) {
-					printer.print(", ");
-				}
+		for (Iterator<Parameter> i = parameters.iterator(); i.hasNext(); ) {
+			Parameter p = i.next();
+			p.accept(this, arg);
+			if (i.hasNext()) {
+				printer.print(", ");
 			}
 		}
 		if (printPar) {

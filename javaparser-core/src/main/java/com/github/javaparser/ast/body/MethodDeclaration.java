@@ -72,7 +72,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NameExpr name;
 
-    private List<Parameter> parameters;
+    private NodeList<Parameter> parameters;
 
     private List<ReferenceType> throws_;
 
@@ -92,7 +92,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new ClassOrInterfaceType(),
                 emptyNodeList(),
                 name(""),
-                new ArrayList<>(),
+                emptyNodeList(),
                 emptyNodeList(),
                 new ArrayList<>(),
                 new BlockStmt());
@@ -106,14 +106,14 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 elementType,
                 emptyNodeList(),
                 name(name),
-                new ArrayList<>(),
+                emptyNodeList(),
                 emptyNodeList(),
                 new ArrayList<>(),
                 new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name,
-                             final List<Parameter> parameters) {
+                             final NodeList<Parameter> parameters) {
         this(Range.UNKNOWN,
                 modifiers,
                 emptyNodeList(),
@@ -133,7 +133,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final String name,
-                             final List<Parameter> parameters, 
+                             final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
                              final List<ReferenceType> throws_, 
                              final BlockStmt body) {
@@ -157,7 +157,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final NameExpr nameExpr,
-                             final List<Parameter> parameters, 
+                             final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
                              final List<ReferenceType> throws_, 
                              final BlockStmt body) {
@@ -209,8 +209,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public List<Parameter> getParameters() {
-        parameters = ensureNotNull(parameters);
+    public NodeList<Parameter> getParameters() {
         return parameters;
     }
 
@@ -263,8 +262,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setParameters(final List<Parameter> parameters) {
-        this.parameters = parameters;
+    public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
+        this.parameters = assertNotNull(parameters);
         setAsParentNodeOf(this.parameters);
         return this;
     }

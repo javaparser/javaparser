@@ -157,14 +157,14 @@ final class ASTParser {
             Expression inner = ((EnclosedExpr) ret).getInner();
             if (inner != null && inner instanceof NameExpr) {
                 VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr) inner).getName(), emptyNodeList());
-                List<Parameter> params = add(new LinkedList<Parameter>(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), new NodeList<AnnotationExpr>(), new UnknownType(), emptyNodeList(), false, id));
+                NodeList<Parameter> params = add(emptyNodeList(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), emptyNodeList(), false, id));
                 ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
             } else {
-                ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
+                ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), emptyNodeList(), lambdaBody, true);
             }
         } else if (ret instanceof NameExpr) {
             VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr) ret).getName(), emptyNodeList());
-            List<Parameter> params = add(new LinkedList<Parameter>(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), new NodeList<AnnotationExpr>(), new UnknownType(), emptyNodeList(), false, id));
+            NodeList<Parameter> params = add(emptyNodeList(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), emptyNodeList(), new UnknownType(), emptyNodeList(), false, id));
             ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
@@ -1708,7 +1708,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
 	Type type;
 	NameExpr name;
-	List<Parameter> parameters;
+	NodeList<Parameter> parameters = emptyNodeList();
 	ArrayBracketPair arrayBracketPair;
 	NodeList<ArrayBracketPair> arrayBracketPairs = emptyNodeList();
 	List<ReferenceType> throws_ = null;
@@ -1749,9 +1749,9 @@ ReferenceType ReferenceTypeWithAnnotations():
     }
 }
 
-List<Parameter> FormalParameters():
+NodeList<Parameter> FormalParameters():
 {
-	List<Parameter> ret = null;
+	NodeList<Parameter> ret = emptyNodeList();
 	Parameter par;
 }
 {
@@ -1760,9 +1760,9 @@ List<Parameter> FormalParameters():
   { return ret; }
 }
 
-List<Parameter> FormalLambdaParameters():
+NodeList<Parameter> FormalLambdaParameters():
 {
-  List<Parameter> ret = null;
+  NodeList<Parameter> ret = null;
   Parameter par;
 }
 {
@@ -1771,9 +1771,9 @@ List<Parameter> FormalLambdaParameters():
   { return ret;  }
 }
 
-List<Parameter> InferredLambdaParameters():
+NodeList<Parameter> InferredLambdaParameters():
 {
-  List<Parameter> ret = null;
+  NodeList<Parameter> ret = null;
   VariableDeclaratorId id;
 }
 {
@@ -1806,7 +1806,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
 	NameExpr name;
-	List<Parameter> parameters;
+	NodeList<Parameter> parameters = emptyNodeList();
 	List<ReferenceType> throws_ = null;
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyNodeList();
@@ -2478,7 +2478,7 @@ Expression PrimaryPrefix():
 	NameExpr name;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	List<Expression> args = null;
-	List<Parameter> params = null;
+	NodeList<Parameter> params = emptyNodeList();
 	boolean hasArgs = false;
 	boolean isLambda = false;
 	Type type;

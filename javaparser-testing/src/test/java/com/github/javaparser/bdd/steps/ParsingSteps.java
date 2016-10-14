@@ -203,7 +203,7 @@ public class ParsingSteps {
     public void thenLambdaInStatementInMethodInClassIsParentOfContainedParameter(int statementPosition, int methodPosition, int classPosition) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         Parameter parameter = lambdaExpr.getParameters().get(0);
-        assertThat(parameter.getParentNode(), is((Node) lambdaExpr));
+        assertThat(parameter.getParentNode().getParentNode(), is((Node) lambdaExpr));
     }
 
     @Then("method reference in statement $statementPosition in method $methodPosition in class $classPosition scope is $expectedName")
