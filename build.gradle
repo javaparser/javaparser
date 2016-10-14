@@ -19,6 +19,7 @@ apply plugin: 'idea'
 allprojects  {
   apply plugin: 'java'
   apply plugin: 'idea'
+  apply plugin: 'jacoco'
 
   group = 'me.tomassetti'
   version = '0.4.0-SNAPSHOT'
@@ -29,7 +30,18 @@ allprojects  {
     maven { url "http://repo.maven.apache.org/maven2" }
   }
 
-  cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report  
+  jacoco {
+    toolVersion = "0.7.6.201602180812"
+    reportsDir = file("$buildDir/test_coverage")
+  }
+
+  jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
+    }
+  }  
 }
 
 subprojects {
