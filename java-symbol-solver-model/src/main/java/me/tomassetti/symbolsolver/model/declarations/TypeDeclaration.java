@@ -47,16 +47,16 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
 
     boolean isAssignableBy(TypeDeclaration other);
 
-    SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver);
+    SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 
     /**
      * Try to solve a symbol just in the declaration, it does not delegate to the container.
      *
-     * @param substring
+     * @param name
      * @param typeSolver
      * @return
      */
-    SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
+    SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
 
     List<ReferenceType> getAncestors();
     
