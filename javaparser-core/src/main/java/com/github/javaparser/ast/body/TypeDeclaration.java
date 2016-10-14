@@ -21,13 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -39,6 +32,11 @@ import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
+import java.util.EnumSet;
+
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -49,28 +47,37 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<BodyDeclaration<?>> members;
+    private NodeList<BodyDeclaration<?>> members;
 
 	public TypeDeclaration() {
+		this(Range.UNKNOWN,
+                emptyNodeList(),
+                EnumSet.noneOf(Modifier.class),
+                "",
+                emptyNodeList());
 	}
 
     public TypeDeclaration(EnumSet<Modifier> modifiers, String name) {
-		setName(name);
-		setModifiers(modifiers);
+        this(Range.UNKNOWN,
+                emptyNodeList(),
+                modifiers,
+                name,
+                emptyNodeList());
 	}
 
 	public TypeDeclaration(NodeList<AnnotationExpr> annotations,
                            EnumSet<Modifier> modifiers, String name,
-                           List<BodyDeclaration<?>> members) {
-		super(annotations);
-		setName(name);
-		setModifiers(modifiers);
-		setMembers(members);
+                           NodeList<BodyDeclaration<?>> members) {
+        this(Range.UNKNOWN,
+                annotations,
+                modifiers,
+                name,
+                members);
 	}
 
 	public TypeDeclaration(Range range, NodeList<AnnotationExpr> annotations,
                            EnumSet<Modifier> modifiers, String name,
-                           List<BodyDeclaration<?>> members) {
+                           NodeList<BodyDeclaration<?>> members) {
 		super(range, annotations);
 		setName(name);
 		setModifiers(modifiers);
@@ -78,27 +85,20 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 	}
 
 	/**
-	 * Adds the given declaration to the specified type. The list of members
-	 * will be initialized if it is <code>null</code>.
+	 * Adds the given declaration to the specified type.
 	 *
 	 * @param decl
 	 *            member declaration
 	 */
 	public TypeDeclaration<T> addMember(BodyDeclaration<?> decl) {
-		List<BodyDeclaration<?>> members = getMembers();
-		if (isNullOrEmpty(members)) {
-			members = new ArrayList<>();
-			setMembers(members);
-		}
+		NodeList<BodyDeclaration<?>> members = getMembers();
 		members.add(decl);
-		decl.setParentNode(this);
 		return this;
 	}
 
-    @Override
-    public List<BodyDeclaration<?>> getMembers() {
-        	members = ensureNotNull(members);
-        	return members;
+	@Override
+	public NodeList<BodyDeclaration<?>> getMembers() {
+		return members;
 	}
 
 	/**
@@ -119,8 +119,8 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 
     @SuppressWarnings("unchecked")
     @Override
-    public T setMembers(List<BodyDeclaration<?>> members) {
-		this.members = members;
+    public T setMembers(NodeList<BodyDeclaration<?>> members) {
+		this.members = assertNotNull(members);
 		setAsParentNodeOf(this.members);
         return (T) this;
 	}

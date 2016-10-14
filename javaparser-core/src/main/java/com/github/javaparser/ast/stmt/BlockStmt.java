@@ -38,13 +38,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
 
-    private NodeList<Statement> stmts = emptyNodeList();
+    private NodeList<Statement> stmts;
 
     public BlockStmt() {
+        this(Range.UNKNOWN, emptyNodeList());
     }
 
     public BlockStmt(final NodeList<Statement> stmts) {
-        setStmts(stmts);
+        this(Range.UNKNOWN, stmts);
+
     }
 
     public BlockStmt(final Range range, final NodeList<Statement> stmts) {

@@ -1416,7 +1416,7 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(null);
     NodeList<ClassOrInterfaceType> extList = emptyNodeList();
     NodeList<ClassOrInterfaceType> impList = emptyNodeList();
-    List<BodyDeclaration<?>> members;
+    NodeList<BodyDeclaration<?>> members = emptyNodeList();
     Position begin = modifier.begin;
 }
 {
@@ -1471,7 +1471,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 	EnumConstantDeclaration entry;
 	List<EnumConstantDeclaration> entries = null;
 	BodyDeclaration<?> member;
-	List<BodyDeclaration<?>> members = null;
+    NodeList<BodyDeclaration<?>> members = emptyNodeList();
 	Position begin = modifier.begin;
 }
 {
@@ -1503,7 +1503,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
 	AnnotationExpr ann;
 	String name;
 	List<Expression> args = null;
-	List<BodyDeclaration<?>> classBody = null;
+	NodeList<BodyDeclaration<?>> classBody = emptyNodeList();
 	Position begin = INVALID;
 }
 {
@@ -1559,9 +1559,9 @@ List<ClassOrInterfaceType> TypeBound():
    { return ret; }
 }
 
-List<BodyDeclaration<?>> ClassOrInterfaceBody(boolean isInterface):
+NodeList<BodyDeclaration<?>> ClassOrInterfaceBody(boolean isInterface):
 {
-	List<BodyDeclaration<?>> ret = new LinkedList<BodyDeclaration<?>>();
+	NodeList<BodyDeclaration<?>> ret = emptyNodeList();
 	BodyDeclaration member;
 }
 {
@@ -2698,7 +2698,7 @@ Expression AllocationExpression(Expression scope):
 	Expression ret;
 	Type type;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
-	List<BodyDeclaration<?>> anonymousBody = null;
+	NodeList<BodyDeclaration<?>> anonymousBody = null;
 	List<Expression> args;
 	Position begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
@@ -3353,7 +3353,7 @@ Expression  MemberValueArrayInitializer():
 AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
 	NameExpr name;
-	List<BodyDeclaration<?>> members;
+    NodeList<BodyDeclaration<?>> members = emptyNodeList();
 	Position begin = modifier.begin;
 }
 {
@@ -3367,9 +3367,9 @@ AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
   }
 }
 
-List<BodyDeclaration<?>> AnnotationTypeBody():
+NodeList<BodyDeclaration<?>> AnnotationTypeBody():
 {
-	List<BodyDeclaration<?>> ret = null;
+	NodeList<BodyDeclaration<?>> ret = emptyNodeList();
 	BodyDeclaration member;
 }
 {

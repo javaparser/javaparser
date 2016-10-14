@@ -22,11 +22,13 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -36,6 +38,7 @@ import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -77,25 +80,51 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private boolean isDefault = false;
 
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType = emptyNodeList();
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList = emptyNodeList();
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList;
 
     public MethodDeclaration() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                new ArrayList<>(),
+                new ClassOrInterfaceType(),
+                emptyNodeList(),
+                name(""),
+                new ArrayList<>(),
+                emptyNodeList(),
+                new ArrayList<>(),
+                new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name) {
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setName(name);
+        this(Range.UNKNOWN,
+                modifiers,
+                emptyNodeList(),
+                new ArrayList<>(),
+                elementType,
+                emptyNodeList(),
+                name(name),
+                new ArrayList<>(),
+                emptyNodeList(),
+                new ArrayList<>(),
+                new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name,
                              final List<Parameter> parameters) {
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setName(name);
-        setParameters(parameters);
+        this(Range.UNKNOWN,
+                modifiers,
+                emptyNodeList(),
+                new ArrayList<>(),
+                elementType,
+                emptyNodeList(),
+                name(name),
+                parameters,
+                emptyNodeList(),
+                new ArrayList<>(),
+                new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, 
@@ -108,16 +137,17 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
                              final List<ReferenceType> throws_, 
                              final BlockStmt body) {
-        super(annotations);
-        setModifiers(modifiers);
-        setTypeParameters(typeParameters);
-        setElementType(elementType);
-        setName(name);
-        setParameters(parameters);
-        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
-        setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
-        setThrows(throws_);
-        setBody(body);
+        this(Range.UNKNOWN,
+                modifiers,
+                annotations,
+                typeParameters,
+                elementType,
+                arrayBracketPairsAfterElementType,
+                name(name),
+                parameters,
+                arrayBracketPairsAfterParameterList,
+                throws_,
+                body);
     }
 
     public MethodDeclaration(Range range,

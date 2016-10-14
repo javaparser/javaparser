@@ -42,6 +42,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -62,32 +63,45 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     private Type elementType;
 
-    private NodeList<VariableDeclarator> variables = emptyNodeList();
+    private NodeList<VariableDeclarator> variables;
 
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType = emptyNodeList();
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType;
 
     public FieldDeclaration() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                new ClassOrInterfaceType(),
+                emptyNodeList(),
+                emptyNodeList());
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, VariableDeclarator variable) {
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setVariables(new NodeList<VariableDeclarator>(this).add(variable));
+        this(Range.UNKNOWN,
+                modifiers,
+                emptyNodeList(),
+                elementType,
+                nodeList(variable),
+                emptyNodeList());
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, NodeList<VariableDeclarator> variables) {
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setVariables(variables);
+        this(Range.UNKNOWN,
+                modifiers,
+                emptyNodeList(),
+                elementType,
+                variables,
+                emptyNodeList());
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                             NodeList<VariableDeclarator> variables) {
-        super(annotations);
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setVariables(variables);
-        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
+        this(Range.UNKNOWN,
+                modifiers,
+                annotations,
+                elementType,
+                variables,
+                arrayBracketPairsAfterElementType);
     }
 
     public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType,

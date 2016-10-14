@@ -23,6 +23,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -41,14 +42,14 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 
 	private Expression label;
 
-	private NodeList<Statement> stmts = emptyNodeList();
+	private NodeList<Statement> stmts;
 
 	public SwitchEntryStmt() {
+		this(Range.UNKNOWN, new CharLiteralExpr(), emptyNodeList());
 	}
 
 	public SwitchEntryStmt(final Expression label, final NodeList<Statement> stmts) {
-		setLabel(label);
-		setStmts(stmts);
+		this(Range.UNKNOWN, label, stmts);
 	}
 
 	public SwitchEntryStmt(Range range, final Expression label,

@@ -55,13 +55,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override public Node visit(final AnnotationDeclaration n, final A arg) {
 		visitAnnotations(n, arg);
 		visitComment(n, arg);
-        final List<BodyDeclaration<?>> members = n.getMembers();
-		if (members != null) {
-			for (int i = 0; i < members.size(); i++) {
-                members.set(i, (BodyDeclaration<?>) members.get(i).accept(this, arg));
-			}
-			removeNulls(members);
-		}
+        n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
 		return n;
 	}
 
@@ -220,13 +214,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 		n.setExtends((NodeList<ClassOrInterfaceType>) n.getExtends().accept(this, arg));
 		n.setImplements((NodeList<ClassOrInterfaceType>) n.getImplements().accept(this, arg));
-        final List<BodyDeclaration<?>> members = n.getMembers();
-		if (members != null) {
-			for (int i = 0; i < members.size(); i++) {
-                members.set(i, (BodyDeclaration<?>) members.get(i).accept(this, arg));
-			}
-			removeNulls(members);
-		}
+		n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
 		return n;
 	}
 
@@ -350,13 +338,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			}
 			removeNulls(args);
 		}
-        final List<BodyDeclaration<?>> classBody = n.getClassBody();
-		if (classBody != null) {
-			for (int i = 0; i < classBody.size(); i++) {
-                classBody.set(i, (BodyDeclaration<?>) classBody.get(i).accept(this, arg));
-			}
-			removeNulls(classBody);
-		}
+        n.setClassBody((NodeList<BodyDeclaration<?>>)n.getClassBody().accept(this, arg));
 		return n;
 	}
 
@@ -371,13 +353,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			}
 			removeNulls(entries);
 		}
-        final List<BodyDeclaration<?>> members = n.getMembers();
-		if (members != null) {
-			for (int i = 0; i < members.size(); i++) {
-                members.set(i, (BodyDeclaration<?>) members.get(i).accept(this, arg));
-			}
-			removeNulls(members);
-		}
+        n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
 		return n;
 	}
 
@@ -635,13 +611,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 			}
 			removeNulls(args);
 		}
-        final List<BodyDeclaration<?>> anonymousClassBody = n.getAnonymousClassBody();
-		if (anonymousClassBody != null) {
-			for (int i = 0; i < anonymousClassBody.size(); i++) {
-                anonymousClassBody.set(i, (BodyDeclaration<?>) anonymousClassBody.get(i).accept(this, arg));
-			}
-			removeNulls(anonymousClassBody);
-		}
+        n.setAnonymousClassBody((NodeList<BodyDeclaration<?>>)n.getAnonymousClassBody().accept(this, arg));
 		return n;
 	}
 

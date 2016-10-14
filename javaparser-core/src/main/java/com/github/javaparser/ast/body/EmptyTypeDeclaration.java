@@ -36,11 +36,11 @@ import static com.github.javaparser.ast.NodeList.*;
 public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclaration> {
 
     public EmptyTypeDeclaration() {
-        super(emptyNodeList(), EnumSet.noneOf(Modifier.class), null, null);
+        super(emptyNodeList(), EnumSet.noneOf(Modifier.class), null, emptyNodeList());
     }
 
     public EmptyTypeDeclaration(Range range) {
-        super(range, emptyNodeList(), EnumSet.noneOf(Modifier.class), null, null);
+        super(range, emptyNodeList(), EnumSet.noneOf(Modifier.class), null, emptyNodeList());
     }
 
     @Override

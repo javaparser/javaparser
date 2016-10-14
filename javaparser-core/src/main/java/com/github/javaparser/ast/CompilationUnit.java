@@ -61,17 +61,16 @@ public final class CompilationUnit extends Node {
 
     private PackageDeclaration pakage;
 
-    private NodeList<ImportDeclaration> imports = emptyNodeList();
+    private NodeList<ImportDeclaration> imports;
 
-    private NodeList<TypeDeclaration<?>> types = emptyNodeList();
+    private NodeList<TypeDeclaration<?>> types;
 
     public CompilationUnit() {
+        this(Range.UNKNOWN, new PackageDeclaration(), emptyNodeList(), emptyNodeList());
     }
 
     public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
-        setPackage(pakage);
-        setImports(imports);
-        setTypes(types);
+        this(Range.UNKNOWN, pakage, imports, types);
     }
 
     public CompilationUnit(Range range, PackageDeclaration pakage, NodeList<ImportDeclaration> imports,

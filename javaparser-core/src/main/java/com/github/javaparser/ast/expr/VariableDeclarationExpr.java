@@ -40,6 +40,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -59,40 +60,62 @@ public final class VariableDeclarationExpr extends Expression implements
 
     private Type elementType;
 
-    private NodeList<VariableDeclarator> variables = emptyNodeList();
+    private NodeList<VariableDeclarator> variables;
 
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType = emptyNodeList();
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public VariableDeclarationExpr() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                new ClassOrInterfaceType(),
+                emptyNodeList(),
+                emptyNodeList());
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName) {
-        setElementType(elementType);
-        setVariables(nodeList(new VariableDeclarator(variableName)));
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                elementType,
+                nodeList(new VariableDeclarator(variableName)),
+                emptyNodeList());
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var) {
-        setElementType(elementType);
-        setVariables(nodeList(var));
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                elementType,
+                nodeList(var),
+                emptyNodeList());
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName, Modifier... modifiers) {
-        setElementType(elementType);
-        setVariables(nodeList(new VariableDeclarator(variableName)));
-        setModifiers(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        this(Range.UNKNOWN,
+                Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
+                emptyNodeList(),
+                elementType,
+                nodeList(new VariableDeclarator(variableName)),
+                emptyNodeList());
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var, Modifier... modifiers) {
-        setElementType(elementType);
-        setVariables(nodeList(var));
-        setModifiers(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        this(Range.UNKNOWN,
+                Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
+                emptyNodeList(),
+                elementType,
+                nodeList(var),
+                emptyNodeList());
     }
 
     public VariableDeclarationExpr(final Type elementType, final NodeList<VariableDeclarator> variables) {
-        setElementType(elementType);
-        setVariables(variables);
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                elementType,
+                variables,
+                emptyNodeList());
     }
 
     public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type elementType,

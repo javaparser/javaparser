@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -30,9 +31,10 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -57,7 +59,7 @@ public final class ObjectCreationExpr extends Expression implements
     private List<Expression> args;
 
     // This can be null, to indicate there is no body
-    private List<BodyDeclaration<?>> anonymousClassBody;
+    private NodeList<BodyDeclaration<?>> anonymousClassBody = null;
 
     public ObjectCreationExpr() {
     }
@@ -77,7 +79,7 @@ public final class ObjectCreationExpr extends Expression implements
 
 	public ObjectCreationExpr(final Range range,
 			final Expression scope, final ClassOrInterfaceType type, final List<Type<?>> typeArguments,
-                              final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
+                              final List<Expression> args, final NodeList<BodyDeclaration<?>> anonymousBody) {
 		super(range);
 		setScope(scope);
 		setType(type);
@@ -99,15 +101,14 @@ public final class ObjectCreationExpr extends Expression implements
     /**
      * This can be null, to indicate there is no body
      */
-    public List<BodyDeclaration<?>> getAnonymousClassBody() {
+    public NodeList<BodyDeclaration<?>> getAnonymousClassBody() {
         return anonymousClassBody;
     }
 
     public void addAnonymousClassBody(BodyDeclaration<?> body) {
         if (anonymousClassBody == null)
-            anonymousClassBody = new ArrayList<>();
+            anonymousClassBody = emptyNodeList();
         anonymousClassBody.add(body);
-        body.setParentNode(this);
     }
 
     public List<Expression> getArgs() {
@@ -124,7 +125,7 @@ public final class ObjectCreationExpr extends Expression implements
         return type;
     }
 
-    public ObjectCreationExpr setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
+    public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
         return this;

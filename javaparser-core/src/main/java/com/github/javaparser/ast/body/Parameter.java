@@ -29,6 +29,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -60,14 +61,26 @@ public final class Parameter extends Node implements
 
     private VariableDeclaratorId id;
 
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType = emptyNodeList();
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public Parameter() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                new ClassOrInterfaceType(),
+                emptyNodeList(),
+                false,
+                new VariableDeclaratorId());
     }
 
     public Parameter(Type elementType, VariableDeclaratorId id) {
-        setId(id);
-        setElementType(elementType);
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                elementType,
+                emptyNodeList(),
+                false,
+                id);
     }
 
     /**
@@ -80,13 +93,23 @@ public final class Parameter extends Node implements
      * @return instance of {@link Parameter}
      */
     public static Parameter create(Type elementType, String name) {
-        return new Parameter(elementType, new VariableDeclaratorId(name));
+        return new Parameter(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                emptyNodeList(),
+                elementType,
+                emptyNodeList(),
+                false,
+                new VariableDeclaratorId(name));
     }
 
     public Parameter(EnumSet<Modifier> modifiers, Type elementType, VariableDeclaratorId id) {
-        setModifiers(modifiers);
-        setId(id);
-        setElementType(elementType);
+        this(Range.UNKNOWN,
+                modifiers,
+                emptyNodeList(),
+                elementType,
+                emptyNodeList(),
+                false,
+                id);
     }
 
     public Parameter(final Range range, 

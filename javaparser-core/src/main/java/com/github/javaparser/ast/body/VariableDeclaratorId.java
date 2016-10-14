@@ -39,13 +39,18 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
 
     private String name;
 
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterId = emptyNodeList();
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterId;
 
     public VariableDeclaratorId() {
+        this(Range.UNKNOWN,
+                "",
+                emptyNodeList());
     }
 
     public VariableDeclaratorId(String name) {
-       setName(name);
+        this(Range.UNKNOWN,
+                name,
+                emptyNodeList());
     }
 
     public VariableDeclaratorId(Range range, String name, NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {

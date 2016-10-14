@@ -27,8 +27,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -79,7 +77,13 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	}
 
 	public <N extends Node> boolean nodesEquals(NodeList<N> n1, NodeList<N> n2) {
-		if (n1.size() != n2.size()) {
+        if (n1 == n2) {
+            return true;
+        }
+        if (n1 == null || n2 == null) {
+            return false;
+        }
+        if (n1.size() != n2.size()) {
 			return false;
 		}
 		for (int i = 0; i < n1.size(); i++) {

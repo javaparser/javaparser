@@ -21,9 +21,12 @@
  
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.javaparser.Range;
@@ -46,25 +49,23 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     private List<Expression> args;
 
-    private List<BodyDeclaration<?>> classBody;
+    private NodeList<BodyDeclaration<?>> classBody;
 
     public EnumConstantDeclaration() {
+        this(Range.UNKNOWN, emptyNodeList(), "", new ArrayList<>(), emptyNodeList());
     }
 
     public EnumConstantDeclaration(String name) {
-        setName(name);
+        this(Range.UNKNOWN, emptyNodeList(), name, new ArrayList<>(), emptyNodeList());
     }
 
     public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, String name, List<Expression> args,
-                                   List<BodyDeclaration<?>> classBody) {
-        super(annotations);
-        setName(name);
-        setArgs(args);
-        setClassBody(classBody);
+                                   NodeList<BodyDeclaration<?>> classBody) {
+        this(Range.UNKNOWN, annotations, name, args, classBody);
     }
 
     public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, String name, List<Expression> args,
-                                   List<BodyDeclaration<?>> classBody) {
+                                   NodeList<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);
         setArgs(args);
@@ -86,8 +87,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return args;
     }
 
-    public List<BodyDeclaration<?>> getClassBody() {
-        classBody = ensureNotNull(classBody);
+    public NodeList<BodyDeclaration<?>> getClassBody() {
         return classBody;
     }
 
@@ -102,8 +102,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return this;
     }
 
-    public EnumConstantDeclaration setClassBody(List<BodyDeclaration<?>> classBody) {
-        this.classBody = classBody;
+    public EnumConstantDeclaration setClassBody(NodeList<BodyDeclaration<?>> classBody) {
+        this.classBody = assertNotNull(classBody);
 		setAsParentNodeOf(this.classBody);
         return this;
     }

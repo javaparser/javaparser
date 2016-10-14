@@ -131,7 +131,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 			printer.print(modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) + " ");
 	}
 
-	private void printMembers(final List<BodyDeclaration<?>> members, final Object arg) {
+	private void printMembers(final NodeList<BodyDeclaration<?>> members, final Object arg) {
 		for (final BodyDeclaration<?> member : members) {
 			printer.printLn();
 			member.accept(this, arg);

@@ -22,6 +22,7 @@
 package com.github.javaparser.utils;
 
 import com.github.javaparser.Provider;
+import com.github.javaparser.ast.NodeList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,6 +41,10 @@ public class Utils {
 	}
 
 	public static <E> boolean isNullOrEmpty(Collection<E> collection) {
+		return collection == null || collection.isEmpty();
+	}
+
+	public static boolean isNullOrEmpty(NodeList<?> collection) {
 		return collection == null || collection.isEmpty();
 	}
 

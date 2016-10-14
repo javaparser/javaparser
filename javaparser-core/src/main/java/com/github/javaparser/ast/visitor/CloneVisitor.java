@@ -92,7 +92,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg);
 		NodeList<ClassOrInterfaceType> extendsList = (NodeList<ClassOrInterfaceType>) _n.getExtends().accept(this, _arg);
 		NodeList<ClassOrInterfaceType> implementsList = (NodeList<ClassOrInterfaceType>) _n.getImplements().accept(this, _arg);
-		List<BodyDeclaration<?>> members = visit(_n.getMembers(), _arg);
+		NodeList<BodyDeclaration<?>> members = (NodeList<BodyDeclaration<?>>) _n.getMembers().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(
@@ -108,7 +108,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		NodeList<AnnotationExpr> annotations = (NodeList<AnnotationExpr>) _n.getAnnotations().accept(this, _arg);
 		NodeList<ClassOrInterfaceType> implementsList = (NodeList<ClassOrInterfaceType>) _n.getImplements().accept(this, _arg);
 		List<EnumConstantDeclaration> entries = visit(_n.getEntries(), _arg);
-        List<BodyDeclaration<?>> members = visit(_n.getMembers(), _arg);
+		NodeList<BodyDeclaration<?>> members = (NodeList<BodyDeclaration<?>>) _n.getMembers().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		EnumDeclaration r = new EnumDeclaration(
@@ -134,7 +134,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(EnumConstantDeclaration _n, Object _arg) {
 		NodeList<AnnotationExpr> annotations = (NodeList<AnnotationExpr>) _n.getAnnotations().accept(this, _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
-        List<BodyDeclaration<?>> classBody = visit(_n.getClassBody(), _arg);
+		NodeList<BodyDeclaration<?>> classBody = (NodeList<BodyDeclaration<?>>) _n.getClassBody().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		EnumConstantDeclaration r = new EnumConstantDeclaration(
@@ -148,7 +148,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(AnnotationDeclaration _n, Object _arg) {
 		NodeList<AnnotationExpr> annotations = (NodeList<AnnotationExpr>) _n.getAnnotations().accept(this, _arg);
-        List<BodyDeclaration<?>> members = visit(_n.getMembers(), _arg);
+		NodeList<BodyDeclaration<?>> members = (NodeList<BodyDeclaration<?>>) _n.getMembers().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		AnnotationDeclaration r = new AnnotationDeclaration(
@@ -726,7 +726,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		ClassOrInterfaceType type_ = cloneNodes(_n.getType(), _arg);
 		List<Type<?>> typeArgs = visit(_n.getTypeArguments(), _arg);
 		List<Expression> args = visit(_n.getArgs(), _arg);
-        List<BodyDeclaration<?>> anonymousBody = visit(_n.getAnonymousClassBody(), _arg);
+		NodeList<BodyDeclaration<?>> anonymousBody = (NodeList<BodyDeclaration<?>>) _n.getAnonymousClassBody().accept(this, _arg);
 		Comment comment = cloneNodes(_n.getComment(), _arg);
 
 		ObjectCreationExpr r = new ObjectCreationExpr(

@@ -42,7 +42,7 @@ public class CloneVisitorTest{
 	@Test
 	public void cloneJavaDocTest(){
 
-		List<BodyDeclaration<?>> bodyDeclarationList = new ArrayList<BodyDeclaration<?>>();
+		NodeList<BodyDeclaration<?>> bodyDeclarationList = new NodeList<>();
 		bodyDeclarationList.add(new AnnotationMemberDeclaration().setJavaDocComment("javadoc"));
 		bodyDeclarationList.add(new ConstructorDeclaration().setJavaDocComment("javadoc"));
 		bodyDeclarationList.add(new EmptyMemberDeclaration().setJavaDocComment("javadoc"));

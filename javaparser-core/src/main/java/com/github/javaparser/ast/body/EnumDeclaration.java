@@ -25,6 +25,7 @@ import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -43,28 +44,45 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements 
         NodeWithImplements<EnumDeclaration> {
 
-    private NodeList<ClassOrInterfaceType> implementsList = emptyNodeList();
+    private NodeList<ClassOrInterfaceType> implementsList;
 
     private List<EnumConstantDeclaration> entries;
 
     public EnumDeclaration() {
+        this(Range.UNKNOWN, 
+                EnumSet.noneOf(Modifier.class), 
+                emptyNodeList(), 
+                "", 
+                emptyNodeList(),
+                new ArrayList<>(),
+                emptyNodeList());
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, String name) {
-        super(modifiers, name);
+        this(Range.UNKNOWN,
+                modifiers,
+                emptyNodeList(),
+                name,
+                emptyNodeList(),
+                new ArrayList<>(),
+                emptyNodeList());
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
                            NodeList<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
-                           List<BodyDeclaration<?>> members) {
-        super(annotations, modifiers, name, members);
-        setImplements(implementsList);
-        setEntries(entries);
+                           NodeList<BodyDeclaration<?>> members) {
+        this(Range.UNKNOWN,
+                modifiers,
+                annotations,
+                name,
+                implementsList,
+                entries,
+                members);
     }
 
     public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
                            NodeList<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
-                           List<BodyDeclaration<?>> members) {
+                           NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setImplements(implementsList);
         setEntries(entries);
