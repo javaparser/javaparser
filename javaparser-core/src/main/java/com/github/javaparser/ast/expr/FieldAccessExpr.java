@@ -22,12 +22,15 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -36,7 +39,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 
 	private Expression scope;
 
-	private List<Type<?>> typeArguments;
+	private NodeList<Type<?>> typeArguments;
 
 	private NameExpr field;
 
@@ -48,7 +51,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 		setField(field);
 	}
 
-	public FieldAccessExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String field) {
+	public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final String field) {
 		super(range);
 		setScope(scope);
 		setTypeArguments(typeArguments);
@@ -91,15 +94,14 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 		setAsParentNodeOf(this.scope);
 		return this;
 	}
-
-
+    
 	@Override
-	public List<Type<?>> getTypeArguments() {
+	public NodeList<Type<?>> getTypeArguments() {
 		return typeArguments;
 	}
 
 	@Override
-	public FieldAccessExpr setTypeArguments(final List<Type<?>> types) {
+	public FieldAccessExpr setTypeArguments(final NodeList<Type<?>> types) {
 		this.typeArguments = types;
 		setAsParentNodeOf(this.typeArguments);
 		return this;

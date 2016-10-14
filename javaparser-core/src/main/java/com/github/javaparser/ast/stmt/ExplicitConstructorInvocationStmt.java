@@ -22,42 +22,41 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 
-    private List<Type<?>> typeArguments;
+    private NodeList<Type<?>> typeArguments;
 
     private boolean isThis;
 
 	private Expression expr;
 
-	private List<Expression> args;
+	private NodeList<Expression> args;
 
 	public ExplicitConstructorInvocationStmt() {
+		this(Range.UNKNOWN, emptyNodeList(), true, null, emptyNodeList());
 	}
 
 	public ExplicitConstructorInvocationStmt(final boolean isThis,
-			final Expression expr, final List<Expression> args) {
-		setThis(isThis);
-		setExpr(expr);
-		setArgs(args);
+			final Expression expr, final NodeList<Expression> args) {
+		this(Range.UNKNOWN, emptyNodeList(), isThis, expr, args);
 	}
 
 	public ExplicitConstructorInvocationStmt(Range range,
-	                                         final List<Type<?>> typeArguments, final boolean isThis,
-	                                         final Expression expr, final List<Expression> args) {
+	                                         final NodeList<Type<?>> typeArguments, final boolean isThis,
+	                                         final Expression expr, final NodeList<Expression> args) {
 		super(range);
 		setTypeArguments(typeArguments);
 		setThis(isThis);
@@ -75,8 +74,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 		v.visit(this, arg);
 	}
 
-	public List<Expression> getArgs() {
-        args = ensureNotNull(args);
+	public NodeList<Expression> getArgs() {
         return args;
 	}
 
@@ -88,8 +86,8 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 		return isThis;
 	}
 
-	public ExplicitConstructorInvocationStmt setArgs(final List<Expression> args) {
-		this.args = args;
+	public ExplicitConstructorInvocationStmt setArgs(final NodeList<Expression> args) {
+		this.args = assertNotNull(args);
 		setAsParentNodeOf(this.args);
 		return this;
 	}
@@ -106,12 +104,12 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 	}
 
     @Override
-    public List<Type<?>> getTypeArguments() {
+    public NodeList<Type<?>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public ExplicitConstructorInvocationStmt setTypeArguments(final List<Type<?>> types) {
+    public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type<?>> types) {
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

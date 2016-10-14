@@ -22,18 +22,14 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -42,29 +38,39 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration>
-        implements NodeWithJavaDoc<EnumConstantDeclaration>, NodeWithName<EnumConstantDeclaration> {
+public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements 
+        NodeWithJavaDoc<EnumConstantDeclaration>, 
+        NodeWithName<EnumConstantDeclaration>,
+        NodeWithArguments<EnumConstantDeclaration> {
 
     private String name;
 
-    private List<Expression> args;
+    private NodeList<Expression> args;
 
     private NodeList<BodyDeclaration<?>> classBody;
 
     public EnumConstantDeclaration() {
-        this(Range.UNKNOWN, emptyNodeList(), "", new ArrayList<>(), emptyNodeList());
+        this(Range.UNKNOWN, 
+                emptyNodeList(), 
+                "",
+                emptyNodeList(),
+                emptyNodeList());
     }
 
     public EnumConstantDeclaration(String name) {
-        this(Range.UNKNOWN, emptyNodeList(), name, new ArrayList<>(), emptyNodeList());
+        this(Range.UNKNOWN, 
+                emptyNodeList(), 
+                name,
+                emptyNodeList(),
+                emptyNodeList());
     }
 
-    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, String name, List<Expression> args,
+    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, String name, NodeList<Expression> args,
                                    NodeList<BodyDeclaration<?>> classBody) {
         this(Range.UNKNOWN, annotations, name, args, classBody);
     }
 
-    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, String name, List<Expression> args,
+    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, String name, NodeList<Expression> args,
                                    NodeList<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);
@@ -82,8 +88,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         v.visit(this, arg);
     }
 
-    public List<Expression> getArgs() {
-        args = ensureNotNull(args);
+    public NodeList<Expression> getArgs() {
         return args;
     }
 
@@ -96,8 +101,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return name;
     }
 
-    public EnumConstantDeclaration setArgs(List<Expression> args) {
-        this.args = args;
+    public EnumConstantDeclaration setArgs(NodeList<Expression> args) {
+        this.args = assertNotNull(args);
 		setAsParentNodeOf(this.args);
         return this;
     }
@@ -120,10 +125,5 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
             return (JavadocComment) getComment();
         }
         return null;
-    }
-
-    public EnumConstantDeclaration addArgument(String valueExpr) {
-        getArgs().add(name(valueExpr));
-        return this;
     }
 }

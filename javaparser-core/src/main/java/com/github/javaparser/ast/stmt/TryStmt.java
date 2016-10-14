@@ -22,11 +22,10 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-
-import java.util.List;
 
 import static com.github.javaparser.utils.Utils.*;
 
@@ -35,26 +34,35 @@ import static com.github.javaparser.utils.Utils.*;
  */
 public final class TryStmt extends Statement {
 	
-	private List<VariableDeclarationExpr> resources;
+	private NodeList<VariableDeclarationExpr> resources;
 
+    // TODO can be null
 	private BlockStmt tryBlock;
 
-	private List<CatchClause> catchs;
+	private NodeList<CatchClause> catchs;
 
+    // TODO can be null
 	private BlockStmt finallyBlock;
 
 	public TryStmt() {
+		this(Range.UNKNOWN,
+				NodeList.emptyNodeList(),
+				new BlockStmt(),
+				NodeList.emptyNodeList(),
+				new BlockStmt());
 	}
 
-	public TryStmt(final BlockStmt tryBlock, final List<CatchClause> catchs,
+	public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchs,
 			final BlockStmt finallyBlock) {
-		setTryBlock(tryBlock);
-		setCatchs(catchs);
-		setFinallyBlock(finallyBlock);
+		this(Range.UNKNOWN,
+				NodeList.emptyNodeList(),
+				tryBlock,
+				catchs,
+				finallyBlock);
 	}
 
-	public TryStmt(Range range, List<VariableDeclarationExpr> resources,
-	               final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
+	public TryStmt(Range range, NodeList<VariableDeclarationExpr> resources,
+	               final BlockStmt tryBlock, final NodeList<CatchClause> catchs, final BlockStmt finallyBlock) {
 		super(range);
 		setResources(resources);
 		setTryBlock(tryBlock);
@@ -72,8 +80,7 @@ public final class TryStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public List<CatchClause> getCatchs() {
-        catchs = ensureNotNull(catchs);
+	public NodeList<CatchClause> getCatchs() {
         return catchs;
 	}
 
@@ -85,13 +92,12 @@ public final class TryStmt extends Statement {
 		return tryBlock;
 	}
 	
-	public List<VariableDeclarationExpr> getResources() {
-        resources = ensureNotNull(resources);
+	public NodeList<VariableDeclarationExpr> getResources() {
         return resources;
 	}
 
-	public TryStmt setCatchs(final List<CatchClause> catchs) {
-		this.catchs = catchs;
+	public TryStmt setCatchs(final NodeList<CatchClause> catchs) {
+		this.catchs = assertNotNull(catchs);
 		setAsParentNodeOf(this.catchs);
 		return this;
 	}
@@ -108,8 +114,8 @@ public final class TryStmt extends Statement {
 		return this;
 	}
 	
-	public TryStmt setResources(List<VariableDeclarationExpr> resources) {
-		this.resources = resources;
+	public TryStmt setResources(NodeList<VariableDeclarationExpr> resources) {
+		this.resources = assertNotNull(resources);
 		setAsParentNodeOf(this.resources);
 		return this;
 	}

@@ -22,65 +22,63 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodCallExpr extends Expression implements NodeWithTypeArguments<MethodCallExpr> {
+public final class MethodCallExpr extends Expression implements 
+        NodeWithTypeArguments<MethodCallExpr>,
+        NodeWithArguments<MethodCallExpr> {
 
+    // Can be null
     private Expression scope;
 
-    private List<Type<?>> typeArguments;
+    private NodeList<Type<?>> typeArguments;
 
     private NameExpr name;
 
-    private List<Expression> args;
+    private NodeList<Expression> args;
 
     public MethodCallExpr() {
+        this(Range.UNKNOWN,
+                null,
+                emptyNodeList(),
+                "",
+                emptyNodeList());
     }
 
     public MethodCallExpr(final Expression scope, final String name) {
-        setScope(scope);
-        setName(name);
+        this(Range.UNKNOWN,
+                scope,
+                emptyNodeList(),
+                name,
+                emptyNodeList());
     }
 
-    public MethodCallExpr(final Expression scope, final String name, final List<Expression> args) {
-        setScope(scope);
-        setName(name);
-        setArgs(args);
+    public MethodCallExpr(final Expression scope, final String name, final NodeList<Expression> args) {
+        this(Range.UNKNOWN,
+                scope,
+                emptyNodeList(),
+                name,
+                args);
     }
 
-	public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String name, final List<Expression> args) {
+	public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final String name, final NodeList<Expression> args) {
 		super(range);
 		setScope(scope);
 		setTypeArguments(typeArguments);
 		setName(name);
 		setArgs(args);
 	}
-
-    /**
-     * Adds the given argument to the method call.
-     *
-     * @param arg
-     *            argument value
-     */
-    public MethodCallExpr addArgument(Expression arg) {
-        getArgs().add(arg);
-        arg.setParentNode(this);
-        return this;
-    }
-
-    public void addArgument(String arg) {
-        addArgument(new NameExpr(arg));
-    }
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -92,8 +90,8 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         v.visit(this, arg);
     }
 
-    public List<Expression> getArgs() {
-        args = ensureNotNull(args);
+    @Override
+    public NodeList<Expression> getArgs() {
         return args;
     }
 
@@ -109,9 +107,11 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return scope;
     }
 
-	public void setArgs(final List<Expression> args) {
-		this.args = args;
+    @Override
+	public MethodCallExpr setArgs(final NodeList<Expression> args) {
+		this.args = assertNotNull(args);
 		setAsParentNodeOf(this.args);
+        return this;
 	}
 
     public MethodCallExpr setName(final String name) {
@@ -132,12 +132,12 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     }
 
     @Override
-    public List<Type<?>> getTypeArguments() {
+    public NodeList<Type<?>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public MethodCallExpr setTypeArguments(final List<Type<?>> types) {
+    public MethodCallExpr setTypeArguments(final NodeList<Type<?>> types) {
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

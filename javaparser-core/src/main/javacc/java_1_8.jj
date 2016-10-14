@@ -73,27 +73,11 @@ final class ASTParser {
         ReInit(new StreamProvider(in, encoding));
     }
 
-    private <T> List<T> add(List<T> list, T obj) {
-    	if (list == null) {
-    		list = new LinkedList<T>();
-    	}
-    	list.add(obj);
-    	return list;
-    }
-
     private <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
     	if (list == null) {
     		list = new NodeList<T>();
     	}
     	list.add(obj);
-    	return list;
-    }
-
-    private <T> List<T> add(int pos, List<T> list, T obj) {
-    	if (list == null) {
-    		list = new LinkedList<T>();
-    	}
-    	list.add(pos, obj);
     	return list;
     }
 
@@ -179,8 +163,8 @@ final class ASTParser {
         return ret;
     }
     
-    private ArrayCreationExpr juggleArrayCreation(Range range, Type type, List<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
-        List<ArrayCreationLevel> levels = new ArrayList<ArrayCreationLevel>();
+    private ArrayCreationExpr juggleArrayCreation(Range range, Type type, NodeList<Expression> dimensions, NodeList<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr)  {
+        NodeList<ArrayCreationLevel> levels = new NodeList<ArrayCreationLevel>();
         
         for(int i = 0; i < arrayAnnotations.size(); i++){
             levels.add(new ArrayCreationLevel(range, dimensions.get(i), arrayAnnotations.get(i)));
@@ -202,10 +186,10 @@ final class ASTParser {
         }
     }
 
-    private static class RangedList<T> {
+    private static class RangedList<T extends Node> {
         Range range = Range.UNKNOWN;
-        List<T> list;
-        RangedList(List<T> list) {
+        NodeList<T> list;
+        RangedList(NodeList<T> list) {
             this.list = list;
         }
         void beginAt(Position begin) {
@@ -216,7 +200,7 @@ final class ASTParser {
         }
         void add(T t) {
             if (list == null) {
-                list = new LinkedList<T>();
+                list = new NodeList<T>();
             }
             list.add(t);
         }
@@ -1413,7 +1397,7 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
 {
     boolean isInterface = false;
     NameExpr name;
-    RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(null);
+    RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyNodeList());
     NodeList<ClassOrInterfaceType> extList = emptyNodeList();
     NodeList<ClassOrInterfaceType> impList = emptyNodeList();
     NodeList<BodyDeclaration<?>> members = emptyNodeList();
@@ -1469,7 +1453,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 	NameExpr name;
     NodeList<ClassOrInterfaceType> impList = emptyNodeList();
 	EnumConstantDeclaration entry;
-	List<EnumConstantDeclaration> entries = null;
+	NodeList<EnumConstantDeclaration> entries = emptyNodeList();
 	BodyDeclaration<?> member;
     NodeList<BodyDeclaration<?>> members = emptyNodeList();
 	Position begin = modifier.begin;
@@ -1480,7 +1464,6 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
   [ impList = ImplementsList(false) ]
   "{"
   	[
-    	{ entries = new LinkedList<EnumConstantDeclaration>(); }
     	entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
   	]
   	[ "," ]
@@ -1502,7 +1485,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	AnnotationExpr ann;
 	String name;
-	List<Expression> args = null;
+	NodeList<Expression> args = emptyNodeList();
 	NodeList<BodyDeclaration<?>> classBody = emptyNodeList();
 	Position begin = INVALID;
 }
@@ -1523,7 +1506,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
  */
 RangedList<TypeParameter> TypeParameters():
 {
-	RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new LinkedList<TypeParameter>());
+	RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new NodeList<TypeParameter>());
 	TypeParameter tp;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
@@ -1540,7 +1523,7 @@ RangedList<TypeParameter> TypeParameters():
 TypeParameter TypeParameter():
 {
 	String name;
-	List<ClassOrInterfaceType> typeBound = null;
+	NodeList<ClassOrInterfaceType> typeBound  = emptyNodeList();
 	Position begin;
 }
 {
@@ -1548,9 +1531,9 @@ TypeParameter TypeParameter():
    { return new TypeParameter(range(begin, tokenEnd()),name, typeBound); }
 }
 
-List<ClassOrInterfaceType> TypeBound():
+NodeList<ClassOrInterfaceType> TypeBound():
 {
-	List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
+	NodeList<ClassOrInterfaceType> ret = emptyNodeList();
 	ClassOrInterfaceType cit;
 }
 {
@@ -1694,7 +1677,7 @@ Expression VariableInitializer():
 
 ArrayInitializerExpr ArrayInitializer():
 {
-	List<Expression> values = null;
+	NodeList<Expression> values = emptyNodeList();
 	Expression val;
 	Position begin;
 }
@@ -1705,13 +1688,13 @@ ArrayInitializerExpr ArrayInitializer():
 
 MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
-	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
+	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
 	Type type;
 	NameExpr name;
 	NodeList<Parameter> parameters = emptyNodeList();
 	ArrayBracketPair arrayBracketPair;
 	NodeList<ArrayBracketPair> arrayBracketPairs = emptyNodeList();
-	List<ReferenceType> throws_ = null;
+	NodeList<ReferenceType<?>> throws_ = emptyNodeList();
 	BlockStmt block = null;
 	Position begin = modifier.begin;
 	ReferenceType throwType;
@@ -1804,10 +1787,10 @@ Parameter FormalParameter():
 
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
-	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
+	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
 	NameExpr name;
 	NodeList<Parameter> parameters = emptyNodeList();
-	List<ReferenceType> throws_ = null;
+	NodeList<ReferenceType<?>> throws_ = emptyNodeList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyNodeList();
     Position begin = modifier.begin;
@@ -1837,7 +1820,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 {
 	boolean isThis = false;
-	List<Expression> args;
+	NodeList<Expression> args;
 	Expression expr = null;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Position begin = INVALID;
@@ -1931,7 +1914,7 @@ IntersectionType IntersectionType():
 {
 	Position begin;
 	ReferenceType elementType;
-	List<ReferenceType> elements = null;
+	NodeList<ReferenceType<?>> elements = emptyNodeList();
 }
 {
     elementType=ReferenceType() { begin=elementType.getBegin(); elements = add(elements, elementType); }
@@ -1985,7 +1968,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 
 RangedList<Type<?>> TypeArguments():
 {
-	RangedList<Type<?>> ret = new RangedList<Type<?>>(new LinkedList<Type<?>>());
+	RangedList<Type<?>> ret = new RangedList<Type<?>>(new NodeList<Type<?>>());
 	Type type;
 }
 {
@@ -2428,7 +2411,7 @@ Expression CastExpression():
 	PrimitiveType primitiveType;
 	Position begin = INVALID;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-	List<ReferenceType> typesOfMultiCast = null;
+	NodeList<ReferenceType<?>> typesOfMultiCast = emptyNodeList();
 }
 {
   "(" {begin=tokenBegin();}
@@ -2477,7 +2460,7 @@ Expression PrimaryPrefix():
 	Expression ret = null;
 	NameExpr name;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
-	List<Expression> args = null;
+	NodeList<Expression> args = emptyNodeList();
 	NodeList<Parameter> params = emptyNodeList();
 	boolean hasArgs = false;
 	boolean isLambda = false;
@@ -2587,7 +2570,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 {
 	Expression ret;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
-	List<Expression> args = null;
+	NodeList<Expression> args = emptyNodeList();
 	boolean hasArgs = false;
 	NameExpr name;
 }
@@ -2674,18 +2657,18 @@ Expression NullLiteral():
   { return new NullLiteralExpr(tokenRange()); }
 }
 
-List<Expression> Arguments():
+NodeList<Expression> Arguments():
 {
-	List<Expression> ret = null;
+	NodeList<Expression> ret = emptyNodeList();
 }
 {
   "(" [ ret = ArgumentList() ] ")"
   { return ret; }
 }
 
-List<Expression> ArgumentList():
+NodeList<Expression> ArgumentList():
 {
-	List<Expression> ret = new LinkedList<Expression>();
+	NodeList<Expression> ret = emptyNodeList();
 	Expression expr;
 }
 {
@@ -2699,7 +2682,7 @@ Expression AllocationExpression(Expression scope):
 	Type type;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
-	List<Expression> args;
+	NodeList<Expression> args;
 	Position begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
@@ -2731,8 +2714,8 @@ ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
 	Expression expr = null;
 	ArrayInitializerExpr arrayInitializerExpr = null;
-	List<Expression> inits = null;
-	List<NodeList<AnnotationExpr>> accum = null;
+	NodeList<Expression> inits = emptyNodeList();
+	NodeList<NodeList<AnnotationExpr>> accum = emptyNodeList();
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 { 
@@ -2940,7 +2923,7 @@ SwitchStmt SwitchStatement():
 {
 	Expression selector;
 	SwitchEntryStmt entry;
-	List<SwitchEntryStmt> entries = null;
+	NodeList<SwitchEntryStmt> entries = emptyNodeList();
 	Position begin;
 }
 {
@@ -3022,8 +3005,8 @@ Statement ForStatement():
 {
 	VariableDeclarationExpr varExpr = null;
 	Expression expr = null;
-	List<Expression> init = null;
-	List<Expression> update = null;
+	NodeList<Expression> init = emptyNodeList();
+	NodeList<Expression> update = emptyNodeList();
 	Statement body;
 	Position begin;
 }
@@ -3047,24 +3030,24 @@ Statement ForStatement():
   }
 }
 
-List<Expression> ForInit():
+NodeList<Expression> ForInit():
 {
-	List<Expression> ret;
+	NodeList<Expression> ret;
 	Expression expr;
 }
 {
   (
 	  LOOKAHEAD( Modifiers() Type() <IDENTIFIER> )
-	  expr = VariableDeclarationExpression() { ret = new LinkedList<Expression>(); ret.add(expr); }
+	  expr = VariableDeclarationExpression() { ret = new NodeList<Expression>(); ret.add(expr); }
 	|
 	  ret = ExpressionList()
   )
   { return ret; }
 }
 
-List<Expression> ExpressionList():
+NodeList<Expression> ExpressionList():
 {
-	List<Expression> ret = new LinkedList<Expression>();
+	NodeList<Expression> ret = new NodeList<Expression>();
 	Expression expr;
 }
 {
@@ -3073,9 +3056,9 @@ List<Expression> ExpressionList():
   { return ret; }
 }
 
-List<Expression> ForUpdate():
+NodeList<Expression> ForUpdate():
 {
-	List<Expression> ret;
+	NodeList<Expression> ret;
 }
 {
   ret = ExpressionList()
@@ -3140,14 +3123,14 @@ TryStmt TryStatement():
  * finally/catch is present.
  */
 {
-	List<VariableDeclarationExpr> resources = null;
+	NodeList<VariableDeclarationExpr> resources = emptyNodeList();
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
-	List<CatchClause> catchs = null;
+	NodeList<CatchClause> catchs = emptyNodeList();
 	BlockStmt catchBlock;
 	ModifierHolder exceptModifier;
 	ReferenceType exceptionType;
-	List<ReferenceType> exceptionTypes = new LinkedList<ReferenceType>();
+	NodeList<ReferenceType<?>> exceptionTypes = emptyNodeList();
 	VariableDeclaratorId exceptId;
 	Position begin;
 	Position catchBegin;
@@ -3175,14 +3158,14 @@ TryStmt TryStatement():
   			        type = (Type)exceptionTypes.get(0);
   			   }
   			   catchs = add(catchs, new CatchClause(range(catchBegin, tokenEnd()), exceptModifier.modifiers, exceptModifier.annotations, type, exceptId, catchBlock));
-  			   exceptionTypes = new LinkedList<ReferenceType>(); }
+  			   exceptionTypes = emptyNodeList(); }
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|
   		"finally" finallyBlock = Block()
   )
   {
-    if (finallyBlock==null && catchs==null && resources==null) {
+    if (finallyBlock == null && catchs.isEmpty() && resources.isEmpty()) {
       addProblem("Try has no finally, no catch, and no resources");
     }
     return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
@@ -3190,9 +3173,9 @@ TryStmt TryStatement():
 }
 
 
-List<VariableDeclarationExpr> ResourceSpecification() :
+NodeList<VariableDeclarationExpr> ResourceSpecification() :
 {
-  List<VariableDeclarationExpr> variables;
+  NodeList<VariableDeclarationExpr> variables;
 }
 {
   "("
@@ -3203,9 +3186,9 @@ List<VariableDeclarationExpr> ResourceSpecification() :
 }
 
 
-List<VariableDeclarationExpr> Resources() :
+NodeList<VariableDeclarationExpr> Resources() :
 {
-	List<VariableDeclarationExpr> variables = new LinkedList<VariableDeclarationExpr>();
+	NodeList<VariableDeclarationExpr> variables = new NodeList<VariableDeclarationExpr>();
 	VariableDeclarationExpr var;
 }
 {
@@ -3269,7 +3252,7 @@ AnnotationExpr Annotation():
 NormalAnnotationExpr NormalAnnotation():
 {
 	NameExpr name;
-	List<MemberValuePair> pairs = null;
+	NodeList<MemberValuePair> pairs = emptyNodeList();
 	Position begin;
 }
 {
@@ -3298,9 +3281,9 @@ SingleMemberAnnotationExpr SingleMemberAnnotation():
   { return new SingleMemberAnnotationExpr(range(begin, tokenEnd()),name, memberVal); }
 }
 
-List<MemberValuePair> MemberValuePairs():
+NodeList<MemberValuePair> MemberValuePairs():
 {
-	List<MemberValuePair> ret = new LinkedList<MemberValuePair>();
+	NodeList<MemberValuePair> ret = new NodeList<MemberValuePair>();
 	MemberValuePair pair;
 }
 {
@@ -3336,7 +3319,7 @@ Expression MemberValue():
 
 Expression  MemberValueArrayInitializer():
 {
-	List<Expression> ret = new LinkedList<Expression>();
+	NodeList<Expression> ret = emptyNodeList();
 	Expression member;
 	Position begin;
 }

@@ -22,12 +22,13 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
+import static com.github.javaparser.ast.NodeList.emptyNodeList;
+import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.*;
 
 /**
@@ -37,19 +38,21 @@ public final class SwitchStmt extends Statement {
 
 	private Expression selector;
 
-	private List<SwitchEntryStmt> entries;
+	private NodeList<SwitchEntryStmt> entries;
 
 	public SwitchStmt() {
+		this(Range.UNKNOWN,
+				// TODO what expression should this be?
+				name(""), emptyNodeList());
 	}
 
 	public SwitchStmt(final Expression selector,
-			final List<SwitchEntryStmt> entries) {
-		setSelector(selector);
-		setEntries(entries);
+			final NodeList<SwitchEntryStmt> entries) {
+		this(Range.UNKNOWN, selector, entries);
 	}
 
 	public SwitchStmt(Range range, final Expression selector,
-	                  final List<SwitchEntryStmt> entries) {
+	                  final NodeList<SwitchEntryStmt> entries) {
 		super(range);
 		setSelector(selector);
 		setEntries(entries);
@@ -65,8 +68,7 @@ public final class SwitchStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public List<SwitchEntryStmt> getEntries() {
-        entries = ensureNotNull(entries);
+	public NodeList<SwitchEntryStmt> getEntries() {
         return entries;
 	}
 
@@ -74,8 +76,8 @@ public final class SwitchStmt extends Statement {
 		return selector;
 	}
 
-	public SwitchStmt setEntries(final List<SwitchEntryStmt> entries) {
-		this.entries = entries;
+	public SwitchStmt setEntries(final NodeList<SwitchEntryStmt> entries) {
+		this.entries = assertNotNull(entries);
 		setAsParentNodeOf(this.entries);
 		return this;
 	}

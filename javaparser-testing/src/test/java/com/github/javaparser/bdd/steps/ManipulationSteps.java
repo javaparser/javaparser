@@ -28,9 +28,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 
 import com.github.javaparser.ast.*;
@@ -62,7 +60,7 @@ public class ManipulationSteps {
     private BlockStmt blockStmt;
     private Statement statement;
     private TryStmt tryStmt;
-    private List<VariableDeclarationExpr> variableDeclarationExprList;
+    private NodeList<VariableDeclarationExpr> variableDeclarationExprList;
     private ChangeMethodNameToUpperCaseVisitor changeMethodNameToUpperCaseVisitor;
     private AddNewIntParameterCalledValueVisitor addNewIntParameterCalledValueVisitor;
 
@@ -90,7 +88,7 @@ public class ManipulationSteps {
 
     @Given("a List of VariableDeclarations")
     public void givenAListOfVariableDeclarations() {
-        variableDeclarationExprList = new ArrayList<>();
+        variableDeclarationExprList = emptyNodeList();
         variableDeclarationExprList.add(new VariableDeclarationExpr());
         variableDeclarationExprList.add(new VariableDeclarationExpr());
     }
@@ -120,9 +118,9 @@ public class ManipulationSteps {
         tryStmt.setResources(variableDeclarationExprList);
     }
 
-    @When("null is set as the resources on TryStmt")
+    @When("empty list is set as the resources on TryStmt")
     public void whenNullIsSetAsTheResourcesOnTryStmt() {
-        tryStmt.setResources(null);
+        tryStmt.setResources(emptyNodeList());
     }
 
     @When("the package declaration is set to \"$packageName\"")
@@ -240,7 +238,7 @@ public class ManipulationSteps {
     @Then("all the VariableDeclarations parent is the TryStmt")
     public void thenAllTheVariableDeclarationsParentIsTheTryStmt() {
         for(VariableDeclarationExpr expr : variableDeclarationExprList){
-            assertThat(expr.getParentNode(), is((Node)tryStmt));
+            assertThat(expr.getParentNode().getParentNode(), is((Node)tryStmt));
         }
     }
 

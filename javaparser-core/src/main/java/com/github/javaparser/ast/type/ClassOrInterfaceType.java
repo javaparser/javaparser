@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -30,6 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -40,25 +42,35 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
         NodeWithAnnotations<ClassOrInterfaceType>,
         NodeWithTypeArguments<ClassOrInterfaceType> {
 
+    // TODO nullable
     private ClassOrInterfaceType scope;
 
     private String name;
 
-    private List<Type<?>> typeArguments;
+    private NodeList<Type<?>> typeArguments;
 
     public ClassOrInterfaceType() {
+        this(Range.UNKNOWN,
+                null,
+                "",
+                null);
     }
 
     public ClassOrInterfaceType(final String name) {
-        setName(name);
+        this(Range.UNKNOWN,
+                null,
+                name,
+                null);
     }
 
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
-        setScope(scope);
-        setName(name);
+        this(Range.UNKNOWN,
+                scope,
+                name,
+                null);
     }
 
-    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final List<Type<?>> typeArguments) {
+    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final NodeList<Type<?>> typeArguments) {
         super(range);
         setScope(scope);
         setName(name);
@@ -106,12 +118,12 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     @Override
-    public List<Type<?>> getTypeArguments() {
+    public NodeList<Type<?>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public ClassOrInterfaceType setTypeArguments(final List<Type<?>> types) {
+    public ClassOrInterfaceType setTypeArguments(final NodeList<Type<?>> types) {
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

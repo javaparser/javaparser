@@ -2,7 +2,6 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -37,6 +36,9 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
     }
 
     private void own(N node) {
+        if (node == null) {
+            return;
+        }
         setAsParentNodeOf(node);
         // Expand the NodeList's range to include the new node.
         if (getRange() == Range.UNKNOWN) {

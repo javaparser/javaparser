@@ -163,7 +163,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	private void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Object arg) {
-		List<Type<?>> typeArguments = nodeWithTypeArguments.getTypeArguments();
+		NodeList<Type<?>> typeArguments = nodeWithTypeArguments.getTypeArguments();
 		if (!isNullOrEmpty(typeArguments)) {
 			printer.print("<");
 			for (final Iterator<Type<?>> i = typeArguments.iterator(); i.hasNext(); ) {
@@ -177,7 +177,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	private void printTypeParameters(final List<TypeParameter> args, final Object arg) {
+	private void printTypeParameters(final NodeList<TypeParameter> args, final Object arg) {
 		if (!isNullOrEmpty(args)) {
 			printer.print("<");
 			for (final Iterator<TypeParameter> i = args.iterator(); i.hasNext(); ) {
@@ -191,7 +191,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		}
 	}
 
-	private void printArguments(final List<Expression> args, final Object arg) {
+	private void printArguments(final NodeList<Expression> args, final Object arg) {
 		printer.print("(");
 		if (!isNullOrEmpty(args)) {
 			for (final Iterator<Expression> i = args.iterator(); i.hasNext(); ) {
@@ -902,7 +902,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printModifiers(n.getModifiers());
 
 		printTypeParameters(n.getTypeParameters(), arg);
-		if (!n.getTypeParameters().isEmpty()) {
+		if (n.isGeneric()) {
 			printer.print(" ");
 		}
 		printer.print(n.getName());
@@ -921,8 +921,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 		if (!isNullOrEmpty(n.getThrows())) {
 			printer.print(" throws ");
-			for (final Iterator<ReferenceType> i = n.getThrows().iterator(); i.hasNext(); ) {
-				final ReferenceType name = i.next();
+			for (final Iterator<ReferenceType<?>> i = n.getThrows().iterator(); i.hasNext(); ) {
+				final ReferenceType<?> name = i.next();
 				name.accept(this, arg);
 				if (i.hasNext()) {
 					printer.print(", ");
@@ -973,7 +973,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 		if (!isNullOrEmpty(n.getThrows())) {
 			printer.print(" throws ");
-			for (final Iterator<ReferenceType> i = n.getThrows().iterator(); i.hasNext(); ) {
+			for (final Iterator<ReferenceType<?>> i = n.getThrows().iterator(); i.hasNext(); ) {
 				final ReferenceType name = i.next();
 				name.accept(this, arg);
 				if (i.hasNext()) {

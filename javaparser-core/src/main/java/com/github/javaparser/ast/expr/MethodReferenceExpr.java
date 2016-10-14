@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -29,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
@@ -45,7 +47,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     private Expression scope;
 
-    private List<Type<?>> typeArguments;
+    private NodeList<Type<?>> typeArguments;
 
     private String identifier;
 
@@ -53,7 +55,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     public MethodReferenceExpr(Range range, Expression scope,
-                               List<Type<?>> typeArguments, String identifier) {
+                               NodeList<Type<?>> typeArguments, String identifier) {
         super(range);
         setIdentifier(identifier);
         setScope(scope);
@@ -82,12 +84,12 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Override
-    public List<Type<?>> getTypeArguments() {
+    public NodeList<Type<?>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public MethodReferenceExpr setTypeArguments(final List<Type<?>> types) {
+    public MethodReferenceExpr setTypeArguments(final NodeList<Type<?>> types) {
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

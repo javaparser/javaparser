@@ -22,52 +22,63 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.ast.NodeList.emptyNodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>
+ * 
  * @author Julio Vilmar Gesser
  */
 public final class ArrayCreationExpr extends Expression implements NodeWithType<ArrayCreationExpr> {
 
-    private List<ArrayCreationLevel> levels;
+    private NodeList<ArrayCreationLevel> levels;
 
     private Type type;
 
     private ArrayInitializerExpr initializer;
 
     public ArrayCreationExpr() {
+        this(Range.UNKNOWN,
+                new ClassOrInterfaceType(),
+                emptyNodeList(),
+                new ArrayInitializerExpr());
     }
 
-    public ArrayCreationExpr(Type type, List<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
-        setLevels(levels);
-        setType(type);
-        setInitializer(initializer);
-    }
-
-    public ArrayCreationExpr(Range range, Type type, List<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
-        super(range);
-        setLevels(levels);
-        setType(type);
-        setInitializer(initializer);
+    public ArrayCreationExpr(Type type, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+        this(Range.UNKNOWN,
+                type,
+                levels,
+                initializer);
     }
 
     public ArrayCreationExpr(Type type) {
-        setType(type);
-        setInitializer(null);
+        this(Range.UNKNOWN,
+                type,
+                emptyNodeList(),
+                new ArrayInitializerExpr());
     }
 
     public ArrayCreationExpr(Range range, Type type) {
+        this(range,
+                type,
+                emptyNodeList(),
+                new ArrayInitializerExpr());
+    }
+
+    public ArrayCreationExpr(Range range, Type type, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
         super(range);
+        setLevels(levels);
         setType(type);
-        setInitializer(null);
+        setInitializer(initializer);
     }
 
     @Override
@@ -102,13 +113,12 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return this;
     }
 
-    public List<ArrayCreationLevel> getLevels() {
-        levels = ensureNotNull(levels);
+    public NodeList<ArrayCreationLevel> getLevels() {
         return levels;
     }
 
-    public ArrayCreationExpr setLevels(List<ArrayCreationLevel> levels) {
-        this.levels = levels;
+    public ArrayCreationExpr setLevels(NodeList<ArrayCreationLevel> levels) {
+        this.levels = assertNotNull(levels);
         setAsParentNodeOf(levels);
         return this;
     }

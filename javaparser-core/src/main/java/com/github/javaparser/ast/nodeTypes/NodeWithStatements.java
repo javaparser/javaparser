@@ -63,4 +63,8 @@ public interface NodeWithStatements<T> {
     default ExpressionStmt addAndGetStatement(String statement) {
         return addAndGetStatement(new NameExpr(statement));
     }
+    
+    default boolean isEmpty() {
+        return getStmts().isEmpty();
+    }
 }

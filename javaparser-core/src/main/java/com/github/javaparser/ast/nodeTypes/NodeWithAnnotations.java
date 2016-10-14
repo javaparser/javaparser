@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.name;
 
 import java.lang.annotation.Annotation;
@@ -51,7 +52,7 @@ public interface NodeWithAnnotations<T> {
      */
     default NormalAnnotationExpr addAnnotation(String name) {
         NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                name(name), null);
+                name(name), emptyNodeList());
         getAnnotations().add(normalAnnotationExpr);
         normalAnnotationExpr.setParentNode((Node) this);
         return normalAnnotationExpr;

@@ -21,32 +21,35 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.arrayToList;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
 
 /**
  * A node that can have type arguments.
  * <pre>
  *     new X();        --> typeArguments == null
- *     new X&lt;>();      --> typeArguments.types = [], typeArguments.diamondOperator=true 
- *     new X&lt;C,D>();   --> typeArguments.types = [C,D], typeArguments.diamondOperator=false 
+ *     new X&lt;>();      --> typeArguments = [], diamondOperator = true 
+ *     new X&lt;C,D>();   --> typeArguments = [C,D], diamondOperator = false
  * </pre>
  */
 public interface NodeWithTypeArguments<T> {
     /**
      * @return the types that can be found in the type arguments: &lt;String, Integer>.
      */
-    List<Type<?>> getTypeArguments();
+    // TODO nullable
+    NodeList<Type<?>> getTypeArguments();
 
     /**
      * Allows you to set the generic arguments
      * @param typeArguments The list of types of the generics
      */
-    T setTypeArguments(List<Type<?>> typeArguments);
+    T setTypeArguments(NodeList<Type<?>> typeArguments);
 
     /**
      * @return whether the type arguments look like &lt;>.
@@ -63,8 +66,7 @@ public interface NodeWithTypeArguments<T> {
      */
     @SuppressWarnings("unchecked")
     default T setDiamondOperator() {
-        final List<Type<?>> empty = new LinkedList<>();
-        setTypeArguments(empty);
+        setTypeArguments(emptyNodeList());
         return (T) this;
     }
 
@@ -73,13 +75,13 @@ public interface NodeWithTypeArguments<T> {
      */
     @SuppressWarnings("unchecked")
     default T removeTypeArguments() {
-        setTypeArguments((List<Type<?>>) null);
+        setTypeArguments((NodeList<Type<?>>) null);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
     default T setTypeArguments(Type<?>... typeArguments) {
-        setTypeArguments(arrayToList(typeArguments));
+        setTypeArguments(nodeList(typeArguments));
         return (T) this;
     }
 }

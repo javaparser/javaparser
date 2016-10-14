@@ -21,12 +21,15 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.ast.expr.NameExpr.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.List;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -39,17 +42,17 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
  */
 public final class NormalAnnotationExpr extends AnnotationExpr {
 
-    private List<MemberValuePair> pairs;
+    private NodeList<MemberValuePair> pairs;
 
     public NormalAnnotationExpr() {
+        this(Range.UNKNOWN, name(""), emptyNodeList());
     }
 
-    public NormalAnnotationExpr(final NameExpr name, final List<MemberValuePair> pairs) {
-        setName(name);
-        setPairs(pairs);
+    public NormalAnnotationExpr(final NameExpr name, final NodeList<MemberValuePair> pairs) {
+        this(Range.UNKNOWN, name, pairs);
     }
 
-    public NormalAnnotationExpr(final Range range, final NameExpr name, final List<MemberValuePair> pairs) {
+    public NormalAnnotationExpr(final Range range, final NameExpr name, final NodeList<MemberValuePair> pairs) {
         super(range);
         setName(name);
         setPairs(pairs);
@@ -65,13 +68,12 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         v.visit(this, arg);
     }
 
-    public List<MemberValuePair> getPairs() {
-        pairs = ensureNotNull(pairs);
+    public NodeList<MemberValuePair> getPairs() {
         return pairs;
     }
 
-    public NormalAnnotationExpr setPairs(final List<MemberValuePair> pairs) {
-        this.pairs = pairs;
+    public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
+        this.pairs = assertNotNull(pairs);
         setAsParentNodeOf(this.pairs);
         return this;
     }

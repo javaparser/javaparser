@@ -22,6 +22,7 @@
 package com.github.javaparser.utils;
 
 import com.github.javaparser.Provider;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +51,7 @@ public class Utils {
 
 	public static <T> T assertNotNull(T o) {
 		if (o == null) {
-			throw new NullPointerException("Assertion failed.");
+			throw new AssertionError("A reference was unexpectedly null.");
 		}
 		return o;
 	}
@@ -87,34 +88,13 @@ public class Utils {
 		return result.toString();
 	}
 
-	public static String providerToString(Provider provider) throws IOException {
-		final StringBuilder result = new StringBuilder();
-		final char[] buffer = new char[8 * 1024];
-		int numChars;
-
-		while ((numChars = provider.read(buffer, 0, buffer.length)) != -1) {
-			result.append(buffer, 0, numChars);
-		}
-
-		return result.toString();
-	}
-
 	/**
 	 * Puts varargs in a mutable list.
-     * This does not have the disadvantage of Arrays#asList that it has a static size. 
+	 * This does not have the disadvantage of Arrays#asList that it has a static size. 
 	 */
 	public static <T> List<T> arrayToList(T[] array){
 		List<T> list = new LinkedList<>();
 		Collections.addAll(list, array);
 		return list;
-	}
-
-	public static <T> List<T> copyList(List<T> originalList) {
-		if (originalList == null) {
-			return null;
-		}
-		final List<T> newList = new ArrayList<>();
-		newList.addAll(originalList);
-		return newList;
 	}
 }

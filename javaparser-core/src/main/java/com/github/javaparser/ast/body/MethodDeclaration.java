@@ -26,11 +26,8 @@ import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
@@ -62,11 +59,12 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithModifiers<MethodDeclaration>, 
         NodeWithParameters<MethodDeclaration>,
         NodeWithThrowable<MethodDeclaration>, 
-        NodeWithBlockStmt<MethodDeclaration> {
+        NodeWithBlockStmt<MethodDeclaration>,
+        NodeWithTypeParameters<MethodDeclaration> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<TypeParameter> typeParameters;
+    private NodeList<TypeParameter> typeParameters;
 
     private Type elementType;
 
@@ -74,7 +72,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NodeList<Parameter> parameters;
 
-    private List<ReferenceType> throws_;
+    private NodeList<ReferenceType<?>> throws_;
 
     private BlockStmt body;
 
@@ -88,13 +86,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
                 emptyNodeList(),
-                new ArrayList<>(),
+                emptyNodeList(),
                 new ClassOrInterfaceType(),
                 emptyNodeList(),
                 name(""),
                 emptyNodeList(),
                 emptyNodeList(),
-                new ArrayList<>(),
+                emptyNodeList(),
                 new BlockStmt());
     }
 
@@ -102,13 +100,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         this(Range.UNKNOWN,
                 modifiers,
                 emptyNodeList(),
-                new ArrayList<>(),
+                emptyNodeList(),
                 elementType,
                 emptyNodeList(),
                 name(name),
                 emptyNodeList(),
                 emptyNodeList(),
-                new ArrayList<>(),
+                emptyNodeList(),
                 new BlockStmt());
     }
 
@@ -117,25 +115,25 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         this(Range.UNKNOWN,
                 modifiers,
                 emptyNodeList(),
-                new ArrayList<>(),
+                emptyNodeList(),
                 elementType,
                 emptyNodeList(),
                 name(name),
                 parameters,
                 emptyNodeList(),
-                new ArrayList<>(),
+                emptyNodeList(),
                 new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, 
                              final NodeList<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, 
+                             final NodeList<TypeParameter> typeParameters, 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final String name,
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final List<ReferenceType> throws_, 
+                             final NodeList<ReferenceType<?>> throws_, 
                              final BlockStmt body) {
         this(Range.UNKNOWN,
                 modifiers,
@@ -153,13 +151,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     public MethodDeclaration(Range range,
                              final EnumSet<Modifier> modifiers, 
                              final NodeList<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, 
+                             final NodeList<TypeParameter> typeParameters, 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final NameExpr nameExpr,
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final List<ReferenceType> throws_, 
+                             final NodeList<ReferenceType<?>> throws_, 
                              final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -214,8 +212,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public List<ReferenceType> getThrows() {
-        throws_ = ensureNotNull(throws_);
+    public NodeList<ReferenceType<?>> getThrows() {
         return throws_;
     }
 
@@ -231,8 +228,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         return elementType;
     }
 
-    public List<TypeParameter> getTypeParameters() {
-        typeParameters = ensureNotNull(typeParameters);
+    @Override
+    public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
@@ -269,8 +266,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setThrows(final List<ReferenceType> throws_) {
-        this.throws_ = throws_;
+    public MethodDeclaration setThrows(final NodeList<ReferenceType<?>> throws_) {
+        this.throws_ = assertNotNull(throws_);
         setAsParentNodeOf(this.throws_);
         return this;
     }
@@ -286,13 +283,14 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     @Override
     public MethodDeclaration setElementType(final Type elementType) {
-        this.elementType = elementType;
+        this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
     }
 
-    public MethodDeclaration setTypeParameters(final List<TypeParameter> typeParameters) {
-        this.typeParameters = typeParameters;
+    @Override
+    public MethodDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+        this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(typeParameters);
         return this;
     }

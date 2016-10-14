@@ -46,7 +46,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 
     private NodeList<ClassOrInterfaceType> implementsList;
 
-    private List<EnumConstantDeclaration> entries;
+    private NodeList<EnumConstantDeclaration> entries;
 
     public EnumDeclaration() {
         this(Range.UNKNOWN, 
@@ -54,7 +54,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
                 emptyNodeList(), 
                 "", 
                 emptyNodeList(),
-                new ArrayList<>(),
+                emptyNodeList(),
                 emptyNodeList());
     }
 
@@ -64,12 +64,12 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
                 emptyNodeList(),
                 name,
                 emptyNodeList(),
-                new ArrayList<>(),
+                emptyNodeList(),
                 emptyNodeList());
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
-                           NodeList<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         this(Range.UNKNOWN,
                 modifiers,
@@ -81,7 +81,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
-                           NodeList<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setImplements(implementsList);
@@ -99,8 +99,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         v.visit(this, arg);
     }
 
-    public List<EnumConstantDeclaration> getEntries() {
-        entries = ensureNotNull(entries);
+    public NodeList<EnumConstantDeclaration> getEntries() {
         return entries;
     }
 
@@ -109,8 +108,8 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return implementsList;
     }
 
-    public EnumDeclaration setEntries(List<EnumConstantDeclaration> entries) {
-        this.entries = entries;
+    public EnumDeclaration setEntries(NodeList<EnumConstantDeclaration> entries) {
+        this.entries = assertNotNull(entries);
 		setAsParentNodeOf(this.entries);
         return this;
     }
@@ -121,8 +120,6 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 		setAsParentNodeOf(this.implementsList);
         return this;
     }
-
-
 
     public EnumConstantDeclaration addEnumConstant(String name) {
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
