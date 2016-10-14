@@ -1,7 +1,7 @@
 package me.tomassetti.symbolsolver.logic;
 
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class FunctionalInterfaceLogic {
 
-    public static Optional<MethodUsage> getFunctionalMethod(TypeUsage type) {
+    public static Optional<MethodUsage> getFunctionalMethod(Type type) {
         if (type.isReferenceType() && type.asReferenceTypeUsage().getTypeDeclaration().isInterface()) {
             //We need to find all abstract methods
             Set<MethodUsage> methods = type.asReferenceTypeUsage().getTypeDeclaration().getAllMethods().stream()

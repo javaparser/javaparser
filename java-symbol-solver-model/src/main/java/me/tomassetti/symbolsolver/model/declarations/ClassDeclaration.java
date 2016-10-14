@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
+public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, HasAccessLevel {
 
     /**
      * This method should always return true.
@@ -20,31 +20,31 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrized {
     }
 
     /**
-     * This is a ReferenceTypeUsage because it could contain type parameters.
+     * This is a ReferenceTypeUsage because it could contain type typeParametersValues.
      * For example: class A extends B<Integer, String>.
      * <p/>
      * Note that only the Object class should not have a superclass and therefore
      * return null.
      */
-    ReferenceTypeUsage getSuperClass();
+    ReferenceType getSuperClass();
 
     /**
      * Return all the interfaces implemented directly by this class.
      * It does not include the interfaces implemented by superclasses or extended
      * by the interfaces implemented.
      */
-    List<InterfaceDeclaration> getInterfaces();
+    List<ReferenceType> getInterfaces();
 
     /**
-     * Get all superclasses, with all the type parameters expressed as functions of the type parameters of this
+     * Get all superclasses, with all the type typeParametersValues expressed as functions of the type typeParametersValues of this
      * declaration.
      */
-    List<ReferenceTypeUsage> getAllSuperClasses();
+    List<ReferenceType> getAllSuperClasses();
 
     /**
-     * Get all interfaces, with all the type parameters expressed as functions of the type parameters of this
+     * Get all interfaces, with all the type typeParametersValues expressed as functions of the type typeParametersValues of this
      * declaration.
      */
-    List<InterfaceDeclaration> getAllInterfaces();
+    List<ReferenceType> getAllInterfaces();
 
 }

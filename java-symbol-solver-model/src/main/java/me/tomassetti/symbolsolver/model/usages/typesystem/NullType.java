@@ -1,15 +1,15 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 /**
  * This is a virtual type used to represent null values.
  *
  * @author Federico Tomassetti
  */
-public class NullTypeUsage implements TypeUsage {
+public class NullType implements Type {
 
-    public static final NullTypeUsage INSTANCE = new NullTypeUsage();
+    public static final NullType INSTANCE = new NullType();
 
-    private NullTypeUsage() {
+    private NullType() {
     }
 
     @Override
@@ -42,7 +42,7 @@ public class NullTypeUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other) {
+    public boolean isAssignableBy(Type other) {
         throw new UnsupportedOperationException("It does not make sense to assign a value to null, it can only be assigned");
     }
 

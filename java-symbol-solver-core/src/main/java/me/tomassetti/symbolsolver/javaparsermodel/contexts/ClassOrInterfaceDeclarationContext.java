@@ -16,9 +16,9 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 
@@ -51,8 +51,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then among inherited fields
-        for (ReferenceTypeUsage ancestor : getDeclaration().getAncestors()) {
-            SymbolReference ref = ancestor.getTypeDeclaration().getContext().solveSymbol(name, typeSolver);
+        for (ReferenceType ancestor : getDeclaration().getAncestors()) {
+            SymbolReference ref = ancestor.getTypeDeclaration().solveSymbol(name, typeSolver);
             if (ref.isSolved()) {
                 return ref;
             }
@@ -78,8 +78,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then among inherited fields
-        for (ReferenceTypeUsage ancestor : getDeclaration().getAncestors()) {
-            Optional<Value> ref = ancestor.getTypeDeclaration().getContext().solveSymbolAsValue(name, typeSolver);
+        for (ReferenceType ancestor : getDeclaration().getAncestors()) {
+            Optional<Value> ref = ContextHelper.getContext(ancestor.getTypeDeclaration()).solveSymbolAsValue(name, typeSolver);
             if (ref.isPresent()) {
                 return ref;
             }
@@ -90,10 +90,10 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     @Override
-    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
+    public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)) {
-                return Optional.of(new TypeParameterUsage(new JavaParserTypeParameter(tp, typeSolver)));
+                return Optional.of(new TypeParameter(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return getParent().solveGenericType(name, typeSolver);
@@ -130,7 +130,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
         List<MethodDeclaration> candidateMethods = methodsByName(name);
 
         if (this.wrappedNode.getExtends() != null && !this.wrappedNode.getExtends().isEmpty()) {

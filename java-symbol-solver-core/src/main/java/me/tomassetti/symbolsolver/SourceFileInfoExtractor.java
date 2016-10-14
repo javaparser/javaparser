@@ -16,8 +16,8 @@ import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,10 +78,10 @@ public class SourceFileInfoExtractor {
         TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
         if (typeDeclaration.isClass()) {
             out.println("\n[ Class " + typeDeclaration.getQualifiedName() + " ]");
-            for (ReferenceTypeUsage sc : typeDeclaration.asClass().getAllSuperClasses()) {
+            for (ReferenceType sc : typeDeclaration.asClass().getAllSuperClasses()) {
                 out.println("  superclass: " + sc.getQualifiedName());
             }
-            for (TypeDeclaration sc : typeDeclaration.asClass().getAllInterfaces()) {
+            for (ReferenceType sc : typeDeclaration.asClass().getAllInterfaces()) {
                 out.println("  interface: " + sc.getQualifiedName());
             }
         }
@@ -97,7 +97,7 @@ public class SourceFileInfoExtractor {
                 // skip
             } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)) {
                 try {
-                    TypeUsage ref = JavaParserFacade.get(typeSolver).getType(node);
+                    Type ref = JavaParserFacade.get(typeSolver).getType(node);
                     out.println("  Line " + node.getRange().begin.line + ") " + node + " ==> " + ref.describe());
                     ok++;
                 } catch (UnsupportedOperationException upe) {

@@ -8,7 +8,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.AbstractResolutionTest;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class Issue18 extends AbstractResolutionTest {
         ExpressionStmt expr = (ExpressionStmt)methodDeclaration.getBody().getStmts().get(1);
         TypeSolver typeSolver = new JreTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        TypeUsage typeUsage = javaParserFacade.getType(expr.getExpression());
-        assertEquals("java.lang.Object", typeUsage.describe());
+        Type type = javaParserFacade.getType(expr.getExpression());
+        assertEquals("java.lang.Object", type.describe());
     }
 }

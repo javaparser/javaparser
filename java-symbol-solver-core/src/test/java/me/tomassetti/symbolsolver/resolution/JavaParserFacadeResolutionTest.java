@@ -3,7 +3,7 @@ package me.tomassetti.symbolsolver.resolution;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
@@ -20,7 +20,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("Generics");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         TypeDeclaration typeDeclaration = JavaParserFacade.get(new JreTypeSolver()).getTypeDeclaration(clazz);
-        ReferenceTypeUsage superclass = typeDeclaration.asClass().getSuperClass();
+        ReferenceType superclass = typeDeclaration.asClass().getSuperClass();
         assertEquals(Object.class.getCanonicalName(), superclass.getQualifiedName());
     }
 }

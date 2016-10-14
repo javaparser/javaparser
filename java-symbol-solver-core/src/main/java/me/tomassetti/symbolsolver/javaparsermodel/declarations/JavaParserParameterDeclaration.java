@@ -3,8 +3,8 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.body.Parameter;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ArrayType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 public class JavaParserParameterDeclaration implements ParameterDeclaration {
@@ -43,10 +43,10 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public TypeUsage getType() {
-        TypeUsage res = JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
+    public Type getType() {
+        Type res = JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
         for (int i=0;i<wrappedNode.getId().getArrayCount();i++) {
-            res = new ArrayTypeUsage(res);
+            res = new ArrayType(res);
         }
         return res;
     }

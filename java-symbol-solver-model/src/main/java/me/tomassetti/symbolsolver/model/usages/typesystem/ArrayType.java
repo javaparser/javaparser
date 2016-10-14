@@ -1,13 +1,13 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 /**
  * @author Federico Tomassetti
  */
-public class ArrayTypeUsage implements TypeUsage {
+public class ArrayType implements Type {
 
-    private TypeUsage baseType;
+    private Type baseType;
 
-    public ArrayTypeUsage(TypeUsage baseType) {
+    public ArrayType(Type baseType) {
         this.baseType = baseType;
     }
 
@@ -16,7 +16,7 @@ public class ArrayTypeUsage implements TypeUsage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ArrayTypeUsage that = (ArrayTypeUsage) o;
+        ArrayType that = (ArrayType) o;
 
         if (!baseType.equals(that.baseType)) return false;
 
@@ -25,13 +25,11 @@ public class ArrayTypeUsage implements TypeUsage {
 
     @Override
     public String toString() {
-        return "ArrayTypeUsage{" +
-                "baseType=" + baseType +
-                '}';
+        return "ArrayTypeUsage{" + baseType + "}";
     }
 
     @Override
-    public ArrayTypeUsage asArrayTypeUsage() {
+    public ArrayType asArrayTypeUsage() {
         return this;
     }
 
@@ -50,22 +48,22 @@ public class ArrayTypeUsage implements TypeUsage {
         return baseType.describe() + "[]";
     }
 
-    public TypeUsage getComponentType() {
+    public Type getComponentType() {
         return baseType;
     }
 
     @Override
-    public TypeUsage replaceParam(String name, TypeUsage replaced) {
-        TypeUsage baseTypeReplaced = baseType.replaceParam(name, replaced);
+    public Type replaceParam(String name, Type replaced) {
+        Type baseTypeReplaced = baseType.replaceParam(name, replaced);
         if (baseTypeReplaced == baseType) {
             return this;
         } else {
-            return new ArrayTypeUsage(baseTypeReplaced);
+            return new ArrayType(baseTypeReplaced);
         }
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other) {
+    public boolean isAssignableBy(Type other) {
         if (other.isArray()) {
             return baseType.isAssignableBy(other.asArrayTypeUsage().getComponentType());
         } else {

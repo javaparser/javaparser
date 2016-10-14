@@ -3,30 +3,30 @@ package me.tomassetti.symbolsolver.javassistmodel;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.ArrayTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.VoidTypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ArrayType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.PrimitiveType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.VoidType;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 public class JavassistFactory {
 
-    public static TypeUsage typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {
+    public static Type typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {
         try {
             if (ctClazz.isArray()) {
-                return new ArrayTypeUsage(typeUsageFor(ctClazz.getComponentType(), typeSolver));
+                return new ArrayType(typeUsageFor(ctClazz.getComponentType(), typeSolver));
             } else if (ctClazz.isPrimitive()) {
                 if (ctClazz.getName().equals("void")) {
-                    return VoidTypeUsage.INSTANCE;
+                    return VoidType.INSTANCE;
                 } else {
-                    return PrimitiveTypeUsage.byName(ctClazz.getName());
+                    return PrimitiveType.byName(ctClazz.getName());
                 }
             } else {
                 if (ctClazz.isInterface()) {
-                    return new ReferenceTypeUsageImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver), typeSolver);
+                    return new ReferenceTypeImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver), typeSolver);
                 } else {
-                    return new ReferenceTypeUsageImpl(new JavassistClassDeclaration(ctClazz, typeSolver), typeSolver);
+                    return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver), typeSolver);
                 }
             }
         } catch (NotFoundException e) {

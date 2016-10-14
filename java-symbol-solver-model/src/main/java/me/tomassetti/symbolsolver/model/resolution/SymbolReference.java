@@ -1,10 +1,7 @@
 package me.tomassetti.symbolsolver.model.resolution;
 
 import me.tomassetti.symbolsolver.model.declarations.Declaration;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -13,7 +10,6 @@ import java.util.Optional;
 public class SymbolReference<S extends Declaration> {
 
     private Optional<? extends S> correspondingDeclaration;
-    private Map<String, TypeUsage> typeParametersByName = new HashMap<>();
 
     private SymbolReference(Optional<? extends S> correspondingDeclaration) {
         this.correspondingDeclaration = correspondingDeclaration;
@@ -29,9 +25,7 @@ public class SymbolReference<S extends Declaration> {
 
     @Override
     public String toString() {
-        return "SymbolReference{" +
-                "correspondingDeclaration=" + correspondingDeclaration +
-                '}';
+        return "SymbolReference{" + correspondingDeclaration + "}";
     }
 
     public S getCorrespondingDeclaration() {

@@ -1,10 +1,10 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 /**
  * A usage of a type. It could be a primitive type or a reference type (enum, class, interface).
- * In the later case it could take type parameters (other TypeUsages). It could also be a TypeVariable, like in:
+ * In the later case it could take type typeParametersValues (other TypeUsages). It could also be a TypeVariable, like in:
  * <p/>
  * class A<B> { }
  * <p/>
@@ -12,7 +12,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
  *
  * @author Federico Tomassetti
  */
-public interface TypeUsage {
+public interface Type {
 
     ///
     /// Relation with other types
@@ -78,24 +78,24 @@ public interface TypeUsage {
     /// Downcasting
     ///
 
-    default ArrayTypeUsage asArrayTypeUsage() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    default ArrayType asArrayTypeUsage() {
+        throw new UnsupportedOperationException(String.format("%s is not an Array", this));
     }
 
-    default ReferenceTypeUsage asReferenceTypeUsage() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    default ReferenceType asReferenceTypeUsage() {
+        throw new UnsupportedOperationException(String.format("%s is not a Reference Type", this));
     }
 
-    default TypeParameter asTypeParameter() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    default TypeParameterDeclaration asTypeParameter() {
+        throw new UnsupportedOperationException(String.format("%s is not a Type parameter", this));
     }
 
-    default PrimitiveTypeUsage asPrimitive() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    default PrimitiveType asPrimitive() {
+        throw new UnsupportedOperationException(String.format("%s is not a Primitive type", this));
     }
 
-    default WildcardUsage asWildcard() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    default Wildcard asWildcard() {
+        throw new UnsupportedOperationException(String.format("%s is not a Wildcard", this));
     }
 
     ///
@@ -108,8 +108,14 @@ public interface TypeUsage {
     /// TypeParameters
     ///
 
-    default TypeUsage replaceParam(String name, TypeUsage replaced) {
+    @Deprecated
+    default Type replaceParam(String name, Type replaced) {
         return this;
+    }
+
+
+    default Type replaceParam(TypeParameterDeclaration name, Type replaced) {
+        throw new UnsupportedOperationException();
     }
 
     ///
@@ -119,6 +125,6 @@ public interface TypeUsage {
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */
-    boolean isAssignableBy(TypeUsage other);
+    boolean isAssignableBy(Type other);
 
 }

@@ -5,13 +5,14 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.core.resolution.Context;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 import java.lang.reflect.Modifier;
@@ -56,11 +57,6 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
     public boolean isType() {
         return false;
     }
@@ -75,7 +71,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public TypeUsage getReturnType() {
+    public Type getReturnType() {
         try {
             return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
         } catch (NotFoundException e) {
@@ -110,8 +106,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public MethodUsage resolveTypeVariables(Context context, List<TypeUsage> parameterTypes) {
+    public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
         throw new UnsupportedOperationException();
     }
 
@@ -121,17 +116,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public boolean isPrivate() {
-        return Modifier.isPrivate(ctMethod.getModifiers());
-    }
-
-    @Override
-    public boolean isPackageProtected() {
-        return !Modifier.isPrivate(ctMethod.getModifiers()) && !Modifier.isProtected(ctMethod.getModifiers()) && !Modifier.isPublic(ctMethod.getModifiers());
-    }
-
-    @Override
-    public List<TypeParameter> getTypeParameters() {
+    public List<TypeParameterDeclaration> getTypeParameters() {
         try {
             if (ctMethod.getGenericSignature() == null) {
                 return Collections.emptyList();
@@ -141,5 +126,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
         } catch (BadBytecode badBytecode) {
             throw new RuntimeException(badBytecode);
         }
+    }
+
+    @Override
+    public AccessLevel accessLevel() {
+        // return !Modifier.isPrivate(ctMethod.getModifiers()) && !Modifier.isProtected(ctMethod.getModifiers()) && !Modifier.isPublic(ctMethod.getModifiers());
+        throw new UnsupportedOperationException();
     }
 }

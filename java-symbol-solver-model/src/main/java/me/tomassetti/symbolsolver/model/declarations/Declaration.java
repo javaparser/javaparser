@@ -27,10 +27,6 @@ public interface Declaration {
         return false;
     }
 
-    default boolean isVariable() {
-        return false;
-    }
-
     default boolean isType() {
         return false;
     }
@@ -40,18 +36,18 @@ public interface Declaration {
     }
 
     default FieldDeclaration asField() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("%s is not a FieldDeclaration", this));
     }
 
     default ParameterDeclaration asParameter() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("%s is not a ParameterDeclaration", this));
     }
 
     default TypeDeclaration asType() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(String.format("%s is not a TypeDeclaration", this));
     }
 
     default MethodDeclaration asMethod() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("%s is not a MethodDeclaration", this));
     }
 }

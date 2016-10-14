@@ -1,13 +1,13 @@
 package me.tomassetti.symbolsolver.javassistmodel;
 
 import javassist.bytecode.SignatureAttribute;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class JavassistTypeParameter implements TypeParameter {
+public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     private SignatureAttribute.TypeParameter wrapped;
     private boolean declaredOnClass;
@@ -44,7 +44,8 @@ public class JavassistTypeParameter implements TypeParameter {
     @Override
     public String qualifiedName() {
         if (this.declaredOnClass()) {
-            return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
+            throw new UnsupportedOperationException();
+            //return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
         } else {
             //com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
             //MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
@@ -53,13 +54,9 @@ public class JavassistTypeParameter implements TypeParameter {
         }
     }
 
-    @Override
-    public String getQNameOfDeclaringClass() {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
-    public List<TypeParameter.Bound> getBounds(TypeSolver typeSolver) {
+    public List<TypeParameterDeclaration.Bound> getBounds(TypeSolver typeSolver) {
         List<Bound> bounds = new ArrayList<>();
         if (wrapped.getClassBound() != null) {
             throw new UnsupportedOperationException(wrapped.getClassBound().toString());

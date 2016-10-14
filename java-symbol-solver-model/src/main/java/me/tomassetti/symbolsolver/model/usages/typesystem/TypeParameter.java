@@ -1,23 +1,25 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 /**
  * @author Federico Tomassetti
  */
-public class TypeParameterUsage implements TypeUsage {
+public class TypeParameter implements Type {
 
-    private TypeParameter typeParameter;
+    private TypeParameterDeclaration typeParameter;
 
-    public TypeParameterUsage(TypeParameter typeParameter) {
+    public TypeParameter(TypeParameterDeclaration typeParameter) {
         this.typeParameter = typeParameter;
     }
 
     @Override
     public String toString() {
-        return "TypeUsageOfTypeParameter{" +
-                "typeParameter=" + typeParameter +
-                '}';
+        return "TypeUsageOfTypeParameter{" + typeParameter + "}";
+    }
+
+    public String qualifiedName() {
+        return this.typeParameter.qualifiedName();
     }
 
     @Override
@@ -25,7 +27,7 @@ public class TypeParameterUsage implements TypeUsage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TypeParameterUsage that = (TypeParameterUsage) o;
+        TypeParameter that = (TypeParameter) o;
 
         if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
         if (typeParameter.declaredOnClass() != that.typeParameter.declaredOnClass()) return false;
@@ -50,7 +52,7 @@ public class TypeParameterUsage implements TypeUsage {
     }
 
     @Override
-    public TypeUsage replaceParam(String name, TypeUsage replaced) {
+    public Type replaceParam(String name, Type replaced) {
         if (name.equals(typeParameter.getName())) {
             return replaced;
         } else {
@@ -69,7 +71,7 @@ public class TypeParameterUsage implements TypeUsage {
     }
 
     @Override
-    public TypeParameter asTypeParameter() {
+    public TypeParameterDeclaration asTypeParameter() {
         return typeParameter;
     }
 
@@ -79,7 +81,7 @@ public class TypeParameterUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other) {
+    public boolean isAssignableBy(Type other) {
         if (other.isTypeVariable()) {
             return describe().equals(other.describe());
         } else {

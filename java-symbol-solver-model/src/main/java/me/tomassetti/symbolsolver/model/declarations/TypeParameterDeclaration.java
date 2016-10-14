@@ -1,16 +1,17 @@
-package me.tomassetti.symbolsolver.model.resolution;
+package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.List;
 
 /**
  * @author Federico Tomassetti
  */
-public interface TypeParameter {
+public interface TypeParameterDeclaration {
 
-    static TypeParameter onClass(final String name, String classQName, List<Bound> bounds) {
-        return new TypeParameter() {
+    static TypeParameterDeclaration onClass(final String name, String classQName, List<Bound> bounds) {
+        return new TypeParameterDeclaration() {
             @Override
             public String getName() {
                 return name;
@@ -29,11 +30,6 @@ public interface TypeParameter {
             @Override
             public String qualifiedName() {
                 return String.format("%s.%s", classQName, name);
-            }
-
-            @Override
-            public String getQNameOfDeclaringClass() {
-                return classQName;
             }
 
             @Override
@@ -56,29 +52,26 @@ public interface TypeParameter {
 
     String qualifiedName();
 
-    @Deprecated
-    String getQNameOfDeclaringClass();
-
     List<Bound> getBounds(TypeSolver typeSolver);
 
     class Bound {
         private boolean extendsBound;
-        private TypeUsage type;
+        private Type type;
 
-        private Bound(boolean extendsBound, TypeUsage type) {
+        private Bound(boolean extendsBound, Type type) {
             this.extendsBound = extendsBound;
             this.type = type;
         }
 
-        public static Bound extendsBound(TypeUsage typeUsage) {
-            return new Bound(true, typeUsage);
+        public static Bound extendsBound(Type type) {
+            return new Bound(true, type);
         }
 
-        public static Bound superBound(TypeUsage typeUsage) {
-            return new Bound(false, typeUsage);
+        public static Bound superBound(Type type) {
+            return new Bound(false, type);
         }
 
-        public TypeUsage getType() {
+        public Type getType() {
             return type;
         }
 

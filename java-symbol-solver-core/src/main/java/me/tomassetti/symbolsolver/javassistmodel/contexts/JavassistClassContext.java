@@ -6,8 +6,8 @@ import javassist.bytecode.SignatureAttribute;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
@@ -34,7 +34,7 @@ public class JavassistClassContext implements Context {
     }
 
     @Override
-    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
+    public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
         try {
             if (wrappedNode.getGenericSignature() != null) {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(wrappedNode.getGenericSignature());
@@ -53,7 +53,7 @@ public class JavassistClassContext implements Context {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

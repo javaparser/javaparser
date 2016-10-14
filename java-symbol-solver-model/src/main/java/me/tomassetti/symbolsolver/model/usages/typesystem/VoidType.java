@@ -1,12 +1,12 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 /**
  * @author Federico Tomassetti
  */
-public class VoidTypeUsage implements TypeUsage {
-    public static final TypeUsage INSTANCE = new VoidTypeUsage();
+public class VoidType implements Type {
+    public static final Type INSTANCE = new VoidType();
 
-    private VoidTypeUsage() {
+    private VoidType() {
     }
 
     @Override
@@ -15,7 +15,7 @@ public class VoidTypeUsage implements TypeUsage {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage other) {
+    public boolean isAssignableBy(Type other) {
         throw new UnsupportedOperationException();
     }
 

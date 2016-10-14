@@ -1,38 +1,41 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.*;
+import me.tomassetti.symbolsolver.model.usages.typesystem.*;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
 
 import java.lang.reflect.*;
 
 public class ReflectionFactory {
-    public static TypeUsage typeUsageFor(Class<?> clazz, TypeSolver typeSolver) {
+    public static Type typeUsageFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
-            return new ArrayTypeUsage(typeUsageFor(clazz.getComponentType(), typeSolver));
+            return new ArrayType(typeUsageFor(clazz.getComponentType(), typeSolver));
         } else if (clazz.isPrimitive()) {
             if (clazz.getName().equals("void")) {
-                return VoidTypeUsage.INSTANCE;
+                return VoidType.INSTANCE;
             } else {
-                return PrimitiveTypeUsage.byName(clazz.getName());
+                return PrimitiveType.byName(clazz.getName());
             }
         } else if (clazz.isInterface()) {
-            return new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(clazz, typeSolver), typeSolver);
+            return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(clazz, typeSolver), typeSolver);
         } else {
-            return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
+            return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
         }
     }
 
-    public static TypeUsage typeUsageFor(Type type, TypeSolver typeSolver) {
+    public static Type typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
         if (type instanceof TypeVariable) {
             TypeVariable tv = (TypeVariable) type;
             boolean declaredOnClass = ((TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
-            me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter = new ReflectionTypeParameter(tv, declaredOnClass);
-            return new TypeParameterUsage(typeParameter);
+            TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass);
+            return new TypeParameter(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
-            ReferenceTypeUsage rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceTypeUsage();
+            ReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceTypeUsage();
             int i = 0;
-            for (Type actualTypeArgument : pt.getActualTypeArguments()) {
+            for (java.lang.reflect.Type actualTypeArgument : pt.getActualTypeArguments()) {
                 rawType = rawType.replaceParam(i, typeUsageFor(actualTypeArgument, typeSolver)).asReferenceTypeUsage();
                 i++;
             }
@@ -41,20 +44,20 @@ public class ReflectionFactory {
             Class c = (Class) type;
             if (c.isPrimitive()) {
                 if (c.getName().equals("void")) {
-                    return VoidTypeUsage.INSTANCE;
+                    return VoidType.INSTANCE;
                 } else {
-                    return PrimitiveTypeUsage.byName(c.getName());
+                    return PrimitiveType.byName(c.getName());
                 }
             } else if (c.isArray()) {
-                return new ArrayTypeUsage(typeUsageFor(c.getComponentType(), typeSolver));
+                return new ArrayType(typeUsageFor(c.getComponentType(), typeSolver));
             } else if (c.isInterface()) {
-                return new ReferenceTypeUsageImpl(new ReflectionInterfaceDeclaration(c, typeSolver), typeSolver);
+                return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(c, typeSolver), typeSolver);
             } else {
-                return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(c, typeSolver), typeSolver);
+                return new ReferenceTypeImpl(new ReflectionClassDeclaration(c, typeSolver), typeSolver);
             }
         } else if (type instanceof GenericArrayType) {
             GenericArrayType genericArrayType = (GenericArrayType) type;
-            return new ArrayTypeUsage(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
+            return new ArrayType(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
             if (wildcardType.getLowerBounds().length > 0 && wildcardType.getUpperBounds().length > 0) {
@@ -66,17 +69,29 @@ public class ReflectionFactory {
                 if (wildcardType.getLowerBounds().length > 1) {
                     throw new UnsupportedOperationException();
                 }
-                return WildcardUsage.superBound(typeUsageFor(wildcardType.getLowerBounds()[0], typeSolver));
+                return Wildcard.superBound(typeUsageFor(wildcardType.getLowerBounds()[0], typeSolver));
             }
             if (wildcardType.getUpperBounds().length > 0) {
                 if (wildcardType.getUpperBounds().length > 1) {
                     throw new UnsupportedOperationException();
                 }
-                return WildcardUsage.extendsBound(typeUsageFor(wildcardType.getUpperBounds()[0], typeSolver));
+                return Wildcard.extendsBound(typeUsageFor(wildcardType.getUpperBounds()[0], typeSolver));
             }
-            return WildcardUsage.UNBOUNDED;
+            return Wildcard.UNBOUNDED;
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName() + " " + type);
+        }
+    }
+
+    static AccessLevel modifiersToAccessLevel(final int modifiers) {
+        if (Modifier.isPublic(modifiers)) {
+            return AccessLevel.PUBLIC;
+        } else if (Modifier.isProtected(modifiers)) {
+            return AccessLevel.PROTECTED;
+        } else if (Modifier.isPrivate(modifiers)) {
+            return AccessLevel.PRIVATE;
+        } else {
+            return AccessLevel.PACKAGE_PROTECTED;
         }
     }
 }

@@ -10,7 +10,7 @@ import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import org.junit.Test;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 
@@ -38,7 +38,7 @@ public class EnumResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodCallExpr call = Navigator.findMethodCall(clazz, "put");
 
-        TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(call);
+        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(call);
         assertEquals("MyClass.Primitive", ref.describe());
     }
 

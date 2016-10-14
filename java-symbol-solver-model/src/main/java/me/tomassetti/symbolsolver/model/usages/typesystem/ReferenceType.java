@@ -1,12 +1,14 @@
-package me.tomassetti.symbolsolver.model.typesystem;
+package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.TypeParametersMap;
+import me.tomassetti.symbolsolver.model.usages.TypeParametrized;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +16,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
-//      and to get the Object type declaration
-
 /**
  * @author Federico Tomassetti
  */
-public abstract class ReferenceTypeUsage implements TypeUsage {
+public abstract class ReferenceType implements Type, TypeParametrized {
 
     protected TypeDeclaration typeDeclaration;
-    protected List<TypeUsage> typeParameters;
+    protected List<Type> typeParameters;
     protected TypeSolver typeSolver;
 
-    public ReferenceTypeUsage(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    public ReferenceType(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
         if (this.typeDeclaration.isTypeVariable()) {
             throw new IllegalArgumentException();
@@ -34,7 +33,7 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         this.typeSolver = typeSolver;
     }
 
-    public ReferenceTypeUsage(TypeDeclaration typeDeclaration, List<TypeUsage> typeParameters, TypeSolver typeSolver) {
+    public ReferenceType(TypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver) {
         if (typeSolver == null) {
             throw new IllegalArgumentException("typeSolver should not be null");
         }
@@ -46,11 +45,11 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         this.typeSolver = typeSolver;
     }
 
-    private static List<TypeUsage> deriveParams(TypeDeclaration typeDeclaration) {
-        return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeParameterUsage(tp)).collect(Collectors.toList());
+    private static List<Type> deriveParams(TypeDeclaration typeDeclaration) {
+        return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeParameter(tp)).collect(Collectors.toList());
     }
 
-    public ReferenceTypeUsage asReferenceTypeUsage() {
+    public ReferenceType asReferenceTypeUsage() {
         return this;
     }
 
@@ -59,7 +58,7 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ReferenceTypeUsage that = (ReferenceTypeUsage) o;
+        ReferenceType that = (ReferenceType) o;
 
         if (!typeDeclaration.equals(that.typeDeclaration)) return false;
         if (!typeParameters.equals(that.typeParameters)) return false;
@@ -97,28 +96,29 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
     public String toString() {
         return "ReferenceTypeUsage{" +
                 "declaration=" + typeDeclaration +
-                ", typeParameters=" + typeParameters +
+                ", typeParametersValues=" + typeParameters +
                 '}';
     }
 
-    protected abstract ReferenceTypeUsage create(TypeDeclaration typeDeclaration, TypeSolver typeSolver);
+    protected abstract ReferenceType create(TypeDeclaration typeDeclaration, TypeSolver typeSolver);
 
-    private Optional<TypeUsage> typeParamByName(String name) {
-        List<TypeUsage> typeParameters = this.typeParameters;
+    @Deprecated
+    private Optional<Type> typeParamByName(String name) {
+        List<Type> typeParameters = this.typeParameters;
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-        ReferenceTypeUsage objectRef = create(objectType, typeSolver);
+        ReferenceType objectRef = create(objectType, typeSolver);
         if (typeDeclaration.getTypeParameters().size() != typeParameters.size()) {
             if (!typeParameters.isEmpty()) {
                 throw new UnsupportedOperationException();
             }
-            // type parameters not specified, default to Object
+            // type typeParametersValues not specified, default to Object
             typeParameters = new ArrayList<>();
             for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
                 typeParameters.add(objectRef);
             }
         }
         int i = 0;
-        for (TypeParameter tp : typeDeclaration.getTypeParameters()) {
+        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
             if (tp.getName().equals(name)) {
                 return Optional.of(typeParameters.get(i));
             }
@@ -131,22 +131,23 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
      * The type of the field could be different from the one in the corresponding FieldDeclaration because
      * type variables would be solved.
      */
-    public Optional<TypeUsage> getFieldType(String name) {
+    public Optional<Type> getFieldType(String name) {
         if (!typeDeclaration.hasField(name)) {
             return Optional.empty();
         }
-        TypeUsage typeUsage = typeDeclaration.getField(name).getType();
-        typeUsage = replaceTypeParams(typeUsage);
-        return Optional.of(typeUsage);
+        Type type = typeDeclaration.getField(name).getType();
+        type = replaceTypeParams(type);
+        return Optional.of(type);
     }
 
     /**
      * Get the type associated with the type parameter with the given name.
      * It returns Optional.empty unless the type declaration declares a type parameter with the given name.
      */
-    public Optional<TypeUsage> getGenericParameterByName(String name) {
+    @Deprecated
+    public Optional<Type> getGenericParameterByName(String name) {
         int i = 0;
-        for (TypeParameter tp : typeDeclaration.getTypeParameters()) {
+        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
             if (tp.getName().equals(name)) {
                 return Optional.of(this.typeParameters.get(i));
             }
@@ -159,20 +160,20 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
      * Create a copy of the value with the type parameter changed.
      */
     @Deprecated
-    public TypeUsage replaceParam(int i, TypeUsage replaced) {
-        ArrayList<TypeUsage> typeParametersCorrected = new ArrayList<>(typeParameters);
+    public Type replaceParam(int i, Type replaced) {
+        ArrayList<Type> typeParametersCorrected = new ArrayList<>(typeParameters);
         typeParametersCorrected.set(i, replaced);
         return create(typeDeclaration, typeParametersCorrected, typeSolver);
     }
 
-    protected abstract ReferenceTypeUsage create(TypeDeclaration typeDeclaration, List<TypeUsage> typeParametersCorrected, TypeSolver typeSolver);
+    protected abstract ReferenceType create(TypeDeclaration typeDeclaration, List<Type> typeParametersCorrected, TypeSolver typeSolver);
 
     @Override
-    public TypeUsage replaceParam(String name, TypeUsage replaced) {
+    public Type replaceParam(String name, Type replaced) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
-        List<TypeUsage> newParams = typeParameters.stream().map((tp) -> tp.replaceParam(name, replaced)).collect(Collectors.toList());
+        List<Type> newParams = typeParameters.stream().map((tp) -> tp.replaceParam(name, replaced)).collect(Collectors.toList());
         if (typeParameters.equals(newParams)) {
             return this;
         } else {
@@ -183,7 +184,7 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
     /**
      * Return all ancestors, that means all superclasses and interfaces.
      * This list should always include Object (unless this is a reference to Object).
-     * The type parameters should be expressed in terms of this type parameters.
+     * The type typeParametersValues should be expressed in terms of this type typeParametersValues.
      *
      * For example, given:
      *
@@ -193,14 +194,14 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
      * a call to getAllAncestors on a reference to Bar having type parameter Boolean should include
      * Foo<Boolean, String>.
      */
-    public List<ReferenceTypeUsage> getAllAncestors() {
-        List<ReferenceTypeUsage> ancestors = typeDeclaration.getAllAncestors();
+    public List<ReferenceType> getAllAncestors() {
+        List<ReferenceType> ancestors = typeDeclaration.getAllAncestors();
 
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-        ReferenceTypeUsage objectRef = create(objectType, typeSolver);
+        ReferenceType objectRef = create(objectType, typeSolver);
 
         ancestors = ancestors.stream().map((a) -> replaceTypeParams(a).asReferenceTypeUsage()).collect(Collectors.toList());
-        // TODO replace type parameters
+        // TODO replace type typeParametersValues
 
         for (int i = 0; i < ancestors.size(); i++) {
             if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
@@ -212,28 +213,39 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         return ancestors;
     }
 
-    public TypeUsage replaceTypeParams(TypeUsage typeUsage) {
-        if (typeUsage.isTypeVariable()) {
-            TypeParameter typeParameter = typeUsage.asTypeParameter();
+    public List<ReferenceType> getAllInterfacesAncestors() {
+        return getAllAncestors().stream()
+                .filter(it -> it.getTypeDeclaration().isInterface())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Replace the type typeParametersValues present in the given type with the ones for which this type
+     * has a value.
+     */
+    @Deprecated
+    public Type replaceTypeParams(Type type) {
+        if (type.isTypeVariable()) {
+            TypeParameterDeclaration typeParameter = type.asTypeParameter();
             if (typeParameter.declaredOnClass()) {
-                Optional<TypeUsage> typeParam = typeParamByName(typeParameter.getName());
+                Optional<Type> typeParam = typeParamByName(typeParameter.getName());
                 if (typeParam.isPresent()) {
-                    typeUsage = typeParam.get();
+                    type = typeParam.get();
                 }
             }
         }
 
-        if (typeUsage.isReferenceType()) {
-            for (int i = 0; i < typeUsage.asReferenceTypeUsage().parameters().size(); i++) {
-                TypeUsage replaced = replaceTypeParams(typeUsage.asReferenceTypeUsage().parameters().get(i));
+        if (type.isReferenceType()) {
+            for (int i = 0; i < type.asReferenceTypeUsage().typeParametersValues().size(); i++) {
+                Type replaced = replaceTypeParams(type.asReferenceTypeUsage().typeParametersValues().get(i));
                 // Identity comparison on purpose
-                if (replaced != typeUsage.asReferenceTypeUsage().parameters().get(i)) {
-                    typeUsage = typeUsage.asReferenceTypeUsage().replaceParam(i, replaced);
+                if (replaced != type.asReferenceTypeUsage().typeParametersValues().get(i)) {
+                    type = type.asReferenceTypeUsage().replaceParam(i, replaced);
                 }
             }
         }
 
-        return typeUsage;
+        return type;
     }
 
     @Override
@@ -244,10 +256,10 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         } else {
             sb.append("<anonymous class>");
         }
-        if (!parameters().isEmpty()) {
+        if (!typeParametersValues().isEmpty()) {
             sb.append("<");
             boolean first = true;
-            for (TypeUsage param : parameters()) {
+            for (Type param : typeParametersValues()) {
                 if (first) {
                     first = false;
                 } else {
@@ -260,16 +272,17 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
         return sb.toString();
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         return typeDeclaration.solveMethod(name, parameterTypes);
     }
 
-    public List<TypeUsage> parameters() {
+    @Deprecated
+    public List<Type> typeParametersValues() {
         return typeParameters;
     }
 
     @Override
-    public abstract TypeParameter asTypeParameter();
+    public abstract TypeParameterDeclaration asTypeParameter();
 
     @Override
     public boolean isTypeVariable() {
@@ -280,13 +293,13 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
      * This method checks if ThisType t = new OtherType() would compile.
      */
     @Override
-    public abstract boolean isAssignableBy(TypeUsage other);
+    public abstract boolean isAssignableBy(Type other);
 
     public boolean hasName() {
         return typeDeclaration.hasName();
     }
 
-    protected boolean compareConsideringTypeParameters(ReferenceTypeUsage other) {
+    protected boolean compareConsideringTypeParameters(ReferenceType other) {
         if (other.equals(this)) {
             return true;
         }
@@ -294,15 +307,15 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
             if (this.isRawType() || other.isRawType()) {
                 return true;
             }
-            if (this.parameters().size() != other.parameters().size()) {
+            if (this.typeParametersValues().size() != other.typeParametersValues().size()) {
                 throw new IllegalStateException();
             }
-            for (int i = 0; i < parameters().size(); i++) {
-                TypeUsage thisParam = parameters().get(i);
-                TypeUsage otherParam = other.parameters().get(i);
+            for (int i = 0; i < typeParametersValues().size(); i++) {
+                Type thisParam = typeParametersValues().get(i);
+                Type otherParam = other.typeParametersValues().get(i);
                 if (!thisParam.equals(otherParam)) {
-                    if (thisParam instanceof WildcardUsage) {
-                        WildcardUsage thisParamAsWildcard = (WildcardUsage) thisParam;
+                    if (thisParam instanceof Wildcard) {
+                        Wildcard thisParamAsWildcard = (Wildcard) thisParam;
                         if (thisParamAsWildcard.isSuper() && otherParam.isAssignableBy(thisParamAsWildcard.getBoundedType())) {
                             // ok
                         } else if (thisParamAsWildcard.isExtends() && thisParamAsWildcard.getBoundedType().isAssignableBy(otherParam)) {
@@ -354,11 +367,17 @@ public abstract class ReferenceTypeUsage implements TypeUsage {
     			typeParameters.isEmpty());
     }
 
-    public List<Tuple2<TypeParameter, TypeUsage>> getTypeParametersMap() {
-        List<Tuple2<TypeParameter, TypeUsage>> typeParametersMap = new ArrayList<>();
+    @Deprecated
+    public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
+        List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
         for (int i=0;i<typeDeclaration.getTypeParameters().size(); i++) {
-            typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), parameters().get(i)));
+            typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
         }
         return typeParametersMap;
+    }
+
+    @Override
+    public TypeParametersMap typeParametersMap() {
+        throw new UnsupportedOperationException();
     }
 }

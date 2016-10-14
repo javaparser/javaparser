@@ -9,8 +9,8 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
-import me.tomassetti.symbolsolver.model.typesystem.PrimitiveTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.PrimitiveType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 
@@ -29,7 +29,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         if (wrappedNode.getFieldExpr().toString().equals(name)) {
             if (wrappedNode.getScope() instanceof ThisExpr) {
-                TypeUsage typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
+                Type typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
                 return typeOfThis.asReferenceTypeUsage().getTypeDeclaration().solveSymbol(name, typeSolver);
             }
         }
@@ -42,7 +42,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
         return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveMethod(name, parameterTypes, typeSolver);
     }
 
@@ -50,12 +50,12 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         Expression scope = wrappedNode.getScope();
         if (wrappedNode.getFieldExpr().toString().equals(name)) {
-            TypeUsage typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
+            Type typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             if (typeOfScope.isArray() && name.equals(ARRAY_LENGTH_FIELD_NAME)) {
-                return Optional.of(new Value(PrimitiveTypeUsage.INT, ARRAY_LENGTH_FIELD_NAME, false));
+                return Optional.of(new Value(PrimitiveType.INT, ARRAY_LENGTH_FIELD_NAME, false));
             }
             if (typeOfScope.isReferenceType()) {
-                Optional<TypeUsage> typeUsage = typeOfScope.asReferenceTypeUsage().getFieldType(name);
+                Optional<Type> typeUsage = typeOfScope.asReferenceTypeUsage().getFieldType(name);
                 if (typeUsage.isPresent()) {
                     return Optional.of(new Value(typeUsage.get(), name, true));
                 } else {

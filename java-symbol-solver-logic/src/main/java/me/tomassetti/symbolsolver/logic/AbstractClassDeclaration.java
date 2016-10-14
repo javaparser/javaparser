@@ -1,9 +1,8 @@
 package me.tomassetti.symbolsolver.logic;
 
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.InterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration implements ClassDeclaration {
 
-    protected abstract ReferenceTypeUsage object();
+    protected abstract ReferenceType object();
 
     @Override
     public boolean hasName() {
@@ -19,10 +18,10 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public final List<ReferenceTypeUsage> getAllSuperClasses() {
-        // TODO it could specify type parameters: they should appear
-        List<ReferenceTypeUsage> superclasses = new ArrayList<>();
-        ReferenceTypeUsage superClass = getSuperClass();
+    public final List<ReferenceType> getAllSuperClasses() {
+        // TODO it could specify type typeParametersValues: they should appear
+        List<ReferenceType> superclasses = new ArrayList<>();
+        ReferenceType superClass = getSuperClass();
         if (superClass != null) {
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllAncestors());
@@ -43,12 +42,12 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public final List<InterfaceDeclaration> getAllInterfaces() {
-        // TODO it could specify type parameters: they should appear
-        List<InterfaceDeclaration> interfaces = new ArrayList<>();
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
+    public final List<ReferenceType> getAllInterfaces() {
+        // TODO it could specify type typeParametersValues: they should appear
+        List<ReferenceType> interfaces = new ArrayList<>();
+        for (ReferenceType interfaceDeclaration : getInterfaces()) {
             interfaces.add(interfaceDeclaration);
-            interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended());
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
         }
         return interfaces;
     }

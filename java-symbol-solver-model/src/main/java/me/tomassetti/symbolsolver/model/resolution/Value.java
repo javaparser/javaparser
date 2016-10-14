@@ -1,46 +1,42 @@
 package me.tomassetti.symbolsolver.model.resolution;
 
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 /**
  * @author Federico Tomassetti
  */
 public class Value {
-    @Override
-    public String toString() {
-        return "Value{" +
-                "typeUsage=" + typeUsage +
-                ", name='" + name + '\'' +
-                ", field=" + field +
-                '}';
-    }
-
-    private TypeUsage typeUsage;
+    private Type type;
     private String name;
     private boolean field;
 
-    public Value(TypeUsage typeUsage, String name, boolean field) {
-        this.typeUsage = typeUsage;
+    public Value(Type type, String name, boolean field) {
+        this.type = type;
         this.name = name;
         this.field = field;
     }
 
     public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
-        TypeUsage typeUsage = decl.getType();
-        return new Value(typeUsage, decl.getName(), decl.isField());
+        Type type = decl.getType();
+        return new Value(type, decl.getName(), decl.isField());
+    }
+
+    @Override
+    public String toString() {
+        return "Value{" +
+                "typeUsage=" + type +
+                ", name='" + name + '\'' +
+                ", field=" + field +
+                '}';
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean isField() {
-        return field;
-    }
-
-    public TypeUsage getUsage() {
-        return typeUsage;
+    public Type getUsage() {
+        return type;
     }
 
 }

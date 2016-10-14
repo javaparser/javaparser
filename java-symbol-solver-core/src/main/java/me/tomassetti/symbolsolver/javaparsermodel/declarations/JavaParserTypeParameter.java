@@ -8,13 +8,13 @@ import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameter {
+public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameterDeclaration {
 
     private com.github.javaparser.ast.TypeParameter wrappedNode;
     private TypeSolver typeSolver;
@@ -39,7 +39,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         return getContext().solveMethod(name, parameterTypes, typeSolver());
     }
 
@@ -64,7 +64,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
@@ -85,17 +85,13 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public String qualifiedName() {
         if (this.declaredOnClass()) {
-            return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
+            throw new UnsupportedOperationException();
+            //return String.format("%s.%s", getQNameOfDeclaringClass(), getName());
         } else {
             com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
             MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
             return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
         }
-    }
-
-    @Override
-    public String getQNameOfDeclaringClass() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -107,8 +103,8 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     private Bound toBound(ClassOrInterfaceType classOrInterfaceType, TypeSolver typeSolver) {
-        TypeUsage typeUsage = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
-        Bound bound = Bound.extendsBound(typeUsage);
+        Type type = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
+        Bound bound = Bound.extendsBound(type);
         return bound;
     }
 
@@ -117,17 +113,16 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         return getName();
     }
 
-    @Override
     public Context getContext() {
         throw new UnsupportedOperationException();
     }
 
-    public TypeUsage getUsage(Node node) {
+    public Type getUsage(Node node) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
+    public boolean isAssignableBy(Type type) {
         throw new UnsupportedOperationException();
     }
 
@@ -157,7 +152,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAncestors() {
+    public List<ReferenceType> getAncestors() {
         throw new UnsupportedOperationException();
     }
 
@@ -172,7 +167,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<TypeParameter> getTypeParameters() {
+    public List<TypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
     }
 

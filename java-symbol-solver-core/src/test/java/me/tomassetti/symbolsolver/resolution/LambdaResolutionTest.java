@@ -7,7 +7,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = methodCallExpr.getArgs().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
-        TypeUsage type = javaParserFacade.getType(expression);
+        Type type = javaParserFacade.getType(expression);
         assertEquals("java.util.function.Function<? super java.lang.String, ? extends java.lang.String>", type.describe());
     }
 
@@ -39,7 +39,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = returnStmt.getExpr();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
-        TypeUsage type = javaParserFacade.getType(expression);
+        Type type = javaParserFacade.getType(expression);
         assertEquals("java.util.stream.Stream<java.lang.String>", type.describe());
     }
 
@@ -54,7 +54,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = methodCallExpr.getArgs().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
-        TypeUsage type = javaParserFacade.getType(expression);
+        Type type = javaParserFacade.getType(expression);
         assertEquals("java.util.stream.Collector<T, ? extends java.lang.Object, java.util.List<T>>", type.describe());
     }
 
@@ -67,7 +67,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = returnStmt.getExpr();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
-        TypeUsage type = javaParserFacade.getType(expression);
+        Type type = javaParserFacade.getType(expression);
         assertEquals("java.util.List<java.lang.String>", type.describe());
     }
 

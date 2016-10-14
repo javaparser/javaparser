@@ -1,9 +1,9 @@
 package me.tomassetti.symbolsolver.javaparsermodel;
 
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 
 /**
- * Created by federico on 30/07/15.
+ * @author Federico Tomassetti
  */
 public class UnsolvedTypeException extends RuntimeException {
 

@@ -3,16 +3,13 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.TypeParameter;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +28,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
@@ -39,7 +36,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         return getName();
     }
 
-    @Override
     public Context getContext() {
         throw new UnsupportedOperationException();
     }
@@ -52,7 +48,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         throw new UnsupportedOperationException();
     }
 
@@ -61,16 +57,16 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         return typeSolver;
     }
 
-    public TypeUsage getUsage(Node node) {
+    public Type getUsage(Node node) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
-        if (typeUsage.isTypeVariable()) {
-            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + typeUsage.describe());
+    public boolean isAssignableBy(Type type) {
+        if (type.isTypeVariable()) {
+            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + type.describe());
         } else {
-            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + typeUsage);
+            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + type);
         }
     }
 
@@ -105,7 +101,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAncestors() {
+    public List<ReferenceType> getAncestors() {
         throw new UnsupportedOperationException();
     }
 
@@ -130,11 +126,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
     public boolean isType() {
         return true;
     }
@@ -155,11 +146,11 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public List<me.tomassetti.symbolsolver.model.resolution.TypeParameter> getTypeParameters() {
+    public List<TypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
     }
 
-    public me.tomassetti.symbolsolver.model.resolution.TypeParameter asTypeParameter() {
+    public TypeParameterDeclaration asTypeParameter() {
         return new JavaParserTypeParameter(this.wrappedNode, typeSolver);
     }
 

@@ -15,7 +15,7 @@ import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -33,7 +33,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt)method.getBody().getStmts().get(0);
         Expression expression = returnStmt.getExpr();
 
-        TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
     
@@ -75,7 +75,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt)method.getBody().getStmts().get(0);
         Expression expression = returnStmt.getExpr();
 
-        TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
     
@@ -87,7 +87,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt)method.getBody().getStmts().get(0);
         Expression expression = returnStmt.getExpr();
 
-        TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 }

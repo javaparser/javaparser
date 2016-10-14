@@ -13,7 +13,7 @@ import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.resolution.AbstractResolutionTest;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +27,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         VariableDeclarator field = Navigator.demandField(clazz, "PUBLIC");
 
         TypeSolver typeSolver = new JreTypeSolver();
-        TypeUsage ref = JavaParserFacade.get(typeSolver).getType(field);
+        Type ref = JavaParserFacade.get(typeSolver).getType(field);
         assertEquals("int", ref.describe());
     }
 
@@ -38,7 +38,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         VariableDeclarator field = Navigator.demandField(clazz, "PUBLIC");
 
         TypeSolver typeSolver = new JreTypeSolver();
-        TypeUsage ref = JavaParserFacade.get(typeSolver).getType(field.getInit());
+        Type ref = JavaParserFacade.get(typeSolver).getType(field.getInit());
         assertEquals("int", ref.describe());
     }
 
@@ -51,7 +51,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         Expression expression = returnStmt.getExpr();
 
         TypeSolver typeSolver = new JreTypeSolver();
-        TypeUsage ref = JavaParserFacade.get(typeSolver).getType(expression);
+        Type ref = JavaParserFacade.get(typeSolver).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 
@@ -63,7 +63,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         MethodCallExpr expression = Navigator.findMethodCall(method, "next");
 
         TypeSolver typeSolver = new JreTypeSolver();
-        TypeUsage ref = JavaParserFacade.get(typeSolver).getType(expression);
+        Type ref = JavaParserFacade.get(typeSolver).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 

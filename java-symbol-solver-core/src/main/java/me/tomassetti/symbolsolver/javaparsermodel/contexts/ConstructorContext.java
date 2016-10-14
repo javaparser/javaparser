@@ -3,8 +3,8 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.typesystem.TypeParameterUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
@@ -37,10 +37,10 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
     }
 
     @Override
-    public Optional<TypeUsage> solveGenericType(String name, TypeSolver typeSolver) {
+    public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)) {
-                return Optional.of(new TypeParameterUsage(new JavaParserTypeParameter(tp, typeSolver)));
+                return Optional.of(new TypeParameter(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return super.solveGenericType(name, typeSolver);
@@ -75,7 +75,7 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
 
     @Override
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> solveMethod(
-            String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver) {
+            String name, List<Type> parameterTypes, TypeSolver typeSolver) {
         return getParent().solveMethod(name, parameterTypes, typeSolver);
     }
 

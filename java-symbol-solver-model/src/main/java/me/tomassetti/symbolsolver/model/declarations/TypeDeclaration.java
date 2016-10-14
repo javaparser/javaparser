@@ -1,15 +1,13 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -18,20 +16,13 @@ import java.util.Set;
  *
  * @author Federico Tomassetti
  */
-public interface TypeDeclaration extends Declaration, TypeParametrized {
+public interface TypeDeclaration extends Declaration, TypeParametrizable {
+
     String getQualifiedName();
 
-    @Deprecated
-    Context getContext();
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
 
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes);
-
-    @Deprecated
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
-        return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
-    }
-
-    boolean isAssignableBy(TypeUsage typeUsage);
+    boolean isAssignableBy(Type type);
 
     default boolean canBeAssignedTo(TypeDeclaration other) {
         return other.isAssignableBy(this);
@@ -56,22 +47,22 @@ public interface TypeDeclaration extends Declaration, TypeParametrized {
 
     boolean isAssignableBy(TypeDeclaration other);
 
-    SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver);
+    SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 
     /**
      * Try to solve a symbol just in the declaration, it does not delegate to the container.
      *
-     * @param substring
+     * @param name
      * @param typeSolver
      * @return
      */
-    SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver);
+    SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
 
-    List<ReferenceTypeUsage> getAncestors();
+    List<ReferenceType> getAncestors();
     
-    default List<ReferenceTypeUsage> getAllAncestors() {
-    	List<ReferenceTypeUsage> ancestors = new ArrayList<>();
-    	for (ReferenceTypeUsage ancestor : getAncestors()) {
+    default List<ReferenceType> getAllAncestors() {
+    	List<ReferenceType> ancestors = new ArrayList<>();
+    	for (ReferenceType ancestor : getAncestors()) {
     		ancestors.add(ancestor);
     		ancestors.addAll(ancestor.getAllAncestors());
     	}

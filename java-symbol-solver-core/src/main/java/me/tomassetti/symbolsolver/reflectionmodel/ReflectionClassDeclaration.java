@@ -1,20 +1,20 @@
 package me.tomassetti.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
-import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
-import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
-import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.Context;
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeParameter;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.NullTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
-import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypeUsagePlaceholder;
+import me.tomassetti.symbolsolver.core.resolution.Context;
+import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.typesystem.NullType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -28,8 +28,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     private TypeSolver typeSolver;
 
     @Override
-    protected ReferenceTypeUsage object() {
-        return new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    protected ReferenceType object() {
+        return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
     }
 
     @Override
@@ -63,18 +63,18 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<ReferenceTypeUsage> getAncestors() {
-        List<ReferenceTypeUsage> ancestors = new LinkedList<>();
+    public List<ReferenceType> getAncestors() {
+        List<ReferenceType> ancestors = new LinkedList<>();
         if (getSuperClass() != null) {
-            ReferenceTypeUsageImpl superClass = getSuperClass();
+            ReferenceTypeImpl superClass = getSuperClass();
             ancestors.add(superClass);
         } else {
-            ReferenceTypeUsageImpl object = new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+            ReferenceTypeImpl object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
             ancestors.add(object);
         }
-        ancestors.addAll(getInterfaces().stream().map((i) -> new ReferenceTypeUsageImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeUsageImpl>toList()));
+        ancestors.addAll(getInterfaces());
         for (int i = 0; i < ancestors.size(); i++) {
-            ReferenceTypeUsage ancestor = ancestors.get(i);
+            ReferenceType ancestor = ancestors.get(i);
             if (ancestor.hasName() && ancestor.getQualifiedName().equals(Object.class.getCanonicalName())) {
                 ancestors.remove(i);
                 i--;
@@ -105,13 +105,12 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return clazz.getCanonicalName();
     }
 
-    @Override
     public Context getContext() {
         return new ClassOrInterfaceDeclarationContext(clazz);
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<TypeUsage> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
@@ -125,7 +124,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
+        for (ReferenceType interfaceDeclaration : getInterfaces()) {
             SymbolReference<MethodDeclaration> ref = interfaceDeclaration.solveMethod(name, parameterTypes);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
@@ -141,34 +140,33 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 '}';
     }
 
-    public TypeUsage getUsage(Node node) {
+    public Type getUsage(Node node) {
 
-        return new ReferenceTypeUsageImpl(this, typeSolver);
+        return new ReferenceTypeImpl(this, typeSolver);
     }
 
-    @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<TypeUsage> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<TypeUsage> typeParameterValues) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
-            MethodUsage methodUsage = new MethodUsage(methodDeclaration, typeSolver);
+            MethodUsage methodUsage = new MethodUsage(methodDeclaration);
             for (int i = 0; i < getTypeParameters().size(); i++) {
                 String nameToReplace = getTypeParameters().get(i).getName();
-                TypeUsage newValue = typeParameterValues.get(i);
-                methodUsage = methodUsage.replaceNameParam(nameToReplace, newValue);
+                Type newValue = typeParameterValues.get(i);
+                methodUsage = methodUsage.replaceTypeParameterByName(nameToReplace, newValue);
             }
             methods.add(methodUsage);
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-            Optional<MethodUsage> ref = superClass.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(superClass, name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
         }
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
-            Optional<MethodUsage> ref = interfaceDeclaration.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+        for (ReferenceType interfaceDeclaration : getInterfaces()) {
+            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(interfaceDeclaration.getTypeDeclaration(), name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
@@ -179,7 +177,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean canBeAssignedTo(TypeDeclaration other) {
-        if (other instanceof LambdaArgumentTypeUsagePlaceholder) {
+        if (other instanceof LambdaArgumentTypePlaceholder) {
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
         }
@@ -200,25 +198,25 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeUsage typeUsage) {
-        if (typeUsage instanceof NullTypeUsage) {
+    public boolean isAssignableBy(Type type) {
+        if (type instanceof NullType) {
             return true;
         }
-        if (typeUsage instanceof LambdaArgumentTypeUsagePlaceholder) {
+        if (type instanceof LambdaArgumentTypePlaceholder) {
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
         }
-        if (typeUsage.isArray()) {
+        if (type.isArray()) {
             return false;
         }
-        if (typeUsage.isPrimitive()) {
+        if (type.isPrimitive()) {
             return false;
         }
-        if (typeUsage.describe().equals(getQualifiedName())) {
+        if (type.describe().equals(getQualifiedName())) {
             return true;
         }
-        if (typeUsage instanceof ReferenceTypeUsageImpl) {
-            ReferenceTypeUsageImpl otherTypeDeclaration = (ReferenceTypeUsageImpl) typeUsage;
+        if (type instanceof ReferenceTypeImpl) {
+            ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this);
         }
 
@@ -237,9 +235,10 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 return new ReflectionFieldDeclaration(field, typeSolver);
             }
         }
-        for (ReferenceTypeUsage ancestor : getAllAncestors()) {
+        for (ReferenceType ancestor : getAllAncestors()) {
             if (ancestor.getTypeDeclaration().hasField(name)) {
-                return ancestor.getTypeDeclaration().getField(name).replaceType(ancestor.getFieldType(name).get());
+                ReflectionFieldDeclaration reflectionFieldDeclaration = (ReflectionFieldDeclaration)ancestor.getTypeDeclaration().getField(name);
+                return reflectionFieldDeclaration.replaceType(ancestor.getFieldType(name).get());
             }
         }
         throw new UnsolvedSymbolException("Field in " + this, name);
@@ -251,7 +250,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         for (Field field : clazz.getDeclaredFields()) {
             fields.add(new ReflectionFieldDeclaration(field, typeSolver));
         }
-        for (ReferenceTypeUsage ancestor : getAllAncestors()) {
+        for (ReferenceType ancestor : getAllAncestors()) {
             fields.addAll(ancestor.getTypeDeclaration().getAllFields());
         }
         return fields;
@@ -307,7 +306,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 return true;
             }
         }
-        ReferenceTypeUsageImpl superclass = getSuperClass();
+        ReferenceTypeImpl superclass = getSuperClass();
         if (superclass == null) {
             return false;
         } else {
@@ -317,7 +316,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeUsageImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
@@ -336,11 +335,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
     public boolean isType() {
         return true;
     }
@@ -351,27 +345,27 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeUsageImpl getSuperClass() {
+    public ReferenceTypeImpl getSuperClass() {
         if (clazz.getGenericSuperclass() == null) {
             return null;
         }
-        Type superType = clazz.getGenericSuperclass();
+        java.lang.reflect.Type superType = clazz.getGenericSuperclass();
         if (superType instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) superType;
-            List<TypeUsage> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
+            List<Type> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                     .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                     .collect(Collectors.toList());
-            return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver);
+            return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver);
         }
-        return new ReferenceTypeUsageImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
+        return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
     }
 
     @Override
-    public List<InterfaceDeclaration> getInterfaces() {
-        List<InterfaceDeclaration> interfaces = new ArrayList<>();
+    public List<ReferenceType> getInterfaces() {
+        List<ReferenceType> interfaces = new ArrayList<>();
         // TODO use genericInterfaces
         for (Class i : clazz.getInterfaces()) {
-            interfaces.add(new ReflectionInterfaceDeclaration(i, typeSolver));
+            interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
         }
         return interfaces;
     }
@@ -382,8 +376,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<TypeParameter> getTypeParameters() {
-        List<TypeParameter> params = new ArrayList<>();
+    public List<TypeParameterDeclaration> getTypeParameters() {
+        List<TypeParameterDeclaration> params = new ArrayList<>();
         for (TypeVariable tv : this.clazz.getTypeParameters()) {
             params.add(new ReflectionTypeParameter(tv, true));
         }
@@ -437,5 +431,10 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             if (compareResult != 0) return compareResult;
             return 0;
         }
+    }
+
+    @Override
+    public AccessLevel accessLevel() {
+        return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
 }

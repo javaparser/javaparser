@@ -3,7 +3,6 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 import com.google.common.collect.ImmutableSet;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsage;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
@@ -38,7 +37,7 @@ public class ReflectionClassDeclarationTest {
         ClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
 
         assertEquals(Object.class.getCanonicalName(), foo.getSuperClass().getQualifiedName());
-        assertEquals(Collections.emptyList(), foo.getSuperClass().parameters());
+        assertEquals(Collections.emptyList(), foo.getSuperClass().typeParametersValues());
     }
 
     @Test
@@ -51,7 +50,7 @@ public class ReflectionClassDeclarationTest {
         ClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
 
         assertEquals("Bar", foo.getSuperClass().getTypeDeclaration().getName());
-        assertEquals(Collections.emptyList(), foo.getSuperClass().parameters());
+        assertEquals(Collections.emptyList(), foo.getSuperClass().typeParametersValues());
     }
 
     @Test
@@ -65,8 +64,8 @@ public class ReflectionClassDeclarationTest {
         ClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
         assertEquals("Foo", bar.getSuperClass().getTypeDeclaration().getName());
-        assertEquals(1, bar.getSuperClass().parameters().size());
-        assertEquals(String.class.getCanonicalName(), bar.getSuperClass().parameters().get(0).asReferenceTypeUsage().getQualifiedName());
+        assertEquals(1, bar.getSuperClass().typeParametersValues().size());
+        assertEquals(String.class.getCanonicalName(), bar.getSuperClass().typeParametersValues().get(0).asReferenceTypeUsage().getQualifiedName());
     }
 
     @Test
@@ -80,12 +79,12 @@ public class ReflectionClassDeclarationTest {
         ClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
         assertEquals("Foo", bar.getSuperClass().getTypeDeclaration().getName());
-        assertEquals(1, bar.getSuperClass().parameters().size());
-        assertEquals(true, bar.getSuperClass().parameters().get(0).isTypeVariable());
-        assertEquals("E", bar.getSuperClass().parameters().get(0).asTypeParameter().getName());
-        assertEquals(true, bar.getSuperClass().parameters().get(0).asTypeParameter().declaredOnClass());
-        assertEquals(false, bar.getSuperClass().parameters().get(0).asTypeParameter().declaredOnMethod());
-        assertTrue(bar.getSuperClass().parameters().get(0).asTypeParameter().getQNameOfDeclaringClass().endsWith("Bar"));
+        assertEquals(1, bar.getSuperClass().typeParametersValues().size());
+        assertEquals(true, bar.getSuperClass().typeParametersValues().get(0).isTypeVariable());
+        assertEquals("E", bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().getName());
+        assertEquals(true, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnClass());
+        assertEquals(false, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnMethod());
+        assertTrue(bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().qualifiedName().endsWith("Bar.E"));
     }
 
     @Test
@@ -126,7 +125,7 @@ public class ReflectionClassDeclarationTest {
         TypeSolver typeResolver = new JreTypeSolver();
         TypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<MethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> !m.isPrivate() && !m.isPackageProtected())
+                .filter(m -> m.accessLevel() != AccessLevel.PRIVATE && m.accessLevel() != AccessLevel.PACKAGE_PROTECTED)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
         assertEquals(67, methods.size());

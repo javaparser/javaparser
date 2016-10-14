@@ -2,10 +2,11 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.model.typesystem.ReferenceTypeUsageImpl;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 public class JavaParserFieldDeclaration implements FieldDeclaration {
@@ -36,10 +37,10 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public TypeUsage getType() {
+    public Type getType() {
         if (enumConstantDeclaration != null) {
             com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) enumConstantDeclaration.getParentNode();
-            return new ReferenceTypeUsageImpl(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
+            return new ReferenceTypeImpl(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
         } else {
             return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
         }
@@ -69,4 +70,8 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
 		return wrappedNode;
 	}
 
+    @Override
+    public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
+    }
 }

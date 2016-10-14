@@ -9,8 +9,8 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import me.tomassetti.symbolsolver.model.invokations.MethodUsage;
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -25,7 +25,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt)method.getBody().getStmts().get(0);
         Expression expression = returnStmt.getExpr();
 
-        TypeUsage ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
     

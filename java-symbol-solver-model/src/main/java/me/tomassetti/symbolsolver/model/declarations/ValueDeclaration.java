@@ -1,6 +1,6 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 /**
  * Declaration of a value.
@@ -9,6 +9,6 @@ import me.tomassetti.symbolsolver.model.typesystem.TypeUsage;
  */
 public interface ValueDeclaration extends Declaration {
 
-    TypeUsage getType();
+    Type getType();
 
 }
