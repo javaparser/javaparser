@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.logic;
 
 import me.tomassetti.symbolsolver.model.declarations.ClassDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.InterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
 
@@ -43,12 +42,12 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public final List<InterfaceDeclaration> getAllInterfaces() {
+    public final List<ReferenceType> getAllInterfaces() {
         // TODO it could specify type parameters: they should appear
-        List<InterfaceDeclaration> interfaces = new ArrayList<>();
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
+        List<ReferenceType> interfaces = new ArrayList<>();
+        for (ReferenceType interfaceDeclaration : getInterfaces()) {
             interfaces.add(interfaceDeclaration);
-            interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended());
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
         }
         return interfaces;
     }

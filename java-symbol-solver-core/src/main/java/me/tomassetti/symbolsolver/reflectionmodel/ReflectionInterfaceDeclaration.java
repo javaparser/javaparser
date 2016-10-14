@@ -289,10 +289,10 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public List<InterfaceDeclaration> getInterfacesExtended() {
-        List<InterfaceDeclaration> res = new ArrayList<>();
+    public List<ReferenceType> getInterfacesExtended() {
+        List<ReferenceType> res = new ArrayList<>();
         for (Class i : clazz.getInterfaces()) {
-            res.add(new ReflectionInterfaceDeclaration(i, typeSolver));
+            res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
         }
         return res;
     }

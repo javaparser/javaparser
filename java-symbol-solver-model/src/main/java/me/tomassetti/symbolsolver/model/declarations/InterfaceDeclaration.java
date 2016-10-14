@@ -1,5 +1,7 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
+import me.tomassetti.symbolsolver.model.typesystem.ReferenceType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +20,16 @@ public interface InterfaceDeclaration extends TypeDeclaration, TypeParametrizabl
     /**
      * Return the list of interfaces extended directly by this one.
      */
-    List<InterfaceDeclaration> getInterfacesExtended();
+    List<ReferenceType> getInterfacesExtended();
 
     /**
      * Return the list of interfaces extended directly or indirectly by this one.
      */
-    default List<InterfaceDeclaration> getAllInterfacesExtended() {
-        List<InterfaceDeclaration> interfaces = new ArrayList<>();
-        for (InterfaceDeclaration interfaceDeclaration : getInterfacesExtended()) {
+    default List<ReferenceType> getAllInterfacesExtended() {
+        List<ReferenceType> interfaces = new ArrayList<>();
+        for (ReferenceType interfaceDeclaration : getInterfacesExtended()) {
             interfaces.add(interfaceDeclaration);
-            interfaces.addAll(interfaceDeclaration.getAllInterfacesExtended());
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
         }
         return interfaces;
     }
