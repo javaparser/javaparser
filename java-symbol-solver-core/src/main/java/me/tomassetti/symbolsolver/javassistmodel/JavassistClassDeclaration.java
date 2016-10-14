@@ -218,7 +218,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         if (getSuperClass() != null) {
             ancestors.add(getSuperClass());
         }
-        ancestors.addAll(getInterfaces().stream().map(i -> new ReferenceTypeImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeImpl>toList()));
+        ancestors.addAll(getInterfaces());
         return ancestors;
     }
 
@@ -358,10 +358,11 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<InterfaceDeclaration> getInterfaces() {
+    public List<ReferenceType> getInterfaces() {
         try {
             return Arrays.stream(ctClass.getInterfaces())
                     .map(i -> new JavassistInterfaceDeclaration(i, typeSolver()))
+                    .map(i -> new ReferenceTypeImpl(i, typeSolver()))
                     .collect(Collectors.toList());
         } catch (NotFoundException e) {
             throw new RuntimeException(e);

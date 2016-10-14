@@ -81,7 +81,7 @@ public class SourceFileInfoExtractor {
             for (ReferenceType sc : typeDeclaration.asClass().getAllSuperClasses()) {
                 out.println("  superclass: " + sc.getQualifiedName());
             }
-            for (TypeDeclaration sc : typeDeclaration.asClass().getAllInterfaces()) {
+            for (ReferenceType sc : typeDeclaration.asClass().getAllInterfaces()) {
                 out.println("  interface: " + sc.getQualifiedName());
             }
         }

@@ -72,7 +72,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             ReferenceTypeImpl object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
             ancestors.add(object);
         }
-        ancestors.addAll(getInterfaces().stream().map((i) -> new ReferenceTypeImpl(i, typeSolver)).collect(Collectors.<ReferenceTypeImpl>toList()));
+        ancestors.addAll(getInterfaces());
         for (int i = 0; i < ancestors.size(); i++) {
             ReferenceType ancestor = ancestors.get(i);
             if (ancestor.hasName() && ancestor.getQualifiedName().equals(Object.class.getCanonicalName())) {
@@ -124,7 +124,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
+        for (ReferenceType interfaceDeclaration : getInterfaces()) {
             SymbolReference<MethodDeclaration> ref = interfaceDeclaration.solveMethod(name, parameterTypes);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
@@ -165,8 +165,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 methods.add(ref.get());
             }
         }
-        for (InterfaceDeclaration interfaceDeclaration : getInterfaces()) {
-            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(interfaceDeclaration, name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+        for (ReferenceType interfaceDeclaration : getInterfaces()) {
+            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(interfaceDeclaration.getTypeDeclaration(), name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
@@ -361,11 +361,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<InterfaceDeclaration> getInterfaces() {
-        List<InterfaceDeclaration> interfaces = new ArrayList<>();
+    public List<ReferenceType> getInterfaces() {
+        List<ReferenceType> interfaces = new ArrayList<>();
         // TODO use genericInterfaces
         for (Class i : clazz.getInterfaces()) {
-            interfaces.add(new ReflectionInterfaceDeclaration(i, typeSolver));
+            interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
         }
         return interfaces;
     }

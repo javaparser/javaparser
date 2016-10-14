@@ -211,6 +211,12 @@ public abstract class ReferenceType implements Type {
         return ancestors;
     }
 
+    public List<ReferenceType> getAllInterfacesAncestors() {
+        return getAllAncestors().stream()
+                .filter(it -> it.getTypeDeclaration().isInterface())
+                .collect(Collectors.toList());
+    }
+
     public Type replaceTypeParams(Type type) {
         if (type.isTypeVariable()) {
             me.tomassetti.symbolsolver.model.resolution.TypeParameter typeParameter = type.asTypeParameter();

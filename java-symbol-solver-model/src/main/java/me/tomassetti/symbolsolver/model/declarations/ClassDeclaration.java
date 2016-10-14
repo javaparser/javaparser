@@ -33,7 +33,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable {
      * It does not include the interfaces implemented by superclasses or extended
      * by the interfaces implemented.
      */
-    List<InterfaceDeclaration> getInterfaces();
+    List<ReferenceType> getInterfaces();
 
     /**
      * Get all superclasses, with all the type parameters expressed as functions of the type parameters of this
@@ -45,6 +45,6 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable {
      * Get all interfaces, with all the type parameters expressed as functions of the type parameters of this
      * declaration.
      */
-    List<InterfaceDeclaration> getAllInterfaces();
+    List<ReferenceType> getAllInterfaces();
 
 }
