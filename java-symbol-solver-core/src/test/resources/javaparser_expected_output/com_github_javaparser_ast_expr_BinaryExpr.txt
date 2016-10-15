@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 64) setLeft(left) ==> void
   Line 65) setRight(right) ==> void
   Line 66) setOperator(op) ==> void

@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
   interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
   Line 55) setName(name) ==> void
   Line 56) setTypeBound(typeBound) ==> void
   Line 61) beginLine ==> int

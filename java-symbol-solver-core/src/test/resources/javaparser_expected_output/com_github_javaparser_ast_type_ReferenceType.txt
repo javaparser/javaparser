@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.type.Type
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 45) setType(type) ==> void
   Line 49) setType(type) ==> void
   Line 50) setArrayCount(arrayCount) ==> void

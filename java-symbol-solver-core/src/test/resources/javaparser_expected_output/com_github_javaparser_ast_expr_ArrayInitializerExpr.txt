@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 40) setValues(values) ==> void
   Line 44) beginLine ==> int
   Line 44) beginColumn ==> int

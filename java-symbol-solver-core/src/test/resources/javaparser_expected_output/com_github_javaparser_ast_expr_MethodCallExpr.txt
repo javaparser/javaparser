@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 47) setScope(scope) ==> void
   Line 48) setName(name) ==> void
   Line 52) setScope(scope) ==> void

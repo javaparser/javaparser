@@ -49,6 +49,10 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
             interfaces.add(interfaceDeclaration);
             interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
         }
+        ReferenceType superClass = this.getSuperClass();
+        if (superClass != null) {
+            interfaces.addAll(superClass.getAllInterfacesAncestors());
+        }
         return interfaces;
     }
 

@@ -2,6 +2,7 @@
 [ Class com.github.javaparser.ast.body.BaseParameter ]
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 40) setId(id) ==> void
   Line 44) setModifiers(modifiers) ==> void
   Line 45) setId(id) ==> void

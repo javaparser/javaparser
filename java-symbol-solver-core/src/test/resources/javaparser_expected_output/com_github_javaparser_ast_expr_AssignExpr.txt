@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 57) setTarget(target) ==> void
   Line 58) setValue(value) ==> void
   Line 59) setOperator(op) ==> void

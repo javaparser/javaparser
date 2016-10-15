@@ -4,6 +4,8 @@
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
   interface: com.github.javaparser.ast.DocumentableNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
   Line 49) setModifiers(modifiers) ==> void
   Line 50) setType(type) ==> void
   Line 51) List<VariableDeclarator> aux = new ArrayList<VariableDeclarator>() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>

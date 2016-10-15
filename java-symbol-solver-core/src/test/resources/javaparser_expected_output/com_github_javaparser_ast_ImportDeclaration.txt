@@ -2,6 +2,7 @@
 [ Class com.github.javaparser.ast.ImportDeclaration ]
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 53) setAsterisk(isAsterisk) ==> void
   Line 54) setName(name) ==> void
   Line 55) setStatic(isStatic) ==> void

@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.type.Type
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 47) new ClassOrInterfaceType(nameOfBoxedType) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
   Line 51) this.nameOfBoxedType = nameOfBoxedType ==> java.lang.String
   Line 55) new HashMap<String, Primitive>() ==> java.util.HashMap<java.lang.String, com.github.javaparser.ast.type.PrimitiveType.Primitive>

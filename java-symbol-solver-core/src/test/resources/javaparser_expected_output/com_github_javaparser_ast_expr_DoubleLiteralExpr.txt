@@ -5,6 +5,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 36) value ==> java.lang.String
   Line 41) beginLine ==> int
   Line 41) beginColumn ==> int

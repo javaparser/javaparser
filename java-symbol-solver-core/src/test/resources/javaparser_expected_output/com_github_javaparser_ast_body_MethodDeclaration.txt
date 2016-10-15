@@ -6,6 +6,8 @@
   interface: com.github.javaparser.ast.DocumentableNode
   interface: com.github.javaparser.ast.body.WithDeclaration
   interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
   Line 60) false ==> boolean
   Line 66) setModifiers(modifiers) ==> void
   Line 67) setType(type) ==> void

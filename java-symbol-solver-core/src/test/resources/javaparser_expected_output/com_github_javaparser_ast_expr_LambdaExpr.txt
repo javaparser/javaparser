@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 52) beginLine ==> int
   Line 52) beginColumn ==> int
   Line 52) endLine ==> int
