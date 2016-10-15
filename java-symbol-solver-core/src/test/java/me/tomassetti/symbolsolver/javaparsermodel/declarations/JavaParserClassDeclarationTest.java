@@ -7,9 +7,13 @@ import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.ConstructorDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.PrimitiveType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionFactory;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -701,6 +705,51 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     ///
 
     //SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
+    @Test
+    public void testSolveMethodExisting() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        SymbolReference<MethodDeclaration> res = null;
+
+        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of());
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isStatic()", res.getCorrespondingDeclaration().getQualifiedSignature());
+
+        res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolverNewCode)));
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)", res.getCorrespondingDeclaration().getQualifiedSignature());
+
+        res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(String.class, typeSolverNewCode)));
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.String)", res.getCorrespondingDeclaration().getQualifiedSignature());
+
+        // This is solved because it is raw
+        res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode)));
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)", res.getCorrespondingDeclaration().getQualifiedSignature());
+    }
+
+    @Test
+    public void testSolveMethodNotExisting() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        SymbolReference<MethodDeclaration> res = null;
+
+        res = constructorDeclaration.solveMethod("unexistingMethod", ImmutableList.of());
+        assertEquals(false, res.isSolved());
+
+        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(PrimitiveType.BOOLEAN));
+        assertEquals(false, res.isSolved());
+    }
+
+    @Test
+    public void testSolveMethodNotExistingBecauseOfTypeParameters() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        SymbolReference<MethodDeclaration> res = null;
+
+        ReferenceType stringType = (ReferenceType) ReflectionFactory.typeUsageFor(String.class, typeSolverNewCode);
+        ReferenceType rawClassType = (ReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode);
+        ReferenceType classOfStringType = (ReferenceType) rawClassType.replaceParam("T", stringType);
+        res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(classOfStringType));
+        assertEquals(false, res.isSolved());
+    }
 
     //SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 

@@ -130,6 +130,9 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     /// Resolution
     ///
 
+    /**
+     * Find the declaration of the method to invoke for a method call with the given name and actual parameter types.
+     */
     SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
 
     SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
