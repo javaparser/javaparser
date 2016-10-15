@@ -103,10 +103,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 			if (!ref.isSolved()) {
 				throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
 			}
-			List<Type> superClassTypeParameters = new LinkedList<>();
-			wrappedNode.getExtends().get(0).getTypeArguments().getTypeArguments().forEach(ta ->
-					superClassTypeParameters.add(JavaParserFacade.get(typeSolver).convert(ta, ta))
-			);
+			List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().getTypeArguments()
+					.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
+					.collect(Collectors.toList());
 			return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asClass(), superClassTypeParameters, typeSolver);
 		}
 	}
@@ -116,7 +115,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 		List<ReferenceType> interfaces = new ArrayList<>();
 		if (wrappedNode.getImplements() != null) {
 			for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
-				ReferenceType referenceType = new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface(), typeSolver());
+				List<Type> interfaceTypeParameters = t.getTypeArguments().getTypeArguments()
+						.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
+						.collect(Collectors.toList());
+				ReferenceType referenceType = new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface(),
+						interfaceTypeParameters,
+						typeSolver());
 				interfaces.add(referenceType);
 			}
 		}
