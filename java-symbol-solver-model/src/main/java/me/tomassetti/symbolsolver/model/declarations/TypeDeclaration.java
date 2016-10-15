@@ -63,6 +63,49 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     String getQualifiedName();
 
     ///
+    /// Ancestors
+    ///
+
+    List<ReferenceType> getAncestors();
+
+    /**
+     * This list does not contains duplicates with the exacting same type parameters.
+     */
+    default List<ReferenceType> getAllAncestors() {
+        List<ReferenceType> ancestors = new ArrayList<>();
+        for (ReferenceType ancestor : getAncestors()) {
+            ancestors.add(ancestor);
+            for (ReferenceType inheritedAncestor : ancestor.getAllAncestors()) {
+                if (!ancestors.contains(inheritedAncestor)) {
+                    ancestors.add(inheritedAncestor);
+                }
+            }
+        }
+        return ancestors;
+    }
+
+    ///
+    /// Fields
+    ///
+
+    /**
+     * Note that the type of the field should be expressed using the type variables of this particular type.
+     * Consider for example:
+     *
+     * class Foo<E> { E field; }
+     *
+     * class Bar extends Foo<String> { }
+     *
+     * When calling getField("field") on Foo I should get a FieldDeclaration with type E, while calling it on
+     * Bar I should get a FieldDeclaration with type String.
+     */
+    FieldDeclaration getField(String name);
+
+    boolean hasField(String name);
+    
+    List<FieldDeclaration> getAllFields();
+
+    ///
     /// Resolution
     ///
 
@@ -90,42 +133,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     }
 
     boolean isAssignableBy(TypeDeclaration other);
-
-    ///
-    /// Fields
-    ///
-
-    /**
-     * Note that the type of the field should be expressed using the type variables of this particular type.
-     * Consider for example:
-     *
-     * class Foo<E> { E field; }
-     *
-     * class Bar extends Foo<String> { }
-     *
-     * When calling getField("field") on Foo I should get a FieldDeclaration with type E, while calling it on
-     * Bar I should get a FieldDeclaration with type String.
-     */
-    FieldDeclaration getField(String name);
-
-    boolean hasField(String name);
-    
-    List<FieldDeclaration> getAllFields();
-
-    ///
-    /// Ancestors
-    ///
-
-    List<ReferenceType> getAncestors();
-    
-    default List<ReferenceType> getAllAncestors() {
-    	List<ReferenceType> ancestors = new ArrayList<>();
-    	for (ReferenceType ancestor : getAncestors()) {
-    		ancestors.add(ancestor);
-    		ancestors.addAll(ancestor.getAllAncestors());
-    	}
-    	return ancestors;
-    }
 
     ///
     /// Methods
