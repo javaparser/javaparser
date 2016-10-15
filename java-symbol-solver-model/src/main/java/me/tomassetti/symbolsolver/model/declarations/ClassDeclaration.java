@@ -55,8 +55,6 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, H
     /// Constructors
     ///
 
-    default List<ConstructorDeclaration> getConstructors() {
-        throw new UnsupportedOperationException();
-    }
+    List<ConstructorDeclaration> getConstructors();
 
 }

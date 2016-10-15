@@ -1,12 +1,15 @@
 package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import me.tomassetti.symbolsolver.AbstractTest;
 import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
+import me.tomassetti.symbolsolver.model.declarations.ConstructorDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -561,7 +564,171 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration.setTypeParameters(java.util.List<com.github.javaparser.ast.type.TypeParameter>)", sortedMethods.get(19).getQualifiedSignature());
     }
 
+    @Test
+    public void testGetAllMethods() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        Set<MethodUsage> allMethods = constructorDeclaration.getAllMethods();
+
+        List<MethodUsage> sortedMethods = allMethods.stream()
+                .sorted((o1, o2) -> o1.getQualifiedSignature().compareTo(o2.getQualifiedSignature()))
+                .collect(Collectors.toList());
+
+        List<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toList());
+
+        assertEquals(ImmutableList.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
+                "com.github.javaparser.ast.Node.clone()",
+                "com.github.javaparser.ast.Node.contains(com.github.javaparser.ast.Node)",
+                "com.github.javaparser.ast.Node.equals(java.lang.Object)",
+                "com.github.javaparser.ast.Node.getAllContainedComments()",
+                "com.github.javaparser.ast.Node.getBegin()",
+                "com.github.javaparser.ast.Node.getChildrenNodes()",
+                "com.github.javaparser.ast.Node.getComment()",
+                "com.github.javaparser.ast.Node.getEnd()",
+                "com.github.javaparser.ast.Node.getNodesByType(java.lang.Class<N>)",
+                "com.github.javaparser.ast.Node.getOrphanComments()",
+                "com.github.javaparser.ast.Node.getParentNode()",
+                "com.github.javaparser.ast.Node.getParentNodeOfType(java.lang.Class<T>)",
+                "com.github.javaparser.ast.Node.getRange()",
+                "com.github.javaparser.ast.Node.getUserData(com.github.javaparser.ast.UserDataKey<M>)",
+                "com.github.javaparser.ast.Node.hasComment()",
+                "com.github.javaparser.ast.Node.hashCode()",
+                "com.github.javaparser.ast.Node.isPositionedAfter(com.github.javaparser.Position)",
+                "com.github.javaparser.ast.Node.isPositionedBefore(com.github.javaparser.Position)",
+                "com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)",
+                "com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)",
+                "com.github.javaparser.ast.Node.setBegin(com.github.javaparser.Position)",
+                "com.github.javaparser.ast.Node.setBlockComment(java.lang.String)",
+                "com.github.javaparser.ast.Node.setComment(com.github.javaparser.ast.comments.Comment)",
+                "com.github.javaparser.ast.Node.setEnd(com.github.javaparser.Position)",
+                "com.github.javaparser.ast.Node.setLineComment(java.lang.String)",
+                "com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)",
+                "com.github.javaparser.ast.Node.setRange(com.github.javaparser.Range)",
+                "com.github.javaparser.ast.Node.setUserData(com.github.javaparser.ast.UserDataKey<M>, M)",
+                "com.github.javaparser.ast.Node.toString()",
+                "com.github.javaparser.ast.Node.toStringWithoutComments()",
+                "com.github.javaparser.ast.Node.tryAddImportToParentCompilationUnit(java.lang.Class<?>)",
+                "com.github.javaparser.ast.body.BodyDeclaration.getAnnotations()",
+                "com.github.javaparser.ast.body.BodyDeclaration.setAnnotations(java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.accept(com.github.javaparser.ast.visitor.VoidVisitor<A>, A)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getBody()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getDeclarationAsString()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getDeclarationAsString(boolean, boolean)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getDeclarationAsString(boolean, boolean, boolean)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getJavaDoc()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getModifiers()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getName()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getNameExpr()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getParameters()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getThrows()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.getTypeParameters()",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.setBody(com.github.javaparser.ast.stmt.BlockStmt)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.setModifiers(java.util.EnumSet<com.github.javaparser.ast.Modifier>)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.setName(java.lang.String)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.setNameExpr(com.github.javaparser.ast.expr.NameExpr)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.setParameters(java.util.List<com.github.javaparser.ast.body.Parameter>)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.setThrows(java.util.List<com.github.javaparser.ast.type.ReferenceType>)",
+                "com.github.javaparser.ast.body.ConstructorDeclaration.setTypeParameters(java.util.List<com.github.javaparser.ast.type.TypeParameter>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.addAnnotation(java.lang.Class<? extends java.lang.annotation.Annotation>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.addAnnotation(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.addMarkerAnnotation(java.lang.Class<? extends java.lang.annotation.Annotation>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.addMarkerAnnotation(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.addSingleMemberAnnotation(java.lang.Class<? extends java.lang.annotation.Annotation>, java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.addSingleMemberAnnotation(java.lang.String, java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.getAnnotationByClass(java.lang.Class<? extends java.lang.annotation.Annotation>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.getAnnotationByName(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.isAnnotationPresent(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.createBody()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc.setJavaDocComment(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.addModifier(com.github.javaparser.ast.Modifier...)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isAbstract()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isFinal()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isNative()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isPrivate()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isProtected()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isPublic()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isStatic()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isStrictfp()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isSynchronized()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isTransient()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isVolatile()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.body.Parameter)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.type.Type, java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(java.lang.Class<?>, java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(java.lang.String, java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addParameter(com.github.javaparser.ast.body.Parameter)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addParameter(com.github.javaparser.ast.type.Type, java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addParameter(java.lang.Class<?>, java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addParameter(java.lang.String, java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByName(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByType(java.lang.Class<?>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByType(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.addThrows(com.github.javaparser.ast.type.ReferenceType)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.addThrows(java.lang.Class<? extends java.lang.Throwable>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.String)",
+                "java.lang.Object.finalize()",
+                "java.lang.Object.getClass()",
+                "java.lang.Object.notify()",
+                "java.lang.Object.notifyAll()",
+                "java.lang.Object.registerNatives()",
+                "java.lang.Object.wait()",
+                "java.lang.Object.wait(long)",
+                "java.lang.Object.wait(long, int)"), signatures);
+    }
+
     ///
     /// Test constructors
     ///
+
+    @Test
+    public void testGetConstructors() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        List<ConstructorDeclaration> constructors = constructorDeclaration.getConstructors();
+        assertEquals(4, constructors.size());
+
+        assertEquals("ConstructorDeclaration()", constructors.get(0).getSignature());
+        assertEquals("ConstructorDeclaration(java.util.EnumSet<com.github.javaparser.ast.Modifier>, java.lang.String)", constructors.get(1).getSignature());
+        assertEquals("ConstructorDeclaration(java.util.EnumSet<com.github.javaparser.ast.Modifier>, java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>, java.util.List<com.github.javaparser.ast.type.TypeParameter>, java.lang.String, java.util.List<com.github.javaparser.ast.body.Parameter>, java.util.List<com.github.javaparser.ast.type.ReferenceType>, com.github.javaparser.ast.stmt.BlockStmt)", constructors.get(2).getSignature());
+        assertEquals("ConstructorDeclaration(com.github.javaparser.Range, java.util.EnumSet<com.github.javaparser.ast.Modifier>, java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>, java.util.List<com.github.javaparser.ast.type.TypeParameter>, java.lang.String, java.util.List<com.github.javaparser.ast.body.Parameter>, java.util.List<com.github.javaparser.ast.type.ReferenceType>, com.github.javaparser.ast.stmt.BlockStmt)", constructors.get(3).getSignature());
+    }
+
+    ///
+    /// Resolution
+    ///
+
+    //SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
+
+    //SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+
+    //SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
+
+    ///
+    /// Assignability
+    ///
+
+    // boolean isAssignableBy(Type type);
+
+    // boolean canBeAssignedTo(TypeDeclaration other)
+
+    // boolean isAssignableBy(TypeDeclaration other);
+
+    ///
+    /// Annotations
+    ///
+
+    // hasDirectlyAnnotation
+
+    // hasAnnotation
+
+    ///
+    ///
+    ///
+
+    // List<TypeParameterDeclaration> getTypeParameters();
+
+    // AccessLevel accessLevel();
 }

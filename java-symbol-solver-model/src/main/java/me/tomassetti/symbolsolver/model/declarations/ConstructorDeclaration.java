@@ -7,5 +7,6 @@ package me.tomassetti.symbolsolver.model.declarations;
  */
 public interface ConstructorDeclaration extends MethodLikeDeclaration {
 
-    boolean isDefaultMethod();
+    @Override
+    ClassDeclaration declaringType();
 }

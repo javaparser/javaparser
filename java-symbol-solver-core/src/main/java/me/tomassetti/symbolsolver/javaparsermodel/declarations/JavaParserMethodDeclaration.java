@@ -70,6 +70,9 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
+        if (i < 0 || i >= getNoParams()) {
+            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNoParams()));
+        }
         return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i), typeSolver);
     }
 

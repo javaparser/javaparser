@@ -119,4 +119,9 @@ public class MethodUsage implements TypeParametrized {
     public TypeParametersMap typeParametersMap() {
         return typeParametersMap;
     }
+
+    public String getQualifiedSignature() {
+        // TODO use the type parameters
+        return this.getDeclaration().getQualifiedSignature();
+    }
 }

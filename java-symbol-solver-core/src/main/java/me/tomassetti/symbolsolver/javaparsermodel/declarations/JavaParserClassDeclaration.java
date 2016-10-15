@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
@@ -125,6 +126,23 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 			}
 		}
 		return interfaces;
+	}
+
+	@Override
+	public List<ConstructorDeclaration> getConstructors() {
+		List<ConstructorDeclaration> declared = new LinkedList<>();
+        for (BodyDeclaration member : wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
+                com.github.javaparser.ast.body.ConstructorDeclaration constructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) member;
+                declared.add(new JavaParserConstructorDeclaration(this, constructorDeclaration, typeSolver));
+            }
+        }
+        if (declared.isEmpty()) {
+            // If there are no constructors insert the default constructor
+            return ImmutableList.of(new DefaultConstructorDeclaration(this));
+        } else {
+            return declared;
+        }
 	}
 
 	public ClassDeclaration asClass() {

@@ -398,4 +398,9 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     public AccessLevel accessLevel() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public List<ConstructorDeclaration> getConstructors() {
+        throw new UnsupportedOperationException();
+    }
 }

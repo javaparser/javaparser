@@ -435,4 +435,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     public AccessLevel accessLevel() {
         return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
+
+    @Override
+    public List<ConstructorDeclaration> getConstructors() {
+        throw new UnsupportedOperationException();
+    }
 }
