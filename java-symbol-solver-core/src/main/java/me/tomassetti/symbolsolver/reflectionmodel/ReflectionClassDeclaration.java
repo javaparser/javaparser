@@ -3,13 +3,11 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.NullType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
@@ -241,7 +239,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 return reflectionFieldDeclaration.replaceType(ancestor.getFieldType(name).get());
             }
         }
-        throw new UnsolvedSymbolException("Field in " + this, name);
+        throw new me.tomassetti.symbolsolver.model.resolution.UnsolvedSymbolException("Field in " + this, name);
     }
     
     @Override

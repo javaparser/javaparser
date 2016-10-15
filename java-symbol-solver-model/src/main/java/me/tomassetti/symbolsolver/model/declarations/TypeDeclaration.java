@@ -9,6 +9,7 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A declaration of a type. It could be a primitive type, an enum, a class, an interface or a type variable.
@@ -104,6 +105,18 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     boolean hasField(String name);
     
     List<FieldDeclaration> getAllFields();
+
+    default List<FieldDeclaration> getAllNonStaticFields() {
+        return getAllFields().stream().filter(it -> !it.isStatic()).collect(Collectors.toList());
+    }
+
+    default List<FieldDeclaration> getAllStaticFields() {
+        return getAllFields().stream().filter(it -> it.isStatic()).collect(Collectors.toList());
+    }
+
+    default List<FieldDeclaration> getDeclaredFields() {
+        return getAllFields().stream().filter(it ->it.declaringType().getQualifiedName().equals(getQualifiedName())).collect(Collectors.toList());
+    }
 
     ///
     /// Resolution

@@ -239,4 +239,14 @@ public final class Navigator {
     public static ReturnStmt findReturnStmt(MethodDeclaration method) {
         return findNodeOfGivenClass(method, ReturnStmt.class);
     }
+
+    public static <N extends Node> Optional<N> findAncestor(Node node, Class<N> clazz) {
+        if (node.getParentNode() == null) {
+            return Optional.empty();
+        } else if (clazz.isInstance(node.getParentNode())) {
+            return Optional.of(clazz.cast(node.getParentNode()));
+        } else {
+            return findAncestor(node.getParentNode(), clazz);
+        }
+    }
 }

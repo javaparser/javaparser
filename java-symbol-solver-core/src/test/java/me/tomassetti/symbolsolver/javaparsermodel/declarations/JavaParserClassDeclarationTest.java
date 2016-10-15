@@ -2,7 +2,10 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.google.common.collect.ImmutableSet;
 import me.tomassetti.symbolsolver.AbstractTest;
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
+import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -10,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -331,5 +335,190 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
         ancestor = constructorDeclaration.getAllAncestors().get(11);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.T").get().asReferenceType().getQualifiedName());
+    }
+
+    ///
+    /// Test fields
+    ///
+
+    @Test
+    public void testGetFieldForExistingField() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        FieldDeclaration fieldDeclaration = null;
+
+        // declared field
+        fieldDeclaration = constructorDeclaration.getField("modifiers");
+        assertEquals("modifiers", fieldDeclaration.getName());
+        assertEquals("java.util.EnumSet", fieldDeclaration.getType().asReferenceType().getQualifiedName());
+        assertEquals(AccessLevel.PRIVATE, fieldDeclaration.accessLevel());
+        assertEquals(false, fieldDeclaration.isStatic());
+
+        // inherited field
+        fieldDeclaration = constructorDeclaration.getField("annotations");
+        assertEquals("annotations", fieldDeclaration.getName());
+        assertEquals("java.util.List", fieldDeclaration.getType().asReferenceType().getQualifiedName());
+        assertEquals(AccessLevel.PRIVATE, fieldDeclaration.accessLevel());
+    }
+
+    @Test(expected = UnsolvedSymbolException.class)
+    public void testGetFieldForUnexistingField() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        constructorDeclaration.getField("unexisting");
+    }
+
+    @Test
+    public void testGetAllFields() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        List<FieldDeclaration> allFields = constructorDeclaration.getAllFields();
+        assertEquals(16, allFields.size());
+
+        FieldDeclaration fieldDeclaration = null;
+
+        fieldDeclaration = allFields.get(0);
+        assertEquals("modifiers", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(1);
+        assertEquals("typeParameters", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(2);
+        assertEquals("name", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(3);
+        assertEquals("parameters", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(4);
+        assertEquals("throws_", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(5);
+        assertEquals("body", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(6);
+        assertEquals("annotations", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(7);
+        assertEquals("NODE_BY_BEGIN_POSITION", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(8);
+        assertEquals("range", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(9);
+        assertEquals("parentNode", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(10);
+        assertEquals("childrenNodes", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(11);
+        assertEquals("orphanComments", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(12);
+        assertEquals("userData", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(13);
+        assertEquals("comment", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(14);
+        assertEquals("ABSOLUTE_BEGIN_LINE", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(15);
+        assertEquals("ABSOLUTE_END_LINE", fieldDeclaration.getName());
+    }
+
+    @Test
+    public void testGetAllStaticFields() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        List<FieldDeclaration> allFields = constructorDeclaration.getAllStaticFields();
+        assertEquals(3, allFields.size());
+
+        FieldDeclaration fieldDeclaration = null;
+
+        fieldDeclaration = allFields.get(0);
+        assertEquals("NODE_BY_BEGIN_POSITION", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(1);
+        assertEquals("ABSOLUTE_BEGIN_LINE", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(2);
+        assertEquals("ABSOLUTE_END_LINE", fieldDeclaration.getName());
+    }
+
+    @Test
+    public void testGetAllNonStaticFields() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        List<FieldDeclaration> allFields = constructorDeclaration.getAllNonStaticFields();
+        assertEquals(13, allFields.size());
+
+        FieldDeclaration fieldDeclaration = null;
+
+        fieldDeclaration = allFields.get(0);
+        assertEquals("modifiers", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(1);
+        assertEquals("typeParameters", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(2);
+        assertEquals("name", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(3);
+        assertEquals("parameters", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(4);
+        assertEquals("throws_", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(5);
+        assertEquals("body", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(6);
+        assertEquals("annotations", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(7);
+        assertEquals("range", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(8);
+        assertEquals("parentNode", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(9);
+        assertEquals("childrenNodes", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(10);
+        assertEquals("orphanComments", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(11);
+        assertEquals("userData", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(12);
+        assertEquals("comment", fieldDeclaration.getName());
+    }
+
+    @Test
+    public void testGetDeclaredFields() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        List<FieldDeclaration> allFields = constructorDeclaration.getDeclaredFields();
+        assertEquals(6, allFields.size());
+
+        FieldDeclaration fieldDeclaration = null;
+
+        fieldDeclaration = allFields.get(0);
+        assertEquals("modifiers", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(1);
+        assertEquals("typeParameters", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(2);
+        assertEquals("name", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(3);
+        assertEquals("parameters", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(4);
+        assertEquals("throws_", fieldDeclaration.getName());
+
+        fieldDeclaration = allFields.get(5);
+        assertEquals("body", fieldDeclaration.getName());
     }
 }
