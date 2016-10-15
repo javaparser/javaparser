@@ -35,10 +35,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
-import java.util.List;
-
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -48,17 +47,19 @@ public final class VariableDeclarator extends Node implements
 
     private VariableDeclaratorId id;
 
+    // TODO nullable
     private Expression init;
 
     public VariableDeclarator() {
+        this(Range.UNKNOWN, new VariableDeclaratorId(), null);
     }
 
     public VariableDeclarator(VariableDeclaratorId id) {
-        setId(id);
+        this(Range.UNKNOWN, id, null);
     }
 
     public VariableDeclarator(String variableName) {
-        setId(new VariableDeclaratorId(variableName));
+        this(Range.UNKNOWN, new VariableDeclaratorId(variableName), null);
     }
 
     /**
@@ -70,13 +71,11 @@ public final class VariableDeclarator extends Node implements
      *            already added.
      */
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
-        setId(id);
-        setInit(init);
+        this(Range.UNKNOWN, id, init);
     }
 
     public VariableDeclarator(String variableName, Expression init) {
-        setId(new VariableDeclaratorId(variableName));
-        setInit(init);
+        this(Range.UNKNOWN, new VariableDeclaratorId(variableName), init);
     }
 
     public VariableDeclarator(Range range, VariableDeclaratorId id, Expression init) {
@@ -104,7 +103,7 @@ public final class VariableDeclarator extends Node implements
     }
 
     public VariableDeclarator setId(VariableDeclaratorId id) {
-        this.id = id;
+        this.id = assertNotNull(id);
         setAsParentNodeOf(this.id);
         return this;
     }
@@ -119,7 +118,7 @@ public final class VariableDeclarator extends Node implements
      * Will create a {@link NameExpr} with the init param
      */
     public VariableDeclarator setInit(String init) {
-        this.init = new NameExpr(init);
+        this.init = new NameExpr(assertNotNull(init));
         setAsParentNodeOf(this.init);
         return this;
     }
@@ -142,7 +141,7 @@ public final class VariableDeclarator extends Node implements
             throw new IllegalStateException("Cannot set type without a parent");
         }
         nodeWithElementType.setElementType(unwrapped.a);
-        nodeWithElementType.setArrayBracketPairsAfterElementType(emptyNodeList());
+        nodeWithElementType.setArrayBracketPairsAfterElementType(new NodeList<>());
         getId().setArrayBracketPairsAfterId(unwrapped.b);
         return this;
     }

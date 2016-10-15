@@ -21,18 +21,16 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.NodeList.emptyNodeList;
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -51,24 +49,24 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public EnumDeclaration() {
         this(Range.UNKNOWN, 
                 EnumSet.noneOf(Modifier.class), 
-                emptyNodeList(), 
-                "", 
-                emptyNodeList(),
-                emptyNodeList(),
-                emptyNodeList());
+                new NodeList<>(), 
+                new NameExpr(), 
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, String name) {
         this(Range.UNKNOWN,
                 modifiers,
-                emptyNodeList(),
-                name,
-                emptyNodeList(),
-                emptyNodeList(),
-                emptyNodeList());
+                new NodeList<>(),
+                name(name),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
-    public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
+    public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NameExpr name,
                            NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         this(Range.UNKNOWN,
@@ -80,7 +78,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
                 members);
     }
 
-    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
+    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NameExpr name,
                            NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
@@ -122,7 +120,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumConstantDeclaration addEnumConstant(String name) {
-        EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
+        EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(assertNotNull(name));
         getEntries().add(enumConstant);
         enumConstant.setParentNode(this);
         return enumConstant;

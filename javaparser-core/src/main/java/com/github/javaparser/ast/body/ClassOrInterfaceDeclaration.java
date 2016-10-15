@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -35,7 +36,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -58,31 +59,31 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public ClassOrInterfaceDeclaration() {
         this(Range.UNKNOWN, 
                 EnumSet.noneOf(Modifier.class), 
-                emptyNodeList(), 
+                new NodeList<>(), 
                 false, 
-                "",
-                emptyNodeList(),
-                emptyNodeList(), 
-                emptyNodeList(), 
-                emptyNodeList()); 
+                new NameExpr(),
+                new NodeList<>(),
+                new NodeList<>(), 
+                new NodeList<>(), 
+                new NodeList<>()); 
     }
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
                                        final String name) {
         this(Range.UNKNOWN, 
                 modifiers, 
-                emptyNodeList(), 
-                isInterface, 
-                name,
-                emptyNodeList(),
-                emptyNodeList(), 
-                emptyNodeList(), 
-                emptyNodeList());
+                new NodeList<>(), 
+                isInterface,
+                name(name),
+                new NodeList<>(),
+                new NodeList<>(), 
+                new NodeList<>(), 
+                new NodeList<>());
     }
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
-                                       final String name,
+                                       final NameExpr name,
                                        final NodeList<TypeParameter> typeParameters,
                                        final NodeList<ClassOrInterfaceType> extendsList,
                                        final NodeList<ClassOrInterfaceType> implementsList,
@@ -92,7 +93,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
-                                       final String name,
+                                       final NameExpr name,
                                        final NodeList<TypeParameter> typeParameters,
                                        final NodeList<ClassOrInterfaceType> extendsList,
                                        final NodeList<ClassOrInterfaceType> implementsList,

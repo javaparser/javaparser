@@ -32,7 +32,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
-import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.utils.Utils.*;
 
 /**
@@ -51,7 +50,7 @@ public class LambdaExpr extends Expression implements
 
 	public LambdaExpr() {
         this(Range.UNKNOWN,
-                emptyNodeList(),
+                new NodeList<>(),
                 new EmptyStmt(),
                 false);
 	}

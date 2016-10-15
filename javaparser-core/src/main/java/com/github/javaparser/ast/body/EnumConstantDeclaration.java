@@ -51,18 +51,18 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     public EnumConstantDeclaration() {
         this(Range.UNKNOWN, 
-                emptyNodeList(), 
+                new NodeList<>(), 
                 "",
-                emptyNodeList(),
-                emptyNodeList());
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     public EnumConstantDeclaration(String name) {
         this(Range.UNKNOWN, 
-                emptyNodeList(), 
+                new NodeList<>(), 
                 name,
-                emptyNodeList(),
-                emptyNodeList());
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, String name, NodeList<Expression> args,
@@ -115,7 +115,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     @Override
     public EnumConstantDeclaration setName(String name) {
-        this.name = name;
+        this.name = assertNotNull(name);
         return this;
     }
 

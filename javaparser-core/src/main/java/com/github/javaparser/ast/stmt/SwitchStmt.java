@@ -27,7 +27,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.*;
 
@@ -43,7 +42,7 @@ public final class SwitchStmt extends Statement {
 	public SwitchStmt() {
 		this(Range.UNKNOWN,
 				// TODO what expression should this be?
-				name(""), emptyNodeList());
+				name(""), new NodeList<>());
 	}
 
 	public SwitchStmt(final Expression selector,

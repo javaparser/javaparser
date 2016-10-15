@@ -38,6 +38,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 
 import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.ast.expr.NameExpr.*;
+import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -68,28 +70,28 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration() {
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
-                emptyNodeList(),
-                "",
-                emptyNodeList(),
-                emptyNodeList(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NameExpr(),
+                new NodeList<>(),
+                new NodeList<>(),
                 new BlockStmt());
     }
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
         this(Range.UNKNOWN,
                 modifiers,
-                emptyNodeList(),
-                emptyNodeList(),
-                name,
-                emptyNodeList(),
-                emptyNodeList(),
+                new NodeList<>(),
+                new NodeList<>(),
+                name(name),
+                new NodeList<>(),
+                new NodeList<>(),
                 new BlockStmt());
     }
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                                   NodeList<TypeParameter> typeParameters,
-                                  String name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_,
+                                  NameExpr name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_,
                                   BlockStmt block) {
         this(Range.UNKNOWN,
                 modifiers,
@@ -102,12 +104,12 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
-                                  NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, String name,
+                                  NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, NameExpr name,
                                   NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_, BlockStmt block) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
-        setName(name);
+        setNameExpr(name);
         setParameters(parameters);
         setThrows(throws_);
         setBody(block);
@@ -136,7 +138,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public String getName() {
-        return name == null ? null : name.getName();
+        return name.getName();
     }
 
     public NameExpr getNameExpr() {
@@ -159,18 +161,18 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
-        this.modifiers = modifiers;
+        this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
     public ConstructorDeclaration setName(String name) {
-        setNameExpr(new NameExpr(name));
+        setNameExpr(new NameExpr(assertNotNull(name)));
         return this;
     }
 
     public ConstructorDeclaration setNameExpr(NameExpr name) {
-        this.name = name;
+        this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;
     }
@@ -266,7 +268,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public ConstructorDeclaration setBody(BlockStmt body) {
-        this.body = body;
+        this.body = assertNotNull(body);
         setAsParentNodeOf(body);
         return this;
     }

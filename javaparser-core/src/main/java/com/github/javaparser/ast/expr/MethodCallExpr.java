@@ -51,23 +51,23 @@ public final class MethodCallExpr extends Expression implements
     public MethodCallExpr() {
         this(Range.UNKNOWN,
                 null,
-                emptyNodeList(),
+                new NodeList<>(),
                 "",
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public MethodCallExpr(final Expression scope, final String name) {
         this(Range.UNKNOWN,
                 scope,
-                emptyNodeList(),
+                new NodeList<>(),
                 name,
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public MethodCallExpr(final Expression scope, final String name, final NodeList<Expression> args) {
         this(Range.UNKNOWN,
                 scope,
-                emptyNodeList(),
+                new NodeList<>(),
                 name,
                 args);
     }

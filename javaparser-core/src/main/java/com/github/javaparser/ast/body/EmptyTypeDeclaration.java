@@ -25,6 +25,8 @@ import java.util.EnumSet;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -36,11 +38,11 @@ import static com.github.javaparser.ast.NodeList.*;
 public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclaration> {
 
     public EmptyTypeDeclaration() {
-        super(emptyNodeList(), EnumSet.noneOf(Modifier.class), null, emptyNodeList());
+        this(Range.UNKNOWN);
     }
 
     public EmptyTypeDeclaration(Range range) {
-        super(range, emptyNodeList(), EnumSet.noneOf(Modifier.class), null, emptyNodeList());
+        super(range, new NodeList<>(), EnumSet.noneOf(Modifier.class), new NameExpr(), new NodeList<>());
     }
 
     @Override

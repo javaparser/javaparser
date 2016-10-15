@@ -106,7 +106,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     public void addAnonymousClassBody(BodyDeclaration<?> body) {
         if (anonymousClassBody == null)
-            anonymousClassBody = emptyNodeList();
+            anonymousClassBody = new NodeList<>();
         anonymousClassBody.add(body);
     }
 

@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -40,10 +41,11 @@ public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotat
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     public BodyDeclaration() {
+        this(Range.UNKNOWN, new NodeList<>());
     }
 
     public BodyDeclaration(NodeList<AnnotationExpr> annotations) {
-    	setAnnotations(annotations);
+        this(Range.UNKNOWN, annotations);
     }
 
     public BodyDeclaration(Range range, NodeList<AnnotationExpr> annotations) {

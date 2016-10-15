@@ -70,31 +70,31 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public FieldDeclaration() {
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
+                new NodeList<>(),
                 new ClassOrInterfaceType(),
-                emptyNodeList(),
-                emptyNodeList());
+                new NodeList<>(),
+                new NodeList<>());
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, VariableDeclarator variable) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclarator variable) {
         this(Range.UNKNOWN,
                 modifiers,
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
                 nodeList(variable),
-                emptyNodeList());
+                new NodeList<>());
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, NodeList<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> elementType, NodeList<VariableDeclarator> variables) {
         this(Range.UNKNOWN,
                 modifiers,
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
                 variables,
-                emptyNodeList());
+                new NodeList<>());
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
+    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> elementType, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                             NodeList<VariableDeclarator> variables) {
         this(Range.UNKNOWN,
                 modifiers,
@@ -104,7 +104,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                 arrayBracketPairsAfterElementType);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type elementType,
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> elementType,
                             NodeList<VariableDeclarator> variables, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -124,7 +124,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      *            variable declarator
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type,
+    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type<?> type,
                                                           VariableDeclarator variable) {
         return new FieldDeclaration(modifiers, type, new NodeList<VariableDeclarator>().add(variable));
     }
@@ -140,9 +140,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      *            field name
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type, String name) {
-        VariableDeclaratorId id = new VariableDeclaratorId(name);
-        VariableDeclarator variable = new VariableDeclarator(id);
+    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type<?> type, String name) {
+        assertNotNull(type);
+        VariableDeclaratorId id = new VariableDeclaratorId(assertNotNull(name));
+        VariableDeclarator variable = new VariableDeclarator(assertNotNull(id));
         return create(modifiers, type, variable);
     }
 
@@ -174,13 +175,13 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
-        this.modifiers = modifiers;
+        this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
     public FieldDeclaration setVariables(NodeList<VariableDeclarator> variables) {
-        this.variables = variables;
+        this.variables = assertNotNull(variables);
         setAsParentNodeOf(this.variables);
         return this;
     }
@@ -267,7 +268,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public FieldDeclaration setElementType(final Type elementType) {
-        this.elementType = elementType;
+        this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
     }

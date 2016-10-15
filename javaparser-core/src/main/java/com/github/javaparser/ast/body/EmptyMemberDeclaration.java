@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -36,11 +37,11 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
         implements NodeWithJavaDoc<EmptyMemberDeclaration> {
 
     public EmptyMemberDeclaration() {
-        super(emptyNodeList());
+        this(Range.UNKNOWN);
     }
 
     public EmptyMemberDeclaration(Range range) {
-        super(range, emptyNodeList());
+        super(range, new NodeList<>());
     }
 
     @Override

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
@@ -45,7 +44,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     private NodeList<MemberValuePair> pairs;
 
     public NormalAnnotationExpr() {
-        this(Range.UNKNOWN, name(""), emptyNodeList());
+        this(Range.UNKNOWN, name(""), new NodeList<>());
     }
 
     public NormalAnnotationExpr(final NameExpr name, final NodeList<MemberValuePair> pairs) {

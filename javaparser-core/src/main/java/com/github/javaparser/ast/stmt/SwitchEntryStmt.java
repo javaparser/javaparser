@@ -45,7 +45,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 	private NodeList<Statement> stmts;
 
 	public SwitchEntryStmt() {
-		this(Range.UNKNOWN, new CharLiteralExpr(), emptyNodeList());
+		this(Range.UNKNOWN, new CharLiteralExpr(), new NodeList<>());
 	}
 
 	public SwitchEntryStmt(final Expression label, final NodeList<Statement> stmts) {

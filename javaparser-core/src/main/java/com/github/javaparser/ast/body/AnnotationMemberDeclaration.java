@@ -31,11 +31,15 @@ import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
+
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -45,29 +49,39 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private Type type;
+    private Type<?> type;
 
     private String name;
 
+    // TODO nullable
     private Expression defaultValue;
 
     public AnnotationMemberDeclaration() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                new ClassOrInterfaceType(),
+                "",
+                null);
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type type, String name, Expression defaultValue) {
-        setModifiers(modifiers);
-        setType(type);
-        setName(name);
-        setDefaultValue(defaultValue);
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name, Expression defaultValue) {
+        this(Range.UNKNOWN,
+                modifiers,
+                new NodeList<>(),
+                type,
+                name,
+                defaultValue);
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, String name,
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> type, String name,
                                        Expression defaultValue) {
-        super(annotations);
-        setModifiers(modifiers);
-        setType(type);
-        setName(name);
-        setDefaultValue(defaultValue);
+        this(Range.UNKNOWN,
+                modifiers,
+                annotations,
+                type,
+                name,
+                defaultValue);
     }
 
     public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type,
@@ -110,7 +124,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
-    public Type getType() {
+    public Type<?> getType() {
         return type;
     }
 
@@ -122,19 +136,19 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     @Override
     public AnnotationMemberDeclaration setModifiers(EnumSet<Modifier> modifiers) {
-        this.modifiers = modifiers;
+        this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
     public AnnotationMemberDeclaration setName(String name) {
-        this.name = name;
+        this.name = assertNotNull(name);
         return this;
     }
 
     @Override
-    public AnnotationMemberDeclaration setType(Type type) {
-        this.type = type;
+    public AnnotationMemberDeclaration setType(Type<?> type) {
+        this.type = assertNotNull(type);
         setAsParentNodeOf(type);
         return this;
     }

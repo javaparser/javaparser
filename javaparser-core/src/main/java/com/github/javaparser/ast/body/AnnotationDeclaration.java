@@ -29,8 +29,12 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.ast.expr.NameExpr.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,18 +42,31 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> {
 
     public AnnotationDeclaration() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                new NameExpr(),
+                new NodeList<>());
     }
 
     public AnnotationDeclaration(EnumSet<Modifier> modifiers, String name) {
-        super(modifiers, name);
+        this(Range.UNKNOWN,
+                modifiers,
+                new NodeList<>(),
+                name(name),
+                new NodeList<>());
     }
 
-    public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NameExpr name,
                                  NodeList<BodyDeclaration<?>> members) {
-        super(annotations, modifiers, name, members);
+        this(Range.UNKNOWN,
+                modifiers,
+                annotations,
+                name,
+                members);
     }
 
-    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, String name,
+    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NameExpr name,
                                  NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
     }

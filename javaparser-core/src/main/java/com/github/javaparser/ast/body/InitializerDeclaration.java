@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -29,6 +30,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -41,16 +43,15 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     private BlockStmt block;
 
     public InitializerDeclaration() {
+        this(Range.UNKNOWN, false, new BlockStmt());
     }
 
     public InitializerDeclaration(boolean isStatic, BlockStmt block) {
-        super(emptyNodeList());
-        setStatic(isStatic);
-        setBlock(block);
+        this(Range.UNKNOWN, isStatic, block);
     }
 
     public InitializerDeclaration(Range range, boolean isStatic, BlockStmt block) {
-        super(range, emptyNodeList());
+        super(range, new NodeList<>());
         setStatic(isStatic);
         setBlock(block);
     }
@@ -74,7 +75,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     public InitializerDeclaration setBlock(BlockStmt block) {
-        this.block = block;
+        this.block = assertNotNull(block);
 		setAsParentNodeOf(this.block);
         return this;
     }

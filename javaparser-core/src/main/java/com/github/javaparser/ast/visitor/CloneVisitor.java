@@ -90,10 +90,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		NodeList<ClassOrInterfaceType> implementsList = cloneList(_n.getImplements(), _arg);
 		NodeList<BodyDeclaration<?>> members = cloneList(_n.getMembers(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
+        NameExpr nameExpr_ = cloneNode(_n.getNameExpr(), _arg);
 
-		ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(
+        ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(
 				_n.getRange(),
-				_n.getModifiers(), annotations, _n.isInterface(), _n.getName(), typeParameters, extendsList, implementsList, members
+				_n.getModifiers(), annotations, _n.isInterface(), nameExpr_, typeParameters, extendsList, implementsList, members
 		);
 		r.setComment(comment);
 		return r;
@@ -106,10 +107,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
         NodeList<EnumConstantDeclaration> entries = cloneList(_n.getEntries(), _arg);
 		NodeList<BodyDeclaration<?>> members = cloneList(_n.getMembers(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
+        NameExpr nameExpr_ = cloneNode(_n.getNameExpr(), _arg);
 
 		EnumDeclaration r = new EnumDeclaration(
 				_n.getRange(),
-				 _n.getModifiers(), annotations, _n.getName(), implementsList, entries, members
+				 _n.getModifiers(), annotations, nameExpr_, implementsList, entries, members
 		);
 		r.setComment(comment);
 		return r;
@@ -146,10 +148,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
 		NodeList<BodyDeclaration<?>> members = cloneList(_n.getMembers(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
+        NameExpr nameExpr_ = cloneNode(_n.getNameExpr(), _arg);
 
 		AnnotationDeclaration r = new AnnotationDeclaration(
 				_n.getRange(),
-				 _n.getModifiers(), annotations, _n.getName(), members
+				 _n.getModifiers(), annotations, nameExpr_, members
 		);
 		r.setComment(comment);
 		return r;
@@ -227,10 +230,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
         NodeList<ReferenceType<?>> throws_ = cloneList(_n.getThrows(), _arg);
 		BlockStmt block = cloneNode(_n.getBody(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
+        NameExpr nameExpr_ = cloneNode(_n.getNameExpr(), _arg);
 
 		ConstructorDeclaration r = new ConstructorDeclaration(
 				_n.getRange(),
-				 _n.getModifiers(), annotations, typeParameters, _n.getName(), parameters, throws_, block
+				 _n.getModifiers(), annotations, typeParameters, nameExpr_, parameters, throws_, block
 		);
 		r.setComment(comment);
 		return r;

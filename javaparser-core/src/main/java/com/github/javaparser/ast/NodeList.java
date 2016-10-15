@@ -146,10 +146,6 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
         }
     }
 
-    public static <X extends Node> NodeList<X> emptyNodeList() {
-        return new NodeList<>();
-    }
-
     public NodeList<N> add(int index, N node) {
         own(node);
         innerList.add(index, node);

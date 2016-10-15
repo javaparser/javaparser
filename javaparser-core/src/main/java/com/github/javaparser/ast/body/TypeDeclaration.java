@@ -35,6 +35,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import java.util.EnumSet;
 
 import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -51,22 +52,22 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 
 	public TypeDeclaration() {
 		this(Range.UNKNOWN,
-                emptyNodeList(),
+                new NodeList<>(),
                 EnumSet.noneOf(Modifier.class),
-                "",
-                emptyNodeList());
+                new NameExpr(),
+                new NodeList<>());
 	}
 
     public TypeDeclaration(EnumSet<Modifier> modifiers, String name) {
         this(Range.UNKNOWN,
-                emptyNodeList(),
+                new NodeList<>(),
                 modifiers,
-                name,
-                emptyNodeList());
+                name(name),
+                new NodeList<>());
 	}
 
 	public TypeDeclaration(NodeList<AnnotationExpr> annotations,
-                           EnumSet<Modifier> modifiers, String name,
+                           EnumSet<Modifier> modifiers, NameExpr name,
                            NodeList<BodyDeclaration<?>> members) {
         this(Range.UNKNOWN,
                 annotations,
@@ -76,10 +77,10 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 	}
 
 	public TypeDeclaration(Range range, NodeList<AnnotationExpr> annotations,
-                           EnumSet<Modifier> modifiers, String name,
+                           EnumSet<Modifier> modifiers, NameExpr name,
                            NodeList<BodyDeclaration<?>> members) {
 		super(range, annotations);
-		setName(name);
+		setNameExpr(name);
 		setModifiers(modifiers);
 		setMembers(members);
 	}
@@ -128,21 +129,21 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
     @SuppressWarnings("unchecked")
     @Override
     public T setModifiers(EnumSet<Modifier> modifiers) {
-		this.modifiers = modifiers;
+		this.modifiers = assertNotNull(modifiers);
         return (T) this;
 	}
 
     @Override
     @SuppressWarnings("unchecked")
     public T setName(String name) {
-		setNameExpr(new NameExpr(name));
+		setNameExpr(new NameExpr(assertNotNull(name)));
         return (T) this;
 	}
 
     @SuppressWarnings("unchecked")
     public T setNameExpr(NameExpr nameExpr) {
-		this.name = nameExpr;
-		setAsParentNodeOf(this.name);
+		this.name = assertNotNull(nameExpr);
+		setAsParentNodeOf(name);
         return (T) this;
 	}
 

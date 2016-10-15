@@ -31,7 +31,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -52,7 +51,7 @@ public final class ArrayCreationExpr extends Expression {
     public ArrayCreationExpr() {
         this(Range.UNKNOWN,
                 new ClassOrInterfaceType(),
-                emptyNodeList(),
+                new NodeList<>(),
                 new ArrayInitializerExpr());
     }
 
@@ -66,14 +65,14 @@ public final class ArrayCreationExpr extends Expression {
     public ArrayCreationExpr(Type<?> elementType) {
         this(Range.UNKNOWN,
                 elementType,
-                emptyNodeList(),
+                new NodeList<>(),
                 new ArrayInitializerExpr());
     }
 
     public ArrayCreationExpr(Range range, Type<?> elementType) {
         this(range,
                 elementType,
-                emptyNodeList(),
+                new NodeList<>(),
                 new ArrayInitializerExpr());
     }
 
@@ -130,7 +129,7 @@ public final class ArrayCreationExpr extends Expression {
     public Type<?> getType() {
         Type<?> result = elementType;
         for (int i = 0; i < levels.size(); i++) {
-            result = new ArrayType(result, emptyNodeList());
+            result = new ArrayType(result, new NodeList<>());
         }
         return result;
     }

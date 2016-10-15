@@ -88,7 +88,7 @@ public class ManipulationSteps {
 
     @Given("a List of VariableDeclarations")
     public void givenAListOfVariableDeclarations() {
-        variableDeclarationExprList = emptyNodeList();
+        variableDeclarationExprList = new NodeList<>();
         variableDeclarationExprList.add(new VariableDeclarationExpr());
         variableDeclarationExprList.add(new VariableDeclarationExpr());
     }
@@ -120,7 +120,7 @@ public class ManipulationSteps {
 
     @When("empty list is set as the resources on TryStmt")
     public void whenNullIsSetAsTheResourcesOnTryStmt() {
-        tryStmt.setResources(emptyNodeList());
+        tryStmt.setResources(new NodeList<>());
     }
 
     @When("the package declaration is set to \"$packageName\"")

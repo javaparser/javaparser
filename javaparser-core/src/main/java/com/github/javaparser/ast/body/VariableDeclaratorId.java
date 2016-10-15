@@ -44,13 +44,13 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
     public VariableDeclaratorId() {
         this(Range.UNKNOWN,
                 "",
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public VariableDeclaratorId(String name) {
         this(Range.UNKNOWN,
                 name,
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public VariableDeclaratorId(Range range, String name, NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
@@ -76,7 +76,7 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
 
     @Override
     public VariableDeclaratorId setName(String name) {
-        this.name = name;
+        this.name = assertNotNull(name);
         return this;
     }
 

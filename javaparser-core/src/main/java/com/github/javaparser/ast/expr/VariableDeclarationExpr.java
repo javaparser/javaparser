@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
@@ -67,55 +66,55 @@ public final class VariableDeclarationExpr extends Expression implements
     public VariableDeclarationExpr() {
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
+                new NodeList<>(),
                 new ClassOrInterfaceType(),
-                emptyNodeList(),
-                emptyNodeList());
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName) {
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
                 nodeList(new VariableDeclarator(variableName)),
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var) {
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
                 nodeList(var),
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName, Modifier... modifiers) {
         this(Range.UNKNOWN,
                 Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
                 nodeList(new VariableDeclarator(variableName)),
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var, Modifier... modifiers) {
         this(Range.UNKNOWN,
                 Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
                 nodeList(var),
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, final NodeList<VariableDeclarator> variables) {
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
                 variables,
-                emptyNodeList());
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type elementType,

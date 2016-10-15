@@ -28,7 +28,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.NodeList.emptyNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -54,22 +53,22 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 	public TypeParameter() {
 		this(Range.UNKNOWN,
 				"",
-				emptyNodeList(),
-				emptyNodeList());
+				new NodeList<>(),
+				new NodeList<>());
 	}
 
 	public TypeParameter(final String name, final NodeList<ClassOrInterfaceType> typeBound) {
 		this(Range.UNKNOWN,
 				name,
 				typeBound,
-				emptyNodeList());
+				new NodeList<>());
 	}
 
 	public TypeParameter(Range range, final String name, final NodeList<ClassOrInterfaceType> typeBound) {
 		this(range,
 				name,
 				typeBound,
-				emptyNodeList());
+				new NodeList<>());
 	}
 
 	public TypeParameter(Range range, String name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {

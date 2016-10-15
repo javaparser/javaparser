@@ -51,7 +51,7 @@ public final class Parameter extends Node implements
         NodeWithName<Parameter>,
         NodeWithModifiers<Parameter> {
 
-    private Type elementType;
+    private Type<?> elementType;
 
     private boolean isVarArgs;
 
@@ -66,19 +66,19 @@ public final class Parameter extends Node implements
     public Parameter() {
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
+                new NodeList<>(),
                 new ClassOrInterfaceType(),
-                emptyNodeList(),
+                new NodeList<>(),
                 false,
                 new VariableDeclaratorId());
     }
 
-    public Parameter(Type elementType, VariableDeclaratorId id) {
+    public Parameter(Type<?> elementType, VariableDeclaratorId id) {
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
-                emptyNodeList(),
+                new NodeList<>(),
                 false,
                 id);
     }
@@ -95,9 +95,9 @@ public final class Parameter extends Node implements
     public static Parameter create(Type elementType, String name) {
         return new Parameter(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
-                emptyNodeList(),
+                new NodeList<>(),
                 false,
                 new VariableDeclaratorId(name));
     }
@@ -105,9 +105,9 @@ public final class Parameter extends Node implements
     public Parameter(EnumSet<Modifier> modifiers, Type elementType, VariableDeclaratorId id) {
         this(Range.UNKNOWN,
                 modifiers,
-                emptyNodeList(),
+                new NodeList<>(),
                 elementType,
-                emptyNodeList(),
+                new NodeList<>(),
                 false,
                 id);
     }
@@ -139,7 +139,7 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public Type getType() {
+    public Type<?> getType() {
         return wrapInArrayTypes(elementType,
                 getArrayBracketPairsAfterElementType(),
                 getId().getArrayBracketPairsAfterId());
@@ -154,7 +154,7 @@ public final class Parameter extends Node implements
         Pair<Type, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         setElementType(unwrapped.a);
         setArrayBracketPairsAfterElementType(unwrapped.b);
-        getId().setArrayBracketPairsAfterId(emptyNodeList());
+        getId().setArrayBracketPairsAfterId(new NodeList<>());
         return this;
     }
 
@@ -182,6 +182,7 @@ public final class Parameter extends Node implements
     @SuppressWarnings("unchecked")
     @Override
     public Parameter setName(String name) {
+        assertNotNull(name);
         if (id != null)
             id.setName(name);
         else
@@ -220,7 +221,7 @@ public final class Parameter extends Node implements
     @Override
     @SuppressWarnings("unchecked")
     public Parameter setModifiers(EnumSet<Modifier> modifiers) {
-        this.modifiers = modifiers;
+        this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
@@ -230,8 +231,8 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public Parameter setElementType(final Type elementType) {
-        this.elementType = elementType;
+    public Parameter setElementType(final Type<?> elementType) {
+        this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
     }

@@ -46,16 +46,16 @@ public final class TryStmt extends Statement {
 
 	public TryStmt() {
 		this(Range.UNKNOWN,
-				NodeList.emptyNodeList(),
+				new NodeList<>(),
 				new BlockStmt(),
-				NodeList.emptyNodeList(),
+				new NodeList<>(),
 				new BlockStmt());
 	}
 
 	public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchs,
 			final BlockStmt finallyBlock) {
 		this(Range.UNKNOWN,
-				NodeList.emptyNodeList(),
+				new NodeList<>(),
 				tryBlock,
 				catchs,
 				finallyBlock);

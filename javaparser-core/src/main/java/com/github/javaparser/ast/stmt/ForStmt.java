@@ -47,9 +47,9 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
 	public ForStmt() {
 		this(Range.UNKNOWN,
-				emptyNodeList(),
+				new NodeList<>(),
 				new BooleanLiteralExpr(false),
-				emptyNodeList(),
+				new NodeList<>(),
 				new EmptyStmt());
 	}
 

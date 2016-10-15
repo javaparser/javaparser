@@ -66,7 +66,7 @@ public interface NodeWithTypeArguments<T> {
      */
     @SuppressWarnings("unchecked")
     default T setDiamondOperator() {
-        setTypeArguments(emptyNodeList());
+        setTypeArguments(new NodeList<>());
         return (T) this;
     }
 
