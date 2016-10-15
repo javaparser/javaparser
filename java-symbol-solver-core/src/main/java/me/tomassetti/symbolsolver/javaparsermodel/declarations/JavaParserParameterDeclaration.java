@@ -19,17 +19,17 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        return wrappedNode.getName();
     }
 
     @Override
     public boolean isField() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     @Override
     public boolean isParameter() {
-        throw new UnsupportedOperationException();
+        return true;
     }
 
     @Override
@@ -46,6 +46,9 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     public Type getType() {
         Type res = JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
         for (int i=0;i<wrappedNode.getId().getArrayCount();i++) {
+            res = new ArrayType(res);
+        }
+        if (isVariadic()) {
             res = new ArrayType(res);
         }
         return res;

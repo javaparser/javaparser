@@ -149,10 +149,9 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
 
     /**
-     * Solve any possible symbol including: fields, internal types,
-     * @param name
-     * @param typeSolver
-     * @return
+     * Solve any possible visible symbols including: fields, internal types, type variables, the type itself or its containers.
+     *
+     * It should contain its own private fields but not inherited private fields.
      */
     SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 

@@ -10,7 +10,7 @@
   Line 46) provider(assertNotNull(file), UTF8) ==> com.github.javaparser.Providers.provider(java.io.File, java.nio.charset.Charset)
   Line 46) assertNotNull(file) ==> com.github.javaparser.utils.Utils.assertNotNull(T)
   Line 50) provider(Files.newInputStream(assertNotNull(path)), assertNotNull(encoding)) ==> com.github.javaparser.Providers.provider(java.io.InputStream, java.nio.charset.Charset)
-  Line 50) Files.newInputStream(assertNotNull(path)) ==> java.nio.file.Files.newInputStream(java.nio.file.Path, java.nio.file.OpenOption[]...)
+  Line 50) Files.newInputStream(assertNotNull(path)) ==> java.nio.file.Files.newInputStream(java.nio.file.Path, java.nio.file.OpenOption...)
   Line 50) assertNotNull(path) ==> com.github.javaparser.utils.Utils.assertNotNull(T)
   Line 50) assertNotNull(encoding) ==> com.github.javaparser.utils.Utils.assertNotNull(T)
   Line 54) provider(assertNotNull(path), UTF8) ==> com.github.javaparser.Providers.provider(java.nio.file.Path, java.nio.charset.Charset)

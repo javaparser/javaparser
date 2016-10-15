@@ -10,6 +10,7 @@ import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserClassDe
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
+import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
@@ -53,7 +54,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         // then among inherited fields
         for (ReferenceType ancestor : getDeclaration().getAncestors()) {
             SymbolReference ref = ancestor.getTypeDeclaration().solveSymbol(name, typeSolver);
-            if (ref.isSolved()) {
+            if (ref.isSolved() && ref.getCorrespondingDeclaration().asField().accessLevel() != AccessLevel.PRIVATE) {
                 return ref;
             }
         }

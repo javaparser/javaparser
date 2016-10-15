@@ -25,7 +25,10 @@ public class ClassOrInterfaceDeclarationContext implements Context {
     public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : wrapped.getFields()) {
             if (Modifier.isStatic(field.getModifiers()) && field.getName().equals(name)) {
-                return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
+                if (field.getDeclaringClass().getCanonicalName().equals(wrapped.getCanonicalName())
+                        || !Modifier.isPrivate(field.getModifiers())) {
+                    return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
+                }
             }
         }
         return SymbolReference.unsolved(ValueDeclaration.class);

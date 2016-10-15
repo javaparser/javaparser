@@ -3,10 +3,7 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import me.tomassetti.symbolsolver.AbstractTest;
-import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
-import me.tomassetti.symbolsolver.model.declarations.ConstructorDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.UnsolvedSymbolException;
@@ -751,7 +748,59 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
         assertEquals(false, res.isSolved());
     }
 
-    //SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+    @Test
+    public void testSolveSymbolUnexisting() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        SymbolReference<? extends ValueDeclaration> res = constructorDeclaration.solveSymbol("unexisting", typeSolver);
+        assertEquals(false, res.isSolved());
+    }
+
+    @Test
+    public void testSolveSymbolToDeclaredField() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        SymbolReference<? extends ValueDeclaration> res = constructorDeclaration.solveSymbol("name", typeSolver);
+        assertEquals(true, res.isSolved());
+        assertEquals(true, res.getCorrespondingDeclaration().isField());
+    }
+
+    @Test
+    public void testSolveSymbolToInheritedPublicField() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        SymbolReference<? extends ValueDeclaration> res = constructorDeclaration.solveSymbol("NODE_BY_BEGIN_POSITION", typeSolver);
+        assertEquals(true, res.isSolved());
+        assertEquals(true, res.getCorrespondingDeclaration().isField());
+    }
+
+    @Test
+    public void testSolveSymbolToInheritedPrivateField() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        SymbolReference<? extends ValueDeclaration> res = constructorDeclaration.solveSymbol("parentNode", typeSolver);
+        assertEquals(false, res.isSolved());
+    }
+
+    @Test
+    public void testSolveSymbolToInternalType() {
+
+    }
+
+    @Test
+    public void testSolveSymbolToContainer() {
+
+    }
+
+    @Test
+    public void testSolveSymbolToItself() {
+
+    }
+
+    @Test
+    public void testSolveSymbolToTypeVariable() {
+
+    }
 
     //SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
 

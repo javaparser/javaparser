@@ -11,4 +11,4 @@
   Line 77) arrayBracketPairs.add(new ArrayBracketPair(Range.UNKNOWN, arrayType.getAnnotations())) ==> java.util.List.add(E)
   Line 77) arrayType.getAnnotations() ==> com.github.javaparser.ast.type.Type.getAnnotations()
   Line 78) arrayType.getComponentType() ==> com.github.javaparser.ast.type.ArrayType.getComponentType()
-  Line 84) Arrays.asList(annotations) ==> java.util.Arrays.asList(T[]...)
+  Line 84) Arrays.asList(annotations) ==> java.util.Arrays.asList(T...)
