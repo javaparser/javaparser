@@ -50,4 +50,13 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, H
      */
     List<ReferenceType> getAllInterfaces();
 
+
+    ///
+    /// Constructors
+    ///
+
+    default List<ConstructorDeclaration> getConstructors() {
+        throw new UnsupportedOperationException();
+    }
+
 }

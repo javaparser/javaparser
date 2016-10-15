@@ -119,6 +119,14 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     }
 
     ///
+    /// Methods
+    ///
+
+    Set<MethodDeclaration> getDeclaredMethods();
+
+    Set<MethodUsage> getAllMethods();
+
+    ///
     /// Resolution
     ///
 
@@ -146,14 +154,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     }
 
     boolean isAssignableBy(TypeDeclaration other);
-
-    ///
-    /// Methods
-    ///
-
-    Set<MethodDeclaration> getDeclaredMethods();
-
-    Set<MethodUsage> getAllMethods();
 
     ///
     /// Annotations
