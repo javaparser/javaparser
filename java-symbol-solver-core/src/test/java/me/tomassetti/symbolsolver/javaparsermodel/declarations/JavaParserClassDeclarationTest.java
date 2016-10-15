@@ -56,9 +56,27 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     }
 
     @Test
-    public void testGetAllSuperclasses() {
+    public void testGetAllSuperclassesWithoutTypeParameters() {
         JavaParserClassDeclaration cu = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testGetAllSuperclassesWithTypeParameters() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+        assertEquals(3, constructorDeclaration.getAllSuperClasses().size());
+
+        me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType ancestor = null;
+
+        ancestor = constructorDeclaration.getAllSuperClasses().get(0);
+        assertEquals("com.github.javaparser.ast.body.BodyDeclaration", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.BodyDeclaration.T").get().asReferenceType().getQualifiedName());
+
+        ancestor = constructorDeclaration.getAllSuperClasses().get(1);
+        assertEquals("com.github.javaparser.ast.Node", ancestor.getQualifiedName());
+
+        ancestor = constructorDeclaration.getAllSuperClasses().get(2);
+        assertEquals("java.lang.Object", ancestor.getQualifiedName());
     }
 
     @Test
