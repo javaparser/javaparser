@@ -1,8 +1,8 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
@@ -18,60 +18,9 @@ import java.util.Set;
  */
 public interface TypeDeclaration extends Declaration, TypeParametrizable {
 
-    String getQualifiedName();
-
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
-
-    boolean isAssignableBy(Type type);
-
-    default boolean canBeAssignedTo(TypeDeclaration other) {
-        return other.isAssignableBy(this);
-    }
-
-    /**
-     * Note that the type of the field should be expressed using the type variables of this particular type.
-     * Consider for example:
-     *
-     * class Foo<E> { E field; }
-     *
-     * class Bar extends Foo<String> { }
-     *
-     * When calling getField("field") on Foo I should get a FieldDeclaration with type E, while calling it on
-     * Bar I should get a FieldDeclaration with type String.
-     */
-    FieldDeclaration getField(String name);
-
-    boolean hasField(String name);
-    
-    List<FieldDeclaration> getAllFields();
-
-    boolean isAssignableBy(TypeDeclaration other);
-
-    SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
-
-    /**
-     * Try to solve a symbol just in the declaration, it does not delegate to the container.
-     *
-     * @param name
-     * @param typeSolver
-     * @return
-     */
-    SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
-
-    List<ReferenceType> getAncestors();
-    
-    default List<ReferenceType> getAllAncestors() {
-    	List<ReferenceType> ancestors = new ArrayList<>();
-    	for (ReferenceType ancestor : getAncestors()) {
-    		ancestors.add(ancestor);
-    		ancestors.addAll(ancestor.getAllAncestors());
-    	}
-    	return ancestors;
-    }
-
-    Set<MethodDeclaration> getDeclaredMethods();
-
-    Set<MethodUsage> getAllMethods();
+    ///
+    /// Misc
+    ///
 
     default boolean isClass() {
         return false;
@@ -100,12 +49,95 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     }
 
     default ClassDeclaration asClass() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(String.format("%s is not a class", this));
     }
 
     default InterfaceDeclaration asInterface() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(String.format("%s is not an interface", this));
     }
+
+    default InterfaceDeclaration asEnum() {
+        throw new UnsupportedOperationException(String.format("%s is not an enum", this));
+    }
+
+    String getQualifiedName();
+
+    ///
+    /// Resolution
+    ///
+
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
+
+    SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+
+    /**
+     * Try to solve a symbol just in the declaration, it does not delegate to the container.
+     *
+     * @param name
+     * @param typeSolver
+     * @return
+     */
+    SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
+
+    ///
+    /// Assignability
+    ///
+
+    boolean isAssignableBy(Type type);
+
+    default boolean canBeAssignedTo(TypeDeclaration other) {
+        return other.isAssignableBy(this);
+    }
+
+    boolean isAssignableBy(TypeDeclaration other);
+
+    ///
+    /// Fields
+    ///
+
+    /**
+     * Note that the type of the field should be expressed using the type variables of this particular type.
+     * Consider for example:
+     *
+     * class Foo<E> { E field; }
+     *
+     * class Bar extends Foo<String> { }
+     *
+     * When calling getField("field") on Foo I should get a FieldDeclaration with type E, while calling it on
+     * Bar I should get a FieldDeclaration with type String.
+     */
+    FieldDeclaration getField(String name);
+
+    boolean hasField(String name);
+    
+    List<FieldDeclaration> getAllFields();
+
+    ///
+    /// Ancestors
+    ///
+
+    List<ReferenceType> getAncestors();
+    
+    default List<ReferenceType> getAllAncestors() {
+    	List<ReferenceType> ancestors = new ArrayList<>();
+    	for (ReferenceType ancestor : getAncestors()) {
+    		ancestors.add(ancestor);
+    		ancestors.addAll(ancestor.getAllAncestors());
+    	}
+    	return ancestors;
+    }
+
+    ///
+    /// Methods
+    ///
+
+    Set<MethodDeclaration> getDeclaredMethods();
+
+    Set<MethodUsage> getAllMethods();
+
+    ///
+    /// Annotations
+    ///
 
     boolean hasDirectlyAnnotation(String canonicalName);
 
@@ -115,4 +147,5 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
         }
         return getAllAncestors().stream().anyMatch(it -> it.asReferenceType().getTypeDeclaration().hasDirectlyAnnotation(canonicalName));
     }
+
 }

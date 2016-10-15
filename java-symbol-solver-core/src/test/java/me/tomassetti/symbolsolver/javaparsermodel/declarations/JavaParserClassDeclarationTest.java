@@ -36,11 +36,73 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
         typeSolverNewCode = combinedTypeSolverNewCode;
     }
 
+    ///
+    /// Test misc
+    ///
+
     @Test
     public void testIsClass() {
         JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(true, compilationUnit.isClass());
     }
+
+    @Test
+    public void testIsInterface() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals(false, compilationUnit.isInterface());
+    }
+
+    @Test
+    public void testIsEnum() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals(false, compilationUnit.isEnum());
+    }
+
+    @Test
+    public void testIsTypeVariable() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals(false, compilationUnit.isTypeVariable());
+    }
+
+    @Test
+    public void testIsType() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals(true, compilationUnit.isType());
+    }
+
+    @Test
+    public void testAsType() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals(compilationUnit, compilationUnit.asType());
+    }
+
+    @Test
+    public void testAsClass() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals(compilationUnit, compilationUnit.asClass());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testAsInterface() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        compilationUnit.asInterface();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testAsEnum() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        compilationUnit.asEnum();
+    }
+
+    @Test
+    public void testGetQualifiedName() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals("com.github.javaparser.ast.CompilationUnit", compilationUnit.getQualifiedName());
+    }
+
+    ///
+    /// Test ancestors
+    ///
 
     @Test
     public void testGetSuperclassWithoutTypeParameters() {
