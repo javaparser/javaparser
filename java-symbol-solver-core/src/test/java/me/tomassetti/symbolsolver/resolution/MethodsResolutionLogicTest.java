@@ -2,8 +2,6 @@ package me.tomassetti.symbolsolver.resolution;
 
 import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
@@ -33,16 +31,36 @@ public class MethodsResolutionLogicTest extends AbstractResolutionTest {
     }
 
    @Test
-   public void compatibilityShouldConsiderAlsoTypeVariables() {
+   public void compatibilityShouldConsiderAlsoTypeVariablesNegative() {
        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-
-       SymbolReference<MethodDeclaration> res = null;
 
        ReferenceType stringType = (ReferenceType) ReflectionFactory.typeUsageFor(String.class, typeSolver);
        ReferenceType rawClassType = (ReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolver);
        ReferenceType classOfStringType = (ReferenceType) rawClassType.replaceParam("T", stringType);
        MethodUsage mu = constructorDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().getSignature().equals("isThrows(java.lang.Class<? extends java.lang.Throwable>)")).findFirst().get();
-       
+
        assertEquals(false, MethodResolutionLogic.isApplicable(mu, "isThrows", ImmutableList.of(classOfStringType), typeSolver));
    }
+
+    @Test
+    public void compatibilityShouldConsiderAlsoTypeVariablesRaw() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        ReferenceType rawClassType = (ReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolver);
+        MethodUsage mu = constructorDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().getSignature().equals("isThrows(java.lang.Class<? extends java.lang.Throwable>)")).findFirst().get();
+
+        assertEquals(true, MethodResolutionLogic.isApplicable(mu, "isThrows", ImmutableList.of(rawClassType), typeSolver));
+    }
+
+    @Test
+    public void compatibilityShouldConsiderAlsoTypeVariablesPositive() {
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+
+        ReferenceType runtimeException = (ReferenceType) ReflectionFactory.typeUsageFor(RuntimeException.class, typeSolver);
+        ReferenceType rawClassType = (ReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolver);
+        ReferenceType classOfRuntimeType = (ReferenceType) rawClassType.replaceParam("T", runtimeException);
+        MethodUsage mu = constructorDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().getSignature().equals("isThrows(java.lang.Class<? extends java.lang.Throwable>)")).findFirst().get();
+
+        assertEquals(true, MethodResolutionLogic.isApplicable(mu, "isThrows", ImmutableList.of(classOfRuntimeType), typeSolver));
+    }
 }
