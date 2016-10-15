@@ -265,8 +265,8 @@ public final class JavaParser {
 	 * @return Expression representing the Java expression
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static Expression parseExpression(final String expression) {
-		return simplifiedParse(EXPRESSION, provider(expression));
+	public static <T extends Expression> T parseExpression(final String expression) {
+		return (T) simplifiedParse(EXPRESSION, provider(expression));
 	}
 
 	/**

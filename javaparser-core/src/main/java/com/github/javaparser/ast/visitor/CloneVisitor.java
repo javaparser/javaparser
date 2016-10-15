@@ -451,7 +451,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(ArrayCreationExpr _n, Object _arg) {
-		Type<?> type_ = cloneNode(_n.getType(), _arg);
+		Type<?> type_ = cloneNode(_n.getElementType(), _arg);
         NodeList<ArrayCreationLevel> levels_ = cloneList(_n.getLevels(), _arg);
 		ArrayInitializerExpr initializer_ = cloneNode(_n.getInitializer(), _arg);
 

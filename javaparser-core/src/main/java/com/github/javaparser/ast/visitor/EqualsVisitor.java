@@ -711,7 +711,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 	@Override public Boolean visit(final ArrayCreationExpr n1, final Node arg) {
 		final ArrayCreationExpr n2 = (ArrayCreationExpr) arg;
 
-		if (!nodeEquals(n1.getType(), n2.getType())) {
+		if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
 			return false;
 		}
 

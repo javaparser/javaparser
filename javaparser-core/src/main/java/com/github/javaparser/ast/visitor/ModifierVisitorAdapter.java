@@ -82,7 +82,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n, arg);
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setElementType((Type) n.getElementType().accept(this, arg));
 
         n.setLevels((NodeList<ArrayCreationLevel>)n.getLevels().accept(this, arg));
 

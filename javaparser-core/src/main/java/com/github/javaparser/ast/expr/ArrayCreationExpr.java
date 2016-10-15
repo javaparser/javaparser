@@ -22,9 +22,10 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -38,11 +39,13 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * 
  * @author Julio Vilmar Gesser
  */
-public final class ArrayCreationExpr extends Expression implements NodeWithType<ArrayCreationExpr> {
+// NOTE does not implement NodeWithType because setType is problematic
+// NOTE does not implement NodeWithElementType because that implies a list of ArrayBracketPairs
+public final class ArrayCreationExpr extends Expression {
 
     private NodeList<ArrayCreationLevel> levels;
 
-    private Type type;
+    private Type<?> elementType;
 
     private ArrayInitializerExpr initializer;
 
@@ -53,31 +56,31 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
                 new ArrayInitializerExpr());
     }
 
-    public ArrayCreationExpr(Type type, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr(Type<?> elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
         this(Range.UNKNOWN,
-                type,
+                elementType,
                 levels,
                 initializer);
     }
 
-    public ArrayCreationExpr(Type type) {
+    public ArrayCreationExpr(Type<?> elementType) {
         this(Range.UNKNOWN,
-                type,
+                elementType,
                 emptyNodeList(),
                 new ArrayInitializerExpr());
     }
 
-    public ArrayCreationExpr(Range range, Type type) {
+    public ArrayCreationExpr(Range range, Type<?> elementType) {
         this(range,
-                type,
+                elementType,
                 emptyNodeList(),
                 new ArrayInitializerExpr());
     }
 
-    public ArrayCreationExpr(Range range, Type type, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr(Range range, Type<?> elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
         super(range);
         setLevels(levels);
-        setType(type);
+        setElementType(elementType);
         setInitializer(initializer);
     }
 
@@ -95,9 +98,8 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return initializer;
     }
 
-    @Override
-    public Type getType() {
-        return type;
+    public Type<?> getElementType() {
+        return elementType;
     }
 
     public ArrayCreationExpr setInitializer(ArrayInitializerExpr initializer) {
@@ -106,10 +108,9 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return this;
     }
 
-    @Override
-    public ArrayCreationExpr setType(Type type) {
-        this.type = type;
-		setAsParentNodeOf(this.type);
+    public ArrayCreationExpr setElementType(Type<?> elementType) {
+        this.elementType = assertNotNull(elementType);
+		setAsParentNodeOf(this.elementType);
         return this;
     }
 
@@ -121,5 +122,32 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         this.levels = assertNotNull(levels);
         setAsParentNodeOf(levels);
         return this;
+    }
+
+    /**
+     * Takes the element type and wraps it in an ArrayType for every array creation level.
+     */
+    public Type<?> getType() {
+        Type<?> result = elementType;
+        for (int i = 0; i < levels.size(); i++) {
+            result = new ArrayType(result, emptyNodeList());
+        }
+        return result;
+    }
+
+    /**
+     * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
+     *
+     * @param typeClass the type
+     * @return this
+     */
+    public ArrayCreationExpr setElementType(Class<?> typeClass) {
+        tryAddImportToParentCompilationUnit(typeClass);
+        return setElementType(new ClassOrInterfaceType(typeClass.getSimpleName()));
+    }
+
+    public ArrayCreationExpr setElementType(final String type) {
+        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
+        return setElementType(classOrInterfaceType);
     }
 }

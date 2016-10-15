@@ -115,7 +115,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	public R visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n, arg);
 		{
-			R result = n.getType().accept(this, arg);
+			R result = n.getElementType().accept(this, arg);
 			if (result != null) {
 				return result;
 			}

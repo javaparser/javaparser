@@ -3,17 +3,18 @@ package com.github.javaparser.junit.ast.type;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.Type;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
-import static com.github.javaparser.JavaParser.parseStatement;
+import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.ast.type.ArrayType.arrayOf;
 import static com.github.javaparser.utils.Utils.EOL;
@@ -121,5 +122,13 @@ public class TypeConstructionTest {
         method.getParameters().get(0).setType(arrayOf(arrayOf(new ClassOrInterfaceType("Blob"))));
 
         assertEquals("void a(Blob[][] a) {" + EOL + "}", method.toString());
+    }
+
+    @Test
+    public void getArrayCreationType() {
+        ArrayCreationExpr expr = parseExpression("new int[]");
+        ArrayType outerType = (ArrayType) expr.getType();
+        Type<?> innerType = outerType.getComponentType();
+        assertThat(innerType).isEqualTo(expr.getElementType());
     }
 }

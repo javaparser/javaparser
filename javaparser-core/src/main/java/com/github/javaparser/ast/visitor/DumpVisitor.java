@@ -562,7 +562,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ArrayCreationExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print("new ");
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
 		for (ArrayCreationLevel level : n.getLevels()) {
 			level.accept(this, arg);
 		}

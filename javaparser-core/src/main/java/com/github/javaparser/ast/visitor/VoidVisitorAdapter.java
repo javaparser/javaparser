@@ -118,7 +118,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
-		n.getType().accept(this, arg);
+		n.getElementType().accept(this, arg);
 		for (ArrayCreationLevel level : n.getLevels()) {
 			level.accept(this, arg);
 		}
