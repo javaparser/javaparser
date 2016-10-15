@@ -8,6 +8,7 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,18 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public interface TypeDeclaration extends Declaration, TypeParametrizable {
+
+    ///
+    /// Containment
+    ///
+
+    default Set<TypeDeclaration> internalTypes() {
+        throw new UnsupportedOperationException();
+    }
+
+    default Optional<TypeDeclaration> containerType() {
+        throw new UnsupportedOperationException();
+    }
 
     ///
     /// Misc
@@ -135,6 +148,12 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
      */
     SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
 
+    /**
+     * Solve any possible symbol including: fields, internal types,
+     * @param name
+     * @param typeSolver
+     * @return
+     */
     SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 
     /**

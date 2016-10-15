@@ -780,4 +780,12 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     // List<TypeParameterDeclaration> getTypeParameters();
 
     // AccessLevel accessLevel();
+
+    ///
+    /// Containment
+    ///
+
+    // Set<TypeDeclaration> internalTypes()
+
+    // Optional<TypeDeclaration> containerType()
 }
