@@ -52,7 +52,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
 	public TypeParameter() {
 		this(Range.UNKNOWN,
-				"",
+				"empty",
 				new NodeList<>(),
 				new NodeList<>());
 	}

@@ -14,6 +14,7 @@ import java.util.stream.Stream;
  * @param <N> the type of nodes contained.
  */
 public class NodeList<N extends Node> extends Node implements Iterable<N> {
+    // TODO we probably want to use the already existing childrenNodes list for this.
     private List<N> innerList = new ArrayList<>(0);
 
     public NodeList() {

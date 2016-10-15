@@ -31,10 +31,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class JavadocComment extends Comment {
 
     public JavadocComment() {
+        this(Range.UNKNOWN, "empty");
     }
 
     public JavadocComment(String content) {
-        super(content);
+        this(Range.UNKNOWN, content);
     }
 
     public JavadocComment(Range range, String content) {

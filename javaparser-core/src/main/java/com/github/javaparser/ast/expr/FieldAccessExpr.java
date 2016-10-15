@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -44,18 +45,18 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 	private NameExpr field;
 
 	public FieldAccessExpr() {
+        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new NameExpr());
 	}
 
 	public FieldAccessExpr(final Expression scope, final String field) {
-		setScope(scope);
-		setField(field);
+        this(Range.UNKNOWN, scope, new NodeList<>(), name(field));
 	}
 
-	public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final String field) {
+	public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final NameExpr field) {
 		super(range);
 		setScope(scope);
 		setTypeArguments(typeArguments);
-		setField(field);
+		setFieldExpr(field);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

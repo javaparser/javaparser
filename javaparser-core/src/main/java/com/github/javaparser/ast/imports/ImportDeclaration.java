@@ -48,7 +48,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public abstract class ImportDeclaration extends Node {
     public ImportDeclaration() {
-        super();
+        this(Range.UNKNOWN);
     }
 
     public ImportDeclaration(Range range) {

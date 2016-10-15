@@ -52,7 +52,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     public ClassOrInterfaceType() {
         this(Range.UNKNOWN,
                 null,
-                "",
+                "empty",
                 null);
     }
 

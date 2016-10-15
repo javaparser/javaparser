@@ -36,10 +36,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class LineComment extends Comment {
 
     public LineComment() {
+        this(Range.UNKNOWN, "empty");
     }
 
     public LineComment(String content) {
-        super(content);
+        this(Range.UNKNOWN, content);
     }
 
     public LineComment(Range range, String content) {

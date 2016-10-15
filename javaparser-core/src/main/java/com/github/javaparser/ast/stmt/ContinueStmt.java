@@ -30,13 +30,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class ContinueStmt extends Statement {
 
+    // TODO nullable
 	private String id;
 
 	public ContinueStmt() {
+        this(Range.UNKNOWN, null);
 	}
 
 	public ContinueStmt(final String id) {
-		this.id = id;
+		this(Range.UNKNOWN, id);
 	}
 
 	public ContinueStmt(Range range, final String id) {

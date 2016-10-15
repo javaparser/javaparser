@@ -19,13 +19,12 @@ public class UnionType extends Type<UnionType> implements NodeWithAnnotations<Un
     private NodeList<ReferenceType<?>> elements;
 
     public UnionType(Range range, NodeList<ReferenceType<?>> elements) {
-        super(range);
+        super(range, new NodeList<>());
         setElements(elements);
     }
 
     public UnionType(NodeList<ReferenceType<?>> elements) {
-        super();
-        setElements(elements);
+        this(Range.UNKNOWN, elements);
     }
 
     public NodeList<ReferenceType<?>> getElements() {

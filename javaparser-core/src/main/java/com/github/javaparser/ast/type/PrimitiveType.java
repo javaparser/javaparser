@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -82,14 +83,15 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 	private Primitive type;
 
 	public PrimitiveType() {
+        this(Range.UNKNOWN, Primitive.Int);
 	}
 
 	public PrimitiveType(final Primitive type) {
-		this.type = type;
+        this(Range.UNKNOWN, type);
 	}
 
 	public PrimitiveType(Range range, final Primitive type) {
-		super(range);
+		super(range, new NodeList<>());
 		setType(type);
 	}
 

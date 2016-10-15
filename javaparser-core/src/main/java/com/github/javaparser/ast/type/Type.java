@@ -35,17 +35,6 @@ public abstract class Type<T extends Type> extends Node {
 
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-    public Type() {
-    }
-
-    public Type(NodeList<AnnotationExpr> annotation){
-        setAnnotations(annotation);
-    }
-
-    public Type(Range range) {
-        super(range);
-    }
-    
     public Type(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
         setAnnotations(annotations);
@@ -56,9 +45,8 @@ public abstract class Type<T extends Type> extends Node {
     }
 
     public T setAnnotations(NodeList<AnnotationExpr> annotations) {
-        setAsParentNodeOf(annotations);
         this.annotations = assertNotNull(annotations);
+        setAsParentNodeOf(annotations);
         return (T) this;
     }
-
 }

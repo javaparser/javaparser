@@ -22,10 +22,12 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.ast.expr.NameExpr.name;
 
 /**
  * @author Julio Vilmar Gesser
@@ -35,10 +37,11 @@ public final class ReturnStmt extends Statement {
 	private Expression expr;
 
 	public ReturnStmt() {
+        this(Range.UNKNOWN, new BooleanLiteralExpr());
 	}
 
 	public ReturnStmt(final Expression expr) {
-		setExpr(expr);
+		this(Range.UNKNOWN, expr);
 	}
 
 	public ReturnStmt(Range range, final Expression expr) {
@@ -48,11 +51,9 @@ public final class ReturnStmt extends Statement {
 
     /**
      * Will create a NameExpr with the string param
-     * 
-     * @param expr
      */
     public ReturnStmt(String expr) {
-        setExpr(new NameExpr(expr));
+        this(Range.UNKNOWN, name(expr));
     }
 
     @Override

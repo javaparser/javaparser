@@ -397,7 +397,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override public Node visit(final InstanceOfExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setExpr((Expression) n.getExpr().accept(this, arg));
-		n.setType((Type) n.getType().accept(this, arg));
+		n.setType((ReferenceType<?>) n.getType().accept(this, arg));
 		return n;
 	}
 

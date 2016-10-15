@@ -24,6 +24,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -40,9 +41,7 @@ public final class SwitchStmt extends Statement {
 	private NodeList<SwitchEntryStmt> entries;
 
 	public SwitchStmt() {
-		this(Range.UNKNOWN,
-				// TODO what expression should this be?
-				name(""), new NodeList<>());
+		this(Range.UNKNOWN, new NameExpr(), new NodeList<>());
 	}
 
 	public SwitchStmt(final Expression selector,

@@ -119,9 +119,12 @@ public final class VariableDeclarationExpr extends Expression implements
 
     public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type elementType,
                                    final NodeList<VariableDeclarator> variables) {
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setVariables(variables);
+        this(Range.UNKNOWN,
+                modifiers,
+                new NodeList<>(),
+                elementType,
+                variables,
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Range range,

@@ -30,13 +30,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class ThisExpr extends Expression {
 
+    // TODO can be null
 	private Expression classExpr;
 
 	public ThisExpr() {
+        this(Range.UNKNOWN, null); 
 	}
 
 	public ThisExpr(final Expression classExpr) {
-		setClassExpr(classExpr);
+		this(Range.UNKNOWN, classExpr);
 	}
 
 	public ThisExpr(final Range range, final Expression classExpr) {

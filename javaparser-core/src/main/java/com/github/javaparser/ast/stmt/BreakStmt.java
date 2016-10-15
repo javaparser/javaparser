@@ -25,6 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -33,10 +35,11 @@ public final class BreakStmt extends Statement {
 	private String id;
 
 	public BreakStmt() {
+        this(Range.UNKNOWN, "empty");
 	}
 
 	public BreakStmt(final String id) {
-		this.id = id;
+		this(Range.UNKNOWN, id);
 	}
 
 	public BreakStmt(final Range range, final String id) {
@@ -57,7 +60,7 @@ public final class BreakStmt extends Statement {
 	}
 
 	public BreakStmt setId(final String id) {
-		this.id = id;
+		this.id = assertNotNull(id);
 		return this;
 	}
 }

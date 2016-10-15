@@ -26,6 +26,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -34,15 +36,16 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 	private String name;
 
 	public NameExpr() {
+        this(Range.UNKNOWN, "empty");
 	}
 
 	public NameExpr(final String name) {
-		this.name = name;
+		this(Range.UNKNOWN, name);
 	}
 
 	public NameExpr(Range range, final String name) {
 		super(range);
-		this.name = name;
+        setName(name);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -60,7 +63,7 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 
     @Override
     public NameExpr setName(final String name) {
-		this.name = name;
+		this.name = assertNotNull(name);
         return this;
 	}
 
@@ -73,6 +76,7 @@ public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 	 *            qualified name
 	 * @return instanceof {@link NameExpr}
 	 */
+    // TODO this needs a more specific name, like "parse"
 	public static NameExpr name(String qualifiedName) {
 		String[] split = qualifiedName.split("\\.");
 		NameExpr ret = new NameExpr(split[0]);

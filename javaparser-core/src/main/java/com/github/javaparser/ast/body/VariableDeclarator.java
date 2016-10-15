@@ -35,7 +35,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -43,7 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarator extends Node implements
-        NodeWithType<VariableDeclarator> {
+        NodeWithType<VariableDeclarator, Type<?>> {
 
     private VariableDeclaratorId id;
 

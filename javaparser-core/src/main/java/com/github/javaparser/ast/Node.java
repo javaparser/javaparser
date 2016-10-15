@@ -67,10 +67,6 @@ public abstract class Node implements Cloneable {
 
     private Comment comment;
 
-    public Node() {
-        this(Range.UNKNOWN);
-    }
-
     public Node(Range range) {
         this.range = range;
     }

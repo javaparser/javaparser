@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
@@ -54,7 +53,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithJavaDoc<MethodDeclaration>, 
         NodeWithDeclaration, 
         NodeWithName<MethodDeclaration>,
-        NodeWithType<MethodDeclaration>,
+        NodeWithType<MethodDeclaration, Type<?>>,
         NodeWithElementType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>, 
         NodeWithParameters<MethodDeclaration>,
@@ -90,7 +89,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
-                name(""),
+                new NameExpr(),
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>(),

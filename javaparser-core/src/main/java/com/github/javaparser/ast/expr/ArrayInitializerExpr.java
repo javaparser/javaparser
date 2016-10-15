@@ -39,10 +39,11 @@ public final class ArrayInitializerExpr extends Expression {
     private NodeList<Expression> values;
 
     public ArrayInitializerExpr() {
+        this(Range.UNKNOWN, new NodeList<>());
     }
 
     public ArrayInitializerExpr(NodeList<Expression> values) {
-       setValues(values);
+       this(Range.UNKNOWN, values);
     }
 
     public ArrayInitializerExpr(Range range, NodeList<Expression> values) {

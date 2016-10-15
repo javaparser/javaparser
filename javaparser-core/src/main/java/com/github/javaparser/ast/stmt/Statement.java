@@ -28,12 +28,7 @@ import com.github.javaparser.ast.Node;
  * @author Julio Vilmar Gesser
  */
 public abstract class Statement extends Node {
-
-	public Statement() {
-	}
-
 	public Statement(final Range range) {
 		super(range);
 	}
-
 }

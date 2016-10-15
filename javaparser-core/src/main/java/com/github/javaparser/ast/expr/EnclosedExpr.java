@@ -33,10 +33,11 @@ public final class EnclosedExpr extends Expression {
 	private Expression inner;
 
 	public EnclosedExpr() {
+        this(Range.UNKNOWN, new StringLiteralExpr());
 	}
 
 	public EnclosedExpr(final Expression inner) {
-		setInner(inner);
+		this(Range.UNKNOWN, inner);
 	}
 
 	public EnclosedExpr(final Range range, final Expression inner) {

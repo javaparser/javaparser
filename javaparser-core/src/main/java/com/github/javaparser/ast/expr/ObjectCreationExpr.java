@@ -32,7 +32,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,9 +45,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class ObjectCreationExpr extends Expression implements 
         NodeWithTypeArguments<ObjectCreationExpr>,
-        NodeWithType<ObjectCreationExpr>,
+        NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>,
         NodeWithArguments<ObjectCreationExpr> {
 
+    // TODO nullable
     private Expression scope;
 
     private ClassOrInterfaceType type;
@@ -57,10 +57,16 @@ public final class ObjectCreationExpr extends Expression implements
 
     private NodeList<Expression> args;
 
-    // This can be null, to indicate there is no body
+    // TODO This can be null, to indicate there is no body
     private NodeList<BodyDeclaration<?>> anonymousClassBody = null;
 
     public ObjectCreationExpr() {
+        this(Range.UNKNOWN, 
+                null,
+                new ClassOrInterfaceType(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     /**
@@ -71,9 +77,12 @@ public final class ObjectCreationExpr extends Expression implements
      * @param args Any arguments to pass to the constructor
      */
     public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final NodeList<Expression> args) {
-        setScope(scope);
-        setType(type);
-        setArgs(args);
+        this(Range.UNKNOWN,
+                scope,
+                type,
+                new NodeList<>(),
+                args,
+                new NodeList<>());
     }
 
 	public ObjectCreationExpr(final Range range,
@@ -131,7 +140,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     @Override
     public ObjectCreationExpr setArgs(final NodeList<Expression> args) {
-        this.args = args;
+        this.args = assertNotNull(args);
         setAsParentNodeOf(this.args);
         return this;
     }
@@ -143,10 +152,9 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     @Override
-    public ObjectCreationExpr setType(final Type<?> type) {
-        if (!(type instanceof ClassOrInterfaceType))// needed so we can use NodeWithType
-            throw new RuntimeException("You can only add ClassOrInterfaceType to an ObjectCreationExpr");
-        this.type = (ClassOrInterfaceType) type;
+    public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
+        assertNotNull(type);
+        this.type = type;
         setAsParentNodeOf(this.type);
         return this;
     }

@@ -50,15 +50,15 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     private NameExpr name;
 
     public PackageDeclaration() {
+        this(Range.UNKNOWN, new NodeList<>(), new NameExpr());
     }
 
     public PackageDeclaration(NameExpr name) {
-        setName(name);
+        this(Range.UNKNOWN, new NodeList<>(), name);
     }
 
     public PackageDeclaration(NodeList<AnnotationExpr> annotations, NameExpr name) {
-        setAnnotations(annotations);
-        setName(name);
+        this(Range.UNKNOWN, annotations, name);
     }
 
     public PackageDeclaration(Range range, NodeList<AnnotationExpr> annotations, NameExpr name) {

@@ -28,11 +28,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * These are some examples:
@@ -52,6 +47,10 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     private String identifier;
 
     public MethodReferenceExpr() {
+        this(Range.UNKNOWN,
+                new ClassExpr(),
+                new NodeList<>(),
+                "empty");
     }
 
     public MethodReferenceExpr(Range range, Expression scope,

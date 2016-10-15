@@ -565,13 +565,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(FieldAccessExpr _n, Object _arg) {
 		Expression scope_ = cloneNode(_n.getScope(), _arg);
 		NodeList<Type<?>> typeArguments_ = cloneList(_n.getTypeArguments(), _arg);
+        NameExpr fieldExpr_ = cloneNode(_n.getFieldExpr(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
 
 		FieldAccessExpr r = new FieldAccessExpr(
 				_n.getRange(),
 				scope_, 
                 typeArguments_, 
-                _n.getField()
+                fieldExpr_
 		);
 		r.setComment(comment);
 		return r;
@@ -580,7 +581,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	@Override
 	public Node visit(InstanceOfExpr _n, Object _arg) {
 		Expression expr = cloneNode(_n.getExpr(), _arg);
-		Type<?> type_ = cloneNode(_n.getType(), _arg);
+		ReferenceType<?> type_ = cloneNode(_n.getType(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
 
 		InstanceOfExpr r = new InstanceOfExpr(
@@ -694,13 +695,14 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		Expression scope_ = cloneNode(_n.getScope(), _arg);
 		NodeList<Type<?>> typeArguments_ = cloneList(_n.getTypeArguments(), _arg);
         NodeList<Expression> args = cloneList(_n.getArgs(), _arg);
-		Comment comment = cloneNode(_n.getComment(), _arg);
+        NameExpr nameExpr = cloneNode(_n.getNameExpr(), _arg);
+        Comment comment = cloneNode(_n.getComment(), _arg);
 
 		MethodCallExpr r = new MethodCallExpr(
 				_n.getRange(),
 				scope_, 
                 typeArguments_, 
-                _n.getName(), 
+                nameExpr,
                 args
 		);
 		r.setComment(comment);
@@ -1143,10 +1145,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 		BlockStmt catchBlock = cloneNode(_n.getBody(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
 
-		CatchClause r = new CatchClause(
-				_n.getRange(),
-				param.getModifiers(), param.getAnnotations(), param.getElementType(), param.getId(), catchBlock
-		);
+		CatchClause r = new CatchClause(_n.getRange(), param, catchBlock);
 		r.setComment(comment);
 		return r;
 	}

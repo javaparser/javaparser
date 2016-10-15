@@ -31,15 +31,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class MarkerAnnotationExpr extends AnnotationExpr {
 
 	public MarkerAnnotationExpr() {
+        this(Range.UNKNOWN, new NameExpr());
+        
 	}
 
 	public MarkerAnnotationExpr(final NameExpr name) {
-		setName(name);
+		this(Range.UNKNOWN, name);
 	}
 
 	public MarkerAnnotationExpr(final Range range, final NameExpr name) {
-		super(range);
-		setName(name);
+		super(range, name);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

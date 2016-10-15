@@ -1868,9 +1868,9 @@ InitializerDeclaration InitializerDeclaration():
  * Type, name and expression syntax follows.
  */
 
-Type Type():
+Type<?> Type():
 {
-	Type ret;
+	Type<?> ret;
 }
 {
  (
@@ -1881,9 +1881,9 @@ Type Type():
  { return ret; }
 }
 
-ReferenceType ReferenceType():
+ReferenceType<?> ReferenceType():
 {
-	Type type;
+	Type<?> type;
 	ArrayBracketPair arrayBracketPair;
 	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
 }
@@ -1893,7 +1893,7 @@ ReferenceType ReferenceType():
   |
    type = ClassOrInterfaceType()  ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
-  { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
+  { return (ReferenceType<?>)wrapInArrayTypes(type, arrayBracketPairs); }
 }
 
 ArrayBracketPair ArrayBracketPair():
@@ -2042,9 +2042,9 @@ PrimitiveType PrimitiveType():
 { return ret; }
 }
 
-Type ResultType():
+Type<?> ResultType():
 {
-	Type ret;
+	Type<?> ret;
 }
 {
   (
@@ -2236,10 +2236,10 @@ Expression EqualityExpression():
 Expression InstanceOfExpression():
 {
 	Expression ret;
-	Type type;
+	ReferenceType<?> type;
 }
 {
-  ret = RelationalExpression() [ "instanceof" type = Type() { ret = new InstanceOfExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, type); } ]
+  ret = RelationalExpression() [ "instanceof" type = ReferenceType() { ret = new InstanceOfExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, type); } ]
   { return ret; }
 }
 
@@ -2394,8 +2394,8 @@ Expression PostfixExpression():
   ret = PrimaryExpression()
   [
   	LOOKAHEAD(2)
-    ( "++" { op = UnaryExpr.Operator.posIncrement; } |
-      "--" { op = UnaryExpr.Operator.posDecrement; }
+    ( "++" { op = UnaryExpr.Operator.postIncrement; } |
+      "--" { op = UnaryExpr.Operator.postDecrement; }
     ) { ret = new UnaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, op); }
   ]
   { return ret; }
@@ -2480,13 +2480,9 @@ Expression PrimaryPrefix():
 	  [ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			MethodCallExpr m = new MethodCallExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, null, args);
-				m.setNameExpr(name);
-				ret = m;
+	  			ret = new MethodCallExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, name, args);
 			} else {
-	  			FieldAccessExpr f = new FieldAccessExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, null, null);
-				f.setFieldExpr(name);
-				ret = f;
+	  			ret = new FieldAccessExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, emptyList(), name);
 			}
 	  	}
 	 |
@@ -2535,12 +2531,10 @@ Expression PrimaryPrefix():
 
 	|
 	  	name = SimpleName() { begin=tokenBegin(); }
-	  	[ args = Arguments() {hasArgs=true;} ]
+	  	[ args = Arguments() { hasArgs=true; } ]
 	  	{
 	  		if (hasArgs) {
-	  			MethodCallExpr m = new MethodCallExpr(range(begin, tokenEnd()), null, null, null, args);
-				m.setNameExpr(name);
-				ret = m;
+	  			ret = new MethodCallExpr(range(begin, tokenEnd()), null, emptyList(), name, args);
 			} else {
 	  			ret = name;
 			}
@@ -2585,13 +2579,9 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			MethodCallExpr m = new MethodCallExpr(range(scope.getBegin(), tokenEnd()), scope, typeArgs.list, null, args);
-				m.setNameExpr(name);
-				ret = m;
+	  			ret = new MethodCallExpr(range(scope.getBegin(), tokenEnd()), scope, typeArgs.list, name, args);
 			} else {
-	  			FieldAccessExpr f =  new FieldAccessExpr(range(scope.getBegin(), tokenEnd()), scope, typeArgs.list, null);
-				f.setFieldExpr(name);
-				ret = f;
+	  			ret =  new FieldAccessExpr(range(scope.getBegin(), tokenEnd()), scope, typeArgs.list, name);
 			}
 	  	}
 	)
@@ -2898,9 +2888,9 @@ ExpressionStmt StatementExpression():
 	|
 	  expr = PrimaryExpression()
 	  [
-	    "++" { expr = new UnaryExpr(range(expr.getBegin(), tokenEnd()), expr, UnaryExpr.Operator.posIncrement);  }
+	    "++" { expr = new UnaryExpr(range(expr.getBegin(), tokenEnd()), expr, UnaryExpr.Operator.postIncrement);  }
 	  |
-	    "--" { expr = new UnaryExpr(range(expr.getBegin(), tokenEnd()), expr, UnaryExpr.Operator.posDecrement);  }
+	    "--" { expr = new UnaryExpr(range(expr.getBegin(), tokenEnd()), expr, UnaryExpr.Operator.postDecrement);  }
 	  |
 	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin(), tokenEnd()), expr, value, op); }
 	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
@@ -3149,13 +3139,14 @@ TryStmt TryStatement():
   			 
   			catchBlock = Block()
   			{
-  			   if (exceptionTypes.size() > 1) {
+  			    if (exceptionTypes.size() > 1) {
   			        type = new UnionType(exceptionTypes);
-  			   } else {
+  			    } else {
   			        type = (Type)exceptionTypes.get(0);
-  			   }
-  			   catchs = add(catchs, new CatchClause(range(catchBegin, tokenEnd()), exceptModifier.modifiers, exceptModifier.annotations, type, exceptId, catchBlock));
-  			   exceptionTypes = emptyList(); }
+  			    }
+				Parameter catchType = new Parameter(Range.UNKNOWN, exceptModifier.modifiers, exceptModifier.annotations, type, emptyList(), false, exceptId);
+  			    catchs = add(catchs, new CatchClause(range(catchBegin, tokenEnd()), catchType, catchBlock));
+  			    exceptionTypes = emptyList(); }
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|

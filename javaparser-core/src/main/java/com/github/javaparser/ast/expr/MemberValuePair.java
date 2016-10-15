@@ -27,6 +27,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -37,11 +39,11 @@ public final class MemberValuePair extends Node implements NodeWithName<MemberVa
 	private Expression value;
 
 	public MemberValuePair() {
+        this(Range.UNKNOWN, "empty", new StringLiteralExpr());
 	}
 
 	public MemberValuePair(final String name, final Expression value) {
-		setName(name);
-		setValue(value);
+        this(Range.UNKNOWN, name, value);
 	}
 
 	public MemberValuePair(final Range range, final String name, final Expression value) {
@@ -69,12 +71,12 @@ public final class MemberValuePair extends Node implements NodeWithName<MemberVa
 
     @Override
     public MemberValuePair setName(final String name) {
-		this.name = name;
+		this.name = assertNotNull(name);
         return this;
 	}
 
 	public MemberValuePair setValue(final Expression value) {
-		this.value = value;
+		this.value = assertNotNull(value);
 		setAsParentNodeOf(this.value);
 		return this;
 	}

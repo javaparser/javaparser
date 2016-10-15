@@ -23,28 +23,31 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
-public final class CastExpr extends Expression implements NodeWithType<CastExpr> {
+public final class CastExpr extends Expression implements NodeWithType<CastExpr, Type<?>> {
 
-    private Type type;
+    private Type<?> type;
 
     private Expression expr;
 
     public CastExpr() {
+        this(Range.UNKNOWN, new ClassOrInterfaceType(), new NameExpr());
     }
 
-    public CastExpr(Type type, Expression expr) {
-    	setType(type);
-    	setExpr(expr);
+    public CastExpr(Type<?> type, Expression expr) {
+        this(Range.UNKNOWN, type, expr);
     }
 
-    public CastExpr(Range range, Type type, Expression expr) {
+    public CastExpr(Range range, Type<?> type, Expression expr) {
         super(range);
         setType(type);
     	setExpr(expr);
@@ -65,19 +68,19 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr>
     }
 
     @Override
-    public Type getType() {
+    public Type<?> getType() {
         return type;
     }
 
     public CastExpr setExpr(Expression expr) {
-        this.expr = expr;
+        this.expr = assertNotNull(expr);
 		setAsParentNodeOf(this.expr);
         return this;
     }
 
     @Override
-    public CastExpr setType(Type type) {
-        this.type = type;
+    public CastExpr setType(Type<?> type) {
+        this.type = assertNotNull(type);
 		setAsParentNodeOf(this.type);
         return this;
     }

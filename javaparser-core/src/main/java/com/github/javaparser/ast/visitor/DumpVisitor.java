@@ -885,10 +885,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		n.getExpr().accept(this, arg);
 
 		switch (n.getOperator()) {
-			case posIncrement:
+			case postIncrement:
 				printer.print("++");
 				break;
-			case posDecrement:
+			case postDecrement:
 				printer.print("--");
 				break;
 			default:

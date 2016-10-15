@@ -52,7 +52,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     public EnumConstantDeclaration() {
         this(Range.UNKNOWN, 
                 new NodeList<>(), 
-                "",
+                "empty",
                 new NodeList<>(),
                 new NodeList<>());
     }

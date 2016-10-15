@@ -30,13 +30,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class SuperExpr extends Expression {
 
+    // TODO nullable
 	private Expression classExpr;
 
 	public SuperExpr() {
+        this(Range.UNKNOWN, null);
 	}
 
 	public SuperExpr(final Expression classExpr) {
-		setClassExpr(classExpr);
+		this(Range.UNKNOWN, classExpr);
 	}
 
 	public SuperExpr(final Range range, final Expression classExpr) {

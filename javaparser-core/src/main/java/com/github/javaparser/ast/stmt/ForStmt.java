@@ -29,7 +29,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -48,17 +47,14 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 	public ForStmt() {
 		this(Range.UNKNOWN,
 				new NodeList<>(),
-				new BooleanLiteralExpr(false),
+				new BooleanLiteralExpr(),
 				new NodeList<>(),
 				new EmptyStmt());
 	}
 
 	public ForStmt(final NodeList<Expression> init, final Expression compare,
 			final NodeList<Expression> update, final Statement body) {
-		setCompare(compare);
-		setInit(init);
-		setUpdate(update);
-		setBody(body);
+        this(Range.UNKNOWN, init, compare, update, body);
 	}
 
 	public ForStmt(Range range,

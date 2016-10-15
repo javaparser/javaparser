@@ -23,6 +23,8 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -30,10 +32,9 @@ public abstract class AnnotationExpr extends Expression {
 
 	protected NameExpr name;
 
-	public AnnotationExpr() {}
-
-	public AnnotationExpr(Range range) {
+	public AnnotationExpr(Range range, NameExpr name) {
 		super(range);
+        setName(name);
 	}
 
 	public NameExpr getName() {
@@ -41,7 +42,7 @@ public abstract class AnnotationExpr extends Expression {
 	}
 
 	public AnnotationExpr setName(NameExpr name) {
-		this.name = name;
+		this.name = assertNotNull(name);
 		setAsParentNodeOf(name);
 		return this;
 	}

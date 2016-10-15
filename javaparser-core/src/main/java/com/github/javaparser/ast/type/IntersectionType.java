@@ -26,13 +26,13 @@ public class IntersectionType extends Type<IntersectionType> implements NodeWith
 
     private NodeList<ReferenceType<?>> elements;
 
-    public IntersectionType(Range range, NodeList<ReferenceType<?>> elements) {
-        super(range);
-        setElements(elements);
-    }
-
     public IntersectionType(NodeList<ReferenceType<?>> elements) {
         this(Range.UNKNOWN, elements);
+    }
+
+    public IntersectionType(Range range, NodeList<ReferenceType<?>> elements) {
+        super(range, new NodeList<>());
+        setElements(elements);
     }
 
     @Override

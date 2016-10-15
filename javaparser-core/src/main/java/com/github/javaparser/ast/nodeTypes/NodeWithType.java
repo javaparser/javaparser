@@ -34,13 +34,13 @@ import com.github.javaparser.ast.type.Type;
  *
  * @since 2.3.1
  */
-public interface NodeWithType<T> {
+public interface NodeWithType<N, T extends Type<?>> {
     /**
      * Gets the type
      * 
      * @return the type
      */
-    Type<?> getType();
+    T getType();
 
     /**
      * Sets the type
@@ -48,7 +48,7 @@ public interface NodeWithType<T> {
      * @param type the type
      * @return this
      */
-    T setType(Type<?> type);
+    N setType(T type);
 
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
@@ -56,14 +56,14 @@ public interface NodeWithType<T> {
      * @param typeClass the type
      * @return this
      */
-    default T setType(Class<?> typeClass) {
+    default N setType(Class<?> typeClass) {
         ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
-        return setType(new ClassOrInterfaceType(typeClass.getSimpleName()));
+        return setType((T) new ClassOrInterfaceType(typeClass.getSimpleName()));
     }
 
-    default T setType(final String type) {
+    default N setType(final String type) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
-        return setType(classOrInterfaceType);
+        return setType((T) classOrInterfaceType);
     }
 
 }

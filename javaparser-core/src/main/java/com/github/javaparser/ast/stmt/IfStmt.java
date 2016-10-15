@@ -22,9 +22,12 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -35,15 +38,18 @@ public final class IfStmt extends Statement {
 
 	private Statement thenStmt;
 
+    // TODO nullable
 	private Statement elseStmt;
 
 	public IfStmt() {
+        this(Range.UNKNOWN,
+                new BooleanLiteralExpr(),
+                new EmptyStmt(),
+                null);
 	}
 
 	public IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
-		setCondition(condition);
-		setThenStmt(thenStmt);
-		setElseStmt(elseStmt);
+        this(Range.UNKNOWN, condition, thenStmt, elseStmt);
 	}
 
 	public IfStmt(Range range,
@@ -75,7 +81,7 @@ public final class IfStmt extends Statement {
 	}
 
 	public IfStmt setCondition(final Expression condition) {
-		this.condition = condition;
+		this.condition = assertNotNull(condition);
 		setAsParentNodeOf(this.condition);
 		return this;
 	}
@@ -87,7 +93,7 @@ public final class IfStmt extends Statement {
 	}
 
 	public IfStmt setThenStmt(final Statement thenStmt) {
-		this.thenStmt = thenStmt;
+		this.thenStmt = assertNotNull(thenStmt);
 		setAsParentNodeOf(this.thenStmt);
 		return this;
 	}

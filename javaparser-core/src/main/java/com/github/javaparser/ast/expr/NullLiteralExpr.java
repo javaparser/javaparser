@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class NullLiteralExpr extends LiteralExpr {
 
 	public NullLiteralExpr() {
+        this(Range.UNKNOWN);
 	}
 
 	public NullLiteralExpr(final Range range) {

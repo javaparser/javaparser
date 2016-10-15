@@ -43,7 +43,7 @@ public final class VariableDeclaratorId extends Node implements NodeWithName<Var
 
     public VariableDeclaratorId() {
         this(Range.UNKNOWN,
-                "",
+                "empty",
                 new NodeList<>());
     }
 

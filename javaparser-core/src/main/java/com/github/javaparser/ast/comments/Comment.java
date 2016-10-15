@@ -36,14 +36,7 @@ public abstract class Comment extends Node {
 
     private String content;
     private Node commentedNode;
-
-    public Comment() {
-    }
-
-    public Comment(String content) {
-        this.content = content;
-    }
-
+    
     public Comment(Range range, String content) {
         super(range);
         this.content = content;

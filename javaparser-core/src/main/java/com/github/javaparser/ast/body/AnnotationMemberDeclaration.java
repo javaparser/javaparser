@@ -38,14 +38,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavaDoc<AnnotationMemberDeclaration>, NodeWithName<AnnotationMemberDeclaration>,
-        NodeWithType<AnnotationMemberDeclaration>, NodeWithModifiers<AnnotationMemberDeclaration> {
+public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements 
+        NodeWithJavaDoc<AnnotationMemberDeclaration>, 
+        NodeWithName<AnnotationMemberDeclaration>,
+        NodeWithType<AnnotationMemberDeclaration, Type<?>>, 
+        NodeWithModifiers<AnnotationMemberDeclaration> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
@@ -61,7 +63,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
-                "",
+                "empty",
                 null);
     }
 

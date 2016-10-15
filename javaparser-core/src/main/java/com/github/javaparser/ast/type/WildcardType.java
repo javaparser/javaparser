@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -31,25 +32,27 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class WildcardType extends Type<WildcardType> implements NodeWithAnnotations<WildcardType> {
 
+    // TODO nullable
 	private ReferenceType ext;
 
+    // TODO nullable
 	private ReferenceType sup;
 
 	public WildcardType() {
+        this(Range.UNKNOWN, null, null);
 	}
 
-	public WildcardType(final ReferenceType ext) {
-		setExtends(ext);
+	public WildcardType(final ReferenceType<?> ext) {
+		this(Range.UNKNOWN, ext, null);
 	}
 
-	public WildcardType(final ReferenceType ext, final ReferenceType sup) {
-		setExtends(ext);
-		setSuper(sup);
+	public WildcardType(final ReferenceType<?> ext, final ReferenceType<?> sup) {
+        this(Range.UNKNOWN, ext, sup);
 	}
 
 	public WildcardType(final Range range,
-			final ReferenceType ext, final ReferenceType sup) {
-		super(range);
+			final ReferenceType<?> ext, final ReferenceType<?> sup) {
+		super(range, new NodeList<>());
 		setExtends(ext);
 		setSuper(sup);
 	}

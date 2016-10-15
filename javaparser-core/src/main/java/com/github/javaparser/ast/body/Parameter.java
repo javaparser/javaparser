@@ -35,7 +35,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import java.util.EnumSet;
 
@@ -45,7 +44,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class Parameter extends Node implements
-        NodeWithType<Parameter>,
+        NodeWithType<Parameter, Type<?>>,
         NodeWithElementType<Parameter>,
         NodeWithAnnotations<Parameter>,
         NodeWithName<Parameter>,
