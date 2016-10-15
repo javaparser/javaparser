@@ -42,7 +42,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-		return getContext().solveMethod(name, parameterTypes, typeSolver());
+        Context ctx = getContext();
+		return ctx.solveMethod(name, parameterTypes, typeSolver);
 	}
 
 	public Context getContext() {

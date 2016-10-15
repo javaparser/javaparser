@@ -74,7 +74,7 @@ public class MethodResolutionLogic {
         for (int i = 0; i < method.getNoParams(); i++) {
             Type expectedType = method.getParam(i).getType();
             Type actualType = paramTypes.get(i);
-            if (expectedType.isTypeVariable() && expectedType.asTypeParameter().declaredOnMethod()) {
+            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) && expectedType.asTypeParameter().declaredOnMethod()) {
                 matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
                 continue;
             }
@@ -108,6 +108,18 @@ public class MethodResolutionLogic {
             }
         }
         return !withWildcardTolerance || needForWildCardTolerance;
+    }
+
+    public static boolean isAssignableMatchTypeParameters(Type expected, Type actual,
+                                                          Map<String, Type> matchedParameters) {
+        if (expected.isReferenceType() && actual.isReferenceType()) {
+            return isAssignableMatchTypeParameters(expected.asReferenceType(), actual.asReferenceType(), matchedParameters);
+        } else if (expected.isTypeVariable()) {
+            matchedParameters.put(expected.asTypeParameter().getName(), actual);
+            return true;
+        } else {
+            throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " "+actual.getClass().getCanonicalName());
+        }
     }
 
     public static boolean isAssignableMatchTypeParameters(ReferenceType expected, ReferenceType actual,
@@ -159,7 +171,10 @@ public class MethodResolutionLogic {
                     return false;
                 }
             } else if (expectedParam.isWildcard()) {
-                // TODO verify bounds
+                if (expectedParam.asWildcard().isExtends()){
+                    return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actual, matchedParameters);
+                }
+                // TODO verify super bound
                 return true;
             } else {
                 throw new UnsupportedOperationException(expectedParam.describe());
