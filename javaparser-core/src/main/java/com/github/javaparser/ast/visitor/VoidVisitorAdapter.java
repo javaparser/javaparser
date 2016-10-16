@@ -239,7 +239,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final EnclosedExpr n, final A arg) {
 		visitComment(n.getComment(), arg);
-		n.getInner().accept(this, arg);
+		n.getInner().ifPresent(i->i.accept(this, arg));
 	}
 
 	@Override public void visit(final EnumConstantDeclaration n, final A arg) {

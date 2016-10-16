@@ -708,9 +708,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final EnclosedExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print("(");
-		if (n.getInner() != null) {
-			n.getInner().accept(this, arg);
-		}
+        n.getInner().ifPresent(i -> i.accept(this, arg));
 		printer.print(")");
 	}
 

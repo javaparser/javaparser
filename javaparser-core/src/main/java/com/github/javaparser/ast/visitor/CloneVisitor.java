@@ -554,7 +554,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(EnclosedExpr _n, Object _arg) {
-		Expression inner = cloneNode(_n.getInner(), _arg);
+		Optional<Expression> inner = cloneNode(_n.getInner(), _arg);
 				Optional<? extends Comment> comment = cloneNode(_n.getComment(), _arg); 
 
 		EnclosedExpr r = new EnclosedExpr(

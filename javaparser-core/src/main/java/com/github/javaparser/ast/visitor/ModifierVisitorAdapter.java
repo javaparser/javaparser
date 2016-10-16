@@ -269,7 +269,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final EnclosedExpr n, final A arg) {
 		visitComment(n, arg);
-		n.setInner((Expression) n.getInner().accept(this, arg));
+        n.setInner(n.getInner().flatMap(p -> option((Expression) p.accept(this, arg))));
 		return n;
 	}
 
