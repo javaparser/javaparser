@@ -782,28 +782,6 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
         assertEquals(false, res.isSolved());
     }
 
-    @Test
-    public void testSolveSymbolToInternalType() {
-
-    }
-
-    @Test
-    public void testSolveSymbolToContainer() {
-
-    }
-
-    @Test
-    public void testSolveSymbolToItself() {
-
-    }
-
-    @Test
-    public void testSolveSymbolToTypeVariable() {
-
-    }
-
-    //SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
-
     ///
     /// Assignability
     ///
