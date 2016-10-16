@@ -105,9 +105,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);
 		n.getType().accept(this, arg);
-		if (n.getDefaultValue() != null) {
-			n.getDefaultValue().accept(this, arg);
-		}
+        n.getDefaultValue().ifPresent(d -> d.accept(this, arg));
 	}
 
 	@Override public void visit(final ArrayAccessExpr n, final A arg) {

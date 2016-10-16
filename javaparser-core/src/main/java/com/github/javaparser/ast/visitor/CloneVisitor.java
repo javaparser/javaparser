@@ -32,6 +32,10 @@ import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.option;
+
 public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
@@ -162,7 +166,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 	public Node visit(AnnotationMemberDeclaration _n, Object _arg) {
 		NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
 		Type<?> type_ = cloneNode(_n.getType(), _arg);
-		Expression defaultValue = cloneNode(_n.getDefaultValue(), _arg);
+		Optional<Expression> defaultValue = cloneNode(_n.getDefaultValue(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
 
 		AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(
@@ -1266,6 +1270,11 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
             return null;
         return (T) r;
     }
+
+    protected <N extends Node> Optional<N> cloneNode(Optional<N> optionalNode, Object arg) {
+        return optionalNode.flatMap(n -> option(cloneNode(n, arg)));
+    }
+    
 
     private <N extends Node> NodeList<N> cloneList(NodeList<N> list, Object _arg) {
         if (list == null) {

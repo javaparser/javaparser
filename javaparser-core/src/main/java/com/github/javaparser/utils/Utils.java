@@ -21,11 +21,8 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.Provider;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
@@ -97,4 +94,25 @@ public class Utils {
 		Collections.addAll(list, array);
 		return list;
 	}
+
+    /**
+     * Scala-like statically importable shortcut to Optional.of
+     */
+    public static <T> Optional<T> some(T t) {
+        return Optional.of(t);
+    }
+
+    /**
+     * Importable shortcut to Optional.ofNullable
+     */
+    public static <T> Optional<T> option(T t) {
+        return Optional.ofNullable(t);
+    }
+
+    /**
+     * Scala-like importable shortcut to Optional.empty()
+     */
+    public static <T> Optional<T> none() {
+        return Optional.empty();
+    }
 }

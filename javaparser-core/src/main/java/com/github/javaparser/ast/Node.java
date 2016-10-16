@@ -353,6 +353,10 @@ public abstract class Node implements Cloneable {
         }
     }
 
+    protected void setAsParentNodeOf(Optional<? extends Node> childNode) {
+        childNode.ifPresent(c -> c.setParentNode(this));
+    }
+
     public static final int ABSOLUTE_BEGIN_LINE = -1;
     public static final int ABSOLUTE_END_LINE = -2;
 

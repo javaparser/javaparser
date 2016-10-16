@@ -1438,10 +1438,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(" ");
 		printer.print(n.getName());
 		printer.print("()");
-		if (n.getDefaultValue() != null) {
+        n.getDefaultValue().ifPresent(dv -> {
 			printer.print(" default ");
-			n.getDefaultValue().accept(this, arg);
-		}
+			dv.accept(this, arg);
+		});
 		printer.print(";");
 	}
 

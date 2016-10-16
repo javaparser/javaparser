@@ -35,6 +35,8 @@ import com.github.javaparser.ast.type.*;
 
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.option;
+
 /**
  * This visitor adapter can be used to save time when some specific nodes needs
  * to be changed. To do that just extend this class and override the methods
@@ -67,9 +69,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setType((Type) n.getType().accept(this, arg));
-		if (n.getDefaultValue() != null) {
-			n.setDefaultValue((Expression) n.getDefaultValue().accept(this, arg));
-		}
+        n.setDefaultValue(n.getDefaultValue().flatMap(dv -> option((Expression) dv.accept(this, arg))));
 		return n;
 	}
 
