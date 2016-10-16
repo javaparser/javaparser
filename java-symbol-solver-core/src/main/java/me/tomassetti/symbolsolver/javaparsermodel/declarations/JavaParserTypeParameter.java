@@ -3,19 +3,18 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import me.tomassetti.symbolsolver.core.resolution.Context;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.core.resolution.Context;
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,11 +133,6 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public List<FieldDeclaration> getAllFields() {
         return new ArrayList<>();
-    }
-
-    @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

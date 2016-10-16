@@ -173,7 +173,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return Optional.empty();
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {

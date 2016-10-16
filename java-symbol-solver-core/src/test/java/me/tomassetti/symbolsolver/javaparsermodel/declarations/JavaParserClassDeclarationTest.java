@@ -748,39 +748,6 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
         assertEquals(false, res.isSolved());
     }
 
-    @Test
-    public void testSolveSymbolUnexisting() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-
-        SymbolReference<? extends ValueDeclaration> res = constructorDeclaration.solveSymbol("unexisting", typeSolver);
-        assertEquals(false, res.isSolved());
-    }
-
-    @Test
-    public void testSolveSymbolToDeclaredField() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-
-        SymbolReference<? extends ValueDeclaration> res = constructorDeclaration.solveSymbol("name", typeSolver);
-        assertEquals(true, res.isSolved());
-        assertEquals(true, res.getCorrespondingDeclaration().isField());
-    }
-
-    @Test
-    public void testSolveSymbolToInheritedPublicField() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-
-        SymbolReference<? extends ValueDeclaration> res = constructorDeclaration.solveSymbol("NODE_BY_BEGIN_POSITION", typeSolver);
-        assertEquals(true, res.isSolved());
-        assertEquals(true, res.getCorrespondingDeclaration().isField());
-    }
-
-    @Test
-    public void testSolveSymbolToInheritedPrivateField() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-
-        SymbolReference<? extends ValueDeclaration> res = constructorDeclaration.solveSymbol("parentNode", typeSolver);
-        assertEquals(false, res.isSolved());
-    }
 
     ///
     /// Assignability

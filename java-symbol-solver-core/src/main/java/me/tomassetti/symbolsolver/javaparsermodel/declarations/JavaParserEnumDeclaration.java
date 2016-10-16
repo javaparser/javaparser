@@ -280,11 +280,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        return getContext().solveSymbol(substring, typeSolver);
-    }
-
-    @Override
     public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }

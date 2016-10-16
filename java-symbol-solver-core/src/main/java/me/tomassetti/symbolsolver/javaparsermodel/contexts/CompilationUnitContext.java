@@ -13,6 +13,7 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
+import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             String memberName = getMember(itName);
             SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> type = this.solveType(typeName, typeSolver);
             if (type.isSolved()) {
-                return type.getCorrespondingDeclaration().solveSymbol(memberName, typeSolver);
+                return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
             } else {
                 itName = typeName;
             }
@@ -51,7 +52,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         if (importDecl.getName() instanceof QualifiedNameExpr) {
                             String qName = importDecl.getName().toString();
                             me.tomassetti.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(qName);
-                            SymbolReference<? extends ValueDeclaration> ref = importedType.solveSymbol(name, typeSolver);
+                            SymbolReference<? extends ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
                             if (ref.isSolved()) {
                                 return ref;
                             }
@@ -67,7 +68,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
                             if (memberName.equals(name)) {
                                 me.tomassetti.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(typeName);
-                                return importedType.solveSymbol(memberName, typeSolver);
+                                return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
                             }
                         } else {
                             throw new UnsupportedOperationException("C");

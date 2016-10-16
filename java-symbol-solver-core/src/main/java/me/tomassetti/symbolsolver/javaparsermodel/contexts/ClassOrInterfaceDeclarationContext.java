@@ -22,6 +22,7 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
+import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
         // then among inherited fields
         for (ReferenceType ancestor : getDeclaration().getAncestors()) {
-            SymbolReference ref = ancestor.getTypeDeclaration().solveSymbol(name, typeSolver);
+            SymbolReference ref = new SymbolSolver(typeSolver).solveSymbolInType(ancestor.getTypeDeclaration(), name);
             if (ref.isSolved() && ref.getCorrespondingDeclaration().asField().accessLevel() != AccessLevel.PRIVATE) {
                 return ref;
             }

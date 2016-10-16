@@ -3,18 +3,24 @@ package me.tomassetti.symbolsolver.resolution;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
+import me.tomassetti.symbolsolver.core.resolution.Context;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
+import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
+import me.tomassetti.symbolsolver.javassistmodel.JavassistClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
-import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
 import java.util.List;
 import java.util.Optional;
@@ -107,5 +113,35 @@ public class SymbolSolver {
         TypeDeclaration typeDeclaration = typeSolver.solveType(name);
         ReferenceTypeImpl typeUsage = new ReferenceTypeImpl(typeDeclaration, typeSolver);
         return typeUsage;
+    }
+
+    /**
+     * Solve any possible visible symbols including: fields, internal types, type variables, the type itself or its containers.
+     *
+     * It should contain its own private fields but not inherited private fields.
+     */
+    public SymbolReference<? extends ValueDeclaration> solveSymbolInType(TypeDeclaration typeDeclaration, String name) {
+        if (typeDeclaration instanceof JavaParserClassDeclaration) {
+            Context ctx = ((JavaParserClassDeclaration)typeDeclaration).getContext();
+            return ctx.solveSymbol(name, typeSolver);
+        }
+        if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
+            Context ctx = ((JavaParserInterfaceDeclaration)typeDeclaration).getContext();
+            return ctx.solveSymbol(name, typeSolver);
+        }
+        if (typeDeclaration instanceof JavaParserEnumDeclaration) {
+            Context ctx = ((JavaParserEnumDeclaration)typeDeclaration).getContext();
+            return ctx.solveSymbol(name, typeSolver);
+        }
+        if (typeDeclaration instanceof ReflectionClassDeclaration) {
+            return ((ReflectionClassDeclaration)typeDeclaration).solveSymbol(name, typeSolver);
+        }
+        if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
+            return ((ReflectionInterfaceDeclaration)typeDeclaration).solveSymbol(name, typeSolver);
+        }
+        if (typeDeclaration instanceof JavassistClassDeclaration) {
+            return ((JavassistClassDeclaration)typeDeclaration).solveSymbol(name, typeSolver);
+        }
+        return SymbolReference.unsolved(ValueDeclaration.class);
     }
 }

@@ -207,11 +207,6 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }

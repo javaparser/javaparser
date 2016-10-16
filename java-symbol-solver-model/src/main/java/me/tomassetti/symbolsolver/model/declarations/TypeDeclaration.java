@@ -144,16 +144,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     ///
 
     /**
-     * Solve any possible visible symbols including: fields, internal types, type variables, the type itself or its containers.
-     *
-     * It should contain its own private fields but not inherited private fields.
-     *
-     * Deprecated because resolution logic should be outside declarations.
-     */
-    @Deprecated
-    SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
-
-    /**
      * Try to solve a symbol just in the declaration, it does not delegate to the container.
      *
      * Deprecated because resolution logic should be outside declarations.

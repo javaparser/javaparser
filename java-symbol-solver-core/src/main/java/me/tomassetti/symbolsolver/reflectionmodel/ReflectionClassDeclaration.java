@@ -254,7 +254,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return fields;
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : clazz.getFields()) {
             if (field.getName().equals(name)) {

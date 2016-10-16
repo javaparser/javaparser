@@ -13,6 +13,7 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.PrimitiveType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
+import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         if (wrappedNode.getFieldExpr().toString().equals(name)) {
             if (wrappedNode.getScope() instanceof ThisExpr) {
                 Type typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-                return typeOfThis.asReferenceType().getTypeDeclaration().solveSymbol(name, typeSolver);
+                return new SymbolSolver(typeSolver).solveSymbolInType(typeOfThis.asReferenceType().getTypeDeclaration(), name);
             }
         }
         return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveSymbol(name, typeSolver);
