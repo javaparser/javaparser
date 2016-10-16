@@ -17,6 +17,6 @@ public interface NodeWithTypeParameters<T> {
     T setTypeParameters(NodeList<TypeParameter> typeParameters);
 
     default boolean isGeneric() {
-        return getTypeParameters() != null && getTypeParameters().size() > 0;
+        return getTypeParameters().size() > 0;
     }
 }

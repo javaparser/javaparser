@@ -29,15 +29,18 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 
-    private NodeList<Type<?>> typeArguments;
+    private Optional<NodeList<Type<?>>> typeArguments;
 
     private boolean isThis;
 
@@ -46,16 +49,16 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 	private NodeList<Expression> args;
 
 	public ExplicitConstructorInvocationStmt() {
-		this(Range.UNKNOWN, new NodeList<>(), true, null, new NodeList<>());
+		this(Range.UNKNOWN, none(), true, null, new NodeList<>());
 	}
 
 	public ExplicitConstructorInvocationStmt(final boolean isThis,
 			final Expression expr, final NodeList<Expression> args) {
-		this(Range.UNKNOWN, new NodeList<>(), isThis, expr, args);
+		this(Range.UNKNOWN, none(), isThis, expr, args);
 	}
 
 	public ExplicitConstructorInvocationStmt(Range range,
-	                                         final NodeList<Type<?>> typeArguments, final boolean isThis,
+	                                         final Optional<NodeList<Type<?>>> typeArguments, final boolean isThis,
 	                                         final Expression expr, final NodeList<Expression> args) {
 		super(range);
 		setTypeArguments(typeArguments);
@@ -104,13 +107,13 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 	}
 
     @Override
-    public NodeList<Type<?>> getTypeArguments() {
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type<?>> types) {
-        this.typeArguments = types;
+    public ExplicitConstructorInvocationStmt setTypeArguments(final Optional<NodeList<Type<?>>> types) {
+        this.typeArguments = assertNotNull(types);
         setAsParentNodeOf(this.typeArguments);
         return this;
     }

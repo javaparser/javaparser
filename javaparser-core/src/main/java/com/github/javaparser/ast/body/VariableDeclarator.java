@@ -35,8 +35,12 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
+import java.util.Optional;
+
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
+import static com.github.javaparser.utils.Utils.some;
 
 /**
  * @author Julio Vilmar Gesser
@@ -46,19 +50,18 @@ public final class VariableDeclarator extends Node implements
 
     private VariableDeclaratorId id;
 
-    // TODO nullable
-    private Expression init;
+    private Optional<Expression> init;
 
     public VariableDeclarator() {
-        this(Range.UNKNOWN, new VariableDeclaratorId(), null);
+        this(Range.UNKNOWN, new VariableDeclaratorId(), none());
     }
 
     public VariableDeclarator(VariableDeclaratorId id) {
-        this(Range.UNKNOWN, id, null);
+        this(Range.UNKNOWN, id, none());
     }
 
     public VariableDeclarator(String variableName) {
-        this(Range.UNKNOWN, new VariableDeclaratorId(variableName), null);
+        this(Range.UNKNOWN, new VariableDeclaratorId(variableName), none());
     }
 
     /**
@@ -69,15 +72,15 @@ public final class VariableDeclarator extends Node implements
      *            An {@link com.github.javaparser.ast.expr.AssignExpr} is unnecessary as the <code>=</code> operator is
      *            already added.
      */
-    public VariableDeclarator(VariableDeclaratorId id, Expression init) {
+    public VariableDeclarator(VariableDeclaratorId id, Optional<Expression> init) {
         this(Range.UNKNOWN, id, init);
     }
 
-    public VariableDeclarator(String variableName, Expression init) {
+    public VariableDeclarator(String variableName, Optional<Expression> init) {
         this(Range.UNKNOWN, new VariableDeclaratorId(variableName), init);
     }
 
-    public VariableDeclarator(Range range, VariableDeclaratorId id, Expression init) {
+    public VariableDeclarator(Range range, VariableDeclaratorId id, Optional<Expression> init) {
         super(range);
         setId(id);
         setInit(init);
@@ -97,7 +100,7 @@ public final class VariableDeclarator extends Node implements
         return id;
     }
 
-    public Expression getInit() {
+    public Optional<Expression> getInit() {
         return init;
     }
 
@@ -107,8 +110,8 @@ public final class VariableDeclarator extends Node implements
         return this;
     }
 
-    public VariableDeclarator setInit(Expression init) {
-        this.init = init;
+    public VariableDeclarator setInit(Optional<Expression> init) {
+        this.init = assertNotNull(init);
         setAsParentNodeOf(this.init);
         return this;
     }
@@ -117,7 +120,7 @@ public final class VariableDeclarator extends Node implements
      * Will create a {@link NameExpr} with the init param
      */
     public VariableDeclarator setInit(String init) {
-        this.init = new NameExpr(assertNotNull(init));
+        this.init = some(new NameExpr(assertNotNull(init)));
         setAsParentNodeOf(this.init);
         return this;
     }

@@ -27,7 +27,10 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,22 +41,21 @@ public final class IfStmt extends Statement {
 
 	private Statement thenStmt;
 
-    // TODO nullable
-	private Statement elseStmt;
+	private Optional<Statement> elseStmt;
 
 	public IfStmt() {
         this(Range.UNKNOWN,
                 new BooleanLiteralExpr(),
                 new EmptyStmt(),
-                null);
+                none());
 	}
 
-	public IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+	public IfStmt(final Expression condition, final Statement thenStmt, final Optional<Statement> elseStmt) {
         this(Range.UNKNOWN, condition, thenStmt, elseStmt);
 	}
 
 	public IfStmt(Range range,
-	              final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+	              final Expression condition, final Statement thenStmt, final Optional<Statement> elseStmt) {
 		super(range);
 		setCondition(condition);
 		setThenStmt(thenStmt);
@@ -72,7 +74,7 @@ public final class IfStmt extends Statement {
 		return condition;
 	}
 
-	public Statement getElseStmt() {
+	public Optional<Statement> getElseStmt() {
 		return elseStmt;
 	}
 
@@ -86,8 +88,8 @@ public final class IfStmt extends Statement {
 		return this;
 	}
 
-	public IfStmt setElseStmt(final Statement elseStmt) {
-		this.elseStmt = elseStmt;
+	public IfStmt setElseStmt(final Optional<Statement> elseStmt) {
+		this.elseStmt = assertNotNull(elseStmt);
 		setAsParentNodeOf(this.elseStmt);
 		return this;
 	}

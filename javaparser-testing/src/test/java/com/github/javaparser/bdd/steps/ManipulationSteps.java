@@ -24,6 +24,7 @@ package com.github.javaparser.bdd.steps;
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
+import static com.github.javaparser.utils.Utils.some;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
@@ -163,7 +164,7 @@ public class ManipulationSteps {
     public void whenABlockStmtIsAddedToMethodInClass(int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        method.setBody(new BlockStmt());
+        method.setBody(some(new BlockStmt()));
     }
 
     @When("$className.$fieldName.$methodName(\"$stringValue\"); is added to the body of method $methodPosition in class $classPosition")
@@ -173,9 +174,9 @@ public class ManipulationSteps {
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         NameExpr clazz = new NameExpr(className);
         FieldAccessExpr field = new FieldAccessExpr(clazz, fieldName);
-        MethodCallExpr call = new MethodCallExpr(field, methodName);
+        MethodCallExpr call = new MethodCallExpr(some(field), methodName);
         call.addArgument(new StringLiteralExpr(stringValue));
-        method.getBody().addStatement(call);
+        method.getBody().get().addStatement(call);
     }
 
     @When("method $methodPosition in class $classPosition has it's name converted to uppercase")

@@ -59,8 +59,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         }
 		return nodesEquals(n1.getOrphanComments(), n2.getOrphanComments());
 	}
-
-	private <T extends Node> boolean nodesEquals(final List<T> nodes1, final List<T> nodes2) {
+    
+    private boolean nodesEquals(final List<? extends Node> nodes1, final List<? extends Node> nodes2) {
 		if (nodes1 == null) {
 			return nodes2 == null;
 		} else if (nodes2 == null) {
@@ -77,6 +77,18 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return true;
 	}
 
+    public <N extends Node, L extends NodeList<N>> boolean nodesEquals(Optional<L> n1, Optional<L> n2) {
+        if (!n1.isPresent() && !n2.isPresent()) {
+            return true;
+        }
+        if (!n1.isPresent() || !n2.isPresent()) {
+            return false;
+        }
+        L t1 = n1.get();
+        L t2 = n2.get();
+        return nodesEquals(t1, t2);
+    }
+    
 	public <N extends Node> boolean nodesEquals(NodeList<N> n1, NodeList<N> n2) {
         if (n1 == n2) {
             return true;
@@ -95,7 +107,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
 		return true;
 	}
 
-    private <T extends Node> boolean nodeEquals(final T n1, final T n2) {
+    private boolean nodeEquals(final Node n1, final Node n2) {
         if (n1 == n2) {
             return true;
         }
@@ -111,15 +123,15 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Node> {
         return n1.accept(this, n2);
     }
 
-    private <T extends Node> boolean nodeEquals(final Optional<T> n1, final Optional<T> n2) {
+    private boolean nodeEquals(final Optional<? extends Node> n1, final Optional<? extends Node> n2) {
         if (!n1.isPresent() && !n2.isPresent()) {
             return true;
         }
-        if (!n1.isPresent() || n2.isPresent()) {
+        if (!n1.isPresent() || !n2.isPresent()) {
             return false;
         }
-        T t1 = n1.get();
-        T t2 = n2.get();
+        Node t1 = n1.get();
+        Node t2 = n2.get();
         if (t1.getClass() != t2.getClass()) {
             return false;
         }

@@ -23,12 +23,11 @@ package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
@@ -49,6 +48,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
+import static com.github.javaparser.utils.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -187,12 +187,15 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        if (getComment() instanceof JavadocComment) {
-            return (JavadocComment) getComment();
+    public Optional<JavadocComment> getJavaDoc() {
+        if(getComment().isPresent()){
+            if(getComment().get() instanceof JavadocComment){
+                return (Optional<JavadocComment>) getComment();
+            }
         }
-        return null;
+        return none();
     }
+
 
     /**
      * Create a getter for this field, <b>will only work if this field declares only 1 identifier and if this field is
@@ -221,7 +224,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
             getter = parentEnum.addMethod("get" + fieldNameUpper, PUBLIC);
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
-        getter.setBody(blockStmt);
+        getter.setBody(some(blockStmt));
         blockStmt.addStatement(new ReturnStmt(name(fieldName)));
         return getter;
     }
@@ -255,7 +258,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setter.setType(VOID_TYPE);
         setter.getParameters().add(new Parameter(variable.getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
-        setter.setBody(blockStmt2);
+        setter.setBody(some(blockStmt2));
         blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
         return setter;
     }

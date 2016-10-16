@@ -28,10 +28,11 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -40,19 +41,19 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 
 	private Expression scope;
 
-	private NodeList<Type<?>> typeArguments;
+	private Optional<NodeList<Type<?>>> typeArguments;
 
 	private NameExpr field;
 
 	public FieldAccessExpr() {
-        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new NameExpr());
+        this(Range.UNKNOWN, new ThisExpr(), none(), new NameExpr());
 	}
 
 	public FieldAccessExpr(final Expression scope, final String field) {
-        this(Range.UNKNOWN, scope, new NodeList<>(), name(field));
+        this(Range.UNKNOWN, scope, none(), name(field));
 	}
 
-	public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final NameExpr field) {
+	public FieldAccessExpr(final Range range, final Expression scope, final Optional<NodeList<Type<?>>> typeArguments, final NameExpr field) {
 		super(range);
 		setScope(scope);
 		setTypeArguments(typeArguments);
@@ -85,25 +86,25 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 	}
 
 	public FieldAccessExpr setFieldExpr(NameExpr field) {
-		this.field = field;
+		this.field = assertNotNull(field);
 		setAsParentNodeOf(this.field);
 		return this;
 	}
 
 	public FieldAccessExpr setScope(final Expression scope) {
-		this.scope = scope;
+		this.scope = assertNotNull(scope);
 		setAsParentNodeOf(this.scope);
 		return this;
 	}
     
 	@Override
-	public NodeList<Type<?>> getTypeArguments() {
+	public Optional<NodeList<Type<?>>> getTypeArguments() {
 		return typeArguments;
 	}
 
 	@Override
-	public FieldAccessExpr setTypeArguments(final NodeList<Type<?>> types) {
-		this.typeArguments = types;
+	public FieldAccessExpr setTypeArguments(final Optional<NodeList<Type<?>>> types) {
+		this.typeArguments = assertNotNull(types);
 		setAsParentNodeOf(this.typeArguments);
 		return this;
 	}

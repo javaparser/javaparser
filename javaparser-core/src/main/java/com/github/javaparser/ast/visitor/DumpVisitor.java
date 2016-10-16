@@ -33,10 +33,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
@@ -163,8 +160,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	private void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Object arg) {
-		NodeList<Type<?>> typeArguments = nodeWithTypeArguments.getTypeArguments();
-		if (!isNullOrEmpty(typeArguments)) {
+		Optional<NodeList<Type<?>>> optionalTypeArguments = nodeWithTypeArguments.getTypeArguments();
+		optionalTypeArguments.ifPresent( typeArguments -> {
 			printer.print("<");
 			for (final Iterator<Type<?>> i = typeArguments.iterator(); i.hasNext(); ) {
 				final Type<?> t = i.next();
@@ -174,7 +171,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 				}
 			}
 			printer.print(">");
-		}
+		});
 	}
 
 	private void printTypeParameters(final NodeList<TypeParameter> args, final Object arg) {
@@ -205,10 +202,8 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printer.print(")");
 	}
 
-	private void printJavaComment(final Comment javacomment, final Object arg) {
-		if (javacomment != null) {
-			javacomment.accept(this, arg);
-		}
+	private void printJavaComment(final Optional<? extends Comment> javacomment, final Object arg) {
+        javacomment.ifPresent(c -> c.accept(this, arg));
 	}
 
 	@Override
@@ -334,10 +329,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ClassOrInterfaceType n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 
-		if (n.getScope() != null) {
-			n.getScope().accept(this, arg);
+        n.getScope().ifPresent(s -> {
+			s.accept(this, arg);
 			printer.print(".");
-		}
+		});
 		for (AnnotationExpr ae : n.getAnnotations()) {
 			ae.accept(this, arg);
 			printer.print(" ");
@@ -425,9 +420,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ArrayCreationLevel n, final Object arg) {
 		printAnnotations(n.getAnnotations(), true, arg);
 		printer.print("[");
-		if (n.getDimension() != null) {
-			n.getDimension().accept(this, arg);
-		}
+        n.getDimension().ifPresent(d->d.accept(this, arg));
 		printer.print("]");
 	}
 
@@ -466,14 +459,14 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printAnnotations(n.getAnnotations(), false, arg);
 		printer.print("?");
-		if (n.getExtends() != null) {
+        n.getExtends().ifPresent(e -> {
 			printer.print(" extends ");
-			n.getExtends().accept(this, arg);
-		}
-		if (n.getSuper() != null) {
+			e.accept(this, arg);
+		});
+		n.getSuper().ifPresent( s -> {
 			printer.print(" super ");
-			n.getSuper().accept(this, arg);
-		}
+			s.accept(this, arg);
+		});
 	}
 
 	@Override
@@ -509,10 +502,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final VariableDeclarator n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		n.getId().accept(this, arg);
-		if (n.getInit() != null) {
+		n.getInit().ifPresent( i -> {
 			printer.print(" = ");
-			n.getInit().accept(this, arg);
-		}
+			i.accept(this, arg);
+		});
 	}
 
 	@Override
@@ -800,30 +793,30 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final ThisExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		if (n.getClassExpr() != null) {
-			n.getClassExpr().accept(this, arg);
+		n.getClassExpr().ifPresent(ce -> {
+			ce.accept(this, arg);
 			printer.print(".");
-		}
+		});
 		printer.print("this");
 	}
 
 	@Override
 	public void visit(final SuperExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		if (n.getClassExpr() != null) {
-			n.getClassExpr().accept(this, arg);
+		n.getClassExpr().ifPresent(ce ->{
+			ce.accept(this, arg);
 			printer.print(".");
-		}
+		});
 		printer.print("super");
 	}
 
 	@Override
 	public void visit(final MethodCallExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		if (n.getScope() != null) {
-			n.getScope().accept(this, arg);
+		n.getScope().ifPresent(s -> {
+			s.accept(this, arg);
 			printer.print(".");
-		}
+		});
 		printTypeArgs(n, arg);
 		printer.print(n.getName());
 		printArguments(n.getArgs(), arg);
@@ -832,29 +825,27 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	@Override
 	public void visit(final ObjectCreationExpr n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
-		if (n.getScope() != null) {
-			n.getScope().accept(this, arg);
+		n.getScope().ifPresent(s -> {
+			s.accept(this, arg);
 			printer.print(".");
-		}
+		});
 
 		printer.print("new ");
 
 		printTypeArgs(n, arg);
-		if (!isNullOrEmpty(n.getTypeArguments())) {
-			printer.print(" ");
-		}
+        n.getTypeArguments().ifPresent(t -> printer.print(" "));
 
 		n.getType().accept(this, arg);
 
 		printArguments(n.getArgs(), arg);
 
-		if (n.getAnonymousClassBody() != null) {
+		n.getAnonymousClassBody().ifPresent(acb -> {
 			printer.printLn(" {");
 			printer.indent();
-			printMembers(n.getAnonymousClassBody(), arg);
+			printMembers(acb, arg);
 			printer.unindent();
 			printer.print("}");
-		}
+		});
 	}
 
 	@Override
@@ -981,13 +972,13 @@ public class DumpVisitor implements VoidVisitor<Object> {
 				}
 			}
 		}
-		if (n.getBody() == null) {
-			printer.print(";");
-		} else {
-			printer.print(" ");
-			n.getBody().accept(this, arg);
-		}
-	}
+        if (n.getBody().isPresent()) {
+            printer.print(" ");
+            n.getBody().get().accept(this, arg);
+        } else {
+            printer.print(";");
+        }
+    }
 
 	@Override
 	public void visit(final Parameter n, final Object arg) {
@@ -1057,10 +1048,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		printJavaComment(n.getComment(), arg);
 		printer.print("assert ");
 		n.getCheck().accept(this, arg);
-		if (n.getMessage() != null) {
+		n.getMessage().ifPresent(m -> {
 			printer.print(" : ");
-			n.getMessage().accept(this, arg);
-		}
+			m.accept(this, arg);
+		});
 		printer.print(";");
 	}
 
@@ -1157,10 +1148,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ReturnStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print("return");
-		if (n.getExpr() != null) {
+		n.getExpr().ifPresent( e-> {
 			printer.print(" ");
-			n.getExpr().accept(this, arg);
-		}
+			e.accept(this, arg);
+		});
 		printer.print(";");
 	}
 
@@ -1257,23 +1248,23 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		n.getThenStmt().accept(this, arg);
 		if (!thenBlock)
 			printer.unindent();
-		if (n.getElseStmt() != null) {
+        n.getElseStmt().ifPresent(es -> {
 			if (thenBlock)
 				printer.print(" ");
 			else
 				printer.printLn();
-			final boolean elseIf = n.getElseStmt() instanceof IfStmt;
-			final boolean elseBlock = n.getElseStmt() instanceof BlockStmt;
+			final boolean elseIf = es instanceof IfStmt;
+			final boolean elseBlock = es instanceof BlockStmt;
 			if (elseIf || elseBlock) // put chained if and start of block statement on a same level
 				printer.print("else ");
 			else {
 				printer.printLn("else");
 				printer.indent();
 			}
-			n.getElseStmt().accept(this, arg);
+			es.accept(this, arg);
 			if (!(elseIf || elseBlock))
 				printer.unindent();
-		}
+		});
 	}
 
 	@Override
@@ -1289,10 +1280,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final ContinueStmt n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		printer.print("continue");
-		if (n.getId() != null) {
+		n.getId().ifPresent(id -> {
 			printer.print(" ");
-			printer.print(n.getId());
-		}
+			printer.print(id);
+		});
 		printer.print(";");
 	}
 
@@ -1395,10 +1386,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 				c.accept(this, arg);
 			}
 		}
-		if (n.getFinallyBlock() != null) {
+		n.getFinallyBlock().ifPresent(fb -> {
 			printer.print(" finally ");
-			n.getFinallyBlock().accept(this, arg);
-		}
+			fb.accept(this, arg);
+		});
 	}
 
 	@Override

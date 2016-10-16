@@ -30,9 +30,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -42,35 +44,34 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
         NodeWithAnnotations<ClassOrInterfaceType>,
         NodeWithTypeArguments<ClassOrInterfaceType> {
 
-    // TODO nullable
-    private ClassOrInterfaceType scope;
+    private Optional<ClassOrInterfaceType> scope;
 
     private String name;
 
-    private NodeList<Type<?>> typeArguments;
+    private Optional<NodeList<Type<?>>> typeArguments;
 
     public ClassOrInterfaceType() {
         this(Range.UNKNOWN,
-                null,
+                none(),
                 "empty",
-                null);
+                none());
     }
 
     public ClassOrInterfaceType(final String name) {
         this(Range.UNKNOWN,
-                null,
+                none(),
                 name,
-                null);
+                none());
     }
 
-    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
+    public ClassOrInterfaceType(final Optional<ClassOrInterfaceType> scope, final String name) {
         this(Range.UNKNOWN,
                 scope,
                 name,
-                null);
+                none());
     }
 
-    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final NodeList<Type<?>> typeArguments) {
+    public ClassOrInterfaceType(final Range range, final Optional<ClassOrInterfaceType> scope, final String name, final Optional<NodeList<Type<?>>> typeArguments) {
         super(range);
         setScope(scope);
         setName(name);
@@ -90,7 +91,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
         return name;
     }
 
-    public ClassOrInterfaceType getScope() {
+    public Optional<ClassOrInterfaceType> getScope() {
         return scope;
     }
 
@@ -111,20 +112,20 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
         return this;
     }
 
-    public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
-        this.scope = scope;
+    public ClassOrInterfaceType setScope(final Optional<ClassOrInterfaceType> scope) {
+        this.scope = assertNotNull(scope);
         setAsParentNodeOf(this.scope);
         return this;
     }
 
     @Override
-    public NodeList<Type<?>> getTypeArguments() {
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public ClassOrInterfaceType setTypeArguments(final NodeList<Type<?>> types) {
-        this.typeArguments = types;
+    public ClassOrInterfaceType setTypeArguments(final Optional<NodeList<Type<?>>> types) {
+        this.typeArguments = assertNotNull(types);
         setAsParentNodeOf(this.typeArguments);
         return this;
     }

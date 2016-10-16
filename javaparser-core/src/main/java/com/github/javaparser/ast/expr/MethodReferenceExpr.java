@@ -28,6 +28,10 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.none;
+
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * These are some examples:
@@ -42,19 +46,19 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     private Expression scope;
 
-    private NodeList<Type<?>> typeArguments;
+    private Optional<NodeList<Type<?>>> typeArguments;
 
     private String identifier;
 
     public MethodReferenceExpr() {
         this(Range.UNKNOWN,
                 new ClassExpr(),
-                new NodeList<>(),
+                none(),
                 "empty");
     }
 
     public MethodReferenceExpr(Range range, Expression scope,
-                               NodeList<Type<?>> typeArguments, String identifier) {
+                               Optional<NodeList<Type<?>>> typeArguments, String identifier) {
         super(range);
         setIdentifier(identifier);
         setScope(scope);
@@ -83,12 +87,12 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Override
-    public NodeList<Type<?>> getTypeArguments() {
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public MethodReferenceExpr setTypeArguments(final NodeList<Type<?>> types) {
+    public MethodReferenceExpr setTypeArguments(final Optional<NodeList<Type<?>>> types) {
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

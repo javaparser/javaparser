@@ -162,7 +162,7 @@ public class ParsingSteps {
         ExpressionStmt statement = (ExpressionStmt) getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) statement.getExpression();
         VariableDeclarator variableDeclarator = variableDeclarationExpr.getVariables().get(0);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) variableDeclarator.getInit();
+        MethodCallExpr methodCallExpr = (MethodCallExpr) variableDeclarator.getInit().get();
         CastExpr castExpr = (CastExpr) methodCallExpr.getArgs().get(0);
         LambdaExpr lambdaExpr = (LambdaExpr) castExpr.getExpr();
         assertThat(lambdaExpr.getBody().toString(), is(expectedBody));
@@ -243,14 +243,14 @@ public class ParsingSteps {
     private Statement getStatementInMethodInClass(int statementPosition, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        return method.getBody().getStmts().get(statementPosition - 1);
+        return method.getBody().get().getStmts().get(statementPosition - 1);
     }
 
     private LambdaExpr getLambdaExprInStatementInMethodInClass(int statementPosition, int methodPosition, int classPosition) {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr expression = (VariableDeclarationExpr) ((ExpressionStmt) statement).getExpression();
         VariableDeclarator variableDeclarator = expression.getVariables().get(0);
-        return (LambdaExpr) variableDeclarator.getInit();
+        return (LambdaExpr) variableDeclarator.getInit().get();
     }
 
     @Then("all nodes refer to their parent")
@@ -273,7 +273,7 @@ public class ParsingSteps {
     public void thenLambdaInConditionalExpressionInMethodInClassIsParentOfContainedParameter(int statementPosition, int methodPosition, int classPosition) {
     	Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
     	ReturnStmt returnStmt = (ReturnStmt) statement;
-    	ConditionalExpr conditionalExpr = (ConditionalExpr)returnStmt.getExpr();
+    	ConditionalExpr conditionalExpr = (ConditionalExpr)returnStmt.getExpr().get();
         assertThat(conditionalExpr.getElseExpr().getClass().getName(), is(LambdaExpr.class.getName()));
     }
 

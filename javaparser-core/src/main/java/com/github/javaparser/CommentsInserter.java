@@ -30,6 +30,7 @@ import com.github.javaparser.utils.PositionUtils;
 import java.util.*;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
+import static com.github.javaparser.utils.Utils.some;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -66,7 +67,7 @@ class CommentsInserter {
         if (cu.getPackage() != null
                 && (children.isEmpty() || PositionUtils.areInOrder(
                 firstComment, cu.getPackage()))) {
-            cu.setComment(firstComment);
+            cu.setComment(some(firstComment));
             comments.remove(firstComment);
         }
     }
@@ -119,6 +120,7 @@ class CommentsInserter {
                 }
             }
         }
+        commentsToAttribute.removeAll(attributedComments);
 
         /* at this point I create an ordered list of all remaining comments and
          children */
@@ -140,10 +142,10 @@ class CommentsInserter {
                     previousComment = null;
                 }
             } else {
-                if (previousComment != null && !thing.hasComment()) {
+                if (previousComment != null && !thing.getComment().isPresent()) {
                     if (!configuration.doNotAssignCommentsPrecedingEmptyLines
                             || !thereAreLinesBetween(previousComment, thing)) {
-                        thing.setComment(previousComment);
+                        thing.setComment(some(previousComment));
                         attributedComments.add(previousComment);
                         previousComment = null;
                     }
@@ -165,9 +167,9 @@ class CommentsInserter {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
         if (node.getBegin().line == lineComment.getBegin().line
-                && !node.hasComment()) {
+                && !node.getComment().isPresent()) {
             if(!(node instanceof Comment)) {
-                node.setComment(lineComment);
+                node.setComment(some(lineComment));
             }
             return true;
         } else {

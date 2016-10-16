@@ -23,9 +23,12 @@ package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.arrayToList;
+import static com.github.javaparser.utils.Utils.none;
+import static com.github.javaparser.utils.Utils.some;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
@@ -42,23 +45,19 @@ public interface NodeWithTypeArguments<T> {
     /**
      * @return the types that can be found in the type arguments: &lt;String, Integer>.
      */
-    // TODO nullable
-    NodeList<Type<?>> getTypeArguments();
+    Optional<NodeList<Type<?>>> getTypeArguments();
 
     /**
      * Allows you to set the generic arguments
      * @param typeArguments The list of types of the generics
      */
-    T setTypeArguments(NodeList<Type<?>> typeArguments);
+    T setTypeArguments(Optional<NodeList<Type<?>>> typeArguments);
 
     /**
      * @return whether the type arguments look like &lt;>.
      */
     default boolean isUsingDiamondOperator() {
-        if(getTypeArguments()==null){
-            return false;
-        }
-        return getTypeArguments().isEmpty();
+        return getTypeArguments().isPresent() && getTypeArguments().get().isEmpty();
     }
 
     /**
@@ -66,7 +65,7 @@ public interface NodeWithTypeArguments<T> {
      */
     @SuppressWarnings("unchecked")
     default T setDiamondOperator() {
-        setTypeArguments(new NodeList<>());
+        setTypeArguments(some(new NodeList<>()));
         return (T) this;
     }
 
@@ -75,13 +74,13 @@ public interface NodeWithTypeArguments<T> {
      */
     @SuppressWarnings("unchecked")
     default T removeTypeArguments() {
-        setTypeArguments((NodeList<Type<?>>) null);
+        setTypeArguments(none());
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
     default T setTypeArguments(Type<?>... typeArguments) {
-        setTypeArguments(nodeList(typeArguments));
+        setTypeArguments(some(nodeList(typeArguments)));
         return (T) this;
     }
 }
