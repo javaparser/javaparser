@@ -210,9 +210,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	public void visit(final CompilationUnit n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 
-		if (n.getPackage() != null) {
-			n.getPackage().accept(this, arg);
-		}
+        n.getPackage().ifPresent(p -> p.accept(this, arg));
 
 		n.getImports().accept(this, arg);
 		if(!n.getImports().isEmpty()){

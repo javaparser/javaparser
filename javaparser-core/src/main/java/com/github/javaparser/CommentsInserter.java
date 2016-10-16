@@ -64,9 +64,9 @@ class CommentsInserter {
         List<Node> children = cu.getBackwardsCompatibleChildrenNodes();
 
         Comment firstComment = comments.iterator().next();
-        if (cu.getPackage() != null
+        if (cu.getPackage().isPresent()
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                firstComment, cu.getPackage()))) {
+                firstComment, cu.getPackage().get()))) {
             cu.setComment(some(firstComment));
             comments.remove(firstComment);
         }

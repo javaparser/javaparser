@@ -35,7 +35,7 @@ public class ClassCreator {
     private static CompilationUnit createCU() {
         CompilationUnit cu = new CompilationUnit();
         // set the package
-        cu.setPackage(new PackageDeclaration(name("java.parser.test")));
+        cu.setPackage(some(new PackageDeclaration(name("java.parser.test"))));
 
         // create the type declaration 
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");

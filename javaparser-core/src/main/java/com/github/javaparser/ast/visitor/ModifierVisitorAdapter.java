@@ -45,16 +45,7 @@ import static com.github.javaparser.utils.Utils.option;
  * @author Julio Vilmar Gesser
  */
 public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
-
-	private void removeNulls(final List<?> list) {
-		for (int i = list.size() - 1; i >= 0; i--) {
-			if (list.get(i) == null) {
-				list.remove(i);
-			}
-		}
-	}
-
-	@Override public Node visit(final AnnotationDeclaration n, final A arg) {
+    @Override public Node visit(final AnnotationDeclaration n, final A arg) {
 		visitAnnotations(n, arg);
 		visitComment(n, arg);
         n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
@@ -214,9 +205,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final CompilationUnit n, final A arg) {
 		visitComment(n, arg);
-		if (n.getPackage() != null) {
-			n.setPackage((PackageDeclaration) n.getPackage().accept(this, arg));
-		}
+        n.setPackage(n.getPackage().flatMap(p -> option((PackageDeclaration) p.accept(this, arg))));
 		n.setImports((NodeList<ImportDeclaration> )n.getImports().accept(this, arg));
 		n.setTypes((NodeList<TypeDeclaration<?>> )n.getTypes().accept(this, arg));
 		return n;

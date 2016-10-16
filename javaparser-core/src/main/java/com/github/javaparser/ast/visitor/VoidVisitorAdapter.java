@@ -170,9 +170,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final CompilationUnit n, final A arg) {
 		visitComment(n.getComment(), arg);
-		if (n.getPackage() != null) {
-			n.getPackage().accept(this, arg);
-		}
+        n.getPackage().ifPresent(p -> p.accept(this, arg));
 		if (n.getImports() != null) {
 			for (final ImportDeclaration i : n.getImports()) {
 				i.accept(this, arg);

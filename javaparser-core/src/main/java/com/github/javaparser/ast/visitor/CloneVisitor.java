@@ -40,7 +40,7 @@ public class CloneVisitor implements GenericVisitor<Node, Object> {
 
 	@Override
 	public Node visit(CompilationUnit _n, Object _arg) {
-		PackageDeclaration package_ = cloneNode(_n.getPackage(), _arg);
+		Optional<PackageDeclaration> package_ = cloneNode(_n.getPackage(), _arg);
 		NodeList<ImportDeclaration> imports = cloneList(_n.getImports(), _arg);
 		NodeList<TypeDeclaration<?>> types = cloneList(_n.getTypes(), _arg);
 
