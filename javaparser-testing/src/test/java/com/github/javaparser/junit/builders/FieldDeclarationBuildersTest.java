@@ -57,7 +57,7 @@ public class FieldDeclarationBuildersTest {
 		MethodDeclaration getter = methodsWithName.get(0);
 		assertEquals("getMyField", getter.getName());
 		assertEquals("int", getter.getType().toString());
-		assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
+		assertEquals(ReturnStmt.class, getter.getBody().get().getStmts().get(0).getClass());
 	}
 
 	@Test
@@ -70,8 +70,8 @@ public class FieldDeclarationBuildersTest {
 		MethodDeclaration setter = methodsWithName.get(0);
 		assertEquals("setMyField", setter.getName());
 		assertEquals("int", setter.getParameters().get(0).getType().toString());
-		assertEquals(ExpressionStmt.class, setter.getBody().getStmts().get(0).getClass());
-		assertEquals("this.myField = myField;", setter.getBody().getStmts().get(0).toString());
+		assertEquals(ExpressionStmt.class, setter.getBody().get().getStmts().get(0).getClass());
+		assertEquals("this.myField = myField;", setter.getBody().get().getStmts().get(0).toString());
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class FieldDeclarationBuildersTest {
 		MethodDeclaration getter = methodsWithName.get(0);
 		assertEquals("getMyField", getter.getName());
 		assertEquals("int", getter.getType().toString());
-		assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
+		assertEquals(ReturnStmt.class, getter.getBody().get().getStmts().get(0).getClass());
 	}
 
 	@Test
@@ -97,8 +97,8 @@ public class FieldDeclarationBuildersTest {
 		MethodDeclaration setter = methodsWithName.get(0);
 		assertEquals("setMyField", setter.getName());
 		assertEquals("int", setter.getParameters().get(0).getType().toString());
-		assertEquals(ExpressionStmt.class, setter.getBody().getStmts().get(0).getClass());
-		assertEquals("this.myField = myField;", setter.getBody().getStmts().get(0).toString());
+		assertEquals(ExpressionStmt.class, setter.getBody().get().getStmts().get(0).getClass());
+		assertEquals("this.myField = myField;", setter.getBody().get().getStmts().get(0).toString());
 	}
 
 	@Test(expected = IllegalStateException.class)

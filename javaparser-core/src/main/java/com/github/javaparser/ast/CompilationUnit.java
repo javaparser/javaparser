@@ -26,7 +26,6 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.imports.*;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.ClassUtils;
@@ -34,10 +33,13 @@ import com.github.javaparser.utils.ClassUtils;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.expr.NameExpr.name;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
+import static com.github.javaparser.utils.Utils.some;
 
 /**
  * <p>
@@ -58,23 +60,22 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
  */
 public final class CompilationUnit extends Node {
 
-    private PackageDeclaration pakage;
+    private Optional<PackageDeclaration> pakage;
 
-    private List<ImportDeclaration> imports;
+    private NodeList<ImportDeclaration> imports;
 
-    private List<TypeDeclaration<?>> types;
+    private NodeList<TypeDeclaration<?>> types;
 
     public CompilationUnit() {
+        this(Range.UNKNOWN, none(), new NodeList<>(), new NodeList<>());
     }
 
-    public CompilationUnit(PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
-        setPackage(pakage);
-        setImports(imports);
-        setTypes(types);
+    public CompilationUnit(Optional<PackageDeclaration> pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
+        this(Range.UNKNOWN, pakage, imports, types);
     }
 
-    public CompilationUnit(Range range, PackageDeclaration pakage, List<ImportDeclaration> imports,
-                           List<TypeDeclaration<?>> types) {
+    public CompilationUnit(Range range, Optional<PackageDeclaration> pakage, NodeList<ImportDeclaration> imports,
+                           NodeList<TypeDeclaration<?>> types) {
         super(range);
         setPackage(pakage);
         setImports(imports);
@@ -113,8 +114,7 @@ public final class CompilationUnit extends Node {
      * 
      * @return the list of imports or <code>null</code> if there is no import
      */
-    public List<ImportDeclaration> getImports() {
-        imports = ensureNotNull(imports);
+    public NodeList<ImportDeclaration> getImports() {
         return imports;
     }
 
@@ -125,7 +125,7 @@ public final class CompilationUnit extends Node {
      * 
      * @return the package declaration or <code>null</code>
      */
-    public PackageDeclaration getPackage() {
+    public Optional<PackageDeclaration> getPackage() {
         return pakage;
     }
 
@@ -139,19 +139,8 @@ public final class CompilationUnit extends Node {
      * @see EmptyTypeDeclaration
      * @see EnumDeclaration
      */
-    public List<TypeDeclaration<?>> getTypes() {
-        types = ensureNotNull(types);
+    public NodeList<TypeDeclaration<?>> getTypes() {
         return types;
-    }
-
-    /**
-     * Sets the list of comments of this compilation unit.
-     * 
-     * @param comments
-     *            the list of comments
-     */
-    public CompilationUnit setComments(List<Comment> comments) {
-        throw new RuntimeException("Not implemented!");
     }
 
     /**
@@ -161,8 +150,8 @@ public final class CompilationUnit extends Node {
      * @param imports
      *            the list of imports
      */
-    public CompilationUnit setImports(List<ImportDeclaration> imports) {
-        this.imports = imports;
+    public CompilationUnit setImports(NodeList<ImportDeclaration> imports) {
+        this.imports = assertNotNull(imports);
         setAsParentNodeOf(this.imports);
         return this;
     }
@@ -174,7 +163,7 @@ public final class CompilationUnit extends Node {
      *            the pakage declaration to set or <code>null</code> to default
      *            package
      */
-    public CompilationUnit setPackage(PackageDeclaration pakage) {
+    public CompilationUnit setPackage(Optional<PackageDeclaration> pakage) {
         this.pakage = pakage;
         setAsParentNodeOf(this.pakage);
         return this;
@@ -186,8 +175,8 @@ public final class CompilationUnit extends Node {
      * @param types
      *            the lis of types
      */
-    public CompilationUnit setTypes(List<TypeDeclaration<?>> types) {
-        this.types = types;
+    public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
+        this.types = assertNotNull(types);
         setAsParentNodeOf(this.types);
         return this;
     }
@@ -199,7 +188,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageName(String name) {
-        setPackage(new PackageDeclaration(name(name)));
+        setPackage(some(new PackageDeclaration(name(name))));
         return this;
     }
 

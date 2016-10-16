@@ -25,6 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -37,12 +39,11 @@ public final class ConditionalExpr extends Expression {
     private Expression elseExpr;
 
     public ConditionalExpr() {
+        this(Range.UNKNOWN, new BooleanLiteralExpr(), new StringLiteralExpr(), new StringLiteralExpr());
     }
 
     public ConditionalExpr(Expression condition, Expression thenExpr, Expression elseExpr) {
-        setCondition(condition);
-        setThenExpr(thenExpr);
-        setElseExpr(elseExpr);
+        this(Range.UNKNOWN, condition, thenExpr, elseExpr);
     }
 
     public ConditionalExpr(Range range, Expression condition, Expression thenExpr, Expression elseExpr) {
@@ -75,19 +76,19 @@ public final class ConditionalExpr extends Expression {
     }
 
     public ConditionalExpr setCondition(Expression condition) {
-        this.condition = condition;
+        this.condition = assertNotNull(condition);
 		setAsParentNodeOf(this.condition);
         return this;
     }
 
     public ConditionalExpr setElseExpr(Expression elseExpr) {
-        this.elseExpr = elseExpr;
+        this.elseExpr = assertNotNull(elseExpr);
 		setAsParentNodeOf(this.elseExpr);
         return this;
     }
 
     public ConditionalExpr setThenExpr(Expression thenExpr) {
-        this.thenExpr = thenExpr;
+        this.thenExpr = assertNotNull(thenExpr);
 		setAsParentNodeOf(this.thenExpr);
         return this;
     }

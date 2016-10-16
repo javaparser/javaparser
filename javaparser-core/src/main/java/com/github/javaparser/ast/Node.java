@@ -35,8 +35,14 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.utils.PositionUtils;
 
 import java.util.*;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
+import static com.github.javaparser.utils.Utils.some;
+import static java.util.Collections.*;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -62,11 +68,7 @@ public abstract class Node implements Cloneable {
 
     private IdentityHashMap<UserDataKey<?>, Object> userData = null;
 
-    private Comment comment;
-
-    public Node() {
-        this(Range.UNKNOWN);
-    }
+    private Optional<? extends Comment> comment = none();
 
     public Node(Range range) {
         this.range = range;
@@ -104,7 +106,7 @@ public abstract class Node implements Cloneable {
      *
      * @return comment property
      */
-    public final Comment getComment() {
+    public Optional<? extends Comment> getComment() {
         return comment;
     }
 
@@ -158,17 +160,12 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final Node setComment(final Comment comment) {
-        if (comment != null && (this instanceof Comment)) {
-            throw new RuntimeException("A comment can not be commented");
-        }
-        if (this.comment != null) {
-            this.comment.setCommentedNode(null);
-        }
+    public final Node setComment(final Optional<? extends Comment> comment) {
+        assertNotNull(comment);
+        comment.ifPresent(c -> {if (this instanceof Comment) throw new AssertionError("A comment can not be commented");});
+        this.comment.ifPresent(c -> c.setCommentedNode(null));
         this.comment = comment;
-        if (comment != null) {
-            this.comment.setCommentedNode(this);
-        }
+        this.comment.ifPresent(c -> c.setCommentedNode(this));
         return this;
     }
 
@@ -178,7 +175,7 @@ public abstract class Node implements Cloneable {
      * @param comment to be set
      */
     public final Node setLineComment(String comment) {
-        return setComment(new LineComment(comment));
+        return setComment(some(new LineComment(comment)));
     }
 
     /**
@@ -187,7 +184,7 @@ public abstract class Node implements Cloneable {
      * @param comment to be set
      */
     public final Node setBlockComment(String comment) {
-        return setComment(new BlockComment(comment));
+        return setComment(some(new BlockComment(comment)));
     }
 
     /**
@@ -241,12 +238,43 @@ public abstract class Node implements Cloneable {
         return null;
     }
 
+    /**
+     * Contains all nodes that have this node set as their parent.
+     * You can add nodes to it by setting a node's parent to this node.
+     * You can remove nodes from it by setting a child node's parent to something other than this node.
+     *
+     * @return all nodes that have this node as their parent.
+     */
     public List<Node> getChildrenNodes() {
-        return childrenNodes;
+        return unmodifiableList(childrenNodes);
     }
 
-    public boolean contains(Node other) {
-        return range.contains(other.range);
+    /**
+     * Before 3.0.0.alpha-5, if we had a list of nodes, those nodes would not have the list
+     * as its parent, but the node containing the list.
+     * This method returns the children in that way: there are no lists, and all nodes that are
+     * in lists are directly in this list.
+     * @deprecated this will be gone in 3.0.0 release.
+     */
+    @Deprecated
+    public List<Node> getBackwardsCompatibleChildrenNodes() {
+        List<Node> children = new ArrayList<>();
+        for (Node childNode : getChildrenNodes()) {
+            // Avoid attributing comments to NodeLists by pretending they don't exist.
+            if (childNode instanceof NodeList) {
+                for (Node subChildNode : ((NodeList<Node>) childNode)) {
+                    children.add(subChildNode);
+                }
+            } else {
+                children.add(childNode);
+            }
+        }
+        PositionUtils.sortByBeginPosition(children);
+        return children;
+    }
+
+    public <N extends Node> boolean containsWithin(N other) {
+        return range.contains(other.getRange());
     }
 
     public void addOrphanComment(Comment comment) {
@@ -282,8 +310,8 @@ public abstract class Node implements Cloneable {
         comments.addAll(getOrphanComments());
 
         for (Node child : getChildrenNodes()) {
-            if (child.getComment() != null) {
-                comments.add(child.getComment());
+            if (child.getComment().isPresent()) {
+                comments.add(child.getComment().get());
             }
             comments.addAll(child.getAllContainedComments());
         }
@@ -323,6 +351,11 @@ public abstract class Node implements Cloneable {
         }
     }
 
+    protected void setAsParentNodeOf(Optional<? extends Node> childNode) {
+        assertNotNull(childNode);
+        childNode.ifPresent(c -> c.setParentNode(this));
+    }
+
     public static final int ABSOLUTE_BEGIN_LINE = -1;
     public static final int ABSOLUTE_END_LINE = -2;
 
@@ -332,10 +365,6 @@ public abstract class Node implements Cloneable {
 
     public boolean isPositionedBefore(Position position) {
         return range.isBefore(position);
-    }
-
-    public boolean hasComment() {
-        return comment != null;
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
@@ -407,6 +436,7 @@ public abstract class Node implements Cloneable {
      * @throws RuntimeException if it fails in an unexpected way
      */
     public boolean remove() {
+        Node parentNode = this.parentNode;
         if (parentNode == null)
             return false;
         boolean success = false;
@@ -422,6 +452,9 @@ public abstract class Node implements Cloneable {
                         Collection<?> l = (Collection<?>) object;
                         boolean remove = l.remove(this);
                         success |= remove;
+                    } else if (NodeList.class.isAssignableFrom(object.getClass())) {
+                        NodeList<Node> l = (NodeList<Node>) object;
+                        success |= l.remove(this);
                     } else if (Optional.class.equals(f.getType())) {
                         Optional<?> opt = (Optional<?>) object;
                         if (opt.isPresent())

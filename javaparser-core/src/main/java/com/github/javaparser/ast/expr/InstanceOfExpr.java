@@ -23,28 +23,32 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
-public final class InstanceOfExpr extends Expression implements NodeWithType<InstanceOfExpr> {
+public final class InstanceOfExpr extends Expression implements NodeWithType<InstanceOfExpr, ReferenceType<?>> {
 
 	private Expression expr;
 
-	private Type type;
+	private ReferenceType<?> type;
 
 	public InstanceOfExpr() {
+        this(Range.UNKNOWN, new NameExpr(), new ClassOrInterfaceType());
 	}
 
-	public InstanceOfExpr(final Expression expr, final Type type) {
-		setExpr(expr);
-		setType(type);
+	public InstanceOfExpr(final Expression expr, final ReferenceType<?> type) {
+        this(Range.UNKNOWN, expr, type);
 	}
 
-	public InstanceOfExpr(final Range range, final Expression expr, final Type type) {
+	public InstanceOfExpr(final Range range, final Expression expr, final ReferenceType<?> type) {
 		super(range);
 		setExpr(expr);
 		setType(type);
@@ -63,19 +67,19 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
 	}
 
 	@Override
-	public Type getType() {
+	public ReferenceType<?> getType() {
 		return type;
 	}
 
 	public InstanceOfExpr setExpr(final Expression expr) {
-		this.expr = expr;
+		this.expr = assertNotNull(expr);
 		setAsParentNodeOf(this.expr);
 		return this;
 	}
 
 	@Override
-    public InstanceOfExpr setType(final Type type) {
-		this.type = type;
+    public InstanceOfExpr setType(final ReferenceType<?> type) {
+		this.type = assertNotNull(type);
 		setAsParentNodeOf(this.type);
         return this;
 	}

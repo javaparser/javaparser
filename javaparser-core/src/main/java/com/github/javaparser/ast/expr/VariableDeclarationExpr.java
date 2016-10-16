@@ -21,22 +21,23 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-import static java.util.Collections.*;
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -52,58 +53,84 @@ public final class VariableDeclarationExpr extends Expression implements
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     private Type elementType;
 
-    private List<VariableDeclarator> variables;
+    private NodeList<VariableDeclarator> variables;
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public VariableDeclarationExpr() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                new ClassOrInterfaceType(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName) {
-        setElementType(elementType);
-        setVariables(singletonList(new VariableDeclarator(variableName)));
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                elementType,
+                nodeList(new VariableDeclarator(variableName)),
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var) {
-        setElementType(elementType);
-        setVariables(singletonList(var));
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                elementType,
+                nodeList(var),
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName, Modifier... modifiers) {
-        setElementType(elementType);
-        setVariables(singletonList(new VariableDeclarator(variableName)));
-        setModifiers(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        this(Range.UNKNOWN,
+                Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
+                new NodeList<>(),
+                elementType,
+                nodeList(new VariableDeclarator(variableName)),
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var, Modifier... modifiers) {
-        setElementType(elementType);
-        setVariables(singletonList(var));
-        setModifiers(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        this(Range.UNKNOWN,
+                Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
+                new NodeList<>(),
+                elementType,
+                nodeList(var),
+                new NodeList<>());
     }
 
-    public VariableDeclarationExpr(final Type elementType, final List<VariableDeclarator> variables) {
-        setElementType(elementType);
-        setVariables(variables);
+    public VariableDeclarationExpr(final Type elementType, final NodeList<VariableDeclarator> variables) {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                elementType,
+                variables,
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type elementType,
-                                   final List<VariableDeclarator> variables) {
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setVariables(variables);
+                                   final NodeList<VariableDeclarator> variables) {
+        this(Range.UNKNOWN,
+                modifiers,
+                new NodeList<>(),
+                elementType,
+                variables,
+                new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Range range,
-                                   final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
+                                   final EnumSet<Modifier> modifiers,
+                                   final NodeList<AnnotationExpr> annotations,
                                    final Type elementType,
-                                   final List<VariableDeclarator> variables,
-                                   final List<ArrayBracketPair> arrayBracketPairsAfterType) {
+                                   final NodeList<VariableDeclarator> variables,
+                                   final NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
@@ -132,8 +159,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
@@ -154,14 +180,13 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public List<VariableDeclarator> getVariables() {
-        variables = ensureNotNull(variables);
+    public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }
 
     @Override
-    public VariableDeclarationExpr setAnnotations(final List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+    public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
     }
@@ -180,20 +205,19 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     @Override
-    public VariableDeclarationExpr setVariables(final List<VariableDeclarator> variables) {
+    public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
         this.variables = variables;
         setAsParentNodeOf(this.variables);
         return this;
     }
 
-    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
+    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
     @Override
-    public VariableDeclarationExpr setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+    public VariableDeclarationExpr setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }

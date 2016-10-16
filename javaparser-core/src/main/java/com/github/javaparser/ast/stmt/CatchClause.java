@@ -24,17 +24,17 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
-import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
-import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -46,21 +46,34 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     private BlockStmt catchBlock;
 
     public CatchClause() {
+        this(Range.UNKNOWN, new Parameter(), new BlockStmt());         
     }
 
     public CatchClause(final Parameter param, final BlockStmt catchBlock) {
-        setParam(param);
-        setBody(catchBlock);
+        this(Range.UNKNOWN, param, catchBlock);
+    }
+
+    public CatchClause(final EnumSet<Modifier> exceptModifier,
+                       final NodeList<AnnotationExpr> exceptAnnotations,
+                       final ClassOrInterfaceType exceptType,
+                       final VariableDeclaratorId exceptId,
+                       final BlockStmt catchBlock) {
+        this(Range.UNKNOWN, 
+                new Parameter(Range.UNKNOWN, 
+                        exceptModifier, 
+                        exceptAnnotations, 
+                        exceptType, 
+                        new NodeList<>(), 
+                        false, 
+                        exceptId),
+                catchBlock);
     }
 
     public CatchClause(final Range range,
-                       final EnumSet<Modifier> exceptModifier, 
-                       final List<AnnotationExpr> exceptAnnotations,
-                       final Type exceptType,
-                       final VariableDeclaratorId exceptId, 
+                       final Parameter parameter,
                        final BlockStmt catchBlock) {
         super(range);
-        setParam(new Parameter(range, exceptModifier, exceptAnnotations, exceptType, null, false, exceptId));
+        setParam(parameter);
         setBody(catchBlock);
     }
 
@@ -90,8 +103,6 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     /**
      * Use {@link #setBody(BlockStmt)} instead
-     * 
-     * @param catchBlock
      */
     @Deprecated
 	public CatchClause setCatchBlock(final BlockStmt catchBlock) {

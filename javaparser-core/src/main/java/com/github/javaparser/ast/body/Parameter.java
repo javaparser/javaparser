@@ -25,9 +25,11 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -35,38 +37,49 @@ import com.github.javaparser.utils.Pair;
 
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import java.util.EnumSet;
-import java.util.List;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class Parameter extends Node implements
-        NodeWithType<Parameter>,
+        NodeWithType<Parameter, Type<?>>,
         NodeWithElementType<Parameter>,
         NodeWithAnnotations<Parameter>,
         NodeWithName<Parameter>,
         NodeWithModifiers<Parameter> {
 
-    private Type elementType;
+    private Type<?> elementType;
 
     private boolean isVarArgs;
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     private VariableDeclaratorId id;
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterType;
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public Parameter() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                new ClassOrInterfaceType(),
+                new NodeList<>(),
+                false,
+                new VariableDeclaratorId());
     }
 
-    public Parameter(Type elementType, VariableDeclaratorId id) {
-        setId(id);
-        setElementType(elementType);
+    public Parameter(Type<?> elementType, VariableDeclaratorId id) {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                elementType,
+                new NodeList<>(),
+                false,
+                id);
     }
 
     /**
@@ -79,20 +92,30 @@ public final class Parameter extends Node implements
      * @return instance of {@link Parameter}
      */
     public static Parameter create(Type elementType, String name) {
-        return new Parameter(elementType, new VariableDeclaratorId(name));
+        return new Parameter(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                elementType,
+                new NodeList<>(),
+                false,
+                new VariableDeclaratorId(name));
     }
 
     public Parameter(EnumSet<Modifier> modifiers, Type elementType, VariableDeclaratorId id) {
-        setModifiers(modifiers);
-        setId(id);
-        setElementType(elementType);
+        this(Range.UNKNOWN,
+                modifiers,
+                new NodeList<>(),
+                elementType,
+                new NodeList<>(),
+                false,
+                id);
     }
 
     public Parameter(final Range range, 
-                     EnumSet<Modifier> modifiers, 
-                     List<AnnotationExpr> annotations, 
+                     EnumSet<Modifier> modifiers,
+                     NodeList<AnnotationExpr> annotations,
                      Type elementType,
-                     List<ArrayBracketPair> arrayBracketPairsAfterElementType,
+                     NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                      boolean isVarArgs, 
                      VariableDeclaratorId id) {
         super(range);
@@ -101,7 +124,7 @@ public final class Parameter extends Node implements
         setId(id);
         setElementType(elementType);
         setVarArgs(isVarArgs);
-        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
+        setArrayBracketPairsAfterElementType(assertNotNull(arrayBracketPairsAfterElementType));
     }
 
     @Override
@@ -115,7 +138,7 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public Type getType() {
+    public Type<?> getType() {
         return wrapInArrayTypes(elementType,
                 getArrayBracketPairsAfterElementType(),
                 getId().getArrayBracketPairsAfterId());
@@ -127,10 +150,10 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setType(Type type) {
-        Pair<Type, List<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
+        Pair<Type, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         setElementType(unwrapped.a);
         setArrayBracketPairsAfterElementType(unwrapped.b);
-        getId().setArrayBracketPairsAfterId(null);
+        getId().setArrayBracketPairsAfterId(new NodeList<>());
         return this;
     }
 
@@ -142,8 +165,7 @@ public final class Parameter extends Node implements
      * @return the list returned could be immutable (in that case it will be empty)
      */
     @Override
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
@@ -159,6 +181,7 @@ public final class Parameter extends Node implements
     @SuppressWarnings("unchecked")
     @Override
     public Parameter setName(String name) {
+        assertNotNull(name);
         if (id != null)
             id.setName(name);
         else
@@ -183,8 +206,8 @@ public final class Parameter extends Node implements
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Parameter setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+    public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+        this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
     }
@@ -197,7 +220,7 @@ public final class Parameter extends Node implements
     @Override
     @SuppressWarnings("unchecked")
     public Parameter setModifiers(EnumSet<Modifier> modifiers) {
-        this.modifiers = modifiers;
+        this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
@@ -207,20 +230,19 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public Parameter setElementType(final Type elementType) {
-        this.elementType = elementType;
+    public Parameter setElementType(final Type<?> elementType) {
+        this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
     }
 
-    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        arrayBracketPairsAfterType = ensureNotNull(arrayBracketPairsAfterType);
+    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
     @Override
-    public Parameter setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterType = arrayBracketPairsAfterType;
+    public Parameter setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }

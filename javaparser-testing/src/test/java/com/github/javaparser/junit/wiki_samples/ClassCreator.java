@@ -17,6 +17,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.VoidType.*;
+import static com.github.javaparser.utils.Utils.some;
 
 public class ClassCreator {
 
@@ -34,7 +35,7 @@ public class ClassCreator {
     private static CompilationUnit createCU() {
         CompilationUnit cu = new CompilationUnit();
         // set the package
-        cu.setPackage(new PackageDeclaration(name("java.parser.test")));
+        cu.setPackage(some(new PackageDeclaration(name("java.parser.test"))));
 
         // create the type declaration 
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
@@ -52,12 +53,12 @@ public class ClassCreator {
 
         // add a body to the method
         BlockStmt block = new BlockStmt();
-        method.setBody(block);
+        method.setBody(some(block));
 
         // add a statement do the method body
         NameExpr clazz = new NameExpr("System");
         FieldAccessExpr field = new FieldAccessExpr(clazz, "out");
-        MethodCallExpr call = new MethodCallExpr(field, "println");
+        MethodCallExpr call = new MethodCallExpr(some(field), "println");
         call.addArgument(new StringLiteralExpr("Hello World!"));
         block.addStatement(call);
 

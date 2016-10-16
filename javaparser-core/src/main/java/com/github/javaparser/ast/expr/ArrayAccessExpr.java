@@ -25,6 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -35,11 +37,11 @@ public final class ArrayAccessExpr extends Expression {
     private Expression index;
 
     public ArrayAccessExpr() {
+        this(Range.UNKNOWN, new NameExpr(), new IntegerLiteralExpr());
     }
 
     public ArrayAccessExpr(Expression name, Expression index) {
-        setName(name);
-        setIndex(index);
+        this(Range.UNKNOWN, name, index);
     }
 
     public ArrayAccessExpr(Range range, Expression name, Expression index) {
@@ -67,13 +69,13 @@ public final class ArrayAccessExpr extends Expression {
     }
 
     public ArrayAccessExpr setIndex(Expression index) {
-        this.index = index;
+        this.index = assertNotNull(index);
 		setAsParentNodeOf(this.index);
         return this;
     }
 
     public ArrayAccessExpr setName(Expression name) {
-        this.name = name;
+        this.name = assertNotNull(name);
 		setAsParentNodeOf(this.name);
         return this;
     }

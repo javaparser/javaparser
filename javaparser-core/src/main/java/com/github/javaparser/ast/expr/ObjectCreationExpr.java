@@ -22,7 +22,9 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -30,10 +32,11 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
+import static com.github.javaparser.utils.Utils.some;
 
 /**
  * Defines constructor call expression.
@@ -46,20 +49,26 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
  */
 public final class ObjectCreationExpr extends Expression implements 
         NodeWithTypeArguments<ObjectCreationExpr>,
-        NodeWithType<ObjectCreationExpr> {
+        NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>,
+        NodeWithArguments<ObjectCreationExpr> {
 
-    private Expression scope;
+    private Optional<Expression> scope;
 
     private ClassOrInterfaceType type;
 
-    private List<Type<?>> typeArguments;
+    private Optional<NodeList<Type<?>>> typeArguments;
 
-    private List<Expression> args;
+    private NodeList<Expression> args;
 
-    // This can be null, to indicate there is no body
-    private List<BodyDeclaration<?>> anonymousClassBody;
+    private Optional<NodeList<BodyDeclaration<?>>> anonymousClassBody = null;
 
     public ObjectCreationExpr() {
+        this(Range.UNKNOWN, 
+                none(),
+                new ClassOrInterfaceType(),
+                none(),
+                new NodeList<>(),
+                none());
     }
 
     /**
@@ -69,15 +78,18 @@ public final class ObjectCreationExpr extends Expression implements
      * @param type this is the class that the constructor is being called for.
      * @param args Any arguments to pass to the constructor
      */
-    public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final List<Expression> args) {
-        setScope(scope);
-        setType(type);
-        setArgs(args);
+    public ObjectCreationExpr(final Optional<Expression> scope, final ClassOrInterfaceType type, final NodeList<Expression> args) {
+        this(Range.UNKNOWN,
+                scope,
+                type,
+                none(),
+                args,
+                none());
     }
 
 	public ObjectCreationExpr(final Range range,
-			final Expression scope, final ClassOrInterfaceType type, final List<Type<?>> typeArguments,
-                              final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
+			final Optional<Expression> scope, final ClassOrInterfaceType type, final Optional<NodeList<Type<?>>> typeArguments,
+                              final NodeList<Expression> args, final Optional<NodeList<BodyDeclaration<?>>> anonymousBody) {
 		super(range);
 		setScope(scope);
 		setType(type);
@@ -99,23 +111,22 @@ public final class ObjectCreationExpr extends Expression implements
     /**
      * This can be null, to indicate there is no body
      */
-    public List<BodyDeclaration<?>> getAnonymousClassBody() {
+    public Optional<NodeList<BodyDeclaration<?>>> getAnonymousClassBody() {
         return anonymousClassBody;
     }
 
     public void addAnonymousClassBody(BodyDeclaration<?> body) {
-        if (anonymousClassBody == null)
-            anonymousClassBody = new ArrayList<>();
-        anonymousClassBody.add(body);
-        body.setParentNode(this);
+        if(!anonymousClassBody.isPresent()){
+            anonymousClassBody = some(new NodeList<>());
+        }
+        anonymousClassBody.get().add(body);
     }
 
-    public List<Expression> getArgs() {
-        args = ensureNotNull(args);
+    public NodeList<Expression> getArgs() {
         return args;
     }
 
-    public Expression getScope() {
+    public Optional<Expression> getScope() {
         return scope;
     }
 
@@ -124,41 +135,41 @@ public final class ObjectCreationExpr extends Expression implements
         return type;
     }
 
-    public ObjectCreationExpr setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
-        this.anonymousClassBody = anonymousClassBody;
+    public ObjectCreationExpr setAnonymousClassBody(final Optional<NodeList<BodyDeclaration<?>>> anonymousClassBody) {
+        this.anonymousClassBody = assertNotNull(anonymousClassBody);
         setAsParentNodeOf(this.anonymousClassBody);
         return this;
     }
 
-    public ObjectCreationExpr setArgs(final List<Expression> args) {
-        this.args = args;
+    @Override
+    public ObjectCreationExpr setArgs(final NodeList<Expression> args) {
+        this.args = assertNotNull(args);
         setAsParentNodeOf(this.args);
         return this;
     }
 
-    public ObjectCreationExpr setScope(final Expression scope) {
-        this.scope = scope;
+    public ObjectCreationExpr setScope(final Optional<Expression> scope) {
+        this.scope = assertNotNull(scope);
         setAsParentNodeOf(this.scope);
         return this;
     }
 
     @Override
-    public ObjectCreationExpr setType(final Type<?> type) {
-        if (!(type instanceof ClassOrInterfaceType))// needed so we can use NodeWithType
-            throw new RuntimeException("You can only add ClassOrInterfaceType to an ObjectCreationExpr");
-        this.type = (ClassOrInterfaceType) type;
+    public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
+        assertNotNull(type);
+        this.type = type;
         setAsParentNodeOf(this.type);
         return this;
     }
 
     @Override
-    public List<Type<?>> getTypeArguments() {
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public ObjectCreationExpr setTypeArguments(final List<Type<?>> types) {
-        this.typeArguments = types;
+    public ObjectCreationExpr setTypeArguments(final Optional<NodeList<Type<?>>> typeArguments) {
+        this.typeArguments = assertNotNull(typeArguments);
         setAsParentNodeOf(this.typeArguments);
         return this;
     }

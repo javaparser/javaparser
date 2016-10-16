@@ -21,11 +21,11 @@
  
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for
@@ -37,6 +37,7 @@ import java.util.List;
 public final class UnknownType extends Type<UnknownType> {
 
     public UnknownType() {
+        super(Range.UNKNOWN, new NodeList<>());
     }
 
     @Override
@@ -50,13 +51,10 @@ public final class UnknownType extends Type<UnknownType> {
     }
 
     @Override
-    public List<AnnotationExpr> getAnnotations() {
-        throw new IllegalStateException("Inferred lambda types cannot be annotated.");
+    public UnknownType setAnnotations(NodeList<AnnotationExpr> annotations) {
+        if (annotations.size() > 0) {
+            throw new IllegalStateException("Inferred lambda types cannot be annotated.");
+        }
+        return this;
     }
-
-    @Override
-    public UnknownType setAnnotations(List<AnnotationExpr> annotations) {
-        throw new IllegalStateException("Inferred lambda types cannot be annotated.");
-    }
-
 }

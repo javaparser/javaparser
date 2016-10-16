@@ -22,9 +22,16 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
+import static com.github.javaparser.utils.Utils.some;
 
 /**
  * @author Julio Vilmar Gesser
@@ -33,26 +40,24 @@ public final class AssertStmt extends Statement {
 
 	private Expression check;
 
-	private Expression msg;
+	private Optional<Expression> msg;
 
 	public AssertStmt() {
+        this(Range.UNKNOWN, new BooleanLiteralExpr(), none());
 	}
 
 	public AssertStmt(final Expression check) {
-		setCheck(check);
+		this(Range.UNKNOWN, check, none());
 	}
 
 	public AssertStmt(final Expression check, final Expression msg) {
-		setCheck(check);
-		setMessage(msg);
+        this(Range.UNKNOWN, check, some(msg));
 	}
 
-	public AssertStmt(final Range range, final Expression check, final Expression msg) {
+	public AssertStmt(final Range range, final Expression check, final Optional<Expression> msg) {
 		super(range);
-		
 		setCheck(check);
 		setMessage(msg);
-		
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -67,18 +72,18 @@ public final class AssertStmt extends Statement {
 		return check;
 	}
 
-	public Expression getMessage() {
+	public Optional<Expression> getMessage() {
 		return msg;
 	}
 
 	public AssertStmt setCheck(final Expression check) {
-		this.check = check;
+		this.check = assertNotNull(check);
 		setAsParentNodeOf(this.check);
 		return this;
 	}
 
-	public AssertStmt setMessage(final Expression msg) {
-		this.msg = msg;
+	public AssertStmt setMessage(final Optional<Expression> msg) {
+		this.msg = assertNotNull(msg);
 		setAsParentNodeOf(this.msg);
 		return this;
 	}

@@ -7,9 +7,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
+import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
@@ -17,10 +17,10 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
  * the second the expression "2".
  */
 public class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
-    private Expression dimension;
-    private List<AnnotationExpr> annotations;
+    private Optional<Expression> dimension;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-    public ArrayCreationLevel(Range range, Expression dimension, List<AnnotationExpr> annotations) {
+    public ArrayCreationLevel(Range range, Optional<Expression> dimension, NodeList<AnnotationExpr> annotations) {
         super(range);
         setDimension(dimension);
         setAnnotations(annotations);
@@ -34,23 +34,23 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         v.visit(this, arg);
     }
 
-    public void setDimension(Expression dimension) {
-        this.dimension = dimension;
+    public ArrayCreationLevel setDimension(Optional<Expression> dimension) {
+        this.dimension = assertNotNull(dimension);
         setAsParentNodeOf(dimension);
+        return this;
     }
 
-    public Expression getDimension() {
+    public Optional<Expression> getDimension() {
         return dimension;
     }
 
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-    public ArrayCreationLevel setAnnotations(List<AnnotationExpr> annotations) {
+    public ArrayCreationLevel setAnnotations(NodeList<AnnotationExpr> annotations) {
         setAsParentNodeOf(annotations);
-        this.annotations = annotations;
+        this.annotations = assertNotNull(annotations);
         return this;
     }
 }

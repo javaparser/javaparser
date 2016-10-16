@@ -1,6 +1,7 @@
 package com.github.javaparser.junit.ast.visitor;
 import static org.junit.Assert.assertEquals;
 
+import com.github.javaparser.ast.NodeList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class CloneVisitorTest{
 	@Test
 	public void cloneJavaDocTest(){
 
-		List<BodyDeclaration<?>> bodyDeclarationList = new ArrayList<BodyDeclaration<?>>();
+		NodeList<BodyDeclaration<?>> bodyDeclarationList = new NodeList<>();
 		bodyDeclarationList.add(new AnnotationMemberDeclaration().setJavaDocComment("javadoc"));
 		bodyDeclarationList.add(new ConstructorDeclaration().setJavaDocComment("javadoc"));
 		bodyDeclarationList.add(new EmptyMemberDeclaration().setJavaDocComment("javadoc"));
@@ -50,7 +51,7 @@ public class CloneVisitorTest{
 		bodyDeclarationList.add(new InitializerDeclaration().setJavaDocComment("javadoc"));
 		bodyDeclarationList.add(new MethodDeclaration().setJavaDocComment("javadoc"));
 		
-		List<TypeDeclaration<?>> typeDeclarationList = new ArrayList<TypeDeclaration<?>>();
+		NodeList<TypeDeclaration<?>> typeDeclarationList = new NodeList<>();
 		AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration();
 		annotationDeclaration.setName("nnotationDeclarationTest");
 		typeDeclarationList.add(annotationDeclaration.setJavaDocComment("javadoc"));
@@ -74,18 +75,18 @@ public class CloneVisitorTest{
 		cu.setTypes(typeDeclarationList);
 		CompilationUnit cuClone=(CompilationUnit) new CloneVisitor().visit(cu, null);
 		
-		List<TypeDeclaration<?>> typeDeclarationListClone = cuClone.getTypes();
+		NodeList<TypeDeclaration<?>> typeDeclarationListClone = cuClone.getTypes();
 		Iterator<TypeDeclaration<?>> typeItr = typeDeclarationListClone.iterator();
 		TypeDeclaration<?>  typeDeclaration;
 		while(typeItr.hasNext()){
-			typeDeclaration = (TypeDeclaration<?>) typeItr.next();
+			typeDeclaration = typeItr.next();
 			if(typeDeclaration.getMembers()==null){
-				assertEquals(typeDeclaration.getComment().getContent(),"javadoc");
+				assertEquals(typeDeclaration.getComment().get().getContent(),"javadoc");
 			}else{
 				Iterator<BodyDeclaration<?>> bodyItr = typeDeclaration.getMembers().iterator();
 				while(bodyItr.hasNext()){
 					BodyDeclaration<?> bodyDeclaration = bodyItr.next();
-					assertEquals(bodyDeclaration.getComment().getContent(),"javadoc");
+					assertEquals(bodyDeclaration.getComment().get().getContent(),"javadoc");
 				}
 			}
 		}

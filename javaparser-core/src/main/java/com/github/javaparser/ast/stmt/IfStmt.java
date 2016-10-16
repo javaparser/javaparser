@@ -22,9 +22,15 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -35,19 +41,21 @@ public final class IfStmt extends Statement {
 
 	private Statement thenStmt;
 
-	private Statement elseStmt;
+	private Optional<Statement> elseStmt;
 
 	public IfStmt() {
+        this(Range.UNKNOWN,
+                new BooleanLiteralExpr(),
+                new EmptyStmt(),
+                none());
 	}
 
-	public IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
-		setCondition(condition);
-		setThenStmt(thenStmt);
-		setElseStmt(elseStmt);
+	public IfStmt(final Expression condition, final Statement thenStmt, final Optional<Statement> elseStmt) {
+        this(Range.UNKNOWN, condition, thenStmt, elseStmt);
 	}
 
 	public IfStmt(Range range,
-	              final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+	              final Expression condition, final Statement thenStmt, final Optional<Statement> elseStmt) {
 		super(range);
 		setCondition(condition);
 		setThenStmt(thenStmt);
@@ -66,7 +74,7 @@ public final class IfStmt extends Statement {
 		return condition;
 	}
 
-	public Statement getElseStmt() {
+	public Optional<Statement> getElseStmt() {
 		return elseStmt;
 	}
 
@@ -75,19 +83,19 @@ public final class IfStmt extends Statement {
 	}
 
 	public IfStmt setCondition(final Expression condition) {
-		this.condition = condition;
+		this.condition = assertNotNull(condition);
 		setAsParentNodeOf(this.condition);
 		return this;
 	}
 
-	public IfStmt setElseStmt(final Statement elseStmt) {
-		this.elseStmt = elseStmt;
+	public IfStmt setElseStmt(final Optional<Statement> elseStmt) {
+		this.elseStmt = assertNotNull(elseStmt);
 		setAsParentNodeOf(this.elseStmt);
 		return this;
 	}
 
 	public IfStmt setThenStmt(final Statement thenStmt) {
-		this.thenStmt = thenStmt;
+		this.thenStmt = assertNotNull(thenStmt);
 		setAsParentNodeOf(this.thenStmt);
 		return this;
 	}

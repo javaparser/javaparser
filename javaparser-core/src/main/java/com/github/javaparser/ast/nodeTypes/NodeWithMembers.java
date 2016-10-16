@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -33,9 +34,9 @@ import com.github.javaparser.ast.type.Type;
  *
  */
 public interface NodeWithMembers<T> {
-    List<BodyDeclaration<?>> getMembers();
+    NodeList<BodyDeclaration<?>> getMembers();
 
-    T setMembers(List<BodyDeclaration<?>> members);
+    T setMembers(NodeList<BodyDeclaration<?>> members);
 
     /**
      * Add a field to this and automatically add the import of the type if needed
@@ -72,14 +73,12 @@ public interface NodeWithMembers<T> {
      */
     default FieldDeclaration addField(Type<?> type, String name, Modifier... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
-        fieldDeclaration.setParentNode((Node) this);
+        getMembers().add(fieldDeclaration);
         VariableDeclarator variable = new VariableDeclarator(new VariableDeclaratorId(name));
         fieldDeclaration.getVariables().add(variable);
-        variable.setParentNode(fieldDeclaration);
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         variable.setType(type);
-        getMembers().add(fieldDeclaration);
         return fieldDeclaration;
     }
 

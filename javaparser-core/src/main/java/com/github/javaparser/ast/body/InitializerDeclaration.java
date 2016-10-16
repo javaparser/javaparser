@@ -22,11 +22,18 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -39,16 +46,15 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     private BlockStmt block;
 
     public InitializerDeclaration() {
+        this(Range.UNKNOWN, false, new BlockStmt());
     }
 
     public InitializerDeclaration(boolean isStatic, BlockStmt block) {
-        super(null);
-        setStatic(isStatic);
-        setBlock(block);
+        this(Range.UNKNOWN, isStatic, block);
     }
 
     public InitializerDeclaration(Range range, boolean isStatic, BlockStmt block) {
-        super(range, null);
+        super(range, new NodeList<>());
         setStatic(isStatic);
         setBlock(block);
     }
@@ -72,7 +78,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     public InitializerDeclaration setBlock(BlockStmt block) {
-        this.block = block;
+        this.block = assertNotNull(block);
 		setAsParentNodeOf(this.block);
         return this;
     }
@@ -83,10 +89,12 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
-            return (JavadocComment) getComment();
+    public Optional<JavadocComment> getJavaDoc() {
+        if(getComment().isPresent()){
+            if(getComment().get() instanceof JavadocComment){
+                return (Optional<JavadocComment>) getComment();
+            }
         }
-        return null;
+        return none();
     }
 }

@@ -22,42 +22,46 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
+import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
-	private List<Expression> init;
+	private NodeList<Expression> init;
 
-	private Expression compare;
+	private Optional<Expression> compare;
 
-	private List<Expression> update;
+	private NodeList<Expression> update;
 
 	private Statement body;
 
 	public ForStmt() {
+		this(Range.UNKNOWN,
+				new NodeList<>(),
+				none(),
+				new NodeList<>(),
+				new EmptyStmt());
 	}
 
-	public ForStmt(final List<Expression> init, final Expression compare,
-			final List<Expression> update, final Statement body) {
-		setCompare(compare);
-		setInit(init);
-		setUpdate(update);
-		setBody(body);
+	public ForStmt(final NodeList<Expression> init, final Optional<Expression> compare,
+			final NodeList<Expression> update, final Statement body) {
+        this(Range.UNKNOWN, init, compare, update, body);
 	}
 
 	public ForStmt(Range range,
-	               final List<Expression> init, final Expression compare,
-	               final List<Expression> update, final Statement body) {
+	               final NodeList<Expression> init, final Optional<Expression> compare,
+	               final NodeList<Expression> update, final Statement body) {
 		super(range);
 		setCompare(compare);
 		setInit(init);
@@ -80,17 +84,15 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 		return body;
 	}
 
-	public Expression getCompare() {
+	public Optional<Expression> getCompare() {
 		return compare;
 	}
 
-	public List<Expression> getInit() {
-        init = ensureNotNull(init);
+	public NodeList<Expression> getInit() {
         return init;
 	}
 
-	public List<Expression> getUpdate() {
-        update = ensureNotNull(update);
+	public NodeList<Expression> getUpdate() {
         return update;
 	}
 
@@ -101,20 +103,20 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
 	}
 
-	public ForStmt setCompare(final Expression compare) {
+	public ForStmt setCompare(final Optional<Expression> compare) {
 		this.compare = compare;
 		setAsParentNodeOf(this.compare);
 		return this;
 	}
 
-	public ForStmt setInit(final List<Expression> init) {
-		this.init = init;
+	public ForStmt setInit(final NodeList<Expression> init) {
+		this.init = assertNotNull(init);
 		setAsParentNodeOf(this.init);
 		return this;
 	}
 
-	public ForStmt setUpdate(final List<Expression> update) {
-		this.update = update;
+	public ForStmt setUpdate(final NodeList<Expression> update) {
+		this.update = assertNotNull(update);
 		setAsParentNodeOf(this.update);
 		return this;
 	}

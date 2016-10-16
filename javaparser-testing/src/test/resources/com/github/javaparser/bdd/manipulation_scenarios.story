@@ -27,13 +27,6 @@ When the List of VariableDeclarations are set as the resources on TryStmt
 Then all the VariableDeclarations parent is the TryStmt
 
 
-Scenario: Adding null to a TryStmt it handles the outcome gracefully
-
-Given a TryStmt
-When null is set as the resources on TryStmt
-Then the TryStmt has no child nodes
-
-
 Scenario: Creating a complete CompilationUnit
 
 Given a CompilationUnit

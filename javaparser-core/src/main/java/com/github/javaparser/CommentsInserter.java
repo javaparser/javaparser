@@ -30,6 +30,7 @@ import com.github.javaparser.utils.PositionUtils;
 import java.util.*;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
+import static com.github.javaparser.utils.Utils.some;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -60,14 +61,13 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        List<Node> children = cu.getChildrenNodes();
-        PositionUtils.sortByBeginPosition(children);
+        List<Node> children = cu.getBackwardsCompatibleChildrenNodes();
 
         Comment firstComment = comments.iterator().next();
-        if (cu.getPackage() != null
+        if (cu.getPackage().isPresent()
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                firstComment, children.get(0)))) {
-            cu.setComment(firstComment);
+                firstComment, cu.getPackage().get()))) {
+            cu.setComment(some(firstComment));
             comments.remove(firstComment);
         }
     }
@@ -92,8 +92,7 @@ class CommentsInserter {
         // if they preceed a child they are assigned to it, otherweise they
         // remain "orphans"
 
-        List<Node> children = node.getChildrenNodes();
-        PositionUtils.sortByBeginPosition(children);
+        List<Node> children = node.getBackwardsCompatibleChildrenNodes();
 
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
@@ -121,13 +120,17 @@ class CommentsInserter {
                 }
             }
         }
+        commentsToAttribute.removeAll(attributedComments);
 
         /* at this point I create an ordered list of all remaining comments and
          children */
         Comment previousComment = null;
         attributedComments = new LinkedList<>();
         List<Node> childrenAndComments = new LinkedList<>();
-        childrenAndComments.addAll(children);
+        for (Node child : children) {
+            // Avoid attributing comments to a meaningless container.
+            childrenAndComments.add(child);
+        }
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
                 configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
@@ -139,10 +142,10 @@ class CommentsInserter {
                     previousComment = null;
                 }
             } else {
-                if (previousComment != null && !thing.hasComment()) {
+                if (previousComment != null && !thing.getComment().isPresent()) {
                     if (!configuration.doNotAssignCommentsPrecedingEmptyLines
                             || !thereAreLinesBetween(previousComment, thing)) {
-                        thing.setComment(previousComment);
+                        thing.setComment(some(previousComment));
                         attributedComments.add(previousComment);
                         previousComment = null;
                     }
@@ -164,9 +167,9 @@ class CommentsInserter {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
         if (node.getBegin().line == lineComment.getBegin().line
-                && !node.hasComment()) {
+                && !node.getComment().isPresent()) {
             if(!(node instanceof Comment)) {
-                node.setComment(lineComment);
+                node.setComment(some(lineComment));
             }
             return true;
         } else {

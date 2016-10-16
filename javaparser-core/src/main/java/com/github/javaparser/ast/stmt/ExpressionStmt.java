@@ -22,9 +22,12 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -34,14 +37,14 @@ public final class ExpressionStmt extends Statement {
 	private Expression expr;
 
 	public ExpressionStmt() {
+        this(Range.UNKNOWN, new BooleanLiteralExpr());
 	}
 
 	public ExpressionStmt(final Expression expr) {
-		setExpression(expr);
+		this(Range.UNKNOWN, expr);
 	}
 
-	public ExpressionStmt(Range range,
-	                      final Expression expr) {
+	public ExpressionStmt(Range range, final Expression expr) {
 		super(range);
 		setExpression(expr);
 	}
@@ -59,7 +62,7 @@ public final class ExpressionStmt extends Statement {
 	}
 
 	public ExpressionStmt setExpression(final Expression expr) {
-		this.expr = expr;
+		this.expr = assertNotNull(expr);
 		setAsParentNodeOf(this.expr);
 		return this;
 	}

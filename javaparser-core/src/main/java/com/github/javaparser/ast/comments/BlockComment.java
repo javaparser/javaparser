@@ -37,10 +37,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class BlockComment extends Comment {
 
     public BlockComment() {
+        this(Range.UNKNOWN, "empty");
     }
 
     public BlockComment(String content) {
-        super(content);
+        this(Range.UNKNOWN, content);
     }
 
     public BlockComment(Range range, String content) {

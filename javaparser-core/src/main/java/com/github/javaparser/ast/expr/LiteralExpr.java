@@ -27,11 +27,7 @@ import com.github.javaparser.Range;
  * @author Julio Vilmar Gesser
  */
 public abstract class LiteralExpr extends Expression {
-
-	public LiteralExpr() {
-	}
-
-	public LiteralExpr(Range range) {
+    public LiteralExpr(Range range) {
 		super(range);
 	}
 }

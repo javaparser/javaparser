@@ -23,20 +23,25 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
  * @author Raquel Pau
  *
  */
-public class TypeExpr extends Expression implements NodeWithType<TypeExpr> {
+public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type<?>> {
 
     private Type<?> type;
 
-    public TypeExpr(){}
+    public TypeExpr() {
+        this(Range.UNKNOWN, new ClassOrInterfaceType());
+    }
 
     public TypeExpr(Range range, Type<?> type) {
         super(range);
@@ -60,7 +65,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr> {
 
     @Override
     public TypeExpr setType(Type<?> type) {
-        this.type = type;
+        this.type = assertNotNull(type);
         setAsParentNodeOf(this.type);
         return this;
     }

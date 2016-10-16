@@ -23,9 +23,12 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -37,18 +40,18 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     private BlockStmt block;
 
     public SynchronizedStmt() {
+        this(Range.UNKNOWN, new NameExpr(), new BlockStmt());
     }
 
     public SynchronizedStmt(final Expression expr, final BlockStmt block) {
-        setExpr(expr);
-        setBlock(block);
+        this(Range.UNKNOWN, expr, block);
     }
 
     public SynchronizedStmt(Range range, final Expression expr,
                             final BlockStmt block) {
         super(range);
         setExpr(expr);
-        setBlock(block);
+        setBody(block);
     }
 
     @Override
@@ -63,7 +66,6 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
 
     /**
      * @deprecated use {@link #getBody()}
-     * @return
      */
     @Deprecated
     public BlockStmt getBlock() {
@@ -76,17 +78,14 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
 
     /**
      * @deprecated Use {@link #setBody(BlockStmt)} instead
-     * @param block
      */
     @Deprecated
     public SynchronizedStmt setBlock(final BlockStmt block) {
-        this.block = block;
-        setAsParentNodeOf(this.block);
-        return this;
+        return setBody(block);
     }
 
     public SynchronizedStmt setExpr(final Expression expr) {
-        this.expr = expr;
+        this.expr = assertNotNull(expr);
         setAsParentNodeOf(this.expr);
         return this;
     }
@@ -98,7 +97,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
 
     @Override
     public SynchronizedStmt setBody(BlockStmt block) {
-        this.block = block;
+        this.block = assertNotNull(block);
         setAsParentNodeOf(this.block);
         return this;
     }

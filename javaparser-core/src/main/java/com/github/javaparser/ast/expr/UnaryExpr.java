@@ -37,8 +37,8 @@ public final class UnaryExpr extends Expression {
 		preDecrement, // --
 		not, // !
 		inverse, // ~
-		posIncrement, // ++
-		posDecrement, // --
+        postIncrement, // ++
+        postDecrement, // --
 	}
 
 	private Expression expr;
@@ -46,11 +46,11 @@ public final class UnaryExpr extends Expression {
 	private Operator op;
 
 	public UnaryExpr() {
+        this(Range.UNKNOWN, new IntegerLiteralExpr(), Operator.postIncrement);
 	}
 
 	public UnaryExpr(final Expression expr, final Operator op) {
-		setExpr(expr);
-		setOperator(op);
+        this(Range.UNKNOWN, expr, op);
 	}
 
 	public UnaryExpr(final Range range, final Expression expr, final Operator op) {

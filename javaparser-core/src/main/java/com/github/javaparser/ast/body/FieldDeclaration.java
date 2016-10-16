@@ -21,16 +21,18 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
@@ -39,12 +41,14 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
+import static com.github.javaparser.utils.Utils.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -59,38 +63,49 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     private Type elementType;
 
-    private List<VariableDeclarator> variables;
+    private NodeList<VariableDeclarator> variables;
 
-    private List<ArrayBracketPair> arrayBracketPairsAfterElementType;
+    private NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType;
 
     public FieldDeclaration() {
+        this(Range.UNKNOWN,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                new ClassOrInterfaceType(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, VariableDeclarator variable) {
-        setModifiers(modifiers);
-        setElementType(elementType);
-        List<VariableDeclarator> aux = new ArrayList<>();
-        aux.add(variable);
-        setVariables(aux);
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclarator variable) {
+        this(Range.UNKNOWN,
+                modifiers,
+                new NodeList<>(),
+                elementType,
+                nodeList(variable),
+                new NodeList<>());
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, List<VariableDeclarator> variables) {
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setVariables(variables);
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> elementType, NodeList<VariableDeclarator> variables) {
+        this(Range.UNKNOWN,
+                modifiers,
+                new NodeList<>(),
+                elementType,
+                variables,
+                new NodeList<>());
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                            List<VariableDeclarator> variables) {
-        super(annotations);
-        setModifiers(modifiers);
-        setElementType(elementType);
-        setVariables(variables);
-        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
+    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> elementType, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
+                            NodeList<VariableDeclarator> variables) {
+        this(Range.UNKNOWN,
+                modifiers,
+                annotations,
+                elementType,
+                variables,
+                arrayBracketPairsAfterElementType);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
-                            List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> elementType,
+                            NodeList<VariableDeclarator> variables, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);
         setElementType(elementType);
@@ -109,11 +124,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      *            variable declarator
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type,
+    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type<?> type,
                                                           VariableDeclarator variable) {
-        List<VariableDeclarator> variables = new ArrayList<>();
-        variables.add(variable);
-        return new FieldDeclaration(modifiers, type, variables);
+        return new FieldDeclaration(modifiers, type, new NodeList<VariableDeclarator>().add(variable));
     }
 
     /**
@@ -127,9 +140,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      *            field name
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type, String name) {
-        VariableDeclaratorId id = new VariableDeclaratorId(name);
-        VariableDeclarator variable = new VariableDeclarator(id);
+    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type<?> type, String name) {
+        assertNotNull(type);
+        VariableDeclaratorId id = new VariableDeclaratorId(assertNotNull(name));
+        VariableDeclarator variable = new VariableDeclarator(assertNotNull(id));
         return create(modifiers, type, variable);
     }
 
@@ -155,31 +169,33 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
-    public List<VariableDeclarator> getVariables() {
-        variables = ensureNotNull(variables);
+    public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }
 
     @Override
     public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
-        this.modifiers = modifiers;
+        this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
-    public FieldDeclaration setVariables(List<VariableDeclarator> variables) {
-        this.variables = variables;
+    public FieldDeclaration setVariables(NodeList<VariableDeclarator> variables) {
+        this.variables = assertNotNull(variables);
         setAsParentNodeOf(this.variables);
         return this;
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
-        if (getComment() instanceof JavadocComment) {
-            return (JavadocComment) getComment();
+    public Optional<JavadocComment> getJavaDoc() {
+        if(getComment().isPresent()){
+            if(getComment().get() instanceof JavadocComment){
+                return (Optional<JavadocComment>) getComment();
+            }
         }
-        return null;
+        return none();
     }
+
 
     /**
      * Create a getter for this field, <b>will only work if this field declares only 1 identifier and if this field is
@@ -208,7 +224,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
             getter = parentEnum.addMethod("get" + fieldNameUpper, PUBLIC);
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
-        getter.setBody(blockStmt);
+        getter.setBody(some(blockStmt));
         blockStmt.addStatement(new ReturnStmt(name(fieldName)));
         return getter;
     }
@@ -242,7 +258,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setter.setType(VOID_TYPE);
         setter.getParameters().add(new Parameter(variable.getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
-        setter.setBody(blockStmt2);
+        setter.setBody(some(blockStmt2));
         blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
         return setter;
     }
@@ -255,7 +271,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public FieldDeclaration setElementType(final Type elementType) {
-        this.elementType = elementType;
+        this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
     }
@@ -263,14 +279,13 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
      */
-    public List<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        arrayBracketPairsAfterElementType = ensureNotNull(arrayBracketPairsAfterElementType);
+    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterElementType;
     }
 
     @Override
-    public FieldDeclaration setArrayBracketPairsAfterElementType(List<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterElementType = arrayBracketPairsAfterType;
+    public FieldDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        this.arrayBracketPairsAfterElementType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }

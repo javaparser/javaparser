@@ -22,9 +22,11 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.Utils;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Java® Language Specification 3.10.5 String Literals
@@ -35,14 +37,11 @@ public class StringLiteralExpr extends LiteralExpr {
 	protected String value;
 
 	public StringLiteralExpr() {
-        this.value = "";
+        this(Range.UNKNOWN, "empty");
 	}
 
 	public StringLiteralExpr(final String value) {
-        if (value.contains("\n") || value.contains("\r")) {
-            throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
-        }
-		this.value = value;
+		this(Range.UNKNOWN, value);
 	}
 
 	/**
@@ -54,7 +53,10 @@ public class StringLiteralExpr extends LiteralExpr {
 
 	public StringLiteralExpr(final Range range, final String value) {
 		super(range);
-		this.value = value;
+        if (value.contains("\n") || value.contains("\r")) {
+            throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
+        }
+		setValue(value);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -70,7 +72,7 @@ public class StringLiteralExpr extends LiteralExpr {
 	}
 
 	public final StringLiteralExpr setValue(final String value) {
-		this.value = value;
-		return this;
+        this.value = assertNotNull(value);
+        return this;
 	}
 }

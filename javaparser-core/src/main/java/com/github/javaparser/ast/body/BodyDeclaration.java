@@ -25,32 +25,36 @@ import java.util.List;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotations<T> {
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     public BodyDeclaration() {
+        this(Range.UNKNOWN, new NodeList<>());
     }
 
-    public BodyDeclaration(List<AnnotationExpr> annotations) {
-    	setAnnotations(annotations);
+    public BodyDeclaration(NodeList<AnnotationExpr> annotations) {
+        this(Range.UNKNOWN, annotations);
     }
 
-    public BodyDeclaration(Range range, List<AnnotationExpr> annotations) {
+    public BodyDeclaration(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
     	setAnnotations(annotations);
     }
 
     @Override
-    public final List<AnnotationExpr> getAnnotations() {
-        annotations = Utils.ensureNotNull(annotations);
+    public final NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
@@ -61,8 +65,8 @@ public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotat
      */
     @SuppressWarnings("unchecked")
     @Override
-    public final T setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+    public final T setAnnotations(NodeList<AnnotationExpr> annotations) {
+        this.annotations = assertNotNull(annotations);
 		setAsParentNodeOf(this.annotations);
         return (T) this;
     }

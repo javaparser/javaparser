@@ -22,7 +22,10 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
+import com.github.javaparser.ast.stmt.EmptyStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -36,18 +39,23 @@ import static com.github.javaparser.utils.Utils.*;
  *
  * @author Raquel Pau
  */
-public class LambdaExpr extends Expression {
+public class LambdaExpr extends Expression implements
+		NodeWithParameters<LambdaExpr> {
 
-	private List<Parameter> parameters;
+	private NodeList<Parameter> parameters;
 
 	private boolean parametersEnclosed;
 
 	private Statement body;
 
 	public LambdaExpr() {
+        this(Range.UNKNOWN,
+                new NodeList<>(),
+                new EmptyStmt(),
+                false);
 	}
 
-	public LambdaExpr(Range range, List<Parameter> parameters, Statement body,
+	public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body,
                       boolean parametersEnclosed) {
 
 		super(range);
@@ -56,13 +64,14 @@ public class LambdaExpr extends Expression {
         setParametersEnclosed(parametersEnclosed);
 	}
 
-	public List<Parameter> getParameters() {
-        parameters = ensureNotNull(parameters);
+    @Override
+	public NodeList<Parameter> getParameters() {
         return parameters;
 	}
 
-	public LambdaExpr setParameters(List<Parameter> parameters) {
-		this.parameters = parameters;
+    @Override
+	public LambdaExpr setParameters(NodeList<Parameter> parameters) {
+		this.parameters = assertNotNull(parameters);
 		setAsParentNodeOf(this.parameters);
 		return this;
 	}

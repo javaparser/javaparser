@@ -22,9 +22,12 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.body.EmptyTypeDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -34,10 +37,11 @@ public final class TypeDeclarationStmt extends Statement {
 	private TypeDeclaration typeDecl;
 
 	public TypeDeclarationStmt() {
+        this(Range.UNKNOWN, new EmptyTypeDeclaration());
 	}
 
 	public TypeDeclarationStmt(final TypeDeclaration typeDecl) {
-		setTypeDeclaration(typeDecl);
+		this(Range.UNKNOWN, typeDecl);
 	}
 
 	public TypeDeclarationStmt(Range range, final TypeDeclaration typeDecl) {
@@ -58,7 +62,7 @@ public final class TypeDeclarationStmt extends Statement {
 	}
 
 	public TypeDeclarationStmt setTypeDeclaration(final TypeDeclaration typeDecl) {
-		this.typeDecl = typeDecl;
+		this.typeDecl = assertNotNull(typeDecl);
 		setAsParentNodeOf(this.typeDecl);
 		return this;
 	}

@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -35,15 +36,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * </code>
  * @author Julio Vilmar Gesser
  */
-public final class ClassExpr extends Expression implements NodeWithType<ClassExpr> {
+public final class ClassExpr extends Expression implements NodeWithType<ClassExpr, Type<?>> {
 
     private Type type;
 
     public ClassExpr() {
+        this(Range.UNKNOWN, new ClassOrInterfaceType());
     }
 
-    public ClassExpr(Type type) {
-       setType(type);
+    public ClassExpr(Type<?> type) {
+       this(Range.UNKNOWN, type);
     }
 
     public ClassExpr(Range range, Type type) {

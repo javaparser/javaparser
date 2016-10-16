@@ -24,6 +24,10 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.JavadocComment;
 
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.some;
+
 /**
  * Node which can be documented through a Javadoc comment.
  */
@@ -31,9 +35,9 @@ public interface NodeWithJavaDoc<T> {
     /**
      * Gets the JavaDoc for this node. You can set the JavaDoc by calling setComment with a JavadocComment.
      *
-     * @return The JavaDoc for this node if it exists, null if it doesn't.
+     * @return The optional JavaDoc for this node
      */
-    JavadocComment getJavaDoc();
+    Optional<JavadocComment> getJavaDoc();
 
     /**
      * Use this to store additional information to this node.
@@ -42,7 +46,7 @@ public interface NodeWithJavaDoc<T> {
      */
     @SuppressWarnings("unchecked")
     default T setJavaDocComment(String comment) {
-        ((Node) this).setComment(new JavadocComment(comment));
+        ((Node) this).setComment(some(new JavadocComment(comment)));
         return (T) this;
     }
 }

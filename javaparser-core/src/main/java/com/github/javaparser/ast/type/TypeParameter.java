@@ -22,15 +22,13 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <p>
@@ -48,26 +46,34 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
 	private String name;
 
-    private List<AnnotationExpr> annotations;
+    private NodeList<AnnotationExpr> annotations;
 
-	private List<ClassOrInterfaceType> typeBound;
+	private NodeList<ClassOrInterfaceType> typeBound;
 
 	public TypeParameter() {
+		this(Range.UNKNOWN,
+				"empty",
+				new NodeList<>(),
+				new NodeList<>());
 	}
 
-	public TypeParameter(final String name, final List<ClassOrInterfaceType> typeBound) {
-		setName(name);
-		setTypeBound(typeBound);
+	public TypeParameter(final String name, final NodeList<ClassOrInterfaceType> typeBound) {
+		this(Range.UNKNOWN,
+				name,
+				typeBound,
+				new NodeList<>());
 	}
 
-	public TypeParameter(Range range, final String name, final List<ClassOrInterfaceType> typeBound) {
+	public TypeParameter(Range range, final String name, final NodeList<ClassOrInterfaceType> typeBound) {
+		this(range,
+				name,
+				typeBound,
+				new NodeList<>());
+	}
+
+	public TypeParameter(Range range, String name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
 		super(range);
 		setName(name);
-		setTypeBound(typeBound);
-	}
-
-	public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
-		this(range, name, typeBound);
 		setTypeBound(typeBound);
 		setAnnotations(annotations);
 	}
@@ -96,42 +102,30 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 	 * 
 	 * @return list of types that this paramente extends or <code>null</code>
 	 */
-	public List<ClassOrInterfaceType> getTypeBound() {
-        typeBound = ensureNotNull(typeBound);
+	public NodeList<ClassOrInterfaceType> getTypeBound() {
         return typeBound;
 	}
 
-	/**
-	 * Sets the name of this type parameter.
-	 * 
-	 * @param name
-	 *            the name to set
-	 */
     @Override
     public TypeParameter setName(final String name) {
 		this.name = name;
         return this;
 	}
 
-	/**
-	 * Sets the list o types.
-	 * 
-	 * @param typeBound
-	 *            the typeBound to set
-	 */
-	public TypeParameter setTypeBound(final List<ClassOrInterfaceType> typeBound) {
-		this.typeBound = typeBound;
+	public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
+		this.typeBound = assertNotNull(typeBound);
 		setAsParentNodeOf(typeBound);
 		return this;
 	}
 
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
+	@Override
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-    public TypeParameter setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
+	@Override
+    public TypeParameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+		this.annotations = assertNotNull(annotations);
 	    setAsParentNodeOf(this.annotations);
 		return this;
     }

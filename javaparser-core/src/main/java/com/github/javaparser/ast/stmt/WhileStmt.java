@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,11 +38,11 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
 	private Statement body;
 
 	public WhileStmt() {
+        this(Range.UNKNOWN, new BooleanLiteralExpr(), new EmptyStmt());
 	}
 
 	public WhileStmt(final Expression condition, final Statement body) {
-		setCondition(condition);
-		setBody(body);
+        this(Range.UNKNOWN, condition, body);
 	}
 
 	public WhileStmt(Range range, final Expression condition, final Statement body) {

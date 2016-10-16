@@ -52,12 +52,11 @@ public final class AssignExpr extends Expression {
     private Operator op;
 
     public AssignExpr() {
+        this(Range.UNKNOWN, new NameExpr(), new StringLiteralExpr(), Operator.assign);
     }
 
     public AssignExpr(Expression target, Expression value, Operator op) {
-        setTarget(target);
-        setValue(value);
-        setOperator(op);
+        this(Range.UNKNOWN, target, value, op);
     }
 
     public AssignExpr(Range range, Expression target, Expression value, Operator op) {

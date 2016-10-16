@@ -21,18 +21,18 @@
  
 package com.github.javaparser.bdd.steps;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
+import static com.github.javaparser.utils.Utils.some;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
@@ -40,10 +40,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -65,7 +61,7 @@ public class ManipulationSteps {
     private BlockStmt blockStmt;
     private Statement statement;
     private TryStmt tryStmt;
-    private List<VariableDeclarationExpr> variableDeclarationExprList;
+    private NodeList<VariableDeclarationExpr> variableDeclarationExprList;
     private ChangeMethodNameToUpperCaseVisitor changeMethodNameToUpperCaseVisitor;
     private AddNewIntParameterCalledValueVisitor addNewIntParameterCalledValueVisitor;
 
@@ -93,7 +89,7 @@ public class ManipulationSteps {
 
     @Given("a List of VariableDeclarations")
     public void givenAListOfVariableDeclarations() {
-        variableDeclarationExprList = new ArrayList<>();
+        variableDeclarationExprList = new NodeList<>();
         variableDeclarationExprList.add(new VariableDeclarationExpr());
         variableDeclarationExprList.add(new VariableDeclarationExpr());
     }
@@ -123,15 +119,15 @@ public class ManipulationSteps {
         tryStmt.setResources(variableDeclarationExprList);
     }
 
-    @When("null is set as the resources on TryStmt")
+    @When("empty list is set as the resources on TryStmt")
     public void whenNullIsSetAsTheResourcesOnTryStmt() {
-        tryStmt.setResources(null);
+        tryStmt.setResources(new NodeList<>());
     }
 
     @When("the package declaration is set to \"$packageName\"")
     public void whenThePackageDeclarationIsSetTo(String packageName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        compilationUnit.setPackage(new PackageDeclaration(new NameExpr(packageName)));
+        compilationUnit.setPackage(some(new PackageDeclaration(new NameExpr(packageName))));
         state.put("cu1", compilationUnit);
     }
 
@@ -139,7 +135,7 @@ public class ManipulationSteps {
     public void whenAClassCalledIsAddedToTheCompilationUnit(String className) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
 		TypeDeclaration<?> type = new ClassOrInterfaceDeclaration(EnumSet.of(Modifier.PUBLIC), false, "CreateClass");
-        compilationUnit.setTypes(Arrays.asList(type));
+        compilationUnit.setTypes(nodeList(type));
         state.put("cu1", compilationUnit);
     }
 
@@ -168,7 +164,7 @@ public class ManipulationSteps {
     public void whenABlockStmtIsAddedToMethodInClass(int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        method.setBody(new BlockStmt());
+        method.setBody(some(new BlockStmt()));
     }
 
     @When("$className.$fieldName.$methodName(\"$stringValue\"); is added to the body of method $methodPosition in class $classPosition")
@@ -178,9 +174,9 @@ public class ManipulationSteps {
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         NameExpr clazz = new NameExpr(className);
         FieldAccessExpr field = new FieldAccessExpr(clazz, fieldName);
-        MethodCallExpr call = new MethodCallExpr(field, methodName);
+        MethodCallExpr call = new MethodCallExpr(some(field), methodName);
         call.addArgument(new StringLiteralExpr(stringValue));
-        method.getBody().addStatement(call);
+        method.getBody().get().addStatement(call);
     }
 
     @When("method $methodPosition in class $classPosition has it's name converted to uppercase")
@@ -243,7 +239,7 @@ public class ManipulationSteps {
     @Then("all the VariableDeclarations parent is the TryStmt")
     public void thenAllTheVariableDeclarationsParentIsTheTryStmt() {
         for(VariableDeclarationExpr expr : variableDeclarationExprList){
-            assertThat(expr.getParentNode(), is((Node)tryStmt));
+            assertThat(expr.getParentNode().getParentNode(), is((Node)tryStmt));
         }
     }
 

@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 
 /**
  * @author Julio Vilmar Gesser
@@ -29,9 +30,10 @@ import com.github.javaparser.Range;
 public abstract class ReferenceType<T extends ReferenceType> extends Type<T> {
 
     public ReferenceType() {
+        this(Range.UNKNOWN);
 	}
 
 	public ReferenceType(final Range range) {
-		super(range);
+		super(range, new NodeList<>());
 	}
 }

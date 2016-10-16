@@ -25,6 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -35,11 +37,11 @@ public final class LabeledStmt extends Statement {
 	private Statement stmt;
 
 	public LabeledStmt() {
+        this(Range.UNKNOWN, "empty", new EmptyStmt());
 	}
 
 	public LabeledStmt(final String label, final Statement stmt) {
-		setLabel(label);
-		setStmt(stmt);
+        this(Range.UNKNOWN, label, stmt);
 	}
 
 	public LabeledStmt(Range range, final String label, final Statement stmt) {
@@ -65,12 +67,12 @@ public final class LabeledStmt extends Statement {
 	}
 
 	public LabeledStmt setLabel(final String label) {
-		this.label = label;
+		this.label = assertNotNull(label);
 		return this;
 	}
 
 	public LabeledStmt setStmt(final Statement stmt) {
-		this.stmt = stmt;
+		this.stmt = assertNotNull(stmt);
 		setAsParentNodeOf(this.stmt);
 		return this;
 	}

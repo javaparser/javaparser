@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,11 +38,11 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 	private Expression condition;
 
 	public DoStmt() {
+        this(Range.UNKNOWN, new EmptyStmt(), new BooleanLiteralExpr());
 	}
 
 	public DoStmt(final Statement body, final Expression condition) {
-		setBody(body);
-		setCondition(condition);
+        this(Range.UNKNOWN, body, condition);
 	}
 
 	public DoStmt(Range range, final Statement body, final Expression condition) {

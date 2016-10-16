@@ -28,12 +28,7 @@ import com.github.javaparser.ast.Node;
  * @author Julio Vilmar Gesser
  */
 public abstract class Expression extends Node {
-
-	public Expression() {
-	}
-
-	public Expression(Range range) {
+    public Expression(Range range) {
 		super(range);
 	}
-
 }

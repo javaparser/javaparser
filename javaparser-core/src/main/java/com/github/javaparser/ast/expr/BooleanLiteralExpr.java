@@ -33,10 +33,11 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     private boolean value;
 
     public BooleanLiteralExpr() {
+        this(Range.UNKNOWN, false);
     }
 
     public BooleanLiteralExpr(boolean value) {
-    	setValue(value);
+    	this(Range.UNKNOWN, value);
     }
 
     public BooleanLiteralExpr(Range range, boolean value) {

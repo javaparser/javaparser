@@ -29,6 +29,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.ast.expr.NameExpr.name;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -41,13 +43,15 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 	private Statement body;
 
 	public ForeachStmt() {
+        this(Range.UNKNOWN,
+                new VariableDeclarationExpr(),
+                new NameExpr(),
+                new EmptyStmt()); 
 	}
 
 	public ForeachStmt(final VariableDeclarationExpr var,
 			final Expression iterable, final Statement body) {
-		setVariable(var);
-		setIterable(iterable);
-		setBody(body);
+        this(Range.UNKNOWN, var, iterable, body);
 	}
 
 	public ForeachStmt(Range range,
@@ -61,15 +65,9 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 
     /**
      * Will create a {@link NameExpr} with the iterable param
-     * 
-     * @param var
-     * @param iterable
-     * @param body
      */
     public ForeachStmt(VariableDeclarationExpr var, String iterable, BlockStmt body) {
-        setVariable(var);
-        setIterable(new NameExpr(iterable));
-        setBody(body);
+        this(Range.UNKNOWN, var, name(iterable), body);
     }
 
     @Override

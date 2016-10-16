@@ -23,6 +23,9 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
@@ -32,55 +35,69 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
-import java.util.List;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.ast.expr.NameExpr.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration>
-        implements NodeWithImplements<ClassOrInterfaceDeclaration>, NodeWithExtends<ClassOrInterfaceDeclaration> {
+public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements 
+        NodeWithImplements<ClassOrInterfaceDeclaration>, 
+        NodeWithExtends<ClassOrInterfaceDeclaration>,
+        NodeWithTypeParameters<ClassOrInterfaceDeclaration> {
 
     private boolean interface_;
 
-    private List<TypeParameter> typeParameters;
+    private NodeList<TypeParameter> typeParameters;
 
     // Can contain more than one item if this is an interface
-    private List<ClassOrInterfaceType> extendsList;
+    private NodeList<ClassOrInterfaceType> extendsList;
 
-    private List<ClassOrInterfaceType> implementsList;
+    private NodeList<ClassOrInterfaceType> implementsList;
 
     public ClassOrInterfaceDeclaration() {
+        this(Range.UNKNOWN, 
+                EnumSet.noneOf(Modifier.class), 
+                new NodeList<>(), 
+                false, 
+                new NameExpr(),
+                new NodeList<>(),
+                new NodeList<>(), 
+                new NodeList<>(), 
+                new NodeList<>()); 
     }
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
                                        final String name) {
-        super(modifiers, name);
-        setInterface(isInterface);
+        this(Range.UNKNOWN, 
+                modifiers, 
+                new NodeList<>(), 
+                isInterface,
+                name(name),
+                new NodeList<>(),
+                new NodeList<>(), 
+                new NodeList<>(), 
+                new NodeList<>());
     }
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
-                                       final List<AnnotationExpr> annotations, final boolean isInterface,
-                                       final String name,
-                                       final List<TypeParameter> typeParameters,
-                                       final List<ClassOrInterfaceType> extendsList,
-                                       final List<ClassOrInterfaceType> implementsList,
-                                       final List<BodyDeclaration<?>> members) {
-        super(annotations, modifiers, name, members);
-        setInterface(isInterface);
-        setTypeParameters(typeParameters);
-        setExtends(extendsList);
-        setImplements(implementsList);
+                                       final NodeList<AnnotationExpr> annotations, final boolean isInterface,
+                                       final NameExpr name,
+                                       final NodeList<TypeParameter> typeParameters,
+                                       final NodeList<ClassOrInterfaceType> extendsList,
+                                       final NodeList<ClassOrInterfaceType> implementsList,
+                                       final NodeList<BodyDeclaration<?>> members) {
+        this(Range.UNKNOWN, modifiers, annotations, isInterface, name, typeParameters, extendsList, implementsList, members);
     }
 
     public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
-                                       final List<AnnotationExpr> annotations, final boolean isInterface,
-                                       final String name,
-                                       final List<TypeParameter> typeParameters,
-                                       final List<ClassOrInterfaceType> extendsList,
-                                       final List<ClassOrInterfaceType> implementsList,
-                                       final List<BodyDeclaration<?>> members) {
+                                       final NodeList<AnnotationExpr> annotations, final boolean isInterface,
+                                       final NameExpr name,
+                                       final NodeList<TypeParameter> typeParameters,
+                                       final NodeList<ClassOrInterfaceType> extendsList,
+                                       final NodeList<ClassOrInterfaceType> implementsList,
+                                       final NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);
@@ -98,19 +115,17 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         v.visit(this, arg);
     }
 
-    public List<ClassOrInterfaceType> getExtends() {
-        extendsList = ensureNotNull(extendsList);
+    @Override
+    public NodeList<ClassOrInterfaceType> getExtends() {
         return extendsList;
     }
 
     @Override
-    public List<ClassOrInterfaceType> getImplements() {
-        implementsList = ensureNotNull(implementsList);
+    public NodeList<ClassOrInterfaceType> getImplements() {
         return implementsList;
     }
 
-    public List<TypeParameter> getTypeParameters() {
-        typeParameters = ensureNotNull(typeParameters);
+    public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
@@ -118,27 +133,16 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return interface_;
     }
 
-    /**
-     * 
-     * @param extendsList a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
-     * @return
-     */
     @Override
-    public ClassOrInterfaceDeclaration setExtends(final List<ClassOrInterfaceType> extendsList) {
-        this.extendsList = extendsList;
+    public ClassOrInterfaceDeclaration setExtends(final NodeList<ClassOrInterfaceType> extendsList) {
+        this.extendsList = assertNotNull(extendsList);
         setAsParentNodeOf(this.extendsList);
         return this;
     }
 
-    /**
-     * 
-     * @param implementsList a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
-     */
     @Override
-    public ClassOrInterfaceDeclaration setImplements(final List<ClassOrInterfaceType> implementsList) {
-        this.implementsList = implementsList;
+    public ClassOrInterfaceDeclaration setImplements(final NodeList<ClassOrInterfaceType> implementsList) {
+        this.implementsList = assertNotNull(implementsList);
         setAsParentNodeOf(this.implementsList);
         return this;
     }
@@ -148,18 +152,10 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
-    /**
-     *
-     * @param typeParameters a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
-     */
-    public ClassOrInterfaceDeclaration setTypeParameters(final List<TypeParameter> typeParameters) {
-        this.typeParameters = typeParameters;
+    @Override
+    public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+        this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(this.typeParameters);
         return this;
     }
-
-   
-
-
 }

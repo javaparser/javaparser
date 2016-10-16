@@ -22,28 +22,28 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ArrayInitializerExpr extends Expression {
 
-    private List<Expression> values;
+    private NodeList<Expression> values;
 
     public ArrayInitializerExpr() {
+        this(Range.UNKNOWN, new NodeList<>());
     }
 
-    public ArrayInitializerExpr(List<Expression> values) {
-       setValues(values);
+    public ArrayInitializerExpr(NodeList<Expression> values) {
+       this(Range.UNKNOWN, values);
     }
 
-    public ArrayInitializerExpr(Range range, List<Expression> values) {
+    public ArrayInitializerExpr(Range range, NodeList<Expression> values) {
         super(range);
         setValues(values);
     }
@@ -58,13 +58,12 @@ public final class ArrayInitializerExpr extends Expression {
         v.visit(this, arg);
     }
 
-    public List<Expression> getValues() {
-        values = ensureNotNull(values);
+    public NodeList<Expression> getValues() {
         return values;
     }
 
-    public ArrayInitializerExpr setValues(List<Expression> values) {
-        this.values = values;
+    public ArrayInitializerExpr setValues(NodeList<Expression> values) {
+        this.values = assertNotNull(values);
 		setAsParentNodeOf(this.values);
         return this;
     }

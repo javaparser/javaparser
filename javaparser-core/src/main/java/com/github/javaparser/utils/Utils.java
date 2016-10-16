@@ -21,9 +21,6 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.Provider;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
@@ -35,17 +32,10 @@ import java.util.*;
  */
 public class Utils {
 	public static final String EOL = System.getProperty("line.separator");
-	public static <T> List<T> ensureNotNull(List<T> list) {
-		return list == null ? new ArrayList<T>() : list;
-	}
-
-	public static <E> boolean isNullOrEmpty(Collection<E> collection) {
-		return collection == null || collection.isEmpty();
-	}
 
 	public static <T> T assertNotNull(T o) {
 		if (o == null) {
-			throw new NullPointerException("Assertion failed.");
+			throw new AssertionError("A reference was unexpectedly null.");
 		}
 		return o;
 	}
@@ -82,21 +72,9 @@ public class Utils {
 		return result.toString();
 	}
 
-	public static String providerToString(Provider provider) throws IOException {
-		final StringBuilder result = new StringBuilder();
-		final char[] buffer = new char[8 * 1024];
-		int numChars;
-
-		while ((numChars = provider.read(buffer, 0, buffer.length)) != -1) {
-			result.append(buffer, 0, numChars);
-		}
-
-		return result.toString();
-	}
-
 	/**
 	 * Puts varargs in a mutable list.
-     * This does not have the disadvantage of Arrays#asList that it has a static size. 
+	 * This does not have the disadvantage of Arrays#asList that it has a static size. 
 	 */
 	public static <T> List<T> arrayToList(T[] array){
 		List<T> list = new LinkedList<>();
@@ -104,4 +82,24 @@ public class Utils {
 		return list;
 	}
 
+    /**
+     * Scala-like statically importable shortcut to Optional.of
+     */
+    public static <T> Optional<T> some(T t) {
+        return Optional.of(t);
+    }
+
+    /**
+     * Importable shortcut to Optional.ofNullable
+     */
+    public static <T> Optional<T> option(T t) {
+        return Optional.ofNullable(t);
+    }
+
+    /**
+     * Scala-like importable shortcut to Optional.empty()
+     */
+    public static <T> Optional<T> none() {
+        return Optional.empty();
+    }
 }
