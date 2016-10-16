@@ -208,11 +208,6 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new LinkedList<>();
         if (getSuperClass() != null) {

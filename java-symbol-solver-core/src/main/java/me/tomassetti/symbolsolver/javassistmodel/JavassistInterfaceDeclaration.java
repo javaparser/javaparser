@@ -207,11 +207,6 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
         try {

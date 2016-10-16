@@ -1,7 +1,5 @@
 package me.tomassetti.symbolsolver.model.declarations;
 
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
@@ -138,18 +136,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     Set<MethodDeclaration> getDeclaredMethods();
 
     Set<MethodUsage> getAllMethods();
-
-    ///
-    /// Resolution
-    ///
-
-    /**
-     * Try to solve a symbol just in the declaration, it does not delegate to the container.
-     *
-     * Deprecated because resolution logic should be outside declarations.
-     */
-    @Deprecated
-    SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver);
 
     ///
     /// Assignability

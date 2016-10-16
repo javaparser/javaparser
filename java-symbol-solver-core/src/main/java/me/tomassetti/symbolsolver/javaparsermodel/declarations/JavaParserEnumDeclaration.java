@@ -22,6 +22,7 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionFactory;
+import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 
 import java.io.Serializable;
 import java.util.*;
@@ -279,10 +280,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return fields;
     }
 
-    @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public List<ReferenceType> getAncestors() {
@@ -292,7 +289,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
-                SymbolReference<TypeDeclaration> implementedDeclRef = solveType(implementedType.getName(), typeSolver);
+                SymbolReference<TypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName());
                 if (!implementedDeclRef.isSolved()) {
                     throw new UnsolvedSymbolException(implementedType.getName());
                 }

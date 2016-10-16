@@ -319,7 +319,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 	}
 
 	@Deprecated
-	@Override
 	public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
 		if (this.wrappedNode.getName().equals(name)) {
 			return SymbolReference.solved(this);
@@ -349,7 +348,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 					if (internalType instanceof ClassOrInterfaceDeclaration) {
 						return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
 					} else if (internalType instanceof EnumDeclaration) {
-						return new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
+						return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
 					} else {
 						throw new UnsupportedOperationException();
 					}

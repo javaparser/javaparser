@@ -144,4 +144,17 @@ public class SymbolSolver {
         }
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
+
+    /**
+     * Try to solve a symbol just in the declaration, it does not delegate to the container.
+     */
+    public SymbolReference<TypeDeclaration> solveTypeInType(TypeDeclaration typeDeclaration, String name) {
+        if (typeDeclaration instanceof JavaParserClassDeclaration) {
+            return ((JavaParserClassDeclaration)typeDeclaration).solveType(name, typeSolver);
+        }
+        if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
+            return ((JavaParserInterfaceDeclaration)typeDeclaration).solveType(name, typeSolver);
+        }
+        return SymbolReference.unsolved(TypeDeclaration.class);
+    }
 }

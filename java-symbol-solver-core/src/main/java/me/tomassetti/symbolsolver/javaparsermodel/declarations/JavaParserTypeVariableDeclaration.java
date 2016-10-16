@@ -90,11 +90,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<ReferenceType> getAncestors() {
         throw new UnsupportedOperationException();
     }

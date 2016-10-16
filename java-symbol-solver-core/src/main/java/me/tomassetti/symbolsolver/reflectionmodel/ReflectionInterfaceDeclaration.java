@@ -239,11 +239,6 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        return SymbolReference.unsolved(TypeDeclaration.class);
-    }
-
-    @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new LinkedList<>();
         if (clazz.getSuperclass() != null) {

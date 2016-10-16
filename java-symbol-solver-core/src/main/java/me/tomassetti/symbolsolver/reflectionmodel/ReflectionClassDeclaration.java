@@ -265,11 +265,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        return SymbolReference.unsolved(TypeDeclaration.class);
-    }
-
-    @Override
     public ClassDeclaration asClass() {
         return this;
     }
@@ -278,24 +273,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     public boolean hasDirectlyAnnotation(String canonicalName) {
         throw new UnsupportedOperationException();
     }
-
-    /*@Override
-    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
-        if (getQualifiedName().equals(other.getQualifiedName())) {
-            return true;
-        }
-        if (clazz.getSuperclass() != null) {
-            if (new ReflectionClassDeclaration(clazz.getSuperclass()).isAssignableBy(other, typeSolver)){
-                return true;
-            }
-        }
-        for (Class<?> interfaze : clazz.getInterfaces()) {
-            if (new ReflectionClassDeclaration(interfaze).isAssignableBy(other, typeSolver)){
-                return true;
-            }
-        }
-        return false;
-    }*/
 
     @Override
     public boolean hasField(String name) {

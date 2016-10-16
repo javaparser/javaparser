@@ -254,7 +254,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         throw new UnsupportedOperationException("Derived fields");
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)) {
             return SymbolReference.solved(this);
@@ -284,7 +284,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
                     } else if (internalType instanceof EnumDeclaration) {
-                        return new JavaParserEnumDeclaration((EnumDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
+                        return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
                     } else {
                         throw new UnsupportedOperationException();
                     }

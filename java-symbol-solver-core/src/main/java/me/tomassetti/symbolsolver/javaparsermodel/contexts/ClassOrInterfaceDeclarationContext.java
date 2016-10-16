@@ -103,7 +103,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        SymbolReference<TypeDeclaration> ref = getDeclaration().solveType(name, typeSolver);
+        SymbolReference<TypeDeclaration> ref = new SymbolSolver(typeSolver).solveTypeInType(getDeclaration(), name);
         if (ref.isSolved()) {
             return ref;
         }
