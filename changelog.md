@@ -1,10 +1,14 @@
+Version 3.0.0-alpha.5
+------------------
+* 451 null is no longer allowed in the AST. [See last post in issue](https://github.com/javaparser/javaparser/issues/451)
+* 501 421 420 316 use a special type of list for nodes: NodeList. [See last post in issue](https://github.com/javaparser/javaparser/issues/421)
+
 Version 3.0.0-alpha.4
 ------------------
 * 463 471 nodes can now be removed easily
 * 491 import handling changed. Instead of "ImportDeclaration", we now have the four types of import as described in the JLS. [See issue](https://github.com/javaparser/javaparser/pull/491)
 * 452 355 474 494 various improvements
 * 493 492 485 Simplify the JavaParser interface
-
 
 Version 3.0.0-alpha.3
 ------------------
