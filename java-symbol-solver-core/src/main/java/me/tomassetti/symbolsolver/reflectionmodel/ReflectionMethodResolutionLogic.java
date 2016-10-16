@@ -23,9 +23,6 @@ class ReflectionMethodResolutionLogic {
                                                     Context invokationContext, List<Type> typeParameterValues,
                                                     TypeParametrizable typeParametrizable, Class clazz) {
         if (typeParameterValues.size() != typeParametrizable.getTypeParameters().size()) {
-            //if (typeParameterValues.size() != 0){
-            //    throw new UnsupportedOperationException("I have solved typeParametersValues for " + clazz.getCanonicalName() +". Values given are: "+typeParameterValues);
-            //}
             // if it is zero we are going to ignore them
             if (!typeParametrizable.getTypeParameters().isEmpty()) {
                 // Parameters not specified, so default to Object

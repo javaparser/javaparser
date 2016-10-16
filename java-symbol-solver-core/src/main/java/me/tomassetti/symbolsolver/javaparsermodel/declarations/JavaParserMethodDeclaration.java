@@ -243,7 +243,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
-        // return wrappedNode.getModifiers().contains(com.github.javaparser.ast.Modifier.PRIVATE);
         throw new UnsupportedOperationException();
     }
 }

@@ -139,11 +139,6 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         }
     }
 
-    /*@Override
-    public TypeUsage getTypeUsage(TypeSolver typeSolver) {
-        return JavaParserFacade.get(typeSolver).getType(wrappedNode);
-    }*/
-
     @Override
     public TypeDeclaration asType() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName()+": wrapping "+ this.getWrappedNode().getClass().getCanonicalName());

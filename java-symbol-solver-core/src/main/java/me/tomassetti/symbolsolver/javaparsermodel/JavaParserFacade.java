@@ -75,7 +75,6 @@ public class JavaParserFacade {
             if (solved.isPresent()) {
                 return solved.get();
             } else {
-                //throw new UnsolvedSymbolException(context, String.format("Unable to solve generic type %s using context %s", typeUsage.describe(), context.toString()));
                 return type;
             }
         } else if (type.isWildcard()) {

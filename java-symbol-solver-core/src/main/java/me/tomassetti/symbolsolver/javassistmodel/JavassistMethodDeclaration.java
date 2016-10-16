@@ -131,7 +131,6 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
-        // return !Modifier.isPrivate(ctMethod.getModifiers()) && !Modifier.isProtected(ctMethod.getModifiers()) && !Modifier.isPublic(ctMethod.getModifiers());
         throw new UnsupportedOperationException();
     }
 }

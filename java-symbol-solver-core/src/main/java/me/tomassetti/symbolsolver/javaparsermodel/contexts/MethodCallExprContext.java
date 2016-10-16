@@ -35,14 +35,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
         Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
         Optional<Type> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
-        /*if (res.isPresent()) {
-            return res;
-        } else {
-            for (Expression param : this.wrappedNode.getArgs()) {
-                System.out.println(JavaParserFacade.get(typeSolver).getType(param));
-            }
-            throw new UnsupportedOperationException();
-        }*/
         return res;
     }
 

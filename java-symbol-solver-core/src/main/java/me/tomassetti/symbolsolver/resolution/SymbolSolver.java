@@ -81,19 +81,8 @@ public class SymbolSolver {
             return solveType(referenceType.getType());
         } else if (type instanceof ClassOrInterfaceType) {
 
-            //should call typesolver here!
+            // FIXME should call typesolver here!
 
-            /*if (0 == 0) throw new RuntimeException(type.getParentNode().getParentNode().toString());
-
-            ClassOrInterfaceType classType = (ClassOrInterfaceType) type;
-            SymbolReference<? extends ValueDeclaration> ref = solveSymbol(classType.getName(), type);
-            if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(JavaParserFactory.getContext(type), classType.getName());
-            }
-            if (!ref.getCorrespondingDeclaration().isType()) {
-                throw new IllegalStateException(ref.getCorrespondingDeclaration().toString());
-            }
-            return ref.getCorrespondingDeclaration().asTypeDeclaration();*/
             String name = ((ClassOrInterfaceType) type).getName();
             SymbolReference<TypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name, typeSolver);
             if (!ref.isSolved()) {

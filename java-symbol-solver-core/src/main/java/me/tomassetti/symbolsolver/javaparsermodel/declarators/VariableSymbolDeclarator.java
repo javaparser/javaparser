@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableDeclarationExpr> {
 
-
     public VariableSymbolDeclarator(VariableDeclarationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
         if (wrappedNode.getParentNode() instanceof FieldDeclaration) {
