@@ -23,11 +23,9 @@ package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.Range;

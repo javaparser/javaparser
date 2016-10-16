@@ -1838,7 +1838,7 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	  <SUPER> {begin = begin.orIfInvalid(tokenBegin());}
 	  args = Arguments() ";"
   )
-  { return new ExplicitConstructorInvocationStmt(range(begin, tokenEnd()), option(typeArgs.list), isThis, expr, args); }
+  { return new ExplicitConstructorInvocationStmt(range(begin, tokenEnd()), option(typeArgs.list), isThis, option(expr), args); }
 }
 
 NodeList<Statement> Statements():
@@ -2935,7 +2935,7 @@ SwitchEntryStmt SwitchEntry():
   )
   ":" stmts = Statements()
 
-  { return new SwitchEntryStmt(range(begin, tokenEnd()),label, stmts); }
+  { return new SwitchEntryStmt(range(begin, tokenEnd()), option(label), stmts); }
 }
 
 IfStmt IfStatement():
@@ -3004,7 +3004,7 @@ Statement ForStatement():
   	if (varExpr != null) {
   		return new ForeachStmt(range(begin, tokenEnd()),varExpr, expr, body);
   	}
-	return new ForStmt(range(begin, tokenEnd()),init, expr, update, body);
+	return new ForStmt(range(begin, tokenEnd()), init, option(expr), update, body);
   }
 }
 
@@ -3051,7 +3051,7 @@ BreakStmt BreakStatement():
 }
 {
   "break" {begin=tokenBegin();} [ <IDENTIFIER> { id = token.image; } ] ";"
-  { return new BreakStmt(range(begin, tokenEnd()),id); }
+  { return new BreakStmt(range(begin, tokenEnd()), option(id)); }
 }
 
 ContinueStmt ContinueStatement():

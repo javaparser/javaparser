@@ -292,8 +292,8 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final ExplicitConstructorInvocationStmt n, final A arg) {
 		visitComment(n, arg);
-		if (!n.isThis() && n.getExpr() != null) {
-			n.setExpr((Expression) n.getExpr().accept(this, arg));
+		if (!n.isThis()) {
+            n.setExpr(n.getExpr().flatMap(p -> option((Expression) p.accept(this, arg))));
 		}
         n.setTypeArguments(n.getTypeArguments().flatMap(p -> option((NodeList<Type<?>>) modifyList(p, arg))));
         n.setArgs((NodeList<Expression>)n.getArgs().accept(this, arg));
@@ -339,9 +339,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override public Node visit(final ForStmt n, final A arg) {
 		visitComment(n, arg);
         n.setInit((NodeList<Expression>)n.getInit().accept(this, arg));
-		if (n.getCompare() != null) {
-			n.setCompare((Expression) n.getCompare().accept(this, arg));
-		}
+        n.setCompare(n.getCompare().flatMap(p -> option((Expression) p.accept(this, arg))));
         n.setUpdate((NodeList<Expression>)n.getUpdate().accept(this, arg));
 		n.setBody((Statement) n.getBody().accept(this, arg));
 		return n;
@@ -553,9 +551,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	@Override public Node visit(final SwitchEntryStmt n, final A arg) {
 		visitComment(n, arg);
-		if (n.getLabel() != null) {
-			n.setLabel((Expression) n.getLabel().accept(this, arg));
-		}
+        n.setLabel(n.getLabel().flatMap(p -> option((Expression) p.accept(this, arg))));
 		n.setStmts((NodeList<Statement>) n.getStmts().accept(this, arg));
 		return n;
 	}

@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 import static com.github.javaparser.utils.Utils.none;
 
 /**

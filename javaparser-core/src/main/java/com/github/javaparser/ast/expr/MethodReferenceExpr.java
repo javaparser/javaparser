@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.none;
 
 /**
@@ -81,7 +82,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     public MethodReferenceExpr setScope(Expression scope) {
-        this.scope = scope;
+        this.scope = assertNotNull(scope);
         setAsParentNodeOf(this.scope);
         return this;
     }
@@ -93,7 +94,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     @Override
     public MethodReferenceExpr setTypeArguments(final Optional<NodeList<Type<?>>> types) {
-        this.typeArguments = types;
+        this.typeArguments = assertNotNull(types);
         setAsParentNodeOf(this.typeArguments);
         return this;
     }
@@ -103,7 +104,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     public MethodReferenceExpr setIdentifier(String identifier) {
-        this.identifier = identifier;
+        this.identifier = assertNotNull(identifier);
         return this;
     }
 

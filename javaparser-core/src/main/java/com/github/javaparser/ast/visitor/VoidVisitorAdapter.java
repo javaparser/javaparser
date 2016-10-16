@@ -280,8 +280,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final ExplicitConstructorInvocationStmt n, final A arg) {
 		visitComment(n.getComment(), arg);
-		if (!n.isThis() && n.getExpr() != null) {
-			n.getExpr().accept(this, arg);
+		if (!n.isThis() && n.getExpr().isPresent()) {
+			n.getExpr().get().accept(this, arg);
 		}
         n.getTypeArguments().ifPresent(tas -> tas.forEach(ta -> ta.accept(this, arg)));
 		if (n.getArgs() != null) {
@@ -320,19 +320,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final ForStmt n, final A arg) {
 		visitComment(n.getComment(), arg);
-		if (n.getInit() != null) {
-			for (final Expression e : n.getInit()) {
-				e.accept(this, arg);
-			}
-		}
-		if (n.getCompare() != null) {
-			n.getCompare().accept(this, arg);
-		}
-		if (n.getUpdate() != null) {
-			for (final Expression e : n.getUpdate()) {
-				e.accept(this, arg);
-			}
-		}
+        for (final Expression e : n.getInit()) {
+            e.accept(this, arg);
+        }
+        n.getCompare().ifPresent(c-> c.accept(this, arg));
+        for (final Expression e : n.getUpdate()) {
+            e.accept(this, arg);
+        }
 		n.getBody().accept(this, arg);
 	}
 
@@ -532,9 +526,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override public void visit(final SwitchEntryStmt n, final A arg) {
 		visitComment(n.getComment(), arg);
-		if (n.getLabel() != null) {
-			n.getLabel().accept(this, arg);
-		}
+        n.getLabel().ifPresent(l -> l.accept(this, arg));
 		if (n.getStmts() != null) {
 			for (final Statement s : n.getStmts()) {
 				s.accept(this, arg);

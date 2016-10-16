@@ -633,9 +633,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	@Override
 	public R visit(final ExplicitConstructorInvocationStmt n, final A arg) {
 		visitComment(n, arg);
-		if (!n.isThis() && n.getExpr() != null) {
+		if (!n.isThis() && n.getExpr().isPresent()) {
 			{
-				R result = n.getExpr().accept(this, arg);
+				R result = n.getExpr().get().accept(this, arg);
 				if (result != null) {
 					return result;
 				}
@@ -763,9 +763,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 				}
 			}
 		}
-		if (n.getCompare() != null) {
+		if (n.getCompare().isPresent()) {
 			{
-				R result = n.getCompare().accept(this, arg);
+				R result = n.getCompare().get().accept(this, arg);
 				if (result != null) {
 					return result;
 				}
@@ -1292,9 +1292,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	@Override
 	public R visit(final SwitchEntryStmt n, final A arg) {
 		visitComment(n, arg);
-		if (n.getLabel() != null) {
+		if (n.getLabel().isPresent()) {
 			{
-				R result = n.getLabel().accept(this, arg);
+				R result = n.getLabel().get().accept(this, arg);
 				if (result != null) {
 					return result;
 				}

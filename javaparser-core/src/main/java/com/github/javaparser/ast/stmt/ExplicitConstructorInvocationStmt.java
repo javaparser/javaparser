@@ -31,7 +31,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Optional;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.none;
 
@@ -44,22 +43,22 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 
     private boolean isThis;
 
-	private Expression expr;
+	private Optional<Expression> expr;
 
 	private NodeList<Expression> args;
 
 	public ExplicitConstructorInvocationStmt() {
-		this(Range.UNKNOWN, none(), true, null, new NodeList<>());
+		this(Range.UNKNOWN, none(), true, none(), new NodeList<>());
 	}
 
 	public ExplicitConstructorInvocationStmt(final boolean isThis,
-			final Expression expr, final NodeList<Expression> args) {
+			final Optional<Expression> expr, final NodeList<Expression> args) {
 		this(Range.UNKNOWN, none(), isThis, expr, args);
 	}
 
 	public ExplicitConstructorInvocationStmt(Range range,
 	                                         final Optional<NodeList<Type<?>>> typeArguments, final boolean isThis,
-	                                         final Expression expr, final NodeList<Expression> args) {
+	                                         final Optional<Expression> expr, final NodeList<Expression> args) {
 		super(range);
 		setTypeArguments(typeArguments);
 		setThis(isThis);
@@ -81,7 +80,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return args;
 	}
 
-	public Expression getExpr() {
+	public Optional<Expression> getExpr() {
 		return expr;
 	}
 
@@ -95,7 +94,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 		return this;
 	}
 
-	public ExplicitConstructorInvocationStmt setExpr(final Expression expr) {
+	public ExplicitConstructorInvocationStmt setExpr(final Optional<Expression> expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;
