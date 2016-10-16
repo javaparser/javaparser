@@ -70,7 +70,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
         throw new UnsupportedOperationException(String.format("%s is not an interface", this));
     }
 
-    default InterfaceDeclaration asEnum() {
+    default EnumDeclaration asEnum() {
         throw new UnsupportedOperationException(String.format("%s is not an enum", this));
     }
 
