@@ -12,7 +12,7 @@ import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 
-public class JavaParserEnumDeclarationTest extends AbstractTest {
+public class JavaParserInterfaceDeclarationTest extends AbstractTest {
 
     private TypeSolver typeSolver;
 
@@ -32,62 +32,62 @@ public class JavaParserEnumDeclarationTest extends AbstractTest {
 
     @Test
     public void testIsClass() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals(false, modifier.isClass());
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals(false, nodeWithAnnotations.isClass());
     }
 
     @Test
     public void testIsInterface() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals(false, modifier.isInterface());
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals(true, nodeWithAnnotations.isInterface());
     }
 
     @Test
     public void testIsEnum() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals(true, modifier.isEnum());
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals(false, nodeWithAnnotations.isEnum());
     }
 
     @Test
     public void testIsTypeVariable() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals(false, modifier.isTypeVariable());
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals(false, nodeWithAnnotations.isTypeVariable());
     }
 
     @Test
     public void testIsType() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals(true, modifier.isType());
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals(true, nodeWithAnnotations.isType());
     }
 
     @Test
     public void testAsType() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals(modifier, modifier.asType());
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals(nodeWithAnnotations, nodeWithAnnotations.asType());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testAsClass() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        modifier.asClass();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testAsInterface() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        modifier.asInterface();
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals(nodeWithAnnotations, nodeWithAnnotations.asClass());
     }
 
     @Test
+    public void testAsInterface() {
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals(nodeWithAnnotations, nodeWithAnnotations.asInterface());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
     public void testAsEnum() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals(modifier, modifier.asEnum());
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        nodeWithAnnotations.asEnum();
     }
 
     @Test
     public void testGetQualifiedName() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals("com.github.javaparser.ast.Modifier", modifier.getQualifiedName());
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", nodeWithAnnotations.getQualifiedName());
     }
 
     ///
@@ -96,7 +96,7 @@ public class JavaParserEnumDeclarationTest extends AbstractTest {
 
     /*@Test
     public void testGetSuperclassWithoutTypeParameters() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().getQualifiedName());
     }
 
@@ -133,7 +133,7 @@ public class JavaParserEnumDeclarationTest extends AbstractTest {
 
     @Test
     public void testGetInterfacesWithoutParameters() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(ImmutableSet.of(), compilationUnit.getInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
 
         JavaParserClassDeclaration coid = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
@@ -177,7 +177,7 @@ public class JavaParserEnumDeclarationTest extends AbstractTest {
 
     @Test
     public void testGetAllInterfacesWithoutParameters() {
-        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(ImmutableSet.of("java.lang.Cloneable"), compilationUnit.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
 
         JavaParserClassDeclaration coid = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
