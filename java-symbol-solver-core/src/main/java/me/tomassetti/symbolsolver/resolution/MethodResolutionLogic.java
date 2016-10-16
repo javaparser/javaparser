@@ -1,13 +1,22 @@
 package me.tomassetti.symbolsolver.resolution;
 
+import me.tomassetti.symbolsolver.core.resolution.Context;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
+import me.tomassetti.symbolsolver.javassistmodel.JavassistClassDeclaration;
+import me.tomassetti.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.*;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -440,4 +449,43 @@ public class MethodResolutionLogic {
         }
         return true;
     }
+
+    /**
+     * Replace TypeDeclaration.solveMethod
+     * @param typeDeclaration
+     * @param name
+     * @param parameterTypes
+     * @return
+     */
+    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> parameterTypes, TypeSolver typeSolver) {
+        if (typeDeclaration instanceof JavaParserClassDeclaration) {
+            Context ctx = ((JavaParserClassDeclaration)typeDeclaration).getContext();
+            return ctx.solveMethod(name, parameterTypes, typeSolver);
+        }
+        if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
+            Context ctx = ((JavaParserInterfaceDeclaration)typeDeclaration).getContext();
+            return ctx.solveMethod(name, parameterTypes, typeSolver);
+        }
+        if (typeDeclaration instanceof JavaParserEnumDeclaration) {
+            if (name.equals("values") && parameterTypes.isEmpty()) {
+                return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod((JavaParserEnumDeclaration) typeDeclaration, typeSolver));
+            }
+            Context ctx = ((JavaParserEnumDeclaration)typeDeclaration).getContext();
+            return ctx.solveMethod(name, parameterTypes, typeSolver);
+        }
+        if (typeDeclaration instanceof ReflectionClassDeclaration) {
+            return ((ReflectionClassDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+        }
+        if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
+            return ((ReflectionInterfaceDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+        }
+        if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
+            return ((JavassistInterfaceDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+        }
+        if (typeDeclaration instanceof JavassistClassDeclaration) {
+            return ((JavassistClassDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+        }
+        throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
+    }
+
 }

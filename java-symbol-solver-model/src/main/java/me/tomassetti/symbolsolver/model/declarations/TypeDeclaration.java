@@ -144,14 +144,6 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     ///
 
     /**
-     * Find the declaration of the method to invoke for a method call with the given name and actual parameter types.
-     *
-     * Deprecated because resolution logic should be outside declarations.
-     */
-    @Deprecated
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
-
-    /**
      * Solve any possible visible symbols including: fields, internal types, type variables, the type itself or its containers.
      *
      * It should contain its own private fields but not inherited private fields.

@@ -107,7 +107,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return new ClassOrInterfaceDeclarationContext(clazz);
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
@@ -117,13 +117,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-            SymbolReference<MethodDeclaration> ref = superClass.solveMethod(name, parameterTypes);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, parameterTypes, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
         for (ReferenceType interfaceDeclaration : getInterfaces()) {
-            SymbolReference<MethodDeclaration> ref = interfaceDeclaration.solveMethod(name, parameterTypes);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, parameterTypes, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }

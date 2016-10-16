@@ -38,11 +38,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        return getContext().solveMethod(name, parameterTypes, typeSolver());
-    }
-
-    @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         Set<MethodDeclaration> methods = new HashSet<>();
         for (BodyDeclaration member : wrappedNode.getMembers()) {

@@ -220,18 +220,10 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return typeSolver;
     }
 
-    @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        if (name.equals("values") && parameterTypes.isEmpty()) {
-            return SymbolReference.solved(new ValuesMethod());
-        }
-        // TODO add methods inherited from Enum
-        return getContext().solveMethod(name, parameterTypes, typeSolver);
-    }
-
+    @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         if (name.equals("values") && parameterTypes.isEmpty()) {
-            return Optional.of(new ValuesMethod().getUsage(null));
+            return Optional.of(new ValuesMethod(this, typeSolver).getUsage(null));
         }
         // TODO add methods inherited from Enum
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
@@ -331,16 +323,24 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 	}
 
     // Needed by ContextHelper
-    public class ValuesMethod implements MethodDeclaration {
+    public static class ValuesMethod implements MethodDeclaration {
+
+        private JavaParserEnumDeclaration enumDeclaration;
+        private TypeSolver typeSolver;
+
+        public ValuesMethod(JavaParserEnumDeclaration enumDeclaration, TypeSolver typeSolver) {
+            this.enumDeclaration = enumDeclaration;
+            this.typeSolver = typeSolver;
+        }
 
         @Override
         public TypeDeclaration declaringType() {
-            return JavaParserEnumDeclaration.this;
+            return enumDeclaration;
         }
 
         @Override
         public Type getReturnType() {
-            return new ArrayType(new ReferenceTypeImpl(JavaParserEnumDeclaration.this, typeSolver));
+            return new ArrayType(new ReferenceTypeImpl(enumDeclaration, typeSolver));
         }
 
         @Override

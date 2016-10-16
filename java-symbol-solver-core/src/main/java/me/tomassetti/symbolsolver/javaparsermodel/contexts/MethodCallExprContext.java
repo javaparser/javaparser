@@ -198,7 +198,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     String className = ((NameExpr) wrappedNode.getScope()).getName();
                     SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
                     if (ref.isSolved()) {
-                        SymbolReference<MethodDeclaration> m = ref.getCorrespondingDeclaration().solveMethod(name, parameterTypes);
+                        SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, parameterTypes, typeSolver);
                         if (m.isSolved()) {
                             MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                             methodUsage = resolveMethodTypeParameters(methodUsage, parameterTypes);
@@ -242,7 +242,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 SymbolReference symbolReference = this.solveType(scopeAsName.getName(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
-                    return typeDeclaration.solveMethod(name, parameterTypes);
+                    return MethodResolutionLogic.solveMethodInType(typeDeclaration, name, parameterTypes, typeSolver);
                 }
             }
 
@@ -254,26 +254,26 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
-                    return typeOfScope.asWildcard().getBoundedType().asReferenceType().solveMethod(name, parameterTypes);
+                    return MethodResolutionLogic.solveMethodInType(typeOfScope.asWildcard().getBoundedType().asReferenceType().getTypeDeclaration(), name, parameterTypes, typeSolver);
                 } else {
-                    return new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver).solveMethod(name, parameterTypes);
+                    return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, parameterTypes, typeSolver);
                 }
             } else if (typeOfScope.isArray() && typeOfScope.asArrayType().getComponentType().isReferenceType()) {
-                return typeOfScope.asArrayType().getComponentType().asReferenceType().solveMethod(name, parameterTypes);
+                return MethodResolutionLogic.solveMethodInType(typeOfScope.asArrayType().getComponentType().asReferenceType().getTypeDeclaration(), name, parameterTypes, typeSolver);
             } else if (typeOfScope.isTypeVariable()) {
                 for (TypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
-                    SymbolReference<MethodDeclaration> res = bound.getType().asReferenceType().solveMethod(name, parameterTypes);
+                    SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(bound.getType().asReferenceType().getTypeDeclaration(), name, parameterTypes, typeSolver);
                     if (res.isSolved()) {
                         return res;
                     }
                 }
                 return SymbolReference.unsolved(MethodDeclaration.class);
             } else {
-                return typeOfScope.asReferenceType().solveMethod(name, parameterTypes);
+                return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, parameterTypes, typeSolver);
             }
         } else {
             Type typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-            return typeOfScope.asReferenceType().solveMethod(name, parameterTypes);
+            return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, parameterTypes, typeSolver);
         }
     }
 }

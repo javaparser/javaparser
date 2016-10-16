@@ -47,7 +47,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
                 '}';
     }
 
-    @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         throw new UnsupportedOperationException();
     }

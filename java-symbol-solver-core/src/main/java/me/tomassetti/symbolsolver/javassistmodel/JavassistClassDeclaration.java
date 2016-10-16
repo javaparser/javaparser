@@ -226,7 +226,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {

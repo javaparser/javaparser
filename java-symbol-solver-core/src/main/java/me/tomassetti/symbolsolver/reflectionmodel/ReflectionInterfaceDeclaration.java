@@ -55,7 +55,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         return new ClassOrInterfaceDeclarationContext(clazz);
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : clazz.getMethods()) {

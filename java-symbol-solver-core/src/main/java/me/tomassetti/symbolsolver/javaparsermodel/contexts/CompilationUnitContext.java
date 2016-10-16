@@ -12,6 +12,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
+import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.List;
 
@@ -173,7 +174,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         if (importDecl.getName() instanceof QualifiedNameExpr) {
                             String qName = importDecl.getName().toString();
                             me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(qName);
-                            SymbolReference<MethodDeclaration> method = ref.solveMethod(name, parameterTypes);
+                            SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, parameterTypes, typeSolver);
                             if (method.isSolved()) {
                                 return method;
                             }
@@ -186,7 +187,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                             if (qName.equals(name) || qName.endsWith("." + name)) {
                                 String typeName = getType(qName);
                                 me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
-                                SymbolReference<MethodDeclaration> method = ref.solveMethod(name, parameterTypes);
+                                SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, parameterTypes, typeSolver);
                                 if (method.isSolved()) {
                                     return method;
                                 }

@@ -88,6 +88,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         }
     }
 
+    @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues) {
 
@@ -139,7 +140,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         return Optional.empty();
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {

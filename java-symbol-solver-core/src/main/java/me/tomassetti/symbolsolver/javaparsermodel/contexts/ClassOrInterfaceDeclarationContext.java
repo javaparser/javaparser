@@ -18,8 +18,8 @@ import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 
@@ -143,7 +143,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
-            SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().solveMethod(name, parameterTypes);
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, parameterTypes, typeSolver);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
@@ -153,7 +153,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
-            SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().solveMethod(name, parameterTypes);
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, parameterTypes, typeSolver);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
@@ -166,7 +166,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, interfaceClassName);
             }
-            SymbolReference<MethodDeclaration> res = superclass.getCorrespondingDeclaration().solveMethod(name, parameterTypes);
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, parameterTypes, typeSolver);
             if (res.isSolved() && res.getCorrespondingDeclaration().isDefaultMethod()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }

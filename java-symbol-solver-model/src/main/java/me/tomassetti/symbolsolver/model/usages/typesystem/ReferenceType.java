@@ -1,12 +1,10 @@
 package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 import javaslang.Tuple2;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeParametersMap;
 import me.tomassetti.symbolsolver.model.usages.TypeParametrized;
 
@@ -279,10 +277,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             sb.append(">");
         }
         return sb.toString();
-    }
-
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        return typeDeclaration.solveMethod(name, parameterTypes);
     }
 
     @Deprecated
