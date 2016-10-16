@@ -557,10 +557,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		for (ArrayCreationLevel level : n.getLevels()) {
 			level.accept(this, arg);
 		}
-		if (n.getInitializer() != null) {
+		n.getInitializer().ifPresent(i -> {
 			printer.print(" ");
-			n.getInitializer().accept(this, arg);
-		}
+			i.accept(this, arg);
+		});
 	}
 
 	@Override

@@ -70,9 +70,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		for (ArrayCreationLevel level : n.getLevels()) {
 			level.accept(this, arg);
 		}
-		if (n.getInitializer() != null) {
-			n.getInitializer().accept(this, arg);
-		}
+        n.getInitializer().ifPresent(i -> i.accept(this, arg));
 	}
 
 	@Override public void visit(final ArrayInitializerExpr n, final A arg) {

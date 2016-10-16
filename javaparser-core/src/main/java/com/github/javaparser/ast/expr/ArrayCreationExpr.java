@@ -31,7 +31,10 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.none;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>
@@ -46,16 +49,16 @@ public final class ArrayCreationExpr extends Expression {
 
     private Type<?> elementType;
 
-    private ArrayInitializerExpr initializer;
+    private Optional<ArrayInitializerExpr> initializer;
 
     public ArrayCreationExpr() {
         this(Range.UNKNOWN,
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
-                new ArrayInitializerExpr());
+                none());
     }
 
-    public ArrayCreationExpr(Type<?> elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr(Type<?> elementType, NodeList<ArrayCreationLevel> levels, Optional<ArrayInitializerExpr> initializer) {
         this(Range.UNKNOWN,
                 elementType,
                 levels,
@@ -66,17 +69,17 @@ public final class ArrayCreationExpr extends Expression {
         this(Range.UNKNOWN,
                 elementType,
                 new NodeList<>(),
-                new ArrayInitializerExpr());
+                none());
     }
 
     public ArrayCreationExpr(Range range, Type<?> elementType) {
         this(range,
                 elementType,
                 new NodeList<>(),
-                new ArrayInitializerExpr());
+                none());
     }
 
-    public ArrayCreationExpr(Range range, Type<?> elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr(Range range, Type<?> elementType, NodeList<ArrayCreationLevel> levels, Optional<ArrayInitializerExpr> initializer) {
         super(range);
         setLevels(levels);
         setElementType(elementType);
@@ -93,7 +96,7 @@ public final class ArrayCreationExpr extends Expression {
         v.visit(this, arg);
     }
 
-    public ArrayInitializerExpr getInitializer() {
+    public Optional<ArrayInitializerExpr> getInitializer() {
         return initializer;
     }
 
@@ -101,8 +104,8 @@ public final class ArrayCreationExpr extends Expression {
         return elementType;
     }
 
-    public ArrayCreationExpr setInitializer(ArrayInitializerExpr initializer) {
-        this.initializer = initializer;
+    public ArrayCreationExpr setInitializer(Optional<ArrayInitializerExpr> initializer) {
+        this.initializer = assertNotNull(initializer);
 		setAsParentNodeOf(this.initializer);
         return this;
     }

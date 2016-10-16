@@ -128,8 +128,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 				return result;
 			}
 		}
-		if (n.getInitializer() != null) {
-			R result = n.getInitializer().accept(this, arg);
+		if (n.getInitializer().isPresent()) {
+			R result = n.getInitializer().get().accept(this, arg);
 			if (result != null) {
 				return result;
 			}

@@ -175,7 +175,7 @@ final class ASTParser {
         for(int i = 0; i < arrayAnnotations.size(); i++){
             levels.add(new ArrayCreationLevel(range, option(dimensions.get(i)), arrayAnnotations.get(i)));
         }
-        return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
+        return new ArrayCreationExpr(range, type, levels, option(arrayInitializerExpr));
     }
 
 

@@ -74,12 +74,8 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	@Override public Node visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setElementType((Type) n.getElementType().accept(this, arg));
-
         n.setLevels((NodeList<ArrayCreationLevel>)n.getLevels().accept(this, arg));
-
-		if (n.getInitializer() != null) {
-			n.setInitializer((ArrayInitializerExpr) n.getInitializer().accept(this, arg));
-		}
+        n.setInitializer(n.getInitializer().flatMap(dv -> option((ArrayInitializerExpr) dv.accept(this, arg))));
 		return n;
 	}
 
