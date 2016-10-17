@@ -167,7 +167,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         if (wrappedNode.getImports() != null) {
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (importDecl.isStatic()) {
@@ -175,7 +175,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         if (importDecl.getName() instanceof QualifiedNameExpr) {
                             String qName = importDecl.getName().toString();
                             me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(qName);
-                            SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, parameterTypes, typeSolver);
+                            SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, typeSolver);
                             if (method.isSolved()) {
                                 return method;
                             }
@@ -188,7 +188,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                             if (qName.equals(name) || qName.endsWith("." + name)) {
                                 String typeName = getType(qName);
                                 me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
-                                SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, parameterTypes, typeSolver);
+                                SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, typeSolver);
                                 if (method.isSolved()) {
                                     return method;
                                 }

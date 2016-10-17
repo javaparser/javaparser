@@ -53,7 +53,7 @@ public class JavassistClassContext implements Context {
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         throw new UnsupportedOperationException();
     }
 

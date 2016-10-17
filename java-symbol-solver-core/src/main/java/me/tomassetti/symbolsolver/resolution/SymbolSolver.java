@@ -60,16 +60,16 @@ public class SymbolSolver {
         return solveType(name, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    public MethodUsage solveMethod(String methodName, List<Type> params, Context context) {
-        SymbolReference<MethodDeclaration> decl = context.solveMethod(methodName, params, typeSolver);
+    public MethodUsage solveMethod(String methodName, List<Type> argumentsTypes, Context context) {
+        SymbolReference<MethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, typeSolver);
         if (!decl.isSolved()) {
             throw new UnsolvedSymbolException(context, methodName);
         }
         return new MethodUsage(decl.getCorrespondingDeclaration());
     }
 
-    public MethodUsage solveMethod(String methodName, List<Type> params, Node node) {
-        return solveMethod(methodName, params, JavaParserFactory.getContext(node, typeSolver));
+    public MethodUsage solveMethod(String methodName, List<Type> argumentsTypes, Node node) {
+        return solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver));
     }
 
     ;
