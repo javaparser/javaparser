@@ -61,7 +61,7 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     @Override
     public Type getType() {
         Type res = JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
-        for (int i=0;i<wrappedNode.getId().getArrayCount();i++) {
+        for (int i=0;i<wrappedNode.getId().getArrayBracketPairsAfterId().size();i++) {
             res = new ArrayType(res);
         }
         if (isVariadic()) {

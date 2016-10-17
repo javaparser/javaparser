@@ -36,10 +36,10 @@ public class ForechStatementContext extends AbstractJavaParserContext<ForeachStm
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        if (wrappedNode.getVariable().getVars().size() != 1) {
+        if (wrappedNode.getVariable().getVariables().size() != 1) {
             throw new IllegalStateException();
         }
-        VariableDeclarator variableDeclarator = wrappedNode.getVariable().getVars().get(0);
+        VariableDeclarator variableDeclarator = wrappedNode.getVariable().getVariables().get(0);
         if (variableDeclarator.getId().getName().equals(name)) {
             return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
         } else {

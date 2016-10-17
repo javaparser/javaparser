@@ -37,7 +37,7 @@ public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableD
 
     @Override
     public List<ValueDeclaration> getSymbolDeclarations() {
-        List<ValueDeclaration> symbols = wrappedNode.getVars().stream().map(
+        List<ValueDeclaration> symbols = wrappedNode.getVariables().stream().map(
                 v -> JavaParserSymbolDeclaration.localVar(v, typeSolver)
         ).collect(
                 Collectors.toCollection(() -> new LinkedList<>()));

@@ -244,10 +244,10 @@ public class JavaParserFacade {
             throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
         }
         com.github.javaparser.ast.type.ReferenceType referenceType = (com.github.javaparser.ast.type.ReferenceType)typeExpr.getType();
-        if (!(referenceType.getType() instanceof ClassOrInterfaceType)) {
-            throw new UnsupportedOperationException(referenceType.getType().getClass().getCanonicalName());
+        if (!(referenceType instanceof ClassOrInterfaceType)) {
+            throw new UnsupportedOperationException(referenceType.getClass().getCanonicalName());
         }
-        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)referenceType.getType();
+        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)referenceType;
         SymbolReference<TypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName(), typeSolver);
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new UnsupportedOperationException();
@@ -394,10 +394,10 @@ public class JavaParserFacade {
         } else if (node instanceof VariableDeclarator) {
             if (node.getParentNode() instanceof FieldDeclaration) {
                 FieldDeclaration parent = (FieldDeclaration) node.getParentNode();
-                return JavaParserFacade.get(typeSolver).convertToUsage(parent.getType(), parent);
+                return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
             } else if (node.getParentNode() instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr parent = (VariableDeclarationExpr) node.getParentNode();
-                return JavaParserFacade.get(typeSolver).convertToUsage(parent.getType(), parent);
+                return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
             } else {
                 throw new UnsupportedOperationException(node.getParentNode().getClass().getCanonicalName());
             }
@@ -458,10 +458,10 @@ public class JavaParserFacade {
                     return getTypeConcrete(unaryExpr.getExpr(), solveLambdas);
                 case not:
                     return PrimitiveType.BOOLEAN;
-                case posIncrement:
+                case postIncrement:
                 case preIncrement:
                 case preDecrement:
-                case posDecrement:
+                case postDecrement:
                     return getTypeConcrete(unaryExpr.getExpr(), solveLambdas);
                 default:
                     throw new UnsupportedOperationException(unaryExpr.getOperator().name());
@@ -489,12 +489,12 @@ public class JavaParserFacade {
             }
         } else if (node instanceof VariableDeclarationExpr) {
             VariableDeclarationExpr expr = (VariableDeclarationExpr) node;
-            return convertToUsage(expr.getType(), JavaParserFactory.getContext(node, typeSolver));
+            return convertToUsage(expr.getElementType(), JavaParserFactory.getContext(node, typeSolver));
         } else if (node instanceof InstanceOfExpr) {
             return PrimitiveType.BOOLEAN;
         } else if (node instanceof EnclosedExpr) {
             EnclosedExpr enclosedExpr = (EnclosedExpr) node;
-            return getTypeConcrete(enclosedExpr.getInner(), solveLambdas);
+            return getTypeConcrete(enclosedExpr.getInner().get(), solveLambdas);
         } else if (node instanceof CastExpr) {
             CastExpr enclosedExpr = (CastExpr) node;
             return convertToUsage(enclosedExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
@@ -509,7 +509,7 @@ public class JavaParserFacade {
         } else if (node instanceof ArrayCreationExpr) {
             ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr) node;
             Type res = convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
-            for (int i=0; i<arrayCreationExpr.getArrayCount();i++) {
+            for (int i=0; i<arrayCreationExpr.getLevels().size();i++) {
                 res = new ArrayType(res);
             }
             return res;
@@ -554,7 +554,7 @@ public class JavaParserFacade {
     private String qName(ClassOrInterfaceType classOrInterfaceType) {
         String name = classOrInterfaceType.getName();
         if (classOrInterfaceType.getScope() != null) {
-            return qName(classOrInterfaceType.getScope()) + "." + name;
+            return qName(classOrInterfaceType.getScope().get()) + "." + name;
         } else {
             return name;
         }
@@ -563,10 +563,7 @@ public class JavaParserFacade {
     public Type convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
         if (type instanceof com.github.javaparser.ast.type.ReferenceType) {
             com.github.javaparser.ast.type.ReferenceType referenceType = (com.github.javaparser.ast.type.ReferenceType) type;
-            Type typeUsage = convertToUsage(referenceType.getType(), context);
-            for (int i = 0; i < referenceType.getArrayCount(); i++) {
-                typeUsage = new ArrayType(typeUsage);
-            }
+            Type typeUsage = convertToUsage(referenceType, context);
             return typeUsage;
         } else if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
@@ -577,8 +574,8 @@ public class JavaParserFacade {
             }
             TypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
             List<Type> typeParameters = Collections.emptyList();
-            if (classOrInterfaceType.getTypeArgs() != null) {
-                typeParameters = classOrInterfaceType.getTypeArgs().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
+            if (classOrInterfaceType.getTypeArguments() != null) {
+                typeParameters = classOrInterfaceType.getTypeArguments().get().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
             }
             if (typeDeclaration.isTypeVariable()) {
                 if (typeDeclaration instanceof TypeParameterDeclaration) {
@@ -594,11 +591,11 @@ public class JavaParserFacade {
             return PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
-            if (wildcardType.getExtends() != null && wildcardType.getSuper() == null) {
-                return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getExtends(), context));
-            } else if (wildcardType.getExtends() == null && wildcardType.getSuper() != null) {
-                return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getSuper(), context));
-            } else if (wildcardType.getExtends() == null && wildcardType.getSuper() == null) {
+            if (wildcardType.getExtends().isPresent() && wildcardType.getSuper().isPresent()) {
+                return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getExtends().get(), context));
+            } else if (!wildcardType.getExtends().isPresent() && wildcardType.getSuper().isPresent()) {
+                return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getSuper().get(), context));
+            } else if (wildcardType.getExtends().isPresent() && !wildcardType.getSuper().isPresent()) {
                 return Wildcard.UNBOUNDED;
             } else {
                 throw new UnsupportedOperationException();

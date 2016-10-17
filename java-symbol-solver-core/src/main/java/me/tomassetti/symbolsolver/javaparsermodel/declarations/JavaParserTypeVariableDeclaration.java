@@ -17,7 +17,7 @@
 package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.TypeParameter;
+import com.github.javaparser.ast.type.TypeParameter;
 import me.tomassetti.symbolsolver.logic.AbstractTypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.core.resolution.Context;

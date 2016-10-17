@@ -152,7 +152,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
                 return b + "." + cn;
             }
         } else if (container instanceof CompilationUnit) {
-            PackageDeclaration p = ((CompilationUnit) container).getPackage();
+            PackageDeclaration p = ((CompilationUnit) container).getPackage().get();
             if (p != null) {
                 String b = p.getName().toString();
                 if (base.isEmpty()) {
@@ -276,7 +276,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             return SymbolReference.solved(this);
         }
         if (this.wrappedNode.getTypeParameters() != null) {
-            for (com.github.javaparser.ast.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
+            for (com.github.javaparser.ast.type.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
                 if (typeParameter.getName().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter, typeSolver));
                 }

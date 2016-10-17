@@ -41,7 +41,7 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
         for (Expression expression : wrappedNode.getInit()) {
             if (expression instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) expression;
-                for (VariableDeclarator variableDeclarator : variableDeclarationExpr.getVars()) {
+                for (VariableDeclarator variableDeclarator : variableDeclarationExpr.getVariables()) {
                     if (variableDeclarator.getId().getName().equals(name)) {
                         return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
                     }

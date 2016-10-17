@@ -70,9 +70,9 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         
                         VariableDeclarator variableDeclarator = (VariableDeclarator) wrappedNode.getParentNode();
                         if (variableDeclarator.getParentNode() instanceof VariableDeclarationExpr) {
-                            declaratorType = ((VariableDeclarationExpr) variableDeclarator.getParentNode()).getType();
+                            declaratorType = ((VariableDeclarationExpr) variableDeclarator.getParentNode()).getElementType();
                         } else if (variableDeclarator.getParentNode() instanceof FieldDeclaration) {
-                            declaratorType = ((FieldDeclaration) variableDeclarator.getParentNode()).getType();
+                            declaratorType = ((FieldDeclaration) variableDeclarator.getParentNode()).getElementType();
                         } else {
                             throw new UnsupportedOperationException();
                         }

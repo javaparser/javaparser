@@ -94,7 +94,7 @@ public class SymbolSolver {
         if (type instanceof ReferenceType) {
             ReferenceType referenceType = (ReferenceType) type;
             // TODO consider array modifiers
-            return solveType(referenceType.getType());
+            return solveType(referenceType);
         } else if (type instanceof ClassOrInterfaceType) {
 
             // FIXME should call typesolver here!

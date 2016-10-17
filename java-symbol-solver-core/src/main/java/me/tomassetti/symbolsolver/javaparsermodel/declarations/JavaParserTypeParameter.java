@@ -40,10 +40,10 @@ import java.util.stream.Collectors;
 
 public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameterDeclaration {
 
-    private com.github.javaparser.ast.TypeParameter wrappedNode;
+    private com.github.javaparser.ast.type.TypeParameter wrappedNode;
     private TypeSolver typeSolver;
 
-    public JavaParserTypeParameter(com.github.javaparser.ast.TypeParameter wrappedNode, TypeSolver typeSolver) {
+    public JavaParserTypeParameter(com.github.javaparser.ast.type.TypeParameter wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
@@ -181,7 +181,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 	 *
 	 * @return A visitable JavaParser node wrapped by this object.
 	 */
-	public com.github.javaparser.ast.TypeParameter getWrappedNode()
+	public com.github.javaparser.ast.type.TypeParameter getWrappedNode()
 	{
 		return wrappedNode;
 	}
