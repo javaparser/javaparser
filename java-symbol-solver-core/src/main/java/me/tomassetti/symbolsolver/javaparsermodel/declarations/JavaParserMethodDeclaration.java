@@ -67,7 +67,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         } else if (wrappedNode.getParentNode() instanceof EnumDeclaration) {
             return new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode(), typeSolver);
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(wrappedNode.getParentNode().getClass().getCanonicalName());
         }
     }
 

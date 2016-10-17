@@ -553,7 +553,7 @@ public class JavaParserFacade {
     // This is an hack around an issue in JavaParser
     private String qName(ClassOrInterfaceType classOrInterfaceType) {
         String name = classOrInterfaceType.getName();
-        if (classOrInterfaceType.getScope() != null) {
+        if (classOrInterfaceType.getScope().isPresent()) {
             return qName(classOrInterfaceType.getScope().get()) + "." + name;
         } else {
             return name;
@@ -561,11 +561,7 @@ public class JavaParserFacade {
     }
 
     public Type convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
-        if (type instanceof com.github.javaparser.ast.type.ReferenceType) {
-            com.github.javaparser.ast.type.ReferenceType referenceType = (com.github.javaparser.ast.type.ReferenceType) type;
-            Type typeUsage = convertToUsage(referenceType, context);
-            return typeUsage;
-        } else if (type instanceof ClassOrInterfaceType) {
+        if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
             SymbolReference<TypeDeclaration> ref = context.solveType(name, typeSolver);
@@ -574,7 +570,7 @@ public class JavaParserFacade {
             }
             TypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
             List<Type> typeParameters = Collections.emptyList();
-            if (classOrInterfaceType.getTypeArguments() != null) {
+            if (classOrInterfaceType.getTypeArguments().isPresent()) {
                 typeParameters = classOrInterfaceType.getTypeArguments().get().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
             }
             if (typeDeclaration.isTypeVariable()) {
