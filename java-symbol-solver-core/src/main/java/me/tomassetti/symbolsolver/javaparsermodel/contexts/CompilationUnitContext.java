@@ -186,7 +186,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             } else if (importDecl instanceof SingleStaticImportDeclaration) {
                 SingleStaticImportDeclaration staticImportOnDemandDeclaration = (SingleStaticImportDeclaration)importDecl;
 
-                String qName = staticImportOnDemandDeclaration.getType().getName();
+                String importedTypeName = staticImportOnDemandDeclaration.getType().getName();
+                String qName = importedTypeName + "." + staticImportOnDemandDeclaration.getStaticMember();
 
                 if (qName.equals(name) || qName.endsWith("." + name)) {
                     String typeName = getType(qName);
