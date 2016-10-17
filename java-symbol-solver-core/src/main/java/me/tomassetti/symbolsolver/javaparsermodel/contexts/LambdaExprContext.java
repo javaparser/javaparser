@@ -119,7 +119,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        MethodCallExpr parentNode = (MethodCallExpr) wrappedNode.getParentNode();
+        MethodCallExpr parentNode = (MethodCallExpr) getParentNode(wrappedNode);
         int pos = pos(parentNode, wrappedNode);
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage((MethodCallExpr) parentNode);
         Type lambda = methodUsage.getParamTypes().get(pos);

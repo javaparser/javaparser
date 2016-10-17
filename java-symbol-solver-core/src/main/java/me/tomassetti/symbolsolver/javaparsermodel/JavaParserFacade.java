@@ -231,7 +231,7 @@ public class JavaParserFacade {
         for (Node key : map.keySet()) {
             if (key instanceof LambdaExpr) {
                 LambdaExpr keyLambdaExpr = (LambdaExpr)key;
-                if (keyLambdaExpr.toString().equals(lambdaExpr.toString()) && keyLambdaExpr.getParentNode() == lambdaExpr.getParentNode()) {
+                if (keyLambdaExpr.toString().equals(lambdaExpr.toString()) && getParentNode(keyLambdaExpr) == getParentNode(lambdaExpr)) {
                     return Optional.of(map.get(keyLambdaExpr));
                 }
             }
@@ -292,12 +292,12 @@ public class JavaParserFacade {
             return ref.returnType();
             // the type is the return type of the method
         } else if (node instanceof LambdaExpr) {
-            if (node.getParentNode() instanceof MethodCallExpr) {
-                MethodCallExpr callExpr = (MethodCallExpr) node.getParentNode();
+            if (getParentNode(node) instanceof MethodCallExpr) {
+                MethodCallExpr callExpr = (MethodCallExpr) getParentNode(node);
                 int pos = JavaParserSymbolDeclaration.getParamPos(node);
                 SymbolReference<MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr);
                 if (!refMethod.isSolved()) {
-                    throw new UnsolvedSymbolException(node.getParentNode().toString(), callExpr.getName());
+                    throw new UnsolvedSymbolException(getParentNode(node).toString(), callExpr.getName());
                 }
                 logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
@@ -337,12 +337,12 @@ public class JavaParserFacade {
                 throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
             }
         } else if (node instanceof MethodReferenceExpr) {
-            if (node.getParentNode() instanceof MethodCallExpr) {
-                MethodCallExpr callExpr = (MethodCallExpr) node.getParentNode();
+            if (getParentNode(node) instanceof MethodCallExpr) {
+                MethodCallExpr callExpr = (MethodCallExpr) getParentNode(node);
                 int pos = JavaParserSymbolDeclaration.getParamPos(node);
                 SymbolReference<MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr, false);
                 if (!refMethod.isSolved()) {
-                    throw new UnsolvedSymbolException(node.getParentNode().toString(), callExpr.getName());
+                    throw new UnsolvedSymbolException(getParentNode(node).toString(), callExpr.getName());
                 }
                 logger.finest("getType on method reference expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
@@ -540,10 +540,10 @@ public class JavaParserFacade {
             return (ClassOrInterfaceDeclaration) node;
         } else if (node instanceof EnumDeclaration) {
             return (EnumDeclaration) node;
-        } else if (node.getParentNode() == null) {
+        } else if (getParentNode(node) == null) {
             throw new IllegalArgumentException();
         } else {
-            return findContainingTypeDecl(node.getParentNode());
+            return findContainingTypeDecl(getParentNode(node));
         }
     }
 
@@ -660,7 +660,7 @@ public class JavaParserFacade {
             JavaParserEnumDeclaration enumDeclaration = new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
             return new ReferenceTypeImpl(enumDeclaration, typeSolver);
         } else {
-            return getTypeOfThisIn(node.getParentNode());
+            return getTypeOfThisIn(getParentNode(node));
         }
     }
 
