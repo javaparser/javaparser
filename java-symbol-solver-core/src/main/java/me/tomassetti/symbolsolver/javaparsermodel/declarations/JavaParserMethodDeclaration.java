@@ -70,6 +70,9 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
+        if (i < 0 || i >= getNoParams()) {
+            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNoParams()));
+        }
         return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i), typeSolver);
     }
 
@@ -118,15 +121,15 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         if (formalParamType.isArray() && actualParamType.isArray()) {
             determineTypeParameters(
                     determinedTypeParameters,
-                    formalParamType.asArrayTypeUsage().getComponentType(),
-                    actualParamType.asArrayTypeUsage().getComponentType(),
+                    formalParamType.asArrayType().getComponentType(),
+                    actualParamType.asArrayType().getComponentType(),
                     typeSolver);
             return;
         }
         if (formalParamType.isReferenceType() && actualParamType.isReferenceType()
-                && !formalParamType.asReferenceTypeUsage().getQualifiedName().equals(actualParamType.asReferenceTypeUsage().getQualifiedName())) {
-            List<ReferenceType> ancestors = actualParamType.asReferenceTypeUsage().getAllAncestors();
-            final String formalParamTypeQName = formalParamType.asReferenceTypeUsage().getQualifiedName();
+                && !formalParamType.asReferenceType().getQualifiedName().equals(actualParamType.asReferenceType().getQualifiedName())) {
+            List<ReferenceType> ancestors = actualParamType.asReferenceType().getAllAncestors();
+            final String formalParamTypeQName = formalParamType.asReferenceType().getQualifiedName();
             List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
             if (correspondingFormalType.isEmpty()) {
                 throw new IllegalArgumentException();
@@ -134,11 +137,11 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             actualParamType = correspondingFormalType.get(0);
         }
         if (formalParamType.isReferenceType() && actualParamType.isReferenceType()) {
-            if (formalParamType.asReferenceTypeUsage().isRawType() || actualParamType.asReferenceTypeUsage().isRawType()) {
+            if (formalParamType.asReferenceType().isRawType() || actualParamType.asReferenceType().isRawType()) {
                 return;
             }
-            List<Type> formalTypeParams = formalParamType.asReferenceTypeUsage().typeParametersValues();
-            List<Type> actualTypeParams = actualParamType.asReferenceTypeUsage().typeParametersValues();
+            List<Type> formalTypeParams = formalParamType.asReferenceType().typeParametersValues();
+            List<Type> actualTypeParams = actualParamType.asReferenceType().typeParametersValues();
             if (formalTypeParams.size() != actualTypeParams.size()) {
                 throw new UnsupportedOperationException();
             }
@@ -183,11 +186,11 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         }
 
         if (type.isReferenceType()) {
-            for (int i = 0; i < type.asReferenceTypeUsage().typeParametersValues().size(); i++) {
-                Type replaced = replaceTypeParams(type.asReferenceTypeUsage().typeParametersValues().get(i), typeSolver, context);
+            for (int i = 0; i < type.asReferenceType().typeParametersValues().size(); i++) {
+                Type replaced = replaceTypeParams(type.asReferenceType().typeParametersValues().get(i), typeSolver, context);
                 // Identity comparison on purpose
-                if (replaced != type.asReferenceTypeUsage().typeParametersValues().get(i)) {
-                    type = type.asReferenceTypeUsage().replaceParam(i, replaced);
+                if (replaced != type.asReferenceType().typeParametersValues().get(i)) {
+                    type = type.asReferenceType().replaceParam(i, replaced);
                 }
             }
         }
@@ -240,7 +243,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
-        // return wrappedNode.getModifiers().contains(com.github.javaparser.ast.Modifier.PRIVATE);
         throw new UnsupportedOperationException();
     }
 }

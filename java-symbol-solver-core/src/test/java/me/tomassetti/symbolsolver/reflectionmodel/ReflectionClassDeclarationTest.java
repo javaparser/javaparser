@@ -65,7 +65,7 @@ public class ReflectionClassDeclarationTest {
 
         assertEquals("Foo", bar.getSuperClass().getTypeDeclaration().getName());
         assertEquals(1, bar.getSuperClass().typeParametersValues().size());
-        assertEquals(String.class.getCanonicalName(), bar.getSuperClass().typeParametersValues().get(0).asReferenceTypeUsage().getQualifiedName());
+        assertEquals(String.class.getCanonicalName(), bar.getSuperClass().typeParametersValues().get(0).asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class ReflectionClassDeclarationTest {
         assertEquals("E", bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().getName());
         assertEquals(true, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnClass());
         assertEquals(false, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnMethod());
-        assertTrue(bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().qualifiedName().endsWith("Bar.E"));
+        assertTrue(bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().getQualifiedName().endsWith("Bar.E"));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class ReflectionClassDeclarationTest {
 
         FieldDeclaration barField = bar.getField("field");
         assertEquals(true, barField.getType().isReferenceType());
-        assertEquals(String.class.getCanonicalName(), barField.getType().asReferenceTypeUsage().getQualifiedName());
+        assertEquals(String.class.getCanonicalName(), barField.getType().asReferenceType().getQualifiedName());
     }
 
     @Test

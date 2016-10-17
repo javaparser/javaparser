@@ -1,13 +1,22 @@
 package me.tomassetti.symbolsolver.resolution;
 
+import me.tomassetti.symbolsolver.core.resolution.Context;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
+import me.tomassetti.symbolsolver.javassistmodel.JavassistClassDeclaration;
+import me.tomassetti.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.MethodAmbiguityException;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.*;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import me.tomassetti.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,8 +63,8 @@ public class MethodResolutionLogic {
                         expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                     }
                     if (!expectedType.isAssignableBy(actualType)) {
-                        if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayTypeUsage().getComponentType())) {
-                            paramTypes.set(pos, actualType.asArrayTypeUsage().getComponentType());
+                        if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayType().getComponentType())) {
+                            paramTypes.set(pos, actualType.asArrayType().getComponentType());
                         } else {
                             paramTypes = groupVariadicParamValues(paramTypes, pos, method.getLastParam().getType());
                         }
@@ -74,7 +83,7 @@ public class MethodResolutionLogic {
         for (int i = 0; i < method.getNoParams(); i++) {
             Type expectedType = method.getParam(i).getType();
             Type actualType = paramTypes.get(i);
-            if (expectedType.isTypeVariable() && expectedType.asTypeParameter().declaredOnMethod()) {
+            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) && expectedType.asTypeParameter().declaredOnMethod()) {
                 matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
                 continue;
             }
@@ -82,8 +91,8 @@ public class MethodResolutionLogic {
                     (method.getParam(i).isVariadic() && new ArrayType(expectedType).isAssignableBy(actualType));
             if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
                 isAssignableWithoutSubstitution = isAssignableMatchTypeParameters(
-                        expectedType.asReferenceTypeUsage(),
-                        actualType.asReferenceTypeUsage(),
+                        expectedType.asReferenceType(),
+                        actualType.asReferenceType(),
                         matchedParameters);
             }
             if (!isAssignableWithoutSubstitution) {
@@ -108,6 +117,18 @@ public class MethodResolutionLogic {
             }
         }
         return !withWildcardTolerance || needForWildCardTolerance;
+    }
+
+    public static boolean isAssignableMatchTypeParameters(Type expected, Type actual,
+                                                          Map<String, Type> matchedParameters) {
+        if (expected.isReferenceType() && actual.isReferenceType()) {
+            return isAssignableMatchTypeParameters(expected.asReferenceType(), actual.asReferenceType(), matchedParameters);
+        } else if (expected.isTypeVariable()) {
+            matchedParameters.put(expected.asTypeParameter().getName(), actual);
+            return true;
+        } else {
+            throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " "+actual.getClass().getCanonicalName());
+        }
     }
 
     public static boolean isAssignableMatchTypeParameters(ReferenceType expected, ReferenceType actual,
@@ -159,7 +180,10 @@ public class MethodResolutionLogic {
                     return false;
                 }
             } else if (expectedParam.isWildcard()) {
-                // TODO verify bounds
+                if (expectedParam.asWildcard().isExtends()){
+                    return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actual, matchedParameters);
+                }
+                // TODO verify super bound
                 return true;
             } else {
                 throw new UnsupportedOperationException(expectedParam.describe());
@@ -184,12 +208,12 @@ public class MethodResolutionLogic {
         } else if (type.isPrimitive()) {
             return type;
         } else if (type.isArray()) {
-            return new ArrayType(replaceTypeParam(type.asArrayTypeUsage().getComponentType(), tp, typeSolver));
+            return new ArrayType(replaceTypeParam(type.asArrayType().getComponentType(), tp, typeSolver));
         } else if (type.isReferenceType()) {
-            ReferenceType result = type.asReferenceTypeUsage();
+            ReferenceType result = type.asReferenceType();
             int i = 0;
             for (Type typeParam : result.typeParametersValues()) {
-                result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceTypeUsage();
+                result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceType();
                 i++;
             }
             return result;
@@ -425,4 +449,43 @@ public class MethodResolutionLogic {
         }
         return true;
     }
+
+    /**
+     * Replace TypeDeclaration.solveMethod
+     * @param typeDeclaration
+     * @param name
+     * @param parameterTypes
+     * @return
+     */
+    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> parameterTypes, TypeSolver typeSolver) {
+        if (typeDeclaration instanceof JavaParserClassDeclaration) {
+            Context ctx = ((JavaParserClassDeclaration)typeDeclaration).getContext();
+            return ctx.solveMethod(name, parameterTypes, typeSolver);
+        }
+        if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
+            Context ctx = ((JavaParserInterfaceDeclaration)typeDeclaration).getContext();
+            return ctx.solveMethod(name, parameterTypes, typeSolver);
+        }
+        if (typeDeclaration instanceof JavaParserEnumDeclaration) {
+            if (name.equals("values") && parameterTypes.isEmpty()) {
+                return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod((JavaParserEnumDeclaration) typeDeclaration, typeSolver));
+            }
+            Context ctx = ((JavaParserEnumDeclaration)typeDeclaration).getContext();
+            return ctx.solveMethod(name, parameterTypes, typeSolver);
+        }
+        if (typeDeclaration instanceof ReflectionClassDeclaration) {
+            return ((ReflectionClassDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+        }
+        if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
+            return ((ReflectionInterfaceDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+        }
+        if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
+            return ((JavassistInterfaceDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+        }
+        if (typeDeclaration instanceof JavassistClassDeclaration) {
+            return ((JavassistClassDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+        }
+        throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
+    }
+
 }

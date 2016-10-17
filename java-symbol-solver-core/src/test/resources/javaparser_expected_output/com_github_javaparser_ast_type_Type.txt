@@ -2,6 +2,7 @@
 [ Class com.github.javaparser.ast.type.Type ]
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 40) this.annotations = annotation ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
   Line 44) beginLine ==> int
   Line 44) beginColumn ==> int

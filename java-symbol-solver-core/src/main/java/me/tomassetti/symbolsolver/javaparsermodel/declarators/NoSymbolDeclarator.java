@@ -1,7 +1,6 @@
 package me.tomassetti.symbolsolver.javaparsermodel.declarators;
 
 import com.github.javaparser.ast.Node;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
@@ -19,8 +18,4 @@ public class NoSymbolDeclarator<N extends Node> extends AbstractSymbolDeclarator
         return Collections.emptyList();
     }
 
-    @Override
-    public List<MethodDeclaration> getMethodDeclarations() {
-        return Collections.emptyList();
-    }
 }

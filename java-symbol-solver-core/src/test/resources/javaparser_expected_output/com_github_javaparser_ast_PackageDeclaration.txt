@@ -2,6 +2,7 @@
 [ Class com.github.javaparser.ast.PackageDeclaration ]
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 54) setName(name) ==> void
   Line 58) setAnnotations(annotations) ==> void
   Line 59) setName(name) ==> void

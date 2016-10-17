@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.type.Type
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 44) setName(name) ==> void
   Line 48) setScope(scope) ==> void
   Line 49) setName(name) ==> void

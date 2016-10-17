@@ -88,6 +88,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         }
     }
 
+    @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues) {
 
@@ -102,7 +103,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
                         List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
                         Type newReturnType = methodUsage.returnType();
                         for (int i = 0; i < parametersOfReturnType.size(); i++) {
-                            newReturnType = newReturnType.asReferenceTypeUsage().replaceParam(i, parametersOfReturnType.get(i));
+                            newReturnType = newReturnType.asReferenceType().replaceParam(i, parametersOfReturnType.get(i));
                         }
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
                     }
@@ -139,7 +140,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         return Optional.empty();
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
@@ -206,21 +207,11 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                ReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver()).asReferenceTypeUsage();
+                ReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver()).asReferenceType();
                 ancestors.add(superInterfaze);
             }
         } catch (NotFoundException e) {
@@ -268,7 +259,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         } else {
             try {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, typeSolver)).collect(Collectors.toList());
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, ctClass.getName(), typeSolver)).collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);
             }
@@ -278,5 +269,10 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     @Override
     public AccessLevel accessLevel() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public InterfaceDeclaration asInterface() {
+        return this;
     }
 }

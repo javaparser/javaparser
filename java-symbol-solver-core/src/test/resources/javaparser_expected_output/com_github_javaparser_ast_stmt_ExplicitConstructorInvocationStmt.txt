@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.stmt.Statement
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 49) setThis(isThis) ==> void
   Line 50) setExpr(expr) ==> void
   Line 51) setArgs(args) ==> void

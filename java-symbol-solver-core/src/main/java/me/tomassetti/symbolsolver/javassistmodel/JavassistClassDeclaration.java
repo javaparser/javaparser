@@ -136,7 +136,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                         List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
                         Type newReturnType = methodUsage.returnType();
                         for (int i = 0; i < parametersOfReturnType.size(); i++) {
-                            newReturnType = newReturnType.asReferenceTypeUsage().replaceParam(i, parametersOfReturnType.get(i));
+                            newReturnType = newReturnType.asReferenceType().replaceParam(i, parametersOfReturnType.get(i));
                         }
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
                     }
@@ -173,7 +173,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return Optional.empty();
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {
@@ -208,11 +208,6 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new LinkedList<>();
         if (getSuperClass() != null) {
@@ -226,7 +221,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
@@ -386,7 +381,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         } else {
             try {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, typeSolver)).collect(Collectors.toList());
+                String qualifier = ctClass.getName();
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, qualifier, typeSolver)).collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);
             }
@@ -395,6 +391,11 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<ConstructorDeclaration> getConstructors() {
         throw new UnsupportedOperationException();
     }
 }

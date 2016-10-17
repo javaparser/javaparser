@@ -3,8 +3,11 @@ package me.tomassetti.symbolsolver.javassistmodel;
 import javassist.CtField;
 import javassist.NotFoundException;
 import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+
+import java.lang.reflect.Modifier;
 
 public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.model.declarations.FieldDeclaration {
     private CtField ctField;
@@ -21,6 +24,11 @@ public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.mod
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(ctField.getModifiers());
     }
 
     @Override
@@ -45,6 +53,11 @@ public class JavassistFieldDeclaration implements me.tomassetti.symbolsolver.mod
 
     @Override
     public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public TypeDeclaration declaringType() {
         throw new UnsupportedOperationException();
     }
 }

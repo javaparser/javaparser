@@ -4,6 +4,8 @@
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
   interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
   Line 45) setName(name) ==> void
   Line 46) setModifiers(modifiers) ==> void
   Line 52) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>

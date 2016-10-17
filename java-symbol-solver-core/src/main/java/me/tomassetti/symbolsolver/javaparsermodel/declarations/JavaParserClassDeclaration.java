@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.google.common.collect.ImmutableList;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
@@ -39,9 +40,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 		this.typeSolver = typeSolver;
 	}
 
-	@Override
 	public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-		return getContext().solveMethod(name, parameterTypes, typeSolver());
+        Context ctx = getContext();
+		return ctx.solveMethod(name, parameterTypes, typeSolver);
 	}
 
 	public Context getContext() {
@@ -103,7 +104,10 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 			if (!ref.isSolved()) {
 				throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
 			}
-			return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asClass(), typeSolver);
+			List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().getTypeArguments()
+					.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
+					.collect(Collectors.toList());
+			return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asClass(), superClassTypeParameters, typeSolver);
 		}
 	}
 
@@ -112,11 +116,33 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 		List<ReferenceType> interfaces = new ArrayList<>();
 		if (wrappedNode.getImplements() != null) {
 			for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
-				ReferenceType referenceType = new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface(), typeSolver());
+				List<Type> interfaceTypeParameters = t.getTypeArguments().getTypeArguments()
+						.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
+						.collect(Collectors.toList());
+				ReferenceType referenceType = new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface(),
+						interfaceTypeParameters,
+						typeSolver());
 				interfaces.add(referenceType);
 			}
 		}
 		return interfaces;
+	}
+
+	@Override
+	public List<ConstructorDeclaration> getConstructors() {
+		List<ConstructorDeclaration> declared = new LinkedList<>();
+        for (BodyDeclaration member : wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
+                com.github.javaparser.ast.body.ConstructorDeclaration constructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) member;
+                declared.add(new JavaParserConstructorDeclaration(this, constructorDeclaration, typeSolver));
+            }
+        }
+        if (declared.isEmpty()) {
+            // If there are no constructors insert the default constructor
+            return ImmutableList.of(new DefaultConstructorDeclaration(this));
+        } else {
+            return declared;
+        }
 	}
 
 	public ClassDeclaration asClass() {
@@ -292,12 +318,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 		}
 	}
 
-	@Override
-	public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-		return getContext().solveSymbol(name, typeSolver);
-	}
-
-	@Override
+	@Deprecated
 	public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
 		if (this.wrappedNode.getName().equals(name)) {
 			return SymbolReference.solved(this);
@@ -327,7 +348,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 					if (internalType instanceof ClassOrInterfaceDeclaration) {
 						return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
 					} else if (internalType instanceof EnumDeclaration) {
-						return new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
+						return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
 					} else {
 						throw new UnsupportedOperationException();
 					}

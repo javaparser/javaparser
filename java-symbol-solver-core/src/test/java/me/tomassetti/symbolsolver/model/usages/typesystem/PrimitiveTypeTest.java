@@ -105,7 +105,7 @@ public class PrimitiveTypeTest {
     public void testAsReferenceTypeUsage() {
         for (PrimitiveType ptu : PrimitiveType.ALL) {
             try {
-                ptu.asReferenceTypeUsage();
+                ptu.asReferenceType();
                 fail();
             } catch (UnsupportedOperationException e) {
             }
@@ -127,7 +127,7 @@ public class PrimitiveTypeTest {
     public void testAsArrayTypeUsage() {
         for (PrimitiveType ptu : PrimitiveType.ALL) {
             try {
-                ptu.asArrayTypeUsage();
+                ptu.asArrayType();
                 fail();
             } catch (UnsupportedOperationException e) {
             }

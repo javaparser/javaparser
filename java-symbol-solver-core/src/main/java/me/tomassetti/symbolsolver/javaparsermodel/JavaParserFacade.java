@@ -75,7 +75,6 @@ public class JavaParserFacade {
             if (solved.isPresent()) {
                 return solved.get();
             } else {
-                //throw new UnsolvedSymbolException(context, String.format("Unable to solve generic type %s using context %s", typeUsage.describe(), context.toString()));
                 return type;
             }
         } else if (type.isWildcard()) {
@@ -94,8 +93,8 @@ public class JavaParserFacade {
             Type result = type;
             int i = 0;
             if (result.isReferenceType()) {
-                for (Type tp : type.asReferenceTypeUsage().typeParametersValues()) {
-                    result = result.asReferenceTypeUsage().replaceParam(i, solveGenericTypes(tp, context, typeSolver));
+                for (Type tp : type.asReferenceType().typeParametersValues()) {
+                    result = result.asReferenceType().replaceParam(i, solveGenericTypes(tp, context, typeSolver));
                     i++;
                 }
             }

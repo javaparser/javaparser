@@ -47,7 +47,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
                 '}';
     }
 
-    @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         throw new UnsupportedOperationException();
     }
@@ -88,16 +87,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     @Override
     public List<FieldDeclaration> getAllFields() {
         return new ArrayList<>();
-    }
-    
-    @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        return SymbolReference.unsolved(ValueDeclaration.class);
-    }
-
-    @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

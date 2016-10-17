@@ -5,6 +5,8 @@
   superclass: java.lang.Object
   interface: com.github.javaparser.ast.DocumentableNode
   interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
   Line 52) setModifiers(modifiers) ==> void
   Line 53) setType(type) ==> void
   Line 54) setName(name) ==> void

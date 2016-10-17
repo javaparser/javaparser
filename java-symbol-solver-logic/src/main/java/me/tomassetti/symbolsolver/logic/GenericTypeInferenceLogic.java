@@ -40,8 +40,8 @@ public class GenericTypeInferenceLogic {
             map.put(formalType.asTypeParameter().getName(), actualType);
         } else if (formalType.isReferenceType()) {
             if (actualType.isReferenceType()) {
-                ReferenceType formalTypeAsReference = formalType.asReferenceTypeUsage();
-            	ReferenceType actualTypeAsReference = actualType.asReferenceTypeUsage();
+                ReferenceType formalTypeAsReference = formalType.asReferenceType();
+            	ReferenceType actualTypeAsReference = actualType.asReferenceType();
                 if (formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                     if (!formalTypeAsReference.typeParametersValues().isEmpty()) {
                         if (actualTypeAsReference.isRawType()) {
@@ -77,7 +77,7 @@ public class GenericTypeInferenceLogic {
             // nothing to do
         } else if (formalType.isArray()) {
             if (actualType.isArray()) {
-                consider(map, formalType.asArrayTypeUsage().getComponentType(), actualType.asArrayTypeUsage().getComponentType());
+                consider(map, formalType.asArrayType().getComponentType(), actualType.asArrayType().getComponentType());
             }
         } else {
             throw new UnsupportedOperationException(formalType.describe());

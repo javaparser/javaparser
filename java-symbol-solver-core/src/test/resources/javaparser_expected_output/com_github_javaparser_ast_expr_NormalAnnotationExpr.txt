@@ -4,6 +4,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 40) setName(name) ==> void
   Line 41) setPairs(pairs) ==> void
   Line 46) beginLine ==> int

@@ -4,6 +4,8 @@
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
   interface: com.github.javaparser.ast.DocumentableNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
   Line 35) null ==> null
   Line 39) beginLine ==> int
   Line 39) beginColumn ==> int

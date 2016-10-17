@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.stmt.Statement
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 44) setSelector(selector) ==> void
   Line 45) setEntries(entries) ==> void
   Line 51) beginLine ==> int

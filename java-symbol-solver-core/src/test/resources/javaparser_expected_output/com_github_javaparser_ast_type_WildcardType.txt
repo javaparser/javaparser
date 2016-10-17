@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.type.Type
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 40) setExtends(ext) ==> void
   Line 44) setExtends(ext) ==> void
   Line 45) setSuper(sup) ==> void

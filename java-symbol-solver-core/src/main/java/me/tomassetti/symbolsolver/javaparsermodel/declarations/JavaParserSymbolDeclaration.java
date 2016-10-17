@@ -34,12 +34,12 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         this.typeSolver = typeSolver;
     }
 
-    public static JavaParserSymbolDeclaration field(VariableDeclarator wrappedNode, TypeSolver typeSolver) {
-        return new JavaParserSymbolDeclaration(wrappedNode, wrappedNode.getId().getName(), typeSolver, true, false, false);
+    public static JavaParserFieldDeclaration field(VariableDeclarator wrappedNode, TypeSolver typeSolver) {
+        return new JavaParserFieldDeclaration(wrappedNode, typeSolver);
     }
 
-    public static JavaParserSymbolDeclaration parameter(Parameter parameter, TypeSolver typeSolver) {
-        return new JavaParserSymbolDeclaration(parameter, parameter.getId().getName(), typeSolver, false, true, false);
+    public static JavaParserParameterDeclaration parameter(Parameter parameter, TypeSolver typeSolver) {
+        return new JavaParserParameterDeclaration(parameter, typeSolver);
     }
 
     public static JavaParserSymbolDeclaration localVar(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
@@ -139,11 +139,6 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         }
     }
 
-    /*@Override
-    public TypeUsage getTypeUsage(TypeSolver typeSolver) {
-        return JavaParserFacade.get(typeSolver).getType(wrappedNode);
-    }*/
-
     @Override
     public TypeDeclaration asType() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName()+": wrapping "+ this.getWrappedNode().getClass().getCanonicalName());
@@ -158,4 +153,6 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
 	{
 		return wrappedNode;
 	}
+
+
 }

@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 public class FunctionalInterfaceLogic {
 
     public static Optional<MethodUsage> getFunctionalMethod(Type type) {
-        if (type.isReferenceType() && type.asReferenceTypeUsage().getTypeDeclaration().isInterface()) {
+        if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isInterface()) {
             //We need to find all abstract methods
-            Set<MethodUsage> methods = type.asReferenceTypeUsage().getTypeDeclaration().getAllMethods().stream()
+            Set<MethodUsage> methods = type.asReferenceType().getTypeDeclaration().getAllMethods().stream()
                     .filter(m -> m.getDeclaration().isAbstract())
                     // Remove methods inherited by Object:
                     // Consider the case of Comparator which define equals. It would be considered a functional method.

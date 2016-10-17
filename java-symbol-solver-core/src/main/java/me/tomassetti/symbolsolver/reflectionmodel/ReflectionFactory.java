@@ -33,10 +33,10 @@ public class ReflectionFactory {
             return new TypeParameter(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
-            ReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceTypeUsage();
+            ReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();
             int i = 0;
             for (java.lang.reflect.Type actualTypeArgument : pt.getActualTypeArguments()) {
-                rawType = rawType.replaceParam(i, typeUsageFor(actualTypeArgument, typeSolver)).asReferenceTypeUsage();
+                rawType = rawType.replaceParam(i, typeUsageFor(actualTypeArgument, typeSolver)).asReferenceType();
                 i++;
             }
             return rawType;

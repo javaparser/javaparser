@@ -1,12 +1,10 @@
 package me.tomassetti.symbolsolver.model.usages.typesystem;
 
 import javaslang.Tuple2;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.TypeParametersMap;
 import me.tomassetti.symbolsolver.model.usages.TypeParametrized;
 
@@ -24,6 +22,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     protected TypeDeclaration typeDeclaration;
     protected List<Type> typeParameters;
     protected TypeSolver typeSolver;
+    protected TypeParametersMap typeParametersMap;
 
     public ReferenceType(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
@@ -37,6 +36,14 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         if (typeSolver == null) {
             throw new IllegalArgumentException("typeSolver should not be null");
         }
+        if (typeParameters.size() > 0 && typeParameters.size() != typeDeclaration.getTypeParameters().size()) {
+            throw new IllegalArgumentException(String.format("expected either zero type parameters or has many as defined in the declaration (%d). Found %d",
+                    typeDeclaration.getTypeParameters().size(), typeParameters.size()));
+        }
+        this.typeParametersMap = new TypeParametersMap();
+        for (int i=0;i<typeParameters.size();i++) {
+            this.typeParametersMap.setValue(typeDeclaration.getTypeParameters().get(i), typeParameters.get(i));
+        }
         this.typeDeclaration = typeDeclaration;
         this.typeParameters = typeParameters;
         if (this.typeDeclaration.isTypeVariable()) {
@@ -49,7 +56,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeParameter(tp)).collect(Collectors.toList());
     }
 
-    public ReferenceType asReferenceTypeUsage() {
+    public ReferenceType asReferenceType() {
         return this;
     }
 
@@ -200,7 +207,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ReferenceType objectRef = create(objectType, typeSolver);
 
-        ancestors = ancestors.stream().map((a) -> replaceTypeParams(a).asReferenceTypeUsage()).collect(Collectors.toList());
+        ancestors = ancestors.stream().map((a) -> replaceTypeParams(a).asReferenceType()).collect(Collectors.toList());
         // TODO replace type typeParametersValues
 
         for (int i = 0; i < ancestors.size(); i++) {
@@ -236,11 +243,11 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         }
 
         if (type.isReferenceType()) {
-            for (int i = 0; i < type.asReferenceTypeUsage().typeParametersValues().size(); i++) {
-                Type replaced = replaceTypeParams(type.asReferenceTypeUsage().typeParametersValues().get(i));
+            for (int i = 0; i < type.asReferenceType().typeParametersValues().size(); i++) {
+                Type replaced = replaceTypeParams(type.asReferenceType().typeParametersValues().get(i));
                 // Identity comparison on purpose
-                if (replaced != type.asReferenceTypeUsage().typeParametersValues().get(i)) {
-                    type = type.asReferenceTypeUsage().replaceParam(i, replaced);
+                if (replaced != type.asReferenceType().typeParametersValues().get(i)) {
+                    type = type.asReferenceType().replaceParam(i, replaced);
                 }
             }
         }
@@ -270,10 +277,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             sb.append(">");
         }
         return sb.toString();
-    }
-
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        return typeDeclaration.solveMethod(name, parameterTypes);
     }
 
     @Deprecated
@@ -378,6 +381,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
 
     @Override
     public TypeParametersMap typeParametersMap() {
-        throw new UnsupportedOperationException();
+        return typeParametersMap;
     }
 }

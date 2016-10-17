@@ -44,10 +44,6 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         if (declaredOnMethod() != that.declaredOnMethod()) {
             return false;
         }
-        // TODO
-        //if (declaredOnClass && !getQNameOfDeclaringClass().equals(that.getQNameOfDeclaringClass())) {
-        //    return false;
-        //}
         // TODO check bounds
         return true;
     }
@@ -75,7 +71,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public String qualifiedName() {
+    public String getQualifiedName() {
         if (this.declaredOnClass()) {
             return String.format("%s.%s", qNameOfDeclaringClass, getName());
         } else {

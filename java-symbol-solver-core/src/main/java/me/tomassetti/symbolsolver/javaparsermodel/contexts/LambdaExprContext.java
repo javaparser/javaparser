@@ -47,7 +47,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = pos(methodCallExpr, wrappedNode);
                         Type lambdaType = methodUsage.getParamTypes().get(i);
-                        Value value = new Value(lambdaType.asReferenceTypeUsage().typeParametersValues().get(0), name, false);
+                        Value value = new Value(lambdaType.asReferenceType().typeParametersValues().get(0), name, false);
                         return Optional.of(value);
                     } else if (wrappedNode.getParentNode() instanceof VariableDeclarator) {
                         com.github.javaparser.ast.type.Type declaratorType = null;
@@ -68,16 +68,16 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
                             // Replace parameter from declarator
                             if (lambdaType.isReferenceType()) {
-                                for (Tuple2<TypeParameterDeclaration, Type> entry : lambdaType.asReferenceTypeUsage().getTypeParametersMap()) {
+                                for (Tuple2<TypeParameterDeclaration, Type> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
                                     if (entry._2.isTypeVariable() && entry._2.asTypeParameter().declaredOnClass()) {
-                                        Optional<Type> ot = t.asReferenceTypeUsage().getGenericParameterByName(entry._1.getName());
+                                        Optional<Type> ot = t.asReferenceType().getGenericParameterByName(entry._1.getName());
                                         if (ot.isPresent()) {
                                             lambdaType = lambdaType.replaceParam(entry._1.getName(), ot.get());
                                         }
                                     }
                                 }
                             } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnClass()) {
-                                Optional<Type> ot = t.asReferenceTypeUsage().getGenericParameterByName(lambdaType.asTypeParameter().getName());
+                                Optional<Type> ot = t.asReferenceType().getGenericParameterByName(lambdaType.asTypeParameter().getName());
                                 if (ot.isPresent()) {
                                     lambdaType = ot.get();
                                 }
@@ -118,7 +118,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             return Optional.empty();
         }
 
-        //return Optional.of(lambda.asReferenceTypeUsage().typeParametersValues().get(0));
+        //return Optional.of(lambda.asReferenceType().typeParametersValues().get(0));
     }
 
     private int pos(MethodCallExpr callExpr, Expression param) {

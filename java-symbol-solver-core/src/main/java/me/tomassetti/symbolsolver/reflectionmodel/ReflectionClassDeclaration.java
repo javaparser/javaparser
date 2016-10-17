@@ -3,13 +3,11 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 import com.github.javaparser.ast.Node;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.logic.AbstractClassDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.*;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.NullType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
@@ -109,7 +107,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return new ClassOrInterfaceDeclarationContext(clazz);
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
@@ -119,13 +117,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-            SymbolReference<MethodDeclaration> ref = superClass.solveMethod(name, parameterTypes);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, parameterTypes, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
         for (ReferenceType interfaceDeclaration : getInterfaces()) {
-            SymbolReference<MethodDeclaration> ref = interfaceDeclaration.solveMethod(name, parameterTypes);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, parameterTypes, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
@@ -241,7 +239,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 return reflectionFieldDeclaration.replaceType(ancestor.getFieldType(name).get());
             }
         }
-        throw new UnsolvedSymbolException("Field in " + this, name);
+        throw new me.tomassetti.symbolsolver.model.resolution.UnsolvedSymbolException("Field in " + this, name);
     }
     
     @Override
@@ -256,7 +254,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return fields;
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : clazz.getFields()) {
             if (field.getName().equals(name)) {
@@ -264,11 +262,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             }
         }
         return SymbolReference.unsolved(ValueDeclaration.class);
-    }
-
-    @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        return SymbolReference.unsolved(TypeDeclaration.class);
     }
 
     @Override
@@ -280,24 +273,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     public boolean hasDirectlyAnnotation(String canonicalName) {
         throw new UnsupportedOperationException();
     }
-
-    /*@Override
-    public boolean canBeAssignedTo(TypeDeclaration other, TypeSolver typeSolver) {
-        if (getQualifiedName().equals(other.getQualifiedName())) {
-            return true;
-        }
-        if (clazz.getSuperclass() != null) {
-            if (new ReflectionClassDeclaration(clazz.getSuperclass()).isAssignableBy(other, typeSolver)){
-                return true;
-            }
-        }
-        for (Class<?> interfaze : clazz.getInterfaces()) {
-            if (new ReflectionClassDeclaration(interfaze).isAssignableBy(other, typeSolver)){
-                return true;
-            }
-        }
-        return false;
-    }*/
 
     @Override
     public boolean hasField(String name) {
@@ -436,5 +411,10 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     @Override
     public AccessLevel accessLevel() {
         return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
+    }
+
+    @Override
+    public List<ConstructorDeclaration> getConstructors() {
+        throw new UnsupportedOperationException();
     }
 }

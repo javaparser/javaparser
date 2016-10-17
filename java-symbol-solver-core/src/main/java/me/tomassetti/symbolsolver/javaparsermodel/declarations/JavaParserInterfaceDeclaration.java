@@ -38,11 +38,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        return getContext().solveMethod(name, parameterTypes, typeSolver());
-    }
-
-    @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         Set<MethodDeclaration> methods = new HashSet<>();
         for (BodyDeclaration member : wrappedNode.getMembers()) {
@@ -259,12 +254,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         throw new UnsupportedOperationException("Derived fields");
     }
 
-    @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        return getContext().solveSymbol(substring, typeSolver);
-    }
-
-    @Override
+    @Deprecated
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)) {
             return SymbolReference.solved(this);
@@ -294,7 +284,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
                     } else if (internalType instanceof EnumDeclaration) {
-                        return new JavaParserEnumDeclaration((EnumDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
+                        return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
                     } else {
                         throw new UnsupportedOperationException();
                     }

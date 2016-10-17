@@ -79,11 +79,11 @@ public class PrimitiveType implements Type {
         if (other.isPrimitive()) {
             return this == other || promotionTypes.contains(other);
         } else if (other.isReferenceType()) {
-            if (other.asReferenceTypeUsage().getQualifiedName().equals(boxTypeQName)) {
+            if (other.asReferenceType().getQualifiedName().equals(boxTypeQName)) {
                 return true;
             }
             for (PrimitiveType promotion : promotionTypes) {
-                if (other.asReferenceTypeUsage().getQualifiedName().equals(promotion.boxTypeQName)) {
+                if (other.asReferenceType().getQualifiedName().equals(promotion.boxTypeQName)) {
                     return true;
                 }
             }

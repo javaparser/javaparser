@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.stmt.Statement
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 38) this.id = id ==> java.lang.String
   Line 43) beginLine ==> int
   Line 43) beginColumn ==> int

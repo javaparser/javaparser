@@ -38,7 +38,7 @@ public class JavassistFactory {
         if (ctClazz.isInterface()) {
             return new JavassistInterfaceDeclaration(ctClazz, typeSolver);
         } else if (ctClazz.isEnum()) {
-            throw new UnsupportedOperationException("CtClass of enum not yet supported");
+            return new JavassistEnumDeclaration(ctClazz, typeSolver);
         } else if (ctClazz.isAnnotation()) {
             throw new UnsupportedOperationException("CtClass of annotation not yet supported");
         } else if (ctClazz.isArray()) {

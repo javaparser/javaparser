@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 49) setType(type) ==> void
   Line 50) setVars(vars) ==> void
   Line 54) setModifiers(modifiers) ==> void

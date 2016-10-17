@@ -1,6 +1,6 @@
 class Super {
     protected boolean k;
-    private static char m;
+    public static char m;
 }
 
 interface SuperSuperInterface {

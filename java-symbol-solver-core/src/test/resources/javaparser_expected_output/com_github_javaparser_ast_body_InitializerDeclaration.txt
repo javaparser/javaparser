@@ -4,6 +4,8 @@
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
   interface: com.github.javaparser.ast.DocumentableNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
   Line 43) null ==> null
   Line 44) setStatic(isStatic) ==> void
   Line 45) setBlock(block) ==> void

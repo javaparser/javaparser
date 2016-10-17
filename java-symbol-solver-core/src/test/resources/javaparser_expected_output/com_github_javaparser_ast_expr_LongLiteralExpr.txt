@@ -5,6 +5,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 32) "9223372036854775808" ==> java.lang.String
   Line 34) "-" + UNSIGNED_MIN_VALUE + "L" ==> java.lang.String
   Line 40) value ==> java.lang.String

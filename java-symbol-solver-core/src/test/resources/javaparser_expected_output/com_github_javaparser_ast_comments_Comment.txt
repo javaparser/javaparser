@@ -2,6 +2,7 @@
 [ Class com.github.javaparser.ast.comments.Comment ]
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 43) this.content = content ==> java.lang.String
   Line 47) beginLine ==> int
   Line 47) beginColumn ==> int

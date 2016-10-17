@@ -2,10 +2,12 @@ package me.tomassetti.symbolsolver.reflectionmodel;
 
 import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
 import me.tomassetti.symbolsolver.model.declarations.FieldDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class ReflectionFieldDeclaration implements FieldDeclaration {
 
@@ -41,8 +43,18 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(field.getModifiers());
+    }
+
+    @Override
     public boolean isField() {
         return true;
+    }
+
+    @Override
+    public TypeDeclaration declaringType() {
+        throw new UnsupportedOperationException();
     }
 
     public FieldDeclaration replaceType(Type fieldType) {

@@ -2,6 +2,7 @@
 [ Class com.github.javaparser.ast.stmt.CatchClause ]
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 47) setExcept(except) ==> void
   Line 48) setCatchBlock(catchBlock) ==> void
   Line 52) new MultiTypeParameter(exceptModifier, exceptAnnotations, exceptTypes, exceptId) ==> com.github.javaparser.ast.body.MultiTypeParameter

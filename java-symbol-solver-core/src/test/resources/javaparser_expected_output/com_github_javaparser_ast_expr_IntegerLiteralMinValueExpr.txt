@@ -6,6 +6,7 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 33) MIN_VALUE ==> java.lang.String
   Line 37) beginLine ==> int
   Line 37) beginColumn ==> int

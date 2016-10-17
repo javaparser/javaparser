@@ -33,7 +33,7 @@ public class PrintExpressionType {
             super.visit(n, javaParserFacade);
             System.out.println(n.toString() + " has type " + javaParserFacade.getType(n).describe());
             if (javaParserFacade.getType(n).isReferenceType()) {
-                for (ReferenceType ancestor : javaParserFacade.getType(n).asReferenceTypeUsage().getAllAncestors()) {
+                for (ReferenceType ancestor : javaParserFacade.getType(n).asReferenceType().getAllAncestors()) {
                     //System.out.println("Ancestor " + ancestor.describe());
                 }
             }

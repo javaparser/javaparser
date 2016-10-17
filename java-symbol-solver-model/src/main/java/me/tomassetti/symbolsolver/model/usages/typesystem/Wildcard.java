@@ -106,7 +106,7 @@ public class Wildcard implements Type {
     @Override
     public boolean isAssignableBy(Type other) {
         if (boundedType == null) {
-            //return other.isReferenceType() && other.asReferenceTypeUsage().getQualifiedName().equals(Object.class.getCanonicalName());
+            //return other.isReferenceType() && other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
             return false;
         } else if (type == BoundType.SUPER) {
             return boundedType.isAssignableBy(other);

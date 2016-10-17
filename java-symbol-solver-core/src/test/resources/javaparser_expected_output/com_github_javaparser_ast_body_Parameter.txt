@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.body.BaseParameter
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 43) id ==> com.github.javaparser.ast.body.VariableDeclaratorId
   Line 44) setType(type) ==> void
   Line 48) modifiers ==> int

@@ -22,6 +22,7 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionFactory;
+import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 
 import java.io.Serializable;
 import java.util.*;
@@ -163,7 +164,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         if (type.isNull()) {
             return true;
         }
-        return type.isReferenceType() && type.asReferenceTypeUsage().getQualifiedName().equals(getQualifiedName());
+        return type.isReferenceType() && type.asReferenceType().getQualifiedName().equals(getQualifiedName());
     }
 
 
@@ -220,18 +221,10 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return typeSolver;
     }
 
-    @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        if (name.equals("values") && parameterTypes.isEmpty()) {
-            return SymbolReference.solved(new ValuesMethod());
-        }
-        // TODO add methods inherited from Enum
-        return getContext().solveMethod(name, parameterTypes, typeSolver);
-    }
-
+    @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         if (name.equals("values") && parameterTypes.isEmpty()) {
-            return Optional.of(new ValuesMethod().getUsage(null));
+            return Optional.of(new ValuesMethod(this, typeSolver).getUsage(null));
         }
         // TODO add methods inherited from Enum
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
@@ -287,25 +280,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return fields;
     }
 
-    @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String substring, TypeSolver typeSolver) {
-        return getContext().solveSymbol(substring, typeSolver);
-    }
-
-    @Override
-    public SymbolReference<TypeDeclaration> solveType(String substring, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
-        ReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceTypeUsage();
-        enumClass = enumClass.replaceParam("E", new ReferenceTypeImpl(this, typeSolver)).asReferenceTypeUsage();
+        ReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
+        enumClass = enumClass.replaceParam("E", new ReferenceTypeImpl(this, typeSolver)).asReferenceType();
         ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
-                SymbolReference<TypeDeclaration> implementedDeclRef = solveType(implementedType.getName(), typeSolver);
+                SymbolReference<TypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName());
                 if (!implementedDeclRef.isSolved()) {
                     throw new UnsolvedSymbolException(implementedType.getName());
                 }
@@ -331,16 +315,24 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 	}
 
     // Needed by ContextHelper
-    public class ValuesMethod implements MethodDeclaration {
+    public static class ValuesMethod implements MethodDeclaration {
+
+        private JavaParserEnumDeclaration enumDeclaration;
+        private TypeSolver typeSolver;
+
+        public ValuesMethod(JavaParserEnumDeclaration enumDeclaration, TypeSolver typeSolver) {
+            this.enumDeclaration = enumDeclaration;
+            this.typeSolver = typeSolver;
+        }
 
         @Override
         public TypeDeclaration declaringType() {
-            return JavaParserEnumDeclaration.this;
+            return enumDeclaration;
         }
 
         @Override
         public Type getReturnType() {
-            return new ArrayType(new ReferenceTypeImpl(JavaParserEnumDeclaration.this, typeSolver));
+            return new ArrayType(new ReferenceTypeImpl(enumDeclaration, typeSolver));
         }
 
         @Override

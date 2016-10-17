@@ -4,6 +4,7 @@
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
   interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
   Line 39) this.name = name ==> java.lang.String
   Line 44) beginLine ==> int
   Line 44) beginColumn ==> int

@@ -2,6 +2,7 @@
 [ Class com.github.javaparser.ast.body.VariableDeclarator ]
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
   Line 42) setId(id) ==> void
   Line 46) setId(id) ==> void
   Line 47) setInit(init) ==> void

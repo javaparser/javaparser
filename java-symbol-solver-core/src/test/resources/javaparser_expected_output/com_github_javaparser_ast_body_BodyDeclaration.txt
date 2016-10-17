@@ -3,6 +3,7 @@
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
   interface: com.github.javaparser.ast.body.AnnotableNode
+  interface: java.lang.Cloneable
   Line 41) setAnnotations(annotations) ==> void
   Line 45) beginLine ==> int
   Line 45) beginColumn ==> int

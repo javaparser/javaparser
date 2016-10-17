@@ -3,6 +3,8 @@ package me.tomassetti.symbolsolver.javaparsermodel;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
+// Use the one in model instead
+@Deprecated
 public class UnsolvedSymbolException extends RuntimeException {
 
     private String context;

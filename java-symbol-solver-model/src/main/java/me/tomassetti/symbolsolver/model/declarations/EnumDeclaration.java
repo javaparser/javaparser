@@ -11,4 +11,9 @@ public interface EnumDeclaration extends TypeDeclaration, HasAccessLevel {
     default boolean isEnum() {
         return true;
     }
+
+    @Override
+    default EnumDeclaration asEnum() {
+        return this;
+    }
 }

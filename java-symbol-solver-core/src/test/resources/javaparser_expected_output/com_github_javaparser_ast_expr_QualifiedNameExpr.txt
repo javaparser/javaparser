@@ -4,6 +4,8 @@
   superclass: com.github.javaparser.ast.expr.Expression
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.NamedNode
   Line 38) name ==> java.lang.String
   Line 39) setQualifier(scope) ==> void
   Line 44) beginLine ==> int
