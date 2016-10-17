@@ -30,6 +30,8 @@ import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 
 import java.util.Optional;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 /**
  * @author Federico Tomassetti
  */
@@ -93,8 +95,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     @Override
     public final Context getParent() {
-        if (wrappedNode.getParentNode() instanceof MethodCallExpr) {
-            MethodCallExpr parentCall = (MethodCallExpr) wrappedNode.getParentNode();
+        if (getParentNode(wrappedNode) instanceof MethodCallExpr) {
+            MethodCallExpr parentCall = (MethodCallExpr) getParentNode(wrappedNode);
             boolean found = false;
             if (parentCall.getArgs() != null) {
                 for (Expression expression : parentCall.getArgs()) {
@@ -104,16 +106,16 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 }
             }
             if (found) {
-                Node notMethod = wrappedNode.getParentNode();
+                Node notMethod = getParentNode(wrappedNode);
                 while (notMethod instanceof MethodCallExpr) {
-                    notMethod = notMethod.getParentNode();
+                    notMethod = getParentNode(notMethod);
                 }
                 return JavaParserFactory.getContext(notMethod, typeSolver);
             }
         }
-        Node notMethod = wrappedNode.getParentNode();
+        Node notMethod = getParentNode(wrappedNode);
         while (notMethod instanceof MethodCallExpr) {
-            notMethod = notMethod.getParentNode();
+            notMethod = getParentNode(notMethod);
         }
         return JavaParserFactory.getContext(notMethod, typeSolver);
     }

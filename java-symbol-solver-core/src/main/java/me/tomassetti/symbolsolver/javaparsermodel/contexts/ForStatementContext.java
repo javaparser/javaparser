@@ -30,6 +30,8 @@ import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserSymbolD
 
 import java.util.List;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
     public ForStatementContext(ForStmt wrappedNode, TypeSolver typeSolver) {
@@ -51,7 +53,7 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
             }
         }
 
-        if (wrappedNode.getParentNode() instanceof BlockStmt) {
+        if (getParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
             return getParent().solveSymbol(name, typeSolver);

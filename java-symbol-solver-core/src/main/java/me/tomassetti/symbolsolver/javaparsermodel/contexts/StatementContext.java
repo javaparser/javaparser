@@ -34,6 +34,8 @@ import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import java.util.List;
 import java.util.Optional;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class StatementContext<N extends Statement> extends AbstractJavaParserContext<N> {
 
     public StatementContext(N wrappedNode, TypeSolver typeSolver) {
@@ -41,10 +43,10 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     }
 
     public static SymbolReference<? extends ValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt) {
-        if (!(stmt.getParentNode() instanceof BlockStmt)) {
+        if (!(getParentNode(stmt) instanceof BlockStmt)) {
             throw new IllegalArgumentException();
         }
-        BlockStmt blockStmt = (BlockStmt) stmt.getParentNode();
+        BlockStmt blockStmt = (BlockStmt) getParentNode(stmt);
         int position = -1;
         for (int i = 0; i < blockStmt.getStmts().size(); i++) {
             if (blockStmt.getStmts().get(i).equals(stmt)) {
@@ -63,25 +65,25 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
 
         // if nothing is found we should ask the parent context
-        return JavaParserFactory.getContext(stmt.getParentNode(), typeSolver).solveSymbol(name, typeSolver);
+        return JavaParserFactory.getContext(getParentNode(stmt), typeSolver).solveSymbol(name, typeSolver);
     }
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         // we should look in all the statements preceding, treating them as SymbolDeclarators
-        if (wrappedNode.getParentNode() instanceof com.github.javaparser.ast.body.MethodDeclaration) {
+        if (getParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.MethodDeclaration) {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
-        if (wrappedNode.getParentNode() instanceof LambdaExpr) {
+        if (getParentNode(wrappedNode) instanceof LambdaExpr) {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
-        if (wrappedNode.getParentNode() instanceof IfStmt) {
+        if (getParentNode(wrappedNode) instanceof IfStmt) {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
-        if (!(wrappedNode.getParentNode() instanceof BlockStmt)) {
+        if (!(getParentNode(wrappedNode) instanceof BlockStmt)) {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
-        BlockStmt blockStmt = (BlockStmt) wrappedNode.getParentNode();
+        BlockStmt blockStmt = (BlockStmt) getParentNode(wrappedNode);
         int position = -1;
         for (int i = 0; i < blockStmt.getStmts().size(); i++) {
             if (blockStmt.getStmts().get(i).equals(wrappedNode)) {
@@ -107,19 +109,19 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         // we should look in all the statements preceding, treating them as SymbolDeclarators
-        if (wrappedNode.getParentNode() instanceof com.github.javaparser.ast.body.MethodDeclaration) {
+        if (getParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.MethodDeclaration) {
             return getParent().solveSymbol(name, typeSolver);
         }
-        if (wrappedNode.getParentNode() instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
+        if (getParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
             return getParent().solveSymbol(name, typeSolver);
         }
-        if (wrappedNode.getParentNode() instanceof LambdaExpr) {
+        if (getParentNode(wrappedNode) instanceof LambdaExpr) {
             return getParent().solveSymbol(name, typeSolver);
         }
-        if (!(wrappedNode.getParentNode() instanceof BlockStmt)) {
+        if (!(getParentNode(wrappedNode) instanceof BlockStmt)) {
             return getParent().solveSymbol(name, typeSolver);
         }
-        BlockStmt blockStmt = (BlockStmt) wrappedNode.getParentNode();
+        BlockStmt blockStmt = (BlockStmt) getParentNode(wrappedNode);
         int position = -1;
         for (int i = 0; i < blockStmt.getStmts().size(); i++) {
             if (blockStmt.getStmts().get(i).equals(wrappedNode)) {

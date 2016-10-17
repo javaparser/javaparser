@@ -43,6 +43,8 @@ import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	private TypeSolver typeSolver;
@@ -178,7 +180,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public String getQualifiedName() {
-		String containerName = containerName("", wrappedNode.getParentNode());
+		String containerName = containerName("", getParentNode(wrappedNode));
 		if (containerName.isEmpty()) {
 			return wrappedNode.getName();
 		} else {
@@ -200,7 +202,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	private String containerName(String base, Node container) {
 		if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-			String b = containerName(base, container.getParentNode());
+			String b = containerName(base, getParentNode(container));
 			String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
 			if (b.isEmpty()) {
 				return cn;
@@ -220,7 +222,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 				return base;
 			}
 		} else if (container != null) {
-			return containerName(base, container.getParentNode());
+			return containerName(base, getParentNode(container));
 		} else {
 			return base;
 		}

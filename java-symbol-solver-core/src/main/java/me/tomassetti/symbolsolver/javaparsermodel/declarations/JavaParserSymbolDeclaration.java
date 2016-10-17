@@ -32,6 +32,8 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class JavaParserSymbolDeclaration implements ValueDeclaration {
 
     private String name;
@@ -64,7 +66,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
 
     public static int getParamPos(Parameter parameter) {
         int pos = 0;
-        for (Node node : parameter.getParentNode().getChildrenNodes()) {
+        for (Node node : getParentNode(parameter).getChildrenNodes()) {
             if (node == parameter) {
                 return pos;
             } else if (node instanceof Parameter) {
@@ -75,8 +77,8 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     public static int getParamPos(Node node) {
-        if (node.getParentNode() instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) node.getParentNode();
+        if (getParentNode(node) instanceof MethodCallExpr) {
+            MethodCallExpr call = (MethodCallExpr) getParentNode(node);
             for (int i = 0; i < call.getArgs().size(); i++) {
                 if (call.getArgs().get(i) == node) return i;
             }
@@ -118,9 +120,9 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     public Type getType() {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
-            if (wrappedNode.getParentNode() instanceof LambdaExpr) {
+            if (getParentNode(wrappedNode) instanceof LambdaExpr) {
                 int pos = getParamPos(parameter);
-                Type lambdaType = JavaParserFacade.get(typeSolver).getType(wrappedNode.getParentNode());
+                Type lambdaType = JavaParserFacade.get(typeSolver).getType(getParentNode(wrappedNode));
 
                 // TODO understand from the context to which method this corresponds
                 //MethodDeclaration methodDeclaration = JavaParserFacade.get(typeSolver).getMethodCalled
@@ -141,14 +143,14 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
             }
         } else if (wrappedNode instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) wrappedNode;
-            if (wrappedNode.getParentNode() instanceof VariableDeclarationExpr) {
-                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarator.getParentNode();
+            if (getParentNode(wrappedNode) instanceof VariableDeclarationExpr) {
+                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) getParentNode(variableDeclarator);
                 return JavaParserFacade.get(typeSolver).convert(variableDeclarationExpr.getElementType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
-            } else if (wrappedNode.getParentNode() instanceof FieldDeclaration) {
-                FieldDeclaration fieldDeclaration = (FieldDeclaration) variableDeclarator.getParentNode();
+            } else if (getParentNode(wrappedNode) instanceof FieldDeclaration) {
+                FieldDeclaration fieldDeclaration = (FieldDeclaration) getParentNode(variableDeclarator);
                 return JavaParserFacade.get(typeSolver).convert(fieldDeclaration.getElementType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
             } else {
-                throw new UnsupportedOperationException(wrappedNode.getParentNode().getClass().getCanonicalName());
+                throw new UnsupportedOperationException(getParentNode(wrappedNode).getClass().getCanonicalName());
             }
         } else {
             throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());

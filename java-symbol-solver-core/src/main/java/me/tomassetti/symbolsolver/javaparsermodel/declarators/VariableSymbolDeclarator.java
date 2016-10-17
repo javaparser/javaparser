@@ -26,11 +26,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableDeclarationExpr> {
 
     public VariableSymbolDeclarator(VariableDeclarationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
-        if (wrappedNode.getParentNode() instanceof FieldDeclaration) {
+        if (getParentNode(wrappedNode) instanceof FieldDeclaration) {
             throw new IllegalArgumentException();
         }
     }

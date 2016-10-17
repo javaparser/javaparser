@@ -34,6 +34,8 @@ import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import java.util.List;
 import java.util.Optional;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExpr> {
 
     private static final String ARRAY_LENGTH_FIELD_NAME = "length";
@@ -50,17 +52,17 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                 return new SymbolSolver(typeSolver).solveSymbolInType(typeOfThis.asReferenceType().getTypeDeclaration(), name);
             }
         }
-        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveSymbol(name, typeSolver);
+        return JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveSymbol(name, typeSolver);
     }
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveType(name, typeSolver);
+        return JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveType(name, typeSolver);
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        return JavaParserFactory.getContext(wrappedNode.getParentNode(), typeSolver).solveMethod(name, argumentsTypes, typeSolver);
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
+        return JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveMethod(name, parameterTypes, typeSolver);
     }
 
     @Override

@@ -39,6 +39,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 /**
  * It print information extracted from a source file. It is mainly intended as an example usage of JavaSymbolSolver.
  */
@@ -107,11 +109,11 @@ public class SourceFileInfoExtractor {
         if (node instanceof ClassOrInterfaceDeclaration) {
             solveTypeDecl((ClassOrInterfaceDeclaration) node);
         } else if (node instanceof Expression) {
-            if ((node.getParentNode() instanceof ImportDeclaration) || (node.getParentNode() instanceof Expression)
-                    || (node.getParentNode() instanceof MethodDeclaration)
-                    || (node.getParentNode() instanceof PackageDeclaration)) {
+            if ((getParentNode(node) instanceof ImportDeclaration) || (getParentNode(node) instanceof Expression)
+                    || (getParentNode(node) instanceof MethodDeclaration)
+                    || (getParentNode(node) instanceof PackageDeclaration)) {
                 // skip
-            } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)) {
+            } else if ((getParentNode(node) instanceof Statement) || (getParentNode(node) instanceof VariableDeclarator)) {
                 try {
                     Type ref = JavaParserFacade.get(typeSolver).getType(node);
                     out.println("  Line " + node.getRange().begin.line + ") " + node + " ==> " + ref.describe());
