@@ -28,6 +28,8 @@ import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserSymbolD
 
 import java.util.List;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class ForechStatementContext extends AbstractJavaParserContext<ForeachStmt> {
 
     public ForechStatementContext(ForeachStmt wrappedNode, TypeSolver typeSolver) {
@@ -43,7 +45,7 @@ public class ForechStatementContext extends AbstractJavaParserContext<ForeachStm
         if (variableDeclarator.getId().getName().equals(name)) {
             return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
         } else {
-            if (wrappedNode.getParentNode() instanceof BlockStmt) {
+            if (getParentNode(wrappedNode) instanceof BlockStmt) {
                 return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
             } else {
                 return getParent().solveSymbol(name, typeSolver);
