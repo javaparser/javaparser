@@ -88,7 +88,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public boolean declaredOnClass() {
-        return (wrappedNode.getParentNode() instanceof ClassOrInterfaceDeclaration);
+        return (wrappedNode.getParentNode().getParentNode() instanceof ClassOrInterfaceDeclaration);
     }
 
     @Override
@@ -99,11 +99,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public String getQualifiedName() {
         if (this.declaredOnClass()) {
-            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)wrappedNode.getParentNode();
+            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)wrappedNode.getParentNode().getParentNode();
             TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
             return String.format("%s.%s", typeDeclaration.getQualifiedName(), getName());
         } else {
-            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
+            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode().getParentNode();
             MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
             return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
         }

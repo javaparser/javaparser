@@ -18,6 +18,7 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -113,14 +114,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public ReferenceTypeImpl getSuperClass() {
-		if (wrappedNode.getExtends() == null || wrappedNode.getExtends().isEmpty()) {
+		if (wrappedNode.getExtends().isEmpty()) {
 			return new ReferenceTypeImpl(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
 		} else {
 			SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
 			if (!ref.isSolved()) {
 				throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
 			}
-			List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().get()
+			List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().orElseGet(() -> new NodeList<com.github.javaparser.ast.type.Type<?>>())
 					.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
 					.collect(Collectors.toList());
 			return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asClass(), superClassTypeParameters, typeSolver);
@@ -132,7 +133,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 		List<ReferenceType> interfaces = new ArrayList<>();
 		if (wrappedNode.getImplements() != null) {
 			for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
-				List<Type> interfaceTypeParameters = t.getTypeArguments().get()
+				List<Type> interfaceTypeParameters = t.getTypeArguments().orElse(new NodeList<>())
 						.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
 						.collect(Collectors.toList());
 				ReferenceType referenceType = new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface(),

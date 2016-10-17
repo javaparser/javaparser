@@ -587,14 +587,14 @@ public class JavaParserFacade {
             return PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
-            if (wildcardType.getExtends().isPresent() && wildcardType.getSuper().isPresent()) {
+            if (wildcardType.getExtends().isPresent() && !wildcardType.getSuper().isPresent()) {
                 return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getExtends().get(), context));
             } else if (!wildcardType.getExtends().isPresent() && wildcardType.getSuper().isPresent()) {
                 return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getSuper().get(), context));
-            } else if (wildcardType.getExtends().isPresent() && !wildcardType.getSuper().isPresent()) {
+            } else if (!wildcardType.getExtends().isPresent() && !wildcardType.getSuper().isPresent()) {
                 return Wildcard.UNBOUNDED;
             } else {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(wildcardType.toString());
             }
         } else if (type instanceof com.github.javaparser.ast.type.VoidType) {
             return VoidType.INSTANCE;

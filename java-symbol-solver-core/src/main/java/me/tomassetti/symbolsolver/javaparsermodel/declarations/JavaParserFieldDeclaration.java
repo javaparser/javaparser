@@ -43,10 +43,10 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
         }
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
-        if (!(variableDeclarator.getParentNode() instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
+        if (!(variableDeclarator.getParentNode().getParentNode() instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
             throw new IllegalStateException(variableDeclarator.getParentNode().getClass().getCanonicalName());
         }
-        this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) variableDeclarator.getParentNode();
+        this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) variableDeclarator.getParentNode().getParentNode();
     }
 
     public JavaParserFieldDeclaration(EnumConstantDeclaration enumConstantDeclaration, TypeSolver typeSolver) {
