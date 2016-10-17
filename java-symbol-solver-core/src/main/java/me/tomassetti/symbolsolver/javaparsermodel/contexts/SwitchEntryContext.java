@@ -36,7 +36,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        SwitchStmt switchStmt = (SwitchStmt) wrappedNode.getParentNode();
+        SwitchStmt switchStmt = (SwitchStmt) wrappedNode.getParentNode().getParentNode();
         Type type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isEnum()) {
             if (type instanceof ReferenceTypeImpl) {

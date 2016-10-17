@@ -392,14 +392,14 @@ public class JavaParserFacade {
                 throw new UnsupportedOperationException("The type of a method reference expr depends on the position and its return value");
             }
         } else if (node instanceof VariableDeclarator) {
-            if (node.getParentNode() instanceof FieldDeclaration) {
-                FieldDeclaration parent = (FieldDeclaration) node.getParentNode();
+            if (node.getParentNode().getParentNode() instanceof FieldDeclaration) {
+                FieldDeclaration parent = (FieldDeclaration) node.getParentNode().getParentNode();
                 return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
-            } else if (node.getParentNode() instanceof VariableDeclarationExpr) {
-                VariableDeclarationExpr parent = (VariableDeclarationExpr) node.getParentNode();
+            } else if (node.getParentNode().getParentNode() instanceof VariableDeclarationExpr) {
+                VariableDeclarationExpr parent = (VariableDeclarationExpr) node.getParentNode().getParentNode();
                 return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
             } else {
-                throw new UnsupportedOperationException(node.getParentNode().getClass().getCanonicalName());
+                throw new UnsupportedOperationException(node.getParentNode().getParentNode().getClass().getCanonicalName());
             }
         } else if (node instanceof Parameter) {
             Parameter parameter = (Parameter) node;

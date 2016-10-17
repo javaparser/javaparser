@@ -208,9 +208,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 				return b + "." + cn;
 			}
 		} else if (container instanceof CompilationUnit) {
-			PackageDeclaration p = ((CompilationUnit) container).getPackage().get();
-			if (p != null) {
-				String b = p.getName().toString();
+			Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
+			if (p.isPresent()) {
+				String b = p.get().getName().toString();
 				if (base.isEmpty()) {
 					return b;
 				} else {

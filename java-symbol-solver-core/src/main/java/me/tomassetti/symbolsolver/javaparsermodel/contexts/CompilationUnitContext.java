@@ -72,7 +72,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         return ref;
                     }
                 } else if (importDecl instanceof SingleStaticImportDeclaration){
-                    ClassOrInterfaceType classOrInterfaceType = ((StaticImportOnDemandDeclaration) importDecl).getType();
+                    ClassOrInterfaceType classOrInterfaceType = ((SingleStaticImportDeclaration) importDecl).getType();
                     String qName = classOrInterfaceType.getName();
                     // split in field/method name and type name
                     String typeName = getType(qName);
@@ -148,7 +148,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         // Look in current package
-        if (this.wrappedNode.getPackage() != null) {
+        if (this.wrappedNode.getPackage().isPresent()) {
             String qName = this.wrappedNode.getPackage().get().getName().toString() + "." + name;
             SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref.isSolved()) {
@@ -172,28 +172,26 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        if (wrappedNode.getImports() != null) {
-            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (importDecl instanceof StaticImportOnDemandDeclaration) {
-                    StaticImportOnDemandDeclaration staticImportOnDemandDeclaration = (StaticImportOnDemandDeclaration)importDecl;
+        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+            if (importDecl instanceof StaticImportOnDemandDeclaration) {
+                StaticImportOnDemandDeclaration staticImportOnDemandDeclaration = (StaticImportOnDemandDeclaration)importDecl;
 
-                    String qName = staticImportOnDemandDeclaration.getType().getName();
-                    me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(qName);
+                String qName = staticImportOnDemandDeclaration.getType().getName();
+                me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(qName);
+                SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, typeSolver);
+                if (method.isSolved()) {
+                    return method;
+                }
+            } else if (importDecl instanceof SingleStaticImportDeclaration) {
+                SingleStaticImportDeclaration staticImportOnDemandDeclaration = (SingleStaticImportDeclaration)importDecl;
+
+                String qName = staticImportOnDemandDeclaration.getType().getName();
+                if (qName.equals(name) || qName.endsWith("." + name)) {
+                    String typeName = getType(qName);
+                    me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
                     SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, typeSolver);
                     if (method.isSolved()) {
                         return method;
-                    }
-                } else if (importDecl instanceof SingleStaticImportDeclaration) {
-                    SingleStaticImportDeclaration staticImportOnDemandDeclaration = (SingleStaticImportDeclaration)importDecl;
-
-                    String qName = staticImportOnDemandDeclaration.getType().getName();
-                    if (qName.equals(name) || qName.endsWith("." + name)) {
-                        String typeName = getType(qName);
-                        me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
-                        SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, typeSolver);
-                        if (method.isSolved()) {
-                            return method;
-                        }
                     }
                 }
             }

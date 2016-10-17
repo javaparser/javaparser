@@ -69,12 +69,12 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         com.github.javaparser.ast.type.Type declaratorType = null;
                         
                         VariableDeclarator variableDeclarator = (VariableDeclarator) wrappedNode.getParentNode();
-                        if (variableDeclarator.getParentNode() instanceof VariableDeclarationExpr) {
-                            declaratorType = ((VariableDeclarationExpr) variableDeclarator.getParentNode()).getElementType();
-                        } else if (variableDeclarator.getParentNode() instanceof FieldDeclaration) {
-                            declaratorType = ((FieldDeclaration) variableDeclarator.getParentNode()).getElementType();
+                        if (variableDeclarator.getParentNode().getParentNode() instanceof VariableDeclarationExpr) {
+                            declaratorType = ((VariableDeclarationExpr) variableDeclarator.getParentNode().getParentNode()).getElementType();
+                        } else if (variableDeclarator.getParentNode().getParentNode() instanceof FieldDeclaration) {
+                            declaratorType = ((FieldDeclaration) variableDeclarator.getParentNode().getParentNode()).getElementType();
                         } else {
-                            throw new UnsupportedOperationException();
+                            throw new UnsupportedOperationException(variableDeclarator.getParentNode().getParentNode().getClass().getCanonicalName());
                         }
 
                         Type t = JavaParserFacade.get(typeSolver).convert(declaratorType, declaratorType);

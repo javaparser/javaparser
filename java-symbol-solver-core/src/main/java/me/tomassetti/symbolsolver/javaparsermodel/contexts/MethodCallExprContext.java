@@ -46,7 +46,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        if (!wrappedNode.getTypeArguments().get().isEmpty()) {
+        if (!wrappedNode.getTypeArguments().isPresent()) {
             throw new UnsupportedOperationException(name);
         }
         Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
@@ -190,7 +190,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         // TODO consider call of static methods
-        if (wrappedNode.getScope() != null) {
+        if (wrappedNode.getScope().isPresent()) {
             try {
                 Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
                 // we can replace the parameter types from the scope into the typeParametersValues
