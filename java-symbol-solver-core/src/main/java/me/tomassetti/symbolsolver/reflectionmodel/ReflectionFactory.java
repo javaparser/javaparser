@@ -4,7 +4,7 @@ import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.*;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 
 import java.lang.reflect.*;
 
@@ -26,11 +26,11 @@ public class ReflectionFactory {
     }
 
     public static Type typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
-        if (type instanceof TypeVariable) {
-            TypeVariable tv = (TypeVariable) type;
-            boolean declaredOnClass = ((TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
+        if (type instanceof java.lang.reflect.TypeVariable) {
+            java.lang.reflect.TypeVariable tv = (java.lang.reflect.TypeVariable) type;
+            boolean declaredOnClass = ((java.lang.reflect.TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
             TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass);
-            return new TypeParameter(typeParameter);
+            return new TypeVariable(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
             ReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();

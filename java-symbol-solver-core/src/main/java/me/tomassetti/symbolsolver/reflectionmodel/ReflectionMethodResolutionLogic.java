@@ -8,7 +8,7 @@ import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.lang.reflect.Method;
@@ -43,7 +43,7 @@ class ReflectionMethodResolutionLogic {
                     i++;
                 }
                 for (TypeParameterDeclaration methodTypeParameter : methodDeclaration.getTypeParameters()) {
-                    methodUsage = methodUsage.replaceTypeParameterByName(methodTypeParameter.getName(), new TypeParameter(methodTypeParameter));
+                    methodUsage = methodUsage.replaceTypeParameterByName(methodTypeParameter.getName(), new TypeVariable(methodTypeParameter));
                 }
                 methods.add(methodUsage);
             }

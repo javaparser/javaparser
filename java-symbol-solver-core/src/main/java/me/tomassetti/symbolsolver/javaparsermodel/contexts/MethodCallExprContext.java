@@ -13,7 +13,7 @@ import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.resolution.*;
 import me.tomassetti.symbolsolver.model.usages.typesystem.*;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 
@@ -127,7 +127,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         return "MethodCallExprContext{wrapped=" + wrappedNode+ "}";
     }
 
-    private Optional<MethodUsage> solveMethodAsUsage(TypeParameter tp, String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
+    private Optional<MethodUsage> solveMethodAsUsage(TypeVariable tp, String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
         for (TypeParameterDeclaration.Bound bound : tp.asTypeParameter().getBounds(typeSolver)) {
             Optional<MethodUsage> methodUsage = solveMethodAsUsage(bound.getType(), name, argumentsTypes, typeSolver, invokationContext);
             if (methodUsage.isPresent()) {
@@ -140,8 +140,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(Type type, String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
         if (type instanceof ReferenceType) {
             return solveMethodAsUsage((ReferenceType) type, name, argumentsTypes, typeSolver, invokationContext);
-        } else if (type instanceof TypeParameter) {
-            return solveMethodAsUsage((TypeParameter) type, name, argumentsTypes, typeSolver, invokationContext);
+        } else if (type instanceof TypeVariable) {
+            return solveMethodAsUsage((TypeVariable) type, name, argumentsTypes, typeSolver, invokationContext);
         } else if (type instanceof Wildcard) {
             Wildcard wildcardUsage = (Wildcard) type;
             if (wildcardUsage.isSuper()) {

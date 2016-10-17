@@ -7,7 +7,7 @@ import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -32,7 +32,7 @@ public class GenericTypeInferenceLogicTest {
         TypeParameterDeclaration a = EasyMock.createMock(TypeParameterDeclaration.class);
         EasyMock.expect(a.getName()).andReturn("A").anyTimes();
         EasyMock.replay(a);
-        TypeParameter aUsage = new TypeParameter(a);
+        TypeVariable aUsage = new TypeVariable(a);
         assertEquals(ImmutableMap.of("A", string), GenericTypeInferenceLogic.inferGenericTypes(
                 ImmutableList.of(new Tuple2<Type, Type>(aUsage, string))));
     }
@@ -51,9 +51,9 @@ public class GenericTypeInferenceLogicTest {
         EasyMock.replay(a);
         EasyMock.replay(b);
         EasyMock.replay(c);
-        TypeParameter aUsage = new TypeParameter(a);
-        TypeParameter bUsage = new TypeParameter(b);
-        TypeParameter cUsage = new TypeParameter(c);
+        TypeVariable aUsage = new TypeVariable(a);
+        TypeVariable bUsage = new TypeVariable(b);
+        TypeVariable cUsage = new TypeVariable(c);
         assertEquals(ImmutableMap.of("A", string, "B", object, "C", string), GenericTypeInferenceLogic.inferGenericTypes(
                 ImmutableList.of(new Tuple2<Type, Type>(aUsage, string),
                         new Tuple2<Type, Type>(bUsage, object),

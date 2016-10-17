@@ -21,7 +21,7 @@ import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.*;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -566,10 +566,10 @@ public class JavaParserFacade {
             }
             if (typeDeclaration.isTypeVariable()) {
                 if (typeDeclaration instanceof TypeParameterDeclaration) {
-                    return new TypeParameter((TypeParameterDeclaration) typeDeclaration);
+                    return new TypeVariable((TypeParameterDeclaration) typeDeclaration);
                 } else {
                     JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) typeDeclaration;
-                    return new TypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
+                    return new TypeVariable(javaParserTypeVariableDeclaration.asTypeParameter());
                 }
             } else {
                 return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);

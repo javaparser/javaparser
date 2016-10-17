@@ -3,13 +3,16 @@ package me.tomassetti.symbolsolver.model.usages.typesystem;
 import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 /**
+ * From JLS 4.4: A type variable is introduced by the declaration of a type parameter of a generic class,
+ * interface, method, or constructor (§8.1.2, §9.1.2, §8.4.4, §8.8.4).
+ *
  * @author Federico Tomassetti
  */
-public class TypeParameter implements Type {
+public class TypeVariable implements Type {
 
     private TypeParameterDeclaration typeParameter;
 
-    public TypeParameter(TypeParameterDeclaration typeParameter) {
+    public TypeVariable(TypeParameterDeclaration typeParameter) {
         this.typeParameter = typeParameter;
     }
 
@@ -27,7 +30,7 @@ public class TypeParameter implements Type {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TypeParameter that = (TypeParameter) o;
+        TypeVariable that = (TypeVariable) o;
 
         if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
         if (typeParameter.declaredOnClass() != that.typeParameter.declaredOnClass()) return false;

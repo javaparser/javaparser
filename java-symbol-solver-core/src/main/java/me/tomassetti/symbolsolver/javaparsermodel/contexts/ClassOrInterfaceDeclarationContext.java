@@ -19,7 +19,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 import me.tomassetti.symbolsolver.resolution.SymbolSolver;
@@ -95,7 +95,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)) {
-                return Optional.of(new TypeParameter(new JavaParserTypeParameter(tp, typeSolver)));
+                return Optional.of(new TypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return getParent().solveGenericType(name, typeSolver);
