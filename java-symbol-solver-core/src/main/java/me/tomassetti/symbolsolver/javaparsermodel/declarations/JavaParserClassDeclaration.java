@@ -121,7 +121,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 			if (!ref.isSolved()) {
 				throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
 			}
-			List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().orElseGet(() -> new NodeList<com.github.javaparser.ast.type.Type<?>>())
+			List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().orElse(new NodeList<>())
 					.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
 					.collect(Collectors.toList());
 			return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asClass(), superClassTypeParameters, typeSolver);

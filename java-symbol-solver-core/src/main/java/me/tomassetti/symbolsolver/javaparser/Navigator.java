@@ -18,6 +18,7 @@ package me.tomassetti.symbolsolver.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -39,6 +40,15 @@ public final class Navigator {
 
     private static String getOuterTypeName(String qualifiedName) {
         return qualifiedName.split("\\.", 2)[0];
+    }
+
+    public static Node getParentNode(Node node) {
+        Node parent = node.getParentNode();
+        if (parent instanceof NodeList){
+            return Navigator.getParentNode(parent);
+        } else {
+            return parent;
+        }
     }
     
     private static String getInnerTypeName(String qualifiedName) {

@@ -74,6 +74,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 } else if (importDecl instanceof SingleStaticImportDeclaration){
                     ClassOrInterfaceType classOrInterfaceType = ((SingleStaticImportDeclaration) importDecl).getType();
                     String qName = classOrInterfaceType.getName();
+
                     // split in field/method name and type name
                     String typeName = getType(qName);
                     String memberName = getMember(qName);
@@ -186,6 +187,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 SingleStaticImportDeclaration staticImportOnDemandDeclaration = (SingleStaticImportDeclaration)importDecl;
 
                 String qName = staticImportOnDemandDeclaration.getType().getName();
+
                 if (qName.equals(name) || qName.endsWith("." + name)) {
                     String typeName = getType(qName);
                     me.tomassetti.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);

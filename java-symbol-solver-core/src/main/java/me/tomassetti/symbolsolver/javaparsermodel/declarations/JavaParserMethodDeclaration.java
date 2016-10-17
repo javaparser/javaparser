@@ -19,23 +19,20 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.core.resolution.Context;
-import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Wildcard;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class JavaParserMethodDeclaration implements MethodDeclaration {
 
@@ -58,16 +55,16 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     @Override
     public TypeDeclaration declaringType() {
         if (wrappedNode.getParentNode().getParentNode() instanceof ClassOrInterfaceDeclaration) {
-            ClassOrInterfaceDeclaration parent = (ClassOrInterfaceDeclaration) wrappedNode.getParentNode().getParentNode();
+            ClassOrInterfaceDeclaration parent = (ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
             if (parent.isInterface()) {
                 return new JavaParserInterfaceDeclaration(parent, typeSolver);
             } else {
                 return new JavaParserClassDeclaration(parent, typeSolver);
             }
-        } else if (wrappedNode.getParentNode().getParentNode() instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode().getParentNode(), typeSolver);
+        } else if (getParentNode(wrappedNode) instanceof EnumDeclaration) {
+            return new JavaParserEnumDeclaration((EnumDeclaration) getParentNode(wrappedNode), typeSolver);
         } else {
-            throw new UnsupportedOperationException(wrappedNode.getParentNode().getParentNode().getClass().getCanonicalName());
+            throw new UnsupportedOperationException(getParentNode(wrappedNode).getClass().getCanonicalName());
         }
     }
 

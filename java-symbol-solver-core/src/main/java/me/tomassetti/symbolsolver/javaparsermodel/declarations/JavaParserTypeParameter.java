@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameterDeclaration {
 
     private com.github.javaparser.ast.type.TypeParameter wrappedNode;
@@ -88,7 +90,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public boolean declaredOnClass() {
-        return (wrappedNode.getParentNode().getParentNode() instanceof ClassOrInterfaceDeclaration);
+        return (getParentNode(wrappedNode) instanceof ClassOrInterfaceDeclaration);
     }
 
     @Override
@@ -99,11 +101,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public String getQualifiedName() {
         if (this.declaredOnClass()) {
-            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)wrappedNode.getParentNode().getParentNode();
+            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)getParentNode(wrappedNode);
             TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
             return String.format("%s.%s", typeDeclaration.getQualifiedName(), getName());
         } else {
-            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode().getParentNode();
+            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)getParentNode(wrappedNode);
             MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
             return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
         }

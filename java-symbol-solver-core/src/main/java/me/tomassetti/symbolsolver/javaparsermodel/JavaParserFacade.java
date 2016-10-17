@@ -22,22 +22,24 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
 import javaslang.Tuple2;
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.*;
 import me.tomassetti.symbolsolver.logic.FunctionalInterfaceLogic;
 import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
 import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.*;
 import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
+import me.tomassetti.symbolsolver.model.usages.typesystem.ArrayType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.PrimitiveType;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.model.usages.typesystem.VoidType;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -47,6 +49,8 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
@@ -392,14 +396,14 @@ public class JavaParserFacade {
                 throw new UnsupportedOperationException("The type of a method reference expr depends on the position and its return value");
             }
         } else if (node instanceof VariableDeclarator) {
-            if (node.getParentNode().getParentNode() instanceof FieldDeclaration) {
-                FieldDeclaration parent = (FieldDeclaration) node.getParentNode().getParentNode();
+            if (getParentNode(node) instanceof FieldDeclaration) {
+                FieldDeclaration parent = (FieldDeclaration) getParentNode(node);
                 return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
-            } else if (node.getParentNode().getParentNode() instanceof VariableDeclarationExpr) {
-                VariableDeclarationExpr parent = (VariableDeclarationExpr) node.getParentNode().getParentNode();
+            } else if (getParentNode(node) instanceof VariableDeclarationExpr) {
+                VariableDeclarationExpr parent = (VariableDeclarationExpr) getParentNode(node);
                 return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
             } else {
-                throw new UnsupportedOperationException(node.getParentNode().getParentNode().getClass().getCanonicalName());
+                throw new UnsupportedOperationException(getParentNode(node).getClass().getCanonicalName());
             }
         } else if (node instanceof Parameter) {
             Parameter parameter = (Parameter) node;
@@ -598,6 +602,9 @@ public class JavaParserFacade {
             }
         } else if (type instanceof com.github.javaparser.ast.type.VoidType) {
             return VoidType.INSTANCE;
+        } else if (type instanceof com.github.javaparser.ast.type.ArrayType) {
+            com.github.javaparser.ast.type.ArrayType jpArrayType = (com.github.javaparser.ast.type.ArrayType)type;
+            return new ArrayType(convertToUsage(jpArrayType.getComponentType(), context));
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
