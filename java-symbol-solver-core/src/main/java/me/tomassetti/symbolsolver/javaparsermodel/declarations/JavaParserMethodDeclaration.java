@@ -75,9 +75,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public int getNoParams() {
-        if (wrappedNode.getParameters() == null) {
-            return 0;
-        }
         return wrappedNode.getParameters().size();
     }
 
@@ -233,9 +230,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        if (this.wrappedNode.getTypeParameters() == null) {
-            return Collections.emptyList();
-        }
         return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }
 

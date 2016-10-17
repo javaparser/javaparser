@@ -429,13 +429,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public List<TypeParameterDeclaration> getTypeParameters() {
-		if (this.wrappedNode.getTypeParameters() == null) {
-			return Collections.emptyList();
-		} else {
-			return this.wrappedNode.getTypeParameters().stream().map(
-					(tp) -> new JavaParserTypeParameter(tp, typeSolver)
-			).collect(Collectors.toList());
-		}
+		return this.wrappedNode.getTypeParameters().stream().map(
+				(tp) -> new JavaParserTypeParameter(tp, typeSolver)
+		).collect(Collectors.toList());
 	}
 
 	@Override

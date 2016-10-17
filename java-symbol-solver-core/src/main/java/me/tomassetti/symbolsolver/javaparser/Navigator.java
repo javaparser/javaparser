@@ -59,7 +59,7 @@ public final class Navigator {
     }
     
     public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
-        if (cu.getTypes() == null) {
+        if (cu.getTypes().isEmpty()) {
             return Optional.empty();
         }
         
