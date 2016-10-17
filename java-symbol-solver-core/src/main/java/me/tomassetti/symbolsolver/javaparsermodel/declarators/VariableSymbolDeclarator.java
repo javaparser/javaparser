@@ -2,12 +2,10 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarators;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
+import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
-import me.tomassetti.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,8 +28,4 @@ public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableD
         return symbols;
     }
 
-    @Override
-    public List<MethodDeclaration> getMethodDeclarations() {
-        return Collections.emptyList();
-    }
 }
