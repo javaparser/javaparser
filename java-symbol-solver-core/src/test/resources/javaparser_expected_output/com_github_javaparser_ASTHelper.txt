@@ -14,9 +14,9 @@
   Line 89) qualifiedName.split("\\.") ==> java.lang.String[]
   Line 90) NameExpr ret = new NameExpr(split[0]) ==> com.github.javaparser.ast.expr.NameExpr
   Line 90) new NameExpr(split[0]) ==> com.github.javaparser.ast.expr.NameExpr
-  Line 91) i < split.length ==> boolean
   Line 91) int i = 1 ==> int
   Line 91) 1 ==> int
+  Line 91) i < split.length ==> boolean
   Line 91) i++ ==> int
   Line 92) ret = new QualifiedNameExpr(ret, split[i]) ==> com.github.javaparser.ast.expr.NameExpr
   Line 94) ret ==> com.github.javaparser.ast.expr.NameExpr

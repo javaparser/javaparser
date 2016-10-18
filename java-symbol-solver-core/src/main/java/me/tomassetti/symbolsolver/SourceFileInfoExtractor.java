@@ -38,6 +38,8 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.List;
 
 import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -129,9 +131,6 @@ public class SourceFileInfoExtractor {
                 }
             }
         }
-        for (Node child : node.getChildrenNodes()) {
-            solve(child);
-        }
     }
 
     private void solveMethodCalls(Node node) {
@@ -163,6 +162,18 @@ public class SourceFileInfoExtractor {
         }
     }
 
+    private List<Node> collectAllNodes(Node node) {
+        List<Node> nodes = new LinkedList<>();
+        collectAllNodes(node, nodes);
+        nodes.sort((n1, n2) -> n1.getBegin().compareTo(n2.getBegin()));
+        return nodes;
+    }
+
+    private void collectAllNodes(Node node, List<Node> nodes) {
+        nodes.add(node);
+        node.getChildrenNodes().forEach(c -> collectAllNodes(c, nodes));
+    }
+
     public void solve(File file) throws IOException, ParseException {
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
@@ -174,7 +185,8 @@ public class SourceFileInfoExtractor {
                     out.println("- parsing " + file.getAbsolutePath());
                 }
                 CompilationUnit cu = JavaParser.parse(file);
-                solve(cu);
+                List<Node> nodes = collectAllNodes(cu);
+                nodes.forEach(n -> solve(n));
             }
         }
     }
