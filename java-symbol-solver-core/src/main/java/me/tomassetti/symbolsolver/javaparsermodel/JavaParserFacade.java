@@ -244,14 +244,10 @@ public class JavaParserFacade {
             throw new UnsupportedOperationException();
         }
         TypeExpr typeExpr = (TypeExpr)methodReferenceExpr.getScope();
-        if (!(typeExpr.getType() instanceof com.github.javaparser.ast.type.ReferenceType)) {
+        if (!(typeExpr.getType() instanceof com.github.javaparser.ast.type.ClassOrInterfaceType)) {
             throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
         }
-        com.github.javaparser.ast.type.ReferenceType referenceType = (com.github.javaparser.ast.type.ReferenceType)typeExpr.getType();
-        if (!(referenceType instanceof ClassOrInterfaceType)) {
-            throw new UnsupportedOperationException(referenceType.getClass().getCanonicalName());
-        }
-        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)referenceType;
+        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)typeExpr.getType();
         SymbolReference<TypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName(), typeSolver);
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new UnsupportedOperationException();
