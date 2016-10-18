@@ -77,7 +77,7 @@ public final class Navigator {
         final String typeName = getOuterTypeName(qualifiedName);
         
         Optional<TypeDeclaration<?>> type = Optional.empty();
-        for (Node n: td.getChildrenNodes()) {
+        for (Node n: td.getMembers().getChildrenNodes()) {
             if (n instanceof TypeDeclaration && ((TypeDeclaration<?>)n).getName().equals(typeName)) {
                 type = Optional.of((TypeDeclaration<?>)n);
                 break;
