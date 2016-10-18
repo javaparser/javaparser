@@ -397,7 +397,7 @@ public class JavaParserFacade {
                 return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
             } else if (getParentNode(node) instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr parent = (VariableDeclarationExpr) getParentNode(node);
-                return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
+                return JavaParserFacade.get(typeSolver).convertToUsageVariableType(parent);
             } else {
                 throw new UnsupportedOperationException(getParentNode(node).getClass().getCanonicalName());
             }
@@ -489,7 +489,7 @@ public class JavaParserFacade {
             }
         } else if (node instanceof VariableDeclarationExpr) {
             VariableDeclarationExpr expr = (VariableDeclarationExpr) node;
-            return convertToUsage(expr.getElementType(), JavaParserFactory.getContext(node, typeSolver));
+            return convertToUsageVariableType(expr);
         } else if (node instanceof InstanceOfExpr) {
             return PrimitiveType.BOOLEAN;
         } else if (node instanceof EnclosedExpr) {
@@ -541,6 +541,14 @@ public class JavaParserFacade {
         } else {
             return findContainingTypeDecl(getParentNode(node));
         }
+    }
+
+    public Type convertToUsageVariableType(VariableDeclarationExpr var) {
+        Type type = JavaParserFacade.get(typeSolver).convertToUsage(var.getElementType(), var);
+        for (int i=0;i<var.getArrayBracketPairsAfterElementType().size();i++) {
+            type = new ArrayType(type);
+        }
+        return type;
     }
 
     public Type convertToUsage(com.github.javaparser.ast.type.Type type, Node context) {
