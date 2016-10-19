@@ -6,7 +6,7 @@
     <module>java-symbol-solver-examples</module>
   </modules>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>me.tomassetti</groupId>
+  <groupId>com.github.javaparser</groupId>
   <artifactId>java-symbol-solver-parent</artifactId>
   <packaging>pom</packaging>
   <version>0.4-SNAPSHOT</version>

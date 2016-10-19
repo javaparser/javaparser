@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <parent>
-    <groupId>me.tomassetti</groupId>
+    <groupId>com.github.javaparser</groupId>
     <artifactId>java-symbol-solver-parent</artifactId>
     <version>0.4-SNAPSHOT</version>
   </parent>
@@ -57,7 +57,7 @@
           <version>18.0</version>
      </dependency>
      <dependency>
-          <groupId>me.tomassetti</groupId>
+          <groupId>com.github.javaparser</groupId>
           <artifactId>java-symbol-solver-core</artifactId>
           <version>0.4-SNAPSHOT</version>
      </dependency>

@@ -21,7 +21,7 @@ allprojects  {
   apply plugin: 'idea'
   apply plugin: 'jacoco'
 
-  group = 'me.tomassetti'
+  group = 'com.github.javaparser'
   version = '0.4.0-SNAPSHOT'
 
   repositories {
