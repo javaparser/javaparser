@@ -11,7 +11,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Example: <code>import com.github.javaparser.JavaParser;</code>
  * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.1">JLS 7.5.1. Single-Type-Import Declarations</a></p>
  */
-public class SingleTypeImportDeclaration extends ImportDeclaration {
+public class SingleTypeImportDeclaration extends NonEmptyImportDeclaration {
     private ClassOrInterfaceType type;
 
     public SingleTypeImportDeclaration() {
@@ -41,5 +41,15 @@ public class SingleTypeImportDeclaration extends ImportDeclaration {
         this.type = assertNotNull(type);
         setAsParentNodeOf(type);
         return this;
+    }
+
+    @Override
+    boolean isAsterisk() {
+        return false;
+    }
+
+    @Override
+    boolean isStatic() {
+        return false;
     }
 }
