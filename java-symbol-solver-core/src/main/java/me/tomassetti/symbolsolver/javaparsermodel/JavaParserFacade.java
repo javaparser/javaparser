@@ -122,17 +122,17 @@ public class JavaParserFacade {
      * Given a method call find out to which method declaration it corresponds.
      */
     public SymbolReference<MethodDeclaration> solve(MethodCallExpr methodCallExpr, boolean solveLambdas) {
-        List<Type> params = new LinkedList<>();
+        List<Type> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
         int i = 0;
         for (Expression parameterValue : methodCallExpr.getArgs()) {
             if (parameterValue instanceof LambdaExpr || parameterValue instanceof MethodReferenceExpr) {
                 LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(i);
-                params.add(placeholder);
+                argumentTypes.add(placeholder);
                 placeholders.add(placeholder);
             } else {
                 try {
-                    params.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
+                    argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
                 } catch (Exception e){
                     throw new RuntimeException(String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
                             methodCallExpr, parameterValue), e);
@@ -140,7 +140,7 @@ public class JavaParserFacade {
             }
             i++;
         }
-        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName(), params, typeSolver);
+        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
