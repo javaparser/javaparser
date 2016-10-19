@@ -514,9 +514,6 @@ public class JavaParserFacade {
         } else if (node instanceof ArrayCreationExpr) {
             ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr) node;
             Type res = convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
-            for (int i=0; i<arrayCreationExpr.getLevels().size();i++) {
-                res = new ArrayType(res);
-            }
             return res;
         } else if (node instanceof ArrayAccessExpr) {
             ArrayAccessExpr arrayAccessExpr = (ArrayAccessExpr) node;
