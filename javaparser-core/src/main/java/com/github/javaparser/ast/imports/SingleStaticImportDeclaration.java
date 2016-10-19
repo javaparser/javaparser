@@ -13,7 +13,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * and "parse" is the staticMember.
  * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.3">7.5.3. Single-Static-Import Declarations</a></p>
  */
-public class SingleStaticImportDeclaration extends ImportDeclaration {
+public class SingleStaticImportDeclaration extends NonEmptyImportDeclaration {
     private ClassOrInterfaceType type;
     private String staticMember;
 
@@ -54,5 +54,15 @@ public class SingleStaticImportDeclaration extends ImportDeclaration {
     public SingleStaticImportDeclaration setStaticMember(String staticMember) {
         this.staticMember = assertNotNull(staticMember);
         return this;
+    }
+
+    @Override
+    boolean isAsterisk() {
+        return false;
+    }
+
+    @Override
+    boolean isStatic() {
+        return true;
     }
 }

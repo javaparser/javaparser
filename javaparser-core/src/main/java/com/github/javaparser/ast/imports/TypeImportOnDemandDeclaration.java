@@ -17,7 +17,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Since a parser cannot differentiate between a type name and a package name, we simply store a NameExpr.
  * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.2">JLS 7.5.2. Type-Import-on-Demand Declarations</a></p>
  */
-public class TypeImportOnDemandDeclaration extends ImportDeclaration {
+public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration {
     private NameExpr name;
 
     public TypeImportOnDemandDeclaration() {
@@ -59,5 +59,15 @@ public class TypeImportOnDemandDeclaration extends ImportDeclaration {
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;
+    }
+
+    @Override
+    boolean isAsterisk() {
+        return true;
+    }
+
+    @Override
+    boolean isStatic() {
+        return false;
     }
 }
