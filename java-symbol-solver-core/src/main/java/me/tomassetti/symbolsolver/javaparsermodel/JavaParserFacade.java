@@ -22,7 +22,9 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.ast.type.WildcardType;
 import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.javaparsermodel.declarations.*;
@@ -394,10 +396,10 @@ public class JavaParserFacade {
         } else if (node instanceof VariableDeclarator) {
             if (getParentNode(node) instanceof FieldDeclaration) {
                 FieldDeclaration parent = (FieldDeclaration) getParentNode(node);
-                return JavaParserFacade.get(typeSolver).convertToUsage(parent.getElementType(), parent);
+                return JavaParserFacade.get(typeSolver).convertToUsageVariableType((VariableDeclarator)node);
             } else if (getParentNode(node) instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr parent = (VariableDeclarationExpr) getParentNode(node);
-                return JavaParserFacade.get(typeSolver).convertToUsageVariableType(parent);
+                return JavaParserFacade.get(typeSolver).convertToUsageVariableType((VariableDeclarator)node);
             } else {
                 throw new UnsupportedOperationException(getParentNode(node).getClass().getCanonicalName());
             }
@@ -489,7 +491,10 @@ public class JavaParserFacade {
             }
         } else if (node instanceof VariableDeclarationExpr) {
             VariableDeclarationExpr expr = (VariableDeclarationExpr) node;
-            return convertToUsageVariableType(expr);
+            if (expr.getVariables().size() != 1) {
+                throw new UnsupportedOperationException();
+            }
+            return convertToUsageVariableType(expr.getVariables().get(0));
         } else if (node instanceof InstanceOfExpr) {
             return PrimitiveType.BOOLEAN;
         } else if (node instanceof EnclosedExpr) {
@@ -543,11 +548,8 @@ public class JavaParserFacade {
         }
     }
 
-    public Type convertToUsageVariableType(VariableDeclarationExpr var) {
-        Type type = JavaParserFacade.get(typeSolver).convertToUsage(var.getElementType(), var);
-        for (int i=0;i<var.getArrayBracketPairsAfterElementType().size();i++) {
-            type = new ArrayType(type);
-        }
+    public Type convertToUsageVariableType(VariableDeclarator var) {
+        Type type = JavaParserFacade.get(typeSolver).convertToUsage(var.getType(), var);
         return type;
     }
 

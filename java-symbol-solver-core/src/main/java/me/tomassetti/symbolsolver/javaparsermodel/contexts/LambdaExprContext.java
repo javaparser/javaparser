@@ -17,13 +17,11 @@
 package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 
 
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import javaslang.Tuple2;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -67,18 +65,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         Value value = new Value(lambdaType.asReferenceType().typeParametersValues().get(0), name, false);
                         return Optional.of(value);
                     } else if (getParentNode(wrappedNode) instanceof VariableDeclarator) {
-                        com.github.javaparser.ast.type.Type declaratorType = null;
-                        
                         VariableDeclarator variableDeclarator = (VariableDeclarator) getParentNode(wrappedNode);
-                        if (getParentNode(variableDeclarator) instanceof VariableDeclarationExpr) {
-                            declaratorType = ((VariableDeclarationExpr) getParentNode(variableDeclarator)).getElementType();
-                        } else if (getParentNode(variableDeclarator) instanceof FieldDeclaration) {
-                            declaratorType = ((FieldDeclaration) getParentNode(variableDeclarator)).getElementType();
-                        } else {
-                            throw new UnsupportedOperationException(getParentNode(variableDeclarator).getClass().getCanonicalName());
-                        }
-
-                        Type t = JavaParserFacade.get(typeSolver).convert(declaratorType, declaratorType);
+                        Type t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
                         if (functionalMethod.isPresent()) {
                             Type lambdaType = functionalMethod.get().getParamType(index);
