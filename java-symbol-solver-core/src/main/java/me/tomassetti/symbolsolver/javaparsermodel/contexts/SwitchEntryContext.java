@@ -36,7 +36,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
-        return getParent().solveMethod(name, parameterTypes, typeSolver);
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+        return getParent().solveMethod(name, argumentsTypes, typeSolver);
     }
 }

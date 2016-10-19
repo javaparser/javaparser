@@ -21,7 +21,7 @@ import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.*;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 import me.tomassetti.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
@@ -122,17 +122,17 @@ public class JavaParserFacade {
      * Given a method call find out to which method declaration it corresponds.
      */
     public SymbolReference<MethodDeclaration> solve(MethodCallExpr methodCallExpr, boolean solveLambdas) {
-        List<Type> params = new LinkedList<>();
+        List<Type> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
         int i = 0;
         for (Expression parameterValue : methodCallExpr.getArgs()) {
             if (parameterValue instanceof LambdaExpr || parameterValue instanceof MethodReferenceExpr) {
                 LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(i);
-                params.add(placeholder);
+                argumentTypes.add(placeholder);
                 placeholders.add(placeholder);
             } else {
                 try {
-                    params.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
+                    argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
                 } catch (Exception e){
                     throw new RuntimeException(String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
                             methodCallExpr, parameterValue), e);
@@ -140,7 +140,7 @@ public class JavaParserFacade {
             }
             i++;
         }
-        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName(), params, typeSolver);
+        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -566,10 +566,10 @@ public class JavaParserFacade {
             }
             if (typeDeclaration.isTypeVariable()) {
                 if (typeDeclaration instanceof TypeParameterDeclaration) {
-                    return new TypeParameter((TypeParameterDeclaration) typeDeclaration);
+                    return new TypeVariable((TypeParameterDeclaration) typeDeclaration);
                 } else {
                     JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) typeDeclaration;
-                    return new TypeParameter(javaParserTypeVariableDeclaration.asTypeParameter());
+                    return new TypeVariable(javaParserTypeVariableDeclaration.asTypeParameter());
                 }
             } else {
                 return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);

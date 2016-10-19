@@ -19,7 +19,7 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 import me.tomassetti.symbolsolver.resolution.MethodResolutionLogic;
 import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 import me.tomassetti.symbolsolver.resolution.SymbolSolver;
@@ -95,7 +95,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)) {
-                return Optional.of(new TypeParameter(new JavaParserTypeParameter(tp, typeSolver)));
+                return Optional.of(new TypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return getParent().solveGenericType(name, typeSolver);
@@ -132,7 +132,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         List<MethodDeclaration> candidateMethods = methodsByName(name);
 
         if (this.wrappedNode.getExtends() != null && !this.wrappedNode.getExtends().isEmpty()) {
@@ -144,7 +144,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
-            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
@@ -154,7 +154,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
-            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
@@ -167,7 +167,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, interfaceClassName);
             }
-            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
             if (res.isSolved() && res.getCorrespondingDeclaration().isDefaultMethod()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
@@ -176,12 +176,12 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         // We want to avoid infinite recursion when a class is using its own method
         // see issue #75
         if (candidateMethods.isEmpty()) {
-            SymbolReference<MethodDeclaration> parentSolution = getParent().solveMethod(name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> parentSolution = getParent().solveMethod(name, argumentsTypes, typeSolver);
             if (parentSolution.isSolved()) {
                 candidateMethods.add(parentSolution.getCorrespondingDeclaration());
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, parameterTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
     }
 }

@@ -53,7 +53,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     }
 
     private static List<Type> deriveParams(TypeDeclaration typeDeclaration) {
-        return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeParameter(tp)).collect(Collectors.toList());
+        return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeVariable(tp)).collect(Collectors.toList());
     }
 
     public ReferenceType asReferenceType() {

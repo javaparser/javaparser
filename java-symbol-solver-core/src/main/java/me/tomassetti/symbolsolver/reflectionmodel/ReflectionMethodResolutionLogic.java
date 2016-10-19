@@ -8,7 +8,7 @@ import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import me.tomassetti.symbolsolver.model.usages.typesystem.TypeParameter;
+import me.tomassetti.symbolsolver.model.usages.typesystem.TypeVariable;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.lang.reflect.Method;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 class ReflectionMethodResolutionLogic {
 
-    static Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver,
+    static Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues,
                                                     TypeParametrizable typeParametrizable, Class clazz) {
         if (typeParameterValues.size() != typeParametrizable.getTypeParameters().size()) {
@@ -43,14 +43,14 @@ class ReflectionMethodResolutionLogic {
                     i++;
                 }
                 for (TypeParameterDeclaration methodTypeParameter : methodDeclaration.getTypeParameters()) {
-                    methodUsage = methodUsage.replaceTypeParameterByName(methodTypeParameter.getName(), new TypeParameter(methodTypeParameter));
+                    methodUsage = methodUsage.replaceTypeParameterByName(methodTypeParameter.getName(), new TypeVariable(methodTypeParameter));
                 }
                 methods.add(methodUsage);
             }
 
         }
         final List<Type> finalTypeParameterValues = typeParameterValues;
-        parameterTypes = parameterTypes.stream().map((pt) -> {
+        argumentsTypes = argumentsTypes.stream().map((pt) -> {
             int i = 0;
             for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
                 pt = pt.replaceParam(tp.getName(), finalTypeParameterValues.get(i));
@@ -58,6 +58,6 @@ class ReflectionMethodResolutionLogic {
             }
             return pt;
         }).collect(Collectors.toList());
-        return MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
     }
 }

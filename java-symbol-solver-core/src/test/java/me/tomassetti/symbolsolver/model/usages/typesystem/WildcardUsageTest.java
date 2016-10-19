@@ -31,7 +31,7 @@ public class WildcardUsageTest {
     private Wildcard extendsA;
     private Wildcard superString;
     private Wildcard extendsString;
-    private TypeParameter a;
+    private TypeVariable a;
 
     @Before
     public void setup() {
@@ -44,7 +44,7 @@ public class WildcardUsageTest {
         superBar = Wildcard.superBound(bar);
         extendsFoo = Wildcard.extendsBound(foo);
         extendsBar = Wildcard.extendsBound(bar);
-        a = new TypeParameter(TypeParameterDeclaration.onClass("A", "foo.Bar", Collections.emptyList()));
+        a = new TypeVariable(TypeParameterDeclaration.onClass("A", "foo.Bar", Collections.emptyList()));
         superA = Wildcard.superBound(a);
         extendsA = Wildcard.extendsBound(a);
         superString = Wildcard.superBound(string);

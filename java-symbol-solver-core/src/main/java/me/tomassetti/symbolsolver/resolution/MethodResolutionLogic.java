@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 
 public class MethodResolutionLogic {
 
-    private static List<Type> groupVariadicParamValues(List<Type> paramTypes, int startVariadic, Type variadicType) {
-        List<Type> res = new ArrayList<>(paramTypes.subList(0, startVariadic));
-        List<Type> variadicValues = paramTypes.subList(startVariadic, paramTypes.size());
+    private static List<Type> groupVariadicParamValues(List<Type> argumentsTypes, int startVariadic, Type variadicType) {
+        List<Type> res = new ArrayList<>(argumentsTypes.subList(0, startVariadic));
+        List<Type> variadicValues = argumentsTypes.subList(startVariadic, argumentsTypes.size());
         if (variadicValues.isEmpty()) {
             // TODO if there are no variadic values we should default to the bound of the formal type
             res.add(variadicType);
@@ -44,45 +44,45 @@ public class MethodResolutionLogic {
         return variadicValues.get(0);
     }
 
-    public static boolean isApplicable(MethodDeclaration method, String name, List<Type> paramTypes, TypeSolver typeSolver) {
-        return isApplicable(method, name, paramTypes, typeSolver, false);
+    public static boolean isApplicable(MethodDeclaration method, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+        return isApplicable(method, name, argumentsTypes, typeSolver, false);
     }
 
-    private static boolean isApplicable(MethodDeclaration method, String name, List<Type> paramTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
+    private static boolean isApplicable(MethodDeclaration method, String name, List<Type> argumentsTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
         if (!method.getName().equals(name)) {
             return false;
         }
         if (method.hasVariadicParameter()) {
             int pos = method.getNoParams() - 1;
-            if (method.getNoParams() == paramTypes.size()) {
+            if (method.getNoParams() == argumentsTypes.size()) {
                 // check if the last value is directly assignable as an array
                 Type expectedType = method.getLastParam().getType();
-                Type actualType = paramTypes.get(pos);
+                Type actualType = argumentsTypes.get(pos);
                 if (!expectedType.isAssignableBy(actualType)) {
                     for (TypeParameterDeclaration tp : method.getTypeParameters()) {
                         expectedType = replaceTypeParam(expectedType, tp, typeSolver);
                     }
                     if (!expectedType.isAssignableBy(actualType)) {
                         if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayType().getComponentType())) {
-                            paramTypes.set(pos, actualType.asArrayType().getComponentType());
+                            argumentsTypes.set(pos, actualType.asArrayType().getComponentType());
                         } else {
-                            paramTypes = groupVariadicParamValues(paramTypes, pos, method.getLastParam().getType());
+                            argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, method.getLastParam().getType());
                         }
                     }
                 } // else it is already assignable, nothing to do
             } else {
-                paramTypes = groupVariadicParamValues(paramTypes, pos, method.getLastParam().getType());
+                argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, method.getLastParam().getType());
             }
         }
 
-        if (method.getNoParams() != paramTypes.size()) {
+        if (method.getNoParams() != argumentsTypes.size()) {
             return false;
         }
         Map<String, Type> matchedParameters = new HashMap<>();
         boolean needForWildCardTolerance = false;
         for (int i = 0; i < method.getNoParams(); i++) {
             Type expectedType = method.getParam(i).getType();
-            Type actualType = paramTypes.get(i);
+            Type actualType = argumentsTypes.get(i);
             if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) && expectedType.asTypeParameter().declaredOnMethod()) {
                 matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
                 continue;
@@ -234,18 +234,18 @@ public class MethodResolutionLogic {
         }
     }
 
-    public static boolean isApplicable(MethodUsage method, String name, List<Type> paramTypes, TypeSolver typeSolver) {
+    public static boolean isApplicable(MethodUsage method, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         if (!method.getName().equals(name)) {
             return false;
         }
         // TODO Consider varargs
-        if (method.getNoParams() != paramTypes.size()) {
+        if (method.getNoParams() != argumentsTypes.size()) {
             return false;
         }
         for (int i = 0; i < method.getNoParams(); i++) {
             Type expectedType = method.getParamType(i);
             Type expectedTypeWithoutSubstitutions = expectedType;
-            Type actualType = paramTypes.get(i);
+            Type actualType = argumentsTypes.get(i);
             
             List<TypeParameterDeclaration> typeParameters = method.getDeclaration().getTypeParameters();
             typeParameters.addAll(method.declaringType().getTypeParameters());
@@ -317,20 +317,20 @@ public class MethodResolutionLogic {
     /**
      * @param methods    we expect the methods to be ordered such that inherited methods are later in the list
      * @param name
-     * @param paramTypes
+     * @param argumentsTypes
      * @param typeSolver
      * @return
      */
-    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<Type> paramTypes, TypeSolver typeSolver) {
-        SymbolReference<MethodDeclaration> res = findMostApplicable(methods, name, paramTypes, typeSolver, false);
+    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+        SymbolReference<MethodDeclaration> res = findMostApplicable(methods, name, argumentsTypes, typeSolver, false);
         if (res.isSolved()) {
             return res;
         }
-        return findMostApplicable(methods, name, paramTypes, typeSolver, true);
+        return findMostApplicable(methods, name, argumentsTypes, typeSolver, true);
     }
 
-    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<Type> paramTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
-        List<MethodDeclaration> applicableMethods = getMethodsWithoutDuplicates(methods).stream().filter((m) -> isApplicable(m, name, paramTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
+    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<Type> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
+        List<MethodDeclaration> applicableMethods = getMethodsWithoutDuplicates(methods).stream().filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }
@@ -405,8 +405,8 @@ public class MethodResolutionLogic {
         return oneMoreSpecificFound;
     }
 
-    public static Optional<MethodUsage> findMostApplicableUsage(List<MethodUsage> methods, String name, List<Type> parameterTypes, TypeSolver typeSolver) {
-        List<MethodUsage> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, parameterTypes, typeSolver)).collect(Collectors.toList());
+    public static Optional<MethodUsage> findMostApplicableUsage(List<MethodUsage> methods, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+        List<MethodUsage> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver)).collect(Collectors.toList());
         if (applicableMethods.isEmpty()) {
             return Optional.empty();
         }
@@ -454,36 +454,36 @@ public class MethodResolutionLogic {
      * Replace TypeDeclaration.solveMethod
      * @param typeDeclaration
      * @param name
-     * @param parameterTypes
+     * @param argumentsTypes
      * @return
      */
-    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> parameterTypes, TypeSolver typeSolver) {
+    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             Context ctx = ((JavaParserClassDeclaration)typeDeclaration).getContext();
-            return ctx.solveMethod(name, parameterTypes, typeSolver);
+            return ctx.solveMethod(name, argumentsTypes, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
             Context ctx = ((JavaParserInterfaceDeclaration)typeDeclaration).getContext();
-            return ctx.solveMethod(name, parameterTypes, typeSolver);
+            return ctx.solveMethod(name, argumentsTypes, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserEnumDeclaration) {
-            if (name.equals("values") && parameterTypes.isEmpty()) {
+            if (name.equals("values") && argumentsTypes.isEmpty()) {
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod((JavaParserEnumDeclaration) typeDeclaration, typeSolver));
             }
             Context ctx = ((JavaParserEnumDeclaration)typeDeclaration).getContext();
-            return ctx.solveMethod(name, parameterTypes, typeSolver);
+            return ctx.solveMethod(name, argumentsTypes, typeSolver);
         }
         if (typeDeclaration instanceof ReflectionClassDeclaration) {
-            return ((ReflectionClassDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+            return ((ReflectionClassDeclaration)typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-            return ((ReflectionInterfaceDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+            return ((ReflectionInterfaceDeclaration)typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
-            return ((JavassistInterfaceDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+            return ((JavassistInterfaceDeclaration)typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof JavassistClassDeclaration) {
-            return ((JavassistClassDeclaration)typeDeclaration).solveMethod(name, parameterTypes);
+            return ((JavassistClassDeclaration)typeDeclaration).solveMethod(name, argumentsTypes);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }

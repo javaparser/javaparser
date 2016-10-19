@@ -108,7 +108,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Deprecated
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes) {
         List<MethodDeclaration> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
@@ -117,18 +117,18 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, argumentsTypes, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
         for (ReferenceType interfaceDeclaration : getInterfaces()) {
-            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, parameterTypes, typeSolver);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
-        return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(methods, name, argumentsTypes, typeSolver);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return new ReferenceTypeImpl(this, typeSolver);
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
@@ -158,18 +158,18 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(superClass, name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(superClass, name, argumentsTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
         }
         for (ReferenceType interfaceDeclaration : getInterfaces()) {
-            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(interfaceDeclaration.getTypeDeclaration(), name, parameterTypes, typeSolver, invokationContext, typeParameterValues);
+            Optional<MethodUsage> ref = me.tomassetti.symbolsolver.javaparsermodel.contexts.ContextHelper.solveMethodAsUsage(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, typeSolver, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
         }
-        Optional<MethodUsage> ref = MethodResolutionLogic.findMostApplicableUsage(methods, name, parameterTypes, typeSolver);
+        Optional<MethodUsage> ref = MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
         return ref;
     }
 

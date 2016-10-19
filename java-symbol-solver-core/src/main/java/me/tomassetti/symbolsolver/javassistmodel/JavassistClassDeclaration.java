@@ -122,7 +122,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver,
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues) {
 
         // TODO avoid bridge and synthetic methods
@@ -150,7 +150,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, null);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, null);
                 if (ref.isPresent()) {
                     return ref;
                 }
@@ -161,7 +161,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze, typeSolver).solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext, null);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze, typeSolver).solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, null);
                 if (ref.isPresent()) {
                     return ref;
                 }
@@ -222,7 +222,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Deprecated
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes) {
         List<MethodDeclaration> candidates = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             // TODO avoid bridge and synthetic methods
@@ -234,7 +234,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, parameterTypes);
+                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes);
                 if (ref.isSolved()) {
                     candidates.add(ref.getCorrespondingDeclaration());
                 }
@@ -245,7 +245,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<MethodDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethod(name, parameterTypes);
+                SymbolReference<MethodDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethod(name, argumentsTypes);
                 if (ref.isSolved()) {
                     candidates.add(ref.getCorrespondingDeclaration());
                 }
@@ -254,7 +254,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             throw new RuntimeException(e);
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidates, name, parameterTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
     }
 
     public Type getUsage(Node node) {
