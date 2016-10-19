@@ -43,7 +43,7 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
         }
         setAsParentNodeOf(node);
         // Expand the NodeList's range to include the new node.
-        if (getRange() == Range.UNKNOWN) {
+        if (getRange().equals(Range.UNKNOWN)) {
             setRange(node.getRange());
         } else {
             Position nodeBegin = node.getBegin();

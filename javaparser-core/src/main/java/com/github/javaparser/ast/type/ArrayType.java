@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.NodeList;
@@ -9,7 +10,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
-import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.ast.NodeList.nodeList;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -57,7 +58,20 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
             final NodeList<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
-                    type = new ArrayType(type, arrayBracketPairList.get(j).getAnnotations());
+                    // if the type has a position we can use it to derive the position of the ArrayType and possibly
+                    // also the one of the ArrayBracketPair
+                    if (!type.getRange().equals(Range.UNKNOWN)) {
+                        ArrayBracketPair arrayBracketPair = arrayBracketPairList.get(j);
+                        if (arrayBracketPair.getRange().equals(Range.UNKNOWN)) {
+                            Position bracketsStart = type.getRange().end.withColumn(type.getRange().end.column + 1);
+                            Position bracketsEnd = type.getRange().end.withColumn(type.getRange().end.column + 2);
+                            arrayBracketPairList.get(j).setRange(new Range(bracketsStart, bracketsEnd));
+                        }
+                        Range range = type.getRange().withEnd(arrayBracketPair.getEnd());
+                        type = new ArrayType(range, type, arrayBracketPairList.get(j).getAnnotations());
+                    } else {
+                        type = new ArrayType(type, arrayBracketPairList.get(j).getAnnotations());
+                    }
                 }
             }
         }
