@@ -18,6 +18,7 @@ package me.tomassetti.symbolsolver.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -40,6 +41,15 @@ public final class Navigator {
     private static String getOuterTypeName(String qualifiedName) {
         return qualifiedName.split("\\.", 2)[0];
     }
+
+    public static Node getParentNode(Node node) {
+        Node parent = node.getParentNode();
+        if (parent instanceof NodeList){
+            return Navigator.getParentNode(parent);
+        } else {
+            return parent;
+        }
+    }
     
     private static String getInnerTypeName(String qualifiedName) {
         if (qualifiedName.contains(".")) {
@@ -49,7 +59,7 @@ public final class Navigator {
     }
     
     public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
-        if (cu.getTypes() == null) {
+        if (cu.getTypes().isEmpty()) {
             return Optional.empty();
         }
         
@@ -67,7 +77,7 @@ public final class Navigator {
         final String typeName = getOuterTypeName(qualifiedName);
         
         Optional<TypeDeclaration<?>> type = Optional.empty();
-        for (Node n: td.getChildrenNodes()) {
+        for (Node n: td.getMembers().getChildrenNodes()) {
             if (n instanceof TypeDeclaration && ((TypeDeclaration<?>)n).getName().equals(typeName)) {
                 type = Optional.of((TypeDeclaration<?>)n);
                 break;

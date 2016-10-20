@@ -22,6 +22,8 @@ import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
     private TypeSolver typeSolver;
@@ -34,7 +36,7 @@ public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
     @Override
     public Type getType() {
-        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode(), typeSolver), typeSolver);
+        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) getParentNode(wrappedNode), typeSolver), typeSolver);
     }
 
     @Override

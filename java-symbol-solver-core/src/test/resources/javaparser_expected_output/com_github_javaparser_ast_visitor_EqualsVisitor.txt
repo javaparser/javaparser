@@ -17,9 +17,9 @@
   Line 111) false ==> boolean
   Line 113) nodes1.size() != nodes2.size() ==> boolean
   Line 114) false ==> boolean
-  Line 116) i < nodes1.size() ==> boolean
   Line 116) int i = 0 ==> int
   Line 116) 0 ==> int
+  Line 116) i < nodes1.size() ==> boolean
   Line 116) i++ ==> int
   Line 117) !nodeEquals(nodes1.get(i), nodes2.get(i)) ==> boolean
   Line 118) false ==> boolean

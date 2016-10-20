@@ -18,6 +18,7 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -41,6 +42,8 @@ import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
@@ -113,14 +116,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public ReferenceTypeImpl getSuperClass() {
-		if (wrappedNode.getExtends() == null || wrappedNode.getExtends().isEmpty()) {
+		if (wrappedNode.getExtends().isEmpty()) {
 			return new ReferenceTypeImpl(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
 		} else {
 			SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
 			if (!ref.isSolved()) {
 				throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
 			}
-			List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().getTypeArguments()
+			List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().orElse(new NodeList<>())
 					.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
 					.collect(Collectors.toList());
 			return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asClass(), superClassTypeParameters, typeSolver);
@@ -132,7 +135,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 		List<ReferenceType> interfaces = new ArrayList<>();
 		if (wrappedNode.getImplements() != null) {
 			for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
-				List<Type> interfaceTypeParameters = t.getTypeArguments().getTypeArguments()
+				List<Type> interfaceTypeParameters = t.getTypeArguments().orElse(new NodeList<>())
 						.stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
 						.collect(Collectors.toList());
 				ReferenceType referenceType = new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface(),
@@ -177,7 +180,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public String getQualifiedName() {
-		String containerName = containerName("", wrappedNode.getParentNode());
+		String containerName = containerName("", getParentNode(wrappedNode));
 		if (containerName.isEmpty()) {
 			return wrappedNode.getName();
 		} else {
@@ -199,7 +202,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	private String containerName(String base, Node container) {
 		if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-			String b = containerName(base, container.getParentNode());
+			String b = containerName(base, getParentNode(container));
 			String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
 			if (b.isEmpty()) {
 				return cn;
@@ -207,9 +210,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 				return b + "." + cn;
 			}
 		} else if (container instanceof CompilationUnit) {
-			PackageDeclaration p = ((CompilationUnit) container).getPackage();
-			if (p != null) {
-				String b = p.getName().toString();
+			Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
+			if (p.isPresent()) {
+				String b = p.get().getName().toString();
 				if (base.isEmpty()) {
 					return b;
 				} else {
@@ -219,7 +222,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 				return base;
 			}
 		} else if (container != null) {
-			return containerName(base, container.getParentNode());
+			return containerName(base, getParentNode(container));
 		} else {
 			return base;
 		}
@@ -340,7 +343,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 			return SymbolReference.solved(this);
 		}
 		if (this.wrappedNode.getTypeParameters() != null) {
-			for (com.github.javaparser.ast.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
+			for (com.github.javaparser.ast.type.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
 				if (typeParameter.getName().equals(name)) {
 					return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter, typeSolver));
 				}
@@ -412,8 +415,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 		if (!ancestor.isSolved()) {
 			throw new UnsolvedSymbolException(type.getName());
 		}
-		if (type.getTypeArgs() != null) {
-			List<Type> typeParams = type.getTypeArgs().stream().map((t) -> toTypeUsage(t, typeSolver)).collect(Collectors.toList());
+		if (type.getTypeArguments().isPresent()) {
+			List<Type> typeParams = type.getTypeArguments().get().stream().map((t) -> toTypeUsage(t, typeSolver)).collect(Collectors.toList());
 			return new ReferenceTypeImpl(ancestor.getCorrespondingDeclaration(), typeParams, typeSolver);
 		} else {
 			return new ReferenceTypeImpl(ancestor.getCorrespondingDeclaration(), typeSolver);
@@ -426,13 +429,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
 	@Override
 	public List<TypeParameterDeclaration> getTypeParameters() {
-		if (this.wrappedNode.getTypeParameters() == null) {
-			return Collections.emptyList();
-		} else {
-			return this.wrappedNode.getTypeParameters().stream().map(
-					(tp) -> new JavaParserTypeParameter(tp, typeSolver)
-			).collect(Collectors.toList());
-		}
+		return this.wrappedNode.getTypeParameters().stream().map(
+				(tp) -> new JavaParserTypeParameter(tp, typeSolver)
+		).collect(Collectors.toList());
 	}
 
 	@Override

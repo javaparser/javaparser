@@ -19,23 +19,20 @@ package me.tomassetti.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-
+import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
-import me.tomassetti.symbolsolver.model.declarations.AccessLevel;
-import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ParameterDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
-import me.tomassetti.symbolsolver.core.resolution.Context;
-import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
+import me.tomassetti.symbolsolver.model.declarations.*;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceType;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Wildcard;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class JavaParserMethodDeclaration implements MethodDeclaration {
 
@@ -57,17 +54,17 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public TypeDeclaration declaringType() {
-        if (wrappedNode.getParentNode() instanceof ClassOrInterfaceDeclaration) {
-            ClassOrInterfaceDeclaration parent = (ClassOrInterfaceDeclaration) wrappedNode.getParentNode();
+        if (getParentNode(wrappedNode) instanceof ClassOrInterfaceDeclaration) {
+            ClassOrInterfaceDeclaration parent = (ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
             if (parent.isInterface()) {
                 return new JavaParserInterfaceDeclaration(parent, typeSolver);
             } else {
                 return new JavaParserClassDeclaration(parent, typeSolver);
             }
-        } else if (wrappedNode.getParentNode() instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) wrappedNode.getParentNode(), typeSolver);
+        } else if (getParentNode(wrappedNode) instanceof EnumDeclaration) {
+            return new JavaParserEnumDeclaration((EnumDeclaration) getParentNode(wrappedNode), typeSolver);
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(getParentNode(wrappedNode).getClass().getCanonicalName());
         }
     }
 
@@ -78,9 +75,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public int getNoParams() {
-        if (wrappedNode.getParameters() == null) {
-            return 0;
-        }
         return wrappedNode.getParameters().size();
     }
 
@@ -173,13 +167,13 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public boolean isAbstract() {
-        return (wrappedNode.getBody() == null);
+        return (!wrappedNode.getBody().isPresent());
     }
 
     private Optional<Type> typeParamByName(String name, TypeSolver typeSolver, Context context) {
         int i = 0;
         if (wrappedNode.getTypeParameters() != null) {
-            for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
+            for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
                 if (tp.getName().equals(name)) {
                     Type type = JavaParserFacade.get(typeSolver).convertToUsage(this.wrappedNode.getParameters().get(i).getType(), context);
                     return Optional.of(type);
@@ -236,9 +230,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        if (this.wrappedNode.getTypeParameters() == null) {
-            return Collections.emptyList();
-        }
         return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }
 

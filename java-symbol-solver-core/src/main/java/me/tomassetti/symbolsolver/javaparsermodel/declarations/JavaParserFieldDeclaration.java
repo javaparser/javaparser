@@ -30,6 +30,8 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.Optional;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class JavaParserFieldDeclaration implements FieldDeclaration {
 
     private VariableDeclarator variableDeclarator;
@@ -43,10 +45,10 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
         }
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
-        if (!(variableDeclarator.getParentNode() instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
-            throw new IllegalStateException(variableDeclarator.getParentNode().getClass().getCanonicalName());
+        if (!(getParentNode(variableDeclarator) instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
+            throw new IllegalStateException(getParentNode(variableDeclarator).getClass().getCanonicalName());
         }
-        this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) variableDeclarator.getParentNode();
+        this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) getParentNode(variableDeclarator);
     }
 
     public JavaParserFieldDeclaration(EnumConstantDeclaration enumConstantDeclaration, TypeSolver typeSolver) {
@@ -60,10 +62,10 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     @Override
     public Type getType() {
         if (enumConstantDeclaration != null) {
-            com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) enumConstantDeclaration.getParentNode();
+            com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) getParentNode(enumConstantDeclaration);
             return new ReferenceTypeImpl(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
         } else {
-            return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
+            return JavaParserFacade.get(typeSolver).convert(wrappedNode.getElementType(), wrappedNode);
         }
     }
 

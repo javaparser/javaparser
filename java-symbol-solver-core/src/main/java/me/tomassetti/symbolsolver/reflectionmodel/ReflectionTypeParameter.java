@@ -93,7 +93,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         } else {
             throw new UnsupportedOperationException(typeVariable.getGenericDeclaration().getClass().getCanonicalName());
             //typeVariable.getGenericDeclaration()
-            //com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)wrappedNode.getParentNode();
+            //com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)getParentNode(wrappedNode);
             //MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
             //return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
         }

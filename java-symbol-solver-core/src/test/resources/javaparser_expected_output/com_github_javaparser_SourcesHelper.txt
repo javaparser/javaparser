@@ -13,7 +13,7 @@
   Line 43) encoding != null ? s.getBytes(encoding) : s.getBytes() ==> byte[]
   Line 44) new ByteArrayInputStream(rawData) ==> java.io.ByteArrayInputStream
   Line 48) char[] arr = new char[8 * 1024] ==> char[]
-  Line 48) new char[8 * 1024] ==> char
+  Line 48) new char[8 * 1024] ==> char[]
   Line 49) StringBuilder buf = new StringBuilder() ==> java.lang.StringBuilder
   Line 49) new StringBuilder() ==> java.lang.StringBuilder
   Line 50) int numChars ==> int

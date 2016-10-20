@@ -32,6 +32,7 @@ public class FunctionalInterfaceLogic {
     public static Optional<MethodUsage> getFunctionalMethod(Type type) {
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isInterface()) {
             //We need to find all abstract methods
+            Set<MethodUsage> allMethods = type.asReferenceType().getTypeDeclaration().getAllMethods();
             Set<MethodUsage> methods = type.asReferenceType().getTypeDeclaration().getAllMethods().stream()
                     .filter(m -> m.getDeclaration().isAbstract())
                     // Remove methods inherited by Object:
@@ -43,7 +44,6 @@ public class FunctionalInterfaceLogic {
             if (methods.size() == 1) {
                 return Optional.of(methods.iterator().next());
             } else {
-                methods.forEach(m -> System.out.println(m.getDeclaration().getQualifiedSignature()));
                 return Optional.empty();
             }
         } else {

@@ -40,6 +40,8 @@ import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private TypeSolver typeSolver;
@@ -122,7 +124,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public String getQualifiedName() {
-        String containerName = containerName("", wrappedNode.getParentNode());
+        String containerName = containerName("", getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
             return wrappedNode.getName();
         } else {
@@ -144,7 +146,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     private String containerName(String base, Node container) {
         if (container instanceof ClassOrInterfaceDeclaration) {
-            String b = containerName(base, container.getParentNode());
+            String b = containerName(base, getParentNode(container));
             String cn = ((ClassOrInterfaceDeclaration) container).getName();
             if (b.isEmpty()) {
                 return cn;
@@ -152,9 +154,9 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
                 return b + "." + cn;
             }
         } else if (container instanceof CompilationUnit) {
-            PackageDeclaration p = ((CompilationUnit) container).getPackage();
-            if (p != null) {
-                String b = p.getName().toString();
+            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
+            if (p.isPresent()) {
+                String b = p.get().getName().toString();
                 if (base.isEmpty()) {
                     return b;
                 } else {
@@ -164,7 +166,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
                 return base;
             }
         } else if (container != null) {
-            return containerName(base, container.getParentNode());
+            return containerName(base, getParentNode(container));
         } else {
             return base;
         }
@@ -276,7 +278,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             return SymbolReference.solved(this);
         }
         if (this.wrappedNode.getTypeParameters() != null) {
-            for (com.github.javaparser.ast.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
+            for (com.github.javaparser.ast.type.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
                 if (typeParameter.getName().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter, typeSolver));
                 }

@@ -21,18 +21,17 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.javaparser.Navigator;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
+import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
-import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 
 public class StatementContextResolutionTest extends AbstractResolutionTest {
 
@@ -81,7 +80,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
 
         TypeSolver typeSolver = new JreTypeSolver();
 
-        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope().get());
         assertTrue(ref.isSolved());
         assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType().describe());
 
@@ -98,7 +97,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
 
         TypeSolver typeSolver = new JreTypeSolver();
 
-        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope().get());
         assertTrue(ref.isSolved());
         assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType().describe());
 

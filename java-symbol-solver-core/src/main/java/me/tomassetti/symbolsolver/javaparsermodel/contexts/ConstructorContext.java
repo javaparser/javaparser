@@ -54,7 +54,7 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
+        for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().equals(name)) {
                 return Optional.of(new TypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
@@ -80,7 +80,7 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
     public SymbolReference<me.tomassetti.symbolsolver.model.declarations.TypeDeclaration> solveType(
             String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypeParameters() != null) {
-            for (com.github.javaparser.ast.TypeParameter tp : wrappedNode.getTypeParameters()) {
+            for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
                 if (tp.getName().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeParameter(tp, typeSolver));
                 }

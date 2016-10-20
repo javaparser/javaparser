@@ -18,7 +18,6 @@ package me.tomassetti.symbolsolver.resolution;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.ReferenceType;
 import me.tomassetti.symbolsolver.core.resolution.Context;
 import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.javaparsermodel.UnsolvedSymbolException;
@@ -88,14 +87,8 @@ public class SymbolSolver {
         return solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    ;
-
     public TypeDeclaration solveType(com.github.javaparser.ast.type.Type type) {
-        if (type instanceof ReferenceType) {
-            ReferenceType referenceType = (ReferenceType) type;
-            // TODO consider array modifiers
-            return solveType(referenceType.getType());
-        } else if (type instanceof ClassOrInterfaceType) {
+        if (type instanceof ClassOrInterfaceType) {
 
             // FIXME should call typesolver here!
 

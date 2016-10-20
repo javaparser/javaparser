@@ -33,6 +33,8 @@ import me.tomassetti.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator
 import me.tomassetti.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 import me.tomassetti.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class JavaParserFactory {
 
     public static Context getContext(Node node, TypeSolver typeSolver) {
@@ -63,7 +65,7 @@ public class JavaParserFactory {
         } else if (node instanceof Statement) {
             return new StatementContext((Statement) node, typeSolver);
         } else {
-            return getContext(node.getParentNode(), typeSolver);
+            return getContext(getParentNode(node), typeSolver);
         }
     }
 

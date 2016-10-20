@@ -38,7 +38,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr();
+        MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr().get();
         Expression expression = methodCallExpr.getArgs().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
@@ -52,7 +52,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        Expression expression = returnStmt.getExpr();
+        Expression expression = returnStmt.getExpr().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         Type type = javaParserFacade.getType(expression);
@@ -65,7 +65,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr();
+        MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr().get();
         // Collectors.toList()
         Expression expression = methodCallExpr.getArgs().get(0);
 
@@ -80,7 +80,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        Expression expression = returnStmt.getExpr();
+        Expression expression = returnStmt.getExpr().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
         Type type = javaParserFacade.getType(expression);

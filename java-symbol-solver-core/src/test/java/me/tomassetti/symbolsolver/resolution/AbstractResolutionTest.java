@@ -30,6 +30,9 @@ public abstract class AbstractResolutionTest extends AbstractTest {
 
     protected CompilationUnit parseSample(String sampleName) throws ParseException {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(sampleName + ".java.txt");
+        if (is == null) {
+            throw new RuntimeException("Unable to find sample " + sampleName);
+        }
         CompilationUnit cu = JavaParser.parse(is);
         if (cu == null) {
             throw new IllegalStateException();

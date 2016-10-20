@@ -19,7 +19,7 @@ package me.tomassetti.symbolsolver;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -38,6 +38,10 @@ import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.List;
+
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * It print information extracted from a source file. It is mainly intended as an example usage of JavaSymbolSolver.
@@ -107,11 +111,11 @@ public class SourceFileInfoExtractor {
         if (node instanceof ClassOrInterfaceDeclaration) {
             solveTypeDecl((ClassOrInterfaceDeclaration) node);
         } else if (node instanceof Expression) {
-            if ((node.getParentNode() instanceof ImportDeclaration) || (node.getParentNode() instanceof Expression)
-                    || (node.getParentNode() instanceof MethodDeclaration)
-                    || (node.getParentNode() instanceof PackageDeclaration)) {
+            if ((getParentNode(node) instanceof ImportDeclaration) || (getParentNode(node) instanceof Expression)
+                    || (getParentNode(node) instanceof MethodDeclaration)
+                    || (getParentNode(node) instanceof PackageDeclaration)) {
                 // skip
-            } else if ((node.getParentNode() instanceof Statement) || (node.getParentNode() instanceof VariableDeclarator)) {
+            } else if ((getParentNode(node) instanceof Statement) || (getParentNode(node) instanceof VariableDeclarator)) {
                 try {
                     Type ref = JavaParserFacade.get(typeSolver).getType(node);
                     out.println("  Line " + node.getRange().begin.line + ") " + node + " ==> " + ref.describe());
@@ -126,9 +130,6 @@ public class SourceFileInfoExtractor {
                     throw re;
                 }
             }
-        }
-        for (Node child : node.getChildrenNodes()) {
-            solve(child);
         }
     }
 
@@ -161,6 +162,18 @@ public class SourceFileInfoExtractor {
         }
     }
 
+    private List<Node> collectAllNodes(Node node) {
+        List<Node> nodes = new LinkedList<>();
+        collectAllNodes(node, nodes);
+        nodes.sort((n1, n2) -> n1.getBegin().compareTo(n2.getBegin()));
+        return nodes;
+    }
+
+    private void collectAllNodes(Node node, List<Node> nodes) {
+        nodes.add(node);
+        node.getChildrenNodes().forEach(c -> collectAllNodes(c, nodes));
+    }
+
     public void solve(File file) throws IOException, ParseException {
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
@@ -172,7 +185,8 @@ public class SourceFileInfoExtractor {
                     out.println("- parsing " + file.getAbsolutePath());
                 }
                 CompilationUnit cu = JavaParser.parse(file);
-                solve(cu);
+                List<Node> nodes = collectAllNodes(cu);
+                nodes.forEach(n -> solve(n));
             }
         }
     }

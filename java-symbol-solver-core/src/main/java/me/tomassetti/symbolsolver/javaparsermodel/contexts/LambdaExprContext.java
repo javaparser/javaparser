@@ -17,33 +17,32 @@
 package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 
 
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-
 import javaslang.Tuple2;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
 import me.tomassetti.symbolsolver.logic.FunctionalInterfaceLogic;
 import me.tomassetti.symbolsolver.logic.GenericTypeInferenceLogic;
 import me.tomassetti.symbolsolver.model.declarations.TypeDeclaration;
-import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
-import me.tomassetti.symbolsolver.model.usages.MethodUsage;
 import me.tomassetti.symbolsolver.model.declarations.TypeParameterDeclaration;
-import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
-import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
+import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.resolution.Value;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFactory;
+import me.tomassetti.symbolsolver.model.usages.MethodUsage;
+import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
+import me.tomassetti.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
@@ -58,26 +57,16 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             int index = 0;
             for (ValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
-                    if (wrappedNode.getParentNode() instanceof MethodCallExpr) {
-                        MethodCallExpr methodCallExpr = (MethodCallExpr) wrappedNode.getParentNode();
+                    if (getParentNode(wrappedNode) instanceof MethodCallExpr) {
+                        MethodCallExpr methodCallExpr = (MethodCallExpr) getParentNode(wrappedNode);
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = pos(methodCallExpr, wrappedNode);
                         Type lambdaType = methodUsage.getParamTypes().get(i);
                         Value value = new Value(lambdaType.asReferenceType().typeParametersValues().get(0), name, false);
                         return Optional.of(value);
-                    } else if (wrappedNode.getParentNode() instanceof VariableDeclarator) {
-                        com.github.javaparser.ast.type.Type declaratorType = null;
-                        
-                        VariableDeclarator variableDeclarator = (VariableDeclarator) wrappedNode.getParentNode();
-                        if (variableDeclarator.getParentNode() instanceof VariableDeclarationExpr) {
-                            declaratorType = ((VariableDeclarationExpr) variableDeclarator.getParentNode()).getType();
-                        } else if (variableDeclarator.getParentNode() instanceof FieldDeclaration) {
-                            declaratorType = ((FieldDeclaration) variableDeclarator.getParentNode()).getType();
-                        } else {
-                            throw new UnsupportedOperationException();
-                        }
-
-                        Type t = JavaParserFacade.get(typeSolver).convert(declaratorType, declaratorType);
+                    } else if (getParentNode(wrappedNode) instanceof VariableDeclarator) {
+                        VariableDeclarator variableDeclarator = (VariableDeclarator) getParentNode(wrappedNode);
+                        Type t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
                         if (functionalMethod.isPresent()) {
                             Type lambdaType = functionalMethod.get().getParamType(index);
@@ -118,7 +107,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        MethodCallExpr parentNode = (MethodCallExpr) wrappedNode.getParentNode();
+        MethodCallExpr parentNode = (MethodCallExpr) getParentNode(wrappedNode);
         int pos = pos(parentNode, wrappedNode);
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage((MethodCallExpr) parentNode);
         Type lambda = methodUsage.getParamTypes().get(pos);

@@ -18,15 +18,17 @@ package me.tomassetti.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.stmt.SwitchEntryStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
+import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 import me.tomassetti.symbolsolver.model.declarations.MethodDeclaration;
 import me.tomassetti.symbolsolver.model.declarations.ValueDeclaration;
 import me.tomassetti.symbolsolver.model.resolution.SymbolReference;
 import me.tomassetti.symbolsolver.model.resolution.TypeSolver;
 import me.tomassetti.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import me.tomassetti.symbolsolver.model.usages.typesystem.Type;
-import me.tomassetti.symbolsolver.javaparsermodel.JavaParserFacade;
 
 import java.util.List;
+
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStmt> {
 
@@ -36,7 +38,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        SwitchStmt switchStmt = (SwitchStmt) wrappedNode.getParentNode();
+        SwitchStmt switchStmt = (SwitchStmt) getParentNode(wrappedNode);
         Type type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isEnum()) {
             if (type instanceof ReferenceTypeImpl) {

@@ -43,6 +43,8 @@ import me.tomassetti.symbolsolver.resolution.SymbolSolver;
 import java.io.Serializable;
 import java.util.*;
 
+import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
 
     private TypeSolver typeSolver;
@@ -139,7 +141,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public String getQualifiedName() {
-        String containerName = containerName("", wrappedNode.getParentNode());
+        String containerName = containerName("", getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
             return wrappedNode.getName();
         } else {
@@ -149,7 +151,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     private String containerName(String base, Node container) {
         if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-            String b = containerName(base, container.getParentNode());
+            String b = containerName(base, getParentNode(container));
             String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
             if (b.isEmpty()) {
                 return cn;
@@ -157,9 +159,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
                 return b + "." + cn;
             }
         } else if (container instanceof CompilationUnit) {
-            PackageDeclaration p = ((CompilationUnit) container).getPackage();
-            if (p != null) {
-                String b = p.getName().toString();
+            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
+            if (p.isPresent()) {
+                String b = p.get().getName().toString();
                 if (base.isEmpty()) {
                     return b;
                 } else {
@@ -169,7 +171,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
                 return base;
             }
         } else if (container != null) {
-            return containerName(base, container.getParentNode());
+            return containerName(base, getParentNode(container));
         } else {
             return base;
         }

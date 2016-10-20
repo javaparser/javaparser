@@ -1,7 +1,7 @@
 
 description = ''
 dependencies {
-    compile group: 'com.github.javaparser', name: 'javaparser-core', version:'3.0.0-alpha.2'
+    compile group: 'com.github.javaparser', name: 'javaparser-core', version:'3.0.0-alpha.6'
     compile group: 'org.javassist', name: 'javassist', version:'3.19.0-GA'
     compile group: 'com.google.guava', name: 'guava', version:'18.0'
     compile project(':java-symbol-solver-model')

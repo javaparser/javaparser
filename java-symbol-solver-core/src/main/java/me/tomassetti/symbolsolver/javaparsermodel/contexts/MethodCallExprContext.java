@@ -46,10 +46,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        if (!wrappedNode.getTypeArgs().isEmpty()) {
-            throw new UnsupportedOperationException(name);
-        }
-        Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+        Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
         Optional<Type> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
         return res;
     }
@@ -190,9 +187,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         // TODO consider call of static methods
-        if (wrappedNode.getScope() != null) {
+        if (wrappedNode.getScope().isPresent()) {
             try {
-                Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+                Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
                 // we can replace the parameter types from the scope into the typeParametersValues
 
                 for (int i = 0; i< argumentsTypes.size(); i++) {
@@ -202,8 +199,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 return solveMethodAsUsage(typeOfScope, name, argumentsTypes, typeSolver, this);
             } catch (UnsolvedSymbolException e) {
                 // ok, maybe it was instead a static access, so let's look for a type
-                if (wrappedNode.getScope() instanceof NameExpr) {
-                    String className = ((NameExpr) wrappedNode.getScope()).getName();
+                if (wrappedNode.getScope().get() instanceof NameExpr) {
+                    String className = ((NameExpr) wrappedNode.getScope().get()).getName();
                     SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
                     if (ref.isSolved()) {
                         SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
@@ -243,10 +240,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        if (wrappedNode.getScope() != null) {
+        if (wrappedNode.getScope().isPresent()) {
             // consider static methods
-            if (wrappedNode.getScope() instanceof NameExpr) {
-                NameExpr scopeAsName = (NameExpr)wrappedNode.getScope();
+            if (wrappedNode.getScope().get() instanceof NameExpr) {
+                NameExpr scopeAsName = (NameExpr)wrappedNode.getScope().get();
                 SymbolReference symbolReference = this.solveType(scopeAsName.getName(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
@@ -256,7 +253,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
             Type typeOfScope = null;
             try {
-                typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+                typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
             } catch (Exception e) {
                 throw new RuntimeException(String.format("Issur calculating the type of the scope of " + this), e);
             }
