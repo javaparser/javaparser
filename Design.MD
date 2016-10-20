@@ -1,6 +1,6 @@
 # Architecture and Design
 
-This document describe the architecture and design of Java-symbol-solver.
+This document describe the architecture and design of JavaSymbolSolver.
 
 ## Goal of the project
 
@@ -10,6 +10,15 @@ The basic idea is to be able to resolve all sorts of symbols:
 * type references
 * calculate the type of expressions
 * determine which methods are invoked out of the several overload possible
+
+# Organization
+
+The project is divided in four modules:
+
+* **model**: it contains the interfaces of all declarations used by JavaSymbolSolver such as _ClassDeclaration_, _ParameterDeclaration_, _MethodDeclaration_, etc.
+* **logic**: it contains general logic to operate on declarations, for example to perform method resolution
+* **core**: it contains most of the implementation including all the implementation of all the interfaces for source code (using JavaParser), compiled code (using Javassist) and JRE standard libraries (using reflection)
+* **examples**: examples of possible usages of JavaSymbolSolver
  
 # Strategy
 
