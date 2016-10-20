@@ -20,13 +20,12 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -43,10 +42,10 @@ public class FieldAccessContextResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar2");
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "getSelf");
-        
+
         TypeSolver typeSolver = new JreTypeSolver();
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
-        
+
         assertEquals(methodUsage.getName(), "getSelf");
     }
 }

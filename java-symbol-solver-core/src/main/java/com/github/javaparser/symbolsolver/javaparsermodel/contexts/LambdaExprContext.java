@@ -22,22 +22,21 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import javaslang.Tuple2;
-
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
+import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+import javaslang.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +99,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                     }
                 }
                 index++;
-            } 
+            }
         }
 
         // if nothing is found we should ask the parent context
@@ -115,7 +114,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         Type lambda = methodUsage.getParamTypes().get(pos);
 
         List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
-        for (int i=0;i<methodUsage.getDeclaration().getNoParams();i++){
+        for (int i = 0; i < methodUsage.getDeclaration().getNoParams(); i++) {
             formalActualTypePairs.add(new Tuple2<>(methodUsage.getDeclaration().getParam(i).getType(), methodUsage.getParamType(i)));
         }
         Map<String, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);

@@ -24,8 +24,8 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -38,7 +38,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr().get();
+        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpr().get();
         Expression expression = methodCallExpr.getArgs().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
@@ -65,7 +65,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr)returnStmt.getExpr().get();
+        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpr().get();
         // Collectors.toList()
         Expression expression = methodCallExpr.getArgs().get(0);
 

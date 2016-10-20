@@ -67,13 +67,12 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
         return res;
     }
 
-	/**
-	 * Returns the JavaParser node associated with this JavaParserParameterDeclaration.
-	 *
-	 * @return A visitable JavaParser node wrapped by this object.
-	 */
-	public Parameter getWrappedNode()
-	{
-		return wrappedNode;
-	}
+    /**
+     * Returns the JavaParser node associated with this JavaParserParameterDeclaration.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public Parameter getWrappedNode() {
+        return wrappedNode;
+    }
 }

@@ -18,12 +18,12 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
@@ -162,13 +162,12 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         return new JavaParserTypeParameter(this.wrappedNode, typeSolver);
     }
 
-	/**
-	 * Returns the JavaParser node associated with this JavaParserTypeVariableDeclaration.
-	 *
-	 * @return A visitable JavaParser node wrapped by this object.
-	 */
-	public TypeParameter getWrappedNode()
-	{
-		return wrappedNode;
-	}
+    /**
+     * Returns the JavaParser node associated with this JavaParserTypeVariableDeclaration.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public TypeParameter getWrappedNode() {
+        return wrappedNode;
+    }
 }

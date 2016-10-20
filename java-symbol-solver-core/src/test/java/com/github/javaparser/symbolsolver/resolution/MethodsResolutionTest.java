@@ -22,11 +22,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -38,13 +38,13 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessThroughSuper");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "methodTest");
-        ReturnStmt returnStmt = (ReturnStmt)method.getBody().get().getStmts().get(0);
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStmts().get(0);
         Expression expression = returnStmt.getExpr().get();
 
         Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
-    
+
     @Test
     public void solveMethodWithClassExpressionAsParameter() throws ParseException {
         CompilationUnit cu = parseSample("ClassExpression");

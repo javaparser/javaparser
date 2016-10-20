@@ -16,15 +16,15 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel.contexts;
 
-import javassist.CtClass;
-import javassist.CtMethod;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import javassist.CtClass;
+import javassist.CtMethod;
 
 import java.util.List;
 import java.util.Optional;

@@ -20,15 +20,14 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import org.junit.Test;
 
 import java.io.File;
@@ -50,14 +49,14 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar1");
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "foo");
-        
+
         File src = adaptPath(new File("src/test/resources"));
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new JreTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
-        
+
         Context context = new MethodCallExprContext(methodCallExpr, combinedTypeSolver);
-        
+
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo", Collections.emptyList(), combinedTypeSolver);
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());

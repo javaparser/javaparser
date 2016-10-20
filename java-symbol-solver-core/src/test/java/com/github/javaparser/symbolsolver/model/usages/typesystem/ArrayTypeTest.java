@@ -16,20 +16,20 @@
 
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
-import com.google.common.collect.ImmutableList;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.Object;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ArrayTypeTest {
 
@@ -142,8 +142,8 @@ public class ArrayTypeTest {
                 arrayOfListOfA.replaceParam("A", OBJECT).asArrayType().getComponentType()
                         .asReferenceType().getTypeDeclaration());
         assertEquals(new ReferenceTypeImpl(
-                new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(OBJECT), typeSolver),
+                        new ReflectionInterfaceDeclaration(List.class, typeSolver),
+                        ImmutableList.of(OBJECT), typeSolver),
                 arrayOfListOfA.replaceParam("A", OBJECT).asArrayType().getComponentType());
         assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceParam("A", OBJECT));
         assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceParam("A", STRING));

@@ -19,8 +19,8 @@ package com.github.javaparser.symbolsolver.model.usages.typesystem;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 /**
- * A usage of a type. It could be a primitive type or a reference type (enum, class, interface).
- * In the later case it could take type typeParametersValues (other TypeUsages). It could also be a TypeVariable, like in:
+ * A usage of a type. It could be a primitive type or a reference type (enum, class, interface). In the later case it
+ * could take type typeParametersValues (other TypeUsages). It could also be a TypeVariable, like in:
  * <p/>
  * class A<B> { }
  * <p/>
@@ -137,7 +137,7 @@ public interface Type {
     ///
     /// Relation with other types
     ///
-    
+
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */

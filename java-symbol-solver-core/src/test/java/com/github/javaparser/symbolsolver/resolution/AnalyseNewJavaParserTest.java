@@ -54,8 +54,7 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     private static SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
 
     static String readFile(File file)
-            throws IOException
-    {
+            throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
         return new String(encoded, StandardCharsets.UTF_8);
     }
@@ -72,10 +71,10 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         sourceFileInfoExtractor.solveMethodCalls(sourceFile);
         String output = outErrStream.toString();
 
-        String path = adaptPath(new File("src/test/resources/javaparser_methodcalls_expected_output")).getPath()+ "/" + fileName.replaceAll("/", "_")+ ".txt";
+        String path = adaptPath(new File("src/test/resources/javaparser_methodcalls_expected_output")).getPath() + "/" + fileName.replaceAll("/", "_") + ".txt";
         File dstFile = new File(path);
 
-        if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)){
+        if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
             System.err.println(output);
         }
 
@@ -94,8 +93,8 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         String[] outputLines = output.split("\n");
         String[] expectedLines = expected.split("\n");
 
-        for (int i=0; i<Math.min(outputLines.length, expectedLines.length); i++) {
-            assertEquals("Line " + (i+1) + " of " + path + " is different from what is expected", expectedLines[i].trim(), outputLines[i].trim());
+        for (int i = 0; i < Math.min(outputLines.length, expectedLines.length); i++) {
+            assertEquals("Line " + (i + 1) + " of " + path + " is different from what is expected", expectedLines[i].trim(), outputLines[i].trim());
         }
 
         assertEquals(expectedLines.length, outputLines.length);

@@ -27,14 +27,14 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,7 +59,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         Set<MethodDeclaration> methods = new HashSet<>();
         for (BodyDeclaration member : wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration)member, typeSolver));
+                methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration) member, typeSolver));
             }
         }
         return methods;
@@ -317,8 +317,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return getContext().getParent().solveType(name, typeSolver);
     }
 
-	@Override
-	public List<ReferenceType> getAncestors() {
+    @Override
+    public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
         if (wrappedNode.getExtends() != null) {
             for (ClassOrInterfaceType extended : wrappedNode.getExtends()) {
@@ -339,7 +339,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             }
         }
         return ancestors;
-	}
+    }
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
@@ -357,15 +357,14 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return typeSolver;
     }
 
-	/**
-	 * Returns the JavaParser node associated with this JavaParserInterfaceDeclaration.
-	 *
-	 * @return A visitable JavaParser node wrapped by this object.
-	 */
-	public ClassOrInterfaceDeclaration getWrappedNode()
-	{
-		return wrappedNode;
-	}
+    /**
+     * Returns the JavaParser node associated with this JavaParserInterfaceDeclaration.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public ClassOrInterfaceDeclaration getWrappedNode() {
+        return wrappedNode;
+    }
 
     @Override
     public AccessLevel accessLevel() {

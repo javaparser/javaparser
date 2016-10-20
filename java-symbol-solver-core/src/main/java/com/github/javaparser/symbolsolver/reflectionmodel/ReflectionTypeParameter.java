@@ -34,7 +34,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass) {
         GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
         if (genericDeclaration instanceof Class) {
-            Class clazz = (Class)genericDeclaration;
+            Class clazz = (Class) genericDeclaration;
             qNameOfDeclaringClass = clazz.getTypeName();
         } else {
             //System.out.println(genericDeclaration.getClass().getCanonicalName());

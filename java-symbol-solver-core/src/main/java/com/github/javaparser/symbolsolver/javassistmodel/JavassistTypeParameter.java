@@ -16,9 +16,9 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import javassist.bytecode.SignatureAttribute;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;
 import java.util.List;

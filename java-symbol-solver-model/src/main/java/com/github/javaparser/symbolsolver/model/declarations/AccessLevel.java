@@ -19,7 +19,7 @@ package com.github.javaparser.symbolsolver.model.declarations;
 /**
  * @author Federico Tomassetti
  */
-public enum AccessLevel  {
+public enum AccessLevel {
     PUBLIC,
     PRIVATE,
     PROTECTED,

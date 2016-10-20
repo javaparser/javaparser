@@ -17,20 +17,20 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.NullType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -202,7 +202,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (this.clazz.getSuperclass() != null
                 && new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)) {
-                return true;
+            return true;
         }
         for (Class interfaze : clazz.getInterfaces()) {
             if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other)) {
@@ -253,13 +253,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         for (ReferenceType ancestor : getAllAncestors()) {
             if (ancestor.getTypeDeclaration().hasField(name)) {
-                ReflectionFieldDeclaration reflectionFieldDeclaration = (ReflectionFieldDeclaration)ancestor.getTypeDeclaration().getField(name);
+                ReflectionFieldDeclaration reflectionFieldDeclaration = (ReflectionFieldDeclaration) ancestor.getTypeDeclaration().getField(name);
                 return reflectionFieldDeclaration.replaceType(ancestor.getFieldType(name).get());
             }
         }
         throw new UnsolvedSymbolException("Field in " + this, name);
     }
-    
+
     @Override
     public List<FieldDeclaration> getAllFields() {
         ArrayList<FieldDeclaration> fields = new ArrayList<>();

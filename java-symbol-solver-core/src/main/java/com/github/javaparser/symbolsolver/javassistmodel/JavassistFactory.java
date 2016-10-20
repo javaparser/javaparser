@@ -16,15 +16,11 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.*;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ArrayType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.PrimitiveType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.VoidType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 public class JavassistFactory {
 

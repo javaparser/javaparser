@@ -22,14 +22,14 @@ package com.github.javaparser.symbolsolver.model.declarations;
 public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, HasAccessLevel {
 
     default String getQualifiedName() {
-        return declaringType().getQualifiedName()+ "." + this.getName();
+        return declaringType().getQualifiedName() + "." + this.getName();
     }
 
     default String getSignature() {
         StringBuffer sb = new StringBuffer();
         sb.append(getName());
         sb.append("(");
-        for (int i=0; i<getNoParams(); i++) {
+        for (int i = 0; i < getNoParams(); i++) {
             if (i != 0) {
                 sb.append(", ");
             }
@@ -40,7 +40,7 @@ public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, 
     }
 
     default String getQualifiedSignature() {
-        return declaringType().getQualifiedName()+ "." + this.getSignature();
+        return declaringType().getQualifiedName() + "." + this.getSignature();
     }
 
     /**
@@ -64,6 +64,7 @@ public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, 
 
     /**
      * Note that when a method has a variadic parameter it should have an array type.
+     *
      * @return
      */
     default boolean hasVariadicParameter() {

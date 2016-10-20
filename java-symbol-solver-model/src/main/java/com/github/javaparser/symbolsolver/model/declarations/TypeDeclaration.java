@@ -119,18 +119,18 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     /**
      * Note that the type of the field should be expressed using the type variables of this particular type.
      * Consider for example:
-     *
+     * <p>
      * class Foo<E> { E field; }
-     *
+     * <p>
      * class Bar extends Foo<String> { }
-     *
+     * <p>
      * When calling getField("field") on Foo I should get a FieldDeclaration with type E, while calling it on
      * Bar I should get a FieldDeclaration with type String.
      */
     FieldDeclaration getField(String name);
 
     boolean hasField(String name);
-    
+
     List<FieldDeclaration> getAllFields();
 
     default List<FieldDeclaration> getAllNonStaticFields() {
@@ -142,7 +142,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
     }
 
     default List<FieldDeclaration> getDeclaredFields() {
-        return getAllFields().stream().filter(it ->it.declaringType().getQualifiedName().equals(getQualifiedName())).collect(Collectors.toList());
+        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName().equals(getQualifiedName())).collect(Collectors.toList());
     }
 
     ///

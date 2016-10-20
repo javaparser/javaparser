@@ -30,13 +30,13 @@ public class ContextHelper {
 
     static MethodUsage resolveTypeVariables(Context context, MethodDeclaration methodDeclaration, List<Type> parameterTypes) {
         if (methodDeclaration instanceof JavaParserMethodDeclaration) {
-            return ((JavaParserMethodDeclaration)methodDeclaration).resolveTypeVariables(context, parameterTypes);
+            return ((JavaParserMethodDeclaration) methodDeclaration).resolveTypeVariables(context, parameterTypes);
         } else if (methodDeclaration instanceof JavassistMethodDeclaration) {
-            return ((JavassistMethodDeclaration)methodDeclaration).resolveTypeVariables(context, parameterTypes);
+            return ((JavassistMethodDeclaration) methodDeclaration).resolveTypeVariables(context, parameterTypes);
         } else if (methodDeclaration instanceof JavaParserEnumDeclaration.ValuesMethod) {
-            return ((JavaParserEnumDeclaration.ValuesMethod)methodDeclaration).resolveTypeVariables(context, parameterTypes);
+            return ((JavaParserEnumDeclaration.ValuesMethod) methodDeclaration).resolveTypeVariables(context, parameterTypes);
         } else if (methodDeclaration instanceof ReflectionMethodDeclaration) {
-            return ((ReflectionMethodDeclaration)methodDeclaration).resolveTypeVariables(context, parameterTypes);
+            return ((ReflectionMethodDeclaration) methodDeclaration).resolveTypeVariables(context, parameterTypes);
         } else {
             throw new UnsupportedOperationException();
         }

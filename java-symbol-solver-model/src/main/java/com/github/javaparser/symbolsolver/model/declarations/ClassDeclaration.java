@@ -52,17 +52,17 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, H
     List<ReferenceType> getInterfaces();
 
     /**
-     * Get all superclasses, with all the type typeParametersValues expressed as functions of the type typeParametersValues of this
-     * declaration.
+     * Get all superclasses, with all the type typeParametersValues expressed as functions of the type
+     * typeParametersValues of this declaration.
      */
     List<ReferenceType> getAllSuperClasses();
 
     /**
      * Return all the interfaces implemented by this class, either directly or indirectly, including the interfaces
      * extended by interfaces it implements.
-     *
-     * Get all interfaces, with all the type typeParametersValues expressed as functions of the type typeParametersValues of this
-     * declaration.
+     * <p>
+     * Get all interfaces, with all the type typeParametersValues expressed as functions of the type
+     * typeParametersValues of this declaration.
      */
     List<ReferenceType> getAllInterfaces();
 
