@@ -16,9 +16,9 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import javaslang.Tuple2;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import javaslang.Tuple2;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +57,7 @@ public class GenericTypeInferenceLogic {
         } else if (formalType.isReferenceType()) {
             if (actualType.isReferenceType()) {
                 ReferenceType formalTypeAsReference = formalType.asReferenceType();
-            	ReferenceType actualTypeAsReference = actualType.asReferenceType();
+                ReferenceType actualTypeAsReference = actualType.asReferenceType();
                 if (formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                     if (!formalTypeAsReference.typeParametersValues().isEmpty()) {
                         if (actualTypeAsReference.isRawType()) {
