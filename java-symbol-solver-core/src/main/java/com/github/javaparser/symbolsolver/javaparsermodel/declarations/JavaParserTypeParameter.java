@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameterDeclaration {
 

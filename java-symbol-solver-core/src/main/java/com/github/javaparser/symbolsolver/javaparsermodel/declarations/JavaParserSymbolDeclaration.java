@@ -32,7 +32,7 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.PrimitiveType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 
-import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class JavaParserSymbolDeclaration implements ValueDeclaration {
 

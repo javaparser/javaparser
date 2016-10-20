@@ -30,7 +30,7 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.List;
 
-import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 

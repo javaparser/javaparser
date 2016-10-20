@@ -22,7 +22,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 
-import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 

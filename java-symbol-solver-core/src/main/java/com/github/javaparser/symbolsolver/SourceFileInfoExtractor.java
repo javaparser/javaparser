@@ -41,7 +41,7 @@ import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * It print information extracted from a source file. It is mainly intended as an example usage of JavaSymbolSolver.

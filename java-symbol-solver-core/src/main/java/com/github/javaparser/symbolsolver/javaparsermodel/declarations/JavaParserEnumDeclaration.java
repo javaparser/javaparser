@@ -42,7 +42,7 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import java.io.Serializable;
 import java.util.*;
 
-import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
 

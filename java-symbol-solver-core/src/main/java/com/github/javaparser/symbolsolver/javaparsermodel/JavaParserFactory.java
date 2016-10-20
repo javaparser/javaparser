@@ -33,7 +33,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 
-import static me.tomassetti.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class JavaParserFactory {
 
