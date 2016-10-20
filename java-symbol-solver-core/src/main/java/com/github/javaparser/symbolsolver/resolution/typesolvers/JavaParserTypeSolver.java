@@ -18,8 +18,8 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -80,23 +80,22 @@ public class JavaParserTypeSolver implements TypeSolver {
 
         // TODO support enums
         // TODO support interfaces
-    	
-    	String[] nameElements = name.split("\\.");
-    	
-    	for (int i = nameElements.length; i > 0; i--) {
-        	String filePath = srcDir.getAbsolutePath();
-        	for (int j = 0; j < i; j++) {
-        		filePath += "/" + nameElements[j];
-        	}
-        	filePath += ".java";
-        	
+
+        String[] nameElements = name.split("\\.");
+
+        for (int i = nameElements.length; i > 0; i--) {
+            String filePath = srcDir.getAbsolutePath();
+            for (int j = 0; j < i; j++) {
+                filePath += "/" + nameElements[j];
+            }
+            filePath += ".java";
+
             File srcFile = new File(filePath);
             if (srcFile.exists()) {
                 try {
                     String typeName = "";
                     for (int j = i - 1; j < nameElements.length; j++) {
-                        if (j != i - 1)
-                        {
+                        if (j != i - 1) {
                             typeName += ".";
                         }
                         typeName += nameElements[j];
@@ -113,8 +112,8 @@ public class JavaParserTypeSolver implements TypeSolver {
                 }
             }
         }
-    	
-    	return SymbolReference.unsolved(TypeDeclaration.class);
+
+        return SymbolReference.unsolved(TypeDeclaration.class);
     }
 
 }

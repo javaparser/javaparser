@@ -17,23 +17,27 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import com.google.common.collect.ImmutableSet;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ReflectionClassDeclarationTest {
 
     @Test
     public void testIsClass() {
-        class Foo<E> { E field; }
-        class Bar extends Foo<String> { }
+        class Foo<E> {
+            E field;
+        }
+        class Bar extends Foo<String> {
+        }
 
         TypeSolver typeResolver = new JreTypeSolver();
 
@@ -46,7 +50,9 @@ public class ReflectionClassDeclarationTest {
 
     @Test
     public void testGetSuperclassSimpleImplicit() {
-        class Foo<E> { E field; }
+        class Foo<E> {
+            E field;
+        }
 
         TypeSolver typeResolver = new JreTypeSolver();
 
@@ -58,8 +64,11 @@ public class ReflectionClassDeclarationTest {
 
     @Test
     public void testGetSuperclassSimple() {
-        class Bar { }
-        class Foo<E> extends Bar  { E field; }
+        class Bar {
+        }
+        class Foo<E> extends Bar {
+            E field;
+        }
 
         TypeSolver typeResolver = new JreTypeSolver();
 
@@ -71,8 +80,11 @@ public class ReflectionClassDeclarationTest {
 
     @Test
     public void testGetSuperclassWithGenericSimple() {
-        class Foo<E> { E field; }
-        class Bar extends Foo<String> { }
+        class Foo<E> {
+            E field;
+        }
+        class Bar extends Foo<String> {
+        }
 
         TypeSolver typeResolver = new JreTypeSolver();
 
@@ -86,8 +98,11 @@ public class ReflectionClassDeclarationTest {
 
     @Test
     public void testGetSuperclassWithGenericInheritanceSameName() {
-        class Foo<E> { E field; }
-        class Bar<E> extends Foo<E> { }
+        class Foo<E> {
+            E field;
+        }
+        class Bar<E> extends Foo<E> {
+        }
 
         TypeSolver typeResolver = new JreTypeSolver();
 
@@ -105,8 +120,11 @@ public class ReflectionClassDeclarationTest {
 
     @Test
     public void testGetSuperclassWithGenericInheritanceDifferentName() {
-        class Foo<E> { E field; }
-        class Bar extends Foo<String> { }
+        class Foo<E> {
+            E field;
+        }
+        class Bar extends Foo<String> {
+        }
 
         TypeSolver typeResolver = new JreTypeSolver();
 
@@ -119,8 +137,11 @@ public class ReflectionClassDeclarationTest {
 
     @Test
     public void testGetFieldDeclarationTypeVariableInheritance() {
-        class Foo<E> { E field; }
-        class Bar extends Foo<String> { }
+        class Foo<E> {
+            E field;
+        }
+        class Bar extends Foo<String> {
+        }
 
         TypeSolver typeResolver = new JreTypeSolver();
 

@@ -17,14 +17,10 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Wildcard;

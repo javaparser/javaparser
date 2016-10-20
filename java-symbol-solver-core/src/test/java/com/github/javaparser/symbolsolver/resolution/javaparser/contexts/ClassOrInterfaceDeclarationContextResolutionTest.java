@@ -19,27 +19,27 @@ package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.PrimitiveType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import com.google.common.collect.ImmutableList;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.declarations.MethodAmbiguityException;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.Value;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.NullType;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.PrimitiveType;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.DummyTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -134,7 +134,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         assertEquals(true, ref.isSolved());
         assertEquals("boolean", ref.getCorrespondingDeclaration().getType().describe());
     }
-    
+
     @Test
     public void solveSymbolReferringToInterfaceInheritedInstanceField() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithSymbols");
@@ -199,7 +199,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         assertEquals(true, ref.isPresent());
         assertEquals("boolean", ref.get().getUsage().describe());
     }
-    
+
     @Test
     public void solveSymbolAsValueReferringToInterfaceInheritedInstanceField() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithSymbols");

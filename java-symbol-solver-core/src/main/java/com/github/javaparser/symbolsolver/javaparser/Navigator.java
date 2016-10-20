@@ -44,52 +44,52 @@ public final class Navigator {
 
     public static Node getParentNode(Node node) {
         Node parent = node.getParentNode();
-        if (parent instanceof NodeList){
+        if (parent instanceof NodeList) {
             return Navigator.getParentNode(parent);
         } else {
             return parent;
         }
     }
-    
+
     private static String getInnerTypeName(String qualifiedName) {
         if (qualifiedName.contains(".")) {
             return qualifiedName.split("\\.", 2)[1];
         }
         return "";
     }
-    
+
     public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
         if (cu.getTypes().isEmpty()) {
             return Optional.empty();
         }
-        
+
         final String typeName = getOuterTypeName(qualifiedName);
         Optional<TypeDeclaration<?>> type = cu.getTypes().stream().filter((t) -> t.getName().equals(typeName)).findFirst();
 
         final String innerTypeName = getInnerTypeName(qualifiedName);
         if (type.isPresent() && !innerTypeName.isEmpty()) {
             return findType(type.get(), innerTypeName);
-        } 
+        }
         return type;
     }
-    
+
     public static Optional<TypeDeclaration<?>> findType(TypeDeclaration<?> td, String qualifiedName) {
         final String typeName = getOuterTypeName(qualifiedName);
-        
+
         Optional<TypeDeclaration<?>> type = Optional.empty();
-        for (Node n: td.getMembers().getChildrenNodes()) {
-            if (n instanceof TypeDeclaration && ((TypeDeclaration<?>)n).getName().equals(typeName)) {
-                type = Optional.of((TypeDeclaration<?>)n);
+        for (Node n : td.getMembers().getChildrenNodes()) {
+            if (n instanceof TypeDeclaration && ((TypeDeclaration<?>) n).getName().equals(typeName)) {
+                type = Optional.of((TypeDeclaration<?>) n);
                 break;
             }
         }
         final String innerTypeName = getInnerTypeName(qualifiedName);
         if (type.isPresent() && !innerTypeName.isEmpty()) {
             return findType(type.get(), innerTypeName);
-        } 
+        }
         return type;
     }
-    
+
 
     public static ClassOrInterfaceDeclaration demandClass(CompilationUnit cu, String qualifiedName) {
         ClassOrInterfaceDeclaration cd = demandClassOrInterface(cu, qualifiedName);

@@ -21,12 +21,12 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {

@@ -23,19 +23,18 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
@@ -68,13 +67,13 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
-		Set<MethodDeclaration> methods = new HashSet<>();
-		for (BodyDeclaration member : wrappedNode.getMembers()) {
-			if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-				methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration)member, typeSolver));
-			}
-		}
-		return methods;
+        Set<MethodDeclaration> methods = new HashSet<>();
+        for (BodyDeclaration member : wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
+                methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration) member, typeSolver));
+            }
+        }
+        return methods;
     }
 
     public Context getContext() {
@@ -282,7 +281,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
                 if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
                     com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
                     for (VariableDeclarator vd : field.getVariables()) {
-						fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
+                        fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
                     }
                 }
             }
@@ -290,7 +289,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         if (this.wrappedNode.getEntries() != null) {
             for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
-				fields.add(new JavaParserFieldDeclaration(member, typeSolver));
+                fields.add(new JavaParserFieldDeclaration(member, typeSolver));
             }
         }
 
@@ -321,15 +320,14 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return Collections.emptyList();
     }
 
-	/**
-	 * Returns the JavaParser node associated with this JavaParserEnumDeclaration.
-	 *
-	 * @return A visitable JavaParser node wrapped by this object.
-	 */
-	public com.github.javaparser.ast.body.EnumDeclaration getWrappedNode()
-	{
-		return wrappedNode;
-	}
+    /**
+     * Returns the JavaParser node associated with this JavaParserEnumDeclaration.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public com.github.javaparser.ast.body.EnumDeclaration getWrappedNode() {
+        return wrappedNode;
+    }
 
     // Needed by ContextHelper
     public static class ValuesMethod implements MethodDeclaration {

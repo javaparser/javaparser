@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -27,6 +26,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
@@ -135,7 +135,7 @@ public class SourceFileInfoExtractor {
 
     private void solveMethodCalls(Node node) {
         if (node instanceof MethodCallExpr) {
-            out.println("  Line " + node.getBegin().line + ") " + node + " ==> " + toString((MethodCallExpr)node));
+            out.println("  Line " + node.getBegin().line + ") " + node + " ==> " + toString((MethodCallExpr) node));
         }
         for (Node child : node.getChildrenNodes()) {
             solveMethodCalls(child);
@@ -147,7 +147,7 @@ public class SourceFileInfoExtractor {
             return toString(JavaParserFacade.get(typeSolver).solve(node));
         } catch (Exception e) {
             if (verbose) {
-                System.err.println("Error resolving call at L"+node.getBegin().line + ": "+node);
+                System.err.println("Error resolving call at L" + node.getBegin().line + ": " + node);
                 e.printStackTrace();
             }
             return "ERROR";

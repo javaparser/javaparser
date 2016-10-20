@@ -88,15 +88,14 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
         return true;
     }
 
-	/**
-	 * Returns the JavaParser node associated with this JavaParserFieldDeclaration.
-	 *
-	 * @return A visitable JavaParser node wrapped by this object.
-	 */
-	public com.github.javaparser.ast.body.FieldDeclaration getWrappedNode()
-	{
-		return wrappedNode;
-	}
+    /**
+     * Returns the JavaParser node associated with this JavaParserFieldDeclaration.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public com.github.javaparser.ast.body.FieldDeclaration getWrappedNode() {
+        return wrappedNode;
+    }
 
     @Override
     public String toString() {

@@ -16,18 +16,20 @@
 
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
-import com.google.common.collect.ImmutableList;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.*;
 
 public class ReferenceTypeTest {
@@ -188,9 +190,9 @@ public class ReferenceTypeTest {
     public void testIsAssignableByGenerics() {
         assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
         assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
-        assertEquals(true,  listOfWildcardExtendsString.isAssignableBy(listOfStrings));
+        assertEquals(true, listOfWildcardExtendsString.isAssignableBy(listOfStrings));
         assertEquals(false, listOfWildcardExtendsString.isAssignableBy(listOfWildcardSuperString));
-        assertEquals(true,  listOfWildcardSuperString.isAssignableBy(listOfStrings));
+        assertEquals(true, listOfWildcardSuperString.isAssignableBy(listOfStrings));
         assertEquals(false, listOfWildcardSuperString.isAssignableBy(listOfWildcardExtendsString));
     }
 
@@ -242,9 +244,9 @@ public class ReferenceTypeTest {
         //YES MoreBazzing<Foo, Bar> e1 = new MoreBazzing<Foo, Bar>();
         assertEquals(true,
                 new ReferenceTypeImpl(
-                    new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
-                    ImmutableList.of(foo, bar), typeSolver)
-                .isAssignableBy(new ReferenceTypeImpl(
+                        new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
+                        ImmutableList.of(foo, bar), typeSolver)
+                        .isAssignableBy(new ReferenceTypeImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
         );
@@ -331,7 +333,7 @@ public class ReferenceTypeTest {
         assertEquals(false,
                 new ReferenceTypeImpl(
                         new ReflectionClassDeclaration(Bazzer.class, typeSolver),
-                        ImmutableList.of(bar,string,foo), typeSolver)
+                        ImmutableList.of(bar, string, foo), typeSolver)
                         .isAssignableBy(new ReferenceTypeImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(bar, foo), typeSolver))

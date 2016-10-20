@@ -18,9 +18,9 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.symbolsolver.AbstractTest;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
@@ -30,7 +30,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class AnalyseJavaParserTest extends AbstractTest {
 
@@ -48,8 +49,7 @@ public class AnalyseJavaParserTest extends AbstractTest {
     }
 
     static String readFile(File file)
-            throws IOException
-    {
+            throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
         return new String(encoded, StandardCharsets.UTF_8);
     }
@@ -67,10 +67,10 @@ public class AnalyseJavaParserTest extends AbstractTest {
         sourceFileInfoExtractor.solve(sourceFile);
         String output = outErrStream.toString();
 
-        String path = "src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_")+ ".txt";
+        String path = "src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_") + ".txt";
         File dstFile = adaptPath(new File(path));
 
-        if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)){
+        if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
             System.err.println(output);
         }
 
@@ -82,12 +82,12 @@ public class AnalyseJavaParserTest extends AbstractTest {
         String[] outputLines = output.split("\n");
         String[] expectedLines = expected.split("\n");
 
-        for (int i=0; i<Math.min(outputLines.length, expectedLines.length); i++) {
-            assertEquals("Line " + (i+1) + " of " + path + " is different from what is expected", expectedLines[i].trim(), outputLines[i].trim());
+        for (int i = 0; i < Math.min(outputLines.length, expectedLines.length); i++) {
+            assertEquals("Line " + (i + 1) + " of " + path + " is different from what is expected", expectedLines[i].trim(), outputLines[i].trim());
         }
 
         assertEquals(expectedLines.length, outputLines.length);
-        
+
         JavaParserFacade.clearInstances();
 
         // If we need to update the file uncomment these lines

@@ -19,8 +19,8 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -95,17 +95,17 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public boolean declaredOnMethod() {
-        return getParentNode(wrappedNode)  instanceof com.github.javaparser.ast.body.MethodDeclaration;
+        return getParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.MethodDeclaration;
     }
 
     @Override
     public String getQualifiedName() {
         if (this.declaredOnClass()) {
-            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)getParentNode(wrappedNode);
+            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
             TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
             return String.format("%s.%s", typeDeclaration.getQualifiedName(), getName());
         } else {
-            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)getParentNode(wrappedNode);
+            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration) getParentNode(wrappedNode);
             MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
             return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
         }
@@ -175,18 +175,17 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         return typeSolver;
     }
 
-	/**
-	 * Returns the JavaParser node associated with this JavaParserTypeParameter.
-	 *
-	 * @return A visitable JavaParser node wrapped by this object.
-	 */
-	public com.github.javaparser.ast.type.TypeParameter getWrappedNode()
-	{
-		return wrappedNode;
-	}
+    /**
+     * Returns the JavaParser node associated with this JavaParserTypeParameter.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public com.github.javaparser.ast.type.TypeParameter getWrappedNode() {
+        return wrappedNode;
+    }
 
     @Override
     public String toString() {
-        return "JPTypeParameter(" + wrappedNode.getName() +", bounds=" + wrappedNode.getTypeBound()+ ")";
+        return "JPTypeParameter(" + wrappedNode.getName() + ", bounds=" + wrappedNode.getTypeBound() + ")";
     }
 }

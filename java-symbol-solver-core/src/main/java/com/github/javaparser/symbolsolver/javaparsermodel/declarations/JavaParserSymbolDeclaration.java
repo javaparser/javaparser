@@ -24,13 +24,13 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.PrimitiveType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -158,18 +158,17 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
 
     @Override
     public TypeDeclaration asType() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName()+": wrapping "+ this.getWrappedNode().getClass().getCanonicalName());
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName() + ": wrapping " + this.getWrappedNode().getClass().getCanonicalName());
     }
 
     /**
-	 * Returns the JavaParser node associated with this JavaParserSymbolDeclaration.
-	 *
-	 * @return A visitable JavaParser node wrapped by this object.
-	 */
-	public Node getWrappedNode()
-	{
-		return wrappedNode;
-	}
+     * Returns the JavaParser node associated with this JavaParserSymbolDeclaration.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public Node getWrappedNode() {
+        return wrappedNode;
+    }
 
 
 }

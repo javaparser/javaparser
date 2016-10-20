@@ -21,18 +21,18 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.*;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javaslang.Tuple2;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.*;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
+import javaslang.Tuple2;
 
 import java.util.HashMap;
 import java.util.List;
@@ -96,7 +96,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
         }
         Map<String, Type> matchedTypeParameters = new HashMap<>();
-        for (int i=0;i<actualParamTypes.size();i++) {
+        for (int i = 0; i < actualParamTypes.size(); i++) {
             Type expectedType = methodUsage.getParamType(i);
             Type actualType = actualParamTypes.get(i);
             matchTypeParameters(expectedType, actualType, matchedTypeParameters);
@@ -138,7 +138,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public String toString() {
-        return "MethodCallExprContext{wrapped=" + wrappedNode+ "}";
+        return "MethodCallExprContext{wrapped=" + wrappedNode + "}";
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(TypeVariable tp, String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
@@ -193,7 +193,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
                 // we can replace the parameter types from the scope into the typeParametersValues
 
-                for (int i = 0; i< argumentsTypes.size(); i++) {
+                for (int i = 0; i < argumentsTypes.size(); i++) {
                     argumentsTypes.set(i, usingParameterTypesFromScope(typeOfScope, argumentsTypes.get(i)));
                 }
 
@@ -244,7 +244,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (wrappedNode.getScope().isPresent()) {
             // consider static methods
             if (wrappedNode.getScope().get() instanceof NameExpr) {
-                NameExpr scopeAsName = (NameExpr)wrappedNode.getScope().get();
+                NameExpr scopeAsName = (NameExpr) wrappedNode.getScope().get();
                 SymbolReference symbolReference = this.solveType(scopeAsName.getName(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();

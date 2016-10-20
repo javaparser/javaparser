@@ -27,6 +27,7 @@ public abstract class AbstractSymbolDeclarator<N extends Node> implements Symbol
 
     protected N wrappedNode;
     protected TypeSolver typeSolver;
+
     public AbstractSymbolDeclarator(N wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;

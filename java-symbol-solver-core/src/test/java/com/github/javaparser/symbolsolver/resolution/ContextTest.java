@@ -27,15 +27,15 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.symbolsolver.AbstractTest;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import org.junit.Test;
 
 import java.io.File;
@@ -58,8 +58,8 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("ReferencesToField");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method1");
-        ExpressionStmt stmt = (ExpressionStmt)method1.getBody().get().getStmts().get(0);
-        AssignExpr assignExpr = (AssignExpr)stmt.getExpression();
+        ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStmts().get(0);
+        AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
         SymbolSolver symbolSolver = new SymbolSolver(new DummyTypeSolver());
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
@@ -74,8 +74,8 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("ReferencesToField");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method2");
-        ExpressionStmt stmt = (ExpressionStmt)method1.getBody().get().getStmts().get(0);
-        AssignExpr assignExpr = (AssignExpr)stmt.getExpression();
+        ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStmts().get(0);
+        AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
         SymbolSolver symbolSolver = new SymbolSolver(new DummyTypeSolver());
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
@@ -228,14 +228,14 @@ public class ContextTest extends AbstractTest {
         assertEquals("stream", ref.getName());
         assertEquals("java.util.Collection", ref.declaringType().getQualifiedName());
     }
-    
+
     @Test
     public void resolveReferenceToMethodCalledOnArrayAccess() throws ParseException, IOException {
         CompilationUnit cu = parseSample("ArrayAccess");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
         MethodDeclaration method = Navigator.demandMethod(clazz, "access");
         MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim");
-        
+
         File src = new File("src/test/resources");
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JavaParserTypeSolver(src));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
@@ -255,7 +255,7 @@ public class ContextTest extends AbstractTest {
         TypeSolver typeSolver = new JreTypeSolver();
         Type streamType = JavaParserFacade.get(typeSolver).convert(streamJavaParserType, method);
 
-        assertEquals("java.util.stream.Stream<java.lang.String>",streamType.describe());
+        assertEquals("java.util.stream.Stream<java.lang.String>", streamType.describe());
     }
 
     @Test

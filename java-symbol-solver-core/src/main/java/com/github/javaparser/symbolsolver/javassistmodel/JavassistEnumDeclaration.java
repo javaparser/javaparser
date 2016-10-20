@@ -17,11 +17,11 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
-import javassist.CtClass;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import javassist.CtClass;
 
 import java.util.List;
 import java.util.Set;

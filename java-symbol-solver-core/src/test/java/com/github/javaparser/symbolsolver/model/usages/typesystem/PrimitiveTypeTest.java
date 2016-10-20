@@ -17,11 +17,11 @@
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.google.common.collect.ImmutableList;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ public class PrimitiveTypeTest {
     private ReferenceTypeImpl OBJECT;
     private ReferenceTypeImpl STRING;
     private TypeSolver typeSolver;
-    
+
     private ReferenceTypeImpl booleanBox;
     private ReferenceTypeImpl characterBox;
     private ReferenceTypeImpl byteBox;
@@ -56,7 +56,7 @@ public class PrimitiveTypeTest {
         arrayOfListOfA = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new TypeVariable(TypeParameterDeclaration.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
-        
+
         booleanBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
         characterBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
         byteBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
@@ -65,7 +65,7 @@ public class PrimitiveTypeTest {
         longBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
         floatBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
         doubleBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
-        
+
     }
 
     @Test

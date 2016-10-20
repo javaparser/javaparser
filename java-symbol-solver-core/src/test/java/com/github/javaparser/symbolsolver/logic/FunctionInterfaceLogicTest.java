@@ -27,7 +27,7 @@ import org.junit.Test;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class FunctionInterfaceLogicTest {
 

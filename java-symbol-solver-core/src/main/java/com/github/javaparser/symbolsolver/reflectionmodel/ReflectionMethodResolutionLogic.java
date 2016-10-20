@@ -16,16 +16,16 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

@@ -24,14 +24,14 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 

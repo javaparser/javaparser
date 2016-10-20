@@ -17,21 +17,24 @@
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WildcardUsageTest {
 
-    class Foo { }
+    class Foo {
+    }
 
-    class Bar extends Foo { }
+    class Bar extends Foo {
+    }
 
     private TypeSolver typeSolver;
     private ReferenceTypeImpl foo;
@@ -109,7 +112,8 @@ public class WildcardUsageTest {
         assertEquals(false, superFoo.isReferenceType());
         assertEquals(false, superBar.isReferenceType());
         assertEquals(false, extendsFoo.isReferenceType());
-        assertEquals(false, extendsBar.isReferenceType());    }
+        assertEquals(false, extendsBar.isReferenceType());
+    }
 
     @Test
     public void testIsVoid() {

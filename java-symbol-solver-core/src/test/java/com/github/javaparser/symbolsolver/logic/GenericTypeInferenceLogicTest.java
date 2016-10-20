@@ -16,17 +16,17 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import javaslang.Tuple2;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import javaslang.Tuple2;
 import org.easymock.EasyMock;
 import org.junit.Test;
 

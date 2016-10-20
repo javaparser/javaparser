@@ -27,27 +27,27 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.google.common.collect.ImmutableList;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import org.junit.Test;
-
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.google.common.collect.ImmutableList;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GenericsResolutionTest extends AbstractResolutionTest {
 
@@ -147,7 +147,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo1");
 
-        ExpressionStmt stmt = (ExpressionStmt)method.getBody().get().getStmts().get(0);
+        ExpressionStmt stmt = (ExpressionStmt) method.getBody().get().getStmts().get(0);
         Expression expression = stmt.getExpression();
         Type type = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
@@ -179,7 +179,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo2");
 
-        ExpressionStmt stmt = (ExpressionStmt)method.getBody().get().getStmts().get(0);
+        ExpressionStmt stmt = (ExpressionStmt) method.getBody().get().getStmts().get(0);
         Expression expression = stmt.getExpression();
         Type type = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
 
@@ -284,7 +284,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         TypeDeclaration typeDeclaration = javadocType.getTypeDeclaration();
 
         context = ContextHelper.getContext(typeDeclaration);
-        List<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> methods = ((ClassOrInterfaceDeclarationContext)context).methodsByName("accept");
+        List<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> methods = ((ClassOrInterfaceDeclarationContext) context).methodsByName("accept");
         com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration m;
         if (methods.get(0).getParam(0).getType().asReferenceType().getQualifiedName().equals("VoidVisitor")) {
             m = methods.get(0);
@@ -481,7 +481,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals(false, type.isTypeVariable());
         assertEquals("boolean", type.describe());
     }
-    
+
     @Test
     public void methodWithGenericParameterTypes() throws ParseException {
         CompilationUnit cu = parseSample("GenericCollectionWithExtension");

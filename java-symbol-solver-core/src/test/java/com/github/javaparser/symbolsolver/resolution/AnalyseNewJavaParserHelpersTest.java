@@ -20,12 +20,12 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
@@ -83,7 +83,7 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
     @Test
     public void nodesTypeIsCorrect() throws IOException, ParseException {
         CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
-        NameExpr nodes = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName()!=null && it.getName().equals("nodes")).findFirst().get();
+        NameExpr nodes = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().equals("nodes")).findFirst().get();
         Type type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
         assertEquals("java.util.List<T>", type.describe());
         assertEquals(1, type.asReferenceType().typeParametersValues().size());

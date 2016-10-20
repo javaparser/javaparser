@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.symbolsolver.model.usages.typesystem.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
@@ -27,10 +26,11 @@ import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDecla
 import com.github.javaparser.symbolsolver.model.declarations.MethodAmbiguityException;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.*;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
@@ -123,7 +123,7 @@ public class MethodResolutionLogic {
                         needForWildCardTolerance = true;
                         continue;
                     }
-                    if (method.hasVariadicParameter() && i == method.getNoParams() -1) {
+                    if (method.hasVariadicParameter() && i == method.getNoParams() - 1) {
                         if (new ArrayType(expectedType).isAssignableBy(actualType)) {
                             continue;
                         }
@@ -143,7 +143,7 @@ public class MethodResolutionLogic {
             matchedParameters.put(expected.asTypeParameter().getName(), actual);
             return true;
         } else {
-            throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " "+actual.getClass().getCanonicalName());
+            throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " " + actual.getClass().getCanonicalName());
         }
     }
 
@@ -196,7 +196,7 @@ public class MethodResolutionLogic {
                     return false;
                 }
             } else if (expectedParam.isWildcard()) {
-                if (expectedParam.asWildcard().isExtends()){
+                if (expectedParam.asWildcard().isExtends()) {
                     return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actual, matchedParameters);
                 }
                 // TODO verify super bound
@@ -246,7 +246,7 @@ public class MethodResolutionLogic {
             }
             return type;
         } else {
-            throw new UnsupportedOperationException("Replacing "+ type + ", param "+tp+" with "+ type.getClass().getCanonicalName());
+            throw new UnsupportedOperationException("Replacing " + type + ", param " + tp + " with " + type.getClass().getCanonicalName());
         }
     }
 
@@ -262,7 +262,7 @@ public class MethodResolutionLogic {
             Type expectedType = method.getParamType(i);
             Type expectedTypeWithoutSubstitutions = expectedType;
             Type actualType = argumentsTypes.get(i);
-            
+
             List<TypeParameterDeclaration> typeParameters = method.getDeclaration().getTypeParameters();
             typeParameters.addAll(method.declaringType().getTypeParameters());
             for (TypeParameterDeclaration tp : typeParameters) {
@@ -300,7 +300,7 @@ public class MethodResolutionLogic {
             if (!expectedType.isAssignableBy(actualType)
                     && !expectedType2.isAssignableBy(actualType)
                     && !expectedTypeWithoutSubstitutions.isAssignableBy(actualType)) {
-                        return false;
+                return false;
             }
         }
         return true;
@@ -311,7 +311,7 @@ public class MethodResolutionLogic {
             @Override
             public int compare(MethodDeclaration m1, MethodDeclaration m2) {
                 if (m1 instanceof JavaParserMethodDeclaration && m2 instanceof JavaParserMethodDeclaration &&
-                    ((JavaParserMethodDeclaration)m1).getWrappedNode().equals(((JavaParserMethodDeclaration)m2).getWrappedNode())) {
+                        ((JavaParserMethodDeclaration) m1).getWrappedNode().equals(((JavaParserMethodDeclaration) m2).getWrappedNode())) {
                     return 0;
                 }
                 return 1;
@@ -329,9 +329,9 @@ public class MethodResolutionLogic {
         }
         return res;
     }
-    
+
     /**
-     * @param methods    we expect the methods to be ordered such that inherited methods are later in the list
+     * @param methods we expect the methods to be ordered such that inherited methods are later in the list
      * @param name
      * @param argumentsTypes
      * @param typeSolver
@@ -393,7 +393,7 @@ public class MethodResolutionLogic {
             }
             // if it matches a variadic and a not variadic I pick the not variatic
             // FIXME
-            if (i == (methodA.getNoParams() -1) && tdA.arrayLevel() > tdB.arrayLevel()) {
+            if (i == (methodA.getNoParams() - 1) && tdA.arrayLevel() > tdB.arrayLevel()) {
                 return true;
             }
         }
@@ -468,6 +468,7 @@ public class MethodResolutionLogic {
 
     /**
      * Replace TypeDeclaration.solveMethod
+     *
      * @param typeDeclaration
      * @param name
      * @param argumentsTypes
@@ -475,31 +476,31 @@ public class MethodResolutionLogic {
      */
     public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
-            Context ctx = ((JavaParserClassDeclaration)typeDeclaration).getContext();
+            Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
             return ctx.solveMethod(name, argumentsTypes, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
-            Context ctx = ((JavaParserInterfaceDeclaration)typeDeclaration).getContext();
+            Context ctx = ((JavaParserInterfaceDeclaration) typeDeclaration).getContext();
             return ctx.solveMethod(name, argumentsTypes, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserEnumDeclaration) {
             if (name.equals("values") && argumentsTypes.isEmpty()) {
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod((JavaParserEnumDeclaration) typeDeclaration, typeSolver));
             }
-            Context ctx = ((JavaParserEnumDeclaration)typeDeclaration).getContext();
+            Context ctx = ((JavaParserEnumDeclaration) typeDeclaration).getContext();
             return ctx.solveMethod(name, argumentsTypes, typeSolver);
         }
         if (typeDeclaration instanceof ReflectionClassDeclaration) {
-            return ((ReflectionClassDeclaration)typeDeclaration).solveMethod(name, argumentsTypes);
+            return ((ReflectionClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-            return ((ReflectionInterfaceDeclaration)typeDeclaration).solveMethod(name, argumentsTypes);
+            return ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
-            return ((JavassistInterfaceDeclaration)typeDeclaration).solveMethod(name, argumentsTypes);
+            return ((JavassistInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof JavassistClassDeclaration) {
-            return ((JavassistClassDeclaration)typeDeclaration).solveMethod(name, argumentsTypes);
+            return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }

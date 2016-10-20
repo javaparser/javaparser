@@ -18,16 +18,13 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
+import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
@@ -37,6 +34,8 @@ import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
 import java.util.List;
 import java.util.Optional;
@@ -115,31 +114,32 @@ public class SymbolSolver {
     }
 
     /**
-     * Solve any possible visible symbols including: fields, internal types, type variables, the type itself or its containers.
-     *
+     * Solve any possible visible symbols including: fields, internal types, type variables, the type itself or its
+     * containers.
+     * <p>
      * It should contain its own private fields but not inherited private fields.
      */
     public SymbolReference<? extends ValueDeclaration> solveSymbolInType(TypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
-            Context ctx = ((JavaParserClassDeclaration)typeDeclaration).getContext();
+            Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
             return ctx.solveSymbol(name, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
-            Context ctx = ((JavaParserInterfaceDeclaration)typeDeclaration).getContext();
+            Context ctx = ((JavaParserInterfaceDeclaration) typeDeclaration).getContext();
             return ctx.solveSymbol(name, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserEnumDeclaration) {
-            Context ctx = ((JavaParserEnumDeclaration)typeDeclaration).getContext();
+            Context ctx = ((JavaParserEnumDeclaration) typeDeclaration).getContext();
             return ctx.solveSymbol(name, typeSolver);
         }
         if (typeDeclaration instanceof ReflectionClassDeclaration) {
-            return ((ReflectionClassDeclaration)typeDeclaration).solveSymbol(name, typeSolver);
+            return ((ReflectionClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
         }
         if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-            return ((ReflectionInterfaceDeclaration)typeDeclaration).solveSymbol(name, typeSolver);
+            return ((ReflectionInterfaceDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
         }
         if (typeDeclaration instanceof JavassistClassDeclaration) {
-            return ((JavassistClassDeclaration)typeDeclaration).solveSymbol(name, typeSolver);
+            return ((JavassistClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
         }
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
@@ -149,10 +149,10 @@ public class SymbolSolver {
      */
     public SymbolReference<TypeDeclaration> solveTypeInType(TypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
-            return ((JavaParserClassDeclaration)typeDeclaration).solveType(name, typeSolver);
+            return ((JavaParserClassDeclaration) typeDeclaration).solveType(name, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
-            return ((JavaParserInterfaceDeclaration)typeDeclaration).solveType(name, typeSolver);
+            return ((JavaParserInterfaceDeclaration) typeDeclaration).solveType(name, typeSolver);
         }
         return SymbolReference.unsolved(TypeDeclaration.class);
     }

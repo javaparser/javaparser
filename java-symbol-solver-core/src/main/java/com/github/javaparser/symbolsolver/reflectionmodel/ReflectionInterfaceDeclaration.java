@@ -17,21 +17,21 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javaslang.Tuple2;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.NullType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
+import javaslang.Tuple2;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -114,13 +114,13 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
-        Optional<MethodUsage> res =  ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
+        Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
                 typeParameterValues, this, clazz);
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
             List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
             MethodUsage methodUsage = res.get();
-            int i=0;
+            int i = 0;
             for (Type actualType : parameterTypes) {
                 Type formalType = methodUsage.getParamType(i);
                 // We need to replace the class type typeParametersValues (while we derive the method ones)
@@ -152,7 +152,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
         if (this.clazz.getSuperclass() != null
                 && new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)) {
-                return true;
+            return true;
         }
         for (Class interfaze : clazz.getInterfaces()) {
             if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other)) {
