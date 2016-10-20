@@ -16,13 +16,13 @@
 
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
-import javaslang.Tuple2;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.TypeParametersMap;
 import com.github.javaparser.symbolsolver.model.usages.TypeParametrized;
+import javaslang.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
                     typeDeclaration.getTypeParameters().size(), typeParameters.size()));
         }
         this.typeParametersMap = new TypeParametersMap();
-        for (int i=0;i<typeParameters.size();i++) {
+        for (int i = 0; i < typeParameters.size(); i++) {
             this.typeParametersMap.setValue(typeDeclaration.getTypeParameters().get(i), typeParameters.get(i));
         }
         this.typeDeclaration = typeDeclaration;
@@ -208,12 +208,12 @@ public abstract class ReferenceType implements Type, TypeParametrized {
      * Return all ancestors, that means all superclasses and interfaces.
      * This list should always include Object (unless this is a reference to Object).
      * The type typeParametersValues should be expressed in terms of this type typeParametersValues.
-     *
+     * <p>
      * For example, given:
-     *
+     * <p>
      * class Foo<A, B> {}
      * class Bar<C> extends Foo<C, String> {}
-     *
+     * <p>
      * a call to getAllAncestors on a reference to Bar having type parameter Boolean should include
      * Foo<Boolean, String>.
      */
@@ -307,7 +307,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     public boolean isTypeVariable() {
         return typeDeclaration.isTypeVariable();
     }
-    
+
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */
@@ -380,16 +380,16 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     }
 
     public abstract Set<MethodUsage> getDeclaredMethods();
-    
+
     public boolean isRawType() {
-    	return (!typeDeclaration.getTypeParameters().isEmpty() && 
-    			typeParameters.isEmpty());
+        return (!typeDeclaration.getTypeParameters().isEmpty() &&
+                typeParameters.isEmpty());
     }
 
     @Deprecated
     public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
         List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
-        for (int i=0;i<typeDeclaration.getTypeParameters().size(); i++) {
+        for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
             typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
         }
         return typeParametersMap;
