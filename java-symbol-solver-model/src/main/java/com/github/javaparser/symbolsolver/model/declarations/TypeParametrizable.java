@@ -25,6 +25,9 @@ import java.util.List;
  */
 public interface TypeParametrizable {
 
+    /**
+     * The list of type parameters defined on this element.
+     */
     List<TypeParameterDeclaration> getTypeParameters();
 
 }

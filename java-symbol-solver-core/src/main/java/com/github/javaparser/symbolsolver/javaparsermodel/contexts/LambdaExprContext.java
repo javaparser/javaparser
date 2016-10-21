@@ -63,7 +63,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = pos(methodCallExpr, wrappedNode);
                         Type lambdaType = methodUsage.getParamTypes().get(i);
-                        Value value = new Value(lambdaType.asReferenceType().typeParametersValues().get(0), name, false);
+                        Value value = new Value(lambdaType.asReferenceType().typeParametersValues().get(0), name);
                         return Optional.of(value);
                     } else if (getParentNode(wrappedNode) instanceof VariableDeclarator) {
                         VariableDeclarator variableDeclarator = (VariableDeclarator) getParentNode(wrappedNode);
@@ -89,7 +89,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                                 }
                             }
 
-                            Value value = new Value(lambdaType, name, false);
+                            Value value = new Value(lambdaType, name);
                             return Optional.of(value);
                         } else {
                             throw new UnsupportedOperationException();

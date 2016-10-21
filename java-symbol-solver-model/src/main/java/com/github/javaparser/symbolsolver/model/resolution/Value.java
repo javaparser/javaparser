@@ -20,22 +20,22 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 
 /**
+ * Any type of value.
+ *
  * @author Federico Tomassetti
  */
 public class Value {
     private Type type;
     private String name;
-    private boolean field;
 
-    public Value(Type type, String name, boolean field) {
+    public Value(Type type, String name) {
         this.type = type;
         this.name = name;
-        this.field = field;
     }
 
     public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
         Type type = decl.getType();
-        return new Value(type, decl.getName(), decl.isField());
+        return new Value(type, decl.getName());
     }
 
     @Override
@@ -43,7 +43,6 @@ public class Value {
         return "Value{" +
                 "typeUsage=" + type +
                 ", name='" + name + '\'' +
-                ", field=" + field +
                 '}';
     }
 

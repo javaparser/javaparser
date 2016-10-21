@@ -21,6 +21,9 @@ import com.github.javaparser.symbolsolver.model.declarations.Declaration;
 import java.util.Optional;
 
 /**
+ * A reference to a symbol. It can solved or not solved. If solved the corresponding
+ * declaration will be provided.
+ *
  * @author Federico Tomassetti
  */
 public class SymbolReference<S extends Declaration> {
@@ -31,10 +34,16 @@ public class SymbolReference<S extends Declaration> {
         this.correspondingDeclaration = correspondingDeclaration;
     }
 
+    /**
+     * Create a solve reference to the given symbol.
+     */
     public static <S extends Declaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration) {
         return new SymbolReference(Optional.of(symbolDeclaration));
     }
 
+    /**
+     * Create an unsolved reference specifying the type of the value expected.
+     */
     public static <S extends Declaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz) {
         return new SymbolReference(Optional.<S>empty());
     }
@@ -44,13 +53,19 @@ public class SymbolReference<S extends Declaration> {
         return "SymbolReference{" + correspondingDeclaration + "}";
     }
 
+    /**
+     * The corresponding declaration. If not solve this throws UnsupportedOperationException.
+     */
     public S getCorrespondingDeclaration() {
         if (!isSolved()) {
-            throw new IllegalStateException();
+            throw new UnsupportedOperationException();
         }
         return correspondingDeclaration.get();
     }
 
+    /**
+     * Is the reference solved?
+     */
     public boolean isSolved() {
         return correspondingDeclaration.isPresent();
     }

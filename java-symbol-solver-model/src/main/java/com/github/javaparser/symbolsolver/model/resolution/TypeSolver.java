@@ -19,10 +19,16 @@ package com.github.javaparser.symbolsolver.model.resolution;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 
 /**
+ * An element able to find TypeDeclaration from their name.
+ * TypeSolvers are organized in hierarchies.
+ *
  * @author Federico Tomassetti
  */
 public interface TypeSolver {
 
+    /**
+     * Get the root of the hierarchy of type solver.
+     */
     default TypeSolver getRoot() {
         if (getParent() == null) {
             return this;
@@ -31,12 +37,25 @@ public interface TypeSolver {
         }
     }
 
+    /**
+     * Parent of the this TypeSolver. This can return null.
+     */
     TypeSolver getParent();
 
+    /**
+     * Set the parent of this TypeSolver.
+     */
     void setParent(TypeSolver parent);
 
+    /**
+     * Try to solve the type with the given name. It always return a SymbolReference which can be solved
+     * or unsolved.
+     */
     SymbolReference<TypeDeclaration> tryToSolveType(String name);
 
+    /**
+     * Solve the given type. Either the type is found and returned or an UnsolvedSymbolException is thrown.
+     */
     default TypeDeclaration solveType(String name) throws UnsolvedSymbolException {
         SymbolReference<TypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {

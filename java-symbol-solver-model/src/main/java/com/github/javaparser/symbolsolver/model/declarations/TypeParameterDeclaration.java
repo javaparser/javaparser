@@ -85,11 +85,24 @@ public interface TypeParameterDeclaration {
      * Is the type parameter been defined on a method?
      */
     boolean declaredOnMethod();
-    
+
+    /**
+     * The qualified name of the Type Parameter.
+     * It is composed by the qualified name of the container followed by a dot and the name of the Type Parameter.
+     * The qualified name of a method is its qualified signature.
+     */
     String getQualifiedName();
 
+    /**
+     * The bounds specified for the type parameter.
+     * For example:
+     * "extends A" or "super B"
+     */
     List<Bound> getBounds(TypeSolver typeSolver);
 
+    /**
+     * A Bound on a Type Parameter.
+     */
     class Bound {
         private boolean extendsBound;
         private Type type;
@@ -99,22 +112,43 @@ public interface TypeParameterDeclaration {
             this.type = type;
         }
 
+        /**
+         * Create an extends bound with the given type:
+         * <p>
+         *     extends "given type"
+         * </p>
+         */
         public static Bound extendsBound(Type type) {
             return new Bound(true, type);
         }
 
+        /**
+         * Create a super bound with the given type:
+         * <p>
+         *     super "given type"
+         * </p>
+         */
         public static Bound superBound(Type type) {
             return new Bound(false, type);
         }
 
+        /**
+         * Get the type used in the Bound.
+         */
         public Type getType() {
             return type;
         }
 
+        /**
+         * Is this an extends bound?
+         */
         public boolean isExtends() {
             return extendsBound;
         }
 
+        /**
+         * Is this a super bound?
+         */
         public boolean isSuper() {
             return !isExtends();
         }

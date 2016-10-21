@@ -17,6 +17,8 @@
 package com.github.javaparser.symbolsolver.model.resolution;
 
 /**
+ * This exception is thrown when a symbol cannot be resolved.
+ *
  * @author Federico Tomassetti
  */
 public class UnsolvedSymbolException extends RuntimeException {
@@ -26,7 +28,7 @@ public class UnsolvedSymbolException extends RuntimeException {
     private TypeSolver typeSolver;
 
     public UnsolvedSymbolException(String name, TypeSolver typeSolver) {
-        super("Unsolved symbol : " + name + " using typesolver " + typeSolver);
+        super("Unsolved symbol : " + name + " using TypeSolver " + typeSolver);
         this.typeSolver = typeSolver;
         this.name = name;
     }
