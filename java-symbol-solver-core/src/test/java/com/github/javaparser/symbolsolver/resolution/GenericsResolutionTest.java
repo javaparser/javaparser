@@ -63,7 +63,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals(true, symbolReference.isPresent());
         assertEquals("s", symbolReference.get().getName());
 
-        Type type = symbolReference.get().getUsage();
+        Type type = symbolReference.get().getType();
         assertEquals(1, type.asReferenceType().typeParametersValues().size());
         assertEquals("java.lang.String", type.asReferenceType().typeParametersValues().get(0).describe());
     }
@@ -80,7 +80,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals(true, symbolReference.isPresent());
         assertEquals("g", symbolReference.get().getName());
 
-        Type type = symbolReference.get().getUsage();
+        Type type = symbolReference.get().getType();
         assertEquals(1, type.asReferenceType().typeParametersValues().size());
         assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", type.asReferenceType().typeParametersValues().get(0).describe());
     }
@@ -97,7 +97,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals(true, symbolReference.isPresent());
         assertEquals("i", symbolReference.get().getName());
 
-        Type type = symbolReference.get().getUsage();
+        Type type = symbolReference.get().getType();
         assertEquals(1, type.asReferenceType().typeParametersValues().size());
         assertEquals("java.lang.Integer", type.asReferenceType().typeParametersValues().get(0).describe());
     }
@@ -114,7 +114,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals(true, symbolReference.isPresent());
         assertEquals("a", symbolReference.get().getName());
 
-        Type type = symbolReference.get().getUsage();
+        Type type = symbolReference.get().getType();
         assertEquals(true, type.isTypeVariable());
         assertEquals("A", type.describe());
     }
@@ -131,7 +131,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         assertEquals(true, symbolReference.isPresent());
         assertEquals("as", symbolReference.get().getName());
 
-        Type type = symbolReference.get().getUsage();
+        Type type = symbolReference.get().getType();
         assertEquals(false, type.isTypeVariable());
         assertEquals("java.util.List<A>", type.describe());
         assertEquals(1, type.asReferenceType().typeParametersValues().size());

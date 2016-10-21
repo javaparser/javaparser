@@ -33,7 +33,7 @@ public class UnsolvedSymbolException extends RuntimeException {
         this.name = name;
     }
 
-    public UnsolvedSymbolException(String context, String name) {
+    public UnsolvedSymbolException(String name, String context) {
         super("Unsolved symbol in " + context + " : " + name);
         this.context = context;
         this.name = name;

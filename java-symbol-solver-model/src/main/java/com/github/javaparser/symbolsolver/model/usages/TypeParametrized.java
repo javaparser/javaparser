@@ -17,6 +17,8 @@
 package com.github.javaparser.symbolsolver.model.usages;
 
 /**
+ * Something which can have values for TypeParameters.
+ *
  * @author Federico Tomassetti
  */
 public interface TypeParametrized {

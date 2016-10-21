@@ -257,7 +257,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 return reflectionFieldDeclaration.replaceType(ancestor.getFieldType(name).get());
             }
         }
-        throw new UnsolvedSymbolException("Field in " + this, name);
+        throw new UnsolvedSymbolException(name, "Field in " + this);
     }
 
     @Override

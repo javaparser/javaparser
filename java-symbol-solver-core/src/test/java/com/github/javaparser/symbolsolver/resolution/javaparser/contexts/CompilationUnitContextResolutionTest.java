@@ -135,7 +135,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         Optional<Value> ref = context.solveSymbolAsValue("out", typeSolver);
         assertEquals(true, ref.isPresent());
-        assertEquals("java.io.PrintStream", ref.get().getUsage().describe());
+        assertEquals("java.io.PrintStream", ref.get().getType().describe());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         Optional<Value> ref = context.solveSymbolAsValue("err", typeSolver);
         assertEquals(true, ref.isPresent());
-        assertEquals("java.io.PrintStream", ref.get().getUsage().describe());
+        assertEquals("java.io.PrintStream", ref.get().getType().describe());
     }
 
     @Test
@@ -158,7 +158,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
 
         Optional<Value> ref = context.solveSymbolAsValue("java.lang.System.out", new JreTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("java.io.PrintStream", ref.get().getUsage().describe());
+        assertEquals("java.io.PrintStream", ref.get().getType().describe());
     }
 
     @Test

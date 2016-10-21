@@ -31,6 +31,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
+ * specified for the type parameters.
+ *
  * @author Federico Tomassetti
  */
 public abstract class ReferenceType implements Type, TypeParametrized {
@@ -40,6 +43,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     //
 
     protected TypeDeclaration typeDeclaration;
+    @Deprecated
     protected List<Type> typeParameters;
     protected TypeSolver typeSolver;
     protected TypeParametersMap typeParametersMap;
@@ -50,15 +54,15 @@ public abstract class ReferenceType implements Type, TypeParametrized {
 
     public ReferenceType(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
-        if (this.typeDeclaration.isTypeParameter()) {
-            throw new IllegalArgumentException();
-        }
         this.typeSolver = typeSolver;
     }
 
     public ReferenceType(TypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver) {
         if (typeSolver == null) {
             throw new IllegalArgumentException("typeSolver should not be null");
+        }
+        if (typeDeclaration.isTypeParameter()) {
+            throw new IllegalArgumentException("You should use only Classes, Interfaces and enums");
         }
         if (typeParameters.size() > 0 && typeParameters.size() != typeDeclaration.getTypeParameters().size()) {
             throw new IllegalArgumentException(String.format("expected either zero type parameters or has many as defined in the declaration (%d). Found %d",
@@ -70,9 +74,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         }
         this.typeDeclaration = typeDeclaration;
         this.typeParameters = typeParameters;
-        if (this.typeDeclaration.isTypeParameter()) {
-            throw new IllegalArgumentException();
-        }
         this.typeSolver = typeSolver;
     }
 

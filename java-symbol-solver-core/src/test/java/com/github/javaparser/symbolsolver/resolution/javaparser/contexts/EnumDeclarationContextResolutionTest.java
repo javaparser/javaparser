@@ -88,7 +88,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
 
         Optional<Value> ref = context.solveSymbolAsValue("i", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("int", ref.get().getUsage().describe());
+        assertEquals("int", ref.get().getType().describe());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
 
         Optional<Value> ref = context.solveSymbolAsValue("j", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("long", ref.get().getUsage().describe());
+        assertEquals("long", ref.get().getType().describe());
     }
 
     @Test
@@ -110,7 +110,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
 
         Optional<Value> ref = context.solveSymbolAsValue("E1", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("MyEnum", ref.get().getUsage().describe());
+        assertEquals("MyEnum", ref.get().getType().describe());
     }
 
 }

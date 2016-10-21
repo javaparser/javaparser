@@ -17,6 +17,8 @@
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
 /**
+ * Array Type.
+ *
  * @author Federico Tomassetti
  */
 public class ArrayType implements Type {
@@ -26,6 +28,10 @@ public class ArrayType implements Type {
     public ArrayType(Type baseType) {
         this.baseType = baseType;
     }
+
+    ///
+    /// Object methods
+    ///
 
     @Override
     public boolean equals(Object o) {

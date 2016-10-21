@@ -175,7 +175,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
 
         Optional<Value> ref = context.solveSymbolAsValue("i", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("int", ref.get().getUsage().describe());
+        assertEquals("int", ref.get().getType().describe());
     }
 
     @Test
@@ -186,7 +186,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
 
         Optional<Value> ref = context.solveSymbolAsValue("j", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("long", ref.get().getUsage().describe());
+        assertEquals("long", ref.get().getType().describe());
     }
 
     @Test
@@ -197,7 +197,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
 
         Optional<Value> ref = context.solveSymbolAsValue("k", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("boolean", ref.get().getUsage().describe());
+        assertEquals("boolean", ref.get().getType().describe());
     }
 
     @Test
@@ -208,7 +208,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
 
         Optional<Value> ref = context.solveSymbolAsValue("o", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("int", ref.get().getUsage().describe());
+        assertEquals("int", ref.get().getType().describe());
     }
 
     @Test
@@ -219,7 +219,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
 
         Optional<Value> ref = context.solveSymbolAsValue("m", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());
-        assertEquals("char", ref.get().getUsage().describe());
+        assertEquals("char", ref.get().getType().describe());
     }
 
     @Test

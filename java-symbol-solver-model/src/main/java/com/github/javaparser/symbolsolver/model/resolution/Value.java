@@ -33,7 +33,10 @@ public class Value {
         this.name = name;
     }
 
-    public static Value from(ValueDeclaration decl, TypeSolver typeSolver) {
+    /**
+     * Create a Value from a ValueDeclaration.
+     */
+    public static Value from(ValueDeclaration decl) {
         Type type = decl.getType();
         return new Value(type, decl.getName());
     }
@@ -50,7 +53,7 @@ public class Value {
         return name;
     }
 
-    public Type getUsage() {
+    public Type getType() {
         return type;
     }
 

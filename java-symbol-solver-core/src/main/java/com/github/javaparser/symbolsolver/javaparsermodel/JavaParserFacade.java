@@ -279,7 +279,7 @@ public class JavaParserFacade {
             if (!value.isPresent()) {
                 throw new UnsolvedSymbolException("Solving " + node, nameExpr.getName());
             } else {
-                return value.get().getUsage();
+                return value.get().getType();
             }
         } else if (node instanceof MethodCallExpr) {
             logger.finest("getType on method call " + node);
@@ -415,7 +415,7 @@ public class JavaParserFacade {
             try {
                 Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
                 if (value.isPresent()) {
-                    return value.get().getUsage();
+                    return value.get().getType();
                 } else {
                     throw new UnsolvedSymbolException(fieldAccessExpr.getField());
                 }

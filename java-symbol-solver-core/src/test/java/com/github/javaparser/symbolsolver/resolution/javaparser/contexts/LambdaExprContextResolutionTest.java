@@ -67,7 +67,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         Optional<Value> ref = context.solveSymbolAsValue("p", typeSolver);
         assertTrue(ref.isPresent());
-        assertEquals("? super java.lang.String", ref.get().getUsage().describe());
+        assertEquals("? super java.lang.String", ref.get().getType().describe());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         Optional<Value> ref = context.solveSymbolAsValue("p", typeSolver);
         assertTrue(ref.isPresent());
-        assertEquals("java.lang.String", ref.get().getUsage().describe());
+        assertEquals("java.lang.String", ref.get().getType().describe());
     }
 
     @Test
@@ -108,6 +108,6 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         Optional<Value> ref = context.solveSymbolAsValue("p", typeSolver);
         assertTrue(ref.isPresent());
-        assertEquals("java.lang.String", ref.get().getUsage().describe());
+        assertEquals("java.lang.String", ref.get().getType().describe());
     }
 }

@@ -25,6 +25,10 @@ import java.util.List;
  */
 public class PrimitiveType implements Type {
 
+    ///
+    /// Constants
+    ///
+
     public static final PrimitiveType BYTE = new PrimitiveType("byte", Byte.class.getCanonicalName(), ImmutableList.of());
     public static final PrimitiveType SHORT = new PrimitiveType("short", Short.class.getCanonicalName(), ImmutableList.of(BYTE));
     public static final PrimitiveType INT = new PrimitiveType("int", Integer.class.getCanonicalName(), ImmutableList.of(BYTE, SHORT));
@@ -34,6 +38,11 @@ public class PrimitiveType implements Type {
     public static final PrimitiveType FLOAT = new PrimitiveType("float", Float.class.getCanonicalName(), ImmutableList.of());
     public static final PrimitiveType DOUBLE = new PrimitiveType("double", Double.class.getCanonicalName(), ImmutableList.of(FLOAT));
     public static final List<PrimitiveType> ALL = ImmutableList.of(INT, BOOLEAN, LONG, CHAR, FLOAT, DOUBLE, SHORT, BYTE);
+
+    ///
+    /// Fields
+    ///
+
     private String name;
     private String boxTypeQName;
     private List<PrimitiveType> promotionTypes;

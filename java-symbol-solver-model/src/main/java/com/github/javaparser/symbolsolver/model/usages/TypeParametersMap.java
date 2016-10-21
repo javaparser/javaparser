@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * A map of values associated to TypeParameters.
+ *
  * @author Federico Tomassetti
  */
 public class TypeParametersMap {

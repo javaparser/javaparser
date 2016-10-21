@@ -17,6 +17,8 @@
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
 /**
+ * The special type void.
+ *
  * @author Federico Tomassetti
  */
 public class VoidType implements Type {

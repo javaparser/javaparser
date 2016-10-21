@@ -60,7 +60,7 @@ public interface Context {
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         SymbolReference<? extends ValueDeclaration> ref = solveSymbol(name, typeSolver);
         if (ref.isSolved()) {
-            Value value = Value.from(ref.getCorrespondingDeclaration(), typeSolver);
+            Value value = Value.from(ref.getCorrespondingDeclaration());
             return Optional.of(value);
         } else {
             return Optional.empty();
