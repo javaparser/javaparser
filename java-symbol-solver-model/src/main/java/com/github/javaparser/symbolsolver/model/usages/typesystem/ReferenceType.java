@@ -35,10 +35,18 @@ import java.util.stream.Collectors;
  */
 public abstract class ReferenceType implements Type, TypeParametrized {
 
+    //
+    // Fields
+    //
+
     protected TypeDeclaration typeDeclaration;
     protected List<Type> typeParameters;
     protected TypeSolver typeSolver;
     protected TypeParametersMap typeParametersMap;
+
+    //
+    // Constructors
+    //
 
     public ReferenceType(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
@@ -68,13 +76,9 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         this.typeSolver = typeSolver;
     }
 
-    private static List<Type> deriveParams(TypeDeclaration typeDeclaration) {
-        return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeVariable(tp)).collect(Collectors.toList());
-    }
-
-    public ReferenceType asReferenceType() {
-        return this;
-    }
+    //
+    // Public Object methods
+    //
 
     @Override
     public boolean equals(Object o) {
@@ -96,25 +100,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return result;
     }
 
-    public final TypeDeclaration getTypeDeclaration() {
-        return typeDeclaration;
-    }
-
-    @Override
-    public final boolean isArray() {
-        return false;
-    }
-
-    @Override
-    public final boolean isPrimitive() {
-        return false;
-    }
-
-    @Override
-    public final boolean isReferenceType() {
-        return true;
-    }
-
     @Override
     public String toString() {
         return "ReferenceTypeUsage{" +
@@ -123,31 +108,21 @@ public abstract class ReferenceType implements Type, TypeParametrized {
                 '}';
     }
 
-    protected abstract ReferenceType create(TypeDeclaration typeDeclaration, TypeSolver typeSolver);
+    //
+    // Public methods
+    //
 
-    @Deprecated
-    private Optional<Type> typeParamByName(String name) {
-        List<Type> typeParameters = this.typeParameters;
-        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-        ReferenceType objectRef = create(objectType, typeSolver);
-        if (typeDeclaration.getTypeParameters().size() != typeParameters.size()) {
-            if (!typeParameters.isEmpty()) {
-                throw new UnsupportedOperationException();
-            }
-            // type typeParametersValues not specified, default to Object
-            typeParameters = new ArrayList<>();
-            for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
-                typeParameters.add(objectRef);
-            }
-        }
-        int i = 0;
-        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
-            if (tp.getName().equals(name)) {
-                return Optional.of(typeParameters.get(i));
-            }
-            i++;
-        }
-        return Optional.empty();
+    public ReferenceType asReferenceType() {
+        return this;
+    }
+
+    public final TypeDeclaration getTypeDeclaration() {
+        return typeDeclaration;
+    }
+
+    @Override
+    public final boolean isReferenceType() {
+        return true;
     }
 
     /**
@@ -189,8 +164,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return create(typeDeclaration, typeParametersCorrected, typeSolver);
     }
 
-    protected abstract ReferenceType create(TypeDeclaration typeDeclaration, List<Type> typeParametersCorrected, TypeSolver typeSolver);
-
     @Override
     public Type replaceParam(String name, Type replaced) {
         if (replaced == null) {
@@ -211,11 +184,11 @@ public abstract class ReferenceType implements Type, TypeParametrized {
      * <p>
      * For example, given:
      * <p>
-     * class Foo<A, B> {}
-     * class Bar<C> extends Foo<C, String> {}
+     * class Foo&lt;A, B&gt; {}
+     * class Bar&lt;C&gt; extends Foo&lt;C, String&gt; {}
      * <p>
      * a call to getAllAncestors on a reference to Bar having type parameter Boolean should include
-     * Foo<Boolean, String>.
+     * Foo&lt;Boolean, String&gt;.
      */
     public List<ReferenceType> getAllAncestors() {
         List<ReferenceType> ancestors = typeDeclaration.getAllAncestors();
@@ -318,6 +291,61 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return typeDeclaration.hasName();
     }
 
+    public String getQualifiedName() {
+        return typeDeclaration.getQualifiedName();
+    }
+
+    public abstract Set<MethodUsage> getDeclaredMethods();
+
+    public boolean isRawType() {
+        return (!typeDeclaration.getTypeParameters().isEmpty() &&
+                typeParameters.isEmpty());
+    }
+
+    @Deprecated
+    public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
+        List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
+        for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
+            typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
+        }
+        return typeParametersMap;
+    }
+
+    @Override
+    public TypeParametersMap typeParametersMap() {
+        return typeParametersMap;
+    }
+
+    //
+    // Protected methods
+    //
+
+    protected abstract ReferenceType create(TypeDeclaration typeDeclaration, List<Type> typeParametersCorrected, TypeSolver typeSolver);
+    protected abstract ReferenceType create(TypeDeclaration typeDeclaration, TypeSolver typeSolver);
+
+    protected boolean isCorrespondingBoxingType(String typeName) {
+        switch (typeName) {
+            case "boolean":
+                return getQualifiedName().equals(Boolean.class.getCanonicalName());
+            case "char":
+                return getQualifiedName().equals(Character.class.getCanonicalName());
+            case "byte":
+                return getQualifiedName().equals(Byte.class.getCanonicalName());
+            case "short":
+                return getQualifiedName().equals(Short.class.getCanonicalName());
+            case "int":
+                return getQualifiedName().equals(Integer.class.getCanonicalName());
+            case "long":
+                return getQualifiedName().equals(Long.class.getCanonicalName());
+            case "float":
+                return getQualifiedName().equals(Float.class.getCanonicalName());
+            case "double":
+                return getQualifiedName().equals(Double.class.getCanonicalName());
+            default:
+                throw new UnsupportedOperationException(typeName);
+        }
+    }
+
     protected boolean compareConsideringTypeParameters(ReferenceType other) {
         if (other.equals(this)) {
             return true;
@@ -352,51 +380,37 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return false;
     }
 
-    protected boolean isCorrespondingBoxingType(String typeName) {
-        switch (typeName) {
-            case "boolean":
-                return getQualifiedName().equals(Boolean.class.getCanonicalName());
-            case "char":
-                return getQualifiedName().equals(Character.class.getCanonicalName());
-            case "byte":
-                return getQualifiedName().equals(Byte.class.getCanonicalName());
-            case "short":
-                return getQualifiedName().equals(Short.class.getCanonicalName());
-            case "int":
-                return getQualifiedName().equals(Integer.class.getCanonicalName());
-            case "long":
-                return getQualifiedName().equals(Long.class.getCanonicalName());
-            case "float":
-                return getQualifiedName().equals(Float.class.getCanonicalName());
-            case "double":
-                return getQualifiedName().equals(Double.class.getCanonicalName());
-            default:
-                throw new UnsupportedOperationException(typeName);
-        }
-    }
+    //
+    // Private methods
+    //
 
-    public String getQualifiedName() {
-        return typeDeclaration.getQualifiedName();
-    }
-
-    public abstract Set<MethodUsage> getDeclaredMethods();
-
-    public boolean isRawType() {
-        return (!typeDeclaration.getTypeParameters().isEmpty() &&
-                typeParameters.isEmpty());
+    private static List<Type> deriveParams(TypeDeclaration typeDeclaration) {
+        return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeVariable(tp)).collect(Collectors.toList());
     }
 
     @Deprecated
-    public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
-        List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
-        for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
-            typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
+    private Optional<Type> typeParamByName(String name) {
+        List<Type> typeParameters = this.typeParameters;
+        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ReferenceType objectRef = create(objectType, typeSolver);
+        if (typeDeclaration.getTypeParameters().size() != typeParameters.size()) {
+            if (!typeParameters.isEmpty()) {
+                throw new UnsupportedOperationException();
+            }
+            // type typeParametersValues not specified, default to Object
+            typeParameters = new ArrayList<>();
+            for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
+                typeParameters.add(objectRef);
+            }
         }
-        return typeParametersMap;
+        int i = 0;
+        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
+            if (tp.getName().equals(name)) {
+                return Optional.of(typeParameters.get(i));
+            }
+            i++;
+        }
+        return Optional.empty();
     }
 
-    @Override
-    public TypeParametersMap typeParametersMap() {
-        return typeParametersMap;
-    }
 }

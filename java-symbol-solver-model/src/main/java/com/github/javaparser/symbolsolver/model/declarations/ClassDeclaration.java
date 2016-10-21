@@ -66,7 +66,6 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, H
      */
     List<ReferenceType> getAllInterfaces();
 
-
     ///
     /// Constructors
     ///
