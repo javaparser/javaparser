@@ -43,14 +43,14 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public int getNoParams() {
+    public int getNumberOfParams() {
         return this.wrapped.getParameters().size();
     }
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        if (i < 0 || i >= getNoParams()) {
-            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNoParams()));
+        if (i < 0 || i >= getNumberOfParams()) {
+            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
         return new JavaParserParameterDeclaration(wrapped.getParameters().get(i), typeSolver);
     }

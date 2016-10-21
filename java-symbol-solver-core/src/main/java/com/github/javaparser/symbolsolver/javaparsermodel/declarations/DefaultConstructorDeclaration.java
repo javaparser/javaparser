@@ -38,7 +38,7 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public int getNoParams() {
+    public int getNumberOfParams() {
         return 0;
     }
 

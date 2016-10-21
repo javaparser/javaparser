@@ -90,7 +90,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     @Test
     public void testIsTypeVariable() {
         JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        assertEquals(false, compilationUnit.isTypeVariable());
+        assertEquals(false, compilationUnit.isTypeParameter());
     }
 
     @Test

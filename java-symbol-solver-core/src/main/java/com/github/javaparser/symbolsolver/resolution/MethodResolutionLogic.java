@@ -69,8 +69,8 @@ public class MethodResolutionLogic {
             return false;
         }
         if (method.hasVariadicParameter()) {
-            int pos = method.getNoParams() - 1;
-            if (method.getNoParams() == argumentsTypes.size()) {
+            int pos = method.getNumberOfParams() - 1;
+            if (method.getNumberOfParams() == argumentsTypes.size()) {
                 // check if the last value is directly assignable as an array
                 Type expectedType = method.getLastParam().getType();
                 Type actualType = argumentsTypes.get(pos);
@@ -91,12 +91,12 @@ public class MethodResolutionLogic {
             }
         }
 
-        if (method.getNoParams() != argumentsTypes.size()) {
+        if (method.getNumberOfParams() != argumentsTypes.size()) {
             return false;
         }
         Map<String, Type> matchedParameters = new HashMap<>();
         boolean needForWildCardTolerance = false;
-        for (int i = 0; i < method.getNoParams(); i++) {
+        for (int i = 0; i < method.getNumberOfParams(); i++) {
             Type expectedType = method.getParam(i).getType();
             Type actualType = argumentsTypes.get(i);
             if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) && expectedType.asTypeParameter().declaredOnMethod()) {
@@ -123,7 +123,7 @@ public class MethodResolutionLogic {
                         needForWildCardTolerance = true;
                         continue;
                     }
-                    if (method.hasVariadicParameter() && i == method.getNoParams() - 1) {
+                    if (method.hasVariadicParameter() && i == method.getNumberOfParams() - 1) {
                         if (new ArrayType(expectedType).isAssignableBy(actualType)) {
                             continue;
                         }
@@ -374,13 +374,13 @@ public class MethodResolutionLogic {
 
     private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
-        if (methodA.getNoParams() < methodB.getNoParams()) {
+        if (methodA.getNumberOfParams() < methodB.getNumberOfParams()) {
             return true;
         }
-        if (methodA.getNoParams() > methodB.getNoParams()) {
+        if (methodA.getNumberOfParams() > methodB.getNumberOfParams()) {
             return false;
         }
-        for (int i = 0; i < methodA.getNoParams(); i++) {
+        for (int i = 0; i < methodA.getNumberOfParams(); i++) {
             Type tdA = methodA.getParam(i).getType();
             Type tdB = methodB.getParam(i).getType();
             // B is more specific
@@ -393,7 +393,7 @@ public class MethodResolutionLogic {
             }
             // if it matches a variadic and a not variadic I pick the not variatic
             // FIXME
-            if (i == (methodA.getNoParams() - 1) && tdA.arrayLevel() > tdB.arrayLevel()) {
+            if (i == (methodA.getNumberOfParams() - 1) && tdA.arrayLevel() > tdB.arrayLevel()) {
                 return true;
             }
         }

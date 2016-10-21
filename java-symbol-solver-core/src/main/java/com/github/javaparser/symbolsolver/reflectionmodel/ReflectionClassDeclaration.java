@@ -240,7 +240,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isTypeVariable() {
+    public boolean isTypeParameter() {
         return false;
     }
 

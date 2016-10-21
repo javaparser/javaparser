@@ -50,7 +50,7 @@ public class ArrayTypeTest {
         arrayOfStrings = new ArrayType(STRING);
         arrayOfListOfA = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeVariable(TypeParameterDeclaration.onClass("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+                ImmutableList.of(new TypeVariable(TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver));
         arrayOfListOfStrings = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver));

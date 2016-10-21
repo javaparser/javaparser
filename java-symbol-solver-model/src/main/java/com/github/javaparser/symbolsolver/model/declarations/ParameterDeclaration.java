@@ -28,6 +28,9 @@ public interface ParameterDeclaration extends ValueDeclaration {
         return true;
     }
 
+    /**
+     * Is this parameter declared as variadic?
+     */
     boolean isVariadic();
 
     default String describeType() {

@@ -94,7 +94,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
 
 
     @Override
-    public int getNoParams() {
+    public int getNumberOfParams() {
         try {
             return ctMethod.getParameterTypes().length;
         } catch (NotFoundException e) {

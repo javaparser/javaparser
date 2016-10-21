@@ -185,7 +185,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
 
     @Override
-    public boolean isTypeVariable() {
+    public boolean isTypeParameter() {
         return false;
     }
 
@@ -351,7 +351,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         @Override
-        public int getNoParams() {
+        public int getNumberOfParams() {
             return 0;
         }
 

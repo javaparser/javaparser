@@ -264,7 +264,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isTypeVariable() {
+    public boolean isTypeParameter() {
         return false;
     }
 

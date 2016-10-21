@@ -64,7 +64,7 @@ public class JavassistEnumDeclarationTest extends AbstractTest {
     @Test
     public void testIsTypeVariable() {
         EnumDeclaration modifier = (EnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        assertEquals(false, modifier.isTypeVariable());
+        assertEquals(false, modifier.isTypeParameter());
     }
 
     @Test

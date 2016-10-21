@@ -209,7 +209,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         SymbolReference<MethodDeclaration> ref = context.solveMethod("assertFalse", ImmutableList.of(PrimitiveType.BOOLEAN), typeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("assertFalse", ref.getCorrespondingDeclaration().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
         assertEquals("boolean", ref.getCorrespondingDeclaration().getParam(0).getType().describe());
         assertEquals(true, ref.getCorrespondingDeclaration().getParam(0).getType().isPrimitive());
     }
@@ -226,7 +226,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), typeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
-        assertEquals(2, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals(2, ref.getCorrespondingDeclaration().getNumberOfParams());
         assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(0).getType().asReferenceType().getQualifiedName());
         assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(1).getType().asReferenceType().getQualifiedName());
 

@@ -17,10 +17,15 @@
 package com.github.javaparser.symbolsolver.model.declarations;
 
 /**
+ * Anything which can have an AccessLevel.
+ *
  * @author Federico Tomassetti
  */
 public interface HasAccessLevel {
 
+    /**
+     * The AccessLevel of this element.
+     */
     AccessLevel accessLevel();
 
 }

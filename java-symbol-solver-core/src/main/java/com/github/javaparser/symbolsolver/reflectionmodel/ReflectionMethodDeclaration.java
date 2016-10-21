@@ -88,7 +88,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public int getNoParams() {
+    public int getNumberOfParams() {
         return method.getParameterTypes().length;
     }
 
@@ -123,7 +123,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
         Map<String, Type> determinedTypeParameters = new HashMap<>();
-        for (int i = 0; i < getNoParams(); i++) {
+        for (int i = 0; i < getNumberOfParams(); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);
             determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
@@ -200,7 +200,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     private Type replaceTypeParams(Type type, TypeSolver typeSolver, Context context) {
         if (type.isTypeVariable()) {
             TypeParameterDeclaration typeParameter = type.asTypeParameter();
-            if (typeParameter.declaredOnClass()) {
+            if (typeParameter.declaredOnType()) {
                 Optional<Type> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
                 if (typeParam.isPresent()) {
                     type = typeParam.get();

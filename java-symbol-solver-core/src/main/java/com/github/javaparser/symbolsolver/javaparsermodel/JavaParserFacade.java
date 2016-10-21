@@ -580,7 +580,7 @@ public class JavaParserFacade {
             if (classOrInterfaceType.getTypeArguments().isPresent()) {
                 typeParameters = classOrInterfaceType.getTypeArguments().get().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
             }
-            if (typeDeclaration.isTypeVariable()) {
+            if (typeDeclaration.isTypeParameter()) {
                 if (typeDeclaration instanceof TypeParameterDeclaration) {
                     return new TypeVariable((TypeParameterDeclaration) typeDeclaration);
                 } else {

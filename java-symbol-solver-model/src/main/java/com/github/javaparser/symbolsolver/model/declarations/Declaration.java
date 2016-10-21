@@ -35,34 +35,58 @@ public interface Declaration {
      */
     String getName();
 
+    /**
+     * Does this declaration represents a class field?
+     */
     default boolean isField() {
         return false;
     }
 
+    /**
+     * Does this declaration represents a method parameter?
+     */
     default boolean isParameter() {
         return false;
     }
 
+    /**
+     * Does this declaration represents a type?
+     */
     default boolean isType() {
         return false;
     }
 
+    /**
+     * Does this declaration represents a method?
+     */
     default boolean isMethod() {
         return false;
     }
 
+    /**
+     * Return this as a FieldDeclaration or throw an UnsupportedOperationException
+     */
     default FieldDeclaration asField() {
         throw new UnsupportedOperationException(String.format("%s is not a FieldDeclaration", this));
     }
 
+    /**
+     * Return this as a ParameterDeclaration or throw an UnsupportedOperationException
+     */
     default ParameterDeclaration asParameter() {
         throw new UnsupportedOperationException(String.format("%s is not a ParameterDeclaration", this));
     }
 
+    /**
+     * Return this as a TypeDeclaration or throw an UnsupportedOperationException
+     */
     default TypeDeclaration asType() {
         throw new UnsupportedOperationException(String.format("%s is not a TypeDeclaration", this));
     }
 
+    /**
+     * Return this as a MethodDeclaration or throw an UnsupportedOperationException
+     */
     default MethodDeclaration asMethod() {
         throw new UnsupportedOperationException(String.format("%s is not a MethodDeclaration", this));
     }

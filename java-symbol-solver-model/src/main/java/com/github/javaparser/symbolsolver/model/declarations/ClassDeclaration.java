@@ -71,6 +71,10 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, H
     /// Constructors
     ///
 
+    /**
+     * List of constructors available for the class.
+     * This list should also include the default constructor.
+     */
     List<ConstructorDeclaration> getConstructors();
 
 }

@@ -49,7 +49,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
             assertTrue(tp instanceof JavaParserTypeParameter);
             assertEquals("C", tp.getName());
             assertEquals(true, tp.declaredOnMethod());
-            assertEquals(false, tp.declaredOnClass());
+            assertEquals(false, tp.declaredOnType());
         }
     }
 
@@ -67,11 +67,11 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
         assertTrue(typeDeclaration.getTypeParameters().get(0) instanceof JavaParserTypeParameter);
         assertEquals("A", typeDeclaration.getTypeParameters().get(0).getName());
         assertEquals(false, typeDeclaration.getTypeParameters().get(0).declaredOnMethod());
-        assertEquals(true, typeDeclaration.getTypeParameters().get(0).declaredOnClass());
+        assertEquals(true, typeDeclaration.getTypeParameters().get(0).declaredOnType());
         assertTrue(typeDeclaration.getTypeParameters().get(1) instanceof JavaParserTypeParameter);
         assertEquals("B", typeDeclaration.getTypeParameters().get(1).getName());
         assertEquals(false, typeDeclaration.getTypeParameters().get(1).declaredOnMethod());
-        assertEquals(true, typeDeclaration.getTypeParameters().get(1).declaredOnClass());
+        assertEquals(true, typeDeclaration.getTypeParameters().get(1).declaredOnType());
 
     }
 

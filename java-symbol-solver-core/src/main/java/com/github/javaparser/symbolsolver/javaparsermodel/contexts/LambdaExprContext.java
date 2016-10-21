@@ -75,14 +75,14 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             // Replace parameter from declarator
                             if (lambdaType.isReferenceType()) {
                                 for (Tuple2<TypeParameterDeclaration, Type> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
-                                    if (entry._2.isTypeVariable() && entry._2.asTypeParameter().declaredOnClass()) {
+                                    if (entry._2.isTypeVariable() && entry._2.asTypeParameter().declaredOnType()) {
                                         Optional<Type> ot = t.asReferenceType().getGenericParameterByName(entry._1.getName());
                                         if (ot.isPresent()) {
                                             lambdaType = lambdaType.replaceParam(entry._1.getName(), ot.get());
                                         }
                                     }
                                 }
-                            } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnClass()) {
+                            } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
                                 Optional<Type> ot = t.asReferenceType().getGenericParameterByName(lambdaType.asTypeParameter().getName());
                                 if (ot.isPresent()) {
                                     lambdaType = ot.get();
@@ -114,7 +114,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         Type lambda = methodUsage.getParamTypes().get(pos);
 
         List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
-        for (int i = 0; i < methodUsage.getDeclaration().getNoParams(); i++) {
+        for (int i = 0; i < methodUsage.getDeclaration().getNumberOfParams(); i++) {
             formalActualTypePairs.add(new Tuple2<>(methodUsage.getDeclaration().getParam(i).getType(), methodUsage.getParamType(i)));
         }
         Map<String, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);

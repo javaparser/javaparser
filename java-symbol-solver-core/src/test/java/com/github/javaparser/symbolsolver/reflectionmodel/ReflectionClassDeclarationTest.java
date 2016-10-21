@@ -113,7 +113,7 @@ public class ReflectionClassDeclarationTest {
         assertEquals(1, bar.getSuperClass().typeParametersValues().size());
         assertEquals(true, bar.getSuperClass().typeParametersValues().get(0).isTypeVariable());
         assertEquals("E", bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().getName());
-        assertEquals(true, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnClass());
+        assertEquals(true, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnType());
         assertEquals(false, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnMethod());
         assertTrue(bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().getQualifiedName().endsWith("Bar.E"));
     }
@@ -168,11 +168,11 @@ public class ReflectionClassDeclarationTest {
         assertEquals(67, methods.size());
         assertEquals("charAt", methods.get(0).getName());
         assertEquals(false, methods.get(0).isAbstract());
-        assertEquals(1, methods.get(0).getNoParams());
+        assertEquals(1, methods.get(0).getNumberOfParams());
         assertEquals("int", methods.get(0).getParam(0).getType().describe());
         assertEquals("concat", methods.get(6).getName());
         assertEquals(false, methods.get(6).isAbstract());
-        assertEquals(1, methods.get(6).getNoParams());
+        assertEquals(1, methods.get(6).getNumberOfParams());
         assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
     }
 

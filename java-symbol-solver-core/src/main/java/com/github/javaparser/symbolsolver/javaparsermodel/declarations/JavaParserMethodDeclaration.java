@@ -74,14 +74,14 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public int getNoParams() {
+    public int getNumberOfParams() {
         return wrappedNode.getParameters().size();
     }
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        if (i < 0 || i >= getNoParams()) {
-            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNoParams()));
+        if (i < 0 || i >= getNumberOfParams()) {
+            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
         return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i), typeSolver);
     }
@@ -101,7 +101,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
         Map<String, Type> determinedTypeParameters = new HashMap<>();
-        for (int i = 0; i < getNoParams(); i++) {
+        for (int i = 0; i < getNumberOfParams(); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);
             determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
@@ -187,7 +187,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     private Type replaceTypeParams(Type type, TypeSolver typeSolver, Context context) {
         if (type.isTypeVariable()) {
             TypeParameterDeclaration typeParameter = type.asTypeParameter();
-            if (typeParameter.declaredOnClass()) {
+            if (typeParameter.declaredOnType()) {
                 Optional<Type> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
                 if (typeParam.isPresent()) {
                     type = typeParam.get();

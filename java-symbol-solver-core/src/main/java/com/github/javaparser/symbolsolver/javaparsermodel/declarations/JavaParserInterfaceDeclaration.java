@@ -212,7 +212,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public boolean isTypeVariable() {
+    public boolean isTypeParameter() {
         return false;
     }
 

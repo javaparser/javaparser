@@ -89,7 +89,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public boolean isTypeVariable() {
+    public boolean isTypeParameter() {
         return true;
     }
 

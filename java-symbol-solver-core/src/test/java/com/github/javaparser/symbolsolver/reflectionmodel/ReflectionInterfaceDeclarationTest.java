@@ -39,10 +39,10 @@ public class ReflectionInterfaceDeclarationTest {
         assertEquals(28, methods.size());
         assertEquals("clear", methods.get(4).getName());
         assertEquals(true, methods.get(4).isAbstract());
-        assertEquals(0, methods.get(4).getNoParams());
+        assertEquals(0, methods.get(4).getNumberOfParams());
         assertEquals("contains", methods.get(5).getName());
         assertEquals(true, methods.get(5).isAbstract());
-        assertEquals(1, methods.get(5).getNoParams());
+        assertEquals(1, methods.get(5).getNumberOfParams());
         assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
         assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
     }

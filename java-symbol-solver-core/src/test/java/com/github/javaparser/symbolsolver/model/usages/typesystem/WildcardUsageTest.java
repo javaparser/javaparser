@@ -63,7 +63,7 @@ public class WildcardUsageTest {
         superBar = Wildcard.superBound(bar);
         extendsFoo = Wildcard.extendsBound(foo);
         extendsBar = Wildcard.extendsBound(bar);
-        a = new TypeVariable(TypeParameterDeclaration.onClass("A", "foo.Bar", Collections.emptyList()));
+        a = new TypeVariable(TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()));
         superA = Wildcard.superBound(a);
         extendsA = Wildcard.extendsBound(a);
         superString = Wildcard.superBound(string);
@@ -382,7 +382,7 @@ public class WildcardUsageTest {
         assertEquals(true, ref.getFieldType("elements").get().isReferenceType());
         assertEquals(List.class.getCanonicalName(), ref.getFieldType("elements").get().asReferenceType().getQualifiedName());
         assertEquals(1, ref.getFieldType("elements").get().asReferenceType().typeParametersValues().size());
-        assertEquals(true, ref.getFieldType("elements").get().asReferenceType().typeParametersValues().get(0).isTypeVariable());
+        assertEquals(true, ref.getFieldType("elements").get().asReferenceType().typeParametersValues().get(0).isTypeParameter());
         assertEquals("A", ref.getFieldType("elements").get().asReferenceType().typeParametersValues().get(0).asTypeParameter().getName());
 
         ref = new ReferenceTypeUsage(new ReflectionClassDeclaration(Foo.class, typeSolver),

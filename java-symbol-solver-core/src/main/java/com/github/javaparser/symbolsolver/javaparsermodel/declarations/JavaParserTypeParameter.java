@@ -89,7 +89,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public boolean declaredOnClass() {
+    public boolean declaredOnType() {
         return (getParentNode(wrappedNode) instanceof ClassOrInterfaceDeclaration);
     }
 
@@ -100,7 +100,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public String getQualifiedName() {
-        if (this.declaredOnClass()) {
+        if (this.declaredOnType()) {
             com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
             TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
             return String.format("%s.%s", typeDeclaration.getQualifiedName(), getName());
@@ -156,7 +156,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public boolean isTypeVariable() {
+    public boolean isTypeParameter() {
         return true;
     }
 

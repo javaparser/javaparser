@@ -50,13 +50,13 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public boolean declaredOnClass() {
+    public boolean declaredOnType() {
         return declaredOnClass;
     }
 
     @Override
     public boolean declaredOnMethod() {
-        return !declaredOnClass();
+        return !declaredOnType();
     }
 
     @Override

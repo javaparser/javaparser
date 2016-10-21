@@ -42,7 +42,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
 
     public ReferenceType(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
-        if (this.typeDeclaration.isTypeVariable()) {
+        if (this.typeDeclaration.isTypeParameter()) {
             throw new IllegalArgumentException();
         }
         this.typeSolver = typeSolver;
@@ -62,7 +62,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         }
         this.typeDeclaration = typeDeclaration;
         this.typeParameters = typeParameters;
-        if (this.typeDeclaration.isTypeVariable()) {
+        if (this.typeDeclaration.isTypeParameter()) {
             throw new IllegalArgumentException();
         }
         this.typeSolver = typeSolver;
@@ -250,7 +250,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     public Type replaceTypeParams(Type type) {
         if (type.isTypeVariable()) {
             TypeParameterDeclaration typeParameter = type.asTypeParameter();
-            if (typeParameter.declaredOnClass()) {
+            if (typeParameter.declaredOnType()) {
                 Optional<Type> typeParam = typeParamByName(typeParameter.getName());
                 if (typeParam.isPresent()) {
                     type = typeParam.get();
@@ -305,7 +305,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
 
     @Override
     public boolean isTypeVariable() {
-        return typeDeclaration.isTypeVariable();
+        return typeDeclaration.isTypeParameter();
     }
 
     /**

@@ -49,7 +49,7 @@ public class TypeVariable implements Type {
         TypeVariable that = (TypeVariable) o;
 
         if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
-        if (typeParameter.declaredOnClass() != that.typeParameter.declaredOnClass()) return false;
+        if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType()) return false;
         if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod()) return false;
 
         return true;

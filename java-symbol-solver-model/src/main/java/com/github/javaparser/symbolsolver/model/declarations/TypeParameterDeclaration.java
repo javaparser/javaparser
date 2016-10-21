@@ -22,11 +22,22 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import java.util.List;
 
 /**
+ * Declaration of a type parameter.
+ * For example:
+ * <p>
+ *     class A&lt;E extends String&gt;{}
+ * </p>
+ *
+ * In this case <b>E</b> would be a type parameter.
+ *
  * @author Federico Tomassetti
  */
 public interface TypeParameterDeclaration {
 
-    static TypeParameterDeclaration onClass(final String name, String classQName, List<Bound> bounds) {
+    /**
+     * Instantiate a TypeParameter defined on a Type with the given data.
+     */
+    static TypeParameterDeclaration onType(final String name, String classQName, List<Bound> bounds) {
         return new TypeParameterDeclaration() {
             @Override
             public String getName() {
@@ -34,7 +45,7 @@ public interface TypeParameterDeclaration {
             }
 
             @Override
-            public boolean declaredOnClass() {
+            public boolean declaredOnType() {
                 return true;
             }
 
@@ -55,17 +66,26 @@ public interface TypeParameterDeclaration {
 
             @Override
             public String toString() {
-                return "TypeParameter onClass " + name;
+                return "TypeParameter onType " + name;
             }
         };
     }
 
+    /**
+     * Name of the type parameter.
+     */
     String getName();
 
-    boolean declaredOnClass();
+    /**
+     * Is the type parameter been defined on a type?
+     */
+    boolean declaredOnType();
 
+    /**
+     * Is the type parameter been defined on a method?
+     */
     boolean declaredOnMethod();
-
+    
     String getQualifiedName();
 
     List<Bound> getBounds(TypeSolver typeSolver);

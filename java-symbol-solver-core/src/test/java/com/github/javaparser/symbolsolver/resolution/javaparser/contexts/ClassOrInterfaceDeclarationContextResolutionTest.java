@@ -351,7 +351,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         SymbolReference<MethodDeclaration> ref = context.solveMethod("foo0", ImmutableList.of(), new JreTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(0, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
     }
 
     @Test
@@ -363,7 +363,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         SymbolReference<MethodDeclaration> ref = context.solveMethod("foo1", ImmutableList.of(), new JreTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(0, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
     }
 
     @Test
@@ -375,7 +375,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         SymbolReference<MethodDeclaration> ref = context.solveMethod("foo2", ImmutableList.of(), new JreTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("Super", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(0, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
     }
 
     @Test
@@ -389,7 +389,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         SymbolReference<MethodDeclaration> ref = context.solveMethod("foo3", ImmutableList.of(intType), new JreTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
     }
 
     @Test
@@ -403,7 +403,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         SymbolReference<MethodDeclaration> ref = context.solveMethod("foo4", ImmutableList.of(stringType), new JreTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNoParams());
+        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
     }
 
     @Test(expected = MethodAmbiguityException.class)

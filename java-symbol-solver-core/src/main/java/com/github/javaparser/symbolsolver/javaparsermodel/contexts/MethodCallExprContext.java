@@ -74,7 +74,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<Type> actualParamTypes) {
         if (methodUsage.getDeclaration().hasVariadicParameter()) {
-            if (actualParamTypes.size() == methodUsage.getDeclaration().getNoParams()) {
+            if (actualParamTypes.size() == methodUsage.getDeclaration().getNumberOfParams()) {
                 Type expectedType = methodUsage.getDeclaration().getLastParam().getType();
                 Type actualType = actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
@@ -175,7 +175,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Type usingParameterTypesFromScope(Type scope, Type type) {
         if (type.isReferenceType()) {
             for (Tuple2<TypeParameterDeclaration, Type> entry : type.asReferenceType().getTypeParametersMap()) {
-                if (entry._1.declaredOnClass() && scope.asReferenceType().getGenericParameterByName(entry._1.getName()).isPresent()) {
+                if (entry._1.declaredOnType() && scope.asReferenceType().getGenericParameterByName(entry._1.getName()).isPresent()) {
                     type = type.replaceParam(entry._1.getName(), scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get());
                 }
             }

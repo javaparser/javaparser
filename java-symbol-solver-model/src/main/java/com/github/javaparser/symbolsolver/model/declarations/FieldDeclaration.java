@@ -23,6 +23,9 @@ package com.github.javaparser.symbolsolver.model.declarations;
  */
 public interface FieldDeclaration extends ValueDeclaration, HasAccessLevel {
 
+    /**
+     * Is the field static?
+     */
     boolean isStatic();
 
     @Override
@@ -35,6 +38,9 @@ public interface FieldDeclaration extends ValueDeclaration, HasAccessLevel {
         return this;
     }
 
+    /**
+     * The type on which this field has been declared
+     */
     TypeDeclaration declaringType();
 
 }

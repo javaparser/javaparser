@@ -54,7 +54,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         if (!getName().equals(that.getName())) {
             return false;
         }
-        if (declaredOnClass() != that.declaredOnClass()) {
+        if (declaredOnType() != that.declaredOnType()) {
             return false;
         }
         if (declaredOnMethod() != that.declaredOnMethod()) {
@@ -77,7 +77,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public boolean declaredOnClass() {
+    public boolean declaredOnType() {
         return declaredOnClass;
     }
 
@@ -88,7 +88,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public String getQualifiedName() {
-        if (this.declaredOnClass()) {
+        if (this.declaredOnType()) {
             return String.format("%s.%s", qNameOfDeclaringClass, getName());
         } else {
             throw new UnsupportedOperationException(typeVariable.getGenericDeclaration().getClass().getCanonicalName());

@@ -67,7 +67,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractTest {
     @Test
     public void testIsTypeVariable() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
-        assertEquals(false, nodeWithAnnotations.isTypeVariable());
+        assertEquals(false, nodeWithAnnotations.isTypeParameter());
     }
 
     @Test

@@ -39,7 +39,7 @@ public class MethodUsage implements TypeParametrized {
     public MethodUsage(MethodDeclaration declaration) {
         this.typeParametersMap = new TypeParametersMap();
         this.declaration = declaration;
-        for (int i = 0; i < declaration.getNoParams(); i++) {
+        for (int i = 0; i < declaration.getNumberOfParams(); i++) {
             paramTypes.add(declaration.getParam(i).getType());
         }
         returnType = declaration.getReturnType();

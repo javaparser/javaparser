@@ -25,9 +25,19 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
  */
 public interface MethodDeclaration extends MethodLikeDeclaration {
 
+    /**
+     * The type of the value returned by the current method. This method can also be invoked
+     * for methods returning void.
+     */
     Type getReturnType();
 
+    /**
+     * Is the method abstract? All interface methods not marked as default are abstract.
+     */
     boolean isAbstract();
 
+    /**
+     * Is this a default method?
+     */
     boolean isDefaultMethod();
 }

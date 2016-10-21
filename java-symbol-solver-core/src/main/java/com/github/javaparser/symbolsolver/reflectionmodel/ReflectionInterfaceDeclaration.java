@@ -194,7 +194,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public boolean isTypeVariable() {
+    public boolean isTypeParameter() {
         return false;
     }
 
