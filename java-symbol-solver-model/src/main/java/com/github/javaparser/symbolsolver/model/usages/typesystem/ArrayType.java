@@ -46,18 +46,22 @@ public class ArrayType implements Type {
     }
 
     @Override
+    public int hashCode() {
+        return baseType.hashCode();
+    }
+
+    @Override
     public String toString() {
         return "ArrayTypeUsage{" + baseType + "}";
     }
 
+    ///
+    /// Type methods
+    ///
+
     @Override
     public ArrayType asArrayType() {
         return this;
-    }
-
-    @Override
-    public int hashCode() {
-        return baseType.hashCode();
     }
 
     @Override
@@ -75,21 +79,21 @@ public class ArrayType implements Type {
     }
 
     @Override
+    public boolean isAssignableBy(Type other) {
+        if (other.isArray()) {
+            return baseType.isAssignableBy(other.asArrayType().getComponentType());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public Type replaceParam(String name, Type replaced) {
         Type baseTypeReplaced = baseType.replaceParam(name, replaced);
         if (baseTypeReplaced == baseType) {
             return this;
         } else {
             return new ArrayType(baseTypeReplaced);
-        }
-    }
-
-    @Override
-    public boolean isAssignableBy(Type other) {
-        if (other.isArray()) {
-            return baseType.isAssignableBy(other.asArrayType().getComponentType());
-        } else {
-            return false;
         }
     }
 
