@@ -90,6 +90,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
 
         if (!typeDeclaration.equals(that.typeDeclaration)) return false;
         if (!typeParameters.equals(that.typeParameters)) return false;
+        if (!typeParametersMap.equals(that.typeParametersMap)) return false;
 
         return true;
     }
@@ -97,7 +98,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     @Override
     public int hashCode() {
         int result = typeDeclaration.hashCode();
-        result = 31 * result + typeParameters.hashCode();
+        result = 31 * result + typeParametersMap.hashCode();
         return result;
     }
 
@@ -105,55 +106,53 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     public String toString() {
         return "ReferenceTypeUsage{" +
                 "declaration=" + typeDeclaration +
-                ", typeParametersValues=" + typeParameters +
+                ", typeParametersMap=" + typeParametersMap +
                 '}';
     }
 
-    //
-    // Public methods
-    //
-
-    public ReferenceType asReferenceType() {
-        return this;
-    }
-
-    public final TypeDeclaration getTypeDeclaration() {
-        return typeDeclaration;
-    }
+    ///
+    /// Relation with other types
+    ///
 
     @Override
     public final boolean isReferenceType() {
         return true;
     }
 
-    /**
-     * The type of the field could be different from the one in the corresponding FieldDeclaration because
-     * type variables would be solved.
-     */
-    public Optional<Type> getFieldType(String name) {
-        if (!typeDeclaration.hasField(name)) {
-            return Optional.empty();
-        }
-        Type type = typeDeclaration.getField(name).getType();
-        type = replaceTypeParams(type);
-        return Optional.of(type);
+    ///
+    /// Downcasting
+    ///
+
+    @Override
+    public ReferenceType asReferenceType() {
+        return this;
     }
 
-    /**
-     * Get the type associated with the type parameter with the given name.
-     * It returns Optional.empty unless the type declaration declares a type parameter with the given name.
-     */
-    @Deprecated
-    public Optional<Type> getGenericParameterByName(String name) {
-        int i = 0;
-        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
-            if (tp.getName().equals(name)) {
-                return Optional.of(this.typeParameters.get(i));
-            }
-            i++;
+    ///
+    /// Naming
+    ///
+
+    @Override
+    public String describe() {
+        StringBuilder sb = new StringBuilder();
+        if (hasName()) {
+            sb.append(typeDeclaration.getQualifiedName());
+        } else {
+            sb.append("<anonymous class>");
         }
-        return Optional.empty();
+        if (!typeParametersValues().isEmpty()) {
+            sb.append("<");
+            sb.append(String.join(", ", typeParametersValues().stream()
+                    .map(param -> param.describe())
+                    .collect(Collectors.toList())));
+            sb.append(">");
+        }
+        return sb.toString();
     }
+
+    ///
+    /// TypeParameters
+    ///
 
     /**
      * Create a copy of the value with the type parameter changed.
@@ -177,6 +176,20 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             return create(typeDeclaration, newParams, typeSolver);
         }
     }
+
+    ///
+    /// Assignability
+    ///
+
+    /**
+     * This method checks if ThisType t = new OtherType() would compile.
+     */
+    @Override
+    public abstract boolean isAssignableBy(Type other);
+
+    ///
+    /// Ancestors
+    ///
 
     /**
      * Return all ancestors, that means all superclasses and interfaces.
@@ -216,6 +229,26 @@ public abstract class ReferenceType implements Type, TypeParametrized {
                 .collect(Collectors.toList());
     }
 
+    ///
+    /// Type parameters
+    ///
+
+    /**
+     * Get the type associated with the type parameter with the given name.
+     * It returns Optional.empty unless the type declaration declares a type parameter with the given name.
+     */
+    @Deprecated
+    public Optional<Type> getGenericParameterByName(String name) {
+        int i = 0;
+        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
+            if (tp.getName().equals(name)) {
+                return Optional.of(this.typeParameters.get(i));
+            }
+            i++;
+        }
+        return Optional.empty();
+    }
+
     /**
      * Replace the type typeParametersValues present in the given type with the ones for which this type
      * has a value.
@@ -245,62 +278,9 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return type;
     }
 
-    @Override
-    public String describe() {
-        StringBuilder sb = new StringBuilder();
-        if (hasName()) {
-            sb.append(typeDeclaration.getQualifiedName());
-        } else {
-            sb.append("<anonymous class>");
-        }
-        if (!typeParametersValues().isEmpty()) {
-            sb.append("<");
-            boolean first = true;
-            for (Type param : typeParametersValues()) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append(", ");
-                }
-                sb.append(param.describe());
-            }
-            sb.append(">");
-        }
-        return sb.toString();
-    }
-
     @Deprecated
     public List<Type> typeParametersValues() {
         return typeParameters;
-    }
-
-    @Override
-    public abstract TypeParameterDeclaration asTypeParameter();
-
-    @Override
-    public boolean isTypeVariable() {
-        return typeDeclaration.isTypeParameter();
-    }
-
-    /**
-     * This method checks if ThisType t = new OtherType() would compile.
-     */
-    @Override
-    public abstract boolean isAssignableBy(Type other);
-
-    public boolean hasName() {
-        return typeDeclaration.hasName();
-    }
-
-    public String getQualifiedName() {
-        return typeDeclaration.getQualifiedName();
-    }
-
-    public abstract Set<MethodUsage> getDeclaredMethods();
-
-    public boolean isRawType() {
-        return (!typeDeclaration.getTypeParameters().isEmpty() &&
-                typeParameters.isEmpty());
     }
 
     @Deprecated
@@ -315,6 +295,42 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     @Override
     public TypeParametersMap typeParametersMap() {
         return typeParametersMap;
+    }
+
+    ///
+    /// Other methods introduced by ReferenceType
+    ///
+
+    public final TypeDeclaration getTypeDeclaration() {
+        return typeDeclaration;
+    }
+
+    /**
+     * The type of the field could be different from the one in the corresponding FieldDeclaration because
+     * type variables would be solved.
+     */
+    public Optional<Type> getFieldType(String name) {
+        if (!typeDeclaration.hasField(name)) {
+            return Optional.empty();
+        }
+        Type type = typeDeclaration.getField(name).getType();
+        type = replaceTypeParams(type);
+        return Optional.of(type);
+    }
+
+    public boolean hasName() {
+        return typeDeclaration.hasName();
+    }
+
+    public String getQualifiedName() {
+        return typeDeclaration.getQualifiedName();
+    }
+
+    public abstract Set<MethodUsage> getDeclaredMethods();
+
+    public boolean isRawType() {
+        return (!typeDeclaration.getTypeParameters().isEmpty() &&
+                typeParameters.isEmpty());
     }
 
     //
