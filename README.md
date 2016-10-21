@@ -81,7 +81,14 @@ We use Travis to ensure our tests are passing all the time.
 
 The _dev-files_ dir contains configurations for the Eclipse and the IDEA formatters (I took them from the JavaParser project, thanks guys!).
 
-An overview of the architecture of the project is available in Design.MD
+The project is structured in this way:
+
+* We have nodes that wrap the JavaParser nodes (but can also wrap Javassist or JRE nodes)
+* The nodes contain all the information of the AST
+* Context classes contain the logic to solve methods, symbols and types in the respective context.
+* Default fallback behavior: ask the parent context for help (so if a variable identifier cannot be solved inside a MethodContext the underlying ClassDeclarationContext is asked and maybe we find out that the identifier actually refers to a field.
+
+A more detailed description of the architecture of the project is available in [Design.MD](https://github.com/javaparser/javasymbolsolver/blob/master/Design.MD)
 
 ## Contributing
 
