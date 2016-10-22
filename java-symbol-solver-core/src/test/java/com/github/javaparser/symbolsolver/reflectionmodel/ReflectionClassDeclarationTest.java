@@ -18,7 +18,11 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 
@@ -239,5 +243,24 @@ public class ReflectionClassDeclarationTest {
         ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals(ImmutableSet.of("modCount", "serialVersionUID", "MAX_ARRAY_SIZE", "size", "elementData", "EMPTY_ELEMENTDATA", "DEFAULTCAPACITY_EMPTY_ELEMENTDATA", "DEFAULT_CAPACITY"),
                 arraylist.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testTypeParamValue() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
+        ClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
+        InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        InterfaceDeclaration collection = new ReflectionInterfaceDeclaration(Collection.class, typeResolver);
+        InterfaceDeclaration iterable = new ReflectionInterfaceDeclaration(Iterable.class, typeResolver);
+        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ReferenceType arrayListOfString = new ReferenceTypeImpl(arraylist, ImmutableList.of(string), typeResolver);
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(arraylist.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(abstractList.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(abstractCollection.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(list.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(collection.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(iterable.getTypeParameters().get(0)));
     }
 }
