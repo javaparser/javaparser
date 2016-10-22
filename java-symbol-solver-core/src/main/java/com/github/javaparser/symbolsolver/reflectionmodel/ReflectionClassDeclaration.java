@@ -372,7 +372,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     public List<TypeParameterDeclaration> getTypeParameters() {
         List<TypeParameterDeclaration> params = new ArrayList<>();
         for (TypeVariable tv : this.clazz.getTypeParameters()) {
-            params.add(new ReflectionTypeParameter(tv, true));
+            params.add(new ReflectionTypeParameter(tv, true, typeSolver));
         }
         return params;
     }

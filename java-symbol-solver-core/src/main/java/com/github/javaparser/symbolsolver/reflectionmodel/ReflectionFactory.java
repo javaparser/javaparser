@@ -50,7 +50,7 @@ public class ReflectionFactory {
         if (type instanceof java.lang.reflect.TypeVariable) {
             java.lang.reflect.TypeVariable tv = (java.lang.reflect.TypeVariable) type;
             boolean declaredOnClass = ((java.lang.reflect.TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
-            TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass);
+            TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
             return new com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;

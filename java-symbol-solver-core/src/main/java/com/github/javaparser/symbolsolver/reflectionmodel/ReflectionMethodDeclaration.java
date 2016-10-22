@@ -106,7 +106,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        return Arrays.stream(method.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false)).collect(Collectors.toList());
+        return Arrays.stream(method.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
     }
 
     //@Override

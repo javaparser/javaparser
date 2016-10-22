@@ -20,6 +20,7 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclar
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.lang.reflect.GenericDeclaration;
+import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.List;
@@ -30,8 +31,9 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     private TypeVariable typeVariable;
     private boolean declaredOnClass;
     private String qNameOfDeclaringClass;
+    private TypeSolver typeSolver;
 
-    public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass) {
+    public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass, TypeSolver typeSolver) {
         GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
         if (genericDeclaration instanceof Class) {
             Class clazz = (Class) genericDeclaration;
@@ -42,6 +44,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         }
         this.typeVariable = typeVariable;
         this.declaredOnClass = declaredOnClass;
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -91,11 +94,8 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         if (this.declaredOnType()) {
             return String.format("%s.%s", qNameOfDeclaringClass, getName());
         } else {
-            throw new UnsupportedOperationException(typeVariable.getGenericDeclaration().getClass().getCanonicalName());
-            //typeVariable.getGenericDeclaration()
-            //com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration)getParentNode(wrappedNode);
-            //MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
-            //return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
+            String qNameContainer =  new ReflectionMethodDeclaration((Method)typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
+            return String.format("%s.%s", qNameContainer, getName());
         }
     }
 
