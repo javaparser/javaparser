@@ -227,11 +227,7 @@ public class MethodResolutionLogic {
             return new ArrayType(replaceTypeParam(type.asArrayType().getComponentType(), tp, typeSolver));
         } else if (type.isReferenceType()) {
             ReferenceType result = type.asReferenceType();
-            int i = 0;
-            for (Type typeParam : result.typeParametersValues()) {
-                result = result.replaceParam(i, replaceTypeParam(typeParam, tp, typeSolver)).asReferenceType();
-                i++;
-            }
+            result = result.transformTypeParameters(typeParam -> replaceTypeParam(typeParam, tp, typeSolver)).asReferenceType();
             return result;
         } else if (type.isWildcard()) {
             if (type.describe().equals(tp.getName())) {

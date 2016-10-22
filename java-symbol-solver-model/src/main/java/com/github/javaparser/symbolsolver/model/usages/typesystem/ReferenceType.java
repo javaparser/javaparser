@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
 import com.github.javaparser.symbolsolver.model.usages.TypeParametersMap;
 import com.github.javaparser.symbolsolver.model.usages.TypeParametrized;
+import com.github.javaparser.symbolsolver.model.usages.TypeTransformer;
 import javaslang.Tuple2;
 
 import java.util.ArrayList;
@@ -152,16 +153,15 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     /// TypeParameters
     ///
 
-    @FunctionalInterface
-    public interface TypeParameterTransformer {
-        Type transform(Type type);
-    }
-
-    public Type transformTypeParameters(TypeParameterTransformer transformer) {
+    public Type transformTypeParameters(TypeTransformer transformer) {
         Type result = this;
         int i = 0;
         for (Type tp : this.typeParametersValues()) {
-            result = result.asReferenceType().replaceParam(i, transformer.transform(tp));
+            Type transformedTp = transformer.transform(tp);
+            // Identity comparison on purpose
+            if (transformedTp != tp) {
+                result = result.asReferenceType().replaceParam(i, transformedTp);
+            }
             i++;
         }
         return result;

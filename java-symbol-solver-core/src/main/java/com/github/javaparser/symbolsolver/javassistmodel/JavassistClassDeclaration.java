@@ -150,9 +150,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                         SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
                         List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
                         Type newReturnType = methodUsage.returnType();
-                        for (int i = 0; i < parametersOfReturnType.size(); i++) {
-                            newReturnType = newReturnType.asReferenceType().replaceParam(i, parametersOfReturnType.get(i));
-                        }
+                        // consume one parametersOfReturnType at the time
+                        newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
                     }
                     return Optional.of(methodUsage);
