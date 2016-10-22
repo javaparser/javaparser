@@ -154,7 +154,9 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             Type transformedTp = transformer.transform(tp);
             // Identity comparison on purpose
             if (transformedTp != tp) {
-                result = result.asReferenceType().replaceParam(i, transformedTp);
+                List<Type> typeParametersCorrected = result.asReferenceType().typeParametersValues();
+                typeParametersCorrected.set(i, transformedTp);
+                result = create(typeDeclaration, typeParametersCorrected, typeSolver);
             }
             i++;
         }
@@ -430,16 +432,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             i++;
         }
         return Optional.empty();
-    }
-
-    /**
-     * Create a copy of the value with the type parameter changed.
-     */
-    @Deprecated
-    private Type replaceParam(int i, Type replaced) {
-        List<Type> typeParametersCorrected = typeParametersValues();
-        typeParametersCorrected.set(i, replaced);
-        return create(typeDeclaration, typeParametersCorrected, typeSolver);
     }
 
 }
