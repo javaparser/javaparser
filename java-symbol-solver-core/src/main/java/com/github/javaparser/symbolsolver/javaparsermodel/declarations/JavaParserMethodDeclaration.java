@@ -100,21 +100,21 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
-        Map<String, Type> determinedTypeParameters = new HashMap<>();
+        Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
         for (int i = 0; i < getNumberOfParams(); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);
             determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
         }
 
-        for (String determinedParam : determinedTypeParameters.keySet()) {
+        for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
             returnType = returnType.replaceParam(determinedParam, determinedTypeParameters.get(determinedParam));
         }
 
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);
     }
 
-    private void determineTypeParameters(Map<String, Type> determinedTypeParameters, Type formalParamType, Type actualParamType, TypeSolver typeSolver) {
+    private void determineTypeParameters(Map<TypeParameterDeclaration, Type> determinedTypeParameters, Type formalParamType, Type actualParamType, TypeSolver typeSolver) {
         if (actualParamType.isNull()) {
             return;
         }
@@ -122,7 +122,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             return;
         }
         if (formalParamType.isTypeVariable()) {
-            determinedTypeParameters.put(formalParamType.describe(), actualParamType);
+            determinedTypeParameters.put(formalParamType.asTypeParameter(), actualParamType);
             return;
         }
         if (formalParamType instanceof Wildcard) {
