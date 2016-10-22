@@ -54,14 +54,17 @@ public class TypeParametersMap {
     }
 
     private Map<String, Type> nameToValue;
+    private Map<String, TypeParameterDeclaration> nameToDeclaration;
 
     public TypeParametersMap() {
         nameToValue = new HashMap<>();
+        nameToDeclaration = new HashMap<>();
     }
 
     public void setValue(TypeParameterDeclaration typeParameter, Type value) {
         String qualifiedName = typeParameter.getQualifiedName();
         nameToValue.put(qualifiedName, value);
+        nameToDeclaration.put(qualifiedName, typeParameter);
     }
 
     public Type getValue(TypeParameterDeclaration typeParameter) {
@@ -83,5 +86,12 @@ public class TypeParametersMap {
 
     public boolean isEmpty() {
         return nameToValue.isEmpty();
+    }
+
+    public Type replaceAll(Type type) {
+        for (TypeParameterDeclaration typeParameterDeclaration : this.nameToDeclaration.values()) {
+            type = type.replaceParam(typeParameterDeclaration, getValue(typeParameterDeclaration));
+        }
+        return type;
     }
 }

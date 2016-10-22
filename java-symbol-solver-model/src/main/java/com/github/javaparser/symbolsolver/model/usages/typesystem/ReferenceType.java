@@ -196,20 +196,27 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
      * Foo&lt;Boolean, String&gt;.
      */
     public List<ReferenceType> getAllAncestors() {
-        We need to go through the inheritance line and propagate the type parametes
+        // We need to go through the inheritance line and propagate the type parametes
 
         List<ReferenceType> ancestors = typeDeclaration.getAllAncestors();
 
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-        ReferenceType objectRef = create(objectType, typeSolver);
 
         ancestors = ancestors.stream()
-                .map((a) -> useThisTypeParametersOnTheGivenType(a).asReferenceType())
+                .map(a -> replaceParamsForAncestors(a))
                 .collect(Collectors.toList());
 
         ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
+        ReferenceType objectRef = create(objectType, typeSolver);
         ancestors.add(objectRef);
         return ancestors;
+    }
+
+    private ReferenceType replaceParamsForAncestors(ReferenceType ancestor) {
+        return typeParametersMap().replaceAll(ancestor).asReferenceType();
+        //System.out.println("ANCESTOR " +ancestor.describe() + " params " + String.join(", ", ancestor.typeParametersValues().stream().map(tp -> tp.describe()).collect(Collectors.toList())));
+        //ancestor.typeParametersValues().stream().filter(tp -> tp.isTypeVariable()).forEach(tp -> System.out.println("REFER TO "+tp.asTypeParameter().getQualifiedName()));
+        //return ancestor;
     }
 
     public List<ReferenceType> getAllInterfacesAncestors() {
@@ -297,7 +304,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
         }
         for (ReferenceType ancestor : this.getAllAncestors()) {
-
+            System.out.println("THIS "+this.describe() + " ANCESTOR " + ancestor.describe());
         }
         List<Type> typeParameters = this.typeParametersValues();
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());

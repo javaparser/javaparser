@@ -36,6 +36,7 @@ import javaslang.Tuple2;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.TypeVariable;
 import java.util.*;
 import java.util.function.Function;
@@ -238,13 +239,27 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new LinkedList<>();
-        if (clazz.getSuperclass() != null) {
-            ReferenceTypeImpl superclass = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
-            ancestors.add(superclass);
+        if (clazz.getGenericSuperclass() != null) {
+            if (clazz.getGenericSuperclass() instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericSuperclass();
+                List<Type> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
+                        .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
+                        .collect(Collectors.toList());
+                ancestors.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)parameterizedType.getRawType(), typeSolver), typeParameters, typeSolver));
+            } else {
+                throw new RuntimeException(clazz.getGenericSuperclass().getClass().getCanonicalName());
+            }
         }
-        for (Class<?> interfaze : clazz.getInterfaces()) {
-            ReferenceTypeImpl interfazeDecl = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(interfaze, typeSolver), typeSolver);
-            ancestors.add(interfazeDecl);
+        for (java.lang.reflect.Type interfaze : clazz.getGenericInterfaces()) {
+            if (interfaze instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType) interfaze;
+                List<Type> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
+                        .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
+                        .collect(Collectors.toList());
+                ancestors.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)parameterizedType.getRawType(), typeSolver), typeParameters, typeSolver));
+            } else {
+                throw new RuntimeException(interfaze.getClass().getCanonicalName());
+            }
         }
         for (int i = 0; i < ancestors.size(); i++) {
             if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {

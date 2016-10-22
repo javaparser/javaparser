@@ -16,6 +16,8 @@
 
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
+import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.InterfaceDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
@@ -25,10 +27,8 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -414,6 +414,52 @@ public class ReferenceTypeTest {
                 typeSolver);
 
         assertEquals(false, ref.getFieldType("bar").isPresent());
+    }
+
+    @Test
+    public void testTypeParamValue() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
+        ClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
+        InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        InterfaceDeclaration collection = new ReflectionInterfaceDeclaration(Collection.class, typeResolver);
+        InterfaceDeclaration iterable = new ReflectionInterfaceDeclaration(Iterable.class, typeResolver);
+        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ReferenceType arrayListOfString = new ReferenceTypeImpl(arraylist, ImmutableList.of(string), typeResolver);
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(arraylist.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(abstractList.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(abstractCollection.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(list.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(collection.getTypeParameters().get(0)));
+        assertEquals(Optional.of(string), arrayListOfString.typeParamValue(iterable.getTypeParameters().get(0)));
+    }
+
+    @Test
+    public void testGetAllAncestors() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
+        ClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
+        InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        InterfaceDeclaration collection = new ReflectionInterfaceDeclaration(Collection.class, typeResolver);
+        InterfaceDeclaration iterable = new ReflectionInterfaceDeclaration(Iterable.class, typeResolver);
+        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ReferenceType arrayListOfString = new ReferenceTypeImpl(arraylist, ImmutableList.of(string), typeResolver);
+
+        Map<String, ReferenceType> ancestors = new HashMap<>();
+        arrayListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
+        assertEquals(9, ancestors.size());
+
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver), typeResolver), ancestors.get("java.util.RandomAccess"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(AbstractCollection.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.AbstractCollection"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.List"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Cloneable.class, typeResolver), typeResolver), ancestors.get("java.lang.Cloneable"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.Collection"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(AbstractList.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.AbstractList"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver), typeResolver), ancestors.get("java.lang.Object"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.lang.Iterable"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Serializable.class, typeResolver), typeResolver), ancestors.get("java.io.Serializable"));
     }
 
 }
