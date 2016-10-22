@@ -54,7 +54,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
 
     public ReferenceType(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
-        this.typeSolver = typeSolver;
     }
 
     public ReferenceType(TypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver) {
@@ -210,15 +209,11 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ReferenceType objectRef = create(objectType, typeSolver);
 
-        ancestors = ancestors.stream().map((a) -> replaceTypeParams(a).asReferenceType()).collect(Collectors.toList());
-        // TODO replace type typeParametersValues
+        ancestors = ancestors.stream()
+                .map((a) -> replaceTypeParams(a).asReferenceType())
+                .collect(Collectors.toList());
 
-        for (int i = 0; i < ancestors.size(); i++) {
-            if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
-                ancestors.remove(i);
-                i--;
-            }
-        }
+        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
         ancestors.add(objectRef);
         return ancestors;
     }
@@ -237,14 +232,11 @@ public abstract class ReferenceType implements Type, TypeParametrized {
      * Get the type associated with the type parameter with the given name.
      * It returns Optional.empty unless the type declaration declares a type parameter with the given name.
      */
-    @Deprecated
     public Optional<Type> getGenericParameterByName(String name) {
-        int i = 0;
         for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
             if (tp.getName().equals(name)) {
-                return Optional.of(this.typeParameters.get(i));
+                return Optional.of(this.typeParametersMap().getValue(tp));
             }
-            i++;
         }
         return Optional.empty();
     }

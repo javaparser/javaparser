@@ -76,17 +76,12 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             if (lambdaType.isReferenceType()) {
                                 for (Tuple2<TypeParameterDeclaration, Type> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
                                     if (entry._2.isTypeVariable() && entry._2.asTypeParameter().declaredOnType()) {
-                                        Optional<Type> ot = t.asReferenceType().getGenericParameterByName(entry._1.getName());
-                                        if (ot.isPresent()) {
-                                            lambdaType = lambdaType.replaceParam(entry._1.getName(), ot.get());
-                                        }
+                                        Type ot = t.asReferenceType().typeParametersMap().getValue(entry._1);
+                                        lambdaType = lambdaType.replaceParam(entry._1.getName(), ot);
                                     }
                                 }
                             } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
-                                Optional<Type> ot = t.asReferenceType().getGenericParameterByName(lambdaType.asTypeParameter().getName());
-                                if (ot.isPresent()) {
-                                    lambdaType = ot.get();
-                                }
+                                lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
                             }
 
                             Value value = new Value(lambdaType, name);
