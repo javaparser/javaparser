@@ -163,13 +163,6 @@ public class PrimitiveTypeTest {
     }
 
     @Test
-    public void testReplaceParam() {
-        for (PrimitiveType ptu : PrimitiveType.ALL) {
-            assertTrue(ptu == ptu.replaceParam("A", OBJECT));
-        }
-    }
-
-    @Test
     public void testIsAssignableByOtherPrimitiveTypes() {
         assertEquals(true, PrimitiveType.BOOLEAN.isAssignableBy(PrimitiveType.BOOLEAN));
         assertEquals(false, PrimitiveType.BOOLEAN.isAssignableBy(PrimitiveType.CHAR));

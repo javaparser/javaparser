@@ -105,11 +105,6 @@ public class VoidTypeTest {
     }
 
     @Test
-    public void testReplaceParam() {
-        assertTrue(VoidType.INSTANCE == VoidType.INSTANCE.replaceParam("A", OBJECT));
-    }
-
-    @Test
     public void testIsAssignableBy() {
         try {
             assertEquals(false, VoidType.INSTANCE.isAssignableBy(NullType.INSTANCE));

@@ -105,11 +105,6 @@ public class NullTypeTest {
     }
 
     @Test
-    public void testReplaceParam() {
-        assertTrue(NullType.INSTANCE == NullType.INSTANCE.replaceParam("A", OBJECT));
-    }
-
-    @Test
     public void testIsAssignableBy() {
         try {
             assertEquals(false, NullType.INSTANCE.isAssignableBy(NullType.INSTANCE));
