@@ -16,6 +16,8 @@
 
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+
 /**
  * Array Type.
  *
@@ -90,6 +92,16 @@ public class ArrayType implements Type {
     @Override
     public Type replaceParam(String name, Type replaced) {
         Type baseTypeReplaced = baseType.replaceParam(name, replaced);
+        if (baseTypeReplaced == baseType) {
+            return this;
+        } else {
+            return new ArrayType(baseTypeReplaced);
+        }
+    }
+
+    @Override
+    public Type replaceParam(TypeParameterDeclaration tpToReplace, Type replaced) {
+        Type baseTypeReplaced = baseType.replaceParam(tpToReplace, replaced);
         if (baseTypeReplaced == baseType) {
             return this;
         } else {

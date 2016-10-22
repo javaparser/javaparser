@@ -169,6 +169,14 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return transformTypeParameters(tp -> tp.replaceParam(name, replaced));
     }
 
+    @Override
+    public Type replaceParam(TypeParameterDeclaration tpToReplace, Type replaced) {
+        if (replaced == null) {
+            throw new IllegalArgumentException();
+        }
+        return transformTypeParameters(tp -> tp.replaceParam(tpToReplace, replaced));
+    }
+
     ///
     /// Assignability
     ///

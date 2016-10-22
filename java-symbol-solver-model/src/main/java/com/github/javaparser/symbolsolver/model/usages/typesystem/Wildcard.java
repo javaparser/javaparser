@@ -16,6 +16,8 @@
 
 package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+
 /**
  * A wildcard can be:
  * - unbounded (?)
@@ -142,6 +144,25 @@ public class Wildcard implements Type {
             return this;
         }
         Type boundedTypeReplaced = boundedType.replaceParam(name, replaced);
+        if (boundedTypeReplaced == null) {
+            throw new RuntimeException();
+        }
+        if (boundedTypeReplaced != boundedType) {
+            return new Wildcard(type, boundedTypeReplaced);
+        } else {
+            return this;
+        }
+    }
+
+    @Override
+    public Type replaceParam(TypeParameterDeclaration tpToReplace, Type replaced) {
+        if (replaced == null) {
+            throw new IllegalArgumentException();
+        }
+        if (boundedType == null) {
+            return this;
+        }
+        Type boundedTypeReplaced = boundedType.replaceParam(tpToReplace, replaced);
         if (boundedTypeReplaced == null) {
             throw new RuntimeException();
         }
