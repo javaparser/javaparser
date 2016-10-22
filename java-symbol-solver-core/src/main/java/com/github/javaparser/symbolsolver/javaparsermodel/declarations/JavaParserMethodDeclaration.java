@@ -22,12 +22,11 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.logic.TypeParametersLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Wildcard;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -104,7 +103,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         for (int i = 0; i < getNumberOfParams(); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);
-            determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
+            TypeParametersLogic.determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
         }
 
         for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
@@ -112,53 +111,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         }
 
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);
-    }
-
-    private void determineTypeParameters(Map<TypeParameterDeclaration, Type> determinedTypeParameters, Type formalParamType, Type actualParamType, TypeSolver typeSolver) {
-        if (actualParamType.isNull()) {
-            return;
-        }
-        if (actualParamType.isTypeVariable()) {
-            return;
-        }
-        if (formalParamType.isTypeVariable()) {
-            determinedTypeParameters.put(formalParamType.asTypeParameter(), actualParamType);
-            return;
-        }
-        if (formalParamType instanceof Wildcard) {
-            return;
-        }
-        if (formalParamType.isArray() && actualParamType.isArray()) {
-            determineTypeParameters(
-                    determinedTypeParameters,
-                    formalParamType.asArrayType().getComponentType(),
-                    actualParamType.asArrayType().getComponentType(),
-                    typeSolver);
-            return;
-        }
-        if (formalParamType.isReferenceType() && actualParamType.isReferenceType()
-                && !formalParamType.asReferenceType().getQualifiedName().equals(actualParamType.asReferenceType().getQualifiedName())) {
-            List<ReferenceType> ancestors = actualParamType.asReferenceType().getAllAncestors();
-            final String formalParamTypeQName = formalParamType.asReferenceType().getQualifiedName();
-            List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
-            if (correspondingFormalType.isEmpty()) {
-                throw new IllegalArgumentException();
-            }
-            actualParamType = correspondingFormalType.get(0);
-        }
-        if (formalParamType.isReferenceType() && actualParamType.isReferenceType()) {
-            if (formalParamType.asReferenceType().isRawType() || actualParamType.asReferenceType().isRawType()) {
-                return;
-            }
-            List<Type> formalTypeParams = formalParamType.asReferenceType().typeParametersValues();
-            List<Type> actualTypeParams = actualParamType.asReferenceType().typeParametersValues();
-            if (formalTypeParams.size() != actualTypeParams.size()) {
-                throw new UnsupportedOperationException();
-            }
-            for (int i = 0; i < formalTypeParams.size(); i++) {
-                determineTypeParameters(determinedTypeParameters, formalTypeParams.get(i), actualTypeParams.get(i), typeSolver);
-            }
-        }
     }
 
     private Context getContext() {
