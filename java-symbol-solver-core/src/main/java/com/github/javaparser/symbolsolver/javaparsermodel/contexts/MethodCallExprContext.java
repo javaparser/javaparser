@@ -95,24 +95,24 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 //        actualParamTypes, methodUsage.getDeclaration(), methodUsage));
             }
         }
-        Map<String, Type> matchedTypeParameters = new HashMap<>();
+        Map<TypeParameterDeclaration, Type> matchedTypeParameters = new HashMap<>();
         for (int i = 0; i < actualParamTypes.size(); i++) {
             Type expectedType = methodUsage.getParamType(i);
             Type actualType = actualParamTypes.get(i);
             matchTypeParameters(expectedType, actualType, matchedTypeParameters);
         }
-        for (String tp : matchedTypeParameters.keySet()) {
-            methodUsage = methodUsage.replaceTypeParameterByName(tp, matchedTypeParameters.get(tp));
+        for (TypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
+            methodUsage = methodUsage.replaceTypeParameterByName(tp.getName(), matchedTypeParameters.get(tp));
         }
         return methodUsage;
     }
 
-    private void matchTypeParameters(Type expectedType, Type actualType, Map<String, Type> matchedTypeParameters) {
+    private void matchTypeParameters(Type expectedType, Type actualType, Map<TypeParameterDeclaration, Type> matchedTypeParameters) {
         if (expectedType.isTypeVariable()) {
             if (!expectedType.isTypeVariable()) {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
             }
-            matchedTypeParameters.put(expectedType.asTypeParameter().getName(), actualType);
+            matchedTypeParameters.put(expectedType.asTypeParameter(), actualType);
         } else if (expectedType.isArray()) {
             if (!actualType.isArray()) {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
