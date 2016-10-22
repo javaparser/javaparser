@@ -263,12 +263,10 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return type;
     }
 
-    @Deprecated
     public List<Type> typeParametersValues() {
         return this.typeParametersMap.isEmpty() ? Collections.emptyList() : typeDeclaration.getTypeParameters().stream().map(tp -> typeParametersMap.getValue(tp)).collect(Collectors.toList());
     }
 
-    @Deprecated
     public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
         List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
         for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
