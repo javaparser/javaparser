@@ -296,12 +296,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return fields;
     }
 
-
     @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
         ReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
-        enumClass = enumClass.replaceParam("E", new ReferenceTypeImpl(this, typeSolver)).asReferenceType();
+        TypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().getTypeParameters().get(0);
+        enumClass.typeParametersMap().setValue(eTypeParameter, new ReferenceTypeImpl(this, typeSolver));
         ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
