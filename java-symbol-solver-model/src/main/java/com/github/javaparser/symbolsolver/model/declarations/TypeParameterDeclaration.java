@@ -55,8 +55,8 @@ public interface TypeParameterDeclaration {
             }
 
             @Override
-            public String getQualifiedName() {
-                return String.format("%s.%s", classQName, name);
+            public String getContainerQualifiedName() {
+                return classQName;
             }
 
             @Override
@@ -91,7 +91,11 @@ public interface TypeParameterDeclaration {
      * It is composed by the qualified name of the container followed by a dot and the name of the Type Parameter.
      * The qualified name of a method is its qualified signature.
      */
-    String getQualifiedName();
+    default String getQualifiedName() {
+        return String.format("%s.%s", getContainerQualifiedName(), getName());
+    }
+
+    String getContainerQualifiedName();
 
     /**
      * The bounds specified for the type parameter.

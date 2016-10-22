@@ -60,8 +60,8 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public String getQualifiedName() {
-        return String.format("%s.%s", qualifier, getName());
+    public String getContainerQualifiedName() {
+        return qualifier;
     }
 
     @Override

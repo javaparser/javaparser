@@ -90,12 +90,12 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public String getQualifiedName() {
+    public String getContainerQualifiedName() {
         if (this.declaredOnType()) {
-            return String.format("%s.%s", qNameOfDeclaringClass, getName());
+            return qNameOfDeclaringClass;
         } else {
-            String qNameContainer =  new ReflectionMethodDeclaration((Method)typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
-            return String.format("%s.%s", qNameContainer, getName());
+            String qNameContainer = new ReflectionMethodDeclaration((Method)typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
+            return qNameContainer;
         }
     }
 

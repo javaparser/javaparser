@@ -387,8 +387,25 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeVariable(tp)).collect(Collectors.toList());
     }
 
+    private <T> boolean equalsOrNull(T a, T b) {
+        if (a == null && b == null) {
+            return true;
+        }
+        if ((a == null) != (b == null)) {
+            return false;
+        }
+        return a.equals(b);
+    }
+
     @Deprecated
     private Optional<Type> typeParamValue(TypeParameterDeclaration typeParameterDeclaration) {
+        if (typeParameterDeclaration.declaredOnMethod()) {
+            throw new IllegalArgumentException();
+        }
+        String typeQualifiedName = this.getTypeDeclaration().getQualifiedName();
+        if (equalsOrNull(typeQualifiedName, typeParameterDeclaration.getContainerQualifiedName())) {
+            return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
+        }
         List<Type> typeParameters = this.typeParametersValues();
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ReferenceType objectRef = create(objectType, typeSolver);
@@ -406,7 +423,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
             if (tp.getName().equals(typeParameterDeclaration.getName())) {
                 if (!tp.getQualifiedName().equals(typeParameterDeclaration.getQualifiedName())) {
-                    throw new IllegalArgumentException();
+                    //throw new IllegalArgumentException();
                 }
                 return Optional.of(typeParameters.get(i));
             }

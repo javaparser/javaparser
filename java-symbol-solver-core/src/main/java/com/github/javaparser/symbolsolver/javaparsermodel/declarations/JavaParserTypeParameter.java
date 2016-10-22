@@ -99,16 +99,21 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public String getQualifiedName() {
+    public String getContainerQualifiedName() {
         if (this.declaredOnType()) {
             com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
             TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
-            return String.format("%s.%s", typeDeclaration.getQualifiedName(), getName());
+            return typeDeclaration.getQualifiedName();
         } else {
             com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration) getParentNode(wrappedNode);
             MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
-            return String.format("%s.%s", methodDeclaration.getQualifiedSignature(), getName());
+            return methodDeclaration.getQualifiedSignature();
         }
+    }
+
+    @Override
+    public String getQualifiedName() {
+        return String.format("%s.%s", getContainerQualifiedName(), getName());
     }
 
     @Override
