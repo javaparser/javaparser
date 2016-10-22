@@ -25,10 +25,7 @@ import com.github.javaparser.symbolsolver.model.usages.TypeParametrized;
 import com.github.javaparser.symbolsolver.model.usages.TypeTransformer;
 import javaslang.Tuple2;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,8 +41,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     //
 
     protected TypeDeclaration typeDeclaration;
-    @Deprecated
-    protected List<Type> typeParameters;
     protected TypeSolver typeSolver;
     protected TypeParametersMap typeParametersMap;
 
@@ -73,7 +68,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             this.typeParametersMap.setValue(typeDeclaration.getTypeParameters().get(i), typeParameters.get(i));
         }
         this.typeDeclaration = typeDeclaration;
-        this.typeParameters = typeParameters;
         this.typeSolver = typeSolver;
     }
 
@@ -172,12 +166,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
-        List<Type> newParams = typeParameters.stream().map((tp) -> tp.replaceParam(name, replaced)).collect(Collectors.toList());
-        if (typeParameters.equals(newParams)) {
-            return this;
-        } else {
-            return create(typeDeclaration, newParams, typeSolver);
-        }
+        return transformTypeParameters(tp -> tp.replaceParam(name, replaced));
     }
 
     ///
@@ -276,7 +265,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
 
     @Deprecated
     public List<Type> typeParametersValues() {
-        return typeParameters;
+        return this.typeParametersMap.isEmpty() ? Collections.emptyList() : typeDeclaration.getTypeParameters().stream().map(tp -> typeParametersMap.getValue(tp)).collect(Collectors.toList());
     }
 
     @Deprecated
@@ -408,7 +397,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
 
     @Deprecated
     private Optional<Type> typeParamByName(String name) {
-        List<Type> typeParameters = this.typeParameters;
+        List<Type> typeParameters = this.typeParametersValues();
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ReferenceType objectRef = create(objectType, typeSolver);
         if (typeDeclaration.getTypeParameters().size() != typeParameters.size()) {
@@ -436,7 +425,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
      */
     @Deprecated
     private Type replaceParam(int i, Type replaced) {
-        ArrayList<Type> typeParametersCorrected = new ArrayList<>(typeParameters);
+        List<Type> typeParametersCorrected = typeParametersValues();
         typeParametersCorrected.set(i, replaced);
         return create(typeDeclaration, typeParametersCorrected, typeSolver);
     }
