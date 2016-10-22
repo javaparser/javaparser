@@ -209,13 +209,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         }
 
         if (type.isReferenceType()) {
-            for (int i = 0; i < type.asReferenceType().typeParametersValues().size(); i++) {
-                Type replaced = replaceTypeParams(type.asReferenceType().typeParametersValues().get(i), typeSolver, context);
-                // Identity comparison on purpose
-                if (replaced != type.asReferenceType().typeParametersValues().get(i)) {
-                    type = type.asReferenceType().replaceParam(i, replaced);
-                }
-            }
+            type = type.asReferenceType().transformTypeParameters(tp -> replaceTypeParams(tp, typeSolver, context));
         }
 
         return type;
