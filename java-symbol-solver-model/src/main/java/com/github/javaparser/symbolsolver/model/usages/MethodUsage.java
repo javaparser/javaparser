@@ -52,10 +52,6 @@ public class MethodUsage implements TypeParametrized {
         this.returnType = returnType;
     }
 
-    private static Type replaceTypeParameterByName(String name, Type newValue, Type typeToBeExamined) {
-        return typeToBeExamined.replaceParam(name, newValue);
-    }
-
     @Override
     public String toString() {
         return "MethodUsage{" +
@@ -127,7 +123,7 @@ public class MethodUsage implements TypeParametrized {
             Type newParamType = originalParamType.replaceParam(name, type);
             res = res.replaceParamType(i, newParamType);
         }
-        res = res.replaceReturnType(replaceTypeParameterByName(name, type, res.returnType));
+        res = res.replaceReturnType(res.returnType.replaceParam(name, type));
         return res;
     }
 
