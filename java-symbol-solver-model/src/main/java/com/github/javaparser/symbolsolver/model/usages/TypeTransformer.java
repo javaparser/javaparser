@@ -19,7 +19,7 @@ package com.github.javaparser.symbolsolver.model.usages;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 
 /**
- * Created by federico on 22/10/16.
+ * @author Federico Tomassetti
  */
 @FunctionalInterface
 public interface TypeTransformer {
