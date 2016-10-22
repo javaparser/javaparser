@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import com.github.javaparser.symbolsolver.javassistmodel.contexts.JavassistMethodContext;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -29,7 +28,6 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
@@ -112,79 +110,9 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return ctClass.getName();
     }
 
-    private List<Type> parseTypeParameters(String signature, TypeSolver typeSolver, Context context, Context invokationContext) {
-        String originalSignature = signature;
-        if (signature.contains("<")) {
-            signature = signature.substring(signature.indexOf('<') + 1);
-            if (!signature.endsWith(">")) {
-                throw new IllegalArgumentException();
-            }
-            signature = signature.substring(0, signature.length() - 1);
-            if (signature.contains(",")) {
-                throw new UnsupportedOperationException();
-            }
-            if (signature.contains("<")) {
-                throw new UnsupportedOperationException(originalSignature);
-            }
-            if (signature.contains(">")) {
-                throw new UnsupportedOperationException();
-            }
-            List<Type> types = new ArrayList<>();
-            types.add(new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext));
-            return types;
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues) {
-
-        // TODO avoid bridge and synthetic methods
-        for (CtMethod method : ctClass.getDeclaredMethods()) {
-            if (method.getName().equals(name)) {
-                // TODO check typeParametersValues
-                MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver));
-                try {
-                    if (method.getGenericSignature() != null) {
-                        SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
-                        List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
-                        Type newReturnType = methodUsage.returnType();
-                        // consume one parametersOfReturnType at the time
-                        newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
-                        methodUsage = methodUsage.replaceReturnType(newReturnType);
-                    }
-                    return Optional.of(methodUsage);
-                } catch (BadBytecode e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
-        try {
-            CtClass superClass = ctClass.getSuperclass();
-            if (superClass != null) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, null);
-                if (ref.isPresent()) {
-                    return ref;
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(interfaze, typeSolver).solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, null);
-                if (ref.isPresent()) {
-                    return ref;
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        return Optional.empty();
+        return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
     }
 
     @Deprecated
