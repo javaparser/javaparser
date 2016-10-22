@@ -167,16 +167,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return result;
     }
 
-    /**
-     * Create a copy of the value with the type parameter changed.
-     */
-    @Deprecated
-    public Type replaceParam(int i, Type replaced) {
-        ArrayList<Type> typeParametersCorrected = new ArrayList<>(typeParameters);
-        typeParametersCorrected.set(i, replaced);
-        return create(typeDeclaration, typeParametersCorrected, typeSolver);
-    }
-
     @Override
     public Type replaceParam(String name, Type replaced) {
         if (replaced == null) {
@@ -434,6 +424,16 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             i++;
         }
         return Optional.empty();
+    }
+
+    /**
+     * Create a copy of the value with the type parameter changed.
+     */
+    @Deprecated
+    private Type replaceParam(int i, Type replaced) {
+        ArrayList<Type> typeParametersCorrected = new ArrayList<>(typeParameters);
+        typeParametersCorrected.set(i, replaced);
+        return create(typeDeclaration, typeParametersCorrected, typeSolver);
     }
 
 }

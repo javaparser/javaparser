@@ -25,6 +25,9 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ReflectionFactory {
     public static Type typeUsageFor(Class<?> clazz, TypeSolver typeSolver) {
@@ -52,11 +55,10 @@ public class ReflectionFactory {
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
             ReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();
-            int i = 0;
-            for (java.lang.reflect.Type actualTypeArgument : pt.getActualTypeArguments()) {
-                rawType = rawType.replaceParam(i, typeUsageFor(actualTypeArgument, typeSolver)).asReferenceType();
-                i++;
-            }
+            List<java.lang.reflect.Type> actualTypes = new ArrayList<>();
+            actualTypes.addAll(Arrays.asList(pt.getActualTypeArguments()));
+            // we consume the actual types
+            rawType = rawType.transformTypeParameters(tp -> typeUsageFor(actualTypes.remove(0), typeSolver)).asReferenceType();
             return rawType;
         } else if (type instanceof Class) {
             Class c = (Class) type;
