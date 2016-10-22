@@ -113,7 +113,7 @@ public class MethodUsage implements TypeParametrized {
     }
 
     @Deprecated
-    public MethodUsage replaceTypeParameterByName(TypeParameterDeclaration typeParameter, Type type) {
+    public MethodUsage replaceTypeParameter(TypeParameterDeclaration typeParameter, Type type) {
         if (type == null) {
             throw new IllegalArgumentException();
         }

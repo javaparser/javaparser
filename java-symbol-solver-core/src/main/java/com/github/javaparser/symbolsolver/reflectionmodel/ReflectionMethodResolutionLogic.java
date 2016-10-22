@@ -55,11 +55,11 @@ class ReflectionMethodResolutionLogic {
                 MethodUsage methodUsage = new MethodUsage(methodDeclaration);
                 int i = 0;
                 for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
-                    methodUsage = methodUsage.replaceTypeParameterByName(tp, typeParameterValues.get(i));
+                    methodUsage = methodUsage.replaceTypeParameter(tp, typeParameterValues.get(i));
                     i++;
                 }
                 for (TypeParameterDeclaration methodTypeParameter : methodDeclaration.getTypeParameters()) {
-                    methodUsage = methodUsage.replaceTypeParameterByName(methodTypeParameter, new TypeVariable(methodTypeParameter));
+                    methodUsage = methodUsage.replaceTypeParameter(methodTypeParameter, new TypeVariable(methodTypeParameter));
                 }
                 methods.add(methodUsage);
             }
@@ -69,7 +69,7 @@ class ReflectionMethodResolutionLogic {
         argumentsTypes = argumentsTypes.stream().map((pt) -> {
             int i = 0;
             for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
-                pt = pt.replaceParam(tp.getName(), finalTypeParameterValues.get(i));
+                pt = pt.replaceParam(tp, finalTypeParameterValues.get(i));
                 i++;
             }
             return pt;

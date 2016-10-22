@@ -446,7 +446,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
                 MethodUsage mu = new MethodUsage(methodDeclaration, typeSolver);
                 int i = 0;
                 for (TypeParameter tp : typeDeclaration.getTypeParameters()) {
-                    mu = mu.replaceTypeParameterByName(tp.getName(), typeParametersValues.get(i));
+                    mu = mu.replaceTypeParameter(tp.getName(), typeParametersValues.get(i));
                     i++;
                 }
                 methods.add(mu);

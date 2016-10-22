@@ -264,15 +264,15 @@ public class MethodResolutionLogic {
             for (TypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds(typeSolver).isEmpty()) {
                     //expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
-                    expectedType = expectedType.replaceParam(tp.getName(), Wildcard.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
+                    expectedType = expectedType.replaceParam(tp, Wildcard.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
                 } else if (tp.getBounds(typeSolver).size() == 1) {
                     TypeParameterDeclaration.Bound bound = tp.getBounds(typeSolver).get(0);
                     if (bound.isExtends()) {
                         //expectedType = expectedType.replaceParam(tp.getName(), bound.getType());
-                        expectedType = expectedType.replaceParam(tp.getName(), Wildcard.extendsBound(bound.getType()));
+                        expectedType = expectedType.replaceParam(tp, Wildcard.extendsBound(bound.getType()));
                     } else {
                         //expectedType = expectedType.replaceParam(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
-                        expectedType = expectedType.replaceParam(tp.getName(), Wildcard.superBound(bound.getType()));
+                        expectedType = expectedType.replaceParam(tp, Wildcard.superBound(bound.getType()));
                     }
                 } else {
                     throw new UnsupportedOperationException();
@@ -281,13 +281,13 @@ public class MethodResolutionLogic {
             Type expectedType2 = expectedTypeWithoutSubstitutions;
             for (TypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds(typeSolver).isEmpty()) {
-                    expectedType2 = expectedType2.replaceParam(tp.getName(), new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                    expectedType2 = expectedType2.replaceParam(tp, new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                 } else if (tp.getBounds(typeSolver).size() == 1) {
                     TypeParameterDeclaration.Bound bound = tp.getBounds(typeSolver).get(0);
                     if (bound.isExtends()) {
-                        expectedType2 = expectedType2.replaceParam(tp.getName(), bound.getType());
+                        expectedType2 = expectedType2.replaceParam(tp, bound.getType());
                     } else {
-                        expectedType2 = expectedType2.replaceParam(tp.getName(), new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                        expectedType2 = expectedType2.replaceParam(tp, new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                     }
                 } else {
                     throw new UnsupportedOperationException();

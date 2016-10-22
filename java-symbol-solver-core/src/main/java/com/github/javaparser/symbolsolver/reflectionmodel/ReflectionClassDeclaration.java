@@ -170,7 +170,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             for (int i = 0; i < getTypeParameters().size(); i++) {
                 TypeParameterDeclaration tpToReplace = getTypeParameters().get(i);
                 Type newValue = typeParameterValues.get(i);
-                methodUsage = methodUsage.replaceTypeParameterByName(tpToReplace, newValue);
+                methodUsage = methodUsage.replaceTypeParameter(tpToReplace, newValue);
             }
             methods.add(methodUsage);
         }
