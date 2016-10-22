@@ -19,10 +19,7 @@ package com.github.javaparser.symbolsolver.model.usages.typesystem;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.usages.TypeParametersMap;
-import com.github.javaparser.symbolsolver.model.usages.TypeParametrized;
-import com.github.javaparser.symbolsolver.model.usages.TypeTransformer;
+import com.github.javaparser.symbolsolver.model.usages.*;
 import javaslang.Tuple2;
 
 import java.util.*;
@@ -34,7 +31,7 @@ import java.util.stream.Collectors;
  *
  * @author Federico Tomassetti
  */
-public abstract class ReferenceType implements Type, TypeParametrized {
+public abstract class ReferenceType implements Type, TypeParametrized, TypeParameterValueProvider {
 
     //
     // Fields
@@ -236,28 +233,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return Optional.empty();
     }
 
-    /**
-     * Replace the type typeParametersValues present in the given type with the ones for which this type
-     * has a value.
-     */
-    public Type useThisTypeParametersOnTheGivenType(Type type) {
-        if (type.isTypeVariable()) {
-            TypeParameterDeclaration typeParameter = type.asTypeParameter();
-            if (typeParameter.declaredOnType()) {
-                Optional<Type> typeParam = typeParamValue(typeParameter);
-                if (typeParam.isPresent()) {
-                    type = typeParam.get();
-                }
-            }
-        }
-
-        if (type.isReferenceType()) {
-            type = type.asReferenceType().transformTypeParameters(tp -> useThisTypeParametersOnTheGivenType(tp));
-        }
-
-        return type;
-    }
-
     public List<Type> typeParametersValues() {
         return this.typeParametersMap.isEmpty() ? Collections.emptyList() : typeDeclaration.getTypeParameters().stream().map(tp -> typeParametersMap.getValue(tp)).collect(Collectors.toList());
     }
@@ -309,6 +284,40 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     public boolean isRawType() {
         return (!typeDeclaration.getTypeParameters().isEmpty() &&
                 typeParametersMap().isEmpty());
+    }
+
+    public Optional<Type> typeParamValue(TypeParameterDeclaration typeParameterDeclaration) {
+        if (typeParameterDeclaration.declaredOnMethod()) {
+            throw new IllegalArgumentException();
+        }
+        String typeQualifiedName = this.getTypeDeclaration().getQualifiedName();
+        if (equalsOrNull(typeQualifiedName, typeParameterDeclaration.getContainerQualifiedName())) {
+            return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
+        }
+        List<Type> typeParameters = this.typeParametersValues();
+        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ReferenceType objectRef = create(objectType, typeSolver);
+        if (typeDeclaration.getTypeParameters().size() != typeParameters.size()) {
+            if (!typeParameters.isEmpty()) {
+                throw new UnsupportedOperationException();
+            }
+            // type typeParametersValues not specified, default to Object
+            typeParameters = new ArrayList<>();
+            for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
+                typeParameters.add(objectRef);
+            }
+        }
+        int i = 0;
+        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
+            if (tp.getName().equals(typeParameterDeclaration.getName())) {
+                if (!tp.getQualifiedName().equals(typeParameterDeclaration.getQualifiedName())) {
+                    //throw new IllegalArgumentException();
+                }
+                return Optional.of(typeParameters.get(i));
+            }
+            i++;
+        }
+        return Optional.empty();
     }
 
     //
@@ -396,44 +405,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             return false;
         }
         return a.equals(b);
-    }
-
-    /**
-     * Calculate the value for the given type parameter.
-     * It could be inherited.
-     */
-    private Optional<Type> typeParamValue(TypeParameterDeclaration typeParameterDeclaration) {
-        if (typeParameterDeclaration.declaredOnMethod()) {
-            throw new IllegalArgumentException();
-        }
-        String typeQualifiedName = this.getTypeDeclaration().getQualifiedName();
-        if (equalsOrNull(typeQualifiedName, typeParameterDeclaration.getContainerQualifiedName())) {
-            return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
-        }
-        List<Type> typeParameters = this.typeParametersValues();
-        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-        ReferenceType objectRef = create(objectType, typeSolver);
-        if (typeDeclaration.getTypeParameters().size() != typeParameters.size()) {
-            if (!typeParameters.isEmpty()) {
-                throw new UnsupportedOperationException();
-            }
-            // type typeParametersValues not specified, default to Object
-            typeParameters = new ArrayList<>();
-            for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
-                typeParameters.add(objectRef);
-            }
-        }
-        int i = 0;
-        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
-            if (tp.getName().equals(typeParameterDeclaration.getName())) {
-                if (!tp.getQualifiedName().equals(typeParameterDeclaration.getQualifiedName())) {
-                    //throw new IllegalArgumentException();
-                }
-                return Optional.of(typeParameters.get(i));
-            }
-            i++;
-        }
-        return Optional.empty();
     }
 
 }
