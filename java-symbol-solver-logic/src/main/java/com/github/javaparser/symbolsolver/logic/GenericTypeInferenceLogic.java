@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import javaslang.Tuple2;
@@ -26,8 +27,8 @@ import java.util.Map;
 
 public class GenericTypeInferenceLogic {
 
-    public static Map<String, Type> inferGenericTypes(List<Tuple2<Type, Type>> formalActualTypePairs) {
-        Map<String, Type> map = new HashMap<>();
+    public static Map<TypeParameterDeclaration, Type> inferGenericTypes(List<Tuple2<Type, Type>> formalActualTypePairs) {
+        Map<TypeParameterDeclaration, Type> map = new HashMap<>();
 
         for (Tuple2<Type, Type> formalActualTypePair : formalActualTypePairs) {
             Type formalType = formalActualTypePair._1;
@@ -40,7 +41,7 @@ public class GenericTypeInferenceLogic {
         return map;
     }
 
-    private static void consider(Map<String, Type> map, Type formalType, Type actualType) {
+    private static void consider(Map<TypeParameterDeclaration, Type> map, Type formalType, Type actualType) {
         if (formalType == null) {
             throw new IllegalArgumentException();
         }
@@ -53,7 +54,7 @@ public class GenericTypeInferenceLogic {
                     throw new UnsupportedOperationException("Map already contains " + formalType);
                 }
             }
-            map.put(formalType.asTypeParameter().getName(), actualType);
+            map.put(formalType.asTypeParameter(), actualType);
         } else if (formalType.isReferenceType()) {
             if (actualType.isReferenceType()) {
                 ReferenceType formalTypeAsReference = formalType.asReferenceType();

@@ -128,8 +128,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                 i++;
             }
-            Map<String, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-            for (String key : map.keySet()) {
+            Map<TypeParameterDeclaration, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+            for (TypeParameterDeclaration key : map.keySet()) {
                 if (map.get(key) == null) {
                     throw new IllegalArgumentException();
                 }

@@ -314,8 +314,8 @@ public class JavaParserFacade {
                             Type actualType = getType(expressionStmt.getExpression());
                             Type formalType = functionalMethod.get().returnType();
                             formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
-                            Map<String, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-                            for (String typeName : inferredTypes.keySet()) {
+                            Map<TypeParameterDeclaration, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+                            for (TypeParameterDeclaration typeName : inferredTypes.keySet()) {
                                 result = result.replaceParam(typeName, inferredTypes.get(typeName));
                             }
                         } else {
@@ -358,8 +358,8 @@ public class JavaParserFacade {
                             Type actualType = toMethodUsage(methodReferenceExpr).returnType();
                             Type formalType = functionalMethod.get().returnType();
                             formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
-                            Map<String, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-                            for (String typeName : inferredTypes.keySet()) {
+                            Map<TypeParameterDeclaration, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+                            for (TypeParameterDeclaration typeName : inferredTypes.keySet()) {
                                 result = result.replaceParam(typeName, inferredTypes.get(typeName));
                             }
 
@@ -372,8 +372,8 @@ public class JavaParserFacade {
                                 Type actualType = getType(expressionStmt.getExpression());
                                 Type formalType = functionalMethod.get().returnType();
                                 formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
-                                Map<String, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-                                for (String typeName : inferredTypes.keySet()) {
+                                Map<TypeParameterDeclaration, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+                                for (TypeParameterDeclaration typeName : inferredTypes.keySet()) {
                                     result = result.replaceParam(typeName, inferredTypes.get(typeName));
                                 }
                             } else {

@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.model.usages;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 
 import java.util.ArrayList;
@@ -112,7 +113,7 @@ public class MethodUsage implements TypeParametrized {
     }
 
     @Deprecated
-    public MethodUsage replaceTypeParameterByName(String name, Type type) {
+    public MethodUsage replaceTypeParameterByName(TypeParameterDeclaration typeParameter, Type type) {
         if (type == null) {
             throw new IllegalArgumentException();
         }
@@ -120,10 +121,10 @@ public class MethodUsage implements TypeParametrized {
         MethodUsage res = this;
         for (int i = 0; i < paramTypes.size(); i++) {
             Type originalParamType = paramTypes.get(i);
-            Type newParamType = originalParamType.replaceParam(name, type);
+            Type newParamType = originalParamType.replaceParam(typeParameter, type);
             res = res.replaceParamType(i, newParamType);
         }
-        res = res.replaceReturnType(res.returnType.replaceParam(name, type));
+        res = res.replaceReturnType(res.returnType.replaceParam(typeParameter, type));
         return res;
     }
 

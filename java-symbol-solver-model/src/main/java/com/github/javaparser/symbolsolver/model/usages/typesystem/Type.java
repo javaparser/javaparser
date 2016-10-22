@@ -129,9 +129,8 @@ public interface Type {
         return this;
     }
 
-
-    default Type replaceParam(TypeParameterDeclaration name, Type replaced) {
-        throw new UnsupportedOperationException();
+    default Type replaceParam(TypeParameterDeclaration tp, Type replaced) {
+        return replaceParam(tp.getName(), replaced);
     }
 
     ///

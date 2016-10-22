@@ -168,9 +168,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             MethodUsage methodUsage = new MethodUsage(methodDeclaration);
             for (int i = 0; i < getTypeParameters().size(); i++) {
-                String nameToReplace = getTypeParameters().get(i).getName();
+                TypeParameterDeclaration tpToReplace = getTypeParameters().get(i);
                 Type newValue = typeParameterValues.get(i);
-                methodUsage = methodUsage.replaceTypeParameterByName(nameToReplace, newValue);
+                methodUsage = methodUsage.replaceTypeParameterByName(tpToReplace, newValue);
             }
             methods.add(methodUsage);
         }

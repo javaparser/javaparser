@@ -112,14 +112,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         for (int i = 0; i < methodUsage.getDeclaration().getNumberOfParams(); i++) {
             formalActualTypePairs.add(new Tuple2<>(methodUsage.getDeclaration().getParam(i).getType(), methodUsage.getParamType(i)));
         }
-        Map<String, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-        if (map.containsKey(name)) {
-            return Optional.of(map.get(name));
-        } else {
-            return Optional.empty();
-        }
-
-        //return Optional.of(lambda.asReferenceType().typeParametersValues().get(0));
+        Map<TypeParameterDeclaration, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+        return map.keySet().stream().filter(tp -> tp.getName().equals(name)).findFirst().map(tp -> map.get(tp));
     }
 
     private int pos(MethodCallExpr callExpr, Expression param) {

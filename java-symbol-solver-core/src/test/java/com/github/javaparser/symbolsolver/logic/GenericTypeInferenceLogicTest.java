@@ -49,7 +49,7 @@ public class GenericTypeInferenceLogicTest {
         EasyMock.expect(a.getName()).andReturn("A").anyTimes();
         EasyMock.replay(a);
         TypeVariable aUsage = new TypeVariable(a);
-        assertEquals(ImmutableMap.of("A", string), GenericTypeInferenceLogic.inferGenericTypes(
+        assertEquals(ImmutableMap.of(a, string), GenericTypeInferenceLogic.inferGenericTypes(
                 ImmutableList.of(new Tuple2<Type, Type>(aUsage, string))));
     }
 
@@ -70,7 +70,7 @@ public class GenericTypeInferenceLogicTest {
         TypeVariable aUsage = new TypeVariable(a);
         TypeVariable bUsage = new TypeVariable(b);
         TypeVariable cUsage = new TypeVariable(c);
-        assertEquals(ImmutableMap.of("A", string, "B", object, "C", string), GenericTypeInferenceLogic.inferGenericTypes(
+        assertEquals(ImmutableMap.of(a, string, b, object, c, string), GenericTypeInferenceLogic.inferGenericTypes(
                 ImmutableList.of(new Tuple2<Type, Type>(aUsage, string),
                         new Tuple2<Type, Type>(bUsage, object),
                         new Tuple2<Type, Type>(cUsage, string))));
