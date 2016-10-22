@@ -251,13 +251,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         }
 
         if (type.isReferenceType()) {
-            for (int i = 0; i < type.asReferenceType().typeParametersValues().size(); i++) {
-                Type replaced = replaceTypeParams(type.asReferenceType().typeParametersValues().get(i));
-                // Identity comparison on purpose
-                if (replaced != type.asReferenceType().typeParametersValues().get(i)) {
-                    type = type.asReferenceType().replaceParam(i, replaced);
-                }
-            }
+            type = type.asReferenceType().transformTypeParameters(tp -> replaceTypeParams(tp));
         }
 
         return type;
