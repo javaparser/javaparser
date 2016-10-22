@@ -40,6 +40,7 @@ public class ArrayTypeTest {
     private ReferenceTypeImpl OBJECT;
     private ReferenceTypeImpl STRING;
     private TypeSolver typeSolver;
+    private TypeParameterDeclaration tpA;
 
     @Before
     public void setup() {
@@ -48,9 +49,10 @@ public class ArrayTypeTest {
         STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         arrayOfBooleans = new ArrayType(PrimitiveType.BOOLEAN);
         arrayOfStrings = new ArrayType(STRING);
+        tpA = TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
         arrayOfListOfA = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeVariable(TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+                ImmutableList.of(new TypeVariable(tpA)), typeSolver));
         arrayOfListOfStrings = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver));
@@ -128,26 +130,26 @@ public class ArrayTypeTest {
 
     @Test
     public void testReplaceParam() {
-        assertTrue(arrayOfBooleans == arrayOfBooleans.replaceParam("A", OBJECT));
-        assertTrue(arrayOfStrings == arrayOfStrings.replaceParam("A", OBJECT));
-        assertTrue(arrayOfListOfStrings == arrayOfListOfStrings.replaceParam("A", OBJECT));
+        assertTrue(arrayOfBooleans == arrayOfBooleans.replaceParam(tpA, OBJECT));
+        assertTrue(arrayOfStrings == arrayOfStrings.replaceParam(tpA, OBJECT));
+        assertTrue(arrayOfListOfStrings == arrayOfListOfStrings.replaceParam(tpA, OBJECT));
         ArrayType arrayOfListOfObjects = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(OBJECT), typeSolver));
-        assertEquals(true, arrayOfListOfA.replaceParam("A", OBJECT).isArray());
+        assertEquals(true, arrayOfListOfA.replaceParam(tpA, OBJECT).isArray());
         assertEquals(ImmutableList.of(OBJECT),
-                arrayOfListOfA.replaceParam("A", OBJECT).asArrayType().getComponentType()
+                arrayOfListOfA.replaceParam(tpA, OBJECT).asArrayType().getComponentType()
                         .asReferenceType().typeParametersValues());
         assertEquals(new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                arrayOfListOfA.replaceParam("A", OBJECT).asArrayType().getComponentType()
+                arrayOfListOfA.replaceParam(tpA, OBJECT).asArrayType().getComponentType()
                         .asReferenceType().getTypeDeclaration());
         assertEquals(new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(List.class, typeSolver),
                         ImmutableList.of(OBJECT), typeSolver),
-                arrayOfListOfA.replaceParam("A", OBJECT).asArrayType().getComponentType());
-        assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceParam("A", OBJECT));
-        assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceParam("A", STRING));
-        assertTrue(arrayOfListOfA == arrayOfListOfA.replaceParam("B", OBJECT));
+                arrayOfListOfA.replaceParam(tpA, OBJECT).asArrayType().getComponentType());
+        assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceParam(tpA, OBJECT));
+        assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceParam(tpA, STRING));
+        assertTrue(arrayOfListOfA != arrayOfListOfA.replaceParam(tpA, OBJECT));
     }
 
     @Test

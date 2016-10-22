@@ -52,7 +52,7 @@ public class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
         ReferenceType stringType = (ReferenceType) ReflectionFactory.typeUsageFor(String.class, typeSolver);
         ReferenceType rawClassType = (ReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolver);
-        ReferenceType classOfStringType = (ReferenceType) rawClassType.replaceParam("T", stringType);
+        ReferenceType classOfStringType = (ReferenceType) rawClassType.replaceParam(rawClassType.getTypeDeclaration().getTypeParameters().get(0), stringType);
         MethodUsage mu = constructorDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().getSignature().equals("isThrows(java.lang.Class<? extends java.lang.Throwable>)")).findFirst().get();
 
         assertEquals(false, MethodResolutionLogic.isApplicable(mu, "isThrows", ImmutableList.of(classOfStringType), typeSolver));
@@ -74,7 +74,7 @@ public class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
         ReferenceType runtimeException = (ReferenceType) ReflectionFactory.typeUsageFor(RuntimeException.class, typeSolver);
         ReferenceType rawClassType = (ReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolver);
-        ReferenceType classOfRuntimeType = (ReferenceType) rawClassType.replaceParam("T", runtimeException);
+        ReferenceType classOfRuntimeType = (ReferenceType) rawClassType.replaceParam(rawClassType.getTypeDeclaration().getTypeParameters().get(0), runtimeException);
         MethodUsage mu = constructorDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().getSignature().equals("isThrows(java.lang.Class<? extends java.lang.Throwable>)")).findFirst().get();
 
         assertEquals(true, MethodResolutionLogic.isApplicable(mu, "isThrows", ImmutableList.of(classOfRuntimeType), typeSolver));

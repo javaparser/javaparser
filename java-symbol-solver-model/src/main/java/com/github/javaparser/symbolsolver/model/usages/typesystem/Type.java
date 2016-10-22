@@ -124,13 +124,8 @@ public interface Type {
     /// TypeParameters
     ///
 
-    @Deprecated
-    default Type replaceParam(String name, Type replaced) {
-        return this;
-    }
-
     default Type replaceParam(TypeParameterDeclaration tp, Type replaced) {
-        return replaceParam(tp.getName(), replaced);
+        return this;
     }
 
     ///

@@ -71,15 +71,6 @@ public class TypeVariable implements Type {
     }
 
     @Override
-    public Type replaceParam(String name, Type replaced) {
-        if (name.equals(typeParameter.getName())) {
-            return replaced;
-        } else {
-            return this;
-        }
-    }
-
-    @Override
     public Type replaceParam(TypeParameterDeclaration tpToBeReplaced, Type replaced) {
         // FIXME it should use the qualified name
         if (tpToBeReplaced.getName().equals(typeParameter.getName())) {
