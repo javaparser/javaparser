@@ -112,7 +112,6 @@ public class MethodUsage implements TypeParametrized {
         return paramTypes.get(i);
     }
 
-    @Deprecated
     public MethodUsage replaceTypeParameter(TypeParameterDeclaration typeParameter, Type type) {
         if (type == null) {
             throw new IllegalArgumentException();
