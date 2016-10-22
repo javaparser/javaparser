@@ -247,7 +247,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                         .collect(Collectors.toList());
                 ancestors.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)parameterizedType.getRawType(), typeSolver), typeParameters, typeSolver));
             } else {
-                throw new RuntimeException(clazz.getGenericSuperclass().getClass().getCanonicalName());
+                ancestors.add(new ReferenceTypeImpl(new ReflectionClassDeclaration((Class)clazz.getGenericSuperclass(), typeSolver), typeSolver));
             }
         }
         for (java.lang.reflect.Type interfaze : clazz.getGenericInterfaces()) {
@@ -258,7 +258,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                         .collect(Collectors.toList());
                 ancestors.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)parameterizedType.getRawType(), typeSolver), typeParameters, typeSolver));
             } else {
-                throw new RuntimeException(interfaze.getClass().getCanonicalName());
+                ancestors.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)interfaze, typeSolver), typeSolver));
             }
         }
         for (int i = 0; i < ancestors.size(); i++) {

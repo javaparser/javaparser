@@ -304,30 +304,9 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
         }
         for (ReferenceType ancestor : this.getAllAncestors()) {
-            System.out.println("THIS "+this.describe() + " ANCESTOR " + ancestor.describe());
-        }
-        List<Type> typeParameters = this.typeParametersValues();
-        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-        ReferenceType objectRef = create(objectType, typeSolver);
-        if (typeDeclaration.getTypeParameters().size() != typeParameters.size()) {
-            if (!typeParameters.isEmpty()) {
-                throw new UnsupportedOperationException();
+            if (equalsOrNull(ancestor.getQualifiedName(), typeParameterDeclaration.getContainerQualifiedName())) {
+                return Optional.of(ancestor.typeParametersMap().getValue(typeParameterDeclaration));
             }
-            // type typeParametersValues not specified, default to Object
-            typeParameters = new ArrayList<>();
-            for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
-                typeParameters.add(objectRef);
-            }
-        }
-        int i = 0;
-        for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
-            if (tp.getName().equals(typeParameterDeclaration.getName())) {
-                if (!tp.getQualifiedName().equals(typeParameterDeclaration.getQualifiedName())) {
-                    //throw new IllegalArgumentException();
-                }
-                return Optional.of(typeParameters.get(i));
-            }
-            i++;
         }
         return Optional.empty();
     }

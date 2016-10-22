@@ -67,7 +67,7 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     @Override
     public List<TypeParameterDeclaration.Bound> getBounds(TypeSolver typeSolver) {
         List<Bound> bounds = new ArrayList<>();
-        if (wrapped.getClassBound() != null) {
+        if (wrapped.getClassBound() != null && !wrapped.getClassBound().toString().equals(Object.class.getCanonicalName())) {
             throw new UnsupportedOperationException(wrapped.getClassBound().toString());
         }
         for (SignatureAttribute.ObjectType ot : wrapped.getInterfaceBound()) {
