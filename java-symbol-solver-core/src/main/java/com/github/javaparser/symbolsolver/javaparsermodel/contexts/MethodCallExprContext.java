@@ -58,12 +58,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, argumentsTypes, typeSolver, invokationContext, refType.typeParametersValues());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
-            Type returnType = refType.replaceTypeParams(methodUsage.returnType());
+            Type returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             if (returnType != methodUsage.returnType()) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
             }
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
-                Type replaced = refType.replaceTypeParams(methodUsage.getParamTypes().get(i));
+                Type replaced = refType.useThisTypeParametersOnTheGivenType(methodUsage.getParamTypes().get(i));
                 methodUsage = methodUsage.replaceParamType(i, replaced);
             }
             return Optional.of(methodUsage);

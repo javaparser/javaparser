@@ -205,7 +205,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         ReferenceType objectRef = create(objectType, typeSolver);
 
         ancestors = ancestors.stream()
-                .map((a) -> replaceTypeParams(a).asReferenceType())
+                .map((a) -> useThisTypeParametersOnTheGivenType(a).asReferenceType())
                 .collect(Collectors.toList());
 
         ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
@@ -240,8 +240,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
      * Replace the type typeParametersValues present in the given type with the ones for which this type
      * has a value.
      */
-    @Deprecated
-    public Type replaceTypeParams(Type type) {
+    public Type useThisTypeParametersOnTheGivenType(Type type) {
         if (type.isTypeVariable()) {
             TypeParameterDeclaration typeParameter = type.asTypeParameter();
             if (typeParameter.declaredOnType()) {
@@ -253,7 +252,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         }
 
         if (type.isReferenceType()) {
-            type = type.asReferenceType().transformTypeParameters(tp -> replaceTypeParams(tp));
+            type = type.asReferenceType().transformTypeParameters(tp -> useThisTypeParametersOnTheGivenType(tp));
         }
 
         return type;
@@ -293,7 +292,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
             return Optional.empty();
         }
         Type type = typeDeclaration.getField(name).getType();
-        type = replaceTypeParams(type);
+        type = useThisTypeParametersOnTheGivenType(type);
         return Optional.of(type);
     }
 
