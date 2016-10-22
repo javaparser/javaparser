@@ -88,7 +88,6 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         ReferenceType that = (ReferenceType) o;
 
         if (!typeDeclaration.equals(that.typeDeclaration)) return false;
-        if (!typeParameters.equals(that.typeParameters)) return false;
         if (!typeParametersMap.equals(that.typeParametersMap)) return false;
 
         return true;
@@ -139,10 +138,10 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         } else {
             sb.append("<anonymous class>");
         }
-        if (!typeParametersValues().isEmpty()) {
+        if (!typeParametersMap().isEmpty()) {
             sb.append("<");
-            sb.append(String.join(", ", typeParametersValues().stream()
-                    .map(param -> param.describe())
+            sb.append(String.join(", ", typeDeclaration.getTypeParameters().stream()
+                    .map(tp -> typeParametersMap().getValue(tp).describe())
                     .collect(Collectors.toList())));
             sb.append(">");
         }
@@ -152,6 +151,21 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     ///
     /// TypeParameters
     ///
+
+    @FunctionalInterface
+    public interface TypeParameterTransformer {
+        Type transform(Type type);
+    }
+
+    public Type transformTypeParameters(TypeParameterTransformer transformer) {
+        Type result = this;
+        int i = 0;
+        for (Type tp : this.typeParametersValues()) {
+            result = result.asReferenceType().replaceParam(i, transformer.transform(tp));
+            i++;
+        }
+        return result;
+    }
 
     /**
      * Create a copy of the value with the type parameter changed.

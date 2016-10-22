@@ -80,4 +80,8 @@ public class TypeParametersMap {
             return Optional.empty();
         }
     }
+
+    public boolean isEmpty() {
+        return nameToValue.isEmpty();
+    }
 }
