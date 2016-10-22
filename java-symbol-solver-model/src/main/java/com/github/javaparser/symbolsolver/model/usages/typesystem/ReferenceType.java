@@ -196,6 +196,8 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
      * Foo&lt;Boolean, String&gt;.
      */
     public List<ReferenceType> getAllAncestors() {
+        We need to go through the inheritance line and propagate the type parametes
+
         List<ReferenceType> ancestors = typeDeclaration.getAllAncestors();
 
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
@@ -293,6 +295,9 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         String typeQualifiedName = this.getTypeDeclaration().getQualifiedName();
         if (equalsOrNull(typeQualifiedName, typeParameterDeclaration.getContainerQualifiedName())) {
             return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
+        }
+        for (ReferenceType ancestor : this.getAllAncestors()) {
+
         }
         List<Type> typeParameters = this.typeParametersValues();
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
