@@ -243,7 +243,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         if (type.isTypeVariable()) {
             TypeParameterDeclaration typeParameter = type.asTypeParameter();
             if (typeParameter.declaredOnType()) {
-                Optional<Type> typeParam = typeParamByName(typeParameter.getName());
+                Optional<Type> typeParam = typeParamValue(typeParameter);
                 if (typeParam.isPresent()) {
                     type = typeParam.get();
                 }
@@ -388,7 +388,7 @@ public abstract class ReferenceType implements Type, TypeParametrized {
     }
 
     @Deprecated
-    private Optional<Type> typeParamByName(String name) {
+    private Optional<Type> typeParamValue(TypeParameterDeclaration typeParameterDeclaration) {
         List<Type> typeParameters = this.typeParametersValues();
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ReferenceType objectRef = create(objectType, typeSolver);
@@ -404,7 +404,10 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         }
         int i = 0;
         for (TypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
-            if (tp.getName().equals(name)) {
+            if (tp.getName().equals(typeParameterDeclaration.getName())) {
+                if (!tp.getQualifiedName().equals(typeParameterDeclaration.getQualifiedName())) {
+                    throw new IllegalArgumentException();
+                }
                 return Optional.of(typeParameters.get(i));
             }
             i++;
