@@ -399,7 +399,10 @@ public abstract class ReferenceType implements Type, TypeParametrized {
         return a.equals(b);
     }
 
-    @Deprecated
+    /**
+     * Calculate the value for the given type parameter.
+     * It could be inherited.
+     */
     private Optional<Type> typeParamValue(TypeParameterDeclaration typeParameterDeclaration) {
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
