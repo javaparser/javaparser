@@ -16,13 +16,21 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.symbolsolver.model.declarations.InterfaceDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -45,6 +53,20 @@ public class ReflectionInterfaceDeclarationTest {
         assertEquals(1, methods.get(5).getNumberOfParams());
         assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
         assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
+    }
+
+    @Test
+    public void testAllAncestors() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        Map<String, ReferenceType> ancestors = new HashMap<>();
+        list.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
+        assertEquals(3, ancestors.size());
+
+        TypeVariable typeVariable = new TypeVariable(list.getTypeParameters().get(0));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver), ImmutableList.of(typeVariable), typeResolver), ancestors.get("java.util.Collection"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver), typeResolver), ancestors.get("java.lang.Object"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(typeVariable), typeResolver), ancestors.get("java.lang.Iterable"));
     }
 
 }

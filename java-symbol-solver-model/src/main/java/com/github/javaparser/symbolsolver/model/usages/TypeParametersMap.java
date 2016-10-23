@@ -37,7 +37,7 @@ public class TypeParametersMap {
 
         TypeParametersMap that = (TypeParametersMap) o;
 
-        return nameToValue.equals(that.nameToValue);
+        return nameToValue.equals(that.nameToValue) && nameToDeclaration.equals(that.nameToDeclaration);
 
     }
 
