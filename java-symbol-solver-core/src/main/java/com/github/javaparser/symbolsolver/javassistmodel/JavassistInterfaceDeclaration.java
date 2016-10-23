@@ -27,6 +27,7 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeI
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import javassist.CtClass;
+import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -218,4 +219,28 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     public InterfaceDeclaration asInterface() {
         return this;
     }
+
+
+    @Deprecated
+    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        for (CtField field : ctClass.getDeclaredFields()) {
+            if (field.getName().equals(name)) {
+                return SymbolReference.solved(new JavassistFieldDeclaration(field, typeSolver));
+            }
+        }
+
+        try {
+            for (CtClass interfaze : ctClass.getInterfaces()) {
+                SymbolReference<? extends ValueDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
+                if (ref.isSolved()) {
+                    return ref;
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return SymbolReference.unsolved(ValueDeclaration.class);
+    }
+
 }

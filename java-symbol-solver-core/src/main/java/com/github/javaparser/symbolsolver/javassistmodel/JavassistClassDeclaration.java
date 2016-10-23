@@ -137,7 +137,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<? extends ValueDeclaration> ref = new JavassistClassDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
+                SymbolReference<? extends ValueDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
                 if (ref.isSolved()) {
                     return ref;
                 }
@@ -227,7 +227,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                 return true;
             }
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                if (new JavassistClassDeclaration(interfaze, typeSolver).isAssignableBy(type)) {
+                if (new JavassistInterfaceDeclaration(interfaze, typeSolver).isAssignableBy(type)) {
                     return true;
                 }
             }
