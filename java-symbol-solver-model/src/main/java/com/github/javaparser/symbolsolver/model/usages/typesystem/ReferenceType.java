@@ -246,6 +246,10 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         return this.typeParametersMap.isEmpty() ? Collections.emptyList() : typeDeclaration.getTypeParameters().stream().map(tp -> typeParametersMap.getValue(tp)).collect(Collectors.toList());
     }
 
+    /**
+     * Get the values for all type parameters declared on this type.
+     * In case of raw types the values correspond to TypeVariables.
+     */
     public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
         List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
         for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
@@ -263,6 +267,9 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     /// Other methods introduced by ReferenceType
     ///
 
+    /**
+     * Corresponding TypeDeclaration
+     */
     public final TypeDeclaration getTypeDeclaration() {
         return typeDeclaration;
     }
@@ -280,18 +287,30 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         return Optional.of(type);
     }
 
+    /**
+     * Has the TypeDeclaration a name? Anonymous classes do not have one.
+     */
     public boolean hasName() {
         return typeDeclaration.hasName();
     }
 
+    /**
+     * Qualified name of the declaration.
+     */
     public String getQualifiedName() {
         return typeDeclaration.getQualifiedName();
     }
 
+    /**
+     * Id of the declaration. It corresponds to the qualified name, unless for local classes.
+     */
     public String getId() {
         return typeDeclaration.getId();
     }
 
+    /**
+     * Methods declared on this type.
+     */
     public abstract Set<MethodUsage> getDeclaredMethods();
 
     public boolean isRawType() {
