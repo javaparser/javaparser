@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.model.declarations;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * An entity which has type parameter.
@@ -29,5 +30,7 @@ public interface TypeParametrizable {
      * The list of type parameters defined on this element.
      */
     List<TypeParameterDeclaration> getTypeParameters();
+
+    Optional<TypeParameterDeclaration> findTypeParameter(String name);
 
 }

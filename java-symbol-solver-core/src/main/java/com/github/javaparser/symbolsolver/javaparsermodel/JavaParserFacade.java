@@ -296,7 +296,24 @@ public class JavaParserFacade {
                 logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
                 //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
                 if (solveLambdas) {
+
+                    // The type parameter referred here should be the java.util.stream.Stream.T
                     Type result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+
+                    // FIXME: here we should replace the type parameters that can be resolved
+                    //        for example when invoking myListOfStrings.stream().filter(s -> s.length > 0);
+                    //        the MethodDeclaration of filter is:
+                    //        Stream<T> filter(Predicate<? super T> predicate)
+                    //        but T in this case is equal to String
+                    if (callExpr.getScope().isPresent()){
+
+
+                        Type scopeType = JavaParserFacade.get(typeSolver).getType(callExpr.getScope().get());
+                        if (scopeType.isReferenceType()) {
+                            result = scopeType.asReferenceType().useThisTypeParametersOnTheGivenType(result);
+                        }
+                    }
+
                     // We need to replace the type variables
                     Context ctx = JavaParserFactory.getContext(node, typeSolver);
                     result = solveGenericTypes(result, ctx, typeSolver);

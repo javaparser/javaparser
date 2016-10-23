@@ -114,6 +114,10 @@ public class Wildcard implements Type {
         return type == BoundType.EXTENDS;
     }
 
+    public boolean isBounded() {
+        return isSuper() || isExtends();
+    }
+
     public Type getBoundedType() {
         if (boundedType == null) {
             throw new IllegalStateException();

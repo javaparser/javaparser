@@ -40,4 +40,5 @@ public interface MethodDeclaration extends MethodLikeDeclaration {
      * Is this a default method?
      */
     boolean isDefaultMethod();
+
 }

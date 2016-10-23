@@ -375,7 +375,7 @@ public class ContextTest extends AbstractTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         Type typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
 
-        assertEquals("java.util.function.Predicate<com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.describe());
+        assertEquals("java.util.function.Predicate<? super com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.describe());
     }
 
     @Test
@@ -390,7 +390,7 @@ public class ContextTest extends AbstractTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
         Type typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
 
-        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", typeOfT.describe());
+        assertEquals("? super com.github.javaparser.ast.body.TypeDeclaration", typeOfT.describe());
     }
 
     @Test

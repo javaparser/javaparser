@@ -274,4 +274,16 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
         return getAllAncestors().stream().anyMatch(it -> it.asReferenceType().getTypeDeclaration().hasDirectlyAnnotation(qualifiedName));
     }
 
+    @Override
+    default Optional<TypeParameterDeclaration> findTypeParameter(String name) {
+        for (TypeParameterDeclaration tp : this.getTypeParameters()) {
+            if (tp.getName().equals(name)) {
+                return Optional.of(tp);
+            }
+        }
+        if (this.containerType().isPresent()) {
+            return this.containerType().get().findTypeParameter(name);
+        }
+        return Optional.empty();
+    }
 }

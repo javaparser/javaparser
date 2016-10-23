@@ -22,11 +22,15 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import javassist.CtClass;
 
 public class JavassistParameterDeclaration implements ParameterDeclaration {
-    private CtClass type;
+    private Type type;
     private TypeSolver typeSolver;
     private boolean variadic;
 
     public JavassistParameterDeclaration(CtClass type, TypeSolver typeSolver, boolean variadic) {
+        this(JavassistFactory.typeUsageFor(type, typeSolver), typeSolver, variadic);
+    }
+
+    public JavassistParameterDeclaration(Type type, TypeSolver typeSolver, boolean variadic) {
         this.type = type;
         this.typeSolver = typeSolver;
         this.variadic = variadic;
@@ -68,6 +72,6 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public Type getType() {
-        return JavassistFactory.typeUsageFor(type, typeSolver);
+        return type;
     }
 }

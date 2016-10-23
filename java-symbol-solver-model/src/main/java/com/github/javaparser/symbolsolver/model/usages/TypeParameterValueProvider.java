@@ -2,6 +2,7 @@ package com.github.javaparser.symbolsolver.model.usages;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.usages.typesystem.Wildcard;
 
 import java.util.Optional;
 
@@ -31,10 +32,20 @@ public interface TypeParameterValueProvider {
             }
         }
 
+        if (type.isWildcard() && type.asWildcard().isBounded()) {
+            if (type.asWildcard().isExtends()) {
+                return Wildcard.extendsBound(useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
+            } else {
+                return Wildcard.superBound(useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
+            }
+        }
+
         if (type.isReferenceType()) {
             type = type.asReferenceType().transformTypeParameters(tp -> useThisTypeParametersOnTheGivenType(tp));
         }
 
         return type;
     }
+
+    Optional<Type> getGenericParameterByName(String name);
 }

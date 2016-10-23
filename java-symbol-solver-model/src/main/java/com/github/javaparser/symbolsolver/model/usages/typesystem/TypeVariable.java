@@ -34,7 +34,7 @@ public class TypeVariable implements Type {
 
     @Override
     public String toString() {
-        return "TypeUsageOfTypeParameter{" + typeParameter + "}";
+        return "TypeVariable {" + typeParameter.getQualifiedName() + "}";
     }
 
     public String qualifiedName() {

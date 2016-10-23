@@ -16,6 +16,8 @@
 
 package com.github.javaparser.symbolsolver.model.declarations;
 
+import java.util.Optional;
+
 /**
  * This is a common interface for MethodDeclaration and ConstructorDeclaration.
  *
@@ -93,5 +95,15 @@ public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, 
         } else {
             return getParam(getNumberOfParams() - 1).isVariadic();
         }
+    }
+
+    @Override
+    default Optional<TypeParameterDeclaration> findTypeParameter(String name) {
+        for (TypeParameterDeclaration tp : this.getTypeParameters()) {
+            if (tp.getName().equals(name)) {
+                return Optional.of(tp);
+            }
+        }
+        return declaringType().findTypeParameter(name);
     }
 }
