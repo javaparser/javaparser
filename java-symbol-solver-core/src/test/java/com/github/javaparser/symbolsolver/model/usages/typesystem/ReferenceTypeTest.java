@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -527,6 +528,14 @@ public class ReferenceTypeTest {
         assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver), typeResolver), ancestors.get("java.lang.Object"));
         assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.lang.Iterable"));
         assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Serializable.class, typeResolver), typeResolver), ancestors.get("java.io.Serializable"));
+    }
+
+    @Test
+    public void testTypeParametersValues() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ReferenceType stream = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Stream.class, typeResolver), typeResolver);
+        assertEquals(1, stream.typeParametersValues().size());
+        assertEquals(new TypeVariable(new ReflectionInterfaceDeclaration(Stream.class, typeResolver).getTypeParameters().get(0)), stream.typeParametersValues().get(0));
     }
 
 }

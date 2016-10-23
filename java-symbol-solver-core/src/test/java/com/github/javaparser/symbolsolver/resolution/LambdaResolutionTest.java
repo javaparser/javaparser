@@ -47,6 +47,20 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    public void personsStream() throws ParseException {
+        CompilationUnit cu = parseSample("Lambda");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expression = returnStmt.getExpr().get();
+        expression = Navigator.findMethodCall(expression, "stream");
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
+        Type type = javaParserFacade.getType(expression);
+        assertEquals("java.util.stream.Stream<java.lang.String>", type.describe());
+    }
+
+    @Test
     public void lambdaMap() throws ParseException {
         CompilationUnit cu = parseSample("Lambda");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
