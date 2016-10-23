@@ -284,7 +284,7 @@ public class ContextTest extends AbstractTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         Type ref = javaParserFacade.getType(refToT);
 
-        assertEquals("? super java.lang.String", ref.describe());
+        assertEquals("java.lang.String", ref.describe());
     }
 
     @Test

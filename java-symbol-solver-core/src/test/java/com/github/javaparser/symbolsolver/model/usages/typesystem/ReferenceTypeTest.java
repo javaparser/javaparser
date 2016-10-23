@@ -299,6 +299,11 @@ public class ReferenceTypeTest {
         right = new ReferenceTypeImpl(
                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                 ImmutableList.of(string, object), typeSolver);
+
+        // To debug the following
+        List<ReferenceType> ancestors = right.getAllAncestors();
+        ReferenceType moreBazzingAncestor = ancestors.stream().filter(a -> a.getQualifiedName().endsWith("Bazzer")).findFirst().get();
+
         assertEquals(true, left.isAssignableBy(right));
 
         //YES Bazzer<String,String,String> e7 = new MoreBazzing<String, String>();

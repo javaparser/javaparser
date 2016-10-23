@@ -38,6 +38,26 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TypeParameterDeclaration)) return false;
+
+        TypeParameterDeclaration that = (TypeParameterDeclaration) o;
+
+        if (!getQualifiedName().equals(that.getQualifiedName())) {
+            return false;
+        }
+        if (declaredOnType() != that.declaredOnType()) {
+            return false;
+        }
+        if (declaredOnMethod() != that.declaredOnMethod()) {
+            return false;
+        }
+        // TODO check bounds
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "JavassistTypeParameter{" +
                 wrapped.getName()

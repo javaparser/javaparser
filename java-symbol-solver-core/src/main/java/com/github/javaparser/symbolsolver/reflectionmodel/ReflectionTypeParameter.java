@@ -57,7 +57,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
 
         TypeParameterDeclaration that = (TypeParameterDeclaration) o;
 
-        if (!getName().equals(that.getName())) {
+        if (!getQualifiedName().equals(that.getQualifiedName())) {
             return false;
         }
         if (declaredOnType() != that.declaredOnType()) {
