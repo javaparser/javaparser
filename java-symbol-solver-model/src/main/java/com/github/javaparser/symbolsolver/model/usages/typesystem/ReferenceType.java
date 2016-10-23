@@ -203,13 +203,13 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
 
         List<ReferenceType> ancestors = typeDeclaration.getAllAncestors();
 
-        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-
         ancestors = ancestors.stream()
                 .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
 
+        // Avoid repetitions of Object
         ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
+        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ReferenceType objectRef = create(objectType, typeSolver);
         ancestors.add(objectRef);
         return ancestors;
