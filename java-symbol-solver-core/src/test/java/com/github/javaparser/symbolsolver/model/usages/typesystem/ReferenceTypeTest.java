@@ -538,4 +538,40 @@ public class ReferenceTypeTest {
         assertEquals(new TypeVariable(new ReflectionInterfaceDeclaration(Stream.class, typeResolver).getTypeParameters().get(0)), stream.typeParametersValues().get(0));
     }
 
+    @Test
+    public void testReplaceTypeVariables() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        InterfaceDeclaration streamInterface = new ReflectionInterfaceDeclaration(Stream.class, typeResolver);
+        ReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
+
+        com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
+        TypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
+        TypeVariable typeVariable = new TypeVariable(streamMapR);
+        stream.typeParametersMap().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable);
+
+        TypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
+        Type replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+
+        Type streamReplaced = stream.replaceTypeVariables(tpToReplace, replaced);
+        assertEquals("java.util.stream.Stream<java.lang.String>", streamReplaced.describe());
+    }
+
+    @Test
+    public void testReplaceTypeVariablesWithLambdaInBetween() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        InterfaceDeclaration streamInterface = new ReflectionInterfaceDeclaration(Stream.class, typeResolver);
+        ReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
+
+        com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
+        TypeParameterDeclaration streamMapR = streamMap.findTypeParameter("R").get();
+        TypeVariable typeVariable = new TypeVariable(streamMapR);
+        stream.typeParametersMap().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable);
+
+        TypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
+        Type replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+
+        Type streamReplaced = stream.replaceTypeVariables(tpToReplace, replaced);
+        assertEquals("java.util.stream.Stream<java.lang.String>", streamReplaced.describe());
+    }
+
 }

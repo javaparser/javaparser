@@ -168,7 +168,14 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
-        return transformTypeParameters(tp -> tp.replaceTypeVariables(tpToReplace, replaced));
+        Type result = transformTypeParameters(tp -> tp.replaceTypeVariables(tpToReplace, replaced));
+        if (result.isReferenceType() && result.asReferenceType().typeDeclaration.getTypeParameters().contains(tpToReplace)) {
+            List<Type> values = result.asReferenceType().typeParametersValues();
+            int index = result.asReferenceType().typeDeclaration.getTypeParameters().indexOf(tpToReplace);
+            values.set(index, replaced);
+            return create(result.asReferenceType().getTypeDeclaration(), values, typeSolver);
+        }
+        return result;
     }
 
     ///
