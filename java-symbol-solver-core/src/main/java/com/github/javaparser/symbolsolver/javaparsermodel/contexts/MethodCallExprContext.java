@@ -58,6 +58,25 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, argumentsTypes, typeSolver, invokationContext, refType.typeParametersValues());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
+
+            // At this stage I should derive from the context and the value some information on the type parameters
+            // for example, when calling:
+            // myStream.collect(Collectors.toList())
+            // I should be able to figure out that considering the type of the stream (e.g., Stream<String>)
+            // and considering that Stream has this method:
+            //
+            // <R,A> R collect(Collector<? super T,A,R> collector)
+            //
+            // and collector has this method:
+            //
+            // static <T> Collector<T,?,List<T>>   toList()
+            //
+            // In this case collect.R has to be equal to List<toList.T>
+            // And toList.T has to be equal to ? super Stream.T
+            // Therefore R has to be equal to List<? super Stream.T>.
+            // In our example Stream.T equal to String, so the R (and the result of the call to collect) is
+            // List<? super String>
+
             Type returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             if (returnType != methodUsage.returnType()) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
