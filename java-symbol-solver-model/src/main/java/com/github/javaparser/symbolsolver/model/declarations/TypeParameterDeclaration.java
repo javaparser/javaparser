@@ -97,7 +97,7 @@ public interface TypeParameterDeclaration {
      * The qualified name of a method is its qualified signature.
      */
     default String getQualifiedName() {
-        return String.format("%s.%s", getContainerQualifiedName(), getName());
+        return String.format("%s.%s", getContainerId(), getName());
     }
 
     String getContainerQualifiedName();
