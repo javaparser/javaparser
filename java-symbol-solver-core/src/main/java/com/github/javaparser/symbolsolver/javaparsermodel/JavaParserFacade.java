@@ -149,6 +149,8 @@ public class JavaParserFacade {
             } else {
                 try {
                     argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
+                } catch (UnsolvedSymbolException e) {
+                    throw e;
                 } catch (Exception e) {
                     throw new RuntimeException(String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
                             methodCallExpr, parameterValue), e);
@@ -307,10 +309,23 @@ public class JavaParserFacade {
                     //        but T in this case is equal to String
                     if (callExpr.getScope().isPresent()){
 
+                        // If it is a static call we should not try to get the type of the scope
+                        boolean staticCall = false;
+                        if (callExpr.getScope().get() instanceof NameExpr) {
+                            NameExpr nameExpr = (NameExpr)callExpr.getScope().get();
+                            try {
+                                JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName(), typeSolver);
+                                staticCall = true;
+                            } catch (Exception e) {
 
-                        Type scopeType = JavaParserFacade.get(typeSolver).getType(callExpr.getScope().get());
-                        if (scopeType.isReferenceType()) {
-                            result = scopeType.asReferenceType().useThisTypeParametersOnTheGivenType(result);
+                            }
+                        }
+
+                        if (!staticCall) {
+                            Type scopeType = JavaParserFacade.get(typeSolver).getType(callExpr.getScope().get());
+                            if (scopeType.isReferenceType()) {
+                                result = scopeType.asReferenceType().useThisTypeParametersOnTheGivenType(result);
+                            }
                         }
                     }
 
@@ -425,27 +440,19 @@ public class JavaParserFacade {
         } else if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
             // We should understand if this is a static access
-            try {
-                Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
-                if (value.isPresent()) {
-                    return value.get().getType();
-                } else {
-                    throw new UnsolvedSymbolException(fieldAccessExpr.getField());
+            if (fieldAccessExpr.getScope() instanceof NameExpr) {
+                NameExpr staticValue = (NameExpr) fieldAccessExpr.getScope();
+                SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr, typeSolver).solveType(staticValue.toString(), typeSolver);
+                if (typeAccessedStatically.isSolved()) {
+                    // TODO here maybe we have to substitute type typeParametersValues
+                    return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField()).getType();
                 }
-            } catch (UnsolvedSymbolException e) {
-                // Sure, it was not found as value because maybe it is a type and this is a static access
-                if (fieldAccessExpr.getScope() instanceof NameExpr) {
-                    NameExpr staticValue = (NameExpr) fieldAccessExpr.getScope();
-                    SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr, typeSolver).solveType(staticValue.toString(), typeSolver);
-                    if (!typeAccessedStatically.isSolved()) {
-                        throw e;
-                    } else {
-                        // TODO here maybe we have to substitute type typeParametersValues
-                        return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField()).getType();
-                    }
-                } else {
-                    throw e;
-                }
+            }
+            Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
+            if (value.isPresent()) {
+                return value.get().getType();
+            } else {
+                throw new UnsolvedSymbolException(fieldAccessExpr.getField());
             }
         } else if (node instanceof ObjectCreationExpr) {
             ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) node;
