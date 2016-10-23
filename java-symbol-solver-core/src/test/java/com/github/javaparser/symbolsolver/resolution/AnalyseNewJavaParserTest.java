@@ -192,6 +192,10 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         parse("com/github/javaparser/ast/expr/ThisExpr");
         parse("com/github/javaparser/ast/expr/TypeExpr");
         parse("com/github/javaparser/ast/expr/UnaryExpr");
+    }
+
+    @Test
+    public void parseVariableDeclarationExpr() throws IOException, ParseException {
         parse("com/github/javaparser/ast/expr/VariableDeclarationExpr");
     }
 
