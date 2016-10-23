@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -31,16 +32,18 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     private TypeVariable typeVariable;
     private boolean declaredOnClass;
     private String qNameOfDeclaringClass;
+    private String idOfDeclaringClass;
     private TypeSolver typeSolver;
 
     public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass, TypeSolver typeSolver) {
         GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
         if (genericDeclaration instanceof Class) {
-            Class clazz = (Class) genericDeclaration;
-            qNameOfDeclaringClass = clazz.getTypeName();
+            TypeDeclaration typeDeclaration = ReflectionFactory.typeDeclarationFor((Class) genericDeclaration, typeSolver);
+            qNameOfDeclaringClass = typeDeclaration.getQualifiedName();
+            idOfDeclaringClass = typeDeclaration.getId();
         } else {
-            //System.out.println(genericDeclaration.getClass().getCanonicalName());
             qNameOfDeclaringClass = null;
+            idOfDeclaringClass = null;
         }
         this.typeVariable = typeVariable;
         this.declaredOnClass = declaredOnClass;
@@ -93,6 +96,16 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     public String getContainerQualifiedName() {
         if (this.declaredOnType()) {
             return qNameOfDeclaringClass;
+        } else {
+            String qNameContainer = new ReflectionMethodDeclaration((Method)typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
+            return qNameContainer;
+        }
+    }
+
+    @Override
+    public String getContainerId() {
+        if (this.declaredOnType()) {
+            return idOfDeclaringClass;
         } else {
             String qNameContainer = new ReflectionMethodDeclaration((Method)typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
             return qNameContainer;

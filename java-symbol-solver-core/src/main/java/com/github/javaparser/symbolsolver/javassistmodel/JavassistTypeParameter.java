@@ -65,6 +65,11 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
+    public String getContainerId() {
+        return qualifier;
+    }
+
+    @Override
     public List<TypeParameterDeclaration.Bound> getBounds(TypeSolver typeSolver) {
         List<Bound> bounds = new ArrayList<>();
         if (wrapped.getClassBound() != null && !wrapped.getClassBound().toString().equals(Object.class.getCanonicalName())) {

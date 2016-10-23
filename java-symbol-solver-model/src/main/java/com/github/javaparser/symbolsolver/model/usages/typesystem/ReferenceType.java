@@ -299,8 +299,8 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
         }
-        String typeQualifiedName = this.getTypeDeclaration().getQualifiedName();
-        if (equalsOrNull(typeQualifiedName, typeParameterDeclaration.getContainerQualifiedName())) {
+        String typeId = this.getTypeDeclaration().getId();
+        if (equalsOrNull(typeId, typeParameterDeclaration.getContainerId())) {
             return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
         }
         for (ReferenceType ancestor : this.getAllAncestors()) {

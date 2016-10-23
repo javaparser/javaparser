@@ -129,6 +129,14 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
      */
     String getQualifiedName();
 
+    default String getId() {
+        String qname = getQualifiedName();
+        if (qname == null) {
+            return String.format("<localClass>:%s", getName());
+        }
+        return qname;
+    }
+
     ///
     /// Ancestors
     ///

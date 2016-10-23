@@ -60,6 +60,11 @@ public interface TypeParameterDeclaration {
             }
 
             @Override
+            public String getContainerId() {
+                return classQName;
+            }
+
+            @Override
             public List<Bound> getBounds(TypeSolver typeSolver) {
                 return bounds;
             }
@@ -96,6 +101,8 @@ public interface TypeParameterDeclaration {
     }
 
     String getContainerQualifiedName();
+
+    String getContainerId();
 
     /**
      * The bounds specified for the type parameter.

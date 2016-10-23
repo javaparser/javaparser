@@ -152,7 +152,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     @Override
     public String toString() {
         return "ReflectionClassDeclaration{" +
-                "clazz=" + clazz.getCanonicalName() +
+                "clazz=" + getId() +
                 '}';
     }
 
@@ -194,6 +194,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     @Override
     public boolean canBeAssignedTo(TypeDeclaration other) {
         if (other instanceof LambdaArgumentTypePlaceholder) {
+            // FIXME remove and use functional interface recognition
             return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
                     getQualifiedName().equals(Function.class.getCanonicalName());
         }

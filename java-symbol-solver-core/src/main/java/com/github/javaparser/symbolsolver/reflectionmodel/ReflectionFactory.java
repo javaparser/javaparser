@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.*;
@@ -30,6 +31,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ReflectionFactory {
+
+    public static TypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
+        if (clazz.isArray()) {
+            throw new IllegalArgumentException();
+        } else if (clazz.isPrimitive()) {
+            throw new IllegalArgumentException();
+        } else if (clazz.isInterface()) {
+            return new ReflectionInterfaceDeclaration(clazz, typeSolver);
+        } else {
+            return new ReflectionClassDeclaration(clazz, typeSolver);
+        }
+        // FIXME check if it is enum
+    }
+
     public static Type typeUsageFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
             return new ArrayType(typeUsageFor(clazz.getComponentType(), typeSolver));

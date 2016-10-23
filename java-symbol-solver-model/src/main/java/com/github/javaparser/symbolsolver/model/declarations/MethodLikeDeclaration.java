@@ -53,7 +53,7 @@ public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, 
      * followed by the signature of the method.
      */
     default String getQualifiedSignature() {
-        return declaringType().getQualifiedName() + "." + this.getSignature();
+        return declaringType().getId() + "." + this.getSignature();
     }
 
     /**
