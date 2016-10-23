@@ -357,9 +357,16 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     @Override
     public List<ReferenceType> getInterfaces() {
         List<ReferenceType> interfaces = new ArrayList<>();
-        // TODO use genericInterfaces
-        for (Class i : clazz.getInterfaces()) {
-            interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
+        for (java.lang.reflect.Type superInterface : clazz.getGenericInterfaces()) {
+            if (superInterface instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType) superInterface;
+                List<Type> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
+                        .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
+                        .collect(Collectors.toList());
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters, typeSolver));
+            } else {
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)superInterface, typeSolver), typeSolver));
+            }
         }
         return interfaces;
     }

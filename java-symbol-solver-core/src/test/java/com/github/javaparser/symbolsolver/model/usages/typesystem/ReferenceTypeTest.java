@@ -458,7 +458,57 @@ public class ReferenceTypeTest {
     }
 
     @Test
-    public void testGetAllAncestorsOnTypeWithSpecifiedTypeParameters() {
+    public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForInterface() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ReferenceType listOfString = new ReferenceTypeImpl(list, ImmutableList.of(string), typeResolver);
+
+        Map<String, ReferenceType> ancestors = new HashMap<>();
+        listOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
+        assertEquals(3, ancestors.size());
+
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.Collection"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver), typeResolver), ancestors.get("java.lang.Object"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.lang.Iterable"));
+    }
+
+    @Test
+    public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassAbstractCollection() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
+        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ReferenceType abstractCollectionOfString = new ReferenceTypeImpl(abstractCollection, ImmutableList.of(string), typeResolver);
+
+        Map<String, ReferenceType> ancestors = new HashMap<>();
+        abstractCollectionOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
+        assertEquals(3, ancestors.size());
+
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.Collection"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver), typeResolver), ancestors.get("java.lang.Object"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.lang.Iterable"));
+    }
+
+    @Test
+    public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassAbstractList() {
+        TypeSolver typeResolver = new JreTypeSolver();
+        ClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
+        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ReferenceType abstractListOfString = new ReferenceTypeImpl(abstractList, ImmutableList.of(string), typeResolver);
+
+        Map<String, ReferenceType> ancestors = new HashMap<>();
+        abstractListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
+        assertEquals(5, ancestors.size());
+
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(AbstractCollection.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.AbstractCollection"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.List"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.util.Collection"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver), typeResolver), ancestors.get("java.lang.Object"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(string), typeResolver), ancestors.get("java.lang.Iterable"));
+    }
+
+    @Test
+    public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassArrayList() {
         TypeSolver typeResolver = new JreTypeSolver();
         ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
