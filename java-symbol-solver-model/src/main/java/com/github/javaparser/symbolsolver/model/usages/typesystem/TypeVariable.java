@@ -72,8 +72,7 @@ public class TypeVariable implements Type {
 
     @Override
     public Type replaceTypeVariables(TypeParameterDeclaration tpToBeReplaced, Type replaced) {
-        // FIXME it should use the qualified name
-        if (tpToBeReplaced.getName().equals(typeParameter.getName())) {
+        if (tpToBeReplaced.getQualifiedName().equals(typeParameter.getQualifiedName())) {
             return replaced;
         } else {
             return this;
