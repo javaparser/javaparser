@@ -129,12 +129,33 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
      */
     String getQualifiedName();
 
+    /**
+     * The ID corresponds most of the type to the qualified name. It differs only for local
+     * classes which do not have a qualified name but have an ID.
+     */
     default String getId() {
         String qname = getQualifiedName();
         if (qname == null) {
             return String.format("<localClass>:%s", getName());
         }
         return qname;
+    }
+
+    ///
+    /// Type parameters
+    ///
+
+    @Override
+    default Optional<TypeParameterDeclaration> findTypeParameter(String name) {
+        for (TypeParameterDeclaration tp : this.getTypeParameters()) {
+            if (tp.getName().equals(name)) {
+                return Optional.of(tp);
+            }
+        }
+        if (this.containerType().isPresent()) {
+            return this.containerType().get().findTypeParameter(name);
+        }
+        return Optional.empty();
     }
 
     ///
@@ -274,16 +295,4 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
         return getAllAncestors().stream().anyMatch(it -> it.asReferenceType().getTypeDeclaration().hasDirectlyAnnotation(qualifiedName));
     }
 
-    @Override
-    default Optional<TypeParameterDeclaration> findTypeParameter(String name) {
-        for (TypeParameterDeclaration tp : this.getTypeParameters()) {
-            if (tp.getName().equals(name)) {
-                return Optional.of(tp);
-            }
-        }
-        if (this.containerType().isPresent()) {
-            return this.containerType().get().findTypeParameter(name);
-        }
-        return Optional.empty();
-    }
 }

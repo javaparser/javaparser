@@ -90,8 +90,8 @@ public class ArrayType implements Type {
     }
 
     @Override
-    public Type replaceParam(TypeParameterDeclaration tpToReplace, Type replaced) {
-        Type baseTypeReplaced = baseType.replaceParam(tpToReplace, replaced);
+    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced) {
+        Type baseTypeReplaced = baseType.replaceTypeVariables(tpToReplace, replaced);
         if (baseTypeReplaced == baseType) {
             return this;
         } else {

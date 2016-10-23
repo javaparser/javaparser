@@ -129,7 +129,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         }
 
         for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
-            returnType = returnType.replaceParam(determinedParam, determinedTypeParameters.get(determinedParam));
+            returnType = returnType.replaceTypeVariables(determinedParam, determinedTypeParameters.get(determinedParam));
         }
 
         return new MethodUsage(new ReflectionMethodDeclaration(method, typeSolver), params, returnType);

@@ -144,6 +144,9 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     /// TypeParameters
     ///
 
+    /**
+     * Execute a transformation on all the type parameters of this element.
+     */
     public Type transformTypeParameters(TypeTransformer transformer) {
         Type result = this;
         int i = 0;
@@ -161,11 +164,11 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     }
 
     @Override
-    public Type replaceParam(TypeParameterDeclaration tpToReplace, Type replaced) {
+    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
-        return transformTypeParameters(tp -> tp.replaceParam(tpToReplace, replaced));
+        return transformTypeParameters(tp -> tp.replaceTypeVariables(tpToReplace, replaced));
     }
 
     ///
@@ -203,20 +206,13 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
 
         ancestors = ancestors.stream()
-                .map(a -> replaceParamsForAncestors(a))
+                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
 
         ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
         ReferenceType objectRef = create(objectType, typeSolver);
         ancestors.add(objectRef);
         return ancestors;
-    }
-
-    private ReferenceType replaceParamsForAncestors(ReferenceType ancestor) {
-        return typeParametersMap().replaceAll(ancestor).asReferenceType();
-        //System.out.println("ANCESTOR " +ancestor.describe() + " params " + String.join(", ", ancestor.typeParametersValues().stream().map(tp -> tp.describe()).collect(Collectors.toList())));
-        //ancestor.typeParametersValues().stream().filter(tp -> tp.isTypeVariable()).forEach(tp -> System.out.println("REFER TO "+tp.asTypeParameter().getQualifiedName()));
-        //return ancestor;
     }
 
     public List<ReferenceType> getAllInterfacesAncestors() {
@@ -242,6 +238,10 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         return Optional.empty();
     }
 
+    /**
+     * Get the values for all type parameters declared on this type.
+     * The list can be empty for raw types.
+     */
     public List<Type> typeParametersValues() {
         return this.typeParametersMap.isEmpty() ? Collections.emptyList() : typeDeclaration.getTypeParameters().stream().map(tp -> typeParametersMap.getValue(tp)).collect(Collectors.toList());
     }
@@ -288,6 +288,10 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         return typeDeclaration.getQualifiedName();
     }
 
+    public String getId() {
+        return typeDeclaration.getId();
+    }
+
     public abstract Set<MethodUsage> getDeclaredMethods();
 
     public boolean isRawType() {
@@ -300,11 +304,11 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             throw new IllegalArgumentException();
         }
         String typeId = this.getTypeDeclaration().getId();
-        if (equalsOrNull(typeId, typeParameterDeclaration.getContainerId())) {
+        if (typeId.equals(typeParameterDeclaration.getContainerId())) {
             return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
         }
         for (ReferenceType ancestor : this.getAllAncestors()) {
-            if (equalsOrNull(ancestor.getQualifiedName(), typeParameterDeclaration.getContainerQualifiedName())) {
+            if (ancestor.getId().equals(typeParameterDeclaration.getContainerId())) {
                 return Optional.of(ancestor.typeParametersMap().getValue(typeParameterDeclaration));
             }
         }
@@ -386,16 +390,6 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
 
     private static List<Type> deriveParams(TypeDeclaration typeDeclaration) {
         return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeVariable(tp)).collect(Collectors.toList());
-    }
-
-    private <T> boolean equalsOrNull(T a, T b) {
-        if (a == null && b == null) {
-            return true;
-        }
-        if ((a == null) != (b == null)) {
-            return false;
-        }
-        return a.equals(b);
     }
 
 }

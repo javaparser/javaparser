@@ -107,7 +107,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         }
 
         for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
-            returnType = returnType.replaceParam(determinedParam, determinedTypeParameters.get(determinedParam));
+            returnType = returnType.replaceTypeVariables(determinedParam, determinedTypeParameters.get(determinedParam));
         }
 
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);

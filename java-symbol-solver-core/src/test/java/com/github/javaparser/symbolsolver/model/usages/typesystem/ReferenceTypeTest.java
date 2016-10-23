@@ -163,10 +163,10 @@ public class ReferenceTypeTest {
     @Test
     public void testReplaceParam() {
         TypeParameterDeclaration tpA = TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
-        assertTrue(object == object.replaceParam(tpA, object));
-        assertTrue(string == string.replaceParam(tpA, object));
-        assertTrue(listOfStrings == listOfStrings.replaceParam(tpA, object));
-        assertEquals(listOfStrings, listOfA.replaceParam(tpA, string));
+        assertTrue(object == object.replaceTypeVariables(tpA, object));
+        assertTrue(string == string.replaceTypeVariables(tpA, object));
+        assertTrue(listOfStrings == listOfStrings.replaceTypeVariables(tpA, object));
+        assertEquals(listOfStrings, listOfA.replaceTypeVariables(tpA, string));
     }
 
     @Test

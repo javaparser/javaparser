@@ -90,7 +90,7 @@ public class TypeParametersMap {
 
     public Type replaceAll(Type type) {
         for (TypeParameterDeclaration typeParameterDeclaration : this.nameToDeclaration.values()) {
-            type = type.replaceParam(typeParameterDeclaration, getValue(typeParameterDeclaration));
+            type = type.replaceTypeVariables(typeParameterDeclaration, getValue(typeParameterDeclaration));
         }
         return type;
     }

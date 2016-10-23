@@ -184,13 +184,13 @@ public class WildcardUsageTest {
     public void testReplaceParam() {
         TypeParameterDeclaration tpA = TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
         TypeParameterDeclaration tpB = TypeParameterDeclaration.onType("B", "foo.Bar", Collections.emptyList());
-        assertTrue(unbounded == unbounded.replaceParam(tpA, string));
-        assertTrue(superFoo == superFoo.replaceParam(tpA, string));
-        assertTrue(extendsFoo == extendsFoo.replaceParam(tpA, string));
-        assertEquals(superString, superA.replaceParam(tpA, string));
-        assertEquals(extendsString, extendsA.replaceParam(tpA, string));
-        assertTrue(superA == superA.replaceParam(tpB, string));
-        assertTrue(extendsA == extendsA.replaceParam(tpB, string));
+        assertTrue(unbounded == unbounded.replaceTypeVariables(tpA, string));
+        assertTrue(superFoo == superFoo.replaceTypeVariables(tpA, string));
+        assertTrue(extendsFoo == extendsFoo.replaceTypeVariables(tpA, string));
+        assertEquals(superString, superA.replaceTypeVariables(tpA, string));
+        assertEquals(extendsString, extendsA.replaceTypeVariables(tpA, string));
+        assertTrue(superA == superA.replaceTypeVariables(tpB, string));
+        assertTrue(extendsA == extendsA.replaceTypeVariables(tpB, string));
     }
 
     @Test

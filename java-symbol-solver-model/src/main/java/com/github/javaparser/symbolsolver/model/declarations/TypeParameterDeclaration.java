@@ -100,8 +100,14 @@ public interface TypeParameterDeclaration {
         return String.format("%s.%s", getContainerId(), getName());
     }
 
+    /**
+     * The qualified name of the container.
+     */
     String getContainerQualifiedName();
 
+    /**
+     * The ID of the container. See TypeContainer.getId
+     */
     String getContainerId();
 
     /**

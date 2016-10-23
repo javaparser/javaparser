@@ -124,7 +124,11 @@ public interface Type {
     /// TypeParameters
     ///
 
-    default Type replaceParam(TypeParameterDeclaration tp, Type replaced) {
+    /**
+     * Replace all variables referring to the given TypeParameter with the
+     * given value.
+     */
+    default Type replaceTypeVariables(TypeParameterDeclaration tp, Type replaced) {
         return this;
     }
 

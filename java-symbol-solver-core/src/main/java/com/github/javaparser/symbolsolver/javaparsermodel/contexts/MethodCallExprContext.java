@@ -176,7 +176,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (type.isReferenceType()) {
             for (Tuple2<TypeParameterDeclaration, Type> entry : type.asReferenceType().getTypeParametersMap()) {
                 if (entry._1.declaredOnType() && scope.asReferenceType().getGenericParameterByName(entry._1.getName()).isPresent()) {
-                    type = type.replaceParam(entry._1, scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get());
+                    type = type.replaceTypeVariables(entry._1, scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get());
                 }
             }
             return type;

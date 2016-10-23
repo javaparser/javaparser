@@ -130,26 +130,26 @@ public class ArrayTypeTest {
 
     @Test
     public void testReplaceParam() {
-        assertTrue(arrayOfBooleans == arrayOfBooleans.replaceParam(tpA, OBJECT));
-        assertTrue(arrayOfStrings == arrayOfStrings.replaceParam(tpA, OBJECT));
-        assertTrue(arrayOfListOfStrings == arrayOfListOfStrings.replaceParam(tpA, OBJECT));
+        assertTrue(arrayOfBooleans == arrayOfBooleans.replaceTypeVariables(tpA, OBJECT));
+        assertTrue(arrayOfStrings == arrayOfStrings.replaceTypeVariables(tpA, OBJECT));
+        assertTrue(arrayOfListOfStrings == arrayOfListOfStrings.replaceTypeVariables(tpA, OBJECT));
         ArrayType arrayOfListOfObjects = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(OBJECT), typeSolver));
-        assertEquals(true, arrayOfListOfA.replaceParam(tpA, OBJECT).isArray());
+        assertEquals(true, arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).isArray());
         assertEquals(ImmutableList.of(OBJECT),
-                arrayOfListOfA.replaceParam(tpA, OBJECT).asArrayType().getComponentType()
+                arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType()
                         .asReferenceType().typeParametersValues());
         assertEquals(new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                arrayOfListOfA.replaceParam(tpA, OBJECT).asArrayType().getComponentType()
+                arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType()
                         .asReferenceType().getTypeDeclaration());
         assertEquals(new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(List.class, typeSolver),
                         ImmutableList.of(OBJECT), typeSolver),
-                arrayOfListOfA.replaceParam(tpA, OBJECT).asArrayType().getComponentType());
-        assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceParam(tpA, OBJECT));
-        assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceParam(tpA, STRING));
-        assertTrue(arrayOfListOfA != arrayOfListOfA.replaceParam(tpA, OBJECT));
+                arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType());
+        assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceTypeVariables(tpA, OBJECT));
+        assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceTypeVariables(tpA, STRING));
+        assertTrue(arrayOfListOfA != arrayOfListOfA.replaceTypeVariables(tpA, OBJECT));
     }
 
     @Test

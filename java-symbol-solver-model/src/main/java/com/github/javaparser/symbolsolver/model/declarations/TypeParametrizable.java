@@ -31,6 +31,10 @@ public interface TypeParametrizable {
      */
     List<TypeParameterDeclaration> getTypeParameters();
 
+    /**
+     * Find the closest TypeParameterDeclaration with the given name.
+     * It first look on this element itself and then on the containers.
+     */
     Optional<TypeParameterDeclaration> findTypeParameter(String name);
 
 }

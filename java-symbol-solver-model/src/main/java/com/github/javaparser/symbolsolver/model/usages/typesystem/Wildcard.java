@@ -140,14 +140,14 @@ public class Wildcard implements Type {
     }
 
     @Override
-    public Type replaceParam(TypeParameterDeclaration tpToReplace, Type replaced) {
+    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
         if (boundedType == null) {
             return this;
         }
-        Type boundedTypeReplaced = boundedType.replaceParam(tpToReplace, replaced);
+        Type boundedTypeReplaced = boundedType.replaceTypeVariables(tpToReplace, replaced);
         if (boundedTypeReplaced == null) {
             throw new RuntimeException();
         }

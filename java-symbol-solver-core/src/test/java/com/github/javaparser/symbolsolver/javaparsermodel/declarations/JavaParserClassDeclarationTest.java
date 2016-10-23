@@ -762,7 +762,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
 
         ReferenceType stringType = (ReferenceType) ReflectionFactory.typeUsageFor(String.class, typeSolverNewCode);
         ReferenceType rawClassType = (ReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode);
-        ReferenceType classOfStringType = (ReferenceType) rawClassType.replaceParam(rawClassType.getTypeDeclaration().getTypeParameters().get(0), stringType);
+        ReferenceType classOfStringType = (ReferenceType) rawClassType.replaceTypeVariables(rawClassType.getTypeDeclaration().getTypeParameters().get(0), stringType);
         res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(classOfStringType));
         assertEquals(false, res.isSolved());
     }

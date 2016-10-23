@@ -120,10 +120,10 @@ public class MethodUsage implements TypeParametrized {
         MethodUsage res = this;
         for (int i = 0; i < paramTypes.size(); i++) {
             Type originalParamType = paramTypes.get(i);
-            Type newParamType = originalParamType.replaceParam(typeParameter, type);
+            Type newParamType = originalParamType.replaceTypeVariables(typeParameter, type);
             res = res.replaceParamType(i, newParamType);
         }
-        res = res.replaceReturnType(res.returnType.replaceParam(typeParameter, type));
+        res = res.replaceReturnType(res.returnType.replaceTypeVariables(typeParameter, type));
         return res;
     }
 

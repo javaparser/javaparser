@@ -33,6 +33,10 @@ public interface ParameterDeclaration extends ValueDeclaration {
      */
     boolean isVariadic();
 
+    /**
+     * Describe the type of the parameter. In practice add three dots to the type name
+     * is the parameter is variadic.
+     */
     default String describeType() {
         if (isVariadic()) {
             return getType().asArrayType().getComponentType().describe() + "...";

@@ -69,7 +69,7 @@ class ReflectionMethodResolutionLogic {
         argumentsTypes = argumentsTypes.stream().map((pt) -> {
             int i = 0;
             for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
-                pt = pt.replaceParam(tp, finalTypeParameterValues.get(i));
+                pt = pt.replaceTypeVariables(tp, finalTypeParameterValues.get(i));
                 i++;
             }
             return pt;
