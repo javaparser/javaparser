@@ -77,18 +77,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // In our example Stream.T equal to String, so the R (and the result of the call to collect) is
             // List<? super String>
 
-            /*qui mi manca l'informazione che mi deriva dalla definizione di toList che mi dice che il primo e terzo parametro
-            sono collegati. In questo momento argumentsTypes.get(i) è una collector con il primo parametro a String,
-            io dovrei derivare da quello che toList.T = String di modo da usarlo poi
-            QUANDO HO RIMPIAZZATO IL PRIMO PARAMETRO AVREI DOVUTO DERIVARE IL TERZO*/
-
             Map<TypeParameterDeclaration, Type> derivedValues = new HashMap<>();
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
                 //if (this.wrappedNode.getArgs().get(i) instanceof )
                 inferTypes(argumentsTypes.get(i), methodUsage.getDeclaration().getParam(i).getType(), derivedValues);
             }
-
-            //inferTypes(ref.get().returnType(), targetReturnType(invokationContext), derivedValues);
 
             Type returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             if (returnType != methodUsage.returnType()) {
@@ -121,13 +114,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 inferTypes(source, target.asWildcard().getBoundedType(), mappings);
                 return;
             }
-            System.out.println("RW " +source.describe() + " " + target.describe());
-            //throw new RuntimeException("RW " +source.describe() + " " + target.describe());
             return;
         }
         if (source.isWildcard() && target.isWildcard()){
-            System.out.println("WW " +source.describe() + " " + target.describe());
-            //throw new RuntimeException("RW " +source.describe() + " " + target.describe());
             return;
         }
         if (source.isReferenceType() && target.isTypeVariable()){
