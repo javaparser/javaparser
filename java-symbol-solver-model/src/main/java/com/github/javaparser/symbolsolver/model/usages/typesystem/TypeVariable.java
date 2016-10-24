@@ -73,11 +73,6 @@ public class TypeVariable implements Type {
     }
 
     @Override
-    public Type copy() {
-        return new TypeVariable(typeParameter);
-    }
-
-    @Override
     public Type replaceTypeVariables(TypeParameterDeclaration tpToBeReplaced, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
         if (tpToBeReplaced.getQualifiedName().equals(typeParameter.getQualifiedName())) {
             return replaced;

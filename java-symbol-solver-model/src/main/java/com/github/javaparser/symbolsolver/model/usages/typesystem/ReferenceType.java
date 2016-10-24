@@ -164,13 +164,6 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     }
 
     @Override
-    public Type copy() {
-        List<Type> typeParametersCopy = new LinkedList<>();
-        typeParametersCopy.addAll(typeParametersValues());
-        return create(typeDeclaration, typeParametersCopy, typeSolver);
-    }
-
-    @Override
     public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
@@ -179,7 +172,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         Type result = this;
         int i = 0;
         for (Type tp : this.typeParametersValues()) {
-            Type transformedTp = tp.copy().replaceTypeVariables(tpToReplace, replaced, inferredTypes);
+            Type transformedTp = tp.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
             // Identity comparison on purpose
             if (tp.isTypeVariable()) {
                 inferredTypes.put(tp.asTypeParameter(), replaced);

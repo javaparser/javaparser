@@ -26,10 +26,6 @@ import java.util.Map;
  * @author Federico Tomassetti
  */
 public class ArrayType implements Type {
-    @Override
-    public Type copy() {
-        return new ArrayType(baseType.copy());
-    }
 
     private Type baseType;
 

@@ -148,5 +148,4 @@ public interface Type {
      */
     boolean isAssignableBy(Type other);
 
-    Type copy();
 }

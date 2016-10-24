@@ -142,17 +142,6 @@ public class Wildcard implements Type {
     }
 
     @Override
-    public Type copy() {
-        if (this.isSuper()) {
-            return superBound(boundedType.copy());
-        } else if (this.isExtends()) {
-            return extendsBound(boundedType.copy());
-        } else {
-            return UNBOUNDED;
-        }
-    }
-
-    @Override
     public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
