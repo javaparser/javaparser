@@ -132,7 +132,7 @@ public class ArrayTypeTest {
     public void testReplaceParam() {
         assertTrue(arrayOfBooleans == arrayOfBooleans.replaceTypeVariables(tpA, OBJECT));
         assertTrue(arrayOfStrings == arrayOfStrings.replaceTypeVariables(tpA, OBJECT));
-        assertTrue(arrayOfListOfStrings == arrayOfListOfStrings.replaceTypeVariables(tpA, OBJECT));
+        assertEquals(arrayOfListOfStrings, arrayOfListOfStrings.replaceTypeVariables(tpA, OBJECT));
         ArrayType arrayOfListOfObjects = new ArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(OBJECT), typeSolver));

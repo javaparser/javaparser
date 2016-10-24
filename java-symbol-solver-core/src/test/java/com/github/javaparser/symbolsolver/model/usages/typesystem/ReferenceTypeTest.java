@@ -166,7 +166,7 @@ public class ReferenceTypeTest {
         TypeParameterDeclaration tpA = TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
         assertTrue(object == object.replaceTypeVariables(tpA, object));
         assertTrue(string == string.replaceTypeVariables(tpA, object));
-        assertTrue(listOfStrings == listOfStrings.replaceTypeVariables(tpA, object));
+        assertEquals(listOfStrings, listOfStrings.replaceTypeVariables(tpA, object));
         assertEquals(listOfStrings, listOfA.replaceTypeVariables(tpA, string));
     }
 

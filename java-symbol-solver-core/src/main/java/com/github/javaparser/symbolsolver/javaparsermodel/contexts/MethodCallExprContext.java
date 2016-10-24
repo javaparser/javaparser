@@ -144,6 +144,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             mappings.put(target.asTypeParameter(), source);
             return;
         }
+        if (source.isPrimitive() || target.isPrimitive()) {
+            return;
+        }
+        if (source.isNull()) {
+            return;
+        }
         throw new RuntimeException(source.describe() + " " + target.describe());
     }
 

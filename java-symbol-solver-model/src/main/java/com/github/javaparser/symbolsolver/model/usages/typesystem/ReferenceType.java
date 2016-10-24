@@ -184,7 +184,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             if (tp.isTypeVariable()) {
                 inferredTypes.put(tp.asTypeParameter(), replaced);
             }
-            if (!transformedTp.equals(tp)) {
+            if (true) {
                 List<Type> typeParametersCorrected = result.asReferenceType().typeParametersValues();
                 typeParametersCorrected.set(i, transformedTp);
                 result = create(typeDeclaration, typeParametersCorrected, typeSolver);
