@@ -387,7 +387,7 @@ public class MethodResolutionLogic {
             if (tdA.isAssignableBy(tdB) && !tdB.isAssignableBy(tdA)) {
                 return false;
             }
-            // if it matches a variadic and a not variadic I pick the not variatic
+            // if it matches a variadic and a not variadic I pick the not variadic
             // FIXME
             if (i == (methodA.getNumberOfParams() - 1) && tdA.arrayLevel() > tdB.arrayLevel()) {
                 return true;

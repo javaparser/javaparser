@@ -128,13 +128,17 @@ public interface Type {
     ///
 
     /**
-     * Replace all variables referring to the given TypeParameter with the
-     * given value.
+     * Replace all variables referring to the given TypeParameter with the given value.
+     * By replacing these values I could also infer some type equivalence.
+     * Those would be collected in the given map.
      */
     default Type replaceTypeVariables(TypeParameterDeclaration tp, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
         return this;
     }
 
+    /**
+     * This is like ({@link #replaceTypeVariables(TypeParameterDeclaration, Type, Map)} but ignores the inferred values.
+     */
     default Type replaceTypeVariables(TypeParameterDeclaration tp, Type replaced) {
         return replaceTypeVariables(tp, replaced, new HashMap<>());
     }
