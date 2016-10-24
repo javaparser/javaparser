@@ -36,7 +36,7 @@ public class MethodUsage implements TypeParametrized {
     private TypeParametersMap typeParametersMap;
 
     public MethodUsage(MethodDeclaration declaration) {
-        this.typeParametersMap = new TypeParametersMap();
+        this.typeParametersMap = TypeParametersMap.empty();
         this.declaration = declaration;
         for (int i = 0; i < declaration.getNumberOfParams(); i++) {
             paramTypes.add(declaration.getParam(i).getType());
@@ -45,7 +45,7 @@ public class MethodUsage implements TypeParametrized {
     }
 
     public MethodUsage(MethodDeclaration declaration, List<Type> paramTypes, Type returnType) {
-        this.typeParametersMap = new TypeParametersMap();
+        this.typeParametersMap = TypeParametersMap.empty();
         this.declaration = declaration;
         this.paramTypes = paramTypes;
         this.returnType = returnType;

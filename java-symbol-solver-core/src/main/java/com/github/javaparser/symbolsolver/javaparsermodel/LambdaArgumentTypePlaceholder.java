@@ -66,5 +66,5 @@ public class LambdaArgumentTypePlaceholder implements Type {
     public boolean isAssignableBy(Type other) {
         throw new UnsupportedOperationException();
     }
-    
+
 }

@@ -31,6 +31,7 @@ import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
+import com.github.javaparser.symbolsolver.model.usages.TypeParametersMap;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
@@ -301,7 +302,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         List<ReferenceType> ancestors = new ArrayList<>();
         ReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
         TypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().getTypeParameters().get(0);
-        enumClass.typeParametersMap().setValue(eTypeParameter, new ReferenceTypeImpl(this, typeSolver));
+        enumClass = enumClass.deriveTypeParameters(new TypeParametersMap.Builder().setValue(eTypeParameter, new ReferenceTypeImpl(this, typeSolver)).build());
         ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {

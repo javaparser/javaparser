@@ -60,10 +60,11 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             throw new IllegalArgumentException(String.format("expected either zero type parameters or has many as defined in the declaration (%d). Found %d",
                     typeDeclaration.getTypeParameters().size(), typeParameters.size()));
         }
-        this.typeParametersMap = new TypeParametersMap();
+        TypeParametersMap.Builder typeParametersMapBuilder = new TypeParametersMap.Builder();
         for (int i = 0; i < typeParameters.size(); i++) {
-            this.typeParametersMap.setValue(typeDeclaration.getTypeParameters().get(i), typeParameters.get(i));
+            typeParametersMapBuilder.setValue(typeDeclaration.getTypeParameters().get(i), typeParameters.get(i));
         }
+        this.typeParametersMap = typeParametersMapBuilder.build();
         this.typeDeclaration = typeDeclaration;
         this.typeSolver = typeSolver;
     }
@@ -434,4 +435,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeVariable(tp)).collect(Collectors.toList());
     }
 
+    public ReferenceType deriveTypeParameters(TypeParametersMap typeParametersMap) {
+        return create(typeDeclaration, typeParametersMap, typeSolver);
+    }
 }

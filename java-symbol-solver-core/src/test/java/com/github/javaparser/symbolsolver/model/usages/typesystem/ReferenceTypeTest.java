@@ -552,7 +552,7 @@ public class ReferenceTypeTest {
         com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
         TypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
         TypeVariable typeVariable = new TypeVariable(streamMapR);
-        stream.typeParametersMap().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable);
+        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable).build());
 
         TypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
         Type replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
@@ -570,7 +570,7 @@ public class ReferenceTypeTest {
         com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
         TypeParameterDeclaration streamMapR = streamMap.findTypeParameter("R").get();
         TypeVariable typeVariable = new TypeVariable(streamMapR);
-        stream.typeParametersMap().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable);
+        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable).build());
 
         TypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
         Type replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);

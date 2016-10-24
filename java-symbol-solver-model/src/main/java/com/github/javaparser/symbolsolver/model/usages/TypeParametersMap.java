@@ -30,6 +30,35 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public class TypeParametersMap {
+
+    public static class Builder {
+        private Map<String, Type> nameToValue;
+        private Map<String, TypeParameterDeclaration> nameToDeclaration;
+
+        public Builder() {
+            nameToValue = new HashMap<>();
+            nameToDeclaration = new HashMap<>();
+        }
+
+        private Builder(Map<String, Type> nameToValue, Map<String, TypeParameterDeclaration> nameToDeclaration) {
+            this.nameToValue = new HashMap<>();
+            this.nameToValue.putAll(nameToValue);
+            this.nameToDeclaration = new HashMap<>();
+            this.nameToDeclaration.putAll(nameToDeclaration);
+        }
+
+        public TypeParametersMap build() {
+            return new TypeParametersMap(nameToValue, nameToDeclaration);
+        }
+
+        public Builder setValue(TypeParameterDeclaration typeParameter, Type value) {
+            String qualifiedName = typeParameter.getQualifiedName();
+            nameToValue.put(qualifiedName, value);
+            nameToDeclaration.put(qualifiedName, typeParameter);
+            return this;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,15 +85,15 @@ public class TypeParametersMap {
     private Map<String, Type> nameToValue;
     private Map<String, TypeParameterDeclaration> nameToDeclaration;
 
-    public TypeParametersMap() {
-        nameToValue = new HashMap<>();
-        nameToDeclaration = new HashMap<>();
+    public static TypeParametersMap empty() {
+        return new Builder().build();
     }
 
-    public void setValue(TypeParameterDeclaration typeParameter, Type value) {
-        String qualifiedName = typeParameter.getQualifiedName();
-        nameToValue.put(qualifiedName, value);
-        nameToDeclaration.put(qualifiedName, typeParameter);
+    private TypeParametersMap(Map<String, Type> nameToValue, Map<String, TypeParameterDeclaration> nameToDeclaration) {
+        this.nameToValue = new HashMap<>();
+        this.nameToValue.putAll(nameToValue);
+        this.nameToDeclaration = new HashMap<>();
+        this.nameToDeclaration.putAll(nameToDeclaration);
     }
 
     public Type getValue(TypeParameterDeclaration typeParameter) {
@@ -82,6 +111,10 @@ public class TypeParametersMap {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Builder toBuilder() {
+        return new Builder(nameToValue, nameToDeclaration);
     }
 
     public boolean isEmpty() {
