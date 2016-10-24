@@ -21,9 +21,7 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This is basically a MethodDeclaration with some TypeParameters defined.
@@ -118,13 +116,14 @@ public class MethodUsage implements TypeParametrized {
         }
         // TODO if the method declaration has a type param with that name ignore this call
         MethodUsage res = this;
+        Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
         for (int i = 0; i < paramTypes.size(); i++) {
             Type originalParamType = paramTypes.get(i);
-            Type newParamType = originalParamType.replaceTypeVariables(typeParameter, type);
+            Type newParamType = originalParamType.replaceTypeVariables(typeParameter, type, inferredTypes);
             res = res.replaceParamType(i, newParamType);
         }
         Type oldReturnType = res.returnType;
-        Type newReturnType = oldReturnType.replaceTypeVariables(typeParameter, type);
+        Type newReturnType = oldReturnType.replaceTypeVariables(typeParameter, type, inferredTypes);
         res = res.replaceReturnType(newReturnType);
         return res;
     }

@@ -28,9 +28,7 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class ReflectionMethodResolutionLogic {

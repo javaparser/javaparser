@@ -77,6 +77,19 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // In our example Stream.T equal to String, so the R (and the result of the call to collect) is
             // List<? super String>
 
+            /*qui mi manca l'informazione che mi deriva dalla definizione di toList che mi dice che il primo e terzo parametro
+            sono collegati. In questo momento argumentsTypes.get(i) è una collector con il primo parametro a String,
+            io dovrei derivare da quello che toList.T = String di modo da usarlo poi
+            QUANDO HO RIMPIAZZATO IL PRIMO PARAMETRO AVREI DOVUTO DERIVARE IL TERZO*/
+
+            Map<TypeParameterDeclaration, Type> derivedValues = new HashMap<>();
+            for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
+                //if (this.wrappedNode.getArgs().get(i) instanceof )
+                inferTypes(argumentsTypes.get(i), methodUsage.getDeclaration().getParam(i).getType(), derivedValues);
+            }
+
+            //inferTypes(ref.get().returnType(), targetReturnType(invokationContext), derivedValues);
+
             Type returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             if (returnType != methodUsage.returnType()) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
@@ -89,6 +102,49 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         } else {
             return ref;
         }
+    }
+
+    private void inferTypes(Type source, Type target, Map<TypeParameterDeclaration, Type> mappings) {
+        if (source.equals(target)) {
+            return;
+        }
+        if (source.isReferenceType() && target.isReferenceType()) {
+            if (source.asReferenceType().getQualifiedName().equals(target.asReferenceType().getQualifiedName())) {
+                for (int i=0;i<source.asReferenceType().typeParametersValues().size();i++){
+                    inferTypes(source.asReferenceType().typeParametersValues().get(i), target.asReferenceType().typeParametersValues().get(i), mappings);
+                }
+            }
+            return;
+        }
+        if (source.isReferenceType() && target.isWildcard()){
+            if (target.asWildcard().isBounded()) {
+                inferTypes(source, target.asWildcard().getBoundedType(), mappings);
+                return;
+            }
+            System.out.println("RW " +source.describe() + " " + target.describe());
+            //throw new RuntimeException("RW " +source.describe() + " " + target.describe());
+            return;
+        }
+        if (source.isWildcard() && target.isWildcard()){
+            System.out.println("WW " +source.describe() + " " + target.describe());
+            //throw new RuntimeException("RW " +source.describe() + " " + target.describe());
+            return;
+        }
+        if (source.isReferenceType() && target.isTypeVariable()){
+            mappings.put(target.asTypeParameter(), source);
+            return;
+        }
+        if (source.isWildcard() && target.isTypeVariable()) {
+            if (source.asWildcard().isBounded()) {
+                inferTypes(source.asWildcard().getBoundedType(), target, mappings);
+            }
+            return;
+        }
+        if (source.isTypeVariable() && target.isTypeVariable()) {
+            mappings.put(target.asTypeParameter(), source);
+            return;
+        }
+        throw new RuntimeException(source.describe() + " " + target.describe());
     }
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<Type> actualParamTypes) {
@@ -191,11 +247,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
-    private Type usingParameterTypesFromScope(Type scope, Type type) {
+    private Type usingParameterTypesFromScope(Type scope, Type type, Map<TypeParameterDeclaration, Type> inferredTypes) {
         if (type.isReferenceType()) {
             for (Tuple2<TypeParameterDeclaration, Type> entry : type.asReferenceType().getTypeParametersMap()) {
                 if (entry._1.declaredOnType() && scope.asReferenceType().getGenericParameterByName(entry._1.getName()).isPresent()) {
-                    type = type.replaceTypeVariables(entry._1, scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get());
+                    type = type.replaceTypeVariables(entry._1, scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get(), inferredTypes);
                 }
             }
             return type;
@@ -227,8 +283,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
             // we can replace the parameter types from the scope into the typeParametersValues
 
+            Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
             for (int i = 0; i < argumentsTypes.size(); i++) {
-                argumentsTypes.set(i, usingParameterTypesFromScope(typeOfScope, argumentsTypes.get(i)));
+                // by replacing types I can also find new equivalences
+                // for example if I replace T=U with String because I know that T=String I can derive that also U equal String
+                argumentsTypes.set(i, usingParameterTypesFromScope(typeOfScope, argumentsTypes.get(i), inferredTypes));
+            }
+            for (int i = 0; i < argumentsTypes.size(); i++) {
+                argumentsTypes.set(i, applyInferredTypes(argumentsTypes.get(i), inferredTypes));
             }
 
             return solveMethodAsUsage(typeOfScope, name, argumentsTypes, typeSolver, this);
@@ -239,6 +301,15 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             return parentContext.solveMethodAsUsage(name, argumentsTypes, typeSolver);
         }
+    }
+
+    private Type applyInferredTypes(Type type, Map<TypeParameterDeclaration, Type> inferredTypes) {
+        for (TypeParameterDeclaration tp : inferredTypes.keySet()) {
+            System.out.println("APPLYING: before "+type.describe());
+            type = type.replaceTypeVariables(tp, inferredTypes.get(tp), inferredTypes);
+            System.out.println("APPLYING: after "+type.describe());
+        }
+        return type;
     }
 
     @Override

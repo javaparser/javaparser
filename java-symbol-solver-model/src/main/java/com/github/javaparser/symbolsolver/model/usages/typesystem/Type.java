@@ -18,6 +18,9 @@ package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A usage of a type. It could be a primitive type or a reference type (enum, class, interface). In the later case it
  * could take type typeParametersValues (other TypeUsages). It could also be a TypeVariable, like in:
@@ -128,8 +131,12 @@ public interface Type {
      * Replace all variables referring to the given TypeParameter with the
      * given value.
      */
-    default Type replaceTypeVariables(TypeParameterDeclaration tp, Type replaced) {
+    default Type replaceTypeVariables(TypeParameterDeclaration tp, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
         return this;
+    }
+
+    default Type replaceTypeVariables(TypeParameterDeclaration tp, Type replaced) {
+        return replaceTypeVariables(tp, replaced, new HashMap<>());
     }
 
     ///
@@ -141,4 +148,5 @@ public interface Type {
      */
     boolean isAssignableBy(Type other);
 
+    Type copy();
 }

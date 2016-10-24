@@ -106,8 +106,9 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             TypeParametersLogic.determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
         }
 
+        Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
         for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
-            returnType = returnType.replaceTypeVariables(determinedParam, determinedTypeParameters.get(determinedParam));
+            returnType = returnType.replaceTypeVariables(determinedParam, determinedTypeParameters.get(determinedParam), inferredTypes);
         }
 
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);

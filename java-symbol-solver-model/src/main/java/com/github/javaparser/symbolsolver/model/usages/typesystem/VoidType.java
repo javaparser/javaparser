@@ -38,6 +38,11 @@ public class VoidType implements Type {
     }
 
     @Override
+    public Type copy() {
+        return this;
+    }
+
+    @Override
     public boolean isVoid() {
         return true;
     }

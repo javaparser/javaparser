@@ -18,12 +18,18 @@ package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 
+import java.util.Map;
+
 /**
  * Array Type.
  *
  * @author Federico Tomassetti
  */
 public class ArrayType implements Type {
+    @Override
+    public Type copy() {
+        return new ArrayType(baseType.copy());
+    }
 
     private Type baseType;
 
@@ -90,8 +96,8 @@ public class ArrayType implements Type {
     }
 
     @Override
-    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced) {
-        Type baseTypeReplaced = baseType.replaceTypeVariables(tpToReplace, replaced);
+    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
+        Type baseTypeReplaced = baseType.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
         if (baseTypeReplaced == baseType) {
             return this;
         } else {

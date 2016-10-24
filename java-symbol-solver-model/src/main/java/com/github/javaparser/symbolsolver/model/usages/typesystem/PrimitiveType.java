@@ -118,4 +118,9 @@ public class PrimitiveType implements Type {
         }
     }
 
+    @Override
+    public Type copy() {
+        return this;
+    }
+
 }

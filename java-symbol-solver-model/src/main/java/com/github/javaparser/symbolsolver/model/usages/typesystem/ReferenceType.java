@@ -164,11 +164,34 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     }
 
     @Override
-    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced) {
+    public Type copy() {
+        List<Type> typeParametersCopy = new LinkedList<>();
+        typeParametersCopy.addAll(typeParametersValues());
+        return create(typeDeclaration, typeParametersCopy, typeSolver);
+    }
+
+    @Override
+    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
-        Type result = transformTypeParameters(tp -> tp.replaceTypeVariables(tpToReplace, replaced));
+
+        Type result = this;
+        int i = 0;
+        for (Type tp : this.typeParametersValues()) {
+            Type transformedTp = tp.copy().replaceTypeVariables(tpToReplace, replaced, inferredTypes);
+            // Identity comparison on purpose
+            if (tp.isTypeVariable()) {
+                inferredTypes.put(tp.asTypeParameter(), replaced);
+            }
+            if (!transformedTp.equals(tp)) {
+                List<Type> typeParametersCorrected = result.asReferenceType().typeParametersValues();
+                typeParametersCorrected.set(i, transformedTp);
+                result = create(typeDeclaration, typeParametersCorrected, typeSolver);
+            }
+            i++;
+        }
+
         if (result.isReferenceType() && result.asReferenceType().typeDeclaration.getTypeParameters().contains(tpToReplace)) {
             List<Type> values = result.asReferenceType().typeParametersValues();
             int index = result.asReferenceType().typeDeclaration.getTypeParameters().indexOf(tpToReplace);

@@ -18,6 +18,8 @@ package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 
+import java.util.Map;
+
 /**
  * From JLS 4.4: A type variable is introduced by the declaration of a type parameter of a generic class,
  * interface, method, or constructor (§8.1.2, §9.1.2, §8.4.4, §8.8.4).
@@ -71,7 +73,12 @@ public class TypeVariable implements Type {
     }
 
     @Override
-    public Type replaceTypeVariables(TypeParameterDeclaration tpToBeReplaced, Type replaced) {
+    public Type copy() {
+        return new TypeVariable(typeParameter);
+    }
+
+    @Override
+    public Type replaceTypeVariables(TypeParameterDeclaration tpToBeReplaced, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
         if (tpToBeReplaced.getQualifiedName().equals(typeParameter.getQualifiedName())) {
             return replaced;
         } else {

@@ -89,8 +89,9 @@ public class TypeParametersMap {
     }
 
     public Type replaceAll(Type type) {
+        Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
         for (TypeParameterDeclaration typeParameterDeclaration : this.nameToDeclaration.values()) {
-            type = type.replaceTypeVariables(typeParameterDeclaration, getValue(typeParameterDeclaration));
+            type = type.replaceTypeVariables(typeParameterDeclaration, getValue(typeParameterDeclaration), inferredTypes);
         }
         return type;
     }

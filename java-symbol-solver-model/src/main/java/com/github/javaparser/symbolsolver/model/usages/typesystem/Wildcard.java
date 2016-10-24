@@ -18,6 +18,8 @@ package com.github.javaparser.symbolsolver.model.usages.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 
+import java.util.Map;
+
 /**
  * A wildcard can be:
  * - unbounded (?)
@@ -140,14 +142,25 @@ public class Wildcard implements Type {
     }
 
     @Override
-    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced) {
+    public Type copy() {
+        if (this.isSuper()) {
+            return superBound(boundedType.copy());
+        } else if (this.isExtends()) {
+            return extendsBound(boundedType.copy());
+        } else {
+            return UNBOUNDED;
+        }
+    }
+
+    @Override
+    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
         if (boundedType == null) {
             return this;
         }
-        Type boundedTypeReplaced = boundedType.replaceTypeVariables(tpToReplace, replaced);
+        Type boundedTypeReplaced = boundedType.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
         if (boundedTypeReplaced == null) {
             throw new RuntimeException();
         }

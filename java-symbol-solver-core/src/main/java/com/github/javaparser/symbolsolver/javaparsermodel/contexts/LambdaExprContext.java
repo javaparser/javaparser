@@ -38,10 +38,7 @@ import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 import javaslang.Tuple2;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -73,11 +70,12 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             Type lambdaType = functionalMethod.get().getParamType(index);
 
                             // Replace parameter from declarator
+                            Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
                             if (lambdaType.isReferenceType()) {
                                 for (Tuple2<TypeParameterDeclaration, Type> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
                                     if (entry._2.isTypeVariable() && entry._2.asTypeParameter().declaredOnType()) {
                                         Type ot = t.asReferenceType().typeParametersMap().getValue(entry._1);
-                                        lambdaType = lambdaType.replaceTypeVariables(entry._1, ot);
+                                        lambdaType = lambdaType.replaceTypeVariables(entry._1, ot, inferredTypes);
                                     }
                                 }
                             } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
