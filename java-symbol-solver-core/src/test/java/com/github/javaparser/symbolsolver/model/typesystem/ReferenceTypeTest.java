@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.symbolsolver.model.usages.typesystem;
+package com.github.javaparser.symbolsolver.model.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.InterfaceDeclaration;

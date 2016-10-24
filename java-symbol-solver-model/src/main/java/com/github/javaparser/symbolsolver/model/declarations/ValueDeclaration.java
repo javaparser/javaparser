@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.model.declarations;
 
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 /**
  * Declaration of a value.

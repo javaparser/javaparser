@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.symbolsolver.model.usages;
+package com.github.javaparser.symbolsolver.model.methods;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParametersMap;
+import com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParametrized;
 
 import java.util.*;
 

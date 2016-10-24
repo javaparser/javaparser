@@ -23,7 +23,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;

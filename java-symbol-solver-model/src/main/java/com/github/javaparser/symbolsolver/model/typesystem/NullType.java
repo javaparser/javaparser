@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.symbolsolver.model.usages.typesystem;
+package com.github.javaparser.symbolsolver.model.typesystem;
 
 /**
  * This is a virtual type used to represent null values.

@@ -18,10 +18,10 @@ package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import com.google.common.collect.ImmutableList;

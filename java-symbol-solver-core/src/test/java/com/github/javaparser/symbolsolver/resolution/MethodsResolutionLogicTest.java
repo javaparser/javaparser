@@ -18,8 +18,8 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;

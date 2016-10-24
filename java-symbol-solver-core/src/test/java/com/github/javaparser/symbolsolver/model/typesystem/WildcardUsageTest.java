@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.symbolsolver.model.usages.typesystem;
+package com.github.javaparser.symbolsolver.model.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -174,10 +174,10 @@ public class WildcardUsageTest {
     @Test
     public void testAsDescribe() {
         assertEquals("?", unbounded.describe());
-        assertEquals("? super com.github.javaparser.symbolsolver.model.usages.typesystem.WildcardUsageTest.Foo", superFoo.describe());
-        assertEquals("? super com.github.javaparser.symbolsolver.model.usages.typesystem.WildcardUsageTest.Bar", superBar.describe());
-        assertEquals("? extends com.github.javaparser.symbolsolver.model.usages.typesystem.WildcardUsageTest.Foo", extendsFoo.describe());
-        assertEquals("? extends com.github.javaparser.symbolsolver.model.usages.typesystem.WildcardUsageTest.Bar", extendsBar.describe());
+        assertEquals("? super com.github.javaparser.symbolsolver.model.typesystem.WildcardUsageTest.Foo", superFoo.describe());
+        assertEquals("? super com.github.javaparser.symbolsolver.model.typesystem.WildcardUsageTest.Bar", superBar.describe());
+        assertEquals("? extends com.github.javaparser.symbolsolver.model.typesystem.WildcardUsageTest.Foo", extendsFoo.describe());
+        assertEquals("? extends com.github.javaparser.symbolsolver.model.typesystem.WildcardUsageTest.Bar", extendsBar.describe());
     }
 
     @Test

@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.model.declarations;
 
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 /**
  * A declaration of a method (either in an interface, a class, an enum or an annotation).

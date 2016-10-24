@@ -22,7 +22,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import org.junit.Test;
 

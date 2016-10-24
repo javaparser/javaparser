@@ -18,9 +18,9 @@ package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Wildcard;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 
 import java.util.List;
 import java.util.Map;

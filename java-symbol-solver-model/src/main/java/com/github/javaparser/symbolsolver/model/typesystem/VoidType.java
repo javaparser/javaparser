@@ -14,14 +14,31 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.symbolsolver.model.usages;
-
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+package com.github.javaparser.symbolsolver.model.typesystem;
 
 /**
+ * The special type void.
+ *
  * @author Federico Tomassetti
  */
-@FunctionalInterface
-public interface TypeTransformer {
-    Type transform(Type type);
+public class VoidType implements Type {
+    public static final Type INSTANCE = new VoidType();
+
+    private VoidType() {
+    }
+
+    @Override
+    public String describe() {
+        return "void";
+    }
+
+    @Override
+    public boolean isAssignableBy(Type other) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isVoid() {
+        return true;
+    }
 }

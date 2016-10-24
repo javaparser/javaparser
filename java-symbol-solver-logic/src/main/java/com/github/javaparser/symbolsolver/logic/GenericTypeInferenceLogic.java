@@ -17,8 +17,8 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javaslang.Tuple2;
 
 import java.util.HashMap;

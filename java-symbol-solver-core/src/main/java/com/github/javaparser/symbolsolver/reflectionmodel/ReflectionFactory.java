@@ -20,7 +20,7 @@ import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.*;
+import com.github.javaparser.symbolsolver.model.typesystem.*;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
@@ -66,7 +66,7 @@ public class ReflectionFactory {
             java.lang.reflect.TypeVariable tv = (java.lang.reflect.TypeVariable) type;
             boolean declaredOnClass = ((java.lang.reflect.TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
             TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
-            return new com.github.javaparser.symbolsolver.model.usages.typesystem.TypeVariable(typeParameter);
+            return new com.github.javaparser.symbolsolver.model.typesystem.TypeVariable(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
             ReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();

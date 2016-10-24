@@ -27,8 +27,8 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.PrimitiveType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.List;

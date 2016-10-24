@@ -21,8 +21,8 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.TypeParametersLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

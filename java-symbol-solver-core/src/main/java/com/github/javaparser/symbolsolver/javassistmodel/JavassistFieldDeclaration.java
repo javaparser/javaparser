@@ -20,7 +20,7 @@ import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtField;
 import javassist.NotFoundException;
 

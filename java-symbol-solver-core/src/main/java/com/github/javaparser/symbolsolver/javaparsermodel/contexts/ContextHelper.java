@@ -22,8 +22,8 @@ import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclarati
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 

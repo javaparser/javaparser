@@ -16,8 +16,8 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

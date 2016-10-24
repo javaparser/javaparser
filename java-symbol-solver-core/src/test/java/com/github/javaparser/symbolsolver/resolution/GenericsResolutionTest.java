@@ -36,9 +36,9 @@ import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;

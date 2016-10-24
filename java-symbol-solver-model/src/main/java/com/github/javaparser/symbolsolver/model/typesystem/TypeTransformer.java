@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.symbolsolver.model.usages;
+package com.github.javaparser.symbolsolver.model.typesystem;
 
 /**
- * Something which can have values for TypeParameters.
- *
  * @author Federico Tomassetti
  */
-public interface TypeParametrized {
-    TypeParametersMap typeParametersMap();
+@FunctionalInterface
+public interface TypeTransformer {
+    Type transform(Type type);
 }

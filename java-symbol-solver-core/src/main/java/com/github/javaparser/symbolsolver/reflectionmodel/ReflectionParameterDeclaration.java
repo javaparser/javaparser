@@ -18,7 +18,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 public class ReflectionParameterDeclaration implements ParameterDeclaration {
     private Class<?> type;

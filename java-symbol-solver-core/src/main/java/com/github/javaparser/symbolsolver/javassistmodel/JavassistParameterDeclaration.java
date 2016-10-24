@@ -18,7 +18,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtClass;
 
 public class JavassistParameterDeclaration implements ParameterDeclaration {

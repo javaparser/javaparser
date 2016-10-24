@@ -17,8 +17,8 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;

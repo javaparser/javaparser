@@ -18,7 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 /**
  * Placeholder used to represent a lambda argument type while it is being

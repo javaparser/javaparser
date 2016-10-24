@@ -20,8 +20,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.usages.MethodUsage;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionMethodDeclaration;
 
 import java.util.List;

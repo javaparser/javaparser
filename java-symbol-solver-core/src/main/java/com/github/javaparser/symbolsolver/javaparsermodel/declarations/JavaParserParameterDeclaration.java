@@ -20,8 +20,8 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.ArrayType;
-import com.github.javaparser.symbolsolver.model.usages.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 public class JavaParserParameterDeclaration implements ParameterDeclaration {
 
