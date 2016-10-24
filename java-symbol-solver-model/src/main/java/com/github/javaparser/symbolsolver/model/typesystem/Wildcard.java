@@ -32,6 +32,7 @@ import java.util.Map;
 public class Wildcard implements Type {
 
     public static Wildcard UNBOUNDED = new Wildcard(null, null);
+
     private BoundType type;
     private Type boundedType;
 
@@ -68,11 +69,6 @@ public class Wildcard implements Type {
 
     public Wildcard asWildcard() {
         return this;
-    }
-
-    @Override
-    public boolean isReference() {
-        return true;
     }
 
     @Override

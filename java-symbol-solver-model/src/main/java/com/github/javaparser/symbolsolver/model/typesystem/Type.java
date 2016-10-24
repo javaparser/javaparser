@@ -70,7 +70,7 @@ public interface Type {
      * Is this a non primitive value?
      */
     default boolean isReference() {
-        return isReferenceType() || isArray() || isTypeVariable() || isNull();
+        return isReferenceType() || isArray() || isTypeVariable() || isNull() || isWildcard();
     }
 
     /**
