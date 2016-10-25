@@ -17,15 +17,22 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A common ancestor for all ClassDeclarations.
+ *
+ * @author Federico Tomassetti
+ */
 public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration implements ClassDeclaration {
 
+    /**
+     * An implementation of the Object class.
+     */
     protected abstract ReferenceType object();
 
     @Override
@@ -71,7 +78,5 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
         }
         return interfaces;
     }
-
-    protected abstract TypeSolver typeSolver();
 
 }

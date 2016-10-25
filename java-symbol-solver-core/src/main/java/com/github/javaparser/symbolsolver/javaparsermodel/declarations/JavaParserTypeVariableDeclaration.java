@@ -70,11 +70,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    protected TypeSolver typeSolver() {
-        return typeSolver;
-    }
-
     public Type getUsage(Node node) {
         throw new UnsupportedOperationException();
     }

@@ -233,11 +233,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return wrappedNode.hashCode();
     }
 
-    @Override
-    protected TypeSolver typeSolver() {
-        return typeSolver;
-    }
-
     @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
         if (name.equals("values") && parameterTypes.isEmpty()) {

@@ -27,6 +27,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class FunctionalInterfaceLogic {
 
     public static Optional<MethodUsage> getFunctionalMethod(Type type) {

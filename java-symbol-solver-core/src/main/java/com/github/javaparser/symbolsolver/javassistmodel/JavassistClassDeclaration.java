@@ -63,7 +63,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(ctClass.getDeclaredMethods())
-                .map(m -> new JavassistMethodDeclaration(m, typeSolver()))
+                .map(m -> new JavassistMethodDeclaration(m, typeSolver))
                 .collect(Collectors.toSet());
     }
 
@@ -76,11 +76,6 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
-    }
-
-    @Override
-    protected TypeSolver typeSolver() {
-        return typeSolver;
     }
 
     @Override
@@ -286,7 +281,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     public ReferenceTypeImpl getSuperClass() {
         try {
             if (ctClass.getSuperclass() == null) {
-                return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver());
+                return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
             }
             return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver).asClass(), typeSolver);
         } catch (NotFoundException e) {
@@ -298,8 +293,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     public List<ReferenceType> getInterfaces() {
         try {
             return Arrays.stream(ctClass.getInterfaces())
-                    .map(i -> new JavassistInterfaceDeclaration(i, typeSolver()))
-                    .map(i -> new ReferenceTypeImpl(i, typeSolver()))
+                    .map(i -> new JavassistInterfaceDeclaration(i, typeSolver))
+                    .map(i -> new ReferenceTypeImpl(i, typeSolver))
                     .collect(Collectors.toList());
         } catch (NotFoundException e) {
             throw new RuntimeException(e);

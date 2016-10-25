@@ -139,7 +139,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
                         .collect(Collectors.toList());
                 ReferenceType referenceType = new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface(),
                         interfaceTypeParameters,
-                        typeSolver());
+                        typeSolver);
                 interfaces.add(referenceType);
             }
         }
@@ -436,11 +436,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     protected ReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
-    }
-
-    @Override
-    protected TypeSolver typeSolver() {
-        return typeSolver;
     }
 
     /**

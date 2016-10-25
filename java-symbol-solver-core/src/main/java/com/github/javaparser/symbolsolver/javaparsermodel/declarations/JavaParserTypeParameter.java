@@ -56,7 +56,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        return getContext().solveMethod(name, parameterTypes, typeSolver());
+        return getContext().solveMethod(name, parameterTypes, typeSolver);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
             return typeDeclaration.getQualifiedName();
         } else {
             com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration) getParentNode(wrappedNode);
-            MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
+            MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver);
             return methodDeclaration.getQualifiedSignature();
         }
     }
@@ -119,7 +119,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
             return typeDeclaration.getId();
         } else {
             com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration) getParentNode(wrappedNode);
-            MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver());
+            MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver);
             return methodDeclaration.getQualifiedSignature();
         }
     }
@@ -186,11 +186,6 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
-    }
-
-    @Override
-    protected TypeSolver typeSolver() {
-        return typeSolver;
     }
 
     /**

@@ -52,7 +52,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     public Set<MethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(m -> !m.isSynthetic() && !m.isBridge())
-                .map(m -> new ReflectionMethodDeclaration(m, typeSolver()))
+                .map(m -> new ReflectionMethodDeclaration(m, typeSolver))
                 .collect(Collectors.toSet());
     }
 
@@ -71,11 +71,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             throw new IllegalArgumentException();
         }
         this.clazz = clazz;
-    }
-
-    @Override
-    protected TypeSolver typeSolver() {
-        return typeSolver;
     }
 
     @Override

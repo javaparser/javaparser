@@ -276,7 +276,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     public Set<MethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(m -> !m.isSynthetic() && !m.isBridge())
-                .map(m -> new ReflectionMethodDeclaration(m, typeSolver()))
+                .map(m -> new ReflectionMethodDeclaration(m, typeSolver))
                 .collect(Collectors.toSet());
     }
 
@@ -326,11 +326,6 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             params.add(new ReflectionTypeParameter(tv, true, typeSolver));
         }
         return params;
-    }
-
-    @Override
-    protected TypeSolver typeSolver() {
-        return typeSolver;
     }
 
     @Override

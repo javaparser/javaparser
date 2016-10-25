@@ -121,11 +121,6 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    protected TypeSolver typeSolver() {
-        return typeSolver;
-    }
-
-    @Override
     public boolean isAssignableBy(Type type) {
         throw new UnsupportedOperationException();
     }
@@ -155,7 +150,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         List<ReferenceType> ancestors = new ArrayList<>();
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                ReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver()).asReferenceType();
+                ReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver).asReferenceType();
                 ancestors.add(superInterfaze);
             }
         } catch (NotFoundException e) {
@@ -170,7 +165,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(ctClass.getDeclaredMethods())
-                .map(m -> new JavassistMethodDeclaration(m, typeSolver()))
+                .map(m -> new JavassistMethodDeclaration(m, typeSolver))
                 .collect(Collectors.toSet());
     }
 

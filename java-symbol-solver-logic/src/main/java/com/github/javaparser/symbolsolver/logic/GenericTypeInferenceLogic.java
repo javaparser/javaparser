@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class GenericTypeInferenceLogic {
 
     public static Map<TypeParameterDeclaration, Type> inferGenericTypes(List<Tuple2<Type, Type>> formalActualTypePairs) {
