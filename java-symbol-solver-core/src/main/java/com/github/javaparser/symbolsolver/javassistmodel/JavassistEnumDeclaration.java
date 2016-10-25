@@ -16,9 +16,9 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtClass;
@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistEnumDeclaration implements EnumDeclaration {
+public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -77,11 +77,6 @@ public class JavassistEnumDeclaration implements EnumDeclaration {
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Set<MethodUsage> getAllMethods() {
         throw new UnsupportedOperationException();
     }
 

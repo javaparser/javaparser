@@ -25,12 +25,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Common ancestor for most types.
+ *
  * @author Federico Tomassetti
  */
 public abstract class AbstractTypeDeclaration implements TypeDeclaration {
 
     @Override
-    public Set<MethodUsage> getAllMethods() {
+    public final Set<MethodUsage> getAllMethods() {
         Set<MethodUsage> methods = new HashSet<>();
 
         Set<String> methodsSignatures = new HashSet<>();
