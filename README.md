@@ -31,7 +31,7 @@ while (true) {
 
 In the expression `a + 1` a parser (like JavaParser) is not able to tell us to which definition of `a` we are referring to and consequently it cannot tell us the type of `a`. The JavaSymbolSolver is able to do so.
 
-## How can I use it? Shoe me some code!
+## How can I use it? Show me some code!
 
 Take a look at `JavaParserFacade`. For example you can use it to find the type of an expression:
 
@@ -58,6 +58,8 @@ combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/jav
 ```
 
 Typically to analize a project you want to create one instance of `JavaParserTypeSolver` for each source directory, one instance of `JarTypeSolver` for each dependency and one `JreTypeSolver` then you can combine all of them in a `CombinedTypeSolver` and pass that around.
+
+[Tutorial on resolving method calls](http://tomassetti.me/resolve-method-calls-using-java-symbol-solver/)
 
 _We plan to write soon more examples and tutorials._
 
