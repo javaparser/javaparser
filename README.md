@@ -31,7 +31,7 @@ while (true) {
 
 In the expression `a + 1` a parser (like JavaParser) is not able to tell us to which definition of `a` we are referring to and consequently it cannot tell us the type of `a`. The JavaSymbolSolver is able to do so.
 
-## How can I use it? Shoe me some code!
+## How can I use it? Show me some code!
 
 Take a look at `JavaParserFacade`. For example you can use it to find the type of an expression:
 
