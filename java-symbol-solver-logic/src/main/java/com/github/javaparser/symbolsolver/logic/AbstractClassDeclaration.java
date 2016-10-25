@@ -21,7 +21,6 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A common ancestor for all ClassDeclarations.
@@ -30,10 +29,9 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration implements ClassDeclaration {
 
-    /**
-     * An implementation of the Object class.
-     */
-    protected abstract ReferenceType object();
+    ///
+    /// Public
+    ///
 
     @Override
     public boolean hasName() {
@@ -47,21 +45,14 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
         ReferenceType superClass = getSuperClass();
         if (superClass != null) {
             superclasses.add(superClass);
-            superclasses.addAll(superClass.getAllAncestors());
+            superclasses.addAll(superClass.getAllClassesAncestors());
             superclasses.add(object());
         }
-        boolean foundObject = false;
-        for (int i = 0; i < superclasses.size(); i++) {
-            if (superclasses.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
-                if (foundObject) {
-                    superclasses.remove(i);
-                    i--;
-                } else {
-                    foundObject = true;
-                }
-            }
+
+        if (superclasses.removeIf(s -> s.getQualifiedName().equals(Object.class.getCanonicalName()))) {
+            superclasses.add(object());
         }
-        return superclasses.stream().filter((s) -> s.getTypeDeclaration().isClass()).collect(Collectors.toList());
+        return superclasses;
     }
 
     @Override
@@ -78,5 +69,14 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
         }
         return interfaces;
     }
+
+    ///
+    /// Protected
+    ///
+
+    /**
+     * An implementation of the Object class.
+     */
+    protected abstract ReferenceType object();
 
 }

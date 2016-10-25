@@ -242,9 +242,15 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         return ancestors;
     }
 
-    public List<ReferenceType> getAllInterfacesAncestors() {
+    public final List<ReferenceType> getAllInterfacesAncestors() {
         return getAllAncestors().stream()
                 .filter(it -> it.getTypeDeclaration().isInterface())
+                .collect(Collectors.toList());
+    }
+
+    public final List<ReferenceType> getAllClassesAncestors() {
+        return getAllAncestors().stream()
+                .filter(it -> it.getTypeDeclaration().isClass())
                 .collect(Collectors.toList());
     }
 
