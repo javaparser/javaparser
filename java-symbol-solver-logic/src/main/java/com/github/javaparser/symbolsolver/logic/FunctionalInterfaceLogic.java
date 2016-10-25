@@ -30,7 +30,11 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class FunctionalInterfaceLogic {
+public final class FunctionalInterfaceLogic {
+
+    private FunctionalInterfaceLogic() {
+        // prevent instantiation
+    }
 
     public static Optional<MethodUsage> getFunctionalMethod(Type type) {
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isInterface()) {

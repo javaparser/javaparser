@@ -30,6 +30,10 @@ import java.util.Map;
  */
 public class GenericTypeInferenceLogic {
 
+    private GenericTypeInferenceLogic() {
+        // prevent instantiation
+    }
+
     public static Map<TypeParameterDeclaration, Type> inferGenericTypes(List<Tuple2<Type, Type>> formalActualTypePairs) {
         Map<TypeParameterDeclaration, Type> map = new HashMap<>();
 

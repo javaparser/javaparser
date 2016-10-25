@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class TypeParametersLogic {
+public final class TypeParametersLogic {
 
     private TypeParametersLogic() {
         // prevent instantiation
