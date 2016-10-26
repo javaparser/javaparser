@@ -1,3 +1,12 @@
+Version 3.0.0-alpha.7
+------------------
+* roll back attempt at using Optional
+
+Version 3.0.0-alpha.6
+------------------
+* 503 modified ImportDeclaration hierarchy to have getters for static and "asterisk" again
+* 506 bug fix
+
 Version 3.0.0-alpha.5
 ------------------
 * 451 null is no longer allowed in the AST. [See last post in issue](https://github.com/javaparser/javaparser/issues/451)
