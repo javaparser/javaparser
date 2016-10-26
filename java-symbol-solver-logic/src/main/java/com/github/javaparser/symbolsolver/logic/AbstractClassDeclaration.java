@@ -40,13 +40,11 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
 
     @Override
     public final List<ReferenceType> getAllSuperClasses() {
-        // TODO it could specify type typeParametersValues: they should appear
         List<ReferenceType> superclasses = new ArrayList<>();
         ReferenceType superClass = getSuperClass();
         if (superClass != null) {
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllClassesAncestors());
-            superclasses.add(object());
         }
 
         if (superclasses.removeIf(s -> s.getQualifiedName().equals(Object.class.getCanonicalName()))) {
