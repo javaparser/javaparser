@@ -28,7 +28,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -39,7 +39,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
     @Test
     public void declaredOnMethodPositiveCase() throws ParseException {
         CompilationUnit cu = parseSample("MethodTypeParameter");
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
@@ -56,7 +56,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
     @Test
     public void declaredOnMethodNegativeCase() throws ParseException {
         CompilationUnit cu = parseSample("ClassTypeParameter");
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");

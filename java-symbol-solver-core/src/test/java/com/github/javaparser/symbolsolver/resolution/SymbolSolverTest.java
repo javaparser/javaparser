@@ -23,7 +23,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +44,7 @@ public class SymbolSolverTest extends AbstractTest {
 
         File srcNewCode = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core"));
         CombinedTypeSolver combinedTypeSolverNewCode = new CombinedTypeSolver();
-        combinedTypeSolverNewCode.add(new JreTypeSolver());
+        combinedTypeSolverNewCode.add(new ReflectionTypeSolver());
         combinedTypeSolverNewCode.add(new JavaParserTypeSolver(srcNewCode));
         combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-generated-sources"))));
         typeSolverNewCode = combinedTypeSolverNewCode;

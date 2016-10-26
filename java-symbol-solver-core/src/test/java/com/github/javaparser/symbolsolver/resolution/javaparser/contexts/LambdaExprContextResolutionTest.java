@@ -31,7 +31,7 @@ import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,7 +50,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
     @Before
     public void setup() {
-        typeSolver = new JreTypeSolver();
+        typeSolver = new ReflectionTypeSolver();
     }
 
     @Test
@@ -80,7 +80,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         File src = new File("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new JreTypeSolver());
+        combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
 
         Context context = new LambdaExprContext(lambdaExpr, combinedTypeSolver);
@@ -101,7 +101,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         File src = new File("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new JreTypeSolver());
+        combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
 
         Context context = new LambdaExprContext(lambdaExpr, combinedTypeSolver);

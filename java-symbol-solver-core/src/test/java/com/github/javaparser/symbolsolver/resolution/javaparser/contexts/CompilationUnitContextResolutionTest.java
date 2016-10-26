@@ -33,7 +33,7 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.DummyTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -54,7 +54,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
 
     @Before
     public void setup() {
-        typeSolver = new JreTypeSolver();
+        typeSolver = new ReflectionTypeSolver();
     }
 
     @Test
@@ -95,7 +95,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         Context context = new CompilationUnitContext(cu, typeSolver);
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new JreTypeSolver());
+        typeSolver.add(new ReflectionTypeSolver());
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("out", typeSolver);
         assertEquals(true, ref.isSolved());
@@ -108,7 +108,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         Context context = new CompilationUnitContext(cu, typeSolver);
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new JreTypeSolver());
+        typeSolver.add(new ReflectionTypeSolver());
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("err", typeSolver);
         assertEquals(true, ref.isSolved());
@@ -120,7 +120,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitSymbols");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("java.lang.System.out", new JreTypeSolver());
+        SymbolReference<? extends ValueDeclaration> ref = context.solveSymbol("java.lang.System.out", new ReflectionTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
@@ -131,7 +131,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         Context context = new CompilationUnitContext(cu, typeSolver);
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new JreTypeSolver());
+        typeSolver.add(new ReflectionTypeSolver());
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         Optional<Value> ref = context.solveSymbolAsValue("out", typeSolver);
         assertEquals(true, ref.isPresent());
@@ -144,7 +144,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         Context context = new CompilationUnitContext(cu, typeSolver);
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new JreTypeSolver());
+        typeSolver.add(new ReflectionTypeSolver());
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         Optional<Value> ref = context.solveSymbolAsValue("err", typeSolver);
         assertEquals(true, ref.isPresent());
@@ -156,7 +156,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitSymbols");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        Optional<Value> ref = context.solveSymbolAsValue("java.lang.System.out", new JreTypeSolver());
+        Optional<Value> ref = context.solveSymbolAsValue("java.lang.System.out", new ReflectionTypeSolver());
         assertEquals(true, ref.isPresent());
         assertEquals("java.io.PrintStream", ref.get().getType().describe());
     }
@@ -204,7 +204,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
-        typeSolver.add(new JreTypeSolver());
+        typeSolver.add(new ReflectionTypeSolver());
 
         SymbolReference<MethodDeclaration> ref = context.solveMethod("assertFalse", ImmutableList.of(PrimitiveType.BOOLEAN), typeSolver);
         assertEquals(true, ref.isSolved());
@@ -221,7 +221,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
-        typeSolver.add(new JreTypeSolver());
+        typeSolver.add(new ReflectionTypeSolver());
 
         SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), typeSolver);
         assertEquals(true, ref.isSolved());

@@ -20,7 +20,7 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class ProjectResolver {
     public static void main(String[] args) throws IOException, ParseException {
         File src = new File("/home/federico/repos/javaparser/javaparser-core/src/main/java");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new JreTypeSolver());
+        combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
         combinedTypeSolver.add(new JavaParserTypeSolver(new File("/home/federico/repos/javaparser/javaparser-core/target/generated-sources/javacc")));
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();

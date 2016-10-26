@@ -20,7 +20,7 @@ import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.InterfaceDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class ReflectionMethodDeclarationTest {
 
     @Test
     public void testGetSignature() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
 
         ClassDeclaration object = new ReflectionClassDeclaration(Object.class, typeResolver);
         InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);

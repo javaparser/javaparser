@@ -23,7 +23,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
@@ -39,7 +39,7 @@ public class ReflectionInterfaceDeclarationTest {
 
     @Test
     public void testGetDeclaredMethods() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         TypeDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         List<MethodDeclaration> methods = list.getDeclaredMethods().stream()
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
@@ -57,7 +57,7 @@ public class ReflectionInterfaceDeclarationTest {
 
     @Test
     public void testAllAncestors() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         Map<String, ReferenceType> ancestors = new HashMap<>();
         list.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));

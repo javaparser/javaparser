@@ -24,7 +24,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.Declaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ public class FindingAllFields extends AbstractResolutionTest {
     public void findAllInheritedFields() throws ParseException {
         CompilationUnit cu = parseSample("AClassWithFields");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
-        TypeDeclaration typeDeclaration = JavaParserFacade.get(new JreTypeSolver()).getTypeDeclaration(classC);
+        TypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
         assertEquals(3, typeDeclaration.getAllFields().size());
         assertEquals(ImmutableSet.of("a", "b", "c"),
                 typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
@@ -48,7 +48,7 @@ public class FindingAllFields extends AbstractResolutionTest {
     public void findAllInheritedFieldsAndGenerics() throws ParseException {
         CompilationUnit cu = parseSample("AClassWithFieldsAndGenerics");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
-        TypeDeclaration typeDeclaration = JavaParserFacade.get(new JreTypeSolver()).getTypeDeclaration(classC);
+        TypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
         assertEquals(3, typeDeclaration.getAllFields().size());
         assertEquals(ImmutableSet.of("a", "b", "c"),
                 typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));

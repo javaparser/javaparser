@@ -22,7 +22,7 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclar
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class ReferenceTypeTest {
 
     @Before
     public void setup() {
-        typeSolver = new JreTypeSolver();
+        typeSolver = new ReflectionTypeSolver();
         object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         listOfA = new ReferenceTypeImpl(
@@ -72,7 +72,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testDerivationOfTypeParameters() {
-        JreTypeSolver typeSolver = new JreTypeSolver();
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         ReferenceTypeImpl ref1 = new ReferenceTypeImpl(typeSolver.solveType(LinkedList.class.getCanonicalName()), typeSolver);
         assertEquals(1, ref1.typeParametersValues().size());
         assertEquals(true, ref1.typeParametersValues().get(0).isTypeVariable());
@@ -369,7 +369,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void charSequenceIsAssignableToObject() {
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         ReferenceTypeImpl charSequence = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(CharSequence.class, typeSolver), typeSolver);
         ReferenceTypeImpl object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         assertEquals(false, charSequence.isAssignableBy(object));
@@ -382,7 +382,7 @@ public class ReferenceTypeTest {
             List<A> elements;
         }
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         ReferenceTypeImpl ref = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
 
         assertEquals(true, ref.getFieldType("elements").isPresent());
@@ -410,7 +410,7 @@ public class ReferenceTypeTest {
             List<A> elements;
         }
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         ReferenceTypeImpl ref = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
 
         assertEquals(false, ref.getFieldType("bar").isPresent());
@@ -424,7 +424,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testTypeParamValue() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         ClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
         ClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
@@ -443,7 +443,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testGetAllAncestorsOnRawType() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         ReferenceType rawArrayList = new ReferenceTypeImpl(arraylist, typeResolver);
 
@@ -465,7 +465,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForInterface() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
         ReferenceType listOfString = new ReferenceTypeImpl(list, ImmutableList.of(string), typeResolver);
@@ -481,7 +481,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassAbstractCollection() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         ClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
         Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
         ReferenceType abstractCollectionOfString = new ReferenceTypeImpl(abstractCollection, ImmutableList.of(string), typeResolver);
@@ -497,7 +497,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassAbstractList() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         ClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
         Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
         ReferenceType abstractListOfString = new ReferenceTypeImpl(abstractList, ImmutableList.of(string), typeResolver);
@@ -515,7 +515,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassArrayList() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
         ReferenceType arrayListOfString = new ReferenceTypeImpl(arraylist, ImmutableList.of(string), typeResolver);
@@ -537,7 +537,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testTypeParametersValues() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         ReferenceType stream = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Stream.class, typeResolver), typeResolver);
         assertEquals(1, stream.typeParametersValues().size());
         assertEquals(new TypeVariable(new ReflectionInterfaceDeclaration(Stream.class, typeResolver).getTypeParameters().get(0)), stream.typeParametersValues().get(0));
@@ -545,7 +545,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testReplaceTypeVariables() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         InterfaceDeclaration streamInterface = new ReflectionInterfaceDeclaration(Stream.class, typeResolver);
         ReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
 
@@ -563,7 +563,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testReplaceTypeVariablesWithLambdaInBetween() {
-        TypeSolver typeResolver = new JreTypeSolver();
+        TypeSolver typeResolver = new ReflectionTypeSolver();
         InterfaceDeclaration streamInterface = new ReflectionInterfaceDeclaration(Stream.class, typeResolver);
         ReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
 

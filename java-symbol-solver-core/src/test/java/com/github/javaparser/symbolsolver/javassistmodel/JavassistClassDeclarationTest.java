@@ -21,7 +21,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,10 +40,10 @@ public class JavassistClassDeclarationTest extends AbstractTest {
     @Before
     public void setup() throws IOException {
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new JreTypeSolver());
+        typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
 
         String newPathToJar = adaptPath("src/test/resources/javaparser-core-3.0.0-alpha.2.jar");
-        newTypeSolver = new CombinedTypeSolver(new JarTypeSolver(newPathToJar), new JreTypeSolver());
+        newTypeSolver = new CombinedTypeSolver(new JarTypeSolver(newPathToJar), new ReflectionTypeSolver());
     }
 
     ///

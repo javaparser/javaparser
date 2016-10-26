@@ -27,7 +27,7 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -42,7 +42,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo1");
         NameExpr nameExpr = Navigator.findNameExpression(method, "s");
 
-        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
@@ -54,7 +54,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo3");
         NameExpr nameExpr = Navigator.findNameExpression(method, "s");
 
-        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
@@ -66,7 +66,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo2");
         NameExpr nameExpr = Navigator.findNameExpression(method, "s");
 
-        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new JreTypeSolver()).solve(nameExpr);
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
@@ -78,7 +78,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo4");
         MethodCallExpr call = Navigator.findMethodCall(method, "add");
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope().get());
         assertTrue(ref.isSolved());
@@ -95,7 +95,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo5");
         MethodCallExpr call = Navigator.findMethodCall(method, "add");
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope().get());
         assertTrue(ref.isSolved());

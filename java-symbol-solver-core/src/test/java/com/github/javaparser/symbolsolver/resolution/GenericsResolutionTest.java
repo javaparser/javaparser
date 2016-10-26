@@ -39,7 +39,7 @@ import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
@@ -57,7 +57,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         VariableDeclarator fieldS = Navigator.demandField(clazz, "s");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new JreTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("s", fieldS);
 
         assertEquals(true, symbolReference.isPresent());
@@ -74,7 +74,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         VariableDeclarator fieldS = Navigator.demandField(clazz, "g");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new JreTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("g", fieldS);
 
         assertEquals(true, symbolReference.isPresent());
@@ -91,7 +91,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         VariableDeclarator fieldS = Navigator.demandField(clazz, "i");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new JreTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("i", fieldS);
 
         assertEquals(true, symbolReference.isPresent());
@@ -108,7 +108,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
         VariableDeclarator field = Navigator.demandField(clazz, "a");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new JreTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("a", field);
 
         assertEquals(true, symbolReference.isPresent());
@@ -125,7 +125,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
         VariableDeclarator field = Navigator.demandField(clazz, "as");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new JreTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("as", field);
 
         assertEquals(true, symbolReference.isPresent());
@@ -149,7 +149,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         ExpressionStmt stmt = (ExpressionStmt) method.getBody().get().getStmts().get(0);
         Expression expression = stmt.getExpression();
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("java.lang.String", type.describe());
@@ -163,7 +163,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         VariableDeclarator field = Navigator.demandField(clazz, "as");
 
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(field);
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(field);
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("java.util.List<A>", type.describe());
@@ -181,7 +181,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
 
         ExpressionStmt stmt = (ExpressionStmt) method.getBody().get().getStmts().get(0);
         Expression expression = stmt.getExpression();
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("java.util.List<java.lang.String>", type.describe());
@@ -197,7 +197,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "caller");
         MethodCallExpr expression = Navigator.findMethodCall(method, "callee");
 
-        MethodUsage methodUsage = JavaParserFacade.get(new JreTypeSolver()).solveMethodAsUsage(expression);
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
 
         assertEquals("callee", methodUsage.getName());
     }
@@ -210,7 +210,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         VariableDeclarator variableDeclarator = Navigator.demandVariableDeclaration(method, "a");
         Expression expression = variableDeclarator.getInit().get();
 
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("Comment", type.describe());
@@ -224,7 +224,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         VariableDeclarator variableDeclarator = Navigator.demandVariableDeclaration(method, "a");
         Expression expression = variableDeclarator.getInit().get();
 
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("AnnotationExpr", type.describe());
@@ -238,7 +238,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodCallExpr call = Navigator.findMethodCall(method, "accept");
         Expression thisRef = call.getArgs().get(0);
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
         Type voidVisitorAdapterOfA = javaParserFacade.getType(thisRef);
@@ -255,7 +255,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodCallExpr call = Navigator.findMethodCall(method, "accept");
         Expression thisRef = call.getArgs().get(0);
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
         Type type = javaParserFacade.getType(thisRef);
@@ -322,7 +322,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "visit");
         MethodCallExpr call = Navigator.findMethodCall(method, "accept");
 
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(call);
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(call);
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("void", type.describe());
@@ -335,7 +335,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "getNodesByType");
         MethodCallExpr call = Navigator.findMethodCall(method, "cast");
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         Expression scope = call.getScope().get();
         Type type = JavaParserFacade.get(typeSolver).getType(scope);
 
@@ -352,7 +352,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "getNodesByType");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
 
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr().get());
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(returnStmt.getExpr().get());
 
         assertEquals(true, type.isTypeVariable());
         assertEquals("N", type.describe());
@@ -365,7 +365,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
         ThisExpr thisExpr = Navigator.findNodeOfGivenClass(method, ThisExpr.class);
 
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(thisExpr);
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpr);
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("TypeParamOnReturnType", type.describe());
@@ -378,7 +378,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
         NameExpr n1 = Navigator.findNameExpression(method, "n1");
 
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(n1);
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(n1);
 
         assertEquals(true, type.isTypeVariable());
         assertEquals("T", type.describe());
@@ -391,7 +391,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
         MethodCallExpr call = Navigator.findMethodCall(method, "accept");
 
-        JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         Type type = javaParserFacade.getType(call);
 
         assertEquals(false, type.isTypeVariable());
@@ -405,7 +405,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
 
-        Type type = JavaParserFacade.get(new JreTypeSolver()).getType(returnStmt.getExpr().get());
+        Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(returnStmt.getExpr().get());
 
         assertEquals(false, type.isTypeVariable());
         assertEquals("boolean", type.describe());
@@ -472,7 +472,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         Expression returnStmtExpr = returnStmt.getExpr().get();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
@@ -489,7 +489,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
         MethodCallExpr methodCall = Navigator.findMethodCall(method, "foo");
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
         MethodUsage methodUsage = javaParserFacade.solveMethodAsUsage(methodCall);
@@ -504,7 +504,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         Expression returnStmtExpr = returnStmt.getExpr().get();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 

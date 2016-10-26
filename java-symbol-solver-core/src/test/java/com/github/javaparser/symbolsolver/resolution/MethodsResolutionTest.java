@@ -26,7 +26,7 @@ import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -41,7 +41,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStmts().get(0);
         Expression expression = returnStmt.getExpr().get();
 
-        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 
@@ -52,7 +52,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         MethodCallExpr expression = Navigator.findMethodCall(method, "noneOf");
 
-        MethodUsage methodUsage = JavaParserFacade.get(new JreTypeSolver()).solveMethodAsUsage(expression);
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
         assertEquals("noneOf", methodUsage.getName());
     }
 }

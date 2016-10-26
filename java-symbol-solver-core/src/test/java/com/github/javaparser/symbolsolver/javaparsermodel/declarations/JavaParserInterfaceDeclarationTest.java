@@ -20,7 +20,7 @@ import com.github.javaparser.symbolsolver.AbstractTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractTest {
     public void setup() {
         File srcNewCode = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core"));
         CombinedTypeSolver combinedTypeSolverNewCode = new CombinedTypeSolver();
-        combinedTypeSolverNewCode.add(new JreTypeSolver());
+        combinedTypeSolverNewCode.add(new ReflectionTypeSolver());
         combinedTypeSolverNewCode.add(new JavaParserTypeSolver(srcNewCode));
         combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-generated-sources"))));
         typeSolver = combinedTypeSolverNewCode;

@@ -21,7 +21,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
 import java.util.function.Consumer;
@@ -33,14 +33,14 @@ public class FunctionInterfaceLogicTest {
 
     @Test
     public void testGetFunctionalMethodNegativeCaseOnClass() {
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         assertEquals(false, FunctionalInterfaceLogic.getFunctionalMethod(string).isPresent());
     }
 
     @Test
     public void testGetFunctionalMethodPositiveCasesOnInterfaces() {
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         Type function = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Function.class, typeSolver), typeSolver);
         assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
         assertEquals("apply", FunctionalInterfaceLogic.getFunctionalMethod(function).get().getName());

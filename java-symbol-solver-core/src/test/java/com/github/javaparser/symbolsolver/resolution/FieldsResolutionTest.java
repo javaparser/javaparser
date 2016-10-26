@@ -31,7 +31,7 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
 import java.io.File;
@@ -49,7 +49,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStmts().get(0);
         Expression expression = returnStmt.getExpr().get();
 
-        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 
@@ -78,7 +78,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(enumDecl, "getLabel");
         NameExpr expression = Navigator.findNameExpression(method, "label");
 
-        SymbolReference ref = JavaParserFacade.get(new JreTypeSolver()).solve(expression);
+        SymbolReference ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());
         assertEquals("label", ref.getCorrespondingDeclaration().getName());
     }
@@ -91,7 +91,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStmts().get(0);
         Expression expression = returnStmt.getExpr().get();
 
-        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 
@@ -103,7 +103,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStmts().get(0);
         Expression expression = returnStmt.getExpr().get();
 
-        Type ref = JavaParserFacade.get(new JreTypeSolver()).getType(expression);
+        Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 }

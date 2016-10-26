@@ -23,7 +23,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import javaslang.Tuple2;
@@ -43,7 +43,7 @@ public class GenericTypeInferenceLogicTest {
 
     @Test
     public void inferGenericTypesTestSimpleCase() {
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         ReferenceType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         TypeParameterDeclaration a = EasyMock.createMock(TypeParameterDeclaration.class);
         EasyMock.expect(a.getName()).andReturn("A").anyTimes();
@@ -55,7 +55,7 @@ public class GenericTypeInferenceLogicTest {
 
     @Test
     public void inferGenericTypesTestSimpleCaseWithTwoSubstitutions() {
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         ReferenceType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         ReferenceType object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         TypeParameterDeclaration a = EasyMock.createMock(TypeParameterDeclaration.class);
@@ -78,7 +78,7 @@ public class GenericTypeInferenceLogicTest {
 
     @Test
     public void inferGenericTypesTestSimpleCaseNoSubstitutions() {
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         ReferenceType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         ReferenceType object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         assertEquals(Collections.emptyMap(), GenericTypeInferenceLogic.inferGenericTypes(

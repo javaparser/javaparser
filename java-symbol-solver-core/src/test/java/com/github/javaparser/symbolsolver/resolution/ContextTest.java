@@ -237,7 +237,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim");
 
         File src = new File("src/test/resources");
-        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JavaParserTypeSolver(src));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim);
 
@@ -252,7 +252,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         com.github.javaparser.ast.type.Type streamJavaParserType = method.getParameters().get(0).getType();
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         Type streamType = JavaParserFacade.get(typeSolver).convert(streamJavaParserType, method);
 
         assertEquals("java.util.stream.Stream<java.lang.String>", streamType.describe());
@@ -265,7 +265,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "filter");
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         Type ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
 
         assertEquals("java.util.stream.Stream<java.lang.String>", ref.describe());
@@ -280,7 +280,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         NameExpr refToT = Navigator.findNameExpression(method, "t");
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         Type ref = javaParserFacade.getType(refToT);
 
@@ -294,7 +294,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr call = Navigator.findMethodCall(method, "isEmpty");
 
-        TypeSolver typeSolver = new JreTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call);
 
@@ -310,7 +310,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr call = Navigator.findMethodCall(method, "getTypes");
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
         assertEquals("getTypes", methodUsage.getName());
@@ -327,7 +327,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes");
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetTypes);
 
         assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
@@ -343,7 +343,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream");
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToStream);
 
         assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
@@ -357,7 +357,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter");
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToFilter);
 
         assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
@@ -372,7 +372,7 @@ public class ContextTest extends AbstractTest {
         Expression lambdaExpr = callToFilter.getArgs().get(0);
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         Type typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
 
         assertEquals("java.util.function.Predicate<? super com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.describe());
@@ -387,7 +387,7 @@ public class ContextTest extends AbstractTest {
         Expression referenceToT = callToGetName.getScope().get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         Type typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
 
         assertEquals("? super com.github.javaparser.ast.body.TypeDeclaration", typeOfT.describe());
@@ -401,7 +401,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        TypeSolver typeSolver = new CombinedTypeSolver(new JreTypeSolver(), new JarTypeSolver(pathToJar));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetName);
 
         assertEquals("getName", methodUsage.getName());
@@ -415,7 +415,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "m1");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
 
-        JreTypeSolver typeSolver = new JreTypeSolver();
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
         assertEquals("overloaded", ref.getName());
@@ -430,7 +430,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "m2");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
 
-        JreTypeSolver typeSolver = new JreTypeSolver();
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
         assertEquals("overloaded", ref.getName());
@@ -445,7 +445,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "m3");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
 
-        JreTypeSolver typeSolver = new JreTypeSolver();
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
 
         assertEquals("overloaded", ref.getName());

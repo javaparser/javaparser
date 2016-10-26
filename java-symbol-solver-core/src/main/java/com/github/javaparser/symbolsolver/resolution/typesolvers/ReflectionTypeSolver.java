@@ -22,9 +22,19 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
-public class JreTypeSolver implements TypeSolver {
+public class ReflectionTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
+
+    public ReflectionTypeSolver(boolean jreOnly) {
+        this.jreOnly = jreOnly;
+    }
+
+    public ReflectionTypeSolver() {
+        this(true);
+    }
+
+    private boolean jreOnly;
 
     @Override
     public TypeSolver getParent() {
@@ -38,9 +48,9 @@ public class JreTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<TypeDeclaration> tryToSolveType(String name) {
-        if (name.startsWith("java.") || name.startsWith("javax.")) {
+        if (!jreOnly || (name.startsWith("java.") || name.startsWith("javax."))) {
             try {
-                Class<?> clazz = JreTypeSolver.class.getClassLoader().loadClass(name);
+                Class<?> clazz = ReflectionTypeSolver.class.getClassLoader().loadClass(name);
                 if (clazz.isInterface()) {
                     return SymbolReference.solved(new ReflectionInterfaceDeclaration(clazz, getRoot()));
                 } else {

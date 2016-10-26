@@ -21,7 +21,7 @@ import com.github.javaparser.symbolsolver.model.declarations.EnumDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ public class JavassistEnumDeclarationTest extends AbstractTest {
     @Before
     public void setup() throws IOException {
         String pathToJar = adaptPath("src/test/resources/javaparser-core-3.0.0-alpha.2.jar");
-        typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new JreTypeSolver());
+        typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
     }
 
     ///

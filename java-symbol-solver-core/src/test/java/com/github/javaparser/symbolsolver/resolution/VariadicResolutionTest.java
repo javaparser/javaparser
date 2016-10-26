@@ -25,7 +25,7 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
 
         ReturnStmt stmt = (ReturnStmt) method.getBody().get().getStmts().get(0);
         Expression expression = stmt.getExpr().get();
-        JavaParserFacade javaParserFacade = JavaParserFacade.get(new JreTypeSolver());
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         Type type = javaParserFacade.getType(expression);
         assertEquals(true, type.isReferenceType());
         assertEquals(List.class.getCanonicalName(), type.asReferenceType().getQualifiedName());

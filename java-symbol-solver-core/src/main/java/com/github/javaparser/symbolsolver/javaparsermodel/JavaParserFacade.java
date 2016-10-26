@@ -39,7 +39,7 @@ import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JreTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import javaslang.Tuple2;
 
 import java.util.*;
@@ -471,7 +471,7 @@ public class JavaParserFacade {
         } else if (node instanceof DoubleLiteralExpr) {
             return PrimitiveType.DOUBLE;
         } else if (node instanceof StringLiteralExpr) {
-            return new ReferenceTypeImpl(new JreTypeSolver().solveType("java.lang.String"), typeSolver);
+            return new ReferenceTypeImpl(new ReflectionTypeSolver().solveType("java.lang.String"), typeSolver);
         } else if (node instanceof UnaryExpr) {
             UnaryExpr unaryExpr = (UnaryExpr) node;
             switch (unaryExpr.getOperator()) {
