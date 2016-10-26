@@ -21,6 +21,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
@@ -127,14 +128,18 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                 i++;
             }
-            Map<TypeParameterDeclaration, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-            for (TypeParameterDeclaration key : map.keySet()) {
-                if (map.get(key) == null) {
-                    throw new IllegalArgumentException();
+            try {
+                Map<TypeParameterDeclaration, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+                for (TypeParameterDeclaration key : map.keySet()) {
+                    if (map.get(key) == null) {
+                        throw new IllegalArgumentException();
+                    }
+                    methodUsage = methodUsage.replaceTypeParameter(key, map.get(key));
                 }
-                methodUsage = methodUsage.replaceTypeParameter(key, map.get(key));
+                return Optional.of(methodUsage);
+            } catch (ConfilictingGenericTypesException e) {
+                return Optional.empty();
             }
-            return Optional.of(methodUsage);
         } else {
             return res;
         }

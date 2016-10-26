@@ -20,7 +20,6 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclar
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 import javaslang.Tuple2;
 
 import java.util.HashMap;
@@ -45,7 +44,7 @@ public class GenericTypeInferenceLogic {
             Type actualType = formalActualTypePair._2;
             consider(map, formalType, actualType);
             // we can infer also in the other direction
-            consider(map, actualType, formalType);
+            consider(map, formalType, actualType);
         }
 
         return map;
@@ -69,6 +68,19 @@ public class GenericTypeInferenceLogic {
             if (actualType.isReferenceType()) {
                 ReferenceType formalTypeAsReference = formalType.asReferenceType();
                 ReferenceType actualTypeAsReference = actualType.asReferenceType();
+
+                if (!formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
+                    String na = formalTypeAsReference.getQualifiedName();
+                    String nb = actualTypeAsReference.getQualifiedName();
+                    List<ReferenceType> ancestors = actualTypeAsReference.getAllAncestors();
+                    final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
+                    List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+                    if (correspondingFormalType.isEmpty()) {
+                        throw new ConfilictingGenericTypesException(formalType, actualType);
+                    }
+                    actualTypeAsReference = correspondingFormalType.get(0).asReferenceType();
+                }
+
                 if (formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                     if (!formalTypeAsReference.typeParametersValues().isEmpty()) {
                         if (actualTypeAsReference.isRawType()) {
@@ -82,13 +94,13 @@ public class GenericTypeInferenceLogic {
                         }
                     }
                 }
-                // TODO: consider cases where the actual type extends or implements the formal type. Here the number
-                // and order of type typeParametersValues can be different.
             } else if (actualType.isTypeVariable()) {
                 // nothing to do
             } else if (actualType.isWildcard()) {
                 // nothing to do
             } else if (actualType.isPrimitive()) {
+                // nothing to do
+            } else if (actualType.isNull()) {
                 // nothing to do
             } else {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
@@ -115,49 +127,6 @@ public class GenericTypeInferenceLogic {
     public static void determineTypeParameters(Map<TypeParameterDeclaration, Type> determinedTypeParameters,
                                                Type formalParamType, Type actualParamType,
                                                TypeSolver typeSolver) {
-        if (actualParamType.isNull()) {
-            return;
-        }
-        if (actualParamType.isTypeVariable()) {
-            return;
-        }
-        if (formalParamType.isTypeVariable()) {
-            determinedTypeParameters.put(formalParamType.asTypeParameter(), actualParamType);
-            return;
-        }
-        if (formalParamType instanceof Wildcard) {
-            return;
-        }
-        if (formalParamType.isArray() && actualParamType.isArray()) {
-            determineTypeParameters(
-                    determinedTypeParameters,
-                    formalParamType.asArrayType().getComponentType(),
-                    actualParamType.asArrayType().getComponentType(),
-                    typeSolver);
-            return;
-        }
-        if (formalParamType.isReferenceType() && actualParamType.isReferenceType()
-                && !formalParamType.asReferenceType().getQualifiedName().equals(actualParamType.asReferenceType().getQualifiedName())) {
-            List<ReferenceType> ancestors = actualParamType.asReferenceType().getAllAncestors();
-            final String formalParamTypeQName = formalParamType.asReferenceType().getQualifiedName();
-            List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
-            if (correspondingFormalType.isEmpty()) {
-                throw new IllegalArgumentException();
-            }
-            actualParamType = correspondingFormalType.get(0);
-        }
-        if (formalParamType.isReferenceType() && actualParamType.isReferenceType()) {
-            if (formalParamType.asReferenceType().isRawType() || actualParamType.asReferenceType().isRawType()) {
-                return;
-            }
-            List<Type> formalTypeParams = formalParamType.asReferenceType().typeParametersValues();
-            List<Type> actualTypeParams = actualParamType.asReferenceType().typeParametersValues();
-            if (formalTypeParams.size() != actualTypeParams.size()) {
-                throw new UnsupportedOperationException();
-            }
-            for (int i = 0; i < formalTypeParams.size(); i++) {
-                determineTypeParameters(determinedTypeParameters, formalTypeParams.get(i), actualTypeParams.get(i), typeSolver);
-            }
-        }
+        consider(determinedTypeParameters, formalParamType, actualParamType);
     }
 }
