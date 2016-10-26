@@ -19,12 +19,9 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
-import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -34,7 +31,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class JavassistMethodDeclaration implements MethodDeclaration {
@@ -116,7 +112,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
             if (ctMethod.getGenericSignature() != null) {
                 SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
                 SignatureAttribute.Type signatureType = methodSignature.getParameterTypes()[i];
-                return new JavassistParameterDeclaration(signatureTypeToType(signatureType), typeSolver, variadic);
+                return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType, typeSolver, this), typeSolver, variadic);
             } else {
                 return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[0], typeSolver, variadic);
             }
@@ -124,48 +120,6 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
             throw new RuntimeException(e);
         } catch (BadBytecode badBytecode) {
             throw new RuntimeException(badBytecode);
-        }
-    }
-
-    private Type signatureTypeToType(SignatureAttribute.Type signatureType){
-        if (signatureType instanceof SignatureAttribute.ClassType) {
-            SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType)signatureType;
-            List<Type> typeParameters = Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta)).collect(Collectors.toList());
-            TypeDeclaration typeDeclaration = typeSolver.solveType(classType.getName());
-            return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);
-        } else {
-            throw new RuntimeException(signatureType.getClass().getCanonicalName());
-        }
-    }
-
-    private Type objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument){
-        String typeName = typeArgument.jvmTypeName();
-        Optional<Type> type = getGenericParameterByName(typeName);
-        if (type.isPresent()) {
-            return type.get();
-        } else {
-            throw new UnsupportedOperationException(typeName);
-        }
-    }
-
-    private Optional<Type> getGenericParameterByName(String typeName) {
-        Optional<TypeParameterDeclaration> tp = findTypeParameter(typeName);
-        return tp.map(it -> new TypeVariable(it));
-    }
-
-    private Type typeArgumentToType(SignatureAttribute.TypeArgument typeArgument){
-        if (typeArgument.isWildcard()) {
-            if (typeArgument.getType() == null) {
-                return Wildcard.UNBOUNDED;
-            } else if (typeArgument.getKind() == '+'){
-                return Wildcard.extendsBound(objectTypeArgumentToType(typeArgument.getType()));
-            } else if (typeArgument.getKind() == '-'){
-                return Wildcard.superBound(objectTypeArgumentToType(typeArgument.getType()));
-            } else {
-                throw new UnsupportedOperationException();
-            }
-        } else {
-            throw new UnsupportedOperationException();
         }
     }
 

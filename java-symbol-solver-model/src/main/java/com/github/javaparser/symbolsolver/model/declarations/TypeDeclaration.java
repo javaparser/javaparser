@@ -50,7 +50,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
      * @return
      */
     default Optional<TypeDeclaration> containerType() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
     }
 
     ///

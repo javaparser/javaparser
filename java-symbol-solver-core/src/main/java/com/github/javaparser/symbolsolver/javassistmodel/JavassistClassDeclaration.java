@@ -278,25 +278,41 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeImpl getSuperClass() {
+    public ReferenceType getSuperClass() {
         try {
             if (ctClass.getSuperclass() == null) {
                 return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
             }
-            return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver).asClass(), typeSolver);
+            if (ctClass.getGenericSignature() == null) {
+                return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver), typeSolver);
+            }
+
+            SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+            return JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, this).asReferenceType();
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
+        } catch (BadBytecode e) {
+           throw new RuntimeException(e);
         }
     }
 
     @Override
     public List<ReferenceType> getInterfaces() {
         try {
-            return Arrays.stream(ctClass.getInterfaces())
-                    .map(i -> new JavassistInterfaceDeclaration(i, typeSolver))
-                    .map(i -> new ReferenceTypeImpl(i, typeSolver))
-                    .collect(Collectors.toList());
+            if (ctClass.getGenericSignature() == null) {
+                return Arrays.stream(ctClass.getInterfaces())
+                        .map(i -> new JavassistInterfaceDeclaration(i, typeSolver))
+                        .map(i -> new ReferenceTypeImpl(i, typeSolver))
+                        .collect(Collectors.toList());
+            } else {
+                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                return Arrays.stream(classSignature.getInterfaces())
+                        .map(i -> JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType())
+                        .collect(Collectors.toList());
+            }
         } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
@@ -334,5 +350,18 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     @Override
     public List<ConstructorDeclaration> getConstructors() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<TypeDeclaration> containerType() {
+        try {
+            if (ctClass.getDeclaringClass() == null) {
+                return Optional.empty();
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
