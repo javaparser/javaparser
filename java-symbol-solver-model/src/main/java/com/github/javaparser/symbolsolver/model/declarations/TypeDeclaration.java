@@ -295,8 +295,10 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
         return getAllAncestors().stream().anyMatch(it -> it.asReferenceType().getTypeDeclaration().hasDirectlyAnnotation(qualifiedName));
     }
 
-    default boolean implementsFunctionalInterface() {
-        return hasAnnotation(FunctionalInterface.class.getCanonicalName());
-    }
+    /**
+     * This means that the type has a functional method. Conceptually, a functional interface has exactly one abstract method.
+     * Typically these classes has the FunctionInterface annotation but this is not mandatory.
+     */
+    boolean isFunctionalInterface();
 
 }

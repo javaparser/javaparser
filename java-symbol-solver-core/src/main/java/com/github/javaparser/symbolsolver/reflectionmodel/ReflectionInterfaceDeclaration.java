@@ -143,7 +143,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public boolean canBeAssignedTo(TypeDeclaration other) {
         if (other instanceof LambdaArgumentTypePlaceholder) {
-            return implementsFunctionalInterface();
+            return isFunctionalInterface();
         }
         if (other.getQualifiedName().equals(getQualifiedName())) {
             return true;
@@ -171,7 +171,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             return true;
         }
         if (type instanceof LambdaArgumentTypePlaceholder) {
-            return implementsFunctionalInterface();
+            return isFunctionalInterface();
         }
         if (type.isArray()) {
             return false;

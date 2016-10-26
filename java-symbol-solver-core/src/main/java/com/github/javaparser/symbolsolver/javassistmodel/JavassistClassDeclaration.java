@@ -203,7 +203,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
 
         if (type instanceof LambdaArgumentTypePlaceholder) {
-            return implementsFunctionalInterface();
+            return isFunctionalInterface();
         }
 
         // TODO look into generics

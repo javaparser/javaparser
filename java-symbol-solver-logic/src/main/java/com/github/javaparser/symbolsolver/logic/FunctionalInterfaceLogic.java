@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
@@ -36,21 +37,31 @@ public final class FunctionalInterfaceLogic {
         // prevent instantiation
     }
 
+    /**
+     * Get the functional method defined by the type, if any.
+     */
     public static Optional<MethodUsage> getFunctionalMethod(Type type) {
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isInterface()) {
-            //We need to find all abstract methods
-            Set<MethodUsage> methods = type.asReferenceType().getTypeDeclaration().getAllMethods().stream()
-                    .filter(m -> m.getDeclaration().isAbstract())
-                    // Remove methods inherited by Object:
-                    // Consider the case of Comparator which define equals. It would be considered a functional method.
-                    .filter(m -> !declaredOnObject(m))
-                    .collect(Collectors.toSet());
+            return getFunctionalMethod(type.asReferenceType().getTypeDeclaration());
+        } else {
+            return Optional.empty();
+        }
+    }
 
-            if (methods.size() == 1) {
-                return Optional.of(methods.iterator().next());
-            } else {
-                return Optional.empty();
-            }
+    /**
+     * Get the functional method defined by the type, if any.
+     */
+    public static Optional<MethodUsage> getFunctionalMethod(TypeDeclaration typeDeclaration) {
+        //We need to find all abstract methods
+        Set<MethodUsage> methods = typeDeclaration.getAllMethods().stream()
+                .filter(m -> m.getDeclaration().isAbstract())
+                // Remove methods inherited by Object:
+                // Consider the case of Comparator which define equals. It would be considered a functional method.
+                .filter(m -> !declaredOnObject(m))
+                .collect(Collectors.toSet());
+
+        if (methods.size() == 1) {
+            return Optional.of(methods.iterator().next());
         } else {
             return Optional.empty();
         }

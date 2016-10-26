@@ -55,4 +55,8 @@ public abstract class AbstractTypeDeclaration implements TypeDeclaration {
         return methods;
     }
 
+    @Override
+    public final boolean isFunctionalInterface() {
+        return FunctionalInterfaceLogic.getFunctionalMethod(this).isPresent();
+    }
 }
