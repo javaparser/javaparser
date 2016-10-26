@@ -55,7 +55,6 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
 
     @Override
     public final List<ReferenceType> getAllInterfaces() {
-        // TODO it could specify type typeParametersValues: they should appear
         List<ReferenceType> interfaces = new ArrayList<>();
         for (ReferenceType interfaceDeclaration : getInterfaces()) {
             interfaces.add(interfaceDeclaration);

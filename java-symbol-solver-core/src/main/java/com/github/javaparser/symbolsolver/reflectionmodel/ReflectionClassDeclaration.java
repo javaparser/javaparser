@@ -22,10 +22,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlac
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -34,8 +34,6 @@ import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ReflectionClassDeclaration extends AbstractClassDeclaration {
@@ -189,9 +187,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     @Override
     public boolean canBeAssignedTo(TypeDeclaration other) {
         if (other instanceof LambdaArgumentTypePlaceholder) {
-            // FIXME remove and use functional interface recognition
-            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
-                    getQualifiedName().equals(Function.class.getCanonicalName());
+            return implementsFunctionalInterface();
         }
         if (other.getQualifiedName().equals(getQualifiedName())) {
             return true;
@@ -215,8 +211,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             return true;
         }
         if (type instanceof LambdaArgumentTypePlaceholder) {
-            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
-                    getQualifiedName().equals(Function.class.getCanonicalName());
+            return implementsFunctionalInterface();
         }
         if (type.isArray()) {
             return false;

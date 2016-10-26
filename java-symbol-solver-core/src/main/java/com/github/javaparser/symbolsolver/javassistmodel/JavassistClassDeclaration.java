@@ -21,9 +21,9 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
@@ -36,8 +36,6 @@ import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class JavassistClassDeclaration extends AbstractClassDeclaration {
@@ -205,11 +203,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
 
         if (type instanceof LambdaArgumentTypePlaceholder) {
-            if (ctClass.getName().equals(Predicate.class.getCanonicalName()) || ctClass.getName().equals(Function.class.getCanonicalName())) {
-                return true;
-            } else {
-                return false;
-            }
+            return implementsFunctionalInterface();
         }
 
         // TODO look into generics

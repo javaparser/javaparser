@@ -23,9 +23,9 @@ import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolExceptio
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -39,8 +39,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.TypeVariable;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
@@ -145,8 +143,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public boolean canBeAssignedTo(TypeDeclaration other) {
         if (other instanceof LambdaArgumentTypePlaceholder) {
-            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
-                    getQualifiedName().equals(Function.class.getCanonicalName());
+            return implementsFunctionalInterface();
         }
         if (other.getQualifiedName().equals(getQualifiedName())) {
             return true;
@@ -174,8 +171,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             return true;
         }
         if (type instanceof LambdaArgumentTypePlaceholder) {
-            return getQualifiedName().equals(Predicate.class.getCanonicalName()) ||
-                    getQualifiedName().equals(Function.class.getCanonicalName());
+            return implementsFunctionalInterface();
         }
         if (type.isArray()) {
             return false;
