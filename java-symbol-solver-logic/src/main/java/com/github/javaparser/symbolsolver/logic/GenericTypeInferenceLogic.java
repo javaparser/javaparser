@@ -79,7 +79,8 @@ public class GenericTypeInferenceLogic {
                         }
                     }
                 }
-                // TODO: consider cases where the actual type extends or implements the formal type. Here the number and order of type typeParametersValues can be different.
+                // TODO: consider cases where the actual type extends or implements the formal type. Here the number
+                // and order of type typeParametersValues can be different.
             } else if (actualType.isTypeVariable()) {
                 // nothing to do
             } else if (actualType.isWildcard()) {

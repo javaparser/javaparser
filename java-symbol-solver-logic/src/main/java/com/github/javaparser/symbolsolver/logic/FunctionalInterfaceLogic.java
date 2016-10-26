@@ -39,14 +39,12 @@ public final class FunctionalInterfaceLogic {
     public static Optional<MethodUsage> getFunctionalMethod(Type type) {
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isInterface()) {
             //We need to find all abstract methods
-            Set<MethodUsage> allMethods = type.asReferenceType().getTypeDeclaration().getAllMethods();
             Set<MethodUsage> methods = type.asReferenceType().getTypeDeclaration().getAllMethods().stream()
                     .filter(m -> m.getDeclaration().isAbstract())
                     // Remove methods inherited by Object:
                     // Consider the case of Comparator which define equals. It would be considered a functional method.
                     .filter(m -> !declaredOnObject(m))
                     .collect(Collectors.toSet());
-
 
             if (methods.size() == 1) {
                 return Optional.of(methods.iterator().next());
@@ -66,11 +64,11 @@ public final class FunctionalInterfaceLogic {
         return p.getType().getCanonicalName();
     }
 
-    private static List<String> OBJECT_METHODS = Arrays.stream(Object.class.getDeclaredMethods())
+    private static List<String> OBJECT_METHODS_SIGNATURES = Arrays.stream(Object.class.getDeclaredMethods())
             .map(method -> getSignature(method))
             .collect(Collectors.toList());
 
     private static boolean declaredOnObject(MethodUsage m) {
-        return OBJECT_METHODS.contains(m.getDeclaration().getSignature());
+        return OBJECT_METHODS_SIGNATURES.contains(m.getDeclaration().getSignature());
     }
 }
