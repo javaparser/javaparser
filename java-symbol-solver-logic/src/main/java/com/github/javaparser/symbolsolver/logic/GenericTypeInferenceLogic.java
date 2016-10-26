@@ -17,13 +17,16 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 import javaslang.Tuple2;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -109,4 +112,52 @@ public class GenericTypeInferenceLogic {
         }
     }
 
+    public static void determineTypeParameters(Map<TypeParameterDeclaration, Type> determinedTypeParameters,
+                                               Type formalParamType, Type actualParamType,
+                                               TypeSolver typeSolver) {
+        if (actualParamType.isNull()) {
+            return;
+        }
+        if (actualParamType.isTypeVariable()) {
+            return;
+        }
+        if (formalParamType.isTypeVariable()) {
+            determinedTypeParameters.put(formalParamType.asTypeParameter(), actualParamType);
+            return;
+        }
+        if (formalParamType instanceof Wildcard) {
+            return;
+        }
+        if (formalParamType.isArray() && actualParamType.isArray()) {
+            determineTypeParameters(
+                    determinedTypeParameters,
+                    formalParamType.asArrayType().getComponentType(),
+                    actualParamType.asArrayType().getComponentType(),
+                    typeSolver);
+            return;
+        }
+        if (formalParamType.isReferenceType() && actualParamType.isReferenceType()
+                && !formalParamType.asReferenceType().getQualifiedName().equals(actualParamType.asReferenceType().getQualifiedName())) {
+            List<ReferenceType> ancestors = actualParamType.asReferenceType().getAllAncestors();
+            final String formalParamTypeQName = formalParamType.asReferenceType().getQualifiedName();
+            List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+            if (correspondingFormalType.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
+            actualParamType = correspondingFormalType.get(0);
+        }
+        if (formalParamType.isReferenceType() && actualParamType.isReferenceType()) {
+            if (formalParamType.asReferenceType().isRawType() || actualParamType.asReferenceType().isRawType()) {
+                return;
+            }
+            List<Type> formalTypeParams = formalParamType.asReferenceType().typeParametersValues();
+            List<Type> actualTypeParams = actualParamType.asReferenceType().typeParametersValues();
+            if (formalTypeParams.size() != actualTypeParams.size()) {
+                throw new UnsupportedOperationException();
+            }
+            for (int i = 0; i < formalTypeParams.size(); i++) {
+                determineTypeParameters(determinedTypeParameters, formalTypeParams.get(i), actualTypeParams.get(i), typeSolver);
+            }
+        }
+    }
 }

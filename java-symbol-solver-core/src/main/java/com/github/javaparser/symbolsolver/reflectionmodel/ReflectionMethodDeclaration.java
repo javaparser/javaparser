@@ -18,10 +18,10 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.logic.TypeParametersLogic;
+import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Method;
@@ -125,7 +125,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         for (int i = 0; i < getNumberOfParams(); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);
-            TypeParametersLogic.determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
+            GenericTypeInferenceLogic.determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
         }
 
         for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
