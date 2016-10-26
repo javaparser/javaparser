@@ -25,26 +25,23 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class SuperExpr extends Expression {
 
-	private Optional<Expression> classExpr;
+    // TODO nullable
+	private Expression classExpr;
 
 	public SuperExpr() {
         this(Range.UNKNOWN, null);
 	}
 
-	public SuperExpr(final Optional<Expression> classExpr) {
+	public SuperExpr(final Expression classExpr) {
 		this(Range.UNKNOWN, classExpr);
 	}
 
-	public SuperExpr(final Range range, final Optional<Expression> classExpr) {
+	public SuperExpr(final Range range, final Expression classExpr) {
 		super(range);
 		setClassExpr(classExpr);
 	}
@@ -57,12 +54,12 @@ public final class SuperExpr extends Expression {
 		v.visit(this, arg);
 	}
 
-	public Optional<Expression> getClassExpr() {
+	public Expression getClassExpr() {
 		return classExpr;
 	}
 
-	public SuperExpr setClassExpr(final Optional<Expression> classExpr) {
-		this.classExpr = assertNotNull(classExpr);
+	public SuperExpr setClassExpr(final Expression classExpr) {
+		this.classExpr = classExpr;
 		setAsParentNodeOf(this.classExpr);
 		return this;
 	}

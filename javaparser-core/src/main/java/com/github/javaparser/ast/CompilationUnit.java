@@ -33,13 +33,12 @@ import com.github.javaparser.utils.ClassUtils;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
-import static com.github.javaparser.utils.Utils.some;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * <p>
@@ -60,21 +59,22 @@ import static com.github.javaparser.utils.Utils.some;
  */
 public final class CompilationUnit extends Node {
 
-    private Optional<PackageDeclaration> pakage;
+    // TODO nullable
+    private PackageDeclaration pakage;
 
     private NodeList<ImportDeclaration> imports;
 
     private NodeList<TypeDeclaration<?>> types;
 
     public CompilationUnit() {
-        this(Range.UNKNOWN, none(), new NodeList<>(), new NodeList<>());
+        this(Range.UNKNOWN, new PackageDeclaration(), new NodeList<>(), new NodeList<>());
     }
 
-    public CompilationUnit(Optional<PackageDeclaration> pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
+    public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
         this(Range.UNKNOWN, pakage, imports, types);
     }
 
-    public CompilationUnit(Range range, Optional<PackageDeclaration> pakage, NodeList<ImportDeclaration> imports,
+    public CompilationUnit(Range range, PackageDeclaration pakage, NodeList<ImportDeclaration> imports,
                            NodeList<TypeDeclaration<?>> types) {
         super(range);
         setPackage(pakage);
@@ -125,7 +125,7 @@ public final class CompilationUnit extends Node {
      * 
      * @return the package declaration or <code>null</code>
      */
-    public Optional<PackageDeclaration> getPackage() {
+    public PackageDeclaration getPackage() {
         return pakage;
     }
 
@@ -141,6 +141,16 @@ public final class CompilationUnit extends Node {
      */
     public NodeList<TypeDeclaration<?>> getTypes() {
         return types;
+    }
+
+    /**
+     * Sets the list of comments of this compilation unit.
+     * 
+     * @param comments
+     *            the list of comments
+     */
+    public CompilationUnit setComments(List<Comment> comments) {
+        throw new RuntimeException("Not implemented!");
     }
 
     /**
@@ -163,7 +173,7 @@ public final class CompilationUnit extends Node {
      *            the pakage declaration to set or <code>null</code> to default
      *            package
      */
-    public CompilationUnit setPackage(Optional<PackageDeclaration> pakage) {
+    public CompilationUnit setPackage(PackageDeclaration pakage) {
         this.pakage = pakage;
         setAsParentNodeOf(this.pakage);
         return this;
@@ -188,7 +198,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageName(String name) {
-        setPackage(some(new PackageDeclaration(name(name))));
+        setPackage(new PackageDeclaration(name(name)));
         return this;
     }
 

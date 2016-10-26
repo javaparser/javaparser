@@ -25,21 +25,21 @@ import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
-import static com.github.javaparser.utils.Utils.some;
 
 import java.util.EnumSet;
-import java.util.Optional;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.ArrayBracketPair;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -58,6 +58,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithModifiers<MethodDeclaration>, 
         NodeWithParameters<MethodDeclaration>,
         NodeWithThrowable<MethodDeclaration>, 
+        NodeWithBlockStmt<MethodDeclaration>,
         NodeWithTypeParameters<MethodDeclaration> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
@@ -72,7 +73,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NodeList<ReferenceType<?>> throws_;
 
-    private Optional<BlockStmt> body;
+    // TODO nullable
+    private BlockStmt body;
 
     private boolean isDefault = false;
 
@@ -91,7 +93,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>(),
-                none());
+                new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name) {
@@ -105,7 +107,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>(),
-                none());
+                new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name,
@@ -120,7 +122,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 parameters,
                 new NodeList<>(),
                 new NodeList<>(),
-                none());
+                new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, 
@@ -132,7 +134,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
                              final NodeList<ReferenceType<?>> throws_, 
-                             final Optional<BlockStmt> body) {
+                             final BlockStmt body) {
         this(Range.UNKNOWN,
                 modifiers,
                 annotations,
@@ -156,7 +158,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
                              final NodeList<ReferenceType<?>> throws_, 
-                             final Optional<BlockStmt> body) {
+                             final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -179,7 +181,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         v.visit(this, arg);
     }
 
-    public Optional<BlockStmt> getBody() {
+    @Override
+    public BlockStmt getBody() {
         return body;
     }
 
@@ -230,8 +233,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         return typeParameters;
     }
 
-    public MethodDeclaration setBody(final Optional<BlockStmt> body) {
-        this.body = assertNotNull(body);
+    @Override
+    public MethodDeclaration setBody(final BlockStmt body) {
+        this.body = body;
         setAsParentNodeOf(this.body);
         return this;
     }
@@ -381,15 +385,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public Optional<JavadocComment> getJavaDoc() {
-        if(getComment().isPresent()){
-            if(getComment().get() instanceof JavadocComment){
-                return (Optional<JavadocComment>) getComment();
-            }
+    public JavadocComment getJavaDoc() {
+        if (getComment() instanceof JavadocComment) {
+            return (JavadocComment) getComment();
         }
-        return none();
+        return null;
     }
-    
+
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
      */
@@ -415,11 +417,5 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         this.arrayBracketPairsAfterParameterList = assertNotNull(arrayBracketPairsAfterParameterList);
         setAsParentNodeOf(arrayBracketPairsAfterParameterList);
         return this;
-    }
-
-    public BlockStmt createBody() {
-        BlockStmt block = new BlockStmt();
-        setBody(some(block));
-        return block;
     }
 }

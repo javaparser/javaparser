@@ -37,10 +37,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
-import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -57,7 +55,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     private String name;
 
-    private Optional<Expression> defaultValue;
+    // TODO nullable
+    private Expression defaultValue;
 
     public AnnotationMemberDeclaration() {
         this(Range.UNKNOWN,
@@ -65,10 +64,10 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
                 "empty",
-                none());
+                null);
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name, Optional<Expression> defaultValue) {
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name, Expression defaultValue) {
         this(Range.UNKNOWN,
                 modifiers,
                 new NodeList<>(),
@@ -78,7 +77,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> type, String name,
-                                       Optional<Expression> defaultValue) {
+                                       Expression defaultValue) {
         this(Range.UNKNOWN,
                 modifiers,
                 annotations,
@@ -88,7 +87,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type,
-                                       String name, Optional<Expression> defaultValue) {
+                                       String name, Expression defaultValue) {
         super(range, annotations);
         setModifiers(modifiers);
         setType(type);
@@ -106,7 +105,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         v.visit(this, arg);
     }
 
-    public Optional<Expression> getDefaultValue() {
+    public Expression getDefaultValue() {
         return defaultValue;
     }
 
@@ -131,8 +130,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return type;
     }
 
-    public AnnotationMemberDeclaration setDefaultValue(Optional<Expression> defaultValue) {
-        this.defaultValue = assertNotNull(defaultValue);
+    public AnnotationMemberDeclaration setDefaultValue(Expression defaultValue) {
+        this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
         return this;
     }
@@ -157,13 +156,10 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
-    public Optional<JavadocComment> getJavaDoc() {
-        if(getComment().isPresent()){
-            if(getComment().get() instanceof JavadocComment){
-                return (Optional<JavadocComment>) getComment();
-            }
+    public JavadocComment getJavaDoc() {
+        if (getComment() instanceof JavadocComment) {
+            return (JavadocComment) getComment();
         }
-        return none();
+        return null;
     }
-
 }

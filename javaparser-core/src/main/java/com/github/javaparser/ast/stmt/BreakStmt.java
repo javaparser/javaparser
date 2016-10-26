@@ -25,28 +25,25 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
-import static com.github.javaparser.utils.Utils.some;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class BreakStmt extends Statement {
 
-	private Optional<String> id;
+    // TODO nullable
+	private String id;
 
 	public BreakStmt() {
-        this(Range.UNKNOWN, none());
+        this(Range.UNKNOWN, "empty");
 	}
 
 	public BreakStmt(final String id) {
-		this(Range.UNKNOWN, some(id));
+		this(Range.UNKNOWN, id);
 	}
 
-	public BreakStmt(final Range range, final Optional<String> id) {
+	public BreakStmt(final Range range, final String id) {
 		super(range);
 		this.id = id;
 	}
@@ -59,11 +56,11 @@ public final class BreakStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public Optional<String> getId() {
+	public String getId() {
 		return id;
 	}
 
-	public BreakStmt setId(final Optional<String> id) {
+	public BreakStmt setId(final String id) {
 		this.id = assertNotNull(id);
 		return this;
 	}

@@ -27,35 +27,31 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
-import static com.github.javaparser.utils.Utils.some;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class WildcardType extends Type<WildcardType> implements NodeWithAnnotations<WildcardType> {
 
-	private Optional<ReferenceType<?>> ext;
+    // TODO nullable
+	private ReferenceType ext;
 
-	private Optional<ReferenceType<?>> sup;
+    // TODO nullable
+	private ReferenceType sup;
 
 	public WildcardType() {
-        this(Range.UNKNOWN, none(), none());
+        this(Range.UNKNOWN, null, null);
 	}
 
 	public WildcardType(final ReferenceType<?> ext) {
-		this(Range.UNKNOWN, some(ext), none());
+		this(Range.UNKNOWN, ext, null);
 	}
 
-	public WildcardType(final Optional<ReferenceType<?>> ext, final Optional<ReferenceType<?>> sup) {
+	public WildcardType(final ReferenceType<?> ext, final ReferenceType<?> sup) {
         this(Range.UNKNOWN, ext, sup);
 	}
 
 	public WildcardType(final Range range,
-			final Optional<ReferenceType<?>> ext, final Optional<ReferenceType<?>> sup) {
+			final ReferenceType<?> ext, final ReferenceType<?> sup) {
 		super(range, new NodeList<>());
 		setExtends(ext);
 		setSuper(sup);
@@ -69,22 +65,22 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
 		v.visit(this, arg);
 	}
 
-	public Optional<ReferenceType<?>> getExtends() {
+	public ReferenceType getExtends() {
 		return ext;
 	}
 
-	public Optional<ReferenceType<?>> getSuper() {
+	public ReferenceType getSuper() {
 		return sup;
 	}
 
-	public WildcardType setExtends(final Optional<ReferenceType<?>> ext) {
-		this.ext = assertNotNull(ext);
+	public WildcardType setExtends(final ReferenceType ext) {
+		this.ext = ext;
 		setAsParentNodeOf(this.ext);
 		return this;
 	}
 
-	public WildcardType setSuper(final Optional<ReferenceType<?>> sup) {
-		this.sup = assertNotNull(sup);
+	public WildcardType setSuper(final ReferenceType sup) {
+		this.sup = sup;
 		setAsParentNodeOf(this.sup);
 		return this;
 	}

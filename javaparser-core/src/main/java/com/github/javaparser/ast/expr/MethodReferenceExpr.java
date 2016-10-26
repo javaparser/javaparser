@@ -28,11 +28,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
-
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * These are some examples:
@@ -47,19 +42,20 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     private Expression scope;
 
-    private Optional<NodeList<Type<?>>> typeArguments;
+    // TODO nullable
+    private NodeList<Type<?>> typeArguments;
 
     private String identifier;
 
     public MethodReferenceExpr() {
         this(Range.UNKNOWN,
                 new ClassExpr(),
-                none(),
+                null,
                 "empty");
     }
 
     public MethodReferenceExpr(Range range, Expression scope,
-                               Optional<NodeList<Type<?>>> typeArguments, String identifier) {
+                               NodeList<Type<?>> typeArguments, String identifier) {
         super(range);
         setIdentifier(identifier);
         setScope(scope);
@@ -82,19 +78,19 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     public MethodReferenceExpr setScope(Expression scope) {
-        this.scope = assertNotNull(scope);
+        this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
     }
 
     @Override
-    public Optional<NodeList<Type<?>>> getTypeArguments() {
+    public NodeList<Type<?>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public MethodReferenceExpr setTypeArguments(final Optional<NodeList<Type<?>>> types) {
-        this.typeArguments = assertNotNull(types);
+    public MethodReferenceExpr setTypeArguments(final NodeList<Type<?>> types) {
+        this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;
     }
@@ -104,7 +100,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     public MethodReferenceExpr setIdentifier(String identifier) {
-        this.identifier = assertNotNull(identifier);
+        this.identifier = identifier;
         return this;
     }
 

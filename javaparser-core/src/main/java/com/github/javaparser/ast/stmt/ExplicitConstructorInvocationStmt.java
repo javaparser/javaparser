@@ -29,36 +29,36 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
+import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 
-    private Optional<NodeList<Type<?>>> typeArguments;
+    // TODO nullable
+    private NodeList<Type<?>> typeArguments;
 
     private boolean isThis;
 
-	private Optional<Expression> expr;
+    // TODO nullable
+	private Expression expr;
 
 	private NodeList<Expression> args;
 
 	public ExplicitConstructorInvocationStmt() {
-		this(Range.UNKNOWN, none(), true, none(), new NodeList<>());
+		this(Range.UNKNOWN, new NodeList<>(), true, null, new NodeList<>());
 	}
 
 	public ExplicitConstructorInvocationStmt(final boolean isThis,
-			final Optional<Expression> expr, final NodeList<Expression> args) {
-		this(Range.UNKNOWN, none(), isThis, expr, args);
+			final Expression expr, final NodeList<Expression> args) {
+		this(Range.UNKNOWN, new NodeList<>(), isThis, expr, args);
 	}
 
 	public ExplicitConstructorInvocationStmt(Range range,
-	                                         final Optional<NodeList<Type<?>>> typeArguments, final boolean isThis,
-	                                         final Optional<Expression> expr, final NodeList<Expression> args) {
+	                                         final NodeList<Type<?>> typeArguments, final boolean isThis,
+	                                         final Expression expr, final NodeList<Expression> args) {
 		super(range);
 		setTypeArguments(typeArguments);
 		setThis(isThis);
@@ -80,7 +80,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return args;
 	}
 
-	public Optional<Expression> getExpr() {
+	public Expression getExpr() {
 		return expr;
 	}
 
@@ -94,7 +94,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 		return this;
 	}
 
-	public ExplicitConstructorInvocationStmt setExpr(final Optional<Expression> expr) {
+	public ExplicitConstructorInvocationStmt setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;
@@ -106,13 +106,13 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 	}
 
     @Override
-    public Optional<NodeList<Type<?>>> getTypeArguments() {
+    public NodeList<Type<?>> getTypeArguments() {
         return typeArguments;
     }
 
     @Override
-    public ExplicitConstructorInvocationStmt setTypeArguments(final Optional<NodeList<Type<?>>> types) {
-        this.typeArguments = assertNotNull(types);
+    public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type<?>> types) {
+        this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;
     }

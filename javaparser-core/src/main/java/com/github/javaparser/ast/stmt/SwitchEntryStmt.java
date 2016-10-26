@@ -23,34 +23,33 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class SwitchEntryStmt extends Statement implements NodeWithStatements<SwitchEntryStmt> {
 
-	private Optional<Expression> label;
+    // TODO nullable
+	private Expression label;
 
 	private NodeList<Statement> stmts;
 
 	public SwitchEntryStmt() {
-		this(Range.UNKNOWN, none(), new NodeList<>());
+		this(Range.UNKNOWN, new CharLiteralExpr(), new NodeList<>());
 	}
 
-	public SwitchEntryStmt(final Optional<Expression> label, final NodeList<Statement> stmts) {
+	public SwitchEntryStmt(final Expression label, final NodeList<Statement> stmts) {
 		this(Range.UNKNOWN, label, stmts);
 	}
 
-	public SwitchEntryStmt(Range range, final Optional<Expression> label,
+	public SwitchEntryStmt(Range range, final Expression label,
 	                       final NodeList<Statement> stmts) {
 		super(range);
 		setLabel(label);
@@ -67,7 +66,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 		v.visit(this, arg);
 	}
 
-	public Optional<Expression> getLabel() {
+	public Expression getLabel() {
 		return label;
 	}
 
@@ -76,7 +75,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return stmts;
 	}
 
-	public SwitchEntryStmt setLabel(final Optional<Expression> label) {
+	public SwitchEntryStmt setLabel(final Expression label) {
 		this.label = label;
 		setAsParentNodeOf(this.label);
 		return this;

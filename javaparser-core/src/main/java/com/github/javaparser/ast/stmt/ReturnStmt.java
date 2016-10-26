@@ -27,29 +27,25 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
 import static com.github.javaparser.ast.expr.NameExpr.name;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
-import static com.github.javaparser.utils.Utils.some;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ReturnStmt extends Statement {
 
-	private Optional<Expression> expr;
+    // TODO nullable
+	private Expression expr;
 
 	public ReturnStmt() {
-        this(Range.UNKNOWN, none());
+        this(Range.UNKNOWN, new BooleanLiteralExpr());
 	}
 
 	public ReturnStmt(final Expression expr) {
-		this(Range.UNKNOWN, some(expr));
+		this(Range.UNKNOWN, expr);
 	}
 
-	public ReturnStmt(Range range, final Optional<Expression> expr) {
+	public ReturnStmt(Range range, final Expression expr) {
 		super(range);
 		setExpr(expr);
 	}
@@ -58,7 +54,7 @@ public final class ReturnStmt extends Statement {
      * Will create a NameExpr with the string param
      */
     public ReturnStmt(String expr) {
-        this(Range.UNKNOWN, some(name(expr)));
+        this(Range.UNKNOWN, name(expr));
     }
 
     @Override
@@ -70,12 +66,12 @@ public final class ReturnStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public Optional<Expression> getExpr() {
+	public Expression getExpr() {
 		return expr;
 	}
 
-	public ReturnStmt setExpr(final Optional<Expression> expr) {
-		this.expr = assertNotNull(expr);
+	public ReturnStmt setExpr(final Expression expr) {
+		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;
 	}

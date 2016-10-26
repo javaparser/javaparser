@@ -29,11 +29,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -89,12 +85,10 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     @Override
-    public Optional<JavadocComment> getJavaDoc() {
-        if(getComment().isPresent()){
-            if(getComment().get() instanceof JavadocComment){
-                return (Optional<JavadocComment>) getComment();
-            }
+    public JavadocComment getJavaDoc() {
+        if(getComment() instanceof JavadocComment){
+            return (JavadocComment) getComment();
         }
-        return none();
+        return null;
     }
 }

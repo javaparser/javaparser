@@ -39,9 +39,6 @@ import com.github.javaparser.utils.PositionUtils;
 
 import java.util.*;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
-import static com.github.javaparser.utils.Utils.some;
 import static java.util.Collections.*;
 
 /**
@@ -68,7 +65,7 @@ public abstract class Node implements Cloneable {
 
     private IdentityHashMap<UserDataKey<?>, Object> userData = null;
 
-    private Optional<? extends Comment> comment = none();
+    private Comment comment;
 
     public Node(Range range) {
         this.range = range;
@@ -106,7 +103,7 @@ public abstract class Node implements Cloneable {
      *
      * @return comment property
      */
-    public Optional<? extends Comment> getComment() {
+    public final Comment getComment() {
         return comment;
     }
 
@@ -160,12 +157,17 @@ public abstract class Node implements Cloneable {
      *
      * @param comment to be set
      */
-    public final Node setComment(final Optional<? extends Comment> comment) {
-        assertNotNull(comment);
-        comment.ifPresent(c -> {if (this instanceof Comment) throw new AssertionError("A comment can not be commented");});
-        this.comment.ifPresent(c -> c.setCommentedNode(null));
+    public final Node setComment(final Comment comment) {
+        if (comment != null && (this instanceof Comment)) {
+            throw new RuntimeException("A comment can not be commented");
+        }
+        if (this.comment != null) {
+            this.comment.setCommentedNode(null);
+        }
         this.comment = comment;
-        this.comment.ifPresent(c -> c.setCommentedNode(this));
+        if (comment != null) {
+            this.comment.setCommentedNode(this);
+        }
         return this;
     }
 
@@ -175,7 +177,7 @@ public abstract class Node implements Cloneable {
      * @param comment to be set
      */
     public final Node setLineComment(String comment) {
-        return setComment(some(new LineComment(comment)));
+        return setComment(new LineComment(comment));
     }
 
     /**
@@ -184,7 +186,7 @@ public abstract class Node implements Cloneable {
      * @param comment to be set
      */
     public final Node setBlockComment(String comment) {
-        return setComment(some(new BlockComment(comment)));
+        return setComment(new BlockComment(comment));
     }
 
     /**
@@ -310,8 +312,8 @@ public abstract class Node implements Cloneable {
         comments.addAll(getOrphanComments());
 
         for (Node child : getChildrenNodes()) {
-            if (child.getComment().isPresent()) {
-                comments.add(child.getComment().get());
+            if (child.getComment() != null) {
+                comments.add(child.getComment());
             }
             comments.addAll(child.getAllContainedComments());
         }
@@ -351,11 +353,6 @@ public abstract class Node implements Cloneable {
         }
     }
 
-    protected void setAsParentNodeOf(Optional<? extends Node> childNode) {
-        assertNotNull(childNode);
-        childNode.ifPresent(c -> c.setParentNode(this));
-    }
-
     public static final int ABSOLUTE_BEGIN_LINE = -1;
     public static final int ABSOLUTE_END_LINE = -2;
 
@@ -365,6 +362,10 @@ public abstract class Node implements Cloneable {
 
     public boolean isPositionedBefore(Position position) {
         return range.isBefore(position);
+    }
+
+    public boolean hasComment() {
+        return comment != null;
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {

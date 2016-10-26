@@ -6,7 +6,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -136,12 +135,6 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
 
     public boolean isEmpty() {
         return innerList.isEmpty();
-    }
-
-    public void ifNotEmpty(Consumer<NodeList<N>> consumer) {
-        if (!isEmpty()) {
-            consumer.accept(this);
-        }
     }
 
     public void sort(Comparator<? super N> comparator) {

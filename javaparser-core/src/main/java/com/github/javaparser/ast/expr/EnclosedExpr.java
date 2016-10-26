@@ -25,27 +25,23 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class EnclosedExpr extends Expression {
 
-	private Optional<Expression> inner;
+    // TODO nullable
+	private Expression inner;
 
 	public EnclosedExpr() {
-        this(Range.UNKNOWN, none());
+        this(Range.UNKNOWN, new StringLiteralExpr());
 	}
 
-	public EnclosedExpr(final Optional<Expression> inner) {
+	public EnclosedExpr(final Expression inner) {
 		this(Range.UNKNOWN, inner);
 	}
 
-	public EnclosedExpr(final Range range, final Optional<Expression> inner) {
+	public EnclosedExpr(final Range range, final Expression inner) {
 		super(range);
 		setInner(inner);
 	}
@@ -58,12 +54,12 @@ public final class EnclosedExpr extends Expression {
 		v.visit(this, arg);
 	}
 
-	public Optional<Expression> getInner() {
+	public Expression getInner() {
 		return inner;
 	}
 
-	public EnclosedExpr setInner(final Optional<Expression> inner) {
-		this.inner = assertNotNull(inner);
+	public EnclosedExpr setInner(final Expression inner) {
+		this.inner = inner;
 		setAsParentNodeOf(this.inner);
 		return this;
 	}

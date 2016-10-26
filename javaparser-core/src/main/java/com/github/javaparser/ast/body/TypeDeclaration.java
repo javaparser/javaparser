@@ -33,12 +33,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
 import java.util.EnumSet;
-import java.util.Optional;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -154,13 +151,11 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 	}
 
 	@Override
-	public Optional<JavadocComment> getJavaDoc() {
-        if(getComment().isPresent()){
-            if(getComment().get() instanceof JavadocComment){
-                return (Optional<JavadocComment>) getComment();
-            }
-        }
-		return none();
+	public JavadocComment getJavaDoc() {
+		if(getComment() instanceof JavadocComment){
+			return (JavadocComment) getComment();
+		}
+		return null;
 	}
 
 }

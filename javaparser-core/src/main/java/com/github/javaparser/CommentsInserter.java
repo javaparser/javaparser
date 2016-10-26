@@ -30,7 +30,6 @@ import com.github.javaparser.utils.PositionUtils;
 import java.util.*;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
-import static com.github.javaparser.utils.Utils.some;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -64,10 +63,10 @@ class CommentsInserter {
         List<Node> children = cu.getBackwardsCompatibleChildrenNodes();
 
         Comment firstComment = comments.iterator().next();
-        if (cu.getPackage().isPresent()
+        if (cu.getPackage() != null
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                firstComment, cu.getPackage().get()))) {
-            cu.setComment(some(firstComment));
+                firstComment, cu.getPackage()))) {
+            cu.setComment(firstComment);
             comments.remove(firstComment);
         }
     }
@@ -120,7 +119,6 @@ class CommentsInserter {
                 }
             }
         }
-        commentsToAttribute.removeAll(attributedComments);
 
         /* at this point I create an ordered list of all remaining comments and
          children */
@@ -142,10 +140,10 @@ class CommentsInserter {
                     previousComment = null;
                 }
             } else {
-                if (previousComment != null && !thing.getComment().isPresent()) {
+                if (previousComment != null && !thing.hasComment()) {
                     if (!configuration.doNotAssignCommentsPrecedingEmptyLines
                             || !thereAreLinesBetween(previousComment, thing)) {
-                        thing.setComment(some(previousComment));
+                        thing.setComment(previousComment);
                         attributedComments.add(previousComment);
                         previousComment = null;
                     }
@@ -167,9 +165,9 @@ class CommentsInserter {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
         if (node.getBegin().line == lineComment.getBegin().line
-                && !node.getComment().isPresent()) {
+                && !node.hasComment()) {
             if(!(node instanceof Comment)) {
-                node.setComment(some(lineComment));
+                node.setComment(lineComment);
             }
             return true;
         } else {

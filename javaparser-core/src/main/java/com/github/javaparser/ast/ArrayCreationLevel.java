@@ -7,8 +7,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -17,10 +15,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * the second the expression "2".
  */
 public class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
-    private Optional<Expression> dimension;
+    // TODO nullable
+    private Expression dimension;
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-    public ArrayCreationLevel(Range range, Optional<Expression> dimension, NodeList<AnnotationExpr> annotations) {
+    public ArrayCreationLevel(Range range, Expression dimension, NodeList<AnnotationExpr> annotations) {
         super(range);
         setDimension(dimension);
         setAnnotations(annotations);
@@ -34,13 +33,12 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         v.visit(this, arg);
     }
 
-    public ArrayCreationLevel setDimension(Optional<Expression> dimension) {
-        this.dimension = assertNotNull(dimension);
+    public void setDimension(Expression dimension) {
+        this.dimension = dimension;
         setAsParentNodeOf(dimension);
-        return this;
     }
 
-    public Optional<Expression> getDimension() {
+    public Expression getDimension() {
         return dimension;
     }
 

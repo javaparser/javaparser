@@ -24,11 +24,6 @@ package com.github.javaparser.ast.comments;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 
-import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.none;
-import static com.github.javaparser.utils.Utils.some;
-
 /**
  * Abstract class for all AST nodes that represent comments.
  * 
@@ -40,7 +35,8 @@ import static com.github.javaparser.utils.Utils.some;
 public abstract class Comment extends Node {
 
     private String content;
-    private Optional<Node> commentedNode = none();
+    // TODO nullable
+    private Node commentedNode;
     
     public Comment(Range range, String content) {
         super(range);
@@ -80,7 +76,7 @@ public abstract class Comment extends Node {
         }
     }
 
-    public Optional<Node> getCommentedNode()
+    public Node getCommentedNode()
     {
         return this.commentedNode;
     }
@@ -88,7 +84,7 @@ public abstract class Comment extends Node {
     public Comment setCommentedNode(Node commentedNode)
     {
         if (commentedNode==null) {
-            this.commentedNode = none();
+            this.commentedNode = null;
             return this;
         }
         if (commentedNode==this) {
@@ -97,12 +93,12 @@ public abstract class Comment extends Node {
         if (commentedNode instanceof Comment) {
             throw new IllegalArgumentException();
         }
-        this.commentedNode = some(commentedNode);
+        this.commentedNode = commentedNode;
         return this;
     }
 
     public boolean isOrphan()
     {
-        return !commentedNode.isPresent();
+        return this.commentedNode == null;
     }
 }

@@ -27,8 +27,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
-import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.*;
 
 /**
@@ -38,22 +36,24 @@ public final class TryStmt extends Statement {
 	
 	private NodeList<VariableDeclarationExpr> resources;
 
+    // TODO can be null
 	private BlockStmt tryBlock;
 
 	private NodeList<CatchClause> catchs;
 
-	private Optional<BlockStmt> finallyBlock;
+    // TODO can be null
+	private BlockStmt finallyBlock;
 
 	public TryStmt() {
 		this(Range.UNKNOWN,
 				new NodeList<>(),
 				new BlockStmt(),
 				new NodeList<>(),
-				none());
+				new BlockStmt());
 	}
 
 	public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchs,
-			final Optional<BlockStmt> finallyBlock) {
+			final BlockStmt finallyBlock) {
 		this(Range.UNKNOWN,
 				new NodeList<>(),
 				tryBlock,
@@ -62,7 +62,7 @@ public final class TryStmt extends Statement {
 	}
 
 	public TryStmt(Range range, NodeList<VariableDeclarationExpr> resources,
-	               final BlockStmt tryBlock, final NodeList<CatchClause> catchs, final Optional<BlockStmt> finallyBlock) {
+	               final BlockStmt tryBlock, final NodeList<CatchClause> catchs, final BlockStmt finallyBlock) {
 		super(range);
 		setResources(resources);
 		setTryBlock(tryBlock);
@@ -84,7 +84,7 @@ public final class TryStmt extends Statement {
         return catchs;
 	}
 
-	public Optional<BlockStmt> getFinallyBlock() {
+	public BlockStmt getFinallyBlock() {
 		return finallyBlock;
 	}
 
@@ -102,14 +102,14 @@ public final class TryStmt extends Statement {
 		return this;
 	}
 
-	public TryStmt setFinallyBlock(final Optional<BlockStmt> finallyBlock) {
-		this.finallyBlock = assertNotNull(finallyBlock);
+	public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
+		this.finallyBlock = finallyBlock;
 		setAsParentNodeOf(this.finallyBlock);
 		return this;
 	}
 
 	public TryStmt setTryBlock(final BlockStmt tryBlock) {
-		this.tryBlock = assertNotNull(tryBlock);
+		this.tryBlock = tryBlock;
 		setAsParentNodeOf(this.tryBlock);
 		return this;
 	}

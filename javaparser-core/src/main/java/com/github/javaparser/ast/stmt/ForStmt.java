@@ -23,15 +23,13 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.none;
 
 /**
  * @author Julio Vilmar Gesser
@@ -40,7 +38,8 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
 	private NodeList<Expression> init;
 
-	private Optional<Expression> compare;
+    // TODO nullable
+	private Expression compare;
 
 	private NodeList<Expression> update;
 
@@ -49,18 +48,18 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 	public ForStmt() {
 		this(Range.UNKNOWN,
 				new NodeList<>(),
-				none(),
+				new BooleanLiteralExpr(),
 				new NodeList<>(),
 				new EmptyStmt());
 	}
 
-	public ForStmt(final NodeList<Expression> init, final Optional<Expression> compare,
+	public ForStmt(final NodeList<Expression> init, final Expression compare,
 			final NodeList<Expression> update, final Statement body) {
         this(Range.UNKNOWN, init, compare, update, body);
 	}
 
 	public ForStmt(Range range,
-	               final NodeList<Expression> init, final Optional<Expression> compare,
+	               final NodeList<Expression> init, final Expression compare,
 	               final NodeList<Expression> update, final Statement body) {
 		super(range);
 		setCompare(compare);
@@ -84,7 +83,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 		return body;
 	}
 
-	public Optional<Expression> getCompare() {
+	public Expression getCompare() {
 		return compare;
 	}
 
@@ -103,7 +102,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
 	}
 
-	public ForStmt setCompare(final Optional<Expression> compare) {
+	public ForStmt setCompare(final Expression compare) {
 		this.compare = compare;
 		setAsParentNodeOf(this.compare);
 		return this;
