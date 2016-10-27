@@ -98,8 +98,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
 
     @Override
     public String toString() {
-        return "ReferenceTypeUsage{" +
-                "declaration=" + typeDeclaration +
+        return "ReferenceType{" + getQualifiedName() +
                 ", typeParametersMap=" + typeParametersMap +
                 '}';
     }
