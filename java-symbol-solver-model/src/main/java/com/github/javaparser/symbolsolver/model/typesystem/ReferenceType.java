@@ -191,7 +191,10 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         if (result.isReferenceType() && result.asReferenceType().typeDeclaration.getTypeParameters().contains(tpToReplace)) {
             List<Type> values = result.asReferenceType().typeParametersValues();
             int index = result.asReferenceType().typeDeclaration.getTypeParameters().indexOf(tpToReplace);
-            values.set(index, replaced);
+            // this is necessary to avoid an issue in which a type like List<String> becomes List<List<String>>
+            if (!(replaced.isReferenceType() && this.getQualifiedName().equals(replaced.asReferenceType().getQualifiedName()))) {
+                values.set(index, replaced);
+            }
             return create(result.asReferenceType().getTypeDeclaration(), values, typeSolver);
         }
         return result;

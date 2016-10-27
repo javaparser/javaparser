@@ -205,7 +205,7 @@ public class AnalyseJavaParserTest extends AbstractTest {
     }
 
     @Test
-    public void parseConeVisitor() throws IOException, ParseException {
+    public void parseCloneVisitor() throws IOException, ParseException {
         parse("com/github/javaparser/ast/visitor/CloneVisitor");
     }
 

@@ -282,10 +282,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             for (int i = 0; i < argumentsTypes.size(); i++) {
                 // by replacing types I can also find new equivalences
                 // for example if I replace T=U with String because I know that T=String I can derive that also U equal String
-                argumentsTypes.set(i, usingParameterTypesFromScope(typeOfScope, argumentsTypes.get(i), inferredTypes));
+                Type originalArgumentType = argumentsTypes.get(i);
+                Type updatedArgumentType = usingParameterTypesFromScope(typeOfScope, originalArgumentType, inferredTypes);
+                argumentsTypes.set(i, updatedArgumentType);
             }
             for (int i = 0; i < argumentsTypes.size(); i++) {
-                argumentsTypes.set(i, applyInferredTypes(argumentsTypes.get(i), inferredTypes));
+                Type updatedArgumentType = applyInferredTypes(argumentsTypes.get(i), inferredTypes);
+                argumentsTypes.set(i, updatedArgumentType);
             }
 
             return solveMethodAsUsage(typeOfScope, name, argumentsTypes, typeSolver, this);
