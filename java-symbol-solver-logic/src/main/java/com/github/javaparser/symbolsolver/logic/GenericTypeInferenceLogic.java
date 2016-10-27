@@ -70,8 +70,6 @@ public class GenericTypeInferenceLogic {
                 ReferenceType actualTypeAsReference = actualType.asReferenceType();
 
                 if (!formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
-                    String na = formalTypeAsReference.getQualifiedName();
-                    String nb = actualTypeAsReference.getQualifiedName();
                     List<ReferenceType> ancestors = actualTypeAsReference.getAllAncestors();
                     final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
                     List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());

@@ -300,9 +300,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     private Type applyInferredTypes(Type type, Map<TypeParameterDeclaration, Type> inferredTypes) {
         for (TypeParameterDeclaration tp : inferredTypes.keySet()) {
-            System.out.println("APPLYING: before "+type.describe());
             type = type.replaceTypeVariables(tp, inferredTypes.get(tp), inferredTypes);
-            System.out.println("APPLYING: after "+type.describe());
         }
         return type;
     }
