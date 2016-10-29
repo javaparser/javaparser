@@ -1,7 +1,7 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.Position;
-import com.github.javaparser.Range;
+import com.github.javaparser.HasParentNode;
+import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -9,24 +9,20 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * A node that is a list of nodes.
+ * A list of nodes.
  *
  * @param <N> the type of nodes contained.
  */
-public class NodeList<N extends Node> extends Node implements Iterable<N> {
-    // TODO we probably want to use the already existing childrenNodes list for this.
+public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<NodeList<N>>, Visitable {
     private List<N> innerList = new ArrayList<>(0);
 
+    private Node parentNode;
+
     public NodeList() {
-        this(Range.UNKNOWN, null);
+        this(null);
     }
 
     public NodeList(Node parent) {
-        this(Range.UNKNOWN, parent);
-    }
-
-    public NodeList(Range range, Node parent) {
-        super(range);
         setParentNode(parent);
     }
 
@@ -41,23 +37,6 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
             return;
         }
         setAsParentNodeOf(node);
-        // Expand the NodeList's range to include the new node.
-        if (getRange().equals(Range.UNKNOWN)) {
-            setRange(node.getRange());
-        } else {
-            Position nodeBegin = node.getBegin();
-            if (nodeBegin.valid()) {
-                if(nodeBegin.isBefore(getBegin())){
-                    setBegin(nodeBegin);
-                }
-            }
-            Position nodeEnd = node.getEnd();
-            if (nodeEnd.valid()) {
-                if(nodeEnd.isAfter(getEnd())){
-                    setEnd(nodeEnd);
-                }
-            }
-        }
     }
 
     public boolean remove(Node node) {
@@ -96,16 +75,6 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
 
     public Stream<N> stream() {
         return innerList.stream();
-    }
-
-    @Override
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
-    }
-
-    @Override
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
     }
 
     public int size() {
@@ -152,4 +121,30 @@ public class NodeList<N extends Node> extends Node implements Iterable<N> {
         innerList.add(index, node);
         return this;
     }
+
+    @Override
+    public Node getParentNode() {
+        return parentNode;
+    }
+
+    @Override
+    public NodeList<N> setParentNode(Node parentNode) {
+        this.parentNode = parentNode;
+        setAsParentNodeOf(innerList);
+        return this;
+    }
+
+    @Override
+    public Node getParentNodeForChildren() {
+        return parentNode;
+    }
+
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
 }

@@ -42,7 +42,7 @@ import java.util.List;
  * 
  * @author Julio Vilmar Gesser
  */
-public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
+public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 
 	private void removeNulls(final List<?> list) {
 		for (int i = list.size() - 1; i >= 0; i--) {
@@ -52,7 +52,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		}
 	}
 
-	@Override public Node visit(final AnnotationDeclaration n, final A arg) {
+	@Override public Visitable visit(final AnnotationDeclaration n, final A arg) {
 		visitAnnotations(n, arg);
 		visitComment(n, arg);
         n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
@@ -63,7 +63,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 	}
 
-	@Override public Node visit(final AnnotationMemberDeclaration n, final A arg) {
+	@Override public Visitable visit(final AnnotationMemberDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setType((Type) n.getType().accept(this, arg));
@@ -73,14 +73,14 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ArrayAccessExpr n, final A arg) {
+	@Override public Visitable visit(final ArrayAccessExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setName((Expression) n.getName().accept(this, arg));
 		n.setIndex((Expression) n.getIndex().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final ArrayCreationExpr n, final A arg) {
+	@Override public Visitable visit(final ArrayCreationExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setElementType((Type) n.getElementType().accept(this, arg));
 
@@ -92,13 +92,13 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ArrayInitializerExpr n, final A arg) {
+	@Override public Visitable visit(final ArrayInitializerExpr n, final A arg) {
 		visitComment(n, arg);
         n.setValues((NodeList<Expression>)n.getValues().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final AssertStmt n, final A arg) {
+	@Override public Visitable visit(final AssertStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setCheck((Expression) n.getCheck().accept(this, arg));
 		if (n.getMessage() != null) {
@@ -107,7 +107,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final AssignExpr n, final A arg) {
+	@Override public Visitable visit(final AssignExpr n, final A arg) {
 		visitComment(n, arg);
 		final Expression target = (Expression) n.getTarget().accept(this, arg);
 		if (target == null) {
@@ -124,7 +124,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final BinaryExpr n, final A arg) {
+	@Override public Visitable visit(final BinaryExpr n, final A arg) {
 		visitComment(n, arg);
 		final Expression left = (Expression) n.getLeft().accept(this, arg);
 		final Expression right = (Expression) n.getRight().accept(this, arg);
@@ -139,23 +139,23 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final BlockStmt n, final A arg) {
+	@Override public Visitable visit(final BlockStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setStmts((NodeList<Statement>) n.getStmts().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final BooleanLiteralExpr n, final A arg) {
+	@Override public Visitable visit(final BooleanLiteralExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final BreakStmt n, final A arg) {
+	@Override public Visitable visit(final BreakStmt n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final CastExpr n, final A arg) {
+	@Override public Visitable visit(final CastExpr n, final A arg) {
 		visitComment(n, arg);
 		final Type type = (Type) n.getType().accept(this, arg);
 		final Expression expr = (Expression) n.getExpr().accept(this, arg);
@@ -170,7 +170,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final CatchClause n, final A arg) {
+	@Override public Visitable visit(final CatchClause n, final A arg) {
 		visitComment(n, arg);
 		n.setParam((Parameter)n.getParam().accept(this, arg));
 		n.setBody((BlockStmt) n.getBody().accept(this, arg));
@@ -178,18 +178,18 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	}
 
-	@Override public Node visit(final CharLiteralExpr n, final A arg) {
+	@Override public Visitable visit(final CharLiteralExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final ClassExpr n, final A arg) {
+	@Override public Visitable visit(final ClassExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setType((Type) n.getType().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final ClassOrInterfaceDeclaration n, final A arg) {
+	@Override public Visitable visit(final ClassOrInterfaceDeclaration n, final A arg) {
 		visitAnnotations(n, arg);
 		visitComment(n, arg);
 		n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
@@ -206,7 +206,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
         return (NodeList<N>) list.accept(this, arg);
     }
 
-    @Override public Node visit(final ClassOrInterfaceType n, final A arg) {
+    @Override public Visitable visit(final ClassOrInterfaceType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		if (n.getScope() != null) {
@@ -216,7 +216,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final CompilationUnit n, final A arg) {
+	@Override public Visitable visit(final CompilationUnit n, final A arg) {
 		visitComment(n, arg);
 		if (n.getPackage() != null) {
 			n.setPackage((PackageDeclaration) n.getPackage().accept(this, arg));
@@ -226,7 +226,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ConditionalExpr n, final A arg) {
+	@Override public Visitable visit(final ConditionalExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setCondition((Expression) n.getCondition().accept(this, arg));
 		n.setThenExpr((Expression) n.getThenExpr().accept(this, arg));
@@ -234,7 +234,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ConstructorDeclaration n, final A arg) {
+	@Override public Visitable visit(final ConstructorDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
@@ -244,12 +244,12 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ContinueStmt n, final A arg) {
+	@Override public Visitable visit(final ContinueStmt n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final DoStmt n, final A arg) {
+	@Override public Visitable visit(final DoStmt n, final A arg) {
 		visitComment(n, arg);
 		final Statement body = (Statement) n.getBody().accept(this, arg);
 		if (body == null) {
@@ -266,33 +266,33 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final DoubleLiteralExpr n, final A arg) {
+	@Override public Visitable visit(final DoubleLiteralExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final EmptyMemberDeclaration n, final A arg) {
+	@Override public Visitable visit(final EmptyMemberDeclaration n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final EmptyStmt n, final A arg) {
+	@Override public Visitable visit(final EmptyStmt n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final EmptyTypeDeclaration n, final A arg) {
+	@Override public Visitable visit(final EmptyTypeDeclaration n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final EnclosedExpr n, final A arg) {
+	@Override public Visitable visit(final EnclosedExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setInner((Expression) n.getInner().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final EnumConstantDeclaration n, final A arg) {
+	@Override public Visitable visit(final EnumConstantDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
         n.setArgs((NodeList<Expression>)n.getArgs().accept(this, arg));
@@ -300,7 +300,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final EnumDeclaration n, final A arg) {
+	@Override public Visitable visit(final EnumDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setImplements((NodeList<ClassOrInterfaceType>) n.getImplements().accept(this, arg));
@@ -309,7 +309,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ExplicitConstructorInvocationStmt n, final A arg) {
+	@Override public Visitable visit(final ExplicitConstructorInvocationStmt n, final A arg) {
 		visitComment(n, arg);
 		if (!n.isThis() && n.getExpr() != null) {
 			n.setExpr((Expression) n.getExpr().accept(this, arg));
@@ -319,7 +319,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ExpressionStmt n, final A arg) {
+	@Override public Visitable visit(final ExpressionStmt n, final A arg) {
 		visitComment(n, arg);
 		final Expression expr = (Expression) n.getExpression().accept(this, arg);
 		if (expr == null) {
@@ -329,7 +329,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final FieldAccessExpr n, final A arg) {
+	@Override public Visitable visit(final FieldAccessExpr n, final A arg) {
 		visitComment(n, arg);
 		final Expression scope = (Expression) n.getScope().accept(this, arg);
 		if (scope == null) {
@@ -339,7 +339,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final FieldDeclaration n, final A arg) {
+	@Override public Visitable visit(final FieldDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setElementType((Type) n.getElementType().accept(this, arg));
@@ -347,7 +347,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ForeachStmt n, final A arg) {
+	@Override public Visitable visit(final ForeachStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setVariable((VariableDeclarationExpr) n.getVariable().accept(this, arg));
 		n.setIterable((Expression) n.getIterable().accept(this, arg));
@@ -355,7 +355,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ForStmt n, final A arg) {
+	@Override public Visitable visit(final ForStmt n, final A arg) {
 		visitComment(n, arg);
         n.setInit((NodeList<Expression>)n.getInit().accept(this, arg));
 		if (n.getCompare() != null) {
@@ -366,7 +366,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final IfStmt n, final A arg) {
+	@Override public Visitable visit(final IfStmt n, final A arg) {
 		visitComment(n, arg);
 		final Expression condition = (Expression)
 			n.getCondition().accept(this, arg);
@@ -388,62 +388,62 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final InitializerDeclaration n, final A arg) {
+	@Override public Visitable visit(final InitializerDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setBlock((BlockStmt) n.getBlock().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final InstanceOfExpr n, final A arg) {
+	@Override public Visitable visit(final InstanceOfExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setExpr((Expression) n.getExpr().accept(this, arg));
 		n.setType((ReferenceType<?>) n.getType().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final IntegerLiteralExpr n, final A arg) {
+	@Override public Visitable visit(final IntegerLiteralExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final IntegerLiteralMinValueExpr n, final A arg) {
+	@Override public Visitable visit(final IntegerLiteralMinValueExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final JavadocComment n, final A arg) {
+	@Override public Visitable visit(final JavadocComment n, final A arg) {
 		return n;
 	}
 
-	@Override public Node visit(final LabeledStmt n, final A arg) {
+	@Override public Visitable visit(final LabeledStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setStmt((Statement) n.getStmt().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final LongLiteralExpr n, final A arg) {
+	@Override public Visitable visit(final LongLiteralExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final LongLiteralMinValueExpr n, final A arg) {
+	@Override public Visitable visit(final LongLiteralMinValueExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final MarkerAnnotationExpr n, final A arg) {
+	@Override public Visitable visit(final MarkerAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setName((NameExpr) n.getName().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final MemberValuePair n, final A arg) {
+	@Override public Visitable visit(final MemberValuePair n, final A arg) {
 		visitComment(n, arg);
 		n.setValue((Expression) n.getValue().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final MethodCallExpr n, final A arg) {
+	@Override public Visitable visit(final MethodCallExpr n, final A arg) {
 		visitComment(n, arg);
 		if (n.getScope() != null) {
 			n.setScope((Expression) n.getScope().accept(this, arg));
@@ -453,7 +453,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final MethodDeclaration n, final A arg) {
+	@Override public Visitable visit(final MethodDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
@@ -466,24 +466,24 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final NameExpr n, final A arg) {
+	@Override public Visitable visit(final NameExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final NormalAnnotationExpr n, final A arg) {
+	@Override public Visitable visit(final NormalAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setName((NameExpr) n.getName().accept(this, arg));
         n.setPairs((NodeList<MemberValuePair>)n.getPairs().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final NullLiteralExpr n, final A arg) {
+	@Override public Visitable visit(final NullLiteralExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final ObjectCreationExpr n, final A arg) {
+	@Override public Visitable visit(final ObjectCreationExpr n, final A arg) {
 		visitComment(n, arg);
 		if (n.getScope() != null) {
 			n.setScope((Expression) n.getScope().accept(this, arg));
@@ -495,14 +495,14 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final PackageDeclaration n, final A arg) {
+	@Override public Visitable visit(final PackageDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setName((NameExpr) n.getName().accept(this, arg));
 		return n;
 	}
 	
-	@Override public Node visit(final Parameter n, final A arg) {
+	@Override public Visitable visit(final Parameter n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
@@ -510,20 +510,20 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 	
-	@Override public Node visit(final PrimitiveType n, final A arg) {
+	@Override public Visitable visit(final PrimitiveType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final QualifiedNameExpr n, final A arg) {
+	@Override public Visitable visit(final QualifiedNameExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setQualifier((NameExpr) n.getQualifier().accept(this, arg));
 		return n;
 	}
 
 	@Override
-	public Node visit(ArrayType n, A arg) {
+	public Visitable visit(ArrayType n, A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		n.setComponentType((Type) n.getComponentType().accept(this, arg));
@@ -531,7 +531,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
 	@Override
-	public Node visit(ArrayCreationLevel n, A arg) {
+	public Visitable visit(ArrayCreationLevel n, A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		if(n.getDimension()!=null) {
@@ -541,7 +541,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
 	@Override
-    public Node visit(final IntersectionType n, final A arg) {
+    public Visitable visit(final IntersectionType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
         n.setElements((NodeList<ReferenceType<?>>)n.getElements().accept(this, arg));
@@ -549,14 +549,14 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
     }
 
     @Override
-    public Node visit(final UnionType n, final A arg) {
+    public Visitable visit(final UnionType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
         n.setElements((NodeList<ReferenceType<?>>)n.getElements().accept(this, arg));
         return n;
     }
 
-	@Override public Node visit(final ReturnStmt n, final A arg) {
+	@Override public Visitable visit(final ReturnStmt n, final A arg) {
 		visitComment(n, arg);
 		if (n.getExpr() != null) {
 			n.setExpr((Expression) n.getExpr().accept(this, arg));
@@ -564,19 +564,19 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final SingleMemberAnnotationExpr n, final A arg) {
+	@Override public Visitable visit(final SingleMemberAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setName((NameExpr) n.getName().accept(this, arg));
 		n.setMemberValue((Expression) n.getMemberValue().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final StringLiteralExpr n, final A arg) {
+	@Override public Visitable visit(final StringLiteralExpr n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final SuperExpr n, final A arg) {
+	@Override public Visitable visit(final SuperExpr n, final A arg) {
 		visitComment(n, arg);
 		if (n.getClassExpr() != null) {
 			n.setClassExpr((Expression) n.getClassExpr().accept(this, arg));
@@ -584,7 +584,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final SwitchEntryStmt n, final A arg) {
+	@Override public Visitable visit(final SwitchEntryStmt n, final A arg) {
 		visitComment(n, arg);
 		if (n.getLabel() != null) {
 			n.setLabel((Expression) n.getLabel().accept(this, arg));
@@ -593,7 +593,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final SwitchStmt n, final A arg) {
+	@Override public Visitable visit(final SwitchStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setSelector((Expression) n.getSelector().accept(this, arg));
         n.setEntries((NodeList<SwitchEntryStmt>)n.getEntries().accept(this, arg));
@@ -601,14 +601,14 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 
 	}
 
-	@Override public Node visit(final SynchronizedStmt n, final A arg) {
+	@Override public Visitable visit(final SynchronizedStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setExpr((Expression) n.getExpr().accept(this, arg));
 		n.setBody((BlockStmt) n.getBody().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final ThisExpr n, final A arg) {
+	@Override public Visitable visit(final ThisExpr n, final A arg) {
 		visitComment(n, arg);
 		if (n.getClassExpr() != null) {
 			n.setClassExpr((Expression) n.getClassExpr().accept(this, arg));
@@ -616,13 +616,13 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final ThrowStmt n, final A arg) {
+	@Override public Visitable visit(final ThrowStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setExpr((Expression) n.getExpr().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final TryStmt n, final A arg) {
+	@Override public Visitable visit(final TryStmt n, final A arg) {
 		visitComment(n, arg);
         n.setResources((NodeList<VariableDeclarationExpr>)n.getResources().accept(this, arg));
 		n.setTryBlock((BlockStmt) n.getTryBlock().accept(this, arg));
@@ -633,30 +633,30 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final TypeDeclarationStmt n, final A arg) {
+	@Override public Visitable visit(final TypeDeclarationStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setTypeDeclaration((TypeDeclaration<?>) n.getTypeDeclaration().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final TypeParameter n, final A arg) {
+	@Override public Visitable visit(final TypeParameter n, final A arg) {
 		visitComment(n, arg);
         n.setTypeBound((NodeList<ClassOrInterfaceType>)n.getTypeBound().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final UnaryExpr n, final A arg) {
+	@Override public Visitable visit(final UnaryExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setExpr((Expression) n.getExpr().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final UnknownType n, final A arg) {
+	@Override public Visitable visit(final UnknownType n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final VariableDeclarationExpr n, final A arg) {
+	@Override public Visitable visit(final VariableDeclarationExpr n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 
@@ -671,7 +671,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final VariableDeclarator n, final A arg) {
+	@Override public Visitable visit(final VariableDeclarator n, final A arg) {
 		visitComment(n, arg);
 		final VariableDeclaratorId id = (VariableDeclaratorId)
 			n.getId().accept(this, arg);
@@ -685,25 +685,25 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 		return n;
 	}
 
-	@Override public Node visit(final VariableDeclaratorId n, final A arg) {
+	@Override public Visitable visit(final VariableDeclaratorId n, final A arg) {
 		visitComment(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final VoidType n, final A arg) {
+	@Override public Visitable visit(final VoidType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		return n;
 	}
 
-	@Override public Node visit(final WhileStmt n, final A arg) {
+	@Override public Visitable visit(final WhileStmt n, final A arg) {
 		visitComment(n, arg);
 		n.setCondition((Expression) n.getCondition().accept(this, arg));
 		n.setBody((Statement) n.getBody().accept(this, arg));
 		return n;
 	}
 
-	@Override public Node visit(final WildcardType n, final A arg) {
+	@Override public Visitable visit(final WildcardType n, final A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
 		if (n.getExtends() != null) {
@@ -716,7 +716,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
 	@Override
-	public Node visit(final LambdaExpr n, final A arg) {
+	public Visitable visit(final LambdaExpr n, final A arg) {
 		visitComment(n, arg);
         n.setParameters((NodeList<Parameter>)n.getParameters().accept(this, arg));
 		if (n.getBody() != null) {
@@ -726,7 +726,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
 	@Override
-	public Node visit(final MethodReferenceExpr n, final A arg) {
+	public Visitable visit(final MethodReferenceExpr n, final A arg) {
 		visitComment(n, arg);
         n.setTypeArguments(modifyList(n.getTypeArguments(), arg));
 		if (n.getScope() != null) {
@@ -736,7 +736,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
 	@Override
-	public Node visit(final TypeExpr n, final A arg) {
+	public Visitable visit(final TypeExpr n, final A arg) {
 		visitComment(n, arg);
 		if (n.getType() != null) {
             n.setType((Type<?>) n.getType().accept(this, arg));
@@ -745,15 +745,15 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
 	@Override
-	public Node visit(ArrayBracketPair n, A arg) {
+	public Visitable visit(ArrayBracketPair n, A arg) {
 		visitAnnotations(n, arg);
 		return n;
 	}
 
 	@Override
-	public Node visit(NodeList n, A arg) {
+	public Visitable visit(NodeList n, A arg) {
 		for (int i = 0; i < n.size(); i++) {
-			n.set(i, n.get(i).accept(this, arg));
+			n.set(i, (Node) n.get(i).accept(this, arg));
 		}
 		for (int i = n.size() - 1; i >= 0; i--) {
 			if (n.get(i) == null) {
@@ -764,46 +764,46 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Node, A> {
 	}
 
     @Override
-	public Node visit(EmptyImportDeclaration n, A arg) {
+	public Visitable visit(EmptyImportDeclaration n, A arg) {
         visitComment(n, arg);
         return n;
 	}
 
 	@Override
-	public Node visit(SingleStaticImportDeclaration n, A arg) {
-        visitComment(n, arg);
-        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
-        return n;
-	}
-
-	@Override
-	public Node visit(SingleTypeImportDeclaration n, A arg) {
+	public Visitable visit(SingleStaticImportDeclaration n, A arg) {
         visitComment(n, arg);
         n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
         return n;
 	}
 
 	@Override
-	public Node visit(StaticImportOnDemandDeclaration n, A arg) {
+	public Visitable visit(SingleTypeImportDeclaration n, A arg) {
         visitComment(n, arg);
         n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
         return n;
 	}
 
 	@Override
-	public Node visit(TypeImportOnDemandDeclaration n, A arg) {
+	public Visitable visit(StaticImportOnDemandDeclaration n, A arg) {
+        visitComment(n, arg);
+        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
+        return n;
+	}
+
+	@Override
+	public Visitable visit(TypeImportOnDemandDeclaration n, A arg) {
         visitComment(n, arg);
         n.setName((NameExpr) n.getName().accept(this, arg));
         return n;
 	}
 
 	@Override
-	public Node visit(final BlockComment n, final A arg) {
+	public Visitable visit(final BlockComment n, final A arg) {
 		return n;
 	}
 
 	@Override
-	public Node visit(final LineComment n, final A arg) {
+	public Visitable visit(final LineComment n, final A arg) {
 		return n;
 	}
 
