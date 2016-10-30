@@ -138,7 +138,7 @@ public class ParsingSteps {
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         AnnotationExpr annotationUnderTest = fieldUnderTest.getAnnotations().get(annotationPosition - 1);
-        assertThat(annotationUnderTest.getChildrenNodes().get(1).toString(), is(expectedValue));
+        assertThat(annotationUnderTest.getChildNodes().get(1).toString(), is(expectedValue));
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition is called $expectedName")

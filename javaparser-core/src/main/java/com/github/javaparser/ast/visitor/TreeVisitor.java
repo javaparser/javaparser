@@ -37,7 +37,7 @@ public abstract class TreeVisitor {
 	 */
 	public void visitDepthFirst(Node node) {
 		process(node);
-		for (Node child : node.getChildrenNodes()) {
+		for (Node child : node.getChildNodes()) {
 			visitDepthFirst(child);
 		}
 	}
@@ -52,7 +52,7 @@ public abstract class TreeVisitor {
 		queue.offer(node);
 		while (queue.size() > 0) {
 			Node head = queue.peek();
-			for (Node child : head.getChildrenNodes()) {
+			for (Node child : head.getChildNodes()) {
 				queue.offer(child);
 			}
 			process(queue.poll());

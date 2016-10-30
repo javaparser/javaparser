@@ -244,7 +244,7 @@ public class ManipulationSteps {
 
     @Then("the TryStmt has no child nodes")
     public void thenTheTryStmtHasNotChildNodes() {
-        assertThat(tryStmt.getChildrenNodes().size(), is(0));
+        assertThat(tryStmt.getChildNodes().size(), is(0));
     }
 
     @Then("method $methodPosition in class $classPosition has the name \"$expectedName\"")

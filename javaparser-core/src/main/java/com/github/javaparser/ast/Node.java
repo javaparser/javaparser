@@ -247,7 +247,7 @@ public abstract class Node implements Cloneable {
      *
      * @return all nodes that have this node as their parent.
      */
-    public List<Node> getChildrenNodes() {
+    public List<Node> getChildNodes() {
         return unmodifiableList(childrenNodes);
     }
 
@@ -261,7 +261,7 @@ public abstract class Node implements Cloneable {
     @Deprecated
     public List<Node> getBackwardsCompatibleChildrenNodes() {
         List<Node> children = new ArrayList<>();
-        for (Node childNode : getChildrenNodes()) {
+        for (Node childNode : getChildNodes()) {
             // Avoid attributing comments to NodeLists by pretending they don't exist.
             if (childNode instanceof NodeList) {
                 for (Node subChildNode : ((NodeList<Node>) childNode)) {
@@ -311,7 +311,7 @@ public abstract class Node implements Cloneable {
         List<Comment> comments = new LinkedList<>();
         comments.addAll(getOrphanComments());
 
-        for (Node child : getChildrenNodes()) {
+        for (Node child : getChildNodes()) {
             if (child.getComment() != null) {
                 comments.add(child.getComment());
             }
@@ -382,7 +382,7 @@ public abstract class Node implements Cloneable {
      */
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
         List<N> nodes = new ArrayList<>();
-        for (Node child : getChildrenNodes()) {
+        for (Node child : getChildNodes()) {
             if (clazz.isInstance(child)) {
                 nodes.add(clazz.cast(child));
             }
