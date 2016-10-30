@@ -174,7 +174,7 @@ class CommentsInserter {
             // try with all the children, sorted by reverse position (so the
             // first one is the nearest to the comment
             List<Node> children = new LinkedList<Node>();
-            children.addAll(node.getChildrenNodes());
+            children.addAll(node.getChildNodes());
             PositionUtils.sortByBeginPosition(children);
             Collections.reverse(children);
 
