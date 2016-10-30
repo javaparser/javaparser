@@ -60,7 +60,7 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        List<Node> children = cu.getChildrenNodes();
+        List<Node> children = cu.getChildNodes();
 
         Comment firstComment = comments.iterator().next();
         if (cu.getPackage() != null
@@ -91,7 +91,7 @@ class CommentsInserter {
         // if they preceed a child they are assigned to it, otherweise they
         // remain "orphans"
 
-        List<Node> children = node.getChildrenNodes();
+        List<Node> children = node.getChildNodes();
 
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);

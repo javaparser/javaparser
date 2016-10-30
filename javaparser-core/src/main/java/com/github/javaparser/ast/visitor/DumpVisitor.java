@@ -1629,7 +1629,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		Node parent = node.getParentNode();
 		if (parent == null) return;
 		List<Node> everything = new LinkedList<>();
-		everything.addAll(parent.getChildrenNodes());
+		everything.addAll(parent.getChildNodes());
 		sortByBeginPosition(everything);
 		int positionOfTheChild = -1;
 		for (int i = 0; i < everything.size(); i++) {
