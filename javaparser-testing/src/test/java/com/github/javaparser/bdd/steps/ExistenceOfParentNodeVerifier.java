@@ -21,6 +21,7 @@
  
 package com.github.javaparser.bdd.steps;
 
+import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -46,7 +47,7 @@ class ExistenceOfParentNodeVerifier {
     }
 
     private static class Verifier extends VoidVisitorAdapter<Void> {
-        private static void assertParentIsSet(Node n) {
+        private static void assertParentIsSet(HasParentNode<?> n) {
             assertThat(n + " has no parent set!", n.getParentNode(), is(notNullValue()));
         }
 
