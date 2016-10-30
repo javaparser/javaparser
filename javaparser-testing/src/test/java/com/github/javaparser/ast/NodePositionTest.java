@@ -18,7 +18,7 @@ public class NodePositionTest {
     private List<Node> getAllNodes(Node node) {
         List<Node> nodes = new LinkedList<>();
         nodes.add(node);
-        node.getChildrenNodes().forEach(c -> nodes.addAll(getAllNodes(c)));
+        node.getChildNodes().forEach(c -> nodes.addAll(getAllNodes(c)));
         return nodes;
     }
 
