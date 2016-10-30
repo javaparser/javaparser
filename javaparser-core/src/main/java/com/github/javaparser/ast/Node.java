@@ -29,13 +29,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.visitor.*;
-import com.github.javaparser.utils.PositionUtils;
 
 import java.util.*;
 
@@ -50,7 +50,8 @@ import static java.util.Collections.*;
  * 
  * @author Julio Vilmar Gesser
  */
-public abstract class Node implements Cloneable {
+// Use <Node> to prevent Node from becoming generic.
+public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable {
     /**
      * This can be used to sort nodes on position.
      */
@@ -70,34 +71,7 @@ public abstract class Node implements Cloneable {
     public Node(Range range) {
         this.range = range;
     }
-
-    /**
-     * Accept method for visitor support.
-     * 
-     * @param <R>
-     *            the type the return value of the visitor
-     * @param <A>
-     *            the type the argument passed to the visitor
-     * @param v
-     *            the visitor implementation
-     * @param arg
-     *            the argument passed to the visitor
-     * @return the result of the visit
-     */
-    public abstract <R, A> R accept(GenericVisitor<R, A> v, A arg);
-
-    /**
-     * Accept method for visitor support.
-     * 
-     * @param <A>
-     *            the type the argument passed for the visitor
-     * @param v
-     *            the visitor implementation
-     * @param arg
-     *            any value relevant for the visitor
-     */
-    public abstract <A> void accept(VoidVisitor<A> v, A arg);
-
+    
     /**
      * This is a comment associated with this node.
      *
@@ -222,22 +196,12 @@ public abstract class Node implements Cloneable {
 
     @Override
     public Node clone() {
-        return this.accept(new CloneVisitor(), null);
+        return (Node) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public Node getParentNode() {
         return parentNode;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getParentNodeOfType(Class<T> classType) {
-        Node parent = parentNode;
-        while (parent != null) {
-            if (classType.isAssignableFrom(parent.getClass()))
-                return (T) parent;
-            parent = parent.parentNode;
-        }
-        return null;
     }
 
     /**
@@ -249,30 +213,6 @@ public abstract class Node implements Cloneable {
      */
     public List<Node> getChildNodes() {
         return unmodifiableList(childrenNodes);
-    }
-
-    /**
-     * Before 3.0.0.alpha-5, if we had a list of nodes, those nodes would not have the list
-     * as its parent, but the node containing the list.
-     * This method returns the children in that way: there are no lists, and all nodes that are
-     * in lists are directly in this list.
-     * @deprecated this will be gone in 3.0.0 release.
-     */
-    @Deprecated
-    public List<Node> getBackwardsCompatibleChildrenNodes() {
-        List<Node> children = new ArrayList<>();
-        for (Node childNode : getChildNodes()) {
-            // Avoid attributing comments to NodeLists by pretending they don't exist.
-            if (childNode instanceof NodeList) {
-                for (Node subChildNode : ((NodeList<Node>) childNode)) {
-                    children.add(subChildNode);
-                }
-            } else {
-                children.add(childNode);
-            }
-        }
-        PositionUtils.sortByBeginPosition(children);
-        return children;
     }
 
     public <N extends Node> boolean containsWithin(N other) {
@@ -327,7 +267,8 @@ public abstract class Node implements Cloneable {
      *
      * @param parentNode node to be set as parent
      */
-    public void setParentNode(Node parentNode) {
+    @Override
+    public Node setParentNode(Node parentNode) {
         // remove from old parent, if any
         if (this.parentNode != null) {
             this.parentNode.childrenNodes.remove(this);
@@ -337,20 +278,7 @@ public abstract class Node implements Cloneable {
         if (this.parentNode != null) {
             this.parentNode.childrenNodes.add(this);
         }
-    }
-
-    protected void setAsParentNodeOf(List<? extends Node> childNodes) {
-        if (childNodes != null) {
-            for (Node current : childNodes) {
-                current.setParentNode(this);
-            }
-        }
-    }
-
-    protected void setAsParentNodeOf(Node childNode) {
-        if (childNode != null) {
-            childNode.setParentNode(this);
-        }
+        return this;
     }
 
     public static final int ABSOLUTE_BEGIN_LINE = -1;
@@ -473,5 +401,16 @@ public abstract class Node implements Cloneable {
         }
         setParentNode(null);
         return success;
+    }
+
+    @Override
+    public Node getParentNodeForChildren() {
+        return this;
+    }
+
+    protected void setAsParentNodeOf(NodeList<? extends Node> list) {
+        if (list != null) {
+            list.setParentNode(getParentNodeForChildren());
+        }
     }
 }

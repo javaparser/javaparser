@@ -196,14 +196,14 @@ public class ParsingSteps {
     public void thenLambdaInStatementInMethodInClassIsParentOfContainedBody(int statementPosition, int methodPosition, int classPosition) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         Statement body = lambdaExpr.getBody();
-        assertThat(body.getParentNode(), is((Node) lambdaExpr));
+        assertThat(body.getParentNode(), is(lambdaExpr));
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition is parent of contained parameter")
     public void thenLambdaInStatementInMethodInClassIsParentOfContainedParameter(int statementPosition, int methodPosition, int classPosition) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         Parameter parameter = lambdaExpr.getParameters().get(0);
-        assertThat(parameter.getParentNode().getParentNode(), is((Node) lambdaExpr));
+        assertThat(parameter.getParentNode(), is(lambdaExpr));
     }
 
     @Then("method reference in statement $statementPosition in method $methodPosition in class $classPosition scope is $expectedName")
