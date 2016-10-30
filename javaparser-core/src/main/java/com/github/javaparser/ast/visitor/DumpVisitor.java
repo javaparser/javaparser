@@ -1653,7 +1653,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 
 	private void printOrphanCommentsEnding(final Node node) {
 		List<Node> everything = new LinkedList<>();
-		everything.addAll(node.getChildrenNodes());
+		everything.addAll(node.getChildNodes());
 		sortByBeginPosition(everything);
 		if (everything.isEmpty()) {
 			return;

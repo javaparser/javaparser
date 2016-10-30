@@ -211,7 +211,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      *
      * @return all nodes that have this node as their parent.
      */
-    public List<Node> getChildrenNodes() {
+    public List<Node> getChildNodes() {
         return unmodifiableList(childrenNodes);
     }
 
@@ -251,7 +251,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         List<Comment> comments = new LinkedList<>();
         comments.addAll(getOrphanComments());
 
-        for (Node child : getChildrenNodes()) {
+        for (Node child : getChildNodes()) {
             if (child.getComment() != null) {
                 comments.add(child.getComment());
             }
@@ -310,7 +310,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
         List<N> nodes = new ArrayList<>();
-        for (Node child : getChildrenNodes()) {
+        for (Node child : getChildNodes()) {
             if (clazz.isInstance(child)) {
                 nodes.add(clazz.cast(child));
             }
