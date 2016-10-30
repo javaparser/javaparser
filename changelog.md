@@ -1,6 +1,9 @@
 Version 3.0.0-alpha.7
 ------------------
-* roll back attempt at using Optional
+* 515 roll back attempt at using Optional
+* 522 504 make NodeList not a Node (restores parent/children behaviour to before alpha.4)
+* 527 526 rename getChildrenNodes to getChildNodes
+* 525 495 520 bug fix
 
 Version 3.0.0-alpha.6
 ------------------
