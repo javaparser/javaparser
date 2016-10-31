@@ -67,7 +67,7 @@ public final class CompilationUnit extends Node {
     private NodeList<TypeDeclaration<?>> types;
 
     public CompilationUnit() {
-        this(Range.UNKNOWN, new PackageDeclaration(), new NodeList<>(), new NodeList<>());
+        this(Range.UNKNOWN, null, new NodeList<>(), new NodeList<>());
     }
 
     public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {

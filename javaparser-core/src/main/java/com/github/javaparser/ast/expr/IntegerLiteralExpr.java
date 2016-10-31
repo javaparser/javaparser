@@ -32,7 +32,7 @@ public class IntegerLiteralExpr extends StringLiteralExpr {
 
 	private static final String UNSIGNED_MIN_VALUE = "2147483648";
 
-	protected static final String MIN_VALUE = "-" + UNSIGNED_MIN_VALUE;
+	static final String MIN_VALUE = "-" + UNSIGNED_MIN_VALUE;
 
 	public IntegerLiteralExpr() {
         this(Range.UNKNOWN, "0");

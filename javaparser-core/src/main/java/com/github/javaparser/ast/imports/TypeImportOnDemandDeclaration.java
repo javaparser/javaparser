@@ -21,7 +21,7 @@ public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration {
     private NameExpr name;
 
     public TypeImportOnDemandDeclaration() {
-        this(Range.UNKNOWN, name("empty"));
+        this(Range.UNKNOWN, new NameExpr());
     }
     
     public TypeImportOnDemandDeclaration(Range range, NameExpr name) {

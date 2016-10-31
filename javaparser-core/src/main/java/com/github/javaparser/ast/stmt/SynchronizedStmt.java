@@ -47,8 +47,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         this(Range.UNKNOWN, expr, block);
     }
 
-    public SynchronizedStmt(Range range, final Expression expr,
-                            final BlockStmt block) {
+    public SynchronizedStmt(Range range, final Expression expr, final BlockStmt block) {
         super(range);
         setExpr(expr);
         setBody(block);

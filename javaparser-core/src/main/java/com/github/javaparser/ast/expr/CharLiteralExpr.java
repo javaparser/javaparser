@@ -32,10 +32,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class CharLiteralExpr extends StringLiteralExpr {
 
     public CharLiteralExpr() {
+        this(Range.UNKNOWN, "?");
     }
 
     public CharLiteralExpr(String value) {
-        super(value);
+        this(Range.UNKNOWN, value);
     }
 
     public CharLiteralExpr(Range range, String value) {

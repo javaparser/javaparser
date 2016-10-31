@@ -1722,7 +1722,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
   ( block = Block() | ";" )
   { 
         Pair<Type, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, parameters, arrayBracketPairs, throws_, block);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, false, parameters, arrayBracketPairs, throws_, block);
   }
 }
 

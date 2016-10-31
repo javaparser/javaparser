@@ -38,7 +38,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotations<T> {
 
-    private NodeList<AnnotationExpr> annotations = new NodeList<>();
+    private NodeList<AnnotationExpr> annotations;
 
     public BodyDeclaration() {
         this(Range.UNKNOWN, new NodeList<>());

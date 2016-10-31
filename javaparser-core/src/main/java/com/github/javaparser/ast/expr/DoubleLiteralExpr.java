@@ -31,10 +31,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class DoubleLiteralExpr extends StringLiteralExpr {
 
 	public DoubleLiteralExpr() {
+        this(Range.UNKNOWN, "0");
 	}
 
 	public DoubleLiteralExpr(final String value) {
-		super(value);
+		this(Range.UNKNOWN, value);
 	}
 
 	public DoubleLiteralExpr(final Range range, final String value) {

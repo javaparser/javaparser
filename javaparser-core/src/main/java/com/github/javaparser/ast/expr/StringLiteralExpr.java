@@ -53,9 +53,6 @@ public class StringLiteralExpr extends LiteralExpr {
 
 	public StringLiteralExpr(final Range range, final String value) {
 		super(range);
-        if (value.contains("\n") || value.contains("\r")) {
-            throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
-        }
 		setValue(value);
 	}
 
@@ -73,6 +70,9 @@ public class StringLiteralExpr extends LiteralExpr {
 
 	public final StringLiteralExpr setValue(final String value) {
         this.value = assertNotNull(value);
+        if (value.contains("\n") || value.contains("\r")) {
+            throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
+        }
         return this;
 	}
 }

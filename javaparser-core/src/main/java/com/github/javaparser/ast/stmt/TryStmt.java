@@ -47,9 +47,9 @@ public final class TryStmt extends Statement {
 	public TryStmt() {
 		this(Range.UNKNOWN,
 				new NodeList<>(),
-				new BlockStmt(),
+                new BlockStmt(),
 				new NodeList<>(),
-				new BlockStmt());
+				null);
 	}
 
 	public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchs,

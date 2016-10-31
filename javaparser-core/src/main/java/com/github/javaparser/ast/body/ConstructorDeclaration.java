@@ -53,7 +53,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         NodeWithBlockStmt<ConstructorDeclaration>,
         NodeWithTypeParameters<ConstructorDeclaration> {
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private EnumSet<Modifier> modifiers;
 
     private NodeList<TypeParameter> typeParameters;
 

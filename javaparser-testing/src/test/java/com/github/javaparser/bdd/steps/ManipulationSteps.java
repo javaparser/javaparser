@@ -154,7 +154,7 @@ public class ManipulationSteps {
     public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter param = Parameter.create(new ClassOrInterfaceType(typeName), parameterName);
+        Parameter param = new Parameter(new ClassOrInterfaceType(typeName), parameterName);
         param.setVarArgs(true);
         method.addParameter(param);
     }

@@ -59,7 +59,7 @@ public final class ObjectCreationExpr extends Expression implements
     private NodeList<Expression> args;
 
     // TODO This can be null, to indicate there is no body
-    private NodeList<BodyDeclaration<?>> anonymousClassBody = null;
+    private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
     public ObjectCreationExpr() {
         this(Range.UNKNOWN, 

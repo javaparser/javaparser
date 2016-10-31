@@ -15,6 +15,14 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayBracketPair> {
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
+    public ArrayBracketPair() {
+        this(Range.UNKNOWN, new NodeList<AnnotationExpr>());
+    }
+
+    public ArrayBracketPair(NodeList<AnnotationExpr> annotations) {
+        this(Range.UNKNOWN, annotations);
+    }
+
     public ArrayBracketPair(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
         setAnnotations(annotations);

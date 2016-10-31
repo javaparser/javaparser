@@ -53,9 +53,9 @@ public final class VariableDeclarationExpr extends Expression implements
         NodeWithAnnotations<VariableDeclarationExpr>,
         NodeWithVariables<VariableDeclarationExpr> {
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private EnumSet<Modifier> modifiers;
 
-    private NodeList<AnnotationExpr> annotations = new NodeList<>();
+    private NodeList<AnnotationExpr> annotations;
 
     private Type elementType;
 
@@ -139,15 +139,6 @@ public final class VariableDeclarationExpr extends Expression implements
         setElementType(elementType);
         setVariables(variables);
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterType);
-    }
-
-    /**
-     * Creates a {@link VariableDeclarationExpr}.
-     *
-     * @return instance of {@link VariableDeclarationExpr}
-     */
-    public static VariableDeclarationExpr create(Type type, String name) {
-        return new VariableDeclarationExpr(type, name);
     }
 
     @Override
