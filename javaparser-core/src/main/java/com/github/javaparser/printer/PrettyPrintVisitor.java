@@ -415,7 +415,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final UnknownType n, final Void arg) {
-        // Nothing to dump
+        // Nothing to print
     }
 
     @Override

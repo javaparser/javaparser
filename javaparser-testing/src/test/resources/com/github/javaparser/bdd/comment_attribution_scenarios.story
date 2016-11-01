@@ -424,7 +424,7 @@ When the class is parsed by the Java parser
 Then the compilation unit has 1 contained comments
 Then comment 1 in compilation unit commented node is PrimitiveType
 
-Scenario: We dump correctly two consecutive line-comments in a class
+Scenario: We print correctly two consecutive line-comments in a class
  
 Given the class:
 class A {
@@ -433,7 +433,7 @@ class A {
   void aMethod(){}
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 class A {
 
     // foo
@@ -442,7 +442,7 @@ class A {
     }
 }
 
-Scenario: We dump correctly two consecutive line-comments in a method
+Scenario: We print correctly two consecutive line-comments in a method
 
 Given the class:
 class A {
@@ -453,7 +453,7 @@ class A {
   }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 class A {
 
     void aMethod() {
@@ -463,7 +463,7 @@ class A {
     }
 }
 
-Scenario: We dump correctly orphan comments in a for loop
+Scenario: We print correctly orphan comments in a for loop
 Given the class:
 class A {
     public static List calcularResultadoFinal(List avaliacoes) throws SQLException, ClassNotFoundException{
@@ -480,7 +480,7 @@ class A {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 class A {
 
     public static List calcularResultadoFinal(List avaliacoes) throws SQLException, ClassNotFoundException {
