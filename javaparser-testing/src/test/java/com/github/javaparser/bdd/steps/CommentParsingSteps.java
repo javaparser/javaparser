@@ -32,7 +32,7 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.visitor.DumpVisitor;
+import com.github.javaparser.printer.PrettyPrintVisitor;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -187,9 +187,9 @@ public class CommentParsingSteps {
 
     @Then("it is dumped to:$dumpSrc")
     public void isDumpedTo(String dumpSrc) {
-        DumpVisitor dumpVisitor = new DumpVisitor();
-        dumpVisitor.visit(compilationUnit, null);
-        assertThat(dumpVisitor.getSource().trim(), is(dumpSrc.trim()));
+        PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+        prettyPrintVisitor.visit(compilationUnit, null);
+        assertThat(prettyPrintVisitor.getSource().trim(), is(dumpSrc.trim()));
     }
 
     @Then("the compilation unit is not commented")
