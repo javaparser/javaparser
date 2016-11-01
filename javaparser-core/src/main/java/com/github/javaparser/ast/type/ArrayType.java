@@ -11,6 +11,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -19,12 +20,11 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnotations<ArrayType> {
     private Type componentType;
 
-    public ArrayType(Type componentType, NodeList<AnnotationExpr> annotations) {
-        setComponentType(componentType);
-        setAnnotations(annotations);
+    public ArrayType(Type<?> componentType, NodeList<AnnotationExpr> annotations) {
+        this(Range.UNKNOWN, componentType, annotations);
     }
 
-    public ArrayType(Range range, Type componentType, NodeList<AnnotationExpr> annotations) {
+    public ArrayType(Range range, Type<?> componentType, NodeList<AnnotationExpr> annotations) {
         super(range);
         setComponentType(componentType);
         setAnnotations(annotations);
@@ -42,8 +42,8 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         return componentType;
     }
 
-    public ArrayType setComponentType(final Type type) {
-        this.componentType = type;
+    public ArrayType setComponentType(final Type<?> type) {
+        this.componentType = assertNotNull(type);
         setAsParentNodeOf(this.componentType);
         return this;
     }

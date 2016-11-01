@@ -61,7 +61,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithBlockStmt<MethodDeclaration>,
         NodeWithTypeParameters<MethodDeclaration> {
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private EnumSet<Modifier> modifiers;
 
     private NodeList<TypeParameter> typeParameters;
 
@@ -76,7 +76,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     // TODO nullable
     private BlockStmt body;
 
-    private boolean isDefault = false;
+    private boolean isDefault;
 
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
@@ -90,6 +90,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
                 new NameExpr(),
+                false,
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>(),
@@ -104,6 +105,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 elementType,
                 new NodeList<>(),
                 name(name),
+                false,
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>(),
@@ -119,6 +121,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 elementType,
                 new NodeList<>(),
                 name(name),
+                false,
                 parameters,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -131,6 +134,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final String name,
+                             final boolean isDefault,
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
                              final NodeList<ReferenceType<?>> throws_, 
@@ -142,6 +146,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 elementType,
                 arrayBracketPairsAfterElementType,
                 name(name),
+                isDefault,
                 parameters,
                 arrayBracketPairsAfterParameterList,
                 throws_,
@@ -155,6 +160,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final NameExpr nameExpr,
+                             final boolean isDefault,
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
                              final NodeList<ReferenceType<?>> throws_, 
@@ -169,6 +175,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
         setThrows(throws_);
         setBody(body);
+        setDefault(isDefault);
     }
 
     @Override

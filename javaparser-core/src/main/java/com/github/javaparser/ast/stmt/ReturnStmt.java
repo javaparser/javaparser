@@ -38,7 +38,7 @@ public final class ReturnStmt extends Statement {
 	private Expression expr;
 
 	public ReturnStmt() {
-        this(Range.UNKNOWN, new BooleanLiteralExpr());
+        this(Range.UNKNOWN, null);
 	}
 
 	public ReturnStmt(final Expression expr) {

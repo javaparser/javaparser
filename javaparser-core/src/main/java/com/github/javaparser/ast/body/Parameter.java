@@ -54,9 +54,9 @@ public final class Parameter extends Node implements
 
     private boolean isVarArgs;
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private EnumSet<Modifier> modifiers;
 
-    private NodeList<AnnotationExpr> annotations = new NodeList<>();
+    private NodeList<AnnotationExpr> annotations;
 
     private VariableDeclaratorId id;
 
@@ -89,10 +89,9 @@ public final class Parameter extends Node implements
      *            type of the parameter
      * @param name
      *            name of the parameter
-     * @return instance of {@link Parameter}
      */
-    public static Parameter create(Type elementType, String name) {
-        return new Parameter(Range.UNKNOWN,
+    public Parameter(Type<?> elementType, String name) {
+        this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 elementType,
@@ -101,7 +100,7 @@ public final class Parameter extends Node implements
                 new VariableDeclaratorId(name));
     }
 
-    public Parameter(EnumSet<Modifier> modifiers, Type elementType, VariableDeclaratorId id) {
+    public Parameter(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclaratorId id) {
         this(Range.UNKNOWN,
                 modifiers,
                 new NodeList<>(),
@@ -114,7 +113,7 @@ public final class Parameter extends Node implements
     public Parameter(final Range range, 
                      EnumSet<Modifier> modifiers,
                      NodeList<AnnotationExpr> annotations,
-                     Type elementType,
+                     Type<?> elementType,
                      NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                      boolean isVarArgs, 
                      VariableDeclaratorId id) {

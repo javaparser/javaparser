@@ -25,6 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -33,11 +35,11 @@ public final class QualifiedNameExpr extends NameExpr {
 	private NameExpr qualifier;
 
 	public QualifiedNameExpr() {
+        this(Range.UNKNOWN, new NameExpr(), "empty");
 	}
 
 	public QualifiedNameExpr(final NameExpr scope, final String name) {
-		super(name);
-		setQualifier(scope);
+        this(Range.UNKNOWN, scope, name);
 	}
 
 	public QualifiedNameExpr(final Range range, final NameExpr scope, final String name) {
@@ -58,7 +60,7 @@ public final class QualifiedNameExpr extends NameExpr {
 	}
 
 	public QualifiedNameExpr setQualifier(final NameExpr qualifier) {
-		this.qualifier = qualifier;
+		this.qualifier = assertNotNull(qualifier);
 		setAsParentNodeOf(this.qualifier);
 		return this;
 	}

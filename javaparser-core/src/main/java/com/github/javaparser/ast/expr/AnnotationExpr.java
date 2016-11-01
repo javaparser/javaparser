@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -30,20 +30,28 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public abstract class AnnotationExpr extends Expression {
 
-	protected NameExpr name;
+    protected NameExpr name;
 
-	public AnnotationExpr(Range range, NameExpr name) {
-		super(range);
+    public AnnotationExpr() {
+        this(Range.UNKNOWN, new NameExpr());
+    }
+
+    public AnnotationExpr(NameExpr name) {
+        this(Range.UNKNOWN, name);
+    }
+    
+    public AnnotationExpr(Range range, NameExpr name) {
+        super(range);
         setName(name);
-	}
+    }
 
-	public NameExpr getName() {
-		return name;
-	}
+    public NameExpr getName() {
+        return name;
+    }
 
-	public AnnotationExpr setName(NameExpr name) {
-		this.name = assertNotNull(name);
-		setAsParentNodeOf(name);
-		return this;
-	}
+    public AnnotationExpr setName(NameExpr name) {
+        this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
+        return this;
+    }
 }

@@ -9,6 +9,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * This isn't described in the JLS, but accepted by most or all tools that parse Java.
  */
 public class EmptyImportDeclaration extends ImportDeclaration {
+    
+    public EmptyImportDeclaration() {
+        this(Range.UNKNOWN);
+    }
+
+    public EmptyImportDeclaration(Range range) {
+        super(range);
+    }
+
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
@@ -17,13 +26,5 @@ public class EmptyImportDeclaration extends ImportDeclaration {
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
-    }
-
-    public EmptyImportDeclaration() {
-        this(Range.UNKNOWN);
-    }
-
-    public EmptyImportDeclaration(Range range) {
-        super(range);
     }
 }

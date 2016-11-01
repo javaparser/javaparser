@@ -49,7 +49,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         NodeWithType<AnnotationMemberDeclaration, Type<?>>, 
         NodeWithModifiers<AnnotationMemberDeclaration> {
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private EnumSet<Modifier> modifiers;
 
     private Type<?> type;
 
