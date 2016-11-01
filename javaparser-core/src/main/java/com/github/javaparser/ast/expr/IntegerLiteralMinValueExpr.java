@@ -31,7 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class IntegerLiteralMinValueExpr extends IntegerLiteralExpr {
 
 	public IntegerLiteralMinValueExpr() {
-		super(MIN_VALUE);
+		this(Range.UNKNOWN);
 	}
 
 	public IntegerLiteralMinValueExpr(final Range range) {

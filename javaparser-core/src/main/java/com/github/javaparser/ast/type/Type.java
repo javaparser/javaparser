@@ -33,7 +33,7 @@ import static com.github.javaparser.utils.Utils.*;
  */
 public abstract class Type<T extends Type> extends Node {
 
-    private NodeList<AnnotationExpr> annotations = new NodeList<>();
+    private NodeList<AnnotationExpr> annotations;
 
     public Type(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);

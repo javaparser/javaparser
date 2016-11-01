@@ -261,6 +261,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
                 type_,
                 arrayBracketPairsAfterElementType_,
                 nameExpr_, 
+                _n.isDefault(),
                 parameters_, 
                 arrayBracketPairsAfterParameterList_, 
                 throws_, 

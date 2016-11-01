@@ -56,9 +56,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         NodeWithModifiers<FieldDeclaration>,
         NodeWithVariables<FieldDeclaration> {
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private EnumSet<Modifier> modifiers;
 
-    private Type elementType;
+    private Type<?> elementType;
 
     private NodeList<VariableDeclarator> variables;
 
@@ -117,31 +117,11 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      *            modifiers
      * @param type
      *            type
-     * @param variable
-     *            variable declarator
-     * @return instance of {@link FieldDeclaration}
-     */
-    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type<?> type,
-                                                          VariableDeclarator variable) {
-        return new FieldDeclaration(modifiers, type, new NodeList<VariableDeclarator>().add(variable));
-    }
-
-    /**
-     * Creates a {@link FieldDeclaration}.
-     *
-     * @param modifiers
-     *            modifiers
-     * @param type
-     *            type
      * @param name
      *            field name
-     * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type<?> type, String name) {
-        assertNotNull(type);
-        VariableDeclaratorId id = new VariableDeclaratorId(assertNotNull(name));
-        VariableDeclarator variable = new VariableDeclarator(assertNotNull(id));
-        return create(modifiers, type, variable);
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name) {
+        this(assertNotNull(modifiers), assertNotNull(type), new VariableDeclarator(new VariableDeclaratorId(assertNotNull(name))));
     }
 
     @Override
@@ -259,12 +239,12 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
 
     @Override
-    public Type getElementType() {
+    public Type<?> getElementType() {
         return elementType;
     }
 
     @Override
-    public FieldDeclaration setElementType(final Type elementType) {
+    public FieldDeclaration setElementType(final Type<?> elementType) {
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
