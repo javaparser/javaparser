@@ -8,13 +8,23 @@ import java.util.List;
  * An object that has a parent node.
  */
 public interface HasParentNode<T> {
+
     // TODO nullable
+    /**
+     * Return the parent node or null, if no parent is set.
+     */
     Node getParentNode();
 
+    /**
+     * Set the parent node.
+     *
+     * @param parentNode the parent node or null, to set no parent
+     * @return return <i>this</i>
+     */
     T setParentNode(Node parentNode);
 
     /**
-     * "this" for everything except NodeLists. NodeLists use their parent as their childrens parent.
+     * <i>this</i> for everything except NodeLists. NodeLists use their parent as their children parent.
      */
     Node getParentNodeForChildren();
 
