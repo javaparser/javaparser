@@ -24,6 +24,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -45,5 +46,33 @@ public class ReflectionMethodDeclarationTest {
         assertEquals("equals(java.lang.Object)", equals.getSignature());
         assertEquals("containsAll(java.util.Collection<? extends java.lang.Object>)", containsAll.getSignature());
         assertEquals("subList(int, int)", subList.getSignature());
+    }
+
+    @Test
+    public void testGetGenericReturnType() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+
+        InterfaceDeclaration map = new ReflectionInterfaceDeclaration(Map.class, typeResolver);
+
+        MethodDeclaration put = map.getAllMethods().stream().filter(m -> m.getName().equals("put")).findFirst().get().getDeclaration();
+        assertEquals(true, put.getReturnType().isTypeVariable());
+        assertEquals(true, put.getReturnType().asTypeParameter().declaredOnType());
+        assertEquals("java.util.Map.V", put.getReturnType().asTypeParameter().getQualifiedName());
+    }
+
+    @Test
+    public void testGetGenericParameters() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+
+        InterfaceDeclaration map = new ReflectionInterfaceDeclaration(Map.class, typeResolver);
+
+        MethodDeclaration put = map.getAllMethods().stream().filter(m -> m.getName().equals("put")).findFirst().get().getDeclaration();
+        assertEquals(true, put.getParam(0).getType().isTypeVariable());
+        assertEquals(true, put.getParam(0).getType().asTypeParameter().declaredOnType());
+        assertEquals("java.util.Map.K", put.getParam(0).getType().asTypeParameter().getQualifiedName());
+
+        assertEquals(true, put.getParam(1).getType().isTypeVariable());
+        assertEquals(true, put.getParam(1).getType().asTypeParameter().declaredOnType());
+        assertEquals("java.util.Map.V", put.getParam(1).getType().asTypeParameter().getQualifiedName());
     }
 }

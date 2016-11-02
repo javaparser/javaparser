@@ -97,6 +97,11 @@ public class TypeVariable implements Type {
     }
 
     @Override
+    public TypeVariable asTypeVariable() {
+        return this;
+    }
+
+    @Override
     public boolean isTypeVariable() {
         return true;
     }

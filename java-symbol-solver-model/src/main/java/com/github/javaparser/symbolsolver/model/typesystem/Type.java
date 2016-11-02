@@ -109,6 +109,10 @@ public interface Type {
         throw new UnsupportedOperationException(String.format("%s is not a Type parameter", this));
     }
 
+    default TypeVariable asTypeVariable() {
+        throw new UnsupportedOperationException(String.format("%s is not a Type variable", this));
+    }
+
     default PrimitiveType asPrimitive() {
         throw new UnsupportedOperationException(String.format("%s is not a Primitive type", this));
     }

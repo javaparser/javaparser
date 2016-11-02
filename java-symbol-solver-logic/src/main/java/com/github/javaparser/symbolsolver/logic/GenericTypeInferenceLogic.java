@@ -22,12 +22,16 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javaslang.Tuple2;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * These collection of methods implement the Invocation Applicability Inference logic described in
+ * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-18.html#jls-18.5.1">JLS-18.5.1</a>.
+ *
  * @author Federico Tomassetti
  */
 public class GenericTypeInferenceLogic {
@@ -37,6 +41,10 @@ public class GenericTypeInferenceLogic {
     }
 
     public static Map<TypeParameterDeclaration, Type> inferGenericTypes(List<Tuple2<Type, Type>> formalActualTypePairs) {
+        if (formalActualTypePairs.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
         Map<TypeParameterDeclaration, Type> map = new HashMap<>();
 
         for (Tuple2<Type, Type> formalActualTypePair : formalActualTypePairs) {
@@ -48,6 +56,14 @@ public class GenericTypeInferenceLogic {
         }
 
         return map;
+    }
+
+    private Type placeInferenceVariables(Type type) {
+        if (type.isWildcard()) {
+            return InferenceVariableType.fromWildcard(type.asWildcard());
+        } else {
+            return type;
+        }
     }
 
     private static void consider(Map<TypeParameterDeclaration, Type> map, Type formalType, Type actualType) {
