@@ -182,8 +182,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
-        ClassOrInterfaceDeclaration parentClass = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
-        EnumDeclaration parentEnum = getParentNodeOfType(EnumDeclaration.class);
+        ClassOrInterfaceDeclaration parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
+        EnumDeclaration parentEnum = getAncestorOfType(EnumDeclaration.class);
         if ((parentClass == null && parentEnum == null) || (parentClass != null && parentClass.isInterface()))
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
@@ -214,8 +214,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public MethodDeclaration createSetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
-        ClassOrInterfaceDeclaration parentClass = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
-        EnumDeclaration parentEnum = getParentNodeOfType(EnumDeclaration.class);
+        ClassOrInterfaceDeclaration parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
+        EnumDeclaration parentEnum = getAncestorOfType(EnumDeclaration.class);
         if ((parentClass == null && parentEnum == null) || (parentClass != null && parentClass.isInterface()))
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
