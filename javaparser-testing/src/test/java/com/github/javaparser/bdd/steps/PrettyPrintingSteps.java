@@ -42,7 +42,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitorAdapter;
 
-public class DumpingSteps {
+public class PrettyPrintingSteps {
 
     private Node resultNode;
     private String sourceUnderTest;
@@ -109,9 +109,9 @@ public class DumpingSteps {
         }).visit((CompilationUnit) resultNode, null);
     }
 
-    @Then("it is dumped to:$dumpSrc")
-    public void isDumpedTo(String dumpSrc) {
-        assertEquals(dumpSrc.trim(), resultNode.toString().trim());
+    @Then("it is printed as:$src")
+    public void isPrintedAs(String src) {
+        assertEquals(src.trim(), resultNode.toString().trim());
     }
 
 }

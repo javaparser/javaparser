@@ -220,9 +220,9 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                 sb.append(", ");
             }
             if (includingParameterName) {
-                sb.append(param.toStringWithoutComments());
+                sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-                sb.append(param.getElementType().toStringWithoutComments());
+                sb.append(param.getElementType().toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         sb.append(")");
@@ -235,7 +235,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                 } else {
                     sb.append(", ");
                 }
-                sb.append(thr.toStringWithoutComments());
+                sb.append(thr.toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         return sb.toString();

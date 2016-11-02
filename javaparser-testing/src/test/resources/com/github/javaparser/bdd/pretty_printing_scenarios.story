@@ -5,7 +5,7 @@ public class A {
     Object foo = new Object();
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class A {
 
     Object foo = new Object();
@@ -20,7 +20,7 @@ public class B {
     Consumer<Integer> consumer = i->{ i+=1; System.out.println(i);};
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class B {
 
     Runnable runnable = () -> System.out.println("running");
@@ -32,7 +32,7 @@ public class B {
 }
 
 
-Scenario: Dumping orphan comments in empty method
+Scenario: Printing orphan comments in empty method
 Given the class:
 class A {
     public void helloWorld(String greeting, String name) {
@@ -44,7 +44,7 @@ class A {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 class A {
 
     public void helloWorld(String greeting, String name) {
@@ -58,7 +58,7 @@ class A {
 
 
 
-Scenario: Dumping orphan comments in empty method (issue 192)
+Scenario: Printing orphan comments in empty method (issue 192)
 Given the class:
 public class StepImplementation {
     @Step("A step")
@@ -67,7 +67,7 @@ public class StepImplementation {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class StepImplementation {
 
     @Step("A step")
@@ -77,7 +77,7 @@ public class StepImplementation {
 }
 
 
-Scenario: Dumping orphan comments in for loop (issue 192)
+Scenario: Printing orphan comments in for loop (issue 192)
 Given the class:
 public class StepImplementation {
     public void contextStep() {
@@ -87,7 +87,7 @@ public class StepImplementation {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class StepImplementation {
 
     public void contextStep() {
@@ -98,7 +98,7 @@ public class StepImplementation {
 }
 
 
-Scenario: Dumping orphan and attributed comments in for loop (issue 192)
+Scenario: Printing orphan and attributed comments in for loop (issue 192)
 Given the class:
 public class StepImplementation {
 public void contextStep() {
@@ -110,7 +110,7 @@ public void contextStep() {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class StepImplementation {
 
     public void contextStep() {
@@ -123,11 +123,11 @@ public class StepImplementation {
 }
 
 
-Scenario: An empty Enum is dumped correctly
+Scenario: An empty Enum is printed correctly
 Given the compilation unit:
 package test; enum XYZ {}
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 package test;
 
 enum XYZ {
@@ -138,7 +138,7 @@ Scenario: An enum without fields has no () on its members
 Given the compilation unit:
 package test; enum XYZ {A,B,C}
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 package test;
 
 enum XYZ {
@@ -154,7 +154,7 @@ class A {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 class A {
 
     public void helloWorld(String greeting, String name) {
@@ -172,7 +172,7 @@ class A {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 class A {
 
     public void a() {
@@ -188,7 +188,7 @@ package a.b.c;
 
 ;
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 package a.b.c;
 
 ;
@@ -200,7 +200,7 @@ Given the block:
     b=3;
 }
 When the block is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 {
     a = 2;
     b = 3;
@@ -211,7 +211,7 @@ Given the statement:
 while (true) {
 }
 When the statement is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 while (true) {
 }
 
@@ -219,56 +219,56 @@ Scenario: we can parse static on demand imports
 Given the import:
 import static a.b.c.Abc.*;
 When the import is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 import static a.b.c.Abc.*;
 
 Scenario: we can parse static type imports
 Given the import:
 import static a.b.c.Abc;
 When the import is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 import static a.b.c.Abc;
 
 Scenario: we can parse on demand imports
 Given the import:
 import a.b.c.*;
 When the import is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 import a.b.c.*;
 
 Scenario: we can parse type imports
 Given the import:
 import a.b.c.Abc;
 When the import is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 import a.b.c.Abc;
 
 Scenario: we can parse empty imports
 Given the import:
 ;
 When the import is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 ;
 
 Scenario: we can parse annotations
 Given the annotation:
 @Abc
 When the annotation is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 @Abc
 
 Scenario: we can parse body declarations
 Given the body:
 String author();
 When the annotation body declaration is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 String author();
 
 Scenario: we can parse class body declarations
 Given the body:
 public int xyz() {}
 When the class body declaration is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public int xyz() {
 }
 
@@ -276,7 +276,7 @@ Scenario: we can parse interface body declarations
 Given the body:
 int xyz();
 When the interface body declaration is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 int xyz();
 
 Scenario: It doesn't throw NPE when using a modifierVisitorAdapter
@@ -289,7 +289,7 @@ public class Example {
 }
 When the class is parsed by the Java parser
 When the class is visited by an empty ModifierVisitorAdapter
-Then it is dumped to:
+Then it is printed as:
 public class Example {
 
     private String mString;
@@ -307,7 +307,7 @@ public class Foo {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class Foo {
 
     /** This line gets duplicated */
@@ -331,7 +331,7 @@ public class TestLambda {
     }
 }
 When the class body declaration is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class TestLambda {
 
     void okMethod() {
@@ -358,7 +358,7 @@ public class Foo {
     }
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class Foo {
 
     public void foo() {
@@ -378,7 +378,7 @@ public class Foo {
     public void m1(boolean boolArray[]) {}
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class Foo {
 
     public void m1(boolean[] boolArray) {
@@ -395,7 +395,7 @@ class Foo {
     void m1(@Boo boolean @Index1 [] @ Index2 [] boolArray) {}
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 class Foo {
 
     void m1(@Boo boolean @Index1 [] @Index2 [] boolArray) {
@@ -407,7 +407,7 @@ Given the class:
 @C @interface D {
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 @C
 @interface D {
 }
@@ -417,7 +417,7 @@ Given the class:
 @C interface Abc {
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 @C
 interface Abc {
 }
@@ -427,7 +427,7 @@ Given the class:
 @C enum Abc {
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 @C
 enum Abc {
 
@@ -452,7 +452,7 @@ public class Abc<@C A, @C X extends @C String & @C Serializable> {
 */	}
 }
 When the compilation unit is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 @C
 public class Abc<@C A, @C X extends @C String & @C Serializable> {
 
@@ -477,7 +477,7 @@ public class Abc<@C A, @C X extends @C String & @C Serializable> {
 Scenario: we can parse a package-info file.
 Given the class in the file "package-info.java"
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 /**
  * This package contains class for doing some stuff.
  */
@@ -494,7 +494,7 @@ public class Abc {
 	}
 }
 When the compilation unit is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 public class Abc {
 
     public void a() {
@@ -509,7 +509,7 @@ Given the class:
 class A extends @Ann1 B.@Ann2 C {
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 class A extends @Ann1 B.@Ann2 C {
 }
 
@@ -518,6 +518,6 @@ Given the class:
 interface A extends @X B, @Y C, @Z D {
 }
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 interface A extends @X B, @Y C, @Z D {
 }

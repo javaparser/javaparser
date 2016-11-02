@@ -21,22 +21,22 @@
  
 package com.github.javaparser.bdd;
 
-import com.github.javaparser.bdd.steps.DumpingSteps;
+import com.github.javaparser.bdd.steps.PrettyPrintingSteps;
 import de.codecentric.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.junit.runner.RunWith;
 
 @RunWith(JUnitReportingRunner.class)
-public class DumpingTest extends BasicJBehaveTest {
+public class PrettyPrintingTest extends BasicJBehaveTest {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new DumpingSteps());
+        return new InstanceStepsFactory(configuration(), new PrettyPrintingSteps());
     }
 
-    public DumpingTest() {
-        super("**/bdd/dumping*.story");
+    public PrettyPrintingTest() {
+        super("**/bdd/pretty_printing*.story");
     }
 }
 
