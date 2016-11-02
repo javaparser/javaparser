@@ -18,7 +18,10 @@ public interface HasParentNode<T> {
      */
     Node getParentNodeForChildren();
 
-    default <N> N getParentNodeOfType(Class<N> classType) {
+    /**
+     * Get the ancestor of the node having the given type, or null if no ancestor of the given type is found.
+     */
+    default <N> N getAncestorOfType(Class<N> classType) {
         Node parent = getParentNode();
         while (parent != null) {
             if (classType.isAssignableFrom(parent.getClass())) {

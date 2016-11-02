@@ -125,7 +125,7 @@ public final class VariableDeclarator extends Node implements
 
     @Override
     public Type getType() {
-        NodeWithElementType<?> elementType = getParentNodeOfType(NodeWithElementType.class);
+        NodeWithElementType<?> elementType = getAncestorOfType(NodeWithElementType.class);
 
         return wrapInArrayTypes(elementType.getElementType(),
                 elementType.getArrayBracketPairsAfterElementType(),
@@ -135,7 +135,7 @@ public final class VariableDeclarator extends Node implements
     @Override
     public VariableDeclarator setType(Type type) {
         Pair<Type, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
-        NodeWithElementType<?> nodeWithElementType = getParentNodeOfType(NodeWithElementType.class);
+        NodeWithElementType<?> nodeWithElementType = getAncestorOfType(NodeWithElementType.class);
         if (nodeWithElementType == null) {
             throw new IllegalStateException("Cannot set type without a parent");
         }
