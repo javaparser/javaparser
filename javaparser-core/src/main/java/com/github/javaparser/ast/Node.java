@@ -21,25 +21,22 @@
 
 package com.github.javaparser.ast;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.IdentityHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.EqualsVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
-import static java.util.Collections.*;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -56,6 +53,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * This can be used to sort nodes on position.
      */
     public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> a.getBegin().compareTo(b.getBegin());
+
+    private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
+    protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
 
     private Range range;
 
@@ -170,15 +170,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     @Override
     public final String toString() {
-        final DumpVisitor visitor = new DumpVisitor();
-        accept(visitor, null);
-        return visitor.getSource();
+        return toStringPrinter.print(this);
     }
 
-    public final String toStringWithoutComments() {
-        final DumpVisitor visitor = new DumpVisitor(false);
-        accept(visitor, null);
-        return visitor.getSource();
+    public final String toString(PrettyPrinterConfiguration prettyPrinterConfiguration) {
+        return new PrettyPrinter(prettyPrinterConfiguration).print(this);
     }
 
     @Override

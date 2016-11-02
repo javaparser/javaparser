@@ -44,6 +44,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.Pair;
 
 /**
@@ -355,7 +356,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
             }
         }
         // TODO verify it does not print comments connected to the type
-        sb.append(getElementType().toStringWithoutComments());
+        sb.append(getElementType().toString(prettyPrinterNoCommentsConfiguration));
         sb.append(" ");
         sb.append(getName());
         sb.append("(");
@@ -367,9 +368,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 sb.append(", ");
             }
             if (includingParameterName) {
-                sb.append(param.toStringWithoutComments());
+                sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-                sb.append(param.getElementType().toStringWithoutComments());
+                sb.append(param.getElementType().toString(prettyPrinterNoCommentsConfiguration));
                 if (param.isVarArgs()) {
                     sb.append("...");
                 }
@@ -385,7 +386,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 } else {
                     sb.append(", ");
                 }
-                sb.append(thr.toStringWithoutComments());
+                sb.append(thr.toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         return sb.toString();
