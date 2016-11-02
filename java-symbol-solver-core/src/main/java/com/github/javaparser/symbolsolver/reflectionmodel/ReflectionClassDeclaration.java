@@ -353,9 +353,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 List<Type> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                         .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                         .collect(Collectors.toList());
-                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters, typeSolver));
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class) ((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters, typeSolver));
             } else {
-                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class)superInterface, typeSolver), typeSolver));
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class) superInterface, typeSolver), typeSolver));
             }
         }
         return interfaces;

@@ -27,9 +27,9 @@ import com.github.javaparser.symbolsolver.model.declarations.MethodAmbiguityExce
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -327,7 +327,7 @@ public class MethodResolutionLogic {
     }
 
     /**
-     * @param methods we expect the methods to be ordered such that inherited methods are later in the list
+     * @param methods        we expect the methods to be ordered such that inherited methods are later in the list
      * @param name
      * @param argumentsTypes
      * @param typeSolver

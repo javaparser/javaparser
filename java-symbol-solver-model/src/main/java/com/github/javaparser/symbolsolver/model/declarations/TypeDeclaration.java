@@ -47,6 +47,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
 
     /**
      * Get the TypeDeclaration enclosing this declaration.
+     *
      * @return
      */
     default Optional<TypeDeclaration> containerType() {

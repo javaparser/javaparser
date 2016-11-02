@@ -32,10 +32,10 @@ import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
@@ -307,12 +307,12 @@ public class JavaParserFacade {
                     //        the MethodDeclaration of filter is:
                     //        Stream<T> filter(Predicate<? super T> predicate)
                     //        but T in this case is equal to String
-                    if (callExpr.getScope().isPresent()){
+                    if (callExpr.getScope().isPresent()) {
 
                         // If it is a static call we should not try to get the type of the scope
                         boolean staticCall = false;
                         if (callExpr.getScope().get() instanceof NameExpr) {
-                            NameExpr nameExpr = (NameExpr)callExpr.getScope().get();
+                            NameExpr nameExpr = (NameExpr) callExpr.getScope().get();
                             try {
                                 JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName(), typeSolver);
                                 staticCall = true;

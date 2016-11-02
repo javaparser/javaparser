@@ -374,11 +374,13 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     //
 
     protected abstract ReferenceType create(TypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver);
+
     protected ReferenceType create(TypeDeclaration typeDeclaration, TypeParametersMap typeParametersMap, TypeSolver typeSolver) {
         return create(typeDeclaration, typeDeclaration.getTypeParameters().stream()
                 .map(tp -> typeParametersMap.getValue(tp))
                 .collect(Collectors.toList()), typeSolver);
     }
+
     protected abstract ReferenceType create(TypeDeclaration typeDeclaration, TypeSolver typeSolver);
 
     protected boolean isCorrespondingBoxingType(String typeName) {

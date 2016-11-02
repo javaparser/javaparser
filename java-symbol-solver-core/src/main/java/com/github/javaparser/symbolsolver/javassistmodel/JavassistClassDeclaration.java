@@ -286,7 +286,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         } catch (BadBytecode e) {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 

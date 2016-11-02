@@ -25,10 +25,10 @@ import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
@@ -103,23 +103,23 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
         if (source.isReferenceType() && target.isReferenceType()) {
             if (source.asReferenceType().getQualifiedName().equals(target.asReferenceType().getQualifiedName())) {
-                for (int i=0;i<source.asReferenceType().typeParametersValues().size();i++){
+                for (int i = 0; i < source.asReferenceType().typeParametersValues().size(); i++) {
                     inferTypes(source.asReferenceType().typeParametersValues().get(i), target.asReferenceType().typeParametersValues().get(i), mappings);
                 }
             }
             return;
         }
-        if (source.isReferenceType() && target.isWildcard()){
+        if (source.isReferenceType() && target.isWildcard()) {
             if (target.asWildcard().isBounded()) {
                 inferTypes(source, target.asWildcard().getBoundedType(), mappings);
                 return;
             }
             return;
         }
-        if (source.isWildcard() && target.isWildcard()){
+        if (source.isWildcard() && target.isWildcard()) {
             return;
         }
-        if (source.isReferenceType() && target.isTypeVariable()){
+        if (source.isReferenceType() && target.isTypeVariable()) {
             mappings.put(target.asTypeParameter(), source);
             return;
         }

@@ -25,9 +25,9 @@ import java.util.List;
  * Declaration of a type parameter.
  * For example:
  * <p>
- *     class A&lt;E extends String&gt;{}
+ * class A&lt;E extends String&gt;{}
  * </p>
- *
+ * <p>
  * In this case <b>E</b> would be a type parameter.
  *
  * @author Federico Tomassetti
@@ -132,7 +132,7 @@ public interface TypeParameterDeclaration {
         /**
          * Create an extends bound with the given type:
          * <p>
-         *     extends "given type"
+         * extends "given type"
          * </p>
          */
         public static Bound extendsBound(Type type) {
@@ -142,7 +142,7 @@ public interface TypeParameterDeclaration {
         /**
          * Create a super bound with the given type:
          * <p>
-         *     super "given type"
+         * super "given type"
          * </p>
          */
         public static Bound superBound(Type type) {

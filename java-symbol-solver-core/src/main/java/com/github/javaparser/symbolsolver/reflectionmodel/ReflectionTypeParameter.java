@@ -97,7 +97,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         if (this.declaredOnType()) {
             return qNameOfDeclaringClass;
         } else {
-            String qNameContainer = new ReflectionMethodDeclaration((Method)typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
+            String qNameContainer = new ReflectionMethodDeclaration((Method) typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
             return qNameContainer;
         }
     }
@@ -107,7 +107,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         if (this.declaredOnType()) {
             return idOfDeclaringClass;
         } else {
-            String qNameContainer = new ReflectionMethodDeclaration((Method)typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
+            String qNameContainer = new ReflectionMethodDeclaration((Method) typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
             return qNameContainer;
         }
     }

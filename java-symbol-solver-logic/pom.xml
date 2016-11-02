@@ -1,72 +1,73 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
-    <groupId>com.github.javaparser</groupId>
-    <artifactId>java-symbol-solver-parent</artifactId>
-    <version>0.4-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>com.github.javaparser</groupId>
+        <artifactId>java-symbol-solver-parent</artifactId>
+        <version>0.4-SNAPSHOT</version>
+    </parent>
 
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>java-symbol-solver-logic</artifactId>
-  <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>java-symbol-solver-logic</artifactId>
+    <packaging>jar</packaging>
 
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-      <comments>A business-friendly OSS license</comments>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
 
     <developers>
-      <developer>
-        <name>Federico Tomassetti</name>
-        <email>federico@tomassetti.me</email>
-        <url>https://github.com/ftomassetti</url>
-        <id>ftomassetti</id>
-      </developer>
+        <developer>
+            <name>Federico Tomassetti</name>
+            <email>federico@tomassetti.me</email>
+            <url>https://github.com/ftomassetti</url>
+            <id>ftomassetti</id>
+        </developer>
     </developers>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.javaparser</groupId>
-      <artifactId>javaparser-core</artifactId>
-      <version>3.0.0-alpha.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.javassist</groupId>
-      <artifactId>javassist</artifactId>
-      <version>3.19.0-GA</version>
-    </dependency>
-    <dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>3.3.1</version>
-      <scope>test</scope>
-     </dependency>
-      <dependency>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-          <version>18.0</version>
-      </dependency>
-      <dependency>
-          <groupId>com.github.javaparser</groupId>
-          <artifactId>java-symbol-solver-model</artifactId>
-          <version>0.4-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-          <groupId>com.javaslang</groupId>
-          <artifactId>javaslang</artifactId>
-          <version>2.0.0-beta</version>
-      </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core</artifactId>
+            <version>3.0.0-alpha.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.19.0-GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>java-symbol-solver-model</artifactId>
+            <version>0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.javaslang</groupId>
+            <artifactId>javaslang</artifactId>
+            <version>2.0.0-beta</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>

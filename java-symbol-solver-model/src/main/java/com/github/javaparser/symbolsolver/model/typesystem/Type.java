@@ -24,9 +24,9 @@ import java.util.Map;
 /**
  * A usage of a type. It could be a primitive type or a reference type (enum, class, interface). In the later case it
  * could take type typeParametersValues (other TypeUsages). It could also be a TypeVariable, like in:
- * <p/>
+ * <p>
  * class A&lt;Bgt; { }
- * <p/>
+ * <p>
  * where B is a TypeVariable. It could also be Wildcard Type, possibly with constraints.
  *
  * @author Federico Tomassetti

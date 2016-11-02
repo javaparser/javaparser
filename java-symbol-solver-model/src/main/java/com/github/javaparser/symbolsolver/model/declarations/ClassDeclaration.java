@@ -38,7 +38,7 @@ public interface ClassDeclaration extends TypeDeclaration, TypeParametrizable, H
     /**
      * This is a ReferenceTypeUsage because it could contain type typeParametersValues.
      * For example: class A extends B<Integer, String>.
-     * <p/>
+     * <p>
      * Note that only the Object class should not have a superclass and therefore
      * return null.
      */

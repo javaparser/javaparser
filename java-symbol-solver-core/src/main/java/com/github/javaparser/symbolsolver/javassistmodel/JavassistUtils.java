@@ -21,8 +21,8 @@ import com.github.javaparser.symbolsolver.javassistmodel.contexts.JavassistMetho
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
@@ -115,9 +115,9 @@ public class JavassistUtils {
         }
     }
 
-    static Type signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, TypeParametrizable typeParametrizable){
+    static Type signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
         if (signatureType instanceof SignatureAttribute.ClassType) {
-            SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType)signatureType;
+            SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType) signatureType;
             List<Type> typeParameters = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
             TypeDeclaration typeDeclaration = typeSolver.solveType(classType.getName());
             return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);
@@ -126,7 +126,7 @@ public class JavassistUtils {
         }
     }
 
-    private static Type objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable){
+    private static Type objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
         String typeName = typeArgument.jvmTypeName();
         Optional<Type> type = getGenericParameterByName(typeName, typeParametrizable);
         if (type.isPresent()) {
@@ -141,7 +141,7 @@ public class JavassistUtils {
         return tp.map(it -> new TypeVariable(it));
     }
 
-    private static Type typeArgumentToType(SignatureAttribute.TypeArgument typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable){
+    private static Type typeArgumentToType(SignatureAttribute.TypeArgument typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
         if (typeArgument.isWildcard()) {
             if (typeArgument.getType() == null) {
                 return Wildcard.UNBOUNDED;
