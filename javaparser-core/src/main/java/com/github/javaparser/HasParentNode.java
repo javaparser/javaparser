@@ -1,7 +1,6 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 
 import java.util.List;
 
@@ -19,12 +18,12 @@ public interface HasParentNode<T> {
      */
     Node getParentNodeForChildren();
 
-    @SuppressWarnings("unchecked")
     default <N> N getParentNodeOfType(Class<N> classType) {
         Node parent = getParentNode();
         while (parent != null) {
-            if (classType.isAssignableFrom(parent.getClass()))
-                return (N) parent;
+            if (classType.isAssignableFrom(parent.getClass())) {
+                return classType.cast(parent);
+            }
             parent = parent.getParentNode();
         }
         return null;
