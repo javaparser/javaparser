@@ -293,7 +293,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
-        CompilationUnit parentNode = getParentNodeOfType(CompilationUnit.class);
+        CompilationUnit parentNode = getAncestorOfType(CompilationUnit.class);
         if (parentNode != null) {
             parentNode.addImport(clazz);
         }
