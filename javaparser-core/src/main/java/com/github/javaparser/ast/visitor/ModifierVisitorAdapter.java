@@ -377,7 +377,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 		final Statement thenStmt = (Statement) n.getThenStmt().accept(this, arg);
 		if (thenStmt == null) {
 			// Remove the entire statement if the then-clause was removed.
-			// DumpVisitor, used for toString, has no null check for the
+			// PrettyPrintVisitor, used for toString, has no null check for the
 			// then-clause.
 			return null;
 		}
