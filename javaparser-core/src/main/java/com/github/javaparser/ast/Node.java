@@ -199,7 +199,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     public Node getParentNode() {
         return parentNode;
     }
-    
+
     /**
      * Contains all nodes that have this node set as their parent.
      * You can add nodes to it by setting a node's parent to this node.
