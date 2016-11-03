@@ -16,14 +16,21 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.google.common.collect.ImmutableList;
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -35,18 +42,40 @@ public class InferenceContextTest {
     private TypeSolver typeSolver;
     private ReferenceType string;
     private ReferenceType object;
+    private ReferenceType listOfString;
+    private ReferenceType listOfE;
+    private TypeParameterDeclaration tpE;
 
     @Before
     public void setup() {
         typeSolver = new ReflectionTypeSolver();
         string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        listOfString = listOf(string);
+        tpE = EasyMock.createMock(TypeParameterDeclaration.class);
+        listOfE = listOf(new TypeVariable(tpE));
+    }
+
+    private ReferenceType listOf(Type elementType) {
+        return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(elementType), typeSolver);
     }
 
     @Test
     public void noVariablesArePlacedWhenNotNeeded() {
         Type result = new InferenceContext().addPair(string, object);
         assertEquals(object, result);
+    }
+
+    @Test
+    public void placingASingleVariableTopLevel() {
+        Type result = new InferenceContext().addPair(listOfString, new TypeVariable(tpE));
+        assertEquals(new InferenceVariableType(0), result);
+    }
+
+    @Test
+    public void placingASingleVariableInside() {
+        Type result = new InferenceContext().addPair(listOfString, listOfE);
+        assertEquals(listOf(new InferenceVariableType(0)), result);
     }
 
 }
