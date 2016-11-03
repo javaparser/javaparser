@@ -30,8 +30,8 @@ import com.github.javaparser.ast.Node;
  * 
  * @since 2.0.1 
  */
-public interface NodeWithName<T extends Node> {
+public interface NodeWithName<N extends Node> {
     String getName();
 
-    T setName(String name);
+    N setName(String name);
 }

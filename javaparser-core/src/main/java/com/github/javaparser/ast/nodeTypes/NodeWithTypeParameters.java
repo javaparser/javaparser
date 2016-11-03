@@ -12,10 +12,10 @@ import com.github.javaparser.ast.type.TypeParameter;
  *     class X&lt;C,D> {}   --> typeParameters = [C,D] 
  * </pre>
  */
-public interface NodeWithTypeParameters<T extends Node> {
+public interface NodeWithTypeParameters<N extends Node> {
     NodeList<TypeParameter> getTypeParameters();
 
-    T setTypeParameters(NodeList<TypeParameter> typeParameters);
+    N setTypeParameters(NodeList<TypeParameter> typeParameters);
 
     default boolean isGeneric() {
         return getTypeParameters().size() > 0;

@@ -37,7 +37,7 @@ import com.github.javaparser.ast.type.Type;
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with getElementType/setElementType
  * methods
  */
-public interface NodeWithElementType<T extends Node> {
+public interface NodeWithElementType<N extends Node> {
     /**
      * @return the element type
      */
@@ -47,11 +47,11 @@ public interface NodeWithElementType<T extends Node> {
      * @param elementType the element elementType
      * @return this
      */
-    T setElementType(Type<?> elementType);
+    N setElementType(Type<?> elementType);
 
     NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType();
 
-    T setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType);
+    N setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType);
 
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
@@ -59,12 +59,12 @@ public interface NodeWithElementType<T extends Node> {
      * @param typeClass the type
      * @return this
      */
-    default T setElementType(Class<?> typeClass) {
+    default N setElementType(Class<?> typeClass) {
         ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
         return setElementType(new ClassOrInterfaceType(typeClass.getSimpleName()));
     }
 
-    default T setElementType(final String type) {
+    default N setElementType(final String type) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
         return setElementType(classOrInterfaceType);
     }

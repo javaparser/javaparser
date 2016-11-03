@@ -5,19 +5,19 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 
-public interface NodeWithArguments<T extends Node> {
-    T setArgs(NodeList<Expression> args);
+public interface NodeWithArguments<N extends Node> {
+    N setArgs(NodeList<Expression> args);
 
     NodeList<Expression> getArgs();
 
-    default T addArgument(String arg) {
+    default N addArgument(String arg) {
         addArgument(new NameExpr(arg));
-        return (T) this;
+        return (N) this;
     }
 
-    default T addArgument(Expression arg) {
+    default N addArgument(Expression arg) {
         getArgs().add(arg);
-        return (T) this;
+        return (N) this;
     }
 
 }

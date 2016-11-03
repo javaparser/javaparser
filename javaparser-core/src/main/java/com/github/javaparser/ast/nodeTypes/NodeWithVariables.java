@@ -28,8 +28,8 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 /**
  * A node which has a list of variables.
  */
-public interface NodeWithVariables<T extends Node> {
+public interface NodeWithVariables<N extends Node> {
     NodeList<VariableDeclarator> getVariables();
 
-    T setVariables(NodeList<VariableDeclarator> variables);
+    N setVariables(NodeList<VariableDeclarator> variables);
 }

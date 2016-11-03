@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * A Node with Modifiers.
  */
-public interface NodeWithModifiers<T extends Node> {
+public interface NodeWithModifiers<N extends Node> {
     /**
      * Return the modifiers of this variable declaration.
      *
@@ -19,13 +19,13 @@ public interface NodeWithModifiers<T extends Node> {
      */
     EnumSet<Modifier> getModifiers();
 
-    T setModifiers(EnumSet<Modifier> modifiers);
+    N setModifiers(EnumSet<Modifier> modifiers);
 
     @SuppressWarnings("unchecked")
-    default T addModifier(Modifier... modifiers) {
+    default N addModifier(Modifier... modifiers) {
         getModifiers().addAll(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        return (T) this;
+        return (N) this;
     }
 
     default boolean isStatic() {

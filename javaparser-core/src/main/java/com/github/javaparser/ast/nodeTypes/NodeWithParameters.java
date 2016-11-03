@@ -7,16 +7,16 @@ import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
-public interface NodeWithParameters<T extends Node> {
+public interface NodeWithParameters<N extends Node> {
     NodeList<Parameter> getParameters();
 
-    T setParameters(NodeList<Parameter> parameters);
+    N setParameters(NodeList<Parameter> parameters);
 
-    default T addParameter(Type type, String name) {
+    default N addParameter(Type type, String name) {
         return addParameter(new Parameter(type, new VariableDeclaratorId(name)));
     }
 
-    default T addParameter(Class<?> paramClass, String name) {
+    default N addParameter(Class<?> paramClass, String name) {
         ((Node) this).tryAddImportToParentCompilationUnit(paramClass);
         return addParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name);
     }
@@ -27,14 +27,14 @@ public interface NodeWithParameters<T extends Node> {
      * @param className the name of the class, ex : org.test.Foo or Foo if you added manually the import
      * @param name the name of the parameter
      */
-    default T addParameter(String className, String name) {
+    default N addParameter(String className, String name) {
         return addParameter(new ClassOrInterfaceType(className), name);
     }
 
     @SuppressWarnings("unchecked")
-    default T addParameter(Parameter parameter) {
+    default N addParameter(Parameter parameter) {
         getParameters().add(parameter);
-        return (T) this;
+        return (N) this;
     }
 
     default Parameter addAndGetParameter(Type type, String name) {

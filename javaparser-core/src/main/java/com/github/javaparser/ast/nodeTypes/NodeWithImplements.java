@@ -4,10 +4,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-public interface NodeWithImplements<T extends Node> {
+public interface NodeWithImplements<N extends Node> {
     NodeList<ClassOrInterfaceType> getImplements();
 
-    T setImplements(NodeList<ClassOrInterfaceType> implementsList);
+    N setImplements(NodeList<ClassOrInterfaceType> implementsList);
 
     /**
      * Add an implements to this
@@ -16,11 +16,11 @@ public interface NodeWithImplements<T extends Node> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default T addImplements(String name) {
+    default N addImplements(String name) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
         getImplements().add(classOrInterfaceType);
         classOrInterfaceType.setParentNode((Node) this);
-        return (T) this;
+        return (N) this;
     }
 
     /**
@@ -29,7 +29,7 @@ public interface NodeWithImplements<T extends Node> {
      * @param clazz the type to implements from
      * @return this
      */
-    default T addImplements(Class<?> clazz) {
+    default N addImplements(Class<?> clazz) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
         return addImplements(clazz.getSimpleName());
     }

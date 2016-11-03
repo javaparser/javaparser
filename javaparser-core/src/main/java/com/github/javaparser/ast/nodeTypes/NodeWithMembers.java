@@ -24,10 +24,10 @@ import static java.util.stream.Collectors.*;
  * method.
  *
  */
-public interface NodeWithMembers<T extends Node> {
+public interface NodeWithMembers<N extends Node> {
     NodeList<BodyDeclaration<?>> getMembers();
 
-    T setMembers(NodeList<BodyDeclaration<?>> members);
+    N setMembers(NodeList<BodyDeclaration<?>> members);
 
     /**
      * Add a field to this and automatically add the import of the type if needed
