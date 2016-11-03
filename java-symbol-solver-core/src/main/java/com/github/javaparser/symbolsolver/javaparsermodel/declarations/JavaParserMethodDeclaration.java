@@ -105,16 +105,10 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         for (int i = 0; i < getNumberOfParams(); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);
-            //GenericTypeInferenceLogic.determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
-            formalParamType = inferenceContext.addPair(formalParamType, actualParamType);
+            inferenceContext.addPair(formalParamType, actualParamType);
         }
 
-        //Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
-        //for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
-            returnType = inferenceContext.addSingle(returnType);
-            returnType = inferenceContext.resolve(returnType);
-            //returnType = returnType.replaceTypeVariables(determinedParam, determinedTypeParameters.get(determinedParam), inferredTypes);
-        //}
+        returnType = inferenceContext.resolve(inferenceContext.addSingle(returnType));
 
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);
     }

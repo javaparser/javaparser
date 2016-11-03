@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javaslang.Tuple2;
@@ -34,6 +33,7 @@ import java.util.stream.Collectors;
  *
  * @author Federico Tomassetti
  */
+@Deprecated
 public class GenericTypeInferenceLogic {
 
     private GenericTypeInferenceLogic() {
@@ -129,10 +129,5 @@ public class GenericTypeInferenceLogic {
             throw new UnsupportedOperationException(formalType.describe());
         }
     }
-
-    public static void determineTypeParameters(Map<TypeParameterDeclaration, Type> determinedTypeParameters,
-                                               Type formalParamType, Type actualParamType,
-                                               TypeSolver typeSolver) {
-        consider(determinedTypeParameters, formalParamType, actualParamType);
-    }
+    
 }
