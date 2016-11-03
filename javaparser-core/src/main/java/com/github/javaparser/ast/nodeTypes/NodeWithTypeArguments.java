@@ -21,10 +21,11 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import static com.github.javaparser.ast.NodeList.*;
-
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
+
+import static com.github.javaparser.ast.NodeList.nodeList;
 
 /**
  * A node that can have type arguments.
@@ -34,7 +35,7 @@ import com.github.javaparser.ast.type.Type;
  *     new X&lt;C,D>();   --> typeArguments = [C,D], diamondOperator = false
  * </pre>
  */
-public interface NodeWithTypeArguments<T> {
+public interface NodeWithTypeArguments<N extends Node> {
     /**
      * @return the types that can be found in the type arguments: &lt;String, Integer>.
      */
@@ -46,7 +47,7 @@ public interface NodeWithTypeArguments<T> {
      * @param typeArguments The list of types of the generics
      */
     // TODO nullable
-    T setTypeArguments(NodeList<Type<?>> typeArguments);
+    N setTypeArguments(NodeList<Type<?>> typeArguments);
 
     /**
      * @return whether the type arguments look like &lt;>.
@@ -62,23 +63,23 @@ public interface NodeWithTypeArguments<T> {
      * Sets the type arguments to &lt>.
      */
     @SuppressWarnings("unchecked")
-    default T setDiamondOperator() {
+    default N setDiamondOperator() {
         setTypeArguments(new NodeList<>());
-        return (T) this;
+        return (N) this;
     }
 
     /**
      * Removes all type arguments, including the surrounding &lt;>.
      */
     @SuppressWarnings("unchecked")
-    default T removeTypeArguments() {
+    default N removeTypeArguments() {
         setTypeArguments((NodeList<Type<?>>) null);
-        return (T) this;
+        return (N) this;
     }
 
     @SuppressWarnings("unchecked")
-    default T setTypeArguments(Type<?>... typeArguments) {
+    default N setTypeArguments(Type<?>... typeArguments) {
         setTypeArguments(nodeList(typeArguments));
-        return (T) this;
+        return (N) this;
     }
 }

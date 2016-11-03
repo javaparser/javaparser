@@ -21,22 +21,18 @@
  
 package com.github.javaparser.ast.body;
 
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 
-import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotations<T> {
+public abstract class BodyDeclaration<T extends Node> extends Node implements NodeWithAnnotations<T> {
 
     private NodeList<AnnotationExpr> annotations;
 

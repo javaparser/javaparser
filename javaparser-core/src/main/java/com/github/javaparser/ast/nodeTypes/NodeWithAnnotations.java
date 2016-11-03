@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.ast.expr.NameExpr.name;
-
-import java.lang.annotation.Annotation;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -33,16 +28,20 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 
+import java.lang.annotation.Annotation;
+
+import static com.github.javaparser.ast.expr.NameExpr.name;
+
 /**
  * An element which can be the target of annotations.
  *
  * @author Federico Tomassetti
  * @since July 2014
  */
-public interface NodeWithAnnotations<T> {
+public interface NodeWithAnnotations<N extends Node> {
     NodeList<AnnotationExpr> getAnnotations();
 
-    T setAnnotations(NodeList<AnnotationExpr> annotations);
+    N setAnnotations(NodeList<AnnotationExpr> annotations);
 
     /**
      * Annotates this
@@ -76,12 +75,12 @@ public interface NodeWithAnnotations<T> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default T addMarkerAnnotation(String name) {
+    default N addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
                 name(name));
         getAnnotations().add(markerAnnotationExpr);
         markerAnnotationExpr.setParentNode((Node) this);
-        return (T) this;
+        return (N) this;
     }
 
     /**
@@ -90,7 +89,7 @@ public interface NodeWithAnnotations<T> {
      * @param clazz the class of the annotation
      * @return this
      */
-    default T addMarkerAnnotation(Class<? extends Annotation> clazz) {
+    default N addMarkerAnnotation(Class<? extends Annotation> clazz) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
         return addMarkerAnnotation(clazz.getSimpleName());
     }
@@ -103,12 +102,12 @@ public interface NodeWithAnnotations<T> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default T addSingleMemberAnnotation(String name, String value) {
+    default N addSingleMemberAnnotation(String name, String value) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
                 name(name), name(value));
         getAnnotations().add(singleMemberAnnotationExpr);
         singleMemberAnnotationExpr.setParentNode((Node) this);
-        return (T) this;
+        return (N) this;
     }
 
     /**
@@ -118,8 +117,8 @@ public interface NodeWithAnnotations<T> {
      * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */
-    default T addSingleMemberAnnotation(Class<? extends Annotation> clazz,
-                                               String value) {
+    default N addSingleMemberAnnotation(Class<? extends Annotation> clazz,
+                                        String value) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
         return addSingleMemberAnnotation(clazz.getSimpleName(), value);
     }

@@ -1,30 +1,21 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
-import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.Type;
+import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.*;
 
 /**
  * A node having members.
@@ -33,10 +24,10 @@ import com.github.javaparser.ast.type.Type;
  * method.
  *
  */
-public interface NodeWithMembers<T> {
+public interface NodeWithMembers<N extends Node> {
     NodeList<BodyDeclaration<?>> getMembers();
 
-    T setMembers(NodeList<BodyDeclaration<?>> members);
+    N setMembers(NodeList<BodyDeclaration<?>> members);
 
     /**
      * Add a field to this and automatically add the import of the type if needed
