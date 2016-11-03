@@ -121,15 +121,21 @@ public class InferenceContext {
     }
 
     public boolean canBeResolved() {
-        return false;
+        return true;
     }
 
     public Type resolve(Type type) {
         if (type instanceof InferenceVariableType) {
             InferenceVariableType inferenceVariableType = (InferenceVariableType)type;
             return inferenceVariableType.equivalentType();
-        } else {
+        } else if (type.isReferenceType()) {
+            return type.asReferenceType().transformTypeParameters(tp -> resolve(tp));
+        } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
+        } else if (type.isArray()) {
+            return new ArrayType(resolve(type.asArrayType().getComponentType()));
+        } else {
+            throw new UnsupportedOperationException(type.describe());
         }
     }
 }
