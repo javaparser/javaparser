@@ -20,6 +20,7 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclar
 import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +100,8 @@ public class InferenceContext {
             // nothing to do
         } else if (actualType.isArray() && formalType.isArray()) {
             registerCorrespondance(formalType.asArrayType().getComponentType(), actualType.asArrayType().getComponentType());
+        } else if (formalType.isWildcard()) {
+            // nothing to do
         } else {
             throw new UnsupportedOperationException(formalType.describe() + " " + actualType.describe());
         }
@@ -106,7 +109,13 @@ public class InferenceContext {
 
     private Type placeInferenceVariables(Type type) {
         if (type.isWildcard()) {
-            return InferenceVariableType.fromWildcard(type.asWildcard(), nextInferenceVariableId++, objectProvider);
+            if (type.asWildcard().isExtends()) {
+                return Wildcard.extendsBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
+            } else if (type.asWildcard().isSuper()) {
+                return Wildcard.superBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
+            } else {
+                return type;
+            }
         } else if (type.isTypeVariable()) {
             return inferenceVariableTypeForTp(type.asTypeParameter());
         } else if (type.isReferenceType()) {
@@ -134,6 +143,14 @@ public class InferenceContext {
             return type;
         } else if (type.isArray()) {
             return new ArrayType(resolve(type.asArrayType().getComponentType()));
+        } else if (type.isWildcard()) {
+            if (type.asWildcard().isExtends()) {
+                return Wildcard.extendsBound(resolve(type.asWildcard().getBoundedType()));
+            } else if (type.asWildcard().isSuper()) {
+                return Wildcard.superBound(resolve(type.asWildcard().getBoundedType()));
+            } else {
+                return type;
+            }
         } else {
             throw new UnsupportedOperationException(type.describe());
         }
