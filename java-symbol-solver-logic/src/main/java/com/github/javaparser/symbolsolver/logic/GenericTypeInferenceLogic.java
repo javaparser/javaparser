@@ -58,14 +58,6 @@ public class GenericTypeInferenceLogic {
         return map;
     }
 
-    private Type placeInferenceVariables(Type type) {
-        if (type.isWildcard()) {
-            return InferenceVariableType.fromWildcard(type.asWildcard());
-        } else {
-            return type;
-        }
-    }
-
     private static void consider(Map<TypeParameterDeclaration, Type> map, Type formalType, Type actualType) {
         if (formalType == null) {
             throw new IllegalArgumentException();

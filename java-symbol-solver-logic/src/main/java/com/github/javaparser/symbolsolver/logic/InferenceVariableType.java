@@ -12,19 +12,44 @@ import java.util.Set;
  * @author Federico Tomassetti
  */
 public class InferenceVariableType implements Type {
-
-    private static int nextId = 0;
+    @Override
+    public String toString() {
+        return "InferenceVariableType{" +
+                "id=" + id +
+                '}';
+    }
 
     private int id;
     private Set<Type> equivalentTypes = new HashSet<>();
-    private Set<Type> superTypes = new HashSet<>();
 
-    public InferenceVariableType() {
-        this.id = nextId++;
+    public void registerEquivalentType(Type type) {
+        this.equivalentTypes.add(type);
     }
 
-    public static InferenceVariableType fromWildcard(Wildcard wildcard) {
-        InferenceVariableType inferenceVariableType = new InferenceVariableType();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InferenceVariableType)) return false;
+
+        InferenceVariableType that = (InferenceVariableType) o;
+
+        return id == that.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    private Set<Type> superTypes = new HashSet<>();
+
+    public InferenceVariableType(int id) {
+        this.id = id;
+    }
+
+    public static InferenceVariableType fromWildcard(Wildcard wildcard, int id) {
+        InferenceVariableType inferenceVariableType = new InferenceVariableType(id);
         if (wildcard.isExtends()) {
             inferenceVariableType.superTypes.add(wildcard.getBoundedType());
         }
@@ -43,5 +68,13 @@ public class InferenceVariableType implements Type {
     @Override
     public boolean isAssignableBy(Type other) {
         throw new UnsupportedOperationException();
+    }
+
+    public Type equivalentType() {
+        if (equivalentTypes.size() == 1) {
+            return equivalentTypes.iterator().next();
+        } else {
+            throw new IllegalStateException();
+        }
     }
 }

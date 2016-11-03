@@ -22,7 +22,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
+import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -99,17 +99,21 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
-        Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
+        //Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
+        InferenceContext inferenceContext = new InferenceContext();
         for (int i = 0; i < getNumberOfParams(); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);
-            GenericTypeInferenceLogic.determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
+            //GenericTypeInferenceLogic.determineTypeParameters(determinedTypeParameters, formalParamType, actualParamType, typeSolver);
+            formalParamType = inferenceContext.addPair(formalParamType, actualParamType);
         }
 
-        Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
-        for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
-            returnType = returnType.replaceTypeVariables(determinedParam, determinedTypeParameters.get(determinedParam), inferredTypes);
-        }
+        //Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
+        //for (TypeParameterDeclaration determinedParam : determinedTypeParameters.keySet()) {
+            returnType = inferenceContext.addSingle(returnType);
+            returnType = inferenceContext.resolve(returnType);
+            //returnType = returnType.replaceTypeVariables(determinedParam, determinedTypeParameters.get(determinedParam), inferredTypes);
+        //}
 
         return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);
     }

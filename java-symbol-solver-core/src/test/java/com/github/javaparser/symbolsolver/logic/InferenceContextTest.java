@@ -62,19 +62,19 @@ public class InferenceContextTest {
 
     @Test
     public void noVariablesArePlacedWhenNotNeeded() {
-        Type result = new InferenceContext().addPair(string, object);
+        Type result = new InferenceContext().addPair(object, string);
         assertEquals(object, result);
     }
 
     @Test
     public void placingASingleVariableTopLevel() {
-        Type result = new InferenceContext().addPair(listOfString, new TypeVariable(tpE));
+        Type result = new InferenceContext().addPair(new TypeVariable(tpE), listOfString);
         assertEquals(new InferenceVariableType(0), result);
     }
 
     @Test
     public void placingASingleVariableInside() {
-        Type result = new InferenceContext().addPair(listOfString, listOfE);
+        Type result = new InferenceContext().addPair(listOfE, listOfString);
         assertEquals(listOf(new InferenceVariableType(0)), result);
     }
 
