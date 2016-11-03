@@ -176,7 +176,7 @@ public final class Parameter extends Node implements
     public String getName() {
         return getId().getName();
     }
-    
+
     @Override
     public Parameter setName(String name) {
         assertNotNull(name);

@@ -1260,11 +1260,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @SuppressWarnings("unchecked")
     protected <T extends Node> T cloneNode(T _node, Object _arg) {
-        if (_node == null)
-            return null;
-        Node r = (Node)_node.accept(this, _arg);
-        if (r == null)
-            return null;
+        if (_node == null) {
+			return null;
+		}
+        Node r = (Node) _node.accept(this, _arg);
+        if (r == null) {
+			return null;
+		}
         return (T) r;
     }
 
