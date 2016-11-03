@@ -21,10 +21,11 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import static com.github.javaparser.ast.NodeList.*;
-
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
+
+import static com.github.javaparser.ast.NodeList.nodeList;
 
 /**
  * A node that can have type arguments.
@@ -34,7 +35,7 @@ import com.github.javaparser.ast.type.Type;
  *     new X&lt;C,D>();   --> typeArguments = [C,D], diamondOperator = false
  * </pre>
  */
-public interface NodeWithTypeArguments<T> {
+public interface NodeWithTypeArguments<T extends Node> {
     /**
      * @return the types that can be found in the type arguments: &lt;String, Integer>.
      */

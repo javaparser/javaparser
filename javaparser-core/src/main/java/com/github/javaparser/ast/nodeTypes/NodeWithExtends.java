@@ -4,7 +4,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-public interface NodeWithExtends<T> {
+public interface NodeWithExtends<T extends Node> {
     NodeList<ClassOrInterfaceType> getExtends();
 
     T setExtends(NodeList<ClassOrInterfaceType> extendsList);

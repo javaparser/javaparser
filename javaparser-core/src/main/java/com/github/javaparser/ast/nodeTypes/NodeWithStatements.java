@@ -7,7 +7,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
-public interface NodeWithStatements<T> {
+public interface NodeWithStatements<T extends Node> {
     NodeList<Statement> getStmts();
 
     T setStmts(final NodeList<Statement> stmts);

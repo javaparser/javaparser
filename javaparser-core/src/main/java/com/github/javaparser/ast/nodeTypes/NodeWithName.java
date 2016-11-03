@@ -21,6 +21,8 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.Node;
+
 /**
  * A node having a name.
  *  
@@ -28,7 +30,7 @@ package com.github.javaparser.ast.nodeTypes;
  * 
  * @since 2.0.1 
  */
-public interface NodeWithName<T> {
+public interface NodeWithName<T extends Node> {
     String getName();
 
     T setName(String name);

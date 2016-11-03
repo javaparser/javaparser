@@ -3,7 +3,7 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.BlockStmt;
 
-public interface NodeWithBlockStmt<T> {
+public interface NodeWithBlockStmt<T extends Node> {
     BlockStmt getBody();
 
     T setBody(BlockStmt block);

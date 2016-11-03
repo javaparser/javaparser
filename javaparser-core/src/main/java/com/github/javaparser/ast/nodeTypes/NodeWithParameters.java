@@ -1,7 +1,5 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
@@ -9,7 +7,7 @@ import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
-public interface NodeWithParameters<T> {
+public interface NodeWithParameters<T extends Node> {
     NodeList<Parameter> getParameters();
 
     T setParameters(NodeList<Parameter> parameters);

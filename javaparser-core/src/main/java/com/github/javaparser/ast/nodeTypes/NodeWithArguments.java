@@ -1,10 +1,11 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 
-public interface NodeWithArguments<T> {
+public interface NodeWithArguments<T extends Node> {
     T setArgs(NodeList<Expression> args);
 
     NodeList<Expression> getArgs();

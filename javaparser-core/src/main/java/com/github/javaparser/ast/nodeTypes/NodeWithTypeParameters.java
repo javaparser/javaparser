@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.TypeParameter;
 
@@ -11,7 +12,7 @@ import com.github.javaparser.ast.type.TypeParameter;
  *     class X&lt;C,D> {}   --> typeParameters = [C,D] 
  * </pre>
  */
-public interface NodeWithTypeParameters<T> {
+public interface NodeWithTypeParameters<T extends Node> {
     NodeList<TypeParameter> getTypeParameters();
 
     T setTypeParameters(NodeList<TypeParameter> typeParameters);

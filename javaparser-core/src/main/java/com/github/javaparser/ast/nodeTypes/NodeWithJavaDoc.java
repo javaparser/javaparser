@@ -27,7 +27,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 /**
  * Node which can be documented through a Javadoc comment.
  */
-public interface NodeWithJavaDoc<T> {
+public interface NodeWithJavaDoc<T extends Node> {
     /**
      * Gets the JavaDoc for this node. You can set the JavaDoc by calling setComment with a JavadocComment.
      *

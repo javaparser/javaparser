@@ -5,7 +5,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 
-public interface NodeWithThrowable<T> {
+public interface NodeWithThrowable<T extends Node> {
     T setThrows(NodeList<ReferenceType<?>> throws_);
 
     NodeList<ReferenceType<?>> getThrows();

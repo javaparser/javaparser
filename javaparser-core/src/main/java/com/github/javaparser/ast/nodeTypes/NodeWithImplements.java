@@ -1,12 +1,10 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-public interface NodeWithImplements<T> {
+public interface NodeWithImplements<T extends Node> {
     NodeList<ClassOrInterfaceType> getImplements();
 
     T setImplements(NodeList<ClassOrInterfaceType> implementsList);

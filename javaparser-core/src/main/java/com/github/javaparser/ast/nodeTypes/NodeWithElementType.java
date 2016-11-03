@@ -25,11 +25,8 @@ import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
-
-import java.util.List;
 
 /**
  * A node having an element type.
@@ -40,7 +37,7 @@ import java.util.List;
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with getElementType/setElementType
  * methods
  */
-public interface NodeWithElementType<T> {
+public interface NodeWithElementType<T extends Node> {
     /**
      * @return the element type
      */

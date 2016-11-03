@@ -1,15 +1,16 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.Modifier;
-
 /**
  * A Node with Modifiers.
  */
-public interface NodeWithModifiers<T> {
+public interface NodeWithModifiers<T extends Node> {
     /**
      * Return the modifiers of this variable declaration.
      *

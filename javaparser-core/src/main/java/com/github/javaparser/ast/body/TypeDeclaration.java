@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -34,13 +35,13 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
+import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
+public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         implements NodeWithName<T>, NodeWithJavaDoc<T>, NodeWithModifiers<T>, NodeWithMembers<T> {
 
 	private NameExpr name;
