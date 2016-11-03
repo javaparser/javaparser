@@ -126,7 +126,7 @@ public class InferenceContext {
 
     public Type resolve(Type type) {
         if (type instanceof InferenceVariableType) {
-            InferenceVariableType inferenceVariableType = (InferenceVariableType)type;
+            InferenceVariableType inferenceVariableType = (InferenceVariableType) type;
             return inferenceVariableType.equivalentType();
         } else if (type.isReferenceType()) {
             return type.asReferenceType().transformTypeParameters(tp -> resolve(tp));

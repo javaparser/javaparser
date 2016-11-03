@@ -279,7 +279,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     @Test
     public void parseAstVisitor() throws IOException, ParseException {
         parse("com/github/javaparser/ast/visitor/CloneVisitor");
-        parse("com/github/javaparser/ast/visitor/DumpVisitor");
         parse("com/github/javaparser/ast/visitor/EqualsVisitor");
         parse("com/github/javaparser/ast/visitor/GenericVisitor");
         parse("com/github/javaparser/ast/visitor/GenericVisitorAdapter");
@@ -287,6 +286,11 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         parse("com/github/javaparser/ast/visitor/TreeVisitor");
         parse("com/github/javaparser/ast/visitor/VoidVisitor");
         parse("com/github/javaparser/ast/visitor/VoidVisitorAdapter");
+    }
+
+    @Test
+    public void parseDumpVisitor() throws IOException, ParseException {
+        parse("com/github/javaparser/ast/visitor/DumpVisitor");
     }
 
     @Test
