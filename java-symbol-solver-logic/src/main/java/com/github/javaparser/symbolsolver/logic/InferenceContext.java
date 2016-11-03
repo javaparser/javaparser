@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
@@ -31,12 +32,19 @@ import java.util.stream.Collectors;
 public class InferenceContext {
 
     private int nextInferenceVariableId = 0;
+    private ObjectProvider objectProvider;
+
+    public InferenceContext(ObjectProvider objectProvider) {
+        this.objectProvider = objectProvider;
+    }
 
     private Map<TypeParameterDeclaration, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
 
     private InferenceVariableType inferenceVariableTypeForTp(TypeParameterDeclaration tp) {
         if (!inferenceVariableTypeMap.containsKey(tp)) {
-            inferenceVariableTypeMap.put(tp, new InferenceVariableType(nextInferenceVariableId++));
+            InferenceVariableType inferenceVariableType = new InferenceVariableType(nextInferenceVariableId++, objectProvider);
+            inferenceVariableType.setCorrespondingTp(tp);
+            inferenceVariableTypeMap.put(tp, inferenceVariableType);
         }
         return inferenceVariableTypeMap.get(tp);
     }
@@ -84,7 +92,13 @@ public class InferenceContext {
                 }
             }
         } else if (formalType instanceof InferenceVariableType) {
-            ((InferenceVariableType)formalType).registerEquivalentType(actualType);
+            ((InferenceVariableType) formalType).registerEquivalentType(actualType);
+        } else if (actualType.isNull()) {
+            // nothing to do
+        } else if (actualType.equals(formalType)) {
+            // nothing to do
+        } else if (actualType.isArray() && formalType.isArray()) {
+            registerCorrespondance(formalType.asArrayType().getComponentType(), actualType.asArrayType().getComponentType());
         } else {
             throw new UnsupportedOperationException(formalType.describe() + " " + actualType.describe());
         }
@@ -92,13 +106,17 @@ public class InferenceContext {
 
     private Type placeInferenceVariables(Type type) {
         if (type.isWildcard()) {
-            return InferenceVariableType.fromWildcard(type.asWildcard(), nextInferenceVariableId++);
+            return InferenceVariableType.fromWildcard(type.asWildcard(), nextInferenceVariableId++, objectProvider);
         } else if (type.isTypeVariable()) {
             return inferenceVariableTypeForTp(type.asTypeParameter());
         } else if (type.isReferenceType()) {
             return type.asReferenceType().transformTypeParameters(tp -> placeInferenceVariables(tp));
-        } else {
+        } else if (type.isArray()) {
+            return new ArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
+        } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
+        } else {
+            throw new UnsupportedOperationException(type.describe());
         }
     }
 

@@ -27,6 +27,7 @@ import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -100,7 +101,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
         //Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
-        InferenceContext inferenceContext = new InferenceContext();
+        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
         for (int i = 0; i < getNumberOfParams(); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);

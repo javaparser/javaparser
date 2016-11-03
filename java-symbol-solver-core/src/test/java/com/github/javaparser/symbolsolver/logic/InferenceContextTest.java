@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
+import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -62,20 +63,20 @@ public class InferenceContextTest {
 
     @Test
     public void noVariablesArePlacedWhenNotNeeded() {
-        Type result = new InferenceContext().addPair(object, string);
+        Type result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(object, string);
         assertEquals(object, result);
     }
 
     @Test
     public void placingASingleVariableTopLevel() {
-        Type result = new InferenceContext().addPair(new TypeVariable(tpE), listOfString);
-        assertEquals(new InferenceVariableType(0), result);
+        Type result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(new TypeVariable(tpE), listOfString);
+        assertEquals(new InferenceVariableType(0, MyObjectProvider.INSTANCE), result);
     }
 
     @Test
     public void placingASingleVariableInside() {
-        Type result = new InferenceContext().addPair(listOfE, listOfString);
-        assertEquals(listOf(new InferenceVariableType(0)), result);
+        Type result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(listOfE, listOfString);
+        assertEquals(listOf(new InferenceVariableType(0, MyObjectProvider.INSTANCE)), result);
     }
 
 }

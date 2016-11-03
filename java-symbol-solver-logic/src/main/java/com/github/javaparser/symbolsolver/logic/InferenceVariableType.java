@@ -1,10 +1,13 @@
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * An element using during type inference.
@@ -20,7 +23,14 @@ public class InferenceVariableType implements Type {
     }
 
     private int id;
+    private TypeParameterDeclaration correspondingTp;
+
+    public void setCorrespondingTp(TypeParameterDeclaration correspondingTp) {
+        this.correspondingTp = correspondingTp;
+    }
+
     private Set<Type> equivalentTypes = new HashSet<>();
+    private ObjectProvider objectProvider;
 
     public void registerEquivalentType(Type type) {
         this.equivalentTypes.add(type);
@@ -44,12 +54,13 @@ public class InferenceVariableType implements Type {
 
     private Set<Type> superTypes = new HashSet<>();
 
-    public InferenceVariableType(int id) {
+    public InferenceVariableType(int id, ObjectProvider objectProvider) {
         this.id = id;
+        this.objectProvider = objectProvider;
     }
 
-    public static InferenceVariableType fromWildcard(Wildcard wildcard, int id) {
-        InferenceVariableType inferenceVariableType = new InferenceVariableType(id);
+    public static InferenceVariableType fromWildcard(Wildcard wildcard, int id, ObjectProvider objectProvider) {
+        InferenceVariableType inferenceVariableType = new InferenceVariableType(id, objectProvider);
         if (wildcard.isExtends()) {
             inferenceVariableType.superTypes.add(wildcard.getBoundedType());
         }
@@ -71,10 +82,27 @@ public class InferenceVariableType implements Type {
     }
 
     public Type equivalentType() {
+        if (equivalentTypes.isEmpty()) {
+            if (correspondingTp == null) {
+                return objectProvider.object();
+            } else {
+                return new TypeVariable(correspondingTp);
+            }
+        }
         if (equivalentTypes.size() == 1) {
             return equivalentTypes.iterator().next();
+        }
+        Set<Type> notTypeVariables = equivalentTypes.stream().filter(t -> !t.isTypeVariable()).collect(Collectors.toSet());
+        if (notTypeVariables.size() == 1) {
+            return notTypeVariables.iterator().next();
+        } else if (notTypeVariables.size() == 0 && !superTypes.isEmpty()) {
+            if (superTypes.size() == 1) {
+                return superTypes.iterator().next();
+            } else {
+                throw new IllegalStateException("Super types are: " + superTypes);
+            }
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Equivalent types are: " + equivalentTypes);
         }
     }
 }
