@@ -43,7 +43,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         Type type = javaParserFacade.getType(expression);
-        assertEquals("java.util.function.Function<? super java.lang.String, java.lang.String>", type.describe());
+        assertEquals("java.util.function.Function<? super java.lang.String, ? extends java.lang.String>", type.describe());
     }
 
     @Test

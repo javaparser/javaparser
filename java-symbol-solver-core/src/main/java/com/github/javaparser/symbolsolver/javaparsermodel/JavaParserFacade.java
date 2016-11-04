@@ -29,6 +29,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
+import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
@@ -37,6 +38,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -340,16 +342,21 @@ public class JavaParserFacade {
                     if (functionalMethod.isPresent()) {
                         LambdaExpr lambdaExpr = (LambdaExpr) node;
 
-                        List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
+                        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                        // At this point parameterType
+                        // if Function<T=? super Stream.T, ? extends map.R>
+                        // we should replace Stream.T
+                        Type parameterType = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+                        Type functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
+                        //inferenceContext.addPair(parameterType, functionalInterfaceType);
+                        //inferenceContext.addPair(parameterType, result);
+                        inferenceContext.addPair(result, functionalInterfaceType);
                         if (lambdaExpr.getBody() instanceof ExpressionStmt) {
                             ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
                             Type actualType = getType(expressionStmt.getExpression());
                             Type formalType = functionalMethod.get().returnType();
-                            formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
-                            Map<TypeParameterDeclaration, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-                            for (TypeParameterDeclaration typeName : inferredTypes.keySet()) {
-                                result = result.replaceTypeVariables(typeName, inferredTypes.get(typeName));
-                            }
+                            inferenceContext.addPair(formalType, actualType);
+                            result = inferenceContext.resolve(inferenceContext.addSingle(result));
                         } else {
                             throw new UnsupportedOperationException();
                         }

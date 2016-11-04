@@ -27,10 +27,17 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
 public class ReferenceTypeImpl extends ReferenceType {
+
+    public static ReferenceType undeterminedParameters(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+        return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
+                tp -> new TypeVariable(tp)
+        ).collect(Collectors.toList()), typeSolver);
+    }
 
     @Override
     protected ReferenceType create(TypeDeclaration typeDeclaration, List<Type> typeParametersCorrected, TypeSolver typeSolver) {

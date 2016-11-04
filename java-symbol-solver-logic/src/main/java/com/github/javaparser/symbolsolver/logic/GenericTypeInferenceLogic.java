@@ -129,5 +129,5 @@ public class GenericTypeInferenceLogic {
             throw new UnsupportedOperationException(formalType.describe());
         }
     }
-    
+
 }

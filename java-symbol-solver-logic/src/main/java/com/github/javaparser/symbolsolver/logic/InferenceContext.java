@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class InferenceContext {
 
     private int nextInferenceVariableId = 0;
     private ObjectProvider objectProvider;
+    private List<InferenceVariableType> inferenceVariableTypes = new ArrayList<>();
 
     public InferenceContext(ObjectProvider objectProvider) {
         this.objectProvider = objectProvider;
@@ -44,6 +46,7 @@ public class InferenceContext {
     private InferenceVariableType inferenceVariableTypeForTp(TypeParameterDeclaration tp) {
         if (!inferenceVariableTypeMap.containsKey(tp)) {
             InferenceVariableType inferenceVariableType = new InferenceVariableType(nextInferenceVariableId++, objectProvider);
+            inferenceVariableTypes.add(inferenceVariableType);
             inferenceVariableType.setCorrespondingTp(tp);
             inferenceVariableTypeMap.put(tp, inferenceVariableType);
         }
@@ -56,6 +59,7 @@ public class InferenceContext {
      */
     public Type addPair(Type target, Type actual) {
         target = placeInferenceVariables(target);
+        actual = placeInferenceVariables(actual);
         registerCorrespondance(target, actual);
         return target;
     }
@@ -94,6 +98,9 @@ public class InferenceContext {
             }
         } else if (formalType instanceof InferenceVariableType) {
             ((InferenceVariableType) formalType).registerEquivalentType(actualType);
+            if (actualType instanceof InferenceVariableType) {
+                ((InferenceVariableType)actualType).registerEquivalentType(formalType);
+            }
         } else if (actualType.isNull()) {
             // nothing to do
         } else if (actualType.equals(formalType)) {
@@ -102,6 +109,12 @@ public class InferenceContext {
             registerCorrespondance(formalType.asArrayType().getComponentType(), actualType.asArrayType().getComponentType());
         } else if (formalType.isWildcard()) {
             // nothing to do
+            if ((actualType instanceof InferenceVariableType) && formalType.asWildcard().isBounded()) {
+                ((InferenceVariableType) actualType).registerEquivalentType(formalType.asWildcard().getBoundedType());
+                if (formalType.asWildcard().getBoundedType() instanceof InferenceVariableType) {
+                    ((InferenceVariableType)formalType.asWildcard().getBoundedType()).registerEquivalentType(actualType);
+                }
+            }
         } else {
             throw new UnsupportedOperationException(formalType.describe() + " " + actualType.describe());
         }

@@ -81,16 +81,30 @@ public class InferenceVariableType implements Type {
         throw new UnsupportedOperationException();
     }
 
+    private Set<Type> concreteEquivalentTypesAlsoIndirectly(Set<InferenceVariableType> considered, InferenceVariableType inferenceVariableType) {
+        considered.add(inferenceVariableType);
+        Set<Type> result = new HashSet<>();
+        result.addAll(inferenceVariableType.equivalentTypes.stream().filter(t -> !t.isTypeVariable() && !(t instanceof InferenceVariableType)).collect(Collectors.toSet()));
+        inferenceVariableType.equivalentTypes.stream().filter(t -> t instanceof InferenceVariableType).forEach(t -> {
+            InferenceVariableType ivt = (InferenceVariableType)t;
+            if (!considered.contains(ivt)) {
+                result.addAll(concreteEquivalentTypesAlsoIndirectly(considered, ivt));
+            }
+        });
+        return result;
+    }
+
     public Type equivalentType() {
-        if (equivalentTypes.isEmpty()) {
+        Set<Type> concreteEquivalent = concreteEquivalentTypesAlsoIndirectly(new HashSet<>(), this);
+        if (concreteEquivalent.isEmpty()) {
             if (correspondingTp == null) {
                 return objectProvider.object();
             } else {
                 return new TypeVariable(correspondingTp);
             }
         }
-        if (equivalentTypes.size() == 1) {
-            return equivalentTypes.iterator().next();
+        if (concreteEquivalent.size() == 1) {
+            return concreteEquivalent.iterator().next();
         }
         Set<Type> notTypeVariables = equivalentTypes.stream().filter(t -> !t.isTypeVariable()).collect(Collectors.toSet());
         if (notTypeVariables.size() == 1) {
