@@ -162,7 +162,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 	public Visitable visit(AnnotationMemberDeclaration _n, Object _arg) {
 		NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
 		Type<?> type_ = cloneNode(_n.getType(), _arg);
-		Expression defaultValue = cloneNode(_n.getDefaultValue(), _arg);
+		Expression defaultValue = cloneNode(_n.getDefaultValue().orElse(null), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
 
 		AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(

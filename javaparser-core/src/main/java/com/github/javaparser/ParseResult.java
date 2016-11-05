@@ -1,23 +1,21 @@
 package com.github.javaparser;
 
-import com.github.javaparser.ast.comments.CommentsCollection;
+import static com.github.javaparser.utils.Utils.EOL;
+import static java.util.Collections.singletonList;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.Collections.singletonList;
-
-import static com.github.javaparser.utils.Utils.EOL;
+import com.github.javaparser.ast.comments.CommentsCollection;
 
 /**
  * The results given when parsing with an instance of JavaParser.
  */
 public class ParseResult<T> {
-    private final Optional<T> result;
+    private final T result;
     private final List<Problem> problems;
-    private final Optional<List<Token>> tokens;
-    private final Optional<CommentsCollection> commentsCollection;
+    private final List<Token> tokens;
+    private final CommentsCollection commentsCollection;
 
     /**
      * General constructor.
@@ -25,19 +23,19 @@ public class ParseResult<T> {
      * @param problems a list of encountered parsing problems.
      * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
-    ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens, Optional<CommentsCollection> commentsCollection) {
-        this.commentsCollection = assertNotNull(commentsCollection);
-        this.result = assertNotNull(result);
-        this.problems = assertNotNull(problems);
-        this.tokens = assertNotNull(tokens);
+    ParseResult(T result, List<Problem> problems, List<Token> tokens, CommentsCollection commentsCollection) {
+        this.commentsCollection = commentsCollection;
+        this.result = result;
+        this.problems = problems;
+        this.tokens = tokens;
     }
 
     /**
      * Used when parsing failed completely with an exception.
      */
     ParseResult(Throwable throwable) {
-        this(Optional.empty(), singletonList(
-                new Problem(createMessage(throwable), Optional.empty(), Optional.of(throwable))), Optional.empty(), Optional.empty());
+        this(null, singletonList(
+                new Problem(createMessage(throwable), null, throwable)), null, null);
     }
 
     private static String createMessage(Throwable throwable) {
@@ -52,7 +50,7 @@ public class ParseResult<T> {
      * @return if parsing was successful, meaning no errors of any kind were encountered.
      */
     public boolean isSuccessful() {
-        return problems.isEmpty() && result.isPresent();
+        return problems.isEmpty() && result != null;
     }
 
     /**
@@ -66,21 +64,21 @@ public class ParseResult<T> {
      * @return the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
     public Optional<List<Token>> getTokens() {
-        return tokens;
+        return Optional.ofNullable(tokens);
     }
 
     /**
      * @return the complete collection of comments encountered while parsing.
      */
     public Optional<CommentsCollection> getCommentsCollection() {
-        return commentsCollection;
+        return Optional.ofNullable(commentsCollection);
     }
 
     /**
      * @return the AST of the parsed source code, or empty if parsing failed completely.
      */
     public Optional<T> getResult() {
-        return result;
+        return Optional.ofNullable(result);
     }
 
     @Override

@@ -153,7 +153,7 @@ final class ASTParser {
     }
 
     private void addProblem(String message) {
-        problems.add(new Problem(message + ": \"" + token.image, Optional.of(tokenRange()), Optional.empty()));
+        problems.add(new Problem(message + ": \"" + token.image, tokenRange(), null));
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {

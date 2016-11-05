@@ -2,26 +2,25 @@ package com.github.javaparser;
 
 import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * A problem that was encountered during parsing.
  */
 public class Problem {
     private final String message;
-    private final Optional<Range> range;
-    private final Optional<Throwable> cause;
+    private final Range range;
+    private final Throwable cause;
 
-    Problem(String message, Optional<Range> range, Optional<Throwable> cause) {
-        this.message = assertNotNull(message);
-        this.range = assertNotNull(range);
-        this.cause = assertNotNull(cause);
+    Problem(String message, Range range, Throwable cause) {
+        this.message = message;
+        this.range = range;
+        this.cause = cause;
     }
 
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder(message);
-        range.ifPresent(r -> str.append(" ").append(r));
+        if (range != null)
+            str.append(" ").append(range);
         return str.toString();
     }
 
@@ -30,10 +29,10 @@ public class Problem {
     }
 
     public Optional<Range> getRange() {
-        return range;
+        return Optional.ofNullable(range);
     }
 
     public Optional<Throwable> getCause() {
-        return cause;
+        return Optional.ofNullable(cause);
     }
 }

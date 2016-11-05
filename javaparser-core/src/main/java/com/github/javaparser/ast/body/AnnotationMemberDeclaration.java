@@ -37,6 +37,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -55,7 +56,6 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     private String name;
 
-    // TODO nullable
     private Expression defaultValue;
 
     public AnnotationMemberDeclaration() {
@@ -105,8 +105,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         v.visit(this, arg);
     }
 
-    public Expression getDefaultValue() {
-        return defaultValue;
+    public Optional<Expression> getDefaultValue() {
+        return Optional.ofNullable(defaultValue);
     }
 
     /**
@@ -130,6 +130,11 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return type;
     }
 
+    /**
+     * Sets the default value
+     * @param defaultValue the default value, can be null
+     * @return this, the AnnotationMemberDeclaration
+     */
     public AnnotationMemberDeclaration setDefaultValue(Expression defaultValue) {
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);

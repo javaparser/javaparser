@@ -67,8 +67,8 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
 		n.setType((Type) n.getType().accept(this, arg));
-		if (n.getDefaultValue() != null) {
-			n.setDefaultValue((Expression) n.getDefaultValue().accept(this, arg));
+		if (n.getDefaultValue().isPresent()) {
+			n.setDefaultValue((Expression) n.getDefaultValue().get().accept(this, arg));
 		}
 		return n;
 	}

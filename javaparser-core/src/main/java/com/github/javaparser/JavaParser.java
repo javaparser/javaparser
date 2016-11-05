@@ -95,7 +95,7 @@ public final class JavaParser {
             final CommentsCollection comments = astParser.getCommentsCollection();
             commentsInserter.insertComments(resultNode, comments.copy().getComments());
             
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, Optional.of(astParser.getTokens()), Optional.of(astParser.getCommentsCollection()));
+			return new ParseResult<>(resultNode, parser.problems, astParser.getTokens(), astParser.getCommentsCollection());
 		} catch (Exception e) {
 			return new ParseResult<>(e);
 		} finally {
