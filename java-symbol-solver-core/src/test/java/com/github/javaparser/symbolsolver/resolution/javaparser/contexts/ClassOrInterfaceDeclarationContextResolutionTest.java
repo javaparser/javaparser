@@ -204,7 +204,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     public void solveSymbolAsValueReferringToInterfaceInheritedInstanceField() throws ParseException {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
+        ClassOrInterfaceDeclarationContext context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
         Optional<Value> ref = context.solveSymbolAsValue("o", new DummyTypeSolver());
         assertEquals(true, ref.isPresent());

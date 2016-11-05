@@ -23,6 +23,7 @@ import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDecla
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -35,6 +36,17 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public class ContextHelper {
+
+    private ContextHelper() {
+        // prevent instantiation
+    }
+
+    public static Optional<Value> solveSymbolAsValue(TypeDeclaration typeDeclaration, String name, TypeSolver typeSolver) {
+        return typeDeclaration.getAllFields().stream()
+                .filter(f -> f.getName().equals(name))
+                .map(f -> Value.from(f))
+                .findFirst();
+    }
 
     @Deprecated
     public static Context getContext(TypeDeclaration typeDeclaration) {

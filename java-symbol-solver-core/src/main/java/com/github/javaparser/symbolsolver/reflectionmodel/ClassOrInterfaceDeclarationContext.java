@@ -40,7 +40,6 @@ public class ClassOrInterfaceDeclarationContext implements Context {
         this.wrapped = clazz;
     }
 
-
     @Override
     public SymbolReference<ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : wrapped.getFields()) {

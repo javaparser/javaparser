@@ -96,8 +96,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then among inherited fields
-        for (ReferenceType ancestor : getDeclaration().getAncestors()) {
-            Optional<Value> ref = ContextHelper.getContext(ancestor.getTypeDeclaration()).solveSymbolAsValue(name, typeSolver);
+        for (ReferenceType ancestor : getDeclaration().getAllAncestors()) {
+            Optional<Value> ref = ContextHelper.solveSymbolAsValue(ancestor.getTypeDeclaration(), name, typeSolver);
             if (ref.isPresent()) {
                 return ref;
             }
@@ -132,6 +132,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         } else {
             return new JavaParserClassDeclaration(this.wrappedNode, typeSolver);
         }
+        // TODO check enum
     }
 
     public List<MethodDeclaration> methodsByName(String name) {
