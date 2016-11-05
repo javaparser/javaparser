@@ -49,22 +49,6 @@ public class ReflectionFactory {
         }
     }
 
-    public static Type typeUsageFor(Class<?> clazz, TypeSolver typeSolver) {
-        if (clazz.isArray()) {
-            return new ArrayType(typeUsageFor(clazz.getComponentType(), typeSolver));
-        } else if (clazz.isPrimitive()) {
-            if (clazz.getName().equals("void")) {
-                return VoidType.INSTANCE;
-            } else {
-                return PrimitiveType.byName(clazz.getName());
-            }
-        } else if (clazz.isInterface()) {
-            return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(clazz, typeSolver), typeSolver);
-        } else {
-            return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
-        }
-    }
-
     public static Type typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
         if (type instanceof java.lang.reflect.TypeVariable) {
             java.lang.reflect.TypeVariable tv = (java.lang.reflect.TypeVariable) type;
@@ -82,13 +66,15 @@ public class ReflectionFactory {
         } else if (type instanceof Class) {
             Class c = (Class) type;
             if (c.isPrimitive()) {
-                if (c.getName().equals("void")) {
+                if (c.getName().equals(Void.TYPE.getName())) {
                     return VoidType.INSTANCE;
                 } else {
                     return PrimitiveType.byName(c.getName());
                 }
             } else if (c.isArray()) {
                 return new ArrayType(typeUsageFor(c.getComponentType(), typeSolver));
+            }  else if (c.isEnum()) {
+                return new ReferenceTypeImpl(new ReflectionEnumDeclaration(c, typeSolver), typeSolver);
             } else if (c.isInterface()) {
                 return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(c, typeSolver), typeSolver);
             } else {
