@@ -1375,9 +1375,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print(" ");
         printer.print(n.getName());
         printer.print("()");
-        if (n.getDefaultValue() != null) {
+        if (n.getDefaultValue().isPresent()) {
             printer.print(" default ");
-            n.getDefaultValue().accept(this, arg);
+            n.getDefaultValue().get().accept(this, arg);
         }
         printer.print(";");
     }
