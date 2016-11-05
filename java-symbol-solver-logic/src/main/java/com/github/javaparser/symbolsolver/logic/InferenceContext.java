@@ -146,10 +146,6 @@ public class InferenceContext {
         }
     }
 
-    public boolean canBeResolved() {
-        return true;
-    }
-
     public Type resolve(Type type) {
         if (type instanceof InferenceVariableType) {
             InferenceVariableType inferenceVariableType = (InferenceVariableType) type;
