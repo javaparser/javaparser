@@ -47,7 +47,7 @@ public final class Parameter extends Node implements
         NodeWithType<Parameter, Type<?>>,
         NodeWithElementType<Parameter>,
         NodeWithAnnotations<Parameter>,
-        NodeWithName<Parameter>,
+        NodeWithSimpleName<Parameter>,
         NodeWithModifiers<Parameter> {
 
     private Type<?> elementType;

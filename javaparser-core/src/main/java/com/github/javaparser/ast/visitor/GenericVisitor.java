@@ -184,8 +184,6 @@ public interface GenericVisitor<R, A> {
 
 	R visit(ObjectCreationExpr n, A arg);
 
-	R visit(QualifiedNameExpr n, A arg);
-
 	R visit(ThisExpr n, A arg);
 
 	R visit(SuperExpr n, A arg);
@@ -265,4 +263,8 @@ public interface GenericVisitor<R, A> {
 	R visit(StaticImportOnDemandDeclaration n, A arg);
 
 	R visit(TypeImportOnDemandDeclaration n, A arg);
+
+    R visit(Name n, A arg);
+
+    R visit(SimpleName n, A arg);
 }

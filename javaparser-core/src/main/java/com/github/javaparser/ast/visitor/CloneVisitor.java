@@ -740,11 +740,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 	}
 
 	@Override
-	public Visitable visit(QualifiedNameExpr _n, Object _arg) {
+	public Visitable visit(QualifiedName _n, Object _arg) {
 		NameExpr scope = cloneNode(_n.getQualifier(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
 
-		QualifiedNameExpr r = new QualifiedNameExpr(
+		QualifiedName r = new QualifiedName(
 				_n.getRange(),
 				scope, _n.getName()
 		);

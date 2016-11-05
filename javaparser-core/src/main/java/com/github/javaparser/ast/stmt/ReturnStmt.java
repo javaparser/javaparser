@@ -18,16 +18,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.ast.expr.NameExpr.name;
 
 /**
  * @author Julio Vilmar Gesser
@@ -35,44 +33,45 @@ import static com.github.javaparser.ast.expr.NameExpr.name;
 public final class ReturnStmt extends Statement {
 
     // TODO nullable
-	private Expression expr;
+    private Expression expr;
 
-	public ReturnStmt() {
+    public ReturnStmt() {
         this(Range.UNKNOWN, null);
-	}
+    }
 
-	public ReturnStmt(final Expression expr) {
-		this(Range.UNKNOWN, expr);
-	}
+    public ReturnStmt(final Expression expr) {
+        this(Range.UNKNOWN, expr);
+    }
 
-	public ReturnStmt(Range range, final Expression expr) {
-		super(range);
-		setExpr(expr);
-	}
+    public ReturnStmt(Range range, final Expression expr) {
+        super(range);
+        setExpr(expr);
+    }
 
     /**
      * Will create a NameExpr with the string param
      */
     public ReturnStmt(String expr) {
-        this(Range.UNKNOWN, name(expr));
+        this(Range.UNKNOWN, new NameExpr(expr));
     }
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Expression getExpr() {
-		return expr;
-	}
+    public Expression getExpr() {
+        return expr;
+    }
 
-	public ReturnStmt setExpr(final Expression expr) {
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
-		return this;
-	}
+    public ReturnStmt setExpr(final Expression expr) {
+        this.expr = expr;
+        setAsParentNodeOf(this.expr);
+        return this;
+    }
 }

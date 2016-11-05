@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -29,86 +29,83 @@ import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.expr.NameExpr.name;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ForeachStmt extends Statement implements NodeWithBody<ForeachStmt> {
 
-	private VariableDeclarationExpr var;
+    private VariableDeclarationExpr var;
 
-	private Expression iterable;
+    private Expression iterable;
 
-	private Statement body;
+    private Statement body;
 
-	public ForeachStmt() {
+    public ForeachStmt() {
         this(Range.UNKNOWN,
                 new VariableDeclarationExpr(),
                 new NameExpr(),
-                new EmptyStmt()); 
-	}
+                new EmptyStmt());
+    }
 
-	public ForeachStmt(final VariableDeclarationExpr var,
-			final Expression iterable, final Statement body) {
+    public ForeachStmt(final VariableDeclarationExpr var,
+                       final Expression iterable, final Statement body) {
         this(Range.UNKNOWN, var, iterable, body);
-	}
+    }
 
-	public ForeachStmt(Range range,
-	                   final VariableDeclarationExpr var, final Expression iterable,
-	                   final Statement body) {
-		super(range);
-		setVariable(var);
-		setIterable(iterable);
-		setBody(body);
-	}
+    public ForeachStmt(Range range,
+                       final VariableDeclarationExpr var, final Expression iterable,
+                       final Statement body) {
+        super(range);
+        setVariable(var);
+        setIterable(iterable);
+        setBody(body);
+    }
 
-    /**
-     * Will create a {@link NameExpr} with the iterable param
-     */
     public ForeachStmt(VariableDeclarationExpr var, String iterable, BlockStmt body) {
-        this(Range.UNKNOWN, var, name(iterable), body);
+        this(Range.UNKNOWN, var, new NameExpr(iterable), body);
     }
 
     @Override
-	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override
-	public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	@Override
+    @Override
     public Statement getBody() {
-		return body;
-	}
+        return body;
+    }
 
-	public Expression getIterable() {
-		return iterable;
-	}
+    public Expression getIterable() {
+        return iterable;
+    }
 
-	public VariableDeclarationExpr getVariable() {
-		return var;
-	}
+    public VariableDeclarationExpr getVariable() {
+        return var;
+    }
 
-	@Override
+    @Override
     public ForeachStmt setBody(final Statement body) {
-		this.body = body;
-		setAsParentNodeOf(this.body);
+        this.body = assertNotNull(body);
+        setAsParentNodeOf(this.body);
         return this;
-	}
+    }
 
-	public ForeachStmt setIterable(final Expression iterable) {
-		this.iterable = iterable;
-		setAsParentNodeOf(this.iterable);
-		return this;
-	}
+    public ForeachStmt setIterable(final Expression iterable) {
+        this.iterable = assertNotNull(iterable);
+        setAsParentNodeOf(this.iterable);
+        return this;
+    }
 
-	public ForeachStmt setVariable(final VariableDeclarationExpr var) {
-		this.var = var;
-		setAsParentNodeOf(this.var);
-		return this;
-	}
+    public ForeachStmt setVariable(final VariableDeclarationExpr var) {
+        this.var = assertNotNull(var);
+        setAsParentNodeOf(this.var);
+        return this;
+    }
 }

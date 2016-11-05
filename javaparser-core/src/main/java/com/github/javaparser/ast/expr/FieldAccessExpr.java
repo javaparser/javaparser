@@ -28,7 +28,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.expr.NameExpr.name;
+import static com.github.javaparser.ast.expr.Name.name;
 
 /**
  * @author Julio Vilmar Gesser
@@ -40,21 +40,22 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
     // TODO nullable
 	private NodeList<Type<?>> typeArguments;
 
-	private NameExpr field;
+    // TODO make this a SimpleName
+	private Name field;
 
 	public FieldAccessExpr() {
-        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new NameExpr());
+        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new Name());
 	}
 
 	public FieldAccessExpr(final Expression scope, final String field) {
         this(Range.UNKNOWN, scope, new NodeList<>(), name(field));
 	}
 
-	public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final NameExpr field) {
+	public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final Name field) {
 		super(range);
 		setScope(scope);
 		setTypeArguments(typeArguments);
-		setFieldExpr(field);
+		setField(field);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -65,11 +66,11 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 		v.visit(this, arg);
 	}
 
-	public String getField() {
+	public String getFieldAsString() {
 		return field.getName();
 	}
 
-	public NameExpr getFieldExpr() {
+	public Name getField() {
 		return field;
 	}
 
@@ -78,11 +79,11 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 	}
 
 	public FieldAccessExpr setField(final String field) {
-		setFieldExpr(new NameExpr(field));
+		setField(new Name(field));
 		return this;
 	}
 
-	public FieldAccessExpr setFieldExpr(NameExpr field) {
+	public FieldAccessExpr setField(Name field) {
 		this.field = field;
 		setAsParentNodeOf(this.field);
 		return this;

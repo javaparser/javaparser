@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -51,8 +50,8 @@ import com.github.javaparser.utils.Pair;
  */
 public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements 
         NodeWithJavaDoc<MethodDeclaration>, 
-        NodeWithDeclaration, 
-        NodeWithName<MethodDeclaration>,
+        NodeWithDeclaration,
+        NodeWithSimpleName<MethodDeclaration>,
         NodeWithType<MethodDeclaration, Type<?>>,
         NodeWithElementType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>, 

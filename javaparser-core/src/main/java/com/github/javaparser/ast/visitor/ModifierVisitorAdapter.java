@@ -516,7 +516,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 		return n;
 	}
 
-	@Override public Visitable visit(final QualifiedNameExpr n, final A arg) {
+	@Override public Visitable visit(final QualifiedName n, final A arg) {
 		visitComment(n, arg);
 		n.setQualifier((NameExpr) n.getQualifier().accept(this, arg));
 		return n;

@@ -998,8 +998,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 		return true;
 	}
 
-	@Override public Boolean visit(final QualifiedNameExpr n1, final Visitable arg) {
-		final QualifiedNameExpr n2 = (QualifiedNameExpr) arg;
+	@Override public Boolean visit(final QualifiedName n1, final Visitable arg) {
+		final QualifiedName n2 = (QualifiedName) arg;
 
 		if (!nodeEquals(n1.getQualifier(), n2.getQualifier())) {
 			return false;

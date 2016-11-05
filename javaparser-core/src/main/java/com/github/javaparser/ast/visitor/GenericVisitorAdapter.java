@@ -1146,7 +1146,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	}
 
 	@Override
-	public R visit(final QualifiedNameExpr n, final A arg) {
+	public R visit(final QualifiedName n, final A arg) {
 		visitComment(n, arg);
 		{
 			R result = n.getQualifier().accept(this, arg);

@@ -385,7 +385,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
-    @Override public void visit(final QualifiedNameExpr n, final Object arg) {
+    @Override public void visit(final QualifiedName n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }

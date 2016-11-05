@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -37,7 +38,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,7 +46,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements 
         NodeWithJavaDoc<ConstructorDeclaration>, 
         NodeWithDeclaration,
-        NodeWithName<ConstructorDeclaration>, 
+        NodeWithSimpleName<ConstructorDeclaration>, 
         NodeWithModifiers<ConstructorDeclaration>,
         NodeWithParameters<ConstructorDeclaration>, 
         NodeWithThrowable<ConstructorDeclaration>,
@@ -57,7 +57,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     private NodeList<TypeParameter> typeParameters;
 
-    private NameExpr name;
+    private SimpleName name;
 
     private NodeList<Parameter> parameters;
 
@@ -136,10 +136,10 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public String getName() {
-        return name.getName();
+        return name.getId();
     }
 
-    public NameExpr getNameExpr() {
+    public SimpleName getNameExpr() {
         return name;
     }
 

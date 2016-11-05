@@ -23,8 +23,10 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -43,25 +45,27 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * </pre>
  * @author Julio Vilmar Gesser
  */
-public final class PackageDeclaration extends Node implements NodeWithAnnotations<PackageDeclaration> {
+public final class PackageDeclaration extends Node implements 
+        NodeWithAnnotations<PackageDeclaration>,
+        NodeWithName<PackageDeclaration> {
 
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-    private NameExpr name;
+    private Name name;
 
     public PackageDeclaration() {
-        this(Range.UNKNOWN, new NodeList<>(), new NameExpr());
+        this(Range.UNKNOWN, new NodeList<>(), new Name());
     }
 
-    public PackageDeclaration(NameExpr name) {
+    public PackageDeclaration(Name name) {
         this(Range.UNKNOWN, new NodeList<>(), name);
     }
 
-    public PackageDeclaration(NodeList<AnnotationExpr> annotations, NameExpr name) {
+    public PackageDeclaration(NodeList<AnnotationExpr> annotations, Name name) {
         this(Range.UNKNOWN, annotations, name);
     }
 
-    public PackageDeclaration(Range range, NodeList<AnnotationExpr> annotations, NameExpr name) {
+    public PackageDeclaration(Range range, NodeList<AnnotationExpr> annotations, Name name) {
         super(range);
         setAnnotations(annotations);
         setName(name);
@@ -92,7 +96,8 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
      *
      * @return the name of the package
      */
-    public NameExpr getName() {
+    @Override
+    public Name getName() {
         return name;
     }
 
@@ -119,7 +124,8 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
      * @param name
      *            the name to set
      */
-    public PackageDeclaration setName(NameExpr name) {
+    @Override
+    public PackageDeclaration setName(Name name) {
         this.name = name;
         setAsParentNodeOf(this.name);
         return this;

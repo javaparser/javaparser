@@ -23,29 +23,27 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements 
-        NodeWithName<ClassOrInterfaceType>, 
+public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements
+        NodeWithSimpleName<ClassOrInterfaceType>, 
         NodeWithAnnotations<ClassOrInterfaceType>,
         NodeWithTypeArguments<ClassOrInterfaceType> {
 
     // TODO nullable
     private ClassOrInterfaceType scope;
 
-    private String name;
+    private SimpleName name;
 
     // TODO nullable
     private NodeList<Type<?>> typeArguments;
@@ -53,25 +51,25 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     public ClassOrInterfaceType() {
         this(Range.UNKNOWN,
                 null,
-                "empty",
+                new SimpleName(),
                 null);
     }
 
     public ClassOrInterfaceType(final String name) {
         this(Range.UNKNOWN,
                 null,
-                name,
+                new SimpleName(name),
                 null);
     }
 
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
         this(Range.UNKNOWN,
                 scope,
-                name,
+                new SimpleName(name),
                 null);
     }
 
-    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name, final NodeList<Type<?>> typeArguments) {
+    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type<?>> typeArguments) {
         super(range);
         setScope(scope);
         setName(name);
@@ -84,11 +82,6 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
 
     @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public ClassOrInterfaceType getScope() {
@@ -107,8 +100,13 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     @Override
-    public ClassOrInterfaceType setName(final String name) {
-        this.name = name;
+    public SimpleName getName() {
+        return name;
+    }
+
+    @Override
+    public ClassOrInterfaceType setName(final SimpleName name) {
+        this.name = assertNotNull(name);
         return this;
     }
 

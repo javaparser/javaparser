@@ -24,7 +24,7 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -42,7 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * </pre>
  * @author Julio Vilmar Gesser
  */
-public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithName<TypeParameter> {
+public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithSimpleName<TypeParameter> {
 
 	private String name;
 

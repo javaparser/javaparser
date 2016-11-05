@@ -256,7 +256,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 	}
 
 	@Override
-	public void visit(final QualifiedNameExpr n, final Object arg) {
+	public void visit(final QualifiedName n, final Object arg) {
 		printJavaComment(n.getComment(), arg);
 		n.getQualifier().accept(this, arg);
 		printer.print(".");

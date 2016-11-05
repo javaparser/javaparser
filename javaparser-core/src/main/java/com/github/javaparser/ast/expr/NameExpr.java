@@ -18,11 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -31,62 +30,43 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public class NameExpr extends Expression implements NodeWithName<NameExpr> {
+public class NameExpr extends Expression {
 
-	private String name;
+    private Name name;
 
-	public NameExpr() {
-        this(Range.UNKNOWN, "empty");
-	}
+    public NameExpr() {
+        this(Range.UNKNOWN, new Name());
+    }
 
-	public NameExpr(final String name) {
-		this(Range.UNKNOWN, name);
-	}
+    public NameExpr(final String name) {
+        this(Range.UNKNOWN, new Name(name));
+    }
 
-	public NameExpr(Range range, final String name) {
-		super(range);
+    public NameExpr(final Name name) {
+        this(Range.UNKNOWN, name);
+    }
+
+    public NameExpr(Range range, final Name name) {
+        super(range);
         setName(name);
-	}
-
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
-
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
-
-	@Override
-	public final String getName() {
-		return name;
-	}
+    }
 
     @Override
-    public NameExpr setName(final String name) {
-		this.name = assertNotNull(name);
-        return this;
-	}
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	/**
-	 * Creates a new {@link NameExpr} from a qualified name.<br>
-	 * The qualified name can contains "." (dot) characters.
-	 *
-	 * @param qualifiedName
-	 *            qualified name
-	 * @return instanceof {@link NameExpr}
-	 */
-    // TODO this needs a more specific name, like "parse"
-	public static NameExpr name(String qualifiedName) {
-		String[] split = qualifiedName.split("\\.");
-		NameExpr ret = new NameExpr(split[0]);
-		for (int i = 1; i < split.length; i++) {
-			ret = new QualifiedNameExpr(ret, split[i]);
-		}
-		return ret;
-	}
-
-	public String getQualifiedName() {
+    public final Name getName() {
         return name;
+    }
+
+    public NameExpr setName(final Name name) {
+        this.name = assertNotNull(name);
+        return this;
     }
 }
