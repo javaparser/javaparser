@@ -137,6 +137,8 @@ public class InferenceContext {
             return new ArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
         } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
+        } else if (type instanceof InferenceVariableType) {
+            return type;
         } else {
             throw new UnsupportedOperationException(type.describe());
         }

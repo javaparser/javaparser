@@ -42,6 +42,7 @@ import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.google.common.collect.ImmutableList;
 import javaslang.Tuple2;
 
 import java.util.*;
@@ -346,7 +347,6 @@ public class JavaParserFacade {
                         // At this point parameterType
                         // if Function<T=? super Stream.T, ? extends map.R>
                         // we should replace Stream.T
-                        Type parameterType = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
                         Type functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
                         //inferenceContext.addPair(parameterType, functionalInterfaceType);
                         //inferenceContext.addPair(parameterType, result);
@@ -554,7 +554,10 @@ public class JavaParserFacade {
             }
         } else if (node instanceof ClassExpr) {
             // This implementation does not regard the actual type argument of the ClassExpr.
-            return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), typeSolver);
+            ClassExpr classExpr = (ClassExpr)node;
+            com.github.javaparser.ast.type.Type astType = classExpr.getType();
+            Type jssType = convertToUsage(astType, classExpr.getType());
+            return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType),typeSolver);
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
