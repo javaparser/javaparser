@@ -24,6 +24,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtClass;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -33,6 +34,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
+    private JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
 
     public JavassistEnumDeclaration(CtClass ctClass, TypeSolver typeSolver) {
         if (ctClass == null) {
@@ -43,6 +45,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
+        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver);
     }
 
     @Override
@@ -102,6 +105,11 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.getTypeParameters();
+    }
+
+    @Override
+    public Optional<TypeDeclaration> containerType() {
+        return javassistTypeDeclarationAdapter.containerType();
     }
 }

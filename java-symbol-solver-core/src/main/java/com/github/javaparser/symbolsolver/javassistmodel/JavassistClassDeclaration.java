@@ -42,6 +42,19 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
+    private JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
+
+    public JavassistClassDeclaration(CtClass ctClass, TypeSolver typeSolver) {
+        if (ctClass == null) {
+            throw new IllegalArgumentException();
+        }
+        if (ctClass.isInterface() || ctClass.isAnnotation() || ctClass.isPrimitive() || ctClass.isEnum()) {
+            throw new IllegalArgumentException("Trying to instantiate a JavassistClassDeclaration with something which is not a class: " + ctClass.toString());
+        }
+        this.ctClass = ctClass;
+        this.typeSolver = typeSolver;
+        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver);
+    }
 
     @Override
     protected ReferenceType object() {
@@ -55,20 +68,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
-        return Arrays.stream(ctClass.getDeclaredMethods())
-                .map(m -> new JavassistMethodDeclaration(m, typeSolver))
-                .collect(Collectors.toSet());
-    }
-
-    public JavassistClassDeclaration(CtClass ctClass, TypeSolver typeSolver) {
-        if (ctClass == null) {
-            throw new IllegalArgumentException();
-        }
-        if (ctClass.isInterface() || ctClass.isAnnotation() || ctClass.isPrimitive() || ctClass.isEnum()) {
-            throw new IllegalArgumentException("Trying to instantiate a JavassistClassDeclaration with something which is not a class: " + ctClass.toString());
-        }
-        this.ctClass = ctClass;
-        this.typeSolver = typeSolver;
+        return javassistTypeDeclarationAdapter.getDeclaredMethods();
     }
 
     @Override
@@ -314,17 +314,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        if (null == ctClass.getGenericSignature()) {
-            return Collections.emptyList();
-        } else {
-            try {
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                String qualifier = ctClass.getName();
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, qualifier, typeSolver)).collect(Collectors.toList());
-            } catch (BadBytecode badBytecode) {
-                throw new RuntimeException(badBytecode);
-            }
-        }
+        return javassistTypeDeclarationAdapter.getTypeParameters();
     }
 
     @Override
@@ -339,14 +329,6 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public Optional<TypeDeclaration> containerType() {
-        try {
-            if (ctClass.getDeclaringClass() == null) {
-                return Optional.empty();
-            } else {
-                throw new UnsupportedOperationException();
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.containerType();
     }
 }

@@ -30,8 +30,6 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.SignatureAttribute;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,6 +37,8 @@ import java.util.stream.Collectors;
 public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private CtClass ctClass;
+    private TypeSolver typeSolver;
+    private JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
 
     @Override
     public String toString() {
@@ -48,14 +48,13 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
                 '}';
     }
 
-    private TypeSolver typeSolver;
-
     public JavassistInterfaceDeclaration(CtClass ctClass, TypeSolver typeSolver) {
-        this.ctClass = ctClass;
-        this.typeSolver = typeSolver;
         if (!ctClass.isInterface()) {
             throw new IllegalArgumentException("Not an interface: " + ctClass.getName());
         }
+        this.ctClass = ctClass;
+        this.typeSolver = typeSolver;
+        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver);
     }
 
     @Override
@@ -189,16 +188,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        if (null == ctClass.getGenericSignature()) {
-            return Collections.emptyList();
-        } else {
-            try {
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, true, ctClass.getName(), typeSolver)).collect(Collectors.toList());
-            } catch (BadBytecode badBytecode) {
-                throw new RuntimeException(badBytecode);
-            }
-        }
+        return javassistTypeDeclarationAdapter.getTypeParameters();
     }
 
     @Override
@@ -234,4 +224,8 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
+    @Override
+    public Optional<TypeDeclaration> containerType() {
+        return javassistTypeDeclarationAdapter.containerType();
+    }
 }

@@ -67,6 +67,11 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
         return interfaces;
     }
 
+    @Override
+    public final ClassDeclaration asClass() {
+        return this;
+    }
+
     ///
     /// Protected
     ///
