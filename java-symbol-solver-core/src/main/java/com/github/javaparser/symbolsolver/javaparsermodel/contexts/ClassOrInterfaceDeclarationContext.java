@@ -133,7 +133,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         return javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
     }
 
-    public List<MethodDeclaration> methodsByName(String name) {
+    private List<MethodDeclaration> methodsByName(String name) {
         List<MethodDeclaration> candidateMethods = new ArrayList<>();
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
