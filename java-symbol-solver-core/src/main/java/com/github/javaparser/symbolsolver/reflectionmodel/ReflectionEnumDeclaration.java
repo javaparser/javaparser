@@ -20,6 +20,7 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
 
     private Class<?> clazz;
     private TypeSolver typeSolver;
+    private ReflectionClassAdapter reflectionClassAdapter;
 
     ///
     /// Constructors
@@ -57,18 +59,18 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
         if (!clazz.isEnum()) {
             throw new IllegalArgumentException("Class should be an enum");
         }
-        this.typeSolver = typeSolver;
         this.clazz = clazz;
+        this.typeSolver = typeSolver;
+        this.reflectionClassAdapter = new ReflectionClassAdapter(clazz, typeSolver, this);
     }
 
     ///
     /// Public methods
     ///
 
-
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
 
     @Override
@@ -78,37 +80,37 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public List<ReferenceType> getAncestors() {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getAncestors();
     }
 
     @Override
     public FieldDeclaration getField(String name) {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getField(name);
     }
 
     @Override
     public boolean hasField(String name) {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.hasField(name);
     }
 
     @Override
     public List<FieldDeclaration> getAllFields() {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getAllFields();
     }
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getDeclaredMethods();
     }
 
     @Override
     public boolean isAssignableBy(Type type) {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.isAssignableBy(type);
     }
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
-        throw new UnsupportedOperationException();
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
@@ -123,6 +125,6 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getTypeParameters();
     }
 }

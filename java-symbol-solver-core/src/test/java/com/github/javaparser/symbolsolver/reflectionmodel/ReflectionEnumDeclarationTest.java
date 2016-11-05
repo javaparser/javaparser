@@ -90,5 +90,5 @@ public class ReflectionEnumDeclarationTest extends AbstractTest {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
         assertEquals("com.github.javaparser.ast.Modifier", modifier.getQualifiedName());
     }
-    
+
 }
