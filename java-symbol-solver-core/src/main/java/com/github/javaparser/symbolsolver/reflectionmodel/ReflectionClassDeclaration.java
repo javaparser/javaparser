@@ -433,4 +433,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     public List<ConstructorDeclaration> getConstructors() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Set<TypeDeclaration> internalTypes() {
+        return Arrays.stream(this.clazz.getDeclaredClasses())
+                .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
+                .collect(Collectors.toSet());
+    }
 }

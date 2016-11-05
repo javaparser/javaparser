@@ -42,7 +42,7 @@ public interface TypeDeclaration extends Declaration, TypeParametrizable {
      * Get the list of types defined inside the current type.
      */
     default Set<TypeDeclaration> internalTypes() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("InternalTypes not available for " + this);
     }
 
     /**
