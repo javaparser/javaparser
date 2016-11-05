@@ -301,6 +301,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
         fields.addAll(superclass.getAllFields());
 
+        // TODO convert field types because of type parameters
+        getInterfaces().forEach(interf -> interf.getTypeDeclaration().getAllFields().forEach(f -> {
+            fields.add(f);
+        }));
+
         return fields;
     }
 

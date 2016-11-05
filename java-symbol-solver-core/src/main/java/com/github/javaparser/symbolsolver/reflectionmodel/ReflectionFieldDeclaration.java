@@ -73,7 +73,7 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
 
     @Override
     public TypeDeclaration declaringType() {
-        throw new UnsupportedOperationException();
+        return ReflectionFactory.typeDeclarationFor(field.getDeclaringClass(), typeSolver);
     }
 
     public FieldDeclaration replaceType(Type fieldType) {

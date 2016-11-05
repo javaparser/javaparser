@@ -244,6 +244,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             }
         }
 
+        getAncestors().forEach(a -> fields.addAll(a.getTypeDeclaration().getAllFields()));
+
         return fields;
     }
 
@@ -257,18 +259,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public boolean hasField(String name) {
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        throw new UnsupportedOperationException("Derived fields");
+        return getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst().isPresent();
     }
 
     @Deprecated

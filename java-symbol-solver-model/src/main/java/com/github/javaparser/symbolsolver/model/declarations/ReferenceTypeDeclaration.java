@@ -64,14 +64,42 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
     FieldDeclaration getField(String name);
 
     /**
+     * Consider only field or inherited field which is not private.
+     */
+    default FieldDeclaration getVisibleField(String name) {
+        Optional<FieldDeclaration> field = getVisibleFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        if (field.isPresent()) {
+            return field.get();
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    /**
      * Has this type a field with the given name?
      */
     boolean hasField(String name);
 
     /**
+     * Either a declared field or inherited field which is not private.
+     */
+    default boolean hasVisibleField(String name) {
+        return getVisibleFields().stream().filter(f -> f.getName().equals(name)).findFirst().isPresent();
+    }
+
+    /**
      * Return a list of all fields, either declared in this declaration or inherited.
      */
     List<FieldDeclaration> getAllFields();
+
+    /**
+     * Return a list of all fields declared and the inherited ones which are not private.
+     */
+    default List<FieldDeclaration> getVisibleFields() {
+        return getAllFields().stream()
+                .filter(f -> f.declaringType().equals(this) || f.accessLevel() != AccessLevel.PRIVATE)
+                .collect(Collectors.toList());
+    }
 
     /**
      * Return a list of all the non static fields, either declared or inherited.
@@ -174,5 +202,4 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
         }
         return Optional.empty();
     }
-
 }

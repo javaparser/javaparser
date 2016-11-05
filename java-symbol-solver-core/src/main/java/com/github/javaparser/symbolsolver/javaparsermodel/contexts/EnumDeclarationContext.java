@@ -19,16 +19,15 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumConstantDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,15 +55,8 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
             }
         }
 
-        // among declared fields
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
-            if (member instanceof FieldDeclaration) {
-                SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
-                SymbolReference ref = solveWith(symbolDeclarator, name);
-                if (ref.isSolved()) {
-                    return ref;
-                }
-            }
+        if (this.getDeclaration().hasField(name)) {
+            return SymbolReference.solved(this.getDeclaration().getField(name));
         }
 
         // then to parent
@@ -89,5 +81,13 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
         }
         // TODO consider inherited methods
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+    }
+
+    ///
+    /// Private methods
+    ///
+
+    private ReferenceTypeDeclaration getDeclaration() {
+        return new JavaParserEnumDeclaration(this.wrappedNode, typeSolver);
     }
 }

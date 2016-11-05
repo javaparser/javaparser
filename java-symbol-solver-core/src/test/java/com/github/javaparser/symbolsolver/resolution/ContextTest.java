@@ -49,6 +49,8 @@ import static org.junit.Assert.assertEquals;
 
 public class ContextTest extends AbstractTest {
 
+    private TypeSolver typeSolver = new CombinedTypeSolver(new MemoryTypeSolver(), new ReflectionTypeSolver());
+
     private CompilationUnit parseSample(String sampleName) throws ParseException {
         InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
         return JavaParser.parse(is);
@@ -62,7 +64,7 @@ public class ContextTest extends AbstractTest {
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStmts().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
-        SymbolSolver symbolSolver = new SymbolSolver(new MemoryTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertEquals(true, symbolReference.isSolved());
@@ -78,7 +80,7 @@ public class ContextTest extends AbstractTest {
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStmts().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
-        SymbolSolver symbolSolver = new SymbolSolver(new MemoryTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertEquals(true, symbolReference.isSolved());
@@ -93,7 +95,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "aMethod");
         NameExpr foo = Navigator.findNameExpression(method1, "foo");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new MemoryTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("foo", foo);
 
         assertEquals(true, symbolReference.isSolved());

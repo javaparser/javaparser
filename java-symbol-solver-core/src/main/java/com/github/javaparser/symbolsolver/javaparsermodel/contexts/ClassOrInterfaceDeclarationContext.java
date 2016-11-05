@@ -26,7 +26,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -35,7 +38,6 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,23 +67,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         if (typeSolver == null) throw new IllegalArgumentException();
 
-        // first among declared fields
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
-            if (member instanceof FieldDeclaration) {
-                SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
-                SymbolReference ref = solveWith(symbolDeclarator, name);
-                if (ref.isSolved()) {
-                    return ref;
-                }
-            }
-        }
-
-        // then among inherited fields
-        for (ReferenceType ancestor : getDeclaration().getAncestors()) {
-            SymbolReference ref = new SymbolSolver(typeSolver).solveSymbolInType(ancestor.getTypeDeclaration(), name);
-            if (ref.isSolved() && ref.getCorrespondingDeclaration().asField().accessLevel() != AccessLevel.PRIVATE) {
-                return ref;
-            }
+        if (this.getDeclaration().hasVisibleField(name)) {
+            return SymbolReference.solved(this.getDeclaration().getVisibleField(name));
         }
 
         // then to parent
