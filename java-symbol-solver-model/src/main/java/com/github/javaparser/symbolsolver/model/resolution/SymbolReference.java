@@ -69,4 +69,12 @@ public class SymbolReference<S extends Declaration> {
     public boolean isSolved() {
         return correspondingDeclaration.isPresent();
     }
+
+    public static <O extends Declaration> SymbolReference<O> adapt(SymbolReference<? extends O> ref, Class<O> clazz) {
+        if (ref.isSolved()) {
+            return SymbolReference.solved(ref.getCorrespondingDeclaration());
+        } else {
+            return SymbolReference.unsolved(clazz);
+        }
+    }
 }

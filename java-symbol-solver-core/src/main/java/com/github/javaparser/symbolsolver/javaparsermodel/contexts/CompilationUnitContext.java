@@ -66,7 +66,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         while (itName.contains(".")) {
             String typeName = getType(itName);
             String memberName = getMember(itName);
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> type = this.solveType(typeName, typeSolver);
+            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> type = this.solveType(typeName, typeSolver);
             if (type.isSolved()) {
                 return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
             } else {
@@ -104,7 +104,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypes() != null) {
             for (TypeDeclaration type : wrappedNode.getTypes()) {
                 if (type.getName().equals(name)) {
@@ -129,7 +129,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     if (qName.equals(name) || qName.endsWith("." + name)) {
                         SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref.isSolved()) {
-                            return ref;
+                            return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
                         }
                     }
                 } else if (importDecl instanceof TypeImportOnDemandDeclaration) {
@@ -137,7 +137,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     String qName = packageName + "." + name;
                     SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                     if (ref.isSolved()) {
-                        return ref;
+                        return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
                     }
                 }
             }
@@ -148,19 +148,19 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             String qName = this.wrappedNode.getPackage().get().getName().toString() + "." + name;
             SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref.isSolved()) {
-                return ref;
+                return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
             }
         }
 
         // Look in the java.lang package
         SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
         if (ref.isSolved()) {
-            return ref;
+            return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
         }
 
         // DO NOT look for absolute name if this name is not qualified: you cannot import classes from the default package
         if (isQualifiedName(name)) {
-            return typeSolver.tryToSolveType(name);
+            return SymbolReference.adapt(typeSolver.tryToSolveType(name), com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
         } else {
             return SymbolReference.unsolved(com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.class);
         }

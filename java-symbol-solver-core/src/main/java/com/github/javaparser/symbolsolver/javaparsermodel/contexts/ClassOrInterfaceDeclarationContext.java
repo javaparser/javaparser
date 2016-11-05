@@ -129,7 +129,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     @Override
-    public SymbolReference<ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         return javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
     }
 
@@ -155,7 +155,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                 throw new UnsupportedOperationException();
             }
             String superclassName = this.wrappedNode.getExtends().get(0).getName();
-            SymbolReference<ReferenceTypeDeclaration> superclass = solveType(superclassName, typeSolver);
+            SymbolReference<TypeDeclaration> superclass = solveType(superclassName, typeSolver);
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
@@ -165,7 +165,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             }
         } else {
             String superclassName = "java.lang.Object";
-            SymbolReference<ReferenceTypeDeclaration> superclass = solveType(superclassName, typeSolver);
+            SymbolReference<TypeDeclaration> superclass = solveType(superclassName, typeSolver);
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
@@ -178,7 +178,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         // Consider only default methods from interfaces
         for (ClassOrInterfaceType implemented : this.wrappedNode.getImplements()) {
             String interfaceClassName = implemented.getName();
-            SymbolReference<ReferenceTypeDeclaration> superclass = solveType(interfaceClassName, typeSolver);
+            SymbolReference<TypeDeclaration> superclass = solveType(interfaceClassName, typeSolver);
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, interfaceClassName);
             }

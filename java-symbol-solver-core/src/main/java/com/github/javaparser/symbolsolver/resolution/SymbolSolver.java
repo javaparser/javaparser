@@ -88,13 +88,13 @@ public class SymbolSolver {
         return solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    public ReferenceTypeDeclaration solveType(com.github.javaparser.ast.type.Type type) {
+    public TypeDeclaration solveType(com.github.javaparser.ast.type.Type type) {
         if (type instanceof ClassOrInterfaceType) {
 
             // FIXME should call typesolver here!
 
             String name = ((ClassOrInterfaceType) type).getName();
-            SymbolReference<ReferenceTypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name, typeSolver);
+            SymbolReference<TypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name, typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver), name);
             }
@@ -149,7 +149,7 @@ public class SymbolSolver {
      * Try to solve a symbol just in the declaration, it does not delegate to the container.
      */
     @Deprecated
-    public SymbolReference<ReferenceTypeDeclaration> solveTypeInType(TypeDeclaration typeDeclaration, String name) {
+    public SymbolReference<TypeDeclaration> solveTypeInType(TypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             return ((JavaParserClassDeclaration) typeDeclaration).solveType(name, typeSolver);
         }

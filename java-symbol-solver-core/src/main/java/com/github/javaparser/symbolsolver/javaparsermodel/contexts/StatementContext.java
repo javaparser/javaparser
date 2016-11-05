@@ -23,7 +23,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -149,7 +149,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     }
 
     @Override
-    public SymbolReference<ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         return getParent().solveType(name, typeSolver);
     }
 }

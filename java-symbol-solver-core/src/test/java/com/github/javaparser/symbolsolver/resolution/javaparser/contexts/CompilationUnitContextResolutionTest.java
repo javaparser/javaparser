@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -172,7 +173,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         memoryTypeSolver.addDeclaration("com.foo.OtherClassInSamePackage", otherClass);
         EasyMock.replay(otherClass);
 
-        SymbolReference<ReferenceTypeDeclaration> ref = context.solveType("OtherClassInSamePackage", memoryTypeSolver);
+        SymbolReference<TypeDeclaration> ref = context.solveType("OtherClassInSamePackage", memoryTypeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("com.foo.OtherClassInSamePackage", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -182,7 +183,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        SymbolReference<ReferenceTypeDeclaration> ref = context.solveType("Assert", new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
+        SymbolReference<TypeDeclaration> ref = context.solveType("Assert", new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         assertEquals(true, ref.isSolved());
         assertEquals("org.junit.Assert", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -192,7 +193,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        SymbolReference<ReferenceTypeDeclaration> ref = context.solveType("org.junit.Assume", new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
+        SymbolReference<TypeDeclaration> ref = context.solveType("org.junit.Assume", new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         assertEquals(true, ref.isSolved());
         assertEquals("org.junit.Assume", ref.getCorrespondingDeclaration().getQualifiedName());
     }

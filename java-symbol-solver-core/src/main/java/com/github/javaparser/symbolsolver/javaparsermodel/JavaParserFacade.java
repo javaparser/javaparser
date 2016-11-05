@@ -245,11 +245,11 @@ public class JavaParserFacade {
             throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
         }
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) typeExpr.getType();
-        SymbolReference<ReferenceTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName(), typeSolver);
+        SymbolReference<TypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName(), typeSolver);
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new UnsupportedOperationException();
         }
-        List<MethodUsage> methodUsages = typeDeclarationSymbolReference.getCorrespondingDeclaration().getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList());
+        List<MethodUsage> methodUsages = ((ReferenceTypeDeclaration)typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList());
         switch (methodUsages.size()) {
             case 0:
                 throw new UnsupportedOperationException();
@@ -439,10 +439,10 @@ public class JavaParserFacade {
             // We should understand if this is a static access
             if (fieldAccessExpr.getScope() instanceof NameExpr) {
                 NameExpr staticValue = (NameExpr) fieldAccessExpr.getScope();
-                SymbolReference<ReferenceTypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr, typeSolver).solveType(staticValue.toString(), typeSolver);
+                SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr, typeSolver).solveType(staticValue.toString(), typeSolver);
                 if (typeAccessedStatically.isSolved()) {
                     // TODO here maybe we have to substitute type typeParametersValues
-                    return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField()).getType();
+                    return ((ReferenceTypeDeclaration)typeAccessedStatically.getCorrespondingDeclaration()).getField(fieldAccessExpr.getField()).getType();
                 }
             }
             Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField(), fieldAccessExpr);
@@ -591,11 +591,11 @@ public class JavaParserFacade {
         if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
-            SymbolReference<ReferenceTypeDeclaration> ref = context.solveType(name, typeSolver);
+            SymbolReference<TypeDeclaration> ref = context.solveType(name, typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(name);
             }
-            ReferenceTypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
+            TypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
             List<Type> typeParameters = Collections.emptyList();
             if (classOrInterfaceType.getTypeArguments().isPresent()) {
                 typeParameters = classOrInterfaceType.getTypeArguments().get().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
@@ -608,7 +608,7 @@ public class JavaParserFacade {
                     return new TypeVariable(javaParserTypeVariableDeclaration.asTypeParameter());
                 }
             } else {
-                return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);
+                return new ReferenceTypeImpl((ReferenceTypeDeclaration) typeDeclaration, typeParameters, typeSolver);
             }
         } else if (type instanceof com.github.javaparser.ast.type.PrimitiveType) {
             return PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) type).getType().name());

@@ -118,7 +118,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         if (wrappedNode.getExtends().isEmpty()) {
             return new ReferenceTypeImpl(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
         } else {
-            SymbolReference<ReferenceTypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
+            SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
             }
@@ -249,7 +249,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
         if (this.wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType type : wrappedNode.getImplements()) {
-                ReferenceTypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
+                ReferenceTypeDeclaration ancestor = (ReferenceTypeDeclaration) new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
                 }
@@ -333,7 +333,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Deprecated
-    public SymbolReference<ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)) {
             return SymbolReference.solved(this);
         }
@@ -406,15 +406,15 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     private ReferenceTypeImpl toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
-        SymbolReference<ReferenceTypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());
+        SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());
         if (!ancestor.isSolved()) {
             throw new UnsolvedSymbolException(type.getName());
         }
         if (type.getTypeArguments().isPresent()) {
             List<Type> typeParams = type.getTypeArguments().get().stream().map((t) -> toTypeUsage(t, typeSolver)).collect(Collectors.toList());
-            return new ReferenceTypeImpl(ancestor.getCorrespondingDeclaration(), typeParams, typeSolver);
+            return new ReferenceTypeImpl((ReferenceTypeDeclaration) ancestor.getCorrespondingDeclaration(), typeParams, typeSolver);
         } else {
-            return new ReferenceTypeImpl(ancestor.getCorrespondingDeclaration(), typeSolver);
+            return new ReferenceTypeImpl((ReferenceTypeDeclaration) ancestor.getCorrespondingDeclaration(), typeSolver);
         }
     }
 

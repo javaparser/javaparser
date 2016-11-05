@@ -301,11 +301,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
-                SymbolReference<ReferenceTypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName());
+                SymbolReference<TypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName());
                 if (!implementedDeclRef.isSolved()) {
                     throw new UnsolvedSymbolException(implementedType.getName());
                 }
-                ancestors.add(new ReferenceTypeImpl(implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
+                ancestors.add(new ReferenceTypeImpl((ReferenceTypeDeclaration) implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
             }
         }
         return ancestors;
