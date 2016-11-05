@@ -36,6 +36,7 @@ import java.util.Optional;
  */
 public class ContextHelper {
 
+    @Deprecated
     public static Context getContext(TypeDeclaration typeDeclaration) {
         try {
             return (Context) typeDeclaration.getClass().getMethod("getContext").invoke(typeDeclaration);

@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ReflectionFactory {
 
     public static TypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {

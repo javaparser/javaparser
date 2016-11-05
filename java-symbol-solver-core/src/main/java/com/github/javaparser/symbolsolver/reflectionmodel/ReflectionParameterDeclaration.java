@@ -20,6 +20,9 @@ import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaratio
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ReflectionParameterDeclaration implements ParameterDeclaration {
     private Class<?> type;
     private java.lang.reflect.Type genericType;

@@ -27,6 +27,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ReflectionTypeParameter implements TypeParameterDeclaration {
 
     private TypeVariable typeVariable;

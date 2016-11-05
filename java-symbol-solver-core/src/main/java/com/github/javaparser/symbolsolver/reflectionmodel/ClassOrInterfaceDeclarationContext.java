@@ -28,6 +28,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
+@Deprecated
 public class ClassOrInterfaceDeclarationContext implements Context {
 
     private Class<?> wrapped;

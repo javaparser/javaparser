@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ReflectionMethodDeclaration implements MethodDeclaration {
 
     // TODO

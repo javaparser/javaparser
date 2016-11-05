@@ -30,21 +30,52 @@ import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.reflectionmodel.comparators.MethodComparator;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.TypeVariable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ReflectionClassDeclaration extends AbstractClassDeclaration {
+
+    ///
+    /// Fields
+    ///
 
     private Class<?> clazz;
     private TypeSolver typeSolver;
 
-    @Override
-    protected ReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    ///
+    /// Constructors
+    ///
+
+    public ReflectionClassDeclaration(Class<?> clazz, TypeSolver typeSolver) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("Class should not be null");
+        }
+        if (clazz.isInterface()) {
+            throw new IllegalArgumentException("Class should not be an interface");
+        }
+        if (clazz.isPrimitive()) {
+            throw new IllegalArgumentException("Class should not represent a primitive class");
+        }
+        if (clazz.isArray()) {
+            throw new IllegalArgumentException("Class should not be an array");
+        }
+        this.typeSolver = typeSolver;
+        this.clazz = clazz;
     }
+
+    ///
+    /// Public methods
+    ///
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
@@ -52,23 +83,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 .filter(m -> !m.isSynthetic() && !m.isBridge())
                 .map(m -> new ReflectionMethodDeclaration(m, typeSolver))
                 .collect(Collectors.toSet());
-    }
-
-    public ReflectionClassDeclaration(Class<?> clazz, TypeSolver typeSolver) {
-        if (clazz == null) {
-            throw new IllegalArgumentException();
-        }
-        this.typeSolver = typeSolver;
-        if (clazz.isInterface()) {
-            throw new IllegalArgumentException();
-        }
-        if (clazz.isPrimitive()) {
-            throw new IllegalArgumentException();
-        }
-        if (clazz.isArray()) {
-            throw new IllegalArgumentException();
-        }
-        this.clazz = clazz;
     }
 
     @Override
@@ -375,55 +389,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return params;
     }
 
-    private static class ParameterComparator implements Comparator<Parameter> {
-
-        @Override
-        public int compare(Parameter o1, Parameter o2) {
-            int compareName = o1.getName().compareTo(o2.getName());
-            if (compareName != 0) return compareName;
-            int compareType = new ClassComparator().compare(o1.getType(), o2.getType());
-            if (compareType != 0) return compareType;
-            return 0;
-        }
-    }
-
-    private static class ClassComparator implements Comparator<Class<?>> {
-
-        @Override
-        public int compare(Class<?> o1, Class<?> o2) {
-            int subCompare;
-            subCompare = o1.getCanonicalName().compareTo(o2.getCanonicalName());
-            if (subCompare != 0) return subCompare;
-            subCompare = Boolean.compare(o1.isAnnotation(), o2.isAnnotation());
-            if (subCompare != 0) return subCompare;
-            subCompare = Boolean.compare(o1.isArray(), o2.isArray());
-            if (subCompare != 0) return subCompare;
-            subCompare = Boolean.compare(o1.isEnum(), o2.isEnum());
-            if (subCompare != 0) return subCompare;
-            subCompare = Boolean.compare(o1.isInterface(), o2.isInterface());
-            if (subCompare != 0) return subCompare;
-            return 0;
-        }
-    }
-
-    private static class MethodComparator implements Comparator<Method> {
-
-        @Override
-        public int compare(Method o1, Method o2) {
-            int compareName = o1.getName().compareTo(o2.getName());
-            if (compareName != 0) return compareName;
-            int compareNParams = o1.getParameterCount() - o2.getParameterCount();
-            if (compareNParams != 0) return compareNParams;
-            for (int i = 0; i < o1.getParameterCount(); i++) {
-                int compareParam = new ParameterComparator().compare(o1.getParameters()[i], o2.getParameters()[i]);
-                if (compareParam != 0) return compareParam;
-            }
-            int compareResult = new ClassComparator().compare(o1.getReturnType(), o2.getReturnType());
-            if (compareResult != 0) return compareResult;
-            return 0;
-        }
-    }
-
     @Override
     public AccessLevel accessLevel() {
         return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
@@ -440,4 +405,14 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
                 .collect(Collectors.toSet());
     }
+
+    ///
+    /// Protected methods
+    ///
+
+    @Override
+    protected ReferenceType object() {
+        return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    }
+
 }

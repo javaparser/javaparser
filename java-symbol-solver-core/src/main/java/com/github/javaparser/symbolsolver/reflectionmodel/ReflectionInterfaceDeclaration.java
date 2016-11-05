@@ -41,6 +41,9 @@ import java.lang.reflect.TypeVariable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private Class<?> clazz;

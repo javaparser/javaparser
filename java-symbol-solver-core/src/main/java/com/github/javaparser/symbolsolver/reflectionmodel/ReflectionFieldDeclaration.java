@@ -25,6 +25,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ReflectionFieldDeclaration implements FieldDeclaration {
 
     private Field field;
