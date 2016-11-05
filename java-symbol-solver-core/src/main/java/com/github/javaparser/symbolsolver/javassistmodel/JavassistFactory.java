@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import javassist.CtClass;
@@ -46,7 +46,7 @@ public class JavassistFactory {
         }
     }
 
-    public static TypeDeclaration toTypeDeclaration(CtClass ctClazz, TypeSolver typeSolver) {
+    public static ReferenceTypeDeclaration toTypeDeclaration(CtClass ctClazz, TypeSolver typeSolver) {
         if (ctClazz.isInterface()) {
             return new JavassistInterfaceDeclaration(ctClazz, typeSolver);
         } else if (ctClazz.isEnum()) {

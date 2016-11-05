@@ -16,11 +16,12 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumConstantDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -37,8 +38,11 @@ import java.util.List;
  */
 public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclaration> {
 
+    private JavaParserTypeDeclarationAdapter javaParserTypeDeclarationAdapter;
+
     public EnumDeclarationContext(EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
+        this.javaParserTypeDeclarationAdapter = new JavaParserTypeDeclarationAdapter(wrappedNode, typeSolver, this);
     }
 
     @Override
@@ -68,26 +72,8 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
     }
 
     @Override
-    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        if (this.wrappedNode.getName().equals(name)) {
-            return SymbolReference.solved(new JavaParserEnumDeclaration(this.wrappedNode, typeSolver));
-        }
-
-        // Internal classes
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
-                if (internalType.getName().equals(name)) {
-                    if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) internalType, typeSolver));
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-                }
-            }
-        }
-
-        return getParent().solveType(name, typeSolver);
+    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+        return javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
     }
 
     @Override

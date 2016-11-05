@@ -21,7 +21,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -31,8 +31,8 @@ import com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import org.easymock.EasyMock;
@@ -166,13 +166,13 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        TypeDeclaration otherClass = EasyMock.createMock(TypeDeclaration.class);
+        ReferenceTypeDeclaration otherClass = EasyMock.createMock(ReferenceTypeDeclaration.class);
         EasyMock.expect(otherClass.getQualifiedName()).andReturn("com.foo.OtherClassInSamePackage");
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
         memoryTypeSolver.addDeclaration("com.foo.OtherClassInSamePackage", otherClass);
         EasyMock.replay(otherClass);
 
-        SymbolReference<TypeDeclaration> ref = context.solveType("OtherClassInSamePackage", memoryTypeSolver);
+        SymbolReference<ReferenceTypeDeclaration> ref = context.solveType("OtherClassInSamePackage", memoryTypeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("com.foo.OtherClassInSamePackage", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -182,7 +182,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        SymbolReference<TypeDeclaration> ref = context.solveType("Assert", new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
+        SymbolReference<ReferenceTypeDeclaration> ref = context.solveType("Assert", new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         assertEquals(true, ref.isSolved());
         assertEquals("org.junit.Assert", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -192,7 +192,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        SymbolReference<TypeDeclaration> ref = context.solveType("org.junit.Assume", new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
+        SymbolReference<ReferenceTypeDeclaration> ref = context.solveType("org.junit.Assume", new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         assertEquals(true, ref.isSolved());
         assertEquals("org.junit.Assume", ref.getCorrespondingDeclaration().getQualifiedName());
     }

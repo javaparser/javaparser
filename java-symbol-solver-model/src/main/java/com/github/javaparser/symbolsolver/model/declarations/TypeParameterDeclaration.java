@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface TypeParameterDeclaration {
+public interface TypeParameterDeclaration extends TypeDeclaration {
 
     /**
      * Instantiate a TypeParameter defined on a Type with the given data.

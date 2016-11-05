@@ -68,7 +68,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     ///
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
@@ -152,7 +152,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other) {
+    public boolean canBeAssignedTo(ReferenceTypeDeclaration other) {
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return isFunctionalInterface();
         }

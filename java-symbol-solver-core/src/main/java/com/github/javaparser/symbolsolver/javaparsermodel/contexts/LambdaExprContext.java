@@ -25,10 +25,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -137,7 +134,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         return getParent().solveType(name, typeSolver);
     }
 

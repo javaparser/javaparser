@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 
@@ -29,7 +29,7 @@ import java.util.Set;
  *
  * @author Federico Tomassetti
  */
-public abstract class AbstractTypeDeclaration implements TypeDeclaration {
+public abstract class AbstractTypeDeclaration implements ReferenceTypeDeclaration {
 
     @Override
     public final Set<MethodUsage> getAllMethods() {

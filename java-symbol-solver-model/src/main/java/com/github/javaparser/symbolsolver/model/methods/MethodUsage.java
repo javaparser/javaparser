@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.model.methods;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParametersMap;
@@ -69,7 +69,7 @@ public class MethodUsage implements TypeParametrized {
         return declaration.getName();
     }
 
-    public TypeDeclaration declaringType() {
+    public ReferenceTypeDeclaration declaringType() {
         return declaration.declaringType();
     }
 

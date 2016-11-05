@@ -40,13 +40,9 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     protected N wrappedNode;
     protected TypeSolver typeSolver;
 
-    public AbstractJavaParserContext(N wrappedNode, TypeSolver typeSolver) {
-        if (wrappedNode == null) {
-            throw new NullPointerException();
-        }
-        this.wrappedNode = wrappedNode;
-        this.typeSolver = typeSolver;
-    }
+    ///
+    /// Static methods
+    ///
 
     protected static final SymbolReference<ValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name) {
         for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
@@ -56,6 +52,22 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         }
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
+
+    ///
+    /// Constructors
+    ///
+
+    public AbstractJavaParserContext(N wrappedNode, TypeSolver typeSolver) {
+        if (wrappedNode == null) {
+            throw new NullPointerException();
+        }
+        this.wrappedNode = wrappedNode;
+        this.typeSolver = typeSolver;
+    }
+
+    ///
+    /// Public methods
+    ///
 
     @Override
     public boolean equals(Object o) {
@@ -84,15 +96,6 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         }
     }
 
-    protected Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver) {
-        for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
-            if (decl.getName().equals(name)) {
-                return Optional.of(Value.from(decl));
-            }
-        }
-        return Optional.empty();
-    }
-
     @Override
     public final Context getParent() {
         if (getParentNode(wrappedNode) instanceof MethodCallExpr) {
@@ -118,6 +121,17 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             notMethod = getParentNode(notMethod);
         }
         return JavaParserFactory.getContext(notMethod, typeSolver);
+    }
+
+    ///
+    /// Protected methods
+    ///
+
+    protected Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver) {
+        return symbolDeclarator.getSymbolDeclarations().stream()
+                .filter(d -> d.getName().equals(name))
+                .map(d -> Value.from(d))
+                .findFirst();
     }
 
 }

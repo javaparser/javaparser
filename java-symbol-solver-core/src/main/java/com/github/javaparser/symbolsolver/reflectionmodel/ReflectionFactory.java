@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class ReflectionFactory {
 
-    public static TypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
+    public static ReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
             throw new IllegalArgumentException("No type declaration available for an Array");
         } else if (clazz.isPrimitive()) {

@@ -62,7 +62,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
         MethodCallExpr callToFoo = (MethodCallExpr) Navigator.findReturnStmt(methodDecl).getExpr().get();
         com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration methodDeclaration = javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
-        com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = methodDeclaration.declaringType();
+        com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration typeDeclaration = methodDeclaration.declaringType();
         assertEquals(2, typeDeclaration.getTypeParameters().size());
         assertTrue(typeDeclaration.getTypeParameters().get(0) instanceof JavaParserTypeParameter);
         assertEquals("A", typeDeclaration.getTypeParameters().get(0).getName());

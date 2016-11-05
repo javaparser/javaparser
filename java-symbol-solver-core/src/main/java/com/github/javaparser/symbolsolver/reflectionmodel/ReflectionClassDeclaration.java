@@ -177,7 +177,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other) {
+    public boolean canBeAssignedTo(ReferenceTypeDeclaration other) {
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return isFunctionalInterface();
         }
@@ -238,7 +238,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
@@ -298,7 +298,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public Set<TypeDeclaration> internalTypes() {
+    public Set<ReferenceTypeDeclaration> internalTypes() {
         return Arrays.stream(this.clazz.getDeclaredClasses())
                 .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
                 .collect(Collectors.toSet());

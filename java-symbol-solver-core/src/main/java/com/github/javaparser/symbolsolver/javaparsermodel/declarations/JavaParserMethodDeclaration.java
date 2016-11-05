@@ -53,7 +53,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public TypeDeclaration declaringType() {
+    public ReferenceTypeDeclaration declaringType() {
         if (getParentNode(wrappedNode) instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration parent = (ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
             if (parent.isInterface()) {

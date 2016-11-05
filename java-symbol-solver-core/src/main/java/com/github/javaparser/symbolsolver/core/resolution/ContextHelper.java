@@ -26,7 +26,14 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionMethodDeclar
 
 import java.util.List;
 
-public class ContextHelper {
+/**
+ * @author Federico Tomassetti
+ */
+class ContextHelper {
+
+    private ContextHelper() {
+        // prevent instantiation
+    }
 
     static MethodUsage resolveTypeVariables(Context context, MethodDeclaration methodDeclaration, List<Type> parameterTypes) {
         if (methodDeclaration instanceof JavaParserMethodDeclaration) {

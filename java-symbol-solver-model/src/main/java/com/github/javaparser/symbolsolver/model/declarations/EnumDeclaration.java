@@ -21,7 +21,7 @@ package com.github.javaparser.symbolsolver.model.declarations;
  *
  * @author Federico Tomassetti
  */
-public interface EnumDeclaration extends TypeDeclaration, HasAccessLevel {
+public interface EnumDeclaration extends ReferenceTypeDeclaration, HasAccessLevel {
 
     @Override
     default boolean isEnum() {

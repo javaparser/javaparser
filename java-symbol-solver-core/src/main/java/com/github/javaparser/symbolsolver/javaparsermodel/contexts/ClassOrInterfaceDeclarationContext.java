@@ -26,10 +26,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -49,9 +46,20 @@ import java.util.Optional;
  */
 public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContext<ClassOrInterfaceDeclaration> {
 
+    private JavaParserTypeDeclarationAdapter javaParserTypeDeclarationAdapter;
+
+    ///
+    /// Constructors
+    ///
+
     public ClassOrInterfaceDeclarationContext(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
+        this.javaParserTypeDeclarationAdapter = new JavaParserTypeDeclarationAdapter(wrappedNode, typeSolver, this);
     }
+
+    ///
+    /// Public methods
+    ///
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
@@ -97,7 +105,10 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
         // then among inherited fields
         for (ReferenceType ancestor : getDeclaration().getAllAncestors()) {
-            Optional<Value> ref = ContextHelper.solveSymbolAsValue(ancestor.getTypeDeclaration(), name, typeSolver);
+            Optional<Value> ref = ancestor.getTypeDeclaration().getAllFields().stream()
+                    .filter(f -> f.getName().equals(name))
+                    .map(f -> Value.from(f))
+                    .findFirst();
             if (ref.isPresent()) {
                 return ref;
             }
@@ -118,21 +129,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        SymbolReference<TypeDeclaration> ref = new SymbolSolver(typeSolver).solveTypeInType(getDeclaration(), name);
-        if (ref.isSolved()) {
-            return ref;
-        }
-        return getParent().solveType(name, typeSolver);
-    }
-
-    private TypeDeclaration getDeclaration() {
-        if (this.wrappedNode.isInterface()) {
-            return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver);
-        } else {
-            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver);
-        }
-        // TODO check enum
+    public SymbolReference<ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+        return javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
     }
 
     public List<MethodDeclaration> methodsByName(String name) {
@@ -157,7 +155,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                 throw new UnsupportedOperationException();
             }
             String superclassName = this.wrappedNode.getExtends().get(0).getName();
-            SymbolReference<TypeDeclaration> superclass = solveType(superclassName, typeSolver);
+            SymbolReference<ReferenceTypeDeclaration> superclass = solveType(superclassName, typeSolver);
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
@@ -167,7 +165,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             }
         } else {
             String superclassName = "java.lang.Object";
-            SymbolReference<TypeDeclaration> superclass = solveType(superclassName, typeSolver);
+            SymbolReference<ReferenceTypeDeclaration> superclass = solveType(superclassName, typeSolver);
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, superclassName);
             }
@@ -180,7 +178,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         // Consider only default methods from interfaces
         for (ClassOrInterfaceType implemented : this.wrappedNode.getImplements()) {
             String interfaceClassName = implemented.getName();
-            SymbolReference<TypeDeclaration> superclass = solveType(interfaceClassName, typeSolver);
+            SymbolReference<ReferenceTypeDeclaration> superclass = solveType(interfaceClassName, typeSolver);
             if (!superclass.isSolved()) {
                 throw new UnsolvedSymbolException(this, interfaceClassName);
             }
@@ -200,5 +198,17 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+    }
+
+    ///
+    /// Private methods
+    ///
+
+    private ReferenceTypeDeclaration getDeclaration() {
+        if (this.wrappedNode.isInterface()) {
+            return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver);
+        } else {
+            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver);
+        }
     }
 }

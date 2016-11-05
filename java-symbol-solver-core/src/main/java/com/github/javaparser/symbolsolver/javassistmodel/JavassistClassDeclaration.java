@@ -72,7 +72,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
@@ -328,7 +328,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public Optional<TypeDeclaration> containerType() {
+    public Optional<ReferenceTypeDeclaration> containerType() {
         return javassistTypeDeclarationAdapter.containerType();
     }
 }

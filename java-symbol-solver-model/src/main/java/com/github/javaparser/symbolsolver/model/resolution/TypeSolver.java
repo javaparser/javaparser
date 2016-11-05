@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.model.resolution;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 
 /**
  * An element able to find TypeDeclaration from their name.
@@ -51,13 +51,13 @@ public interface TypeSolver {
      * Try to solve the type with the given name. It always return a SymbolReference which can be solved
      * or unsolved.
      */
-    SymbolReference<TypeDeclaration> tryToSolveType(String name);
+    SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name);
 
     /**
      * Solve the given type. Either the type is found and returned or an UnsolvedSymbolException is thrown.
      */
-    default TypeDeclaration solveType(String name) throws UnsolvedSymbolException {
-        SymbolReference<TypeDeclaration> ref = tryToSolveType(name);
+    default ReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
+        SymbolReference<ReferenceTypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
         } else {

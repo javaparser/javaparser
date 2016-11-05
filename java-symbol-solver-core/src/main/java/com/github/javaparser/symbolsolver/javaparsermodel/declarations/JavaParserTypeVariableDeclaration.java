@@ -20,10 +20,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
@@ -46,7 +43,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 

@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface InterfaceDeclaration extends TypeDeclaration, TypeParametrizable, HasAccessLevel {
+public interface InterfaceDeclaration extends ReferenceTypeDeclaration, TypeParametrizable, HasAccessLevel {
 
     @Override
     default boolean isInterface() {

@@ -21,7 +21,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -33,12 +33,22 @@ import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ConstructorContext extends AbstractJavaParserContext<ConstructorDeclaration> {
 
+    ///
+    /// Constructors
+    ///
 
     public ConstructorContext(ConstructorDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
+
+    ///
+    /// Public methods
+    ///
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
@@ -79,7 +89,7 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(
+    public SymbolReference<ReferenceTypeDeclaration> solveType(
             String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {

@@ -109,7 +109,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 

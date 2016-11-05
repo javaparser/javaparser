@@ -132,7 +132,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         List<ReferenceType> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeImpl(other, typeSolver));
         for (ReferenceType ancestorOfOther : ancestorsOfOther) {
@@ -177,7 +177,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             return true;
         }
         if (type.isReferenceType()) {
-            TypeDeclaration other = typeSolver.solveType(type.describe());
+            ReferenceTypeDeclaration other = typeSolver.solveType(type.describe());
             return isAssignableBy(other);
         } else {
             throw new UnsupportedOperationException();
@@ -185,14 +185,14 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other) {
+    public boolean canBeAssignedTo(ReferenceTypeDeclaration other) {
         // TODO consider generic types
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
         if (this.wrappedNode.getExtends() != null) {
             for (ClassOrInterfaceType type : wrappedNode.getExtends()) {
-                TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
+                ReferenceTypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
                 }
@@ -201,7 +201,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
         if (this.wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType type : wrappedNode.getImplements()) {
-                TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
+                ReferenceTypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
                 }
@@ -272,7 +272,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Deprecated
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)) {
             return SymbolReference.solved(this);
         }
@@ -322,7 +322,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         List<ReferenceType> ancestors = new ArrayList<>();
         if (wrappedNode.getExtends() != null) {
             for (ClassOrInterfaceType extended : wrappedNode.getExtends()) {
-                SymbolReference<TypeDeclaration> ancestor = solveType(extended.getName(), typeSolver);
+                SymbolReference<ReferenceTypeDeclaration> ancestor = solveType(extended.getName(), typeSolver);
                 if (!ancestor.isSolved()) {
                     throw new UnsolvedSymbolException(extended.getName());
                 }
@@ -331,7 +331,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
-                SymbolReference<TypeDeclaration> ancestor = solveType(implemented.getName(), typeSolver);
+                SymbolReference<ReferenceTypeDeclaration> ancestor = solveType(implemented.getName(), typeSolver);
                 if (!ancestor.isSolved()) {
                     throw new UnsolvedSymbolException(implemented.getName());
                 }

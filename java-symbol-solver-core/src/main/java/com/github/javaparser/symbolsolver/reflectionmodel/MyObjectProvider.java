@@ -1,7 +1,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.logic.ObjectProvider;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -26,7 +26,7 @@ public class MyObjectProvider implements ObjectProvider {
     @Override
     public ReferenceType byName(String qualifiedName) {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        TypeDeclaration typeDeclaration = typeSolver.solveType(qualifiedName);
+        ReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(qualifiedName);
         if (!typeDeclaration.getTypeParameters().isEmpty()) {
             throw new UnsupportedOperationException();
         }

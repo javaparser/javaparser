@@ -89,7 +89,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         throw new UnsupportedOperationException();
     }
 
@@ -109,7 +109,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
-    public Optional<TypeDeclaration> containerType() {
+    public Optional<ReferenceTypeDeclaration> containerType() {
         return javassistTypeDeclarationAdapter.containerType();
     }
 }

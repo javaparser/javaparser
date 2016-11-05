@@ -21,10 +21,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -262,7 +259,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
             if (wrappedNode.getScope().get() instanceof NameExpr) {
                 String className = ((NameExpr) wrappedNode.getScope().get()).getName();
-                SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
+                SymbolReference<ReferenceTypeDeclaration> ref = solveType(className, typeSolver);
                 if (ref.isSolved()) {
                     SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
                     if (m.isSolved()) {

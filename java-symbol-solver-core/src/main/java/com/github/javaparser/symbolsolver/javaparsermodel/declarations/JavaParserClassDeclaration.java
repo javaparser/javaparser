@@ -118,7 +118,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         if (wrappedNode.getExtends().isEmpty()) {
             return new ReferenceTypeImpl(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
         } else {
-            SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
+            SymbolReference<ReferenceTypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
             }
@@ -184,7 +184,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         List<ReferenceType> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeImpl(other, typeSolver));
         for (ReferenceType ancestorOfOther : ancestorsOfOther) {
@@ -229,7 +229,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
             return true;
         }
         if (type.isReferenceType()) {
-            TypeDeclaration other = typeSolver.solveType(type.describe());
+            ReferenceTypeDeclaration other = typeSolver.solveType(type.describe());
             return isAssignableBy(other);
         } else {
             throw new UnsupportedOperationException();
@@ -237,7 +237,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other) {
+    public boolean canBeAssignedTo(ReferenceTypeDeclaration other) {
         // TODO consider generic types
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
@@ -249,7 +249,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
         if (this.wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType type : wrappedNode.getImplements()) {
-                TypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
+                ReferenceTypeDeclaration ancestor = new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
                 }
@@ -333,7 +333,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Deprecated
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().equals(name)) {
             return SymbolReference.solved(this);
         }
@@ -406,7 +406,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     private ReferenceTypeImpl toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
-        SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());
+        SymbolReference<ReferenceTypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());
         if (!ancestor.isSolved()) {
             throw new UnsolvedSymbolException(type.getName());
         }

@@ -62,7 +62,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
@@ -107,7 +107,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public boolean canBeAssignedTo(TypeDeclaration other) {
+    public boolean canBeAssignedTo(ReferenceTypeDeclaration other) {
         // Enums cannot be extended
         if (other.getQualifiedName().equals(this.getQualifiedName())) {
             return true;
@@ -301,7 +301,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
-                SymbolReference<TypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName());
+                SymbolReference<ReferenceTypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName());
                 if (!implementedDeclRef.isSolved()) {
                     throw new UnsolvedSymbolException(implementedType.getName());
                 }
@@ -337,7 +337,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         @Override
-        public TypeDeclaration declaringType() {
+        public ReferenceTypeDeclaration declaringType() {
             return enumDeclaration;
         }
 

@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.core.resolution;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -44,10 +44,10 @@ public interface Context {
         return Optional.empty();
     }
 
-    default SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    default SymbolReference<ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         Context parent = getParent();
         if (parent == null) {
-            return SymbolReference.unsolved(TypeDeclaration.class);
+            return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
         } else {
             return getParent().solveType(name, typeSolver);
         }

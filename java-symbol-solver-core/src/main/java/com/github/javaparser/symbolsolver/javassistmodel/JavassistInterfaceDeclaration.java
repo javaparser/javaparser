@@ -136,7 +136,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public boolean isAssignableBy(TypeDeclaration other) {
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
         throw new UnsupportedOperationException();
     }
 
@@ -225,7 +225,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public Optional<TypeDeclaration> containerType() {
+    public Optional<ReferenceTypeDeclaration> containerType() {
         return javassistTypeDeclarationAdapter.containerType();
     }
 }

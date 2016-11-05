@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtClass;
@@ -61,7 +61,7 @@ public class JavassistTypeDeclarationAdapter {
         }
     }
 
-    public Optional<TypeDeclaration> containerType() {
+    public Optional<ReferenceTypeDeclaration> containerType() {
         try {
             if (ctClass.getDeclaringClass() == null) {
                 return Optional.empty();

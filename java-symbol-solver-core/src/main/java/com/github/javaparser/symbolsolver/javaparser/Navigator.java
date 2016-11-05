@@ -31,15 +31,13 @@ import java.util.Optional;
 
 /**
  * This class can be used to easily retrieve nodes from a JavaParser AST.
+ *
+ * @author Federico Tomassetti
  */
 public final class Navigator {
 
     private Navigator() {
         // prevent instantiation
-    }
-
-    private static String getOuterTypeName(String qualifiedName) {
-        return qualifiedName.split("\\.", 2)[0];
     }
 
     public static Node getParentNode(Node node) {
@@ -49,13 +47,6 @@ public final class Navigator {
         } else {
             return parent;
         }
-    }
-
-    private static String getInnerTypeName(String qualifiedName) {
-        if (qualifiedName.contains(".")) {
-            return qualifiedName.split("\\.", 2)[1];
-        }
-        return "";
     }
 
     public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
@@ -89,7 +80,6 @@ public final class Navigator {
         }
         return type;
     }
-
 
     public static ClassOrInterfaceDeclaration demandClass(CompilationUnit cu, String qualifiedName) {
         ClassOrInterfaceDeclaration cd = demandClassOrInterface(cu, qualifiedName);
@@ -212,6 +202,50 @@ public final class Navigator {
         }
     }
 
+    public static <N> N findNodeOfGivenClass(Node node, Class<N> clazz) {
+        N res = findNodeOfGivenClassHelper(node, clazz);
+        if (res == null) {
+            throw new IllegalArgumentException();
+        } else {
+            return res;
+        }
+    }
+
+    public static <N> List<N> findAllNodesOfGivenClass(Node node, Class<N> clazz) {
+        List<N> res = new LinkedList<>();
+        findAllNodesOfGivenClassHelper(node, clazz, res);
+        return res;
+    }
+
+    public static ReturnStmt findReturnStmt(MethodDeclaration method) {
+        return findNodeOfGivenClass(method, ReturnStmt.class);
+    }
+
+    public static <N extends Node> Optional<N> findAncestor(Node node, Class<N> clazz) {
+        if (node.getParentNode() == null) {
+            return Optional.empty();
+        } else if (clazz.isInstance(node.getParentNode())) {
+            return Optional.of(clazz.cast(node.getParentNode()));
+        } else {
+            return findAncestor(node.getParentNode(), clazz);
+        }
+    }
+
+    ///
+    /// Private methods
+    ///
+
+    private static String getOuterTypeName(String qualifiedName) {
+        return qualifiedName.split("\\.", 2)[0];
+    }
+
+    private static String getInnerTypeName(String qualifiedName) {
+        if (qualifiedName.contains(".")) {
+            return qualifiedName.split("\\.", 2)[1];
+        }
+        return "";
+    }
+
     private static SwitchStmt findSwitchHelper(Node node) {
         if (node instanceof SwitchStmt) {
             return (SwitchStmt) node;
@@ -238,41 +272,12 @@ public final class Navigator {
         return null;
     }
 
-    public static <N> N findNodeOfGivenClass(Node node, Class<N> clazz) {
-        N res = findNodeOfGivenClassHelper(node, clazz);
-        if (res == null) {
-            throw new IllegalArgumentException();
-        } else {
-            return res;
-        }
-    }
-
-    public static <N> List<N> findAllNodesOfGivenClass(Node node, Class<N> clazz) {
-        List<N> res = new LinkedList<>();
-        findAllNodesOfGivenClassHelper(node, clazz, res);
-        return res;
-    }
-
     private static <N> void findAllNodesOfGivenClassHelper(Node node, Class<N> clazz, List<N> collector) {
         if (clazz.isInstance(node)) {
             collector.add(clazz.cast(node));
         }
         for (Node child : node.getChildrenNodes()) {
             findAllNodesOfGivenClassHelper(child, clazz, collector);
-        }
-    }
-
-    public static ReturnStmt findReturnStmt(MethodDeclaration method) {
-        return findNodeOfGivenClass(method, ReturnStmt.class);
-    }
-
-    public static <N extends Node> Optional<N> findAncestor(Node node, Class<N> clazz) {
-        if (node.getParentNode() == null) {
-            return Optional.empty();
-        } else if (clazz.isInstance(node.getParentNode())) {
-            return Optional.of(clazz.cast(node.getParentNode()));
-        } else {
-            return findAncestor(node.getParentNode(), clazz);
         }
     }
 }

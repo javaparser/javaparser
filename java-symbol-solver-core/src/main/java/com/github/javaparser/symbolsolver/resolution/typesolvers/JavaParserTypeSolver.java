@@ -20,7 +20,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -73,7 +73,7 @@ public class JavaParserTypeSolver implements TypeSolver {
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> tryToSolveType(String name) {
+    public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
         if (!srcDir.exists() || !srcDir.isDirectory()) {
             throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir.getAbsolutePath());
         }
@@ -103,9 +103,9 @@ public class JavaParserTypeSolver implements TypeSolver {
                     CompilationUnit compilationUnit = parse(srcFile);
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName);
                     if (!astTypeDeclaration.isPresent()) {
-                        return SymbolReference.unsolved(TypeDeclaration.class);
+                        return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
                     }
-                    TypeDeclaration typeDeclaration = JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get());
+                    ReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get());
                     return SymbolReference.solved(typeDeclaration);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -113,7 +113,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             }
         }
 
-        return SymbolReference.unsolved(TypeDeclaration.class);
+        return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
     }
 
 }

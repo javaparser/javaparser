@@ -61,7 +61,7 @@ public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, 
     /**
      * The type in which the method is declared.
      */
-    TypeDeclaration declaringType();
+    ReferenceTypeDeclaration declaringType();
 
     /**
      * Number of params.

@@ -151,8 +151,8 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        TypeDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
-        TypeDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
+        ReferenceTypeDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ReferenceTypeDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
         FieldDeclaration fooField = foo.getField("field");
         assertEquals(true, fooField.getType().isTypeVariable());
@@ -166,7 +166,7 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetDeclaredMethods() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        TypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        ReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<MethodDeclaration> methods = string.getDeclaredMethods().stream()
                 .filter(m -> m.accessLevel() != AccessLevel.PRIVATE && m.accessLevel() != AccessLevel.PACKAGE_PROTECTED)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))

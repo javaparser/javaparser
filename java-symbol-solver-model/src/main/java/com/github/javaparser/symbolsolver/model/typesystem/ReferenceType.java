@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -40,7 +40,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     // Fields
     //
 
-    protected TypeDeclaration typeDeclaration;
+    protected ReferenceTypeDeclaration typeDeclaration;
     protected TypeSolver typeSolver;
     protected TypeParametersMap typeParametersMap;
 
@@ -48,11 +48,11 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     // Constructors
     //
 
-    public ReferenceType(TypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    public ReferenceType(ReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
     }
 
-    public ReferenceType(TypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver) {
+    public ReferenceType(ReferenceTypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver) {
         if (typeSolver == null) {
             throw new IllegalArgumentException("typeSolver should not be null");
         }
@@ -238,7 +238,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
 
         // Avoid repetitions of Object
         ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
-        TypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ReferenceType objectRef = create(objectType, typeSolver);
         ancestors.add(objectRef);
         return ancestors;
@@ -305,7 +305,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     /**
      * Corresponding TypeDeclaration
      */
-    public final TypeDeclaration getTypeDeclaration() {
+    public final ReferenceTypeDeclaration getTypeDeclaration() {
         return typeDeclaration;
     }
 
@@ -373,15 +373,15 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     // Protected methods
     //
 
-    protected abstract ReferenceType create(TypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver);
+    protected abstract ReferenceType create(ReferenceTypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver);
 
-    protected ReferenceType create(TypeDeclaration typeDeclaration, TypeParametersMap typeParametersMap, TypeSolver typeSolver) {
+    protected ReferenceType create(ReferenceTypeDeclaration typeDeclaration, TypeParametersMap typeParametersMap, TypeSolver typeSolver) {
         return create(typeDeclaration, typeDeclaration.getTypeParameters().stream()
                 .map(tp -> typeParametersMap.getValue(tp))
                 .collect(Collectors.toList()), typeSolver);
     }
 
-    protected abstract ReferenceType create(TypeDeclaration typeDeclaration, TypeSolver typeSolver);
+    protected abstract ReferenceType create(ReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver);
 
     protected boolean isCorrespondingBoxingType(String typeName) {
         switch (typeName) {
@@ -444,7 +444,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     // Private methods
     //
 
-    private static List<Type> deriveParams(TypeDeclaration typeDeclaration) {
+    private static List<Type> deriveParams(ReferenceTypeDeclaration typeDeclaration) {
         return typeDeclaration.getTypeParameters().stream().map((tp) -> new TypeVariable(tp)).collect(Collectors.toList());
     }
 

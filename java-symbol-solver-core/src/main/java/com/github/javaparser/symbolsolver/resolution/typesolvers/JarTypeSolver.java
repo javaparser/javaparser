@@ -18,7 +18,7 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.ClassPool;
@@ -77,12 +77,12 @@ public class JarTypeSolver implements TypeSolver {
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> tryToSolveType(String name) {
+    public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
         try {
             if (classpathElements.containsKey(name)) {
                 return SymbolReference.solved(JavassistFactory.toTypeDeclaration(classpathElements.get(name).toCtClass(), getRoot()));
             } else {
-                return SymbolReference.unsolved(TypeDeclaration.class);
+                return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -90,8 +90,8 @@ public class JarTypeSolver implements TypeSolver {
     }
 
     @Override
-    public TypeDeclaration solveType(String name) throws UnsolvedSymbolException {
-        SymbolReference<TypeDeclaration> ref = tryToSolveType(name);
+    public ReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
+        SymbolReference<ReferenceTypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
         } else {

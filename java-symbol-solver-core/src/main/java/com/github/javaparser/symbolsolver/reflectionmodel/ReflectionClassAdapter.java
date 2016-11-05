@@ -2,10 +2,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.typesystem.NullType;
@@ -27,9 +24,9 @@ class ReflectionClassAdapter {
 
     private Class<?> clazz;
     private TypeSolver typeSolver;
-    private TypeDeclaration typeDeclaration;
+    private ReferenceTypeDeclaration typeDeclaration;
 
-    public ReflectionClassAdapter(Class<?> clazz, TypeSolver typeSolver, TypeDeclaration typeDeclaration) {
+    public ReflectionClassAdapter(Class<?> clazz, TypeSolver typeSolver, ReferenceTypeDeclaration typeDeclaration) {
         this.clazz = clazz;
         this.typeSolver = typeSolver;
         this.typeDeclaration = typeDeclaration;

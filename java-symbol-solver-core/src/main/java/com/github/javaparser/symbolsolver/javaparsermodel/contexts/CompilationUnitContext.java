@@ -33,16 +33,30 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.List;
 
-
+/**
+ * @author Federico Tomassetti
+ */
 public class CompilationUnitContext extends AbstractJavaParserContext<CompilationUnit> {
+
+    ///
+    /// Static methods
+    ///
+
+    private static boolean isQualifiedName(String name) {
+        return name.contains(".");
+    }
+
+    ///
+    /// Constructors
+    ///
 
     public CompilationUnitContext(CompilationUnit wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
-    private static boolean isQualifiedName(String name) {
-        return name.contains(".");
-    }
+    ///
+    /// Public methods
+    ///
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
@@ -52,7 +66,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         while (itName.contains(".")) {
             String typeName = getType(itName);
             String memberName = getMember(itName);
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> type = this.solveType(typeName, typeSolver);
+            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> type = this.solveType(typeName, typeSolver);
             if (type.isSolved()) {
                 return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
             } else {
@@ -89,26 +103,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         return SymbolReference.unsolved(ValueDeclaration.class);
     }
 
-    private String getType(String qName) {
-        int index = qName.lastIndexOf('.');
-        if (index == -1) {
-            throw new UnsupportedOperationException();
-        }
-        String typeName = qName.substring(0, index);
-        return typeName;
-    }
-
-    private String getMember(String qName) {
-        int index = qName.lastIndexOf('.');
-        if (index == -1) {
-            throw new UnsupportedOperationException();
-        }
-        String memberName = qName.substring(index + 1);
-        return memberName;
-    }
-
     @Override
-    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypes() != null) {
             for (TypeDeclaration type : wrappedNode.getTypes()) {
                 if (type.getName().equals(name)) {
@@ -131,7 +127,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     ClassOrInterfaceType importedType = ((SingleTypeImportDeclaration) importDecl).getType();
                     String qName = importedType.getName();
                     if (qName.equals(name) || qName.endsWith("." + name)) {
-                        SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                        SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref.isSolved()) {
                             return ref;
                         }
@@ -139,7 +135,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 } else if (importDecl instanceof TypeImportOnDemandDeclaration) {
                     String packageName = ((TypeImportOnDemandDeclaration) importDecl).getName().getQualifiedName();
                     String qName = packageName + "." + name;
-                    SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                    SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                     if (ref.isSolved()) {
                         return ref;
                     }
@@ -150,14 +146,14 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         // Look in current package
         if (this.wrappedNode.getPackage().isPresent()) {
             String qName = this.wrappedNode.getPackage().get().getName().toString() + "." + name;
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref.isSolved()) {
                 return ref;
             }
         }
 
         // Look in the java.lang package
-        SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
+        SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
         if (ref.isSolved()) {
             return ref;
         }
@@ -166,7 +162,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         if (isQualifiedName(name)) {
             return typeSolver.tryToSolveType(name);
         } else {
-            return SymbolReference.unsolved(com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+            return SymbolReference.unsolved(com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.class);
         }
     }
 
@@ -199,5 +195,27 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
         return SymbolReference.unsolved(MethodDeclaration.class);
+    }
+
+    ///
+    /// Private methods
+    ///
+
+    private String getType(String qName) {
+        int index = qName.lastIndexOf('.');
+        if (index == -1) {
+            throw new UnsupportedOperationException();
+        }
+        String typeName = qName.substring(0, index);
+        return typeName;
+    }
+
+    private String getMember(String qName) {
+        int index = qName.lastIndexOf('.');
+        if (index == -1) {
+            throw new UnsupportedOperationException();
+        }
+        String memberName = qName.substring(index + 1);
+        return memberName;
     }
 }

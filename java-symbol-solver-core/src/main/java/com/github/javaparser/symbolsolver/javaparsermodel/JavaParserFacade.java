@@ -245,7 +245,7 @@ public class JavaParserFacade {
             throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
         }
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) typeExpr.getType();
-        SymbolReference<TypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName(), typeSolver);
+        SymbolReference<ReferenceTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName(), typeSolver);
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new UnsupportedOperationException();
         }
@@ -439,7 +439,7 @@ public class JavaParserFacade {
             // We should understand if this is a static access
             if (fieldAccessExpr.getScope() instanceof NameExpr) {
                 NameExpr staticValue = (NameExpr) fieldAccessExpr.getScope();
-                SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr, typeSolver).solveType(staticValue.toString(), typeSolver);
+                SymbolReference<ReferenceTypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr, typeSolver).solveType(staticValue.toString(), typeSolver);
                 if (typeAccessedStatically.isSolved()) {
                     // TODO here maybe we have to substitute type typeParametersValues
                     return typeAccessedStatically.getCorrespondingDeclaration().getField(fieldAccessExpr.getField()).getType();
@@ -591,11 +591,11 @@ public class JavaParserFacade {
         if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
-            SymbolReference<TypeDeclaration> ref = context.solveType(name, typeSolver);
+            SymbolReference<ReferenceTypeDeclaration> ref = context.solveType(name, typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(name);
             }
-            TypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
+            ReferenceTypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
             List<Type> typeParameters = Collections.emptyList();
             if (classOrInterfaceType.getTypeArguments().isPresent()) {
                 typeParameters = classOrInterfaceType.getTypeArguments().get().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
@@ -664,7 +664,7 @@ public class JavaParserFacade {
         return methodUsage.get();
     }
 
-    public TypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+    public ReferenceTypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
         if (classOrInterfaceDeclaration.isInterface()) {
             return new JavaParserInterfaceDeclaration(classOrInterfaceDeclaration, typeSolver);
         } else {
@@ -687,7 +687,7 @@ public class JavaParserFacade {
         }
     }
 
-    public TypeDeclaration getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration typeDeclaration) {
+    public ReferenceTypeDeclaration getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration typeDeclaration) {
         if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
             return getTypeDeclaration((ClassOrInterfaceDeclaration) typeDeclaration);
         } else if (typeDeclaration instanceof EnumDeclaration) {

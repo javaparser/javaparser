@@ -30,6 +30,7 @@ import com.github.javaparser.symbolsolver.AbstractTest;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -181,7 +182,7 @@ public class ContextTest extends AbstractTest {
         expect(stringDecl.getName()).andReturn("String");
         expect(stringDecl.getQualifiedName()).andReturn("java.lang.String");
         TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.tryToSolveType("me.tomassetti.symbolsolver.javaparser.String")).andReturn(SymbolReference.unsolved(TypeDeclaration.class));
+        expect(typeSolver.tryToSolveType("me.tomassetti.symbolsolver.javaparser.String")).andReturn(SymbolReference.unsolved(ReferenceTypeDeclaration.class));
         expect(typeSolver.tryToSolveType("java.lang.String")).andReturn(SymbolReference.solved(stringDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, stringDecl);
