@@ -112,9 +112,6 @@ public class JavaParserFacade {
             }
         } else {
             Type result = type;
-            if (result.isReferenceType()) {
-                result = type.asReferenceType().transformTypeParameters((tp) -> solveGenericTypes(tp, context, typeSolver));
-            }
             return result;
         }
     }

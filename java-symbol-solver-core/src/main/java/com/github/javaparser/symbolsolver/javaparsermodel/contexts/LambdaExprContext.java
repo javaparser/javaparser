@@ -25,7 +25,6 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
@@ -38,7 +37,10 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 import javaslang.Tuple2;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -98,22 +100,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         // if nothing is found we should ask the parent context
         return getParent().solveSymbolAsValue(name, typeSolver);
     }
-
-    @Override
-    public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        MethodCallExpr parentNode = (MethodCallExpr) getParentNode(wrappedNode);
-        int pos = pos(parentNode, wrappedNode);
-        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage((MethodCallExpr) parentNode);
-        Type lambda = methodUsage.getParamTypes().get(pos);
-
-        List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
-        for (int i = 0; i < methodUsage.getDeclaration().getNumberOfParams(); i++) {
-            formalActualTypePairs.add(new Tuple2<>(methodUsage.getDeclaration().getParam(i).getType(), methodUsage.getParamType(i)));
-        }
-        Map<TypeParameterDeclaration, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-        return map.keySet().stream().filter(tp -> tp.getName().equals(name)).findFirst().map(tp -> map.get(tp));
-    }
-
+    
     private int pos(MethodCallExpr callExpr, Expression param) {
         int i = 0;
         for (Expression p : callExpr.getArgs()) {
