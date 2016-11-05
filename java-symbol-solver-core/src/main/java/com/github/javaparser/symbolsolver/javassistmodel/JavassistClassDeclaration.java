@@ -49,11 +49,6 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ClassDeclaration asClass() {
-        return this;
-    }
-
-    @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         throw new UnsupportedOperationException();
     }

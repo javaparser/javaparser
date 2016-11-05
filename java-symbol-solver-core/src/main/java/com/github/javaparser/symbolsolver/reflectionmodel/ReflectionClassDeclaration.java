@@ -228,11 +228,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ClassDeclaration asClass() {
-        return this;
-    }
-
-    @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return reflectionClassAdapter.hasDirectlyAnnotation(canonicalName);
     }

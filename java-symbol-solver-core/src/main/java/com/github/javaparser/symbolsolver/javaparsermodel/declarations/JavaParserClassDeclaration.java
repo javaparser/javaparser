@@ -163,10 +163,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         }
     }
 
-    public ClassDeclaration asClass() {
-        return this;
-    }
-
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         throw new UnsupportedOperationException();
