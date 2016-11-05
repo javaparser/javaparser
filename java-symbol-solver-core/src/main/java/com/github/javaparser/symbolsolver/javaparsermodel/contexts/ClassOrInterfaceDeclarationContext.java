@@ -18,9 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
@@ -33,11 +31,9 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,26 +75,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         if (typeSolver == null) throw new IllegalArgumentException();
 
-        // first among declared fields
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
-            if (member instanceof FieldDeclaration) {
-                SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(member, typeSolver);
-                Optional<Value> ref = solveWithAsValue(symbolDeclarator, name, typeSolver);
-                if (ref.isPresent()) {
-                    return ref;
-                }
-            }
-        }
-
-        // then among inherited fields
-        for (ReferenceType ancestor : getDeclaration().getAllAncestors()) {
-            Optional<Value> ref = ancestor.getTypeDeclaration().getAllFields().stream()
-                    .filter(f -> f.getName().equals(name))
-                    .map(f -> Value.from(f))
-                    .findFirst();
-            if (ref.isPresent()) {
-                return ref;
-            }
+        if (this.getDeclaration().hasVisibleField(name)) {
+            return Optional.of(Value.from(this.getDeclaration().getVisibleField(name)));
         }
 
         // then to parent
