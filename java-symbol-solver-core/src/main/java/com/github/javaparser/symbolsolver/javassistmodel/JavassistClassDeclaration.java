@@ -152,10 +152,6 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return ancestors;
     }
 
-    public Context getContext() {
-        throw new UnsupportedOperationException();
-    }
-
     @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes) {
         List<MethodDeclaration> candidates = new ArrayList<>();

@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javassistmodel.contexts.JavassistMethodContext;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
@@ -51,7 +50,7 @@ public class JavassistUtils {
                 try {
                     if (method.getGenericSignature() != null) {
                         SignatureAttribute.MethodSignature classSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
-                        List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, new JavassistMethodContext(method), invokationContext);
+                        List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, invokationContext);
                         Type newReturnType = methodUsage.returnType();
                         // consume one parametersOfReturnType at the time
                         newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
@@ -90,7 +89,7 @@ public class JavassistUtils {
         return Optional.empty();
     }
 
-    private static List<Type> parseTypeParameters(String signature, TypeSolver typeSolver, Context context, Context invokationContext) {
+    private static List<Type> parseTypeParameters(String signature, TypeSolver typeSolver, Context invokationContext) {
         String originalSignature = signature;
         if (signature.contains("<")) {
             signature = signature.substring(signature.indexOf('<') + 1);

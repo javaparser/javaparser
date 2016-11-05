@@ -73,10 +73,6 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         return ctClass.getName();
     }
 
-    public Context getContext() {
-        throw new UnsupportedOperationException();
-    }
-
     @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues) {
