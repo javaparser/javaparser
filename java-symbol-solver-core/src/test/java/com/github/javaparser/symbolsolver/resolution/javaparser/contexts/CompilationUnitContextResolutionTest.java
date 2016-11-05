@@ -31,7 +31,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.DummyTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
@@ -70,9 +70,9 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        Optional<Type> a = context.solveGenericType("A", new DummyTypeSolver());
-        Optional<Type> b = context.solveGenericType("B", new DummyTypeSolver());
-        Optional<Type> c = context.solveGenericType("C", new DummyTypeSolver());
+        Optional<Type> a = context.solveGenericType("A", new MemoryTypeSolver());
+        Optional<Type> b = context.solveGenericType("B", new MemoryTypeSolver());
+        Optional<Type> c = context.solveGenericType("C", new MemoryTypeSolver());
 
         assertEquals(false, a.isPresent());
         assertEquals(false, b.isPresent());
@@ -84,7 +84,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        Optional<Type> d = context.solveGenericType("D", new DummyTypeSolver());
+        Optional<Type> d = context.solveGenericType("D", new MemoryTypeSolver());
 
         assertEquals(false, d.isPresent());
     }
@@ -168,11 +168,11 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
 
         TypeDeclaration otherClass = EasyMock.createMock(TypeDeclaration.class);
         EasyMock.expect(otherClass.getQualifiedName()).andReturn("com.foo.OtherClassInSamePackage");
-        DummyTypeSolver dummyTypeSolver = new DummyTypeSolver();
-        dummyTypeSolver.addDeclaration("com.foo.OtherClassInSamePackage", otherClass);
+        MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
+        memoryTypeSolver.addDeclaration("com.foo.OtherClassInSamePackage", otherClass);
         EasyMock.replay(otherClass);
 
-        SymbolReference<TypeDeclaration> ref = context.solveType("OtherClassInSamePackage", dummyTypeSolver);
+        SymbolReference<TypeDeclaration> ref = context.solveType("OtherClassInSamePackage", memoryTypeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("com.foo.OtherClassInSamePackage", ref.getCorrespondingDeclaration().getQualifiedName());
     }

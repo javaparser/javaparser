@@ -23,7 +23,12 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DummyTypeSolver implements TypeSolver {
+/**
+ * A TypeSolver which only consider the TypeDeclarations provided to it.
+ *
+ * @author Federico Tomassetti
+ */
+public class MemoryTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private Map<String, TypeDeclaration> declarationMap = new HashMap<>();

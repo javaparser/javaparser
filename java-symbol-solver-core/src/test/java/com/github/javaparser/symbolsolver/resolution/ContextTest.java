@@ -61,7 +61,7 @@ public class ContextTest extends AbstractTest {
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStmts().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
-        SymbolSolver symbolSolver = new SymbolSolver(new DummyTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(new MemoryTypeSolver());
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertEquals(true, symbolReference.isSolved());
@@ -77,7 +77,7 @@ public class ContextTest extends AbstractTest {
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStmts().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
-        SymbolSolver symbolSolver = new SymbolSolver(new DummyTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(new MemoryTypeSolver());
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertEquals(true, symbolReference.isSolved());
@@ -92,7 +92,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "aMethod");
         NameExpr foo = Navigator.findNameExpression(method1, "foo");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new DummyTypeSolver());
+        SymbolSolver symbolSolver = new SymbolSolver(new MemoryTypeSolver());
         SymbolReference symbolReference = symbolSolver.solveSymbol("foo", foo);
 
         assertEquals(true, symbolReference.isSolved());
