@@ -28,7 +28,6 @@ import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -43,7 +42,6 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import javaslang.Tuple2;
 
 import java.util.*;
 import java.util.logging.ConsoleHandler;
@@ -393,28 +391,23 @@ public class JavaParserFacade {
                         if (node instanceof MethodReferenceExpr) {
                             MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) node;
 
-                            List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
                             Type actualType = toMethodUsage(methodReferenceExpr).returnType();
                             Type formalType = functionalMethod.get().returnType();
-                            formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
-                            Map<TypeParameterDeclaration, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-                            for (TypeParameterDeclaration typeName : inferredTypes.keySet()) {
-                                result = result.replaceTypeVariables(typeName, inferredTypes.get(typeName));
-                            }
 
+                            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                            inferenceContext.addPair(formalType, actualType);
+                            result = inferenceContext.resolve(inferenceContext.addSingle(result));
                         } else {
                             LambdaExpr lambdaExpr = (LambdaExpr) node;
 
-                            List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
                             if (lambdaExpr.getBody() instanceof ExpressionStmt) {
                                 ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
                                 Type actualType = getType(expressionStmt.getExpression());
                                 Type formalType = functionalMethod.get().returnType();
-                                formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
-                                Map<TypeParameterDeclaration, Type> inferredTypes = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-                                for (TypeParameterDeclaration typeName : inferredTypes.keySet()) {
-                                    result = result.replaceTypeVariables(typeName, inferredTypes.get(typeName));
-                                }
+
+                                InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                                inferenceContext.addPair(formalType, actualType);
+                                result = inferenceContext.resolve(inferenceContext.addSingle(result));
                             } else {
                                 throw new UnsupportedOperationException();
                             }
