@@ -92,6 +92,6 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return ReflectionFactory.modifiersToAccessLevel(field.getModifiers());
     }
 }

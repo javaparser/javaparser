@@ -73,12 +73,8 @@ public class ReflectionFactory {
                 }
             } else if (c.isArray()) {
                 return new ArrayType(typeUsageFor(c.getComponentType(), typeSolver));
-            }  else if (c.isEnum()) {
-                return new ReferenceTypeImpl(new ReflectionEnumDeclaration(c, typeSolver), typeSolver);
-            } else if (c.isInterface()) {
-                return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(c, typeSolver), typeSolver);
             } else {
-                return new ReferenceTypeImpl(new ReflectionClassDeclaration(c, typeSolver), typeSolver);
+                return new ReferenceTypeImpl(typeDeclarationFor(c, typeSolver), typeSolver);
             }
         } else if (type instanceof GenericArrayType) {
             GenericArrayType genericArrayType = (GenericArrayType) type;

@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.*;
@@ -104,10 +103,6 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
             variadic = i == (method.getParameterCount() - 1);
         }
         return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i], typeSolver, variadic);
-    }
-
-    public MethodUsage getUsage(Node node) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
