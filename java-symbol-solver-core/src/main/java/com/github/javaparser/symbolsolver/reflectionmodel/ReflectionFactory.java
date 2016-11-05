@@ -37,15 +37,16 @@ public class ReflectionFactory {
 
     public static TypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No type declaration available for an Array");
         } else if (clazz.isPrimitive()) {
             throw new IllegalArgumentException();
         } else if (clazz.isInterface()) {
             return new ReflectionInterfaceDeclaration(clazz, typeSolver);
+        } else if (clazz.isEnum()) {
+            return new ReflectionEnumDeclaration(clazz, typeSolver);
         } else {
             return new ReflectionClassDeclaration(clazz, typeSolver);
         }
-        // FIXME check if it is enum
     }
 
     public static Type typeUsageFor(Class<?> clazz, TypeSolver typeSolver) {

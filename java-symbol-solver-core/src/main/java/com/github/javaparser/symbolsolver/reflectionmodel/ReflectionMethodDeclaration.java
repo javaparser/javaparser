@@ -115,9 +115,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
         return Arrays.stream(method.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
     }
 
-    //@Override
     public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
-        //return new MethodUsage(new ReflectionMethodDeclaration(method, typeSolver), typeSolver);
         Type returnType = replaceTypeParams(new ReflectionMethodDeclaration(method, typeSolver).getReturnType(), typeSolver, context);
         List<Type> params = new ArrayList<>();
         for (int i = 0; i < method.getParameterCount(); i++) {

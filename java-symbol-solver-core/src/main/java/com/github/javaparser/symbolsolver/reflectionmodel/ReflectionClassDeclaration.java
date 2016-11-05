@@ -69,6 +69,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         if (clazz.isArray()) {
             throw new IllegalArgumentException("Class should not be an array");
         }
+        if (clazz.isEnum()) {
+            throw new IllegalArgumentException("Class should not be an enum");
+        }
         this.typeSolver = typeSolver;
         this.clazz = clazz;
     }
@@ -128,6 +131,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return clazz.getCanonicalName();
     }
 
+    @Deprecated
     public Context getContext() {
         return new ClassOrInterfaceDeclarationContext(clazz);
     }

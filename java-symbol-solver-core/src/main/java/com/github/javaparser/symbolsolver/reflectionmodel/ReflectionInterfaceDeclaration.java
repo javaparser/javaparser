@@ -46,8 +46,16 @@ import java.util.stream.Collectors;
  */
 public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
+    ///
+    /// Fields
+    ///
+
     private Class<?> clazz;
     private TypeSolver typeSolver;
+
+    ///
+    /// Constructor
+    ///
 
     public ReflectionInterfaceDeclaration(Class<?> clazz, TypeSolver typeSolver) {
         if (!clazz.isInterface()) {
@@ -57,6 +65,10 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         this.clazz = clazz;
         this.typeSolver = typeSolver;
     }
+
+    ///
+    /// Public methods
+    ///
 
     @Override
     public boolean isAssignableBy(TypeDeclaration other) {
@@ -68,6 +80,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         return clazz.getCanonicalName();
     }
 
+    @Deprecated
     public Context getContext() {
         return new ClassOrInterfaceDeclarationContext(clazz);
     }
@@ -121,7 +134,6 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
             InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-            //List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
             MethodUsage methodUsage = res.get();
             int i = 0;
             List<Type> parameters = new LinkedList<>();
@@ -130,17 +142,9 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 // We need to replace the class type typeParametersValues (while we derive the method ones)
 
                 parameters.add(inferenceContext.addPair(formalType, actualType));
-                //formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                 i++;
             }
             try {
-//                Map<TypeParameterDeclaration, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-//                for (TypeParameterDeclaration key : map.keySet()) {
-//                    if (map.get(key) == null) {
-//                        throw new IllegalArgumentException();
-//                    }
-//                    methodUsage = methodUsage.replaceTypeParameter(key, map.get(key));
-//                }
                 Type returnType = inferenceContext.addSingle(methodUsage.returnType());
                 for (int j=0;j<parameters.size();j++) {
                     methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
