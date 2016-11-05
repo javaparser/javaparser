@@ -27,27 +27,20 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class GenericsResolutionTest extends AbstractResolutionTest {
 
@@ -244,75 +237,6 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         Type voidVisitorAdapterOfA = javaParserFacade.getType(thisRef);
         List<ReferenceType> allAncestors = voidVisitorAdapterOfA.asReferenceType().getAllAncestors();
         assertEquals(2, allAncestors.size());
-    }
-
-    // Used to debug methodTypeParams
-    @Test
-    public void methodTypeParamsPrep() throws ParseException {
-        CompilationUnit cu = parseSample("MethodTypeParams");
-        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VoidVisitorAdapter");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "visit");
-        MethodCallExpr call = Navigator.findMethodCall(method, "accept");
-        Expression thisRef = call.getArgs().get(0);
-
-        TypeSolver typeSolver = new ReflectionTypeSolver();
-        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-
-        Type type = javaParserFacade.getType(thisRef);
-
-        assertEquals(false, type.isTypeVariable());
-        assertEquals("VoidVisitorAdapter<A>", type.describe());
-
-        Expression arg = call.getArgs().get(1);
-
-        type = javaParserFacade.getType(arg);
-
-        assertEquals(true, type.isTypeVariable());
-        assertEquals("A", type.describe());
-
-        Expression javadoc = call.getScope().get();
-        type = javaParserFacade.getType(javadoc);
-
-        assertEquals(false, type.isTypeVariable());
-        assertEquals("JavadocComment", type.describe());
-
-        Context context = JavaParserFactory.getContext(call, typeSolver);
-        List<Type> params = ImmutableList.of(javaParserFacade.getType(thisRef), javaParserFacade.getType(arg));
-
-        ReferenceType javadocType = javaParserFacade.getType(javadoc).asReferenceType();
-
-        TypeDeclaration typeDeclaration = javadocType.getTypeDeclaration();
-
-        context = ContextHelper.getContext(typeDeclaration);
-        List<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> methods = ((ClassOrInterfaceDeclarationContext) context).methodsByName("accept");
-        com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration m;
-        if (methods.get(0).getParam(0).getType().asReferenceType().getQualifiedName().equals("VoidVisitor")) {
-            m = methods.get(0);
-        } else {
-            m = methods.get(1);
-        }
-
-        // FIXME fra gli antenati di VoidVisitorAdapter<A> non si trova VisitorAdapter<A>
-
-
-        assertTrue(MethodResolutionLogic.isApplicable(m, "accept", params, typeSolver));
-
-
-        // SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = MethodResolutionLogic.findMostApplicable(
-        //methods, "accept", params, typeSolver);
-
-        // SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = context.solveMethod("accept", params, typeSolver);
-
-        // SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = typeDeclaration.solveMethod("accept", params, typeSolver);
-
-        //SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = javadocType.solveMethod("accept", params, typeSolver);
-
-        //SymbolReference<me.tomassetti.symbolsolver.model.declarations.MethodDeclaration> res = context.solveMethod(
-        //        "accept", params, typeSolver);
-        //assertTrue(res.isSolved());
-
-
-        //assertTrue(JavaParserFacade.get(new JreTypeSolver()).solve(call).isSolved());
     }
 
     @Test
