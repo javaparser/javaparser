@@ -100,7 +100,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         // if nothing is found we should ask the parent context
         return getParent().solveSymbolAsValue(name, typeSolver);
     }
-    
+
     private int pos(MethodCallExpr callExpr, Expression param) {
         int i = 0;
         for (Expression p : callExpr.getArgs()) {

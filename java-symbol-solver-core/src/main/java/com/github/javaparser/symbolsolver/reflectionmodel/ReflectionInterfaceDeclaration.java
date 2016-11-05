@@ -22,7 +22,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlac
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
-import com.github.javaparser.symbolsolver.logic.GenericTypeInferenceLogic;
+import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -32,7 +32,6 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javaslang.Tuple2;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -118,24 +117,32 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 typeParameterValues, this, clazz);
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
-            List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
+            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+            //List<Tuple2<Type, Type>> formalActualTypePairs = new ArrayList<>();
             MethodUsage methodUsage = res.get();
             int i = 0;
+            List<Type> parameters = new LinkedList<>();
             for (Type actualType : parameterTypes) {
                 Type formalType = methodUsage.getParamType(i);
                 // We need to replace the class type typeParametersValues (while we derive the method ones)
 
-                formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
+                parameters.add(inferenceContext.addPair(formalType, actualType));
+                //formalActualTypePairs.add(new Tuple2<>(formalType, actualType));
                 i++;
             }
             try {
-                Map<TypeParameterDeclaration, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
-                for (TypeParameterDeclaration key : map.keySet()) {
-                    if (map.get(key) == null) {
-                        throw new IllegalArgumentException();
-                    }
-                    methodUsage = methodUsage.replaceTypeParameter(key, map.get(key));
+//                Map<TypeParameterDeclaration, Type> map = GenericTypeInferenceLogic.inferGenericTypes(formalActualTypePairs);
+//                for (TypeParameterDeclaration key : map.keySet()) {
+//                    if (map.get(key) == null) {
+//                        throw new IllegalArgumentException();
+//                    }
+//                    methodUsage = methodUsage.replaceTypeParameter(key, map.get(key));
+//                }
+                Type returnType = inferenceContext.addSingle(methodUsage.returnType());
+                for (int j=0;j<parameters.size();j++) {
+                    methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
                 }
+                methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
                 return Optional.of(methodUsage);
             } catch (ConfilictingGenericTypesException e) {
                 return Optional.empty();

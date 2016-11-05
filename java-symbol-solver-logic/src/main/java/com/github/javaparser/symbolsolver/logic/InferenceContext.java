@@ -112,9 +112,11 @@ public class InferenceContext {
             if ((actualType instanceof InferenceVariableType) && formalType.asWildcard().isBounded()) {
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType.asWildcard().getBoundedType());
                 if (formalType.asWildcard().getBoundedType() instanceof InferenceVariableType) {
-                    ((InferenceVariableType)formalType.asWildcard().getBoundedType()).registerEquivalentType(actualType);
+                    ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualType);
                 }
             }
+        } else if (actualType.isPrimitive()) {
+            registerCorrespondance(formalType, objectProvider.byName(actualType.asPrimitive().getBoxTypeQName()));
         } else {
             throw new UnsupportedOperationException(formalType.describe() + " " + actualType.describe());
         }

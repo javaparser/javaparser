@@ -118,4 +118,8 @@ public class PrimitiveType implements Type {
         }
     }
 
+    public String getBoxTypeQName() {
+        return boxTypeQName;
+    }
+
 }
