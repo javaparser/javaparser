@@ -239,7 +239,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.hasDirectlyAnnotation(canonicalName);
     }
 
     @Override

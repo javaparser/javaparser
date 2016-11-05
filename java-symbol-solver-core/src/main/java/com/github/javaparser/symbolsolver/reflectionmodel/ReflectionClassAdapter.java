@@ -13,6 +13,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.TypeVariable;
@@ -161,6 +162,15 @@ class ReflectionClassAdapter {
             return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(typeDeclaration);
         }
 
+        return false;
+    }
+
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        for (Annotation a : clazz.getDeclaredAnnotations()) {
+            if (a.annotationType().getCanonicalName().equals(canonicalName)) {
+                return true;
+            }
+        }
         return false;
     }
 

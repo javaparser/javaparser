@@ -115,7 +115,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public boolean hasDirectlyAnnotation(String qualifiedName) {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.hasDirectlyAnnotation(qualifiedName);
     }
 
     @Override

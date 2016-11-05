@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
@@ -33,13 +32,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.TypeVariable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -52,6 +47,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     private Class<?> clazz;
     private TypeSolver typeSolver;
+    private ReflectionClassAdapter reflectionClassAdapter;
 
     ///
     /// Constructor
@@ -64,6 +60,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
         this.clazz = clazz;
         this.typeSolver = typeSolver;
+        this.reflectionClassAdapter = new ReflectionClassAdapter(clazz, typeSolver, this);
     }
 
     ///
@@ -216,29 +213,12 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public FieldDeclaration getField(String name) {
-        for (Field field : clazz.getDeclaredFields()) {
-            if (field.getName().equals(name)) {
-                return new ReflectionFieldDeclaration(field, typeSolver);
-            }
-        }
-        for (ReferenceType ancestor : getAllAncestors()) {
-            if (ancestor.getTypeDeclaration().hasField(name)) {
-                return ancestor.getTypeDeclaration().getField(name);
-            }
-        }
-        throw new UnsolvedSymbolException("Field in " + this, name);
+        return reflectionClassAdapter.getField(name);
     }
 
     @Override
     public List<FieldDeclaration> getAllFields() {
-        List<FieldDeclaration> fields = new ArrayList<>();
-        for (Field field : clazz.getDeclaredFields()) {
-            fields.add(new ReflectionFieldDeclaration(field, typeSolver));
-        }
-        for (ReferenceType ancestor : getAllAncestors()) {
-            fields.addAll(ancestor.getTypeDeclaration().getAllFields());
-        }
-        return fields;
+        return reflectionClassAdapter.getAllFields();
     }
 
     @Deprecated
@@ -253,51 +233,17 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public List<ReferenceType> getAncestors() {
-        List<ReferenceType> ancestors = new LinkedList<>();
-        if (clazz.getGenericSuperclass() != null) {
-            if (clazz.getGenericSuperclass() instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericSuperclass();
-                List<Type> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
-                        .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
-                        .collect(Collectors.toList());
-                ancestors.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class) parameterizedType.getRawType(), typeSolver), typeParameters, typeSolver));
-            } else {
-                ancestors.add(new ReferenceTypeImpl(new ReflectionClassDeclaration((Class) clazz.getGenericSuperclass(), typeSolver), typeSolver));
-            }
-        }
-        for (java.lang.reflect.Type interfaze : clazz.getGenericInterfaces()) {
-            if (interfaze instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType) interfaze;
-                List<Type> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
-                        .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
-                        .collect(Collectors.toList());
-                ancestors.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class) parameterizedType.getRawType(), typeSolver), typeParameters, typeSolver));
-            } else {
-                ancestors.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class) interfaze, typeSolver), typeSolver));
-            }
-        }
-        for (int i = 0; i < ancestors.size(); i++) {
-            if (ancestors.get(i).getQualifiedName().equals(Object.class.getCanonicalName())) {
-                ancestors.remove(i);
-                i--;
-            }
-        }
-        ReferenceTypeImpl object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        ancestors.add(object);
-        return ancestors;
+        return reflectionClassAdapter.getAncestors();
     }
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
-        return Arrays.stream(clazz.getDeclaredMethods())
-                .filter(m -> !m.isSynthetic() && !m.isBridge())
-                .map(m -> new ReflectionMethodDeclaration(m, typeSolver))
-                .collect(Collectors.toSet());
+        return reflectionClassAdapter.getDeclaredMethods();
     }
 
     @Override
     public boolean hasField(String name) {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.hasField(name);
     }
 
     @Override
@@ -326,25 +272,16 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        for (Annotation a : clazz.getDeclaredAnnotations()) {
-            if (a.annotationType().getCanonicalName().equals(canonicalName)) {
-                return true;
-            }
-        }
-        return false;
+        return reflectionClassAdapter.hasDirectlyAnnotation(canonicalName);
     }
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        List<TypeParameterDeclaration> params = new ArrayList<>();
-        for (TypeVariable tv : this.clazz.getTypeParameters()) {
-            params.add(new ReflectionTypeParameter(tv, true, typeSolver));
-        }
-        return params;
+        return reflectionClassAdapter.getTypeParameters();
     }
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
 }
