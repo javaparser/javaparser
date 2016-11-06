@@ -49,8 +49,16 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
  */
 public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
+    ///
+    /// Fields
+    ///
+
     private TypeSolver typeSolver;
     private com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode;
+
+    ///
+    /// Constructors
+    ///
 
     public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode,
                                       TypeSolver typeSolver) {
@@ -61,14 +69,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         this.typeSolver = typeSolver;
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        Context ctx = getContext();
-        return ctx.solveMethod(name, parameterTypes, typeSolver);
-    }
-
-    public Context getContext() {
-        return JavaParserFactory.getContext(wrappedNode, typeSolver);
-    }
+    ///
+    /// Public methods: from Object
+    ///
 
     @Override
     public boolean equals(Object o) {
@@ -85,6 +88,97 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public int hashCode() {
         return wrappedNode.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "JavaParserClassDeclaration{" +
+                "wrappedNode=" + wrappedNode +
+                '}';
+    }
+
+    ///
+    /// Public methods: fields
+    ///
+
+    @Override
+    public FieldDeclaration getField(String name) {
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                for (VariableDeclarator vd : field.getVariables()) {
+                    if (vd.getId().getName().equals(name)) {
+                        return new JavaParserFieldDeclaration(vd, typeSolver);
+                    }
+                }
+            }
+        }
+
+        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
+        if (superclass != null) {
+            return superclass.getField(name);
+        } else {
+            throw new UnsolvedSymbolException("In class " + this, name);
+        }
+
+    }
+
+    @Override
+    public List<FieldDeclaration> getAllFields() {
+        ArrayList<FieldDeclaration> fields = new ArrayList<>();
+        for (BodyDeclaration member : wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                for (VariableDeclarator vd : field.getVariables()) {
+                    fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
+                }
+            }
+        }
+
+        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
+        fields.addAll(superclass.getAllFields());
+
+        // TODO convert field types because of type parameters
+        getInterfaces().forEach(interf -> interf.getTypeDeclaration().getAllFields().forEach(f -> {
+            fields.add(f);
+        }));
+
+        return fields;
+    }
+
+    @Override
+    public boolean hasField(String name) {
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                for (VariableDeclarator vd : field.getVariables()) {
+                    if (vd.getId().getName().equals(name)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
+        if (superclass != null) {
+            return superclass.hasField(name);
+        } else {
+            return false;
+        }
+    }
+
+    ///
+    /// Public methods
+    ///
+
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
+        Context ctx = getContext();
+        return ctx.solveMethod(name, parameterTypes, typeSolver);
+    }
+
+    @Deprecated
+    public Context getContext() {
+        return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
 
     public Type getUsage(Node node) {
@@ -178,34 +272,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return false;
     }
 
-    private String containerName(String base, Node container) {
-        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-            String b = containerName(base, getParentNode(container));
-            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
-            if (b.isEmpty()) {
-                return cn;
-            } else {
-                return b + "." + cn;
-            }
-        } else if (container instanceof CompilationUnit) {
-            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
-            if (p.isPresent()) {
-                String b = p.get().getName().toString();
-                if (base.isEmpty()) {
-                    return b;
-                } else {
-                    return b + "." + base;
-                }
-            } else {
-                return base;
-            }
-        } else if (container != null) {
-            return containerName(base, getParentNode(container));
-        } else {
-            return base;
-        }
-    }
-
     @Override
     public boolean isAssignableBy(Type type) {
         if (type.isNull()) {
@@ -245,79 +311,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public boolean isTypeParameter() {
         return false;
-    }
-
-    @Override
-    public FieldDeclaration getField(String name) {
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)) {
-                        return new JavaParserFieldDeclaration(vd, typeSolver);
-                    }
-                }
-            }
-        }
-
-        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
-        if (superclass != null) {
-            return superclass.getField(name);
-        } else {
-            throw new UnsolvedSymbolException("In class " + this, name);
-        }
-
-    }
-
-    @Override
-    public List<FieldDeclaration> getAllFields() {
-        ArrayList<FieldDeclaration> fields = new ArrayList<>();
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
-                }
-            }
-        }
-
-        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
-        fields.addAll(superclass.getAllFields());
-
-        // TODO convert field types because of type parameters
-        getInterfaces().forEach(interf -> interf.getTypeDeclaration().getAllFields().forEach(f -> {
-            fields.add(f);
-        }));
-
-        return fields;
-    }
-
-    @Override
-    public String toString() {
-        return "JavaParserClassDeclaration{" +
-                "wrappedNode=" + wrappedNode +
-                '}';
-    }
-
-    @Override
-    public boolean hasField(String name) {
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
-        if (superclass != null) {
-            return superclass.hasField(name);
-        } else {
-            return false;
-        }
     }
 
     @Deprecated
@@ -393,6 +386,68 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return methods;
     }
 
+    @Override
+    public List<TypeParameterDeclaration> getTypeParameters() {
+        return this.wrappedNode.getTypeParameters().stream().map(
+                (tp) -> new JavaParserTypeParameter(tp, typeSolver)
+        ).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the JavaParser node associated with this JavaParserClassDeclaration.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public com.github.javaparser.ast.body.ClassOrInterfaceDeclaration getWrappedNode() {
+        return wrappedNode;
+    }
+
+    @Override
+    public AccessLevel accessLevel() {
+        throw new UnsupportedOperationException();
+    }
+
+    ///
+    /// Protected methods
+    ///
+
+    @Override
+    protected ReferenceType object() {
+        return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    }
+
+    ///
+    /// Private methods
+    ///
+
+    private String containerName(String base, Node container) {
+        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
+            String b = containerName(base, getParentNode(container));
+            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
+            if (b.isEmpty()) {
+                return cn;
+            } else {
+                return b + "." + cn;
+            }
+        } else if (container instanceof CompilationUnit) {
+            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
+            if (p.isPresent()) {
+                String b = p.get().getName().toString();
+                if (base.isEmpty()) {
+                    return b;
+                } else {
+                    return b + "." + base;
+                }
+            } else {
+                return base;
+            }
+        } else if (container != null) {
+            return containerName(base, getParentNode(container));
+        } else {
+            return base;
+        }
+    }
+
     private ReferenceTypeImpl toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
         SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());
         if (!ancestor.isSolved()) {
@@ -408,31 +463,5 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     private Type toTypeUsage(com.github.javaparser.ast.type.Type type, TypeSolver typeSolver) {
         return JavaParserFacade.get(typeSolver).convert(type, type);
-    }
-
-    @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
-        return this.wrappedNode.getTypeParameters().stream().map(
-                (tp) -> new JavaParserTypeParameter(tp, typeSolver)
-        ).collect(Collectors.toList());
-    }
-
-    @Override
-    protected ReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
-    }
-
-    /**
-     * Returns the JavaParser node associated with this JavaParserClassDeclaration.
-     *
-     * @return A visitable JavaParser node wrapped by this object.
-     */
-    public com.github.javaparser.ast.body.ClassOrInterfaceDeclaration getWrappedNode() {
-        return wrappedNode;
-    }
-
-    @Override
-    public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
     }
 }
