@@ -16,13 +16,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
@@ -31,13 +27,14 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -98,57 +95,16 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         return javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
     }
 
-    private List<MethodDeclaration> methodsByName(String name) {
-        List<MethodDeclaration> candidateMethods = new ArrayList<>();
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration) member;
-                if (method.getName().equals(name)) {
-                    candidateMethods.add(new JavaParserMethodDeclaration(method, typeSolver));
-                }
-            }
-        }
-        return candidateMethods;
-    }
-
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        List<MethodDeclaration> candidateMethods = methodsByName(name);
+        List<MethodDeclaration> candidateMethods = getDeclaration().getDeclaredMethods().stream()
+                .filter(m -> m.getName().equals(name))
+                .collect(Collectors.toList());
 
-        if (this.wrappedNode.getExtends() != null && !this.wrappedNode.getExtends().isEmpty()) {
-            if (this.wrappedNode.getExtends().size() > 1) {
-                throw new UnsupportedOperationException();
-            }
-            String superclassName = this.wrappedNode.getExtends().get(0).getName();
-            SymbolReference<TypeDeclaration> superclass = solveType(superclassName, typeSolver);
-            if (!superclass.isSolved()) {
-                throw new UnsolvedSymbolException(this, superclassName);
-            }
-            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
-            if (res.isSolved()) {
-                candidateMethods.add(res.getCorrespondingDeclaration());
-            }
-        } else {
-            String superclassName = "java.lang.Object";
-            SymbolReference<TypeDeclaration> superclass = solveType(superclassName, typeSolver);
-            if (!superclass.isSolved()) {
-                throw new UnsolvedSymbolException(this, superclassName);
-            }
-            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
-            if (res.isSolved()) {
-                candidateMethods.add(res.getCorrespondingDeclaration());
-            }
-        }
-
-        // Consider only default methods from interfaces
-        for (ClassOrInterfaceType implemented : this.wrappedNode.getImplements()) {
-            String interfaceClassName = implemented.getName();
-            SymbolReference<TypeDeclaration> superclass = solveType(interfaceClassName, typeSolver);
-            if (!superclass.isSolved()) {
-                throw new UnsolvedSymbolException(this, interfaceClassName);
-            }
-            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(superclass.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
-            if (res.isSolved() && res.getCorrespondingDeclaration().isDefaultMethod()) {
+        for (ReferenceType ancestor : getDeclaration ().getAncestors()) {
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, typeSolver);
+            // consider methods from superclasses and only default methods from interfaces
+            if (res.isSolved() && (!ancestor.getTypeDeclaration().isInterface() || res.getCorrespondingDeclaration().isDefaultMethod())) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
         }
