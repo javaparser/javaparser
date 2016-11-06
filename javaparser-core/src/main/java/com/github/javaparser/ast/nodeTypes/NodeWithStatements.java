@@ -32,7 +32,7 @@ public interface NodeWithStatements<N extends Node> {
         expr.setParentNode(statement);
         return addStatement(statement);
     }
-    
+
     /**
      * It will use {@link JavaParser#parseStatement(String)} inside, so it should end with a semi column
      * 
@@ -42,7 +42,6 @@ public interface NodeWithStatements<N extends Node> {
     default N addStatement(String statement) {
         return addStatement(JavaParser.parseStatement(statement));
     }
-
 
     default N addStatement(int index, final Expression expr) {
         Statement stmt = new ExpressionStmt(expr);
@@ -71,8 +70,20 @@ public interface NodeWithStatements<N extends Node> {
     default ExpressionStmt addAndGetStatement(String statement) {
         return addAndGetStatement(new NameExpr(statement));
     }
-    
+
     default boolean isEmpty() {
         return getStmts().isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    default N copyStatements(NodeList<Statement> nodeList) {
+        for (Statement n : nodeList) {
+            addStatement((Statement) n.clone());
+        }
+        return (N) this;
+    }
+
+    default N copyStatements(NodeWithStatements<?> other) {
+        return copyStatements(other.getStmts());
     }
 }
