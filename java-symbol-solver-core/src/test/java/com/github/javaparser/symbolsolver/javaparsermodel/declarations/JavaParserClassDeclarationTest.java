@@ -823,7 +823,45 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
 
     // hasDirectlyAnnotation
 
+    @Test
+    public void testHasDirectlyAnnotation() throws FileNotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+
+        CompilationUnit cu = JavaParser.parse(adaptPath(new File("src/test/resources/Annotations.java.txt")));
+
+        JavaParserClassDeclaration ca = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CA"), typeSolver);
+        assertEquals(true, ca.hasDirectlyAnnotation("foo.bar.MyAnnotation"));
+        assertEquals(false, ca.hasDirectlyAnnotation("foo.bar.MyAnnotation2"));
+        assertEquals(false, ca.hasDirectlyAnnotation("MyAnnotation"));
+        assertEquals(false, ca.hasDirectlyAnnotation("foo.bar.MyUnexistingAnnotation"));
+
+        JavaParserClassDeclaration cb = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CB"), typeSolver);
+        assertEquals(false, cb.hasDirectlyAnnotation("foo.bar.MyAnnotation"));
+        assertEquals(true, cb.hasDirectlyAnnotation("foo.bar.MyAnnotation2"));
+        assertEquals(false, cb.hasDirectlyAnnotation("MyAnnotation"));
+        assertEquals(false, cb.hasDirectlyAnnotation("foo.bar.MyUnexistingAnnotation"));
+    }
+
     // hasAnnotation
+
+    @Test
+    public void testHasAnnotation() throws FileNotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+
+        CompilationUnit cu = JavaParser.parse(adaptPath(new File("src/test/resources/Annotations.java.txt")));
+
+        JavaParserClassDeclaration ca = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CA"), typeSolver);
+        assertEquals(true, ca.hasAnnotation("foo.bar.MyAnnotation"));
+        assertEquals(false, ca.hasAnnotation("foo.bar.MyAnnotation2"));
+        assertEquals(false, ca.hasAnnotation("MyAnnotation"));
+        assertEquals(false, ca.hasAnnotation("foo.bar.MyUnexistingAnnotation"));
+
+        JavaParserClassDeclaration cb = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CB"), typeSolver);
+        assertEquals(true, cb.hasAnnotation("foo.bar.MyAnnotation"));
+        assertEquals(true, cb.hasAnnotation("foo.bar.MyAnnotation2"));
+        assertEquals(false, cb.hasAnnotation("MyAnnotation"));
+        assertEquals(false, cb.hasAnnotation("foo.bar.MyUnexistingAnnotation"));
+    }
 
     ///
     ///

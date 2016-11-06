@@ -1,0 +1,18 @@
+package foo.bar;
+
+public @interface MyAnnotation {
+}
+
+public @interface MyAnnotation2 {
+}
+
+@MyAnnotation
+class CA {
+
+}
+
+@MyAnnotation2
+class CB extends CA {
+
+}
+

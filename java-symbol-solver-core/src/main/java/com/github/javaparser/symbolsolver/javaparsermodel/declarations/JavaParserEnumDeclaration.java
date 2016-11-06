@@ -16,9 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -143,39 +141,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public String getQualifiedName() {
-        String containerName = containerName("", getParentNode(wrappedNode));
+        String containerName = Helper.containerName("", getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
             return wrappedNode.getName();
         } else {
             return containerName + "." + wrappedNode.getName();
-        }
-    }
-
-    private String containerName(String base, Node container) {
-        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-            String b = containerName(base, getParentNode(container));
-            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
-            if (b.isEmpty()) {
-                return cn;
-            } else {
-                return b + "." + cn;
-            }
-        } else if (container instanceof CompilationUnit) {
-            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
-            if (p.isPresent()) {
-                String b = p.get().getName().toString();
-                if (base.isEmpty()) {
-                    return b;
-                } else {
-                    return b + "." + base;
-                }
-            } else {
-                return base;
-            }
-        } else if (container != null) {
-            return containerName(base, getParentNode(container));
-        } else {
-            return base;
         }
     }
 

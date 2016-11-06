@@ -99,6 +99,8 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
 
     /**
      * Return a list of all fields, either declared in this declaration or inherited.
+     *
+     * Note that they could refer to inherited type variables.
      */
     List<FieldDeclaration> getAllFields();
 

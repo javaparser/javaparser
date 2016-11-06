@@ -16,14 +16,13 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -149,7 +148,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public ReferenceTypeImpl getSuperClass() {
         if (wrappedNode.getExtends().isEmpty()) {
-            return new ReferenceTypeImpl(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
+            return new ReferenceTypeImpl(typeSolver.getRoot().solveType(Object.class.getCanonicalName()).asType().asClass(), typeSolver);
         } else {
             SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
             if (!ref.isSolved()) {
@@ -198,7 +197,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        throw new UnsupportedOperationException();
+        for (AnnotationExpr annotationExpr : wrappedNode.getAnnotations()) {
+            if (solveType(annotationExpr.getName().getName(), typeSolver).getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -208,7 +212,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public String getQualifiedName() {
-        String containerName = containerName("", getParentNode(wrappedNode));
+        String containerName = Helper.containerName("", getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
             return wrappedNode.getName();
         } else {
@@ -375,34 +379,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     ///
     /// Private methods
     ///
-
-    private String containerName(String base, Node container) {
-        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-            String b = containerName(base, getParentNode(container));
-            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
-            if (b.isEmpty()) {
-                return cn;
-            } else {
-                return b + "." + cn;
-            }
-        } else if (container instanceof CompilationUnit) {
-            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
-            if (p.isPresent()) {
-                String b = p.get().getName().toString();
-                if (base.isEmpty()) {
-                    return b;
-                } else {
-                    return b + "." + base;
-                }
-            } else {
-                return base;
-            }
-        } else if (container != null) {
-            return containerName(base, getParentNode(container));
-        } else {
-            return base;
-        }
-    }
 
     private ReferenceTypeImpl toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
         SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());

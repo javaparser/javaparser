@@ -17,11 +17,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -109,8 +111,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (type.getName().equals(name)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
                         return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type));
+                    } else if (type instanceof AnnotationDeclaration) {
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((AnnotationDeclaration)type, typeSolver));
                     } else {
-                        throw new UnsupportedOperationException();
+                        throw new UnsupportedOperationException(type.getClass().getCanonicalName());
                     }
                 }
             }

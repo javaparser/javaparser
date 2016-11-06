@@ -16,10 +16,16 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 
 import java.util.EnumSet;
+import java.util.Optional;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -35,6 +41,34 @@ class Helper {
             return AccessLevel.PUBLIC;
         } else {
             return AccessLevel.PACKAGE_PROTECTED;
+        }
+    }
+
+    public static String containerName(String base, Node container) {
+        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
+            String b = containerName(base, getParentNode(container));
+            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
+            if (b.isEmpty()) {
+                return cn;
+            } else {
+                return b + "." + cn;
+            }
+        } else if (container instanceof CompilationUnit) {
+            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
+            if (p.isPresent()) {
+                String b = p.get().getName().toString();
+                if (base.isEmpty()) {
+                    return b;
+                } else {
+                    return b + "." + base;
+                }
+            } else {
+                return base;
+            }
+        } else if (container != null) {
+            return containerName(base, getParentNode(container));
+        } else {
+            return base;
         }
     }
 }

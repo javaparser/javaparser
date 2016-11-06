@@ -16,9 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -126,7 +124,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public String getQualifiedName() {
-        String containerName = containerName("", getParentNode(wrappedNode));
+        String containerName = Helper.containerName("", getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
             return wrappedNode.getName();
         } else {
@@ -144,34 +142,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             }
         }
         return false;
-    }
-
-    private String containerName(String base, Node container) {
-        if (container instanceof ClassOrInterfaceDeclaration) {
-            String b = containerName(base, getParentNode(container));
-            String cn = ((ClassOrInterfaceDeclaration) container).getName();
-            if (b.isEmpty()) {
-                return cn;
-            } else {
-                return b + "." + cn;
-            }
-        } else if (container instanceof CompilationUnit) {
-            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
-            if (p.isPresent()) {
-                String b = p.get().getName().toString();
-                if (base.isEmpty()) {
-                    return b;
-                } else {
-                    return b + "." + base;
-                }
-            } else {
-                return base;
-            }
-        } else if (container != null) {
-            return containerName(base, getParentNode(container));
-        } else {
-            return base;
-        }
     }
 
     @Override
