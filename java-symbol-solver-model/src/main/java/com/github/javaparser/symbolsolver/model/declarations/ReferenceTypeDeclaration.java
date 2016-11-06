@@ -1,6 +1,7 @@
 package com.github.javaparser.symbolsolver.model.declarations;
 
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
@@ -61,7 +62,14 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
      * When calling getField("field") on Foo I should get a FieldDeclaration with type E, while calling it on
      * Bar I should get a FieldDeclaration with type String.
      */
-    FieldDeclaration getField(String name);
+    default FieldDeclaration getField(String name) {
+        Optional<FieldDeclaration> field = this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        if (field.isPresent()) {
+            return field.get();
+        } else {
+            throw new UnsolvedSymbolException("Field not found: " + name);
+        }
+    }
 
     /**
      * Consider only field or inherited field which is not private.
@@ -78,7 +86,9 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
     /**
      * Has this type a field with the given name?
      */
-    boolean hasField(String name);
+    default boolean hasField(String name) {
+        return this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst().isPresent();
+    }
 
     /**
      * Either a declared field or inherited field which is not private.

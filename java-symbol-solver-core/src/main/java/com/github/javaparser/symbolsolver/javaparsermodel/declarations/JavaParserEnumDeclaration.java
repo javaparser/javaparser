@@ -194,32 +194,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public FieldDeclaration getField(String name) {
-        if (this.wrappedNode.getMembers() != null) {
-            for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-                if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                    com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                    for (VariableDeclarator vd : field.getVariables()) {
-                        if (vd.getId().getName().equals(name)) {
-                            return new JavaParserFieldDeclaration(vd, typeSolver);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (this.wrappedNode.getEntries() != null) {
-            for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
-                if (member.getName().equals(name)) {
-                    return new JavaParserFieldDeclaration(member, typeSolver);
-                }
-            }
-        }
-
-        throw new UnsolvedSymbolException("Field " + name);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -243,33 +217,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
         // TODO add methods inherited from Enum
         return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
-    }
-
-    @Override
-    public boolean hasField(String name) {
-        if (this.wrappedNode.getMembers() != null) {
-            for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-                if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                    com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                    for (VariableDeclarator vd : field.getVariables()) {
-                        if (vd.getId().getName().equals(name)) {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-        }
-
-        if (this.wrappedNode.getEntries() != null) {
-            for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
-                if (member.getName().equals(name)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     @Override

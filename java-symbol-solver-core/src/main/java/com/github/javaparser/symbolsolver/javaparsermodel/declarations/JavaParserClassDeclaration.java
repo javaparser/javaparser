@@ -102,28 +102,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     ///
 
     @Override
-    public FieldDeclaration getField(String name) {
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)) {
-                        return new JavaParserFieldDeclaration(vd, typeSolver);
-                    }
-                }
-            }
-        }
-
-        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
-        if (superclass != null) {
-            return superclass.getField(name);
-        } else {
-            throw new UnsolvedSymbolException("In class " + this, name);
-        }
-
-    }
-
-    @Override
     public List<FieldDeclaration> getAllFields() {
         ArrayList<FieldDeclaration> fields = new ArrayList<>();
         for (BodyDeclaration member : wrappedNode.getMembers()) {
@@ -144,27 +122,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         }));
 
         return fields;
-    }
-
-    @Override
-    public boolean hasField(String name) {
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
-        if (superclass != null) {
-            return superclass.hasField(name);
-        } else {
-            return false;
-        }
     }
 
     ///

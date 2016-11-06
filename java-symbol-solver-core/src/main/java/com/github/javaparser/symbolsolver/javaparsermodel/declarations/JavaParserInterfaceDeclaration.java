@@ -220,22 +220,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public FieldDeclaration getField(String name) {
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    if (vd.getId().getName().equals(name)) {
-                        return new JavaParserFieldDeclaration(vd, typeSolver);
-                    }
-                }
-            }
-        }
-
-        throw new UnsupportedOperationException("Derived fields");
-    }
-
-    @Override
     public List<FieldDeclaration> getAllFields() {
         ArrayList<FieldDeclaration> fields = new ArrayList<>();
         for (BodyDeclaration member : wrappedNode.getMembers()) {
@@ -258,11 +242,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return "JavaParserInterfaceDeclaration{" +
                 "wrappedNode=" + wrappedNode +
                 '}';
-    }
-
-    @Override
-    public boolean hasField(String name) {
-        return getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst().isPresent();
     }
 
     @Deprecated
