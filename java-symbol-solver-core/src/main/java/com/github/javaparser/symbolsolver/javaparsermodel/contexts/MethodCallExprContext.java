@@ -20,11 +20,11 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
@@ -64,9 +64,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        // TODO consider call of static methods
         if (wrappedNode.getScope().isPresent()) {
 
+            // Consider static method calls
             if (wrappedNode.getScope().get() instanceof NameExpr) {
                 String className = ((NameExpr) wrappedNode.getScope().get()).getName();
                 SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
@@ -77,7 +77,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
                         return Optional.of(methodUsage);
                     } else {
-                        throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(), "Method '" + name + "' with parameterTypes " + argumentsTypes);
+                        throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
+                                "Method '" + name + "' with parameterTypes " + argumentsTypes);
                     }
                 }
             }
@@ -122,6 +123,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope().isPresent()) {
+
             // consider static methods
             if (wrappedNode.getScope().get() instanceof NameExpr) {
                 NameExpr scopeAsName = (NameExpr) wrappedNode.getScope().get();
@@ -272,11 +274,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                             expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
                 }
             } else {
-                // TODO fix
                 return methodUsage;
-                // ok, then it needs to be wrapped
-                //throw new UnsupportedOperationException(String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Actual params: %s, Method Declaration: %s. MethodUsage: %s",
-                //        actualParamTypes, methodUsage.getDeclaration(), methodUsage));
             }
         }
         Map<TypeParameterDeclaration, Type> matchedTypeParameters = new HashMap<>();

@@ -22,7 +22,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -36,7 +35,7 @@ import java.util.Optional;
 /**
  * @author Federico Tomassetti
  */
-public class ConstructorContext extends AbstractJavaParserContext<ConstructorDeclaration> {
+public class ConstructorContext extends AbstractMethodLikeDeclarationContext<ConstructorDeclaration> {
 
     ///
     /// Constructors
@@ -49,20 +48,6 @@ public class ConstructorContext extends AbstractJavaParserContext<ConstructorDec
     ///
     /// Public methods
     ///
-
-    @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        for (Parameter parameter : wrappedNode.getParameters()) {
-            SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            SymbolReference symbolReference = solveWith(sb, name);
-            if (symbolReference.isSolved()) {
-                return symbolReference;
-            }
-        }
-
-        // if nothing is found we should ask the parent context
-        return getParent().solveSymbol(name, typeSolver);
-    }
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {

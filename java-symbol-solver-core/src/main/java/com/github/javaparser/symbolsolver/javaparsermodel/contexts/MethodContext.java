@@ -22,7 +22,6 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -33,24 +32,13 @@ import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 import java.util.List;
 import java.util.Optional;
 
-public class MethodContext extends AbstractJavaParserContext<MethodDeclaration> {
+/**
+ * @author Federico Tomassetti
+ */
+public class MethodContext extends AbstractMethodLikeDeclarationContext<MethodDeclaration> {
 
     public MethodContext(MethodDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
-    }
-
-    @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        for (Parameter parameter : wrappedNode.getParameters()) {
-            SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            SymbolReference symbolReference = solveWith(sb, name);
-            if (symbolReference.isSolved()) {
-                return symbolReference;
-            }
-        }
-
-        // if nothing is found we should ask the parent context
-        return getParent().solveSymbol(name, typeSolver);
     }
 
     @Override

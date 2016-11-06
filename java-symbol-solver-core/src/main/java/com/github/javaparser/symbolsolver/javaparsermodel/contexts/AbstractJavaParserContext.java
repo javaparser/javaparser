@@ -44,7 +44,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     /// Static methods
     ///
 
-    protected static final SymbolReference<ValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name) {
+    public static final SymbolReference<ValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name) {
         for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
             if (decl.getName().equals(name)) {
                 return SymbolReference.solved(decl);
