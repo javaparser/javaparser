@@ -97,26 +97,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isField() {
-        return false;
-    }
-
-    @Override
-    public boolean isParameter() {
-        return false;
-    }
-
-    @Override
-    public boolean isType() {
-        return true;
-    }
-
-    @Override
-    public boolean isClass() {
-        return !wrappedNode.isInterface();
-    }
-
-    @Override
     public ReferenceTypeImpl getSuperClass() {
         if (wrappedNode.getExtends().isEmpty()) {
             return new ReferenceTypeImpl(typeSolver.getRoot().solveType("java.lang.Object").asType().asClass(), typeSolver);
