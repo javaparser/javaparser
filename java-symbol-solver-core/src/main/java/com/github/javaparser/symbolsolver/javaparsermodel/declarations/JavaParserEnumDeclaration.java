@@ -40,8 +40,6 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import java.io.Serializable;
 import java.util.*;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
-
 /**
  * @author Federico Tomassetti
  */
@@ -49,10 +47,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     private TypeSolver typeSolver;
     private com.github.javaparser.ast.body.EnumDeclaration wrappedNode;
+    private JavaParserTypeAdapter javaParserTypeAdapter;
 
     public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter(wrappedNode, typeSolver);
     }
 
     @Override
@@ -60,11 +60,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return "JavaParserEnumDeclaration{" +
                 "wrappedNode=" + wrappedNode +
                 '}';
-    }
-
-    @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
@@ -141,22 +136,18 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public String getQualifiedName() {
-        String containerName = Helper.containerName("", getParentNode(wrappedNode));
-        if (containerName.isEmpty()) {
-            return wrappedNode.getName();
-        } else {
-            return containerName + "." + wrappedNode.getName();
-        }
+        return javaParserTypeAdapter.getQualifiedName();
+    }
+
+    @Override
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+        return javaParserTypeAdapter.isAssignableBy(other);
     }
 
     @Override
     public boolean isAssignableBy(Type type) {
-        if (type.isNull()) {
-            return true;
-        }
-        return type.isReferenceType() && type.asReferenceType().getQualifiedName().equals(getQualifiedName());
+        return javaParserTypeAdapter.isAssignableBy(type);
     }
-
 
     @Override
     public boolean isTypeParameter() {

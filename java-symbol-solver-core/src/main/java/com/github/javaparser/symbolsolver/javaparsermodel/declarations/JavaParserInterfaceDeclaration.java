@@ -37,8 +37,6 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
-
 /**
  * @author Federico Tomassetti
  */
@@ -46,6 +44,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     private TypeSolver typeSolver;
     private ClassOrInterfaceDeclaration wrappedNode;
+    private JavaParserTypeAdapter javaParserTypeAdapter;
 
     public JavaParserInterfaceDeclaration(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
         if (!wrappedNode.isInterface()) {
@@ -53,6 +52,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter(wrappedNode, typeSolver);
     }
 
     @Override
@@ -124,37 +124,17 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public String getQualifiedName() {
-        String containerName = Helper.containerName("", getParentNode(wrappedNode));
-        if (containerName.isEmpty()) {
-            return wrappedNode.getName();
-        } else {
-            return containerName + "." + wrappedNode.getName();
-        }
+        return javaParserTypeAdapter.getQualifiedName();
     }
 
     @Override
     public boolean isAssignableBy(ReferenceTypeDeclaration other) {
-        List<ReferenceType> ancestorsOfOther = other.getAllAncestors();
-        ancestorsOfOther.add(new ReferenceTypeImpl(other, typeSolver));
-        for (ReferenceType ancestorOfOther : ancestorsOfOther) {
-            if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
-                return true;
-            }
-        }
-        return false;
+        return javaParserTypeAdapter.isAssignableBy(other);
     }
 
     @Override
     public boolean isAssignableBy(Type type) {
-        if (type.isNull()) {
-            return true;
-        }
-        if (type.isReferenceType()) {
-            ReferenceTypeDeclaration other = typeSolver.solveType(type.describe());
-            return isAssignableBy(other);
-        } else {
-            throw new UnsupportedOperationException();
-        }
+        return javaParserTypeAdapter.isAssignableBy(type);
     }
 
     @Override
