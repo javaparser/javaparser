@@ -19,8 +19,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -258,37 +256,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         if (this.wrappedNode.getName().equals(name)) {
             return SymbolReference.solved(this);
         }
-        if (this.wrappedNode.getTypeParameters() != null) {
-            for (com.github.javaparser.ast.type.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
-                if (typeParameter.getName().equals(name)) {
-                    return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter, typeSolver));
-                }
-            }
-        }
-
-        // Internal classes
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
-                String prefix = internalType.getName() + ".";
-                if (internalType.getName().equals(name)) {
-                    if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
-                    } else if (internalType instanceof EnumDeclaration) {
-                        return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver));
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-                } else if (name.startsWith(prefix) && name.length() > prefix.length()) {
-                    if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
-                    } else if (internalType instanceof EnumDeclaration) {
-                        return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-                }
-            }
+        SymbolReference<TypeDeclaration> ref = javaParserTypeAdapter.solveType(name, typeSolver);
+        if (ref.isSolved()) {
+            return ref;
         }
 
         String prefix = wrappedNode.getName() + ".";
