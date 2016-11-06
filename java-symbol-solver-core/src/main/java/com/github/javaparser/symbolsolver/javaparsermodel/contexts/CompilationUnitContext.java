@@ -21,8 +21,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -109,11 +108,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             for (TypeDeclaration type : wrappedNode.getTypes()) {
                 if (type.getName().equals(name)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
-                        if (((ClassOrInterfaceDeclaration) type).isInterface()) {
-                            return SymbolReference.solved(new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) type, typeSolver));
-                        } else {
-                            return SymbolReference.solved(new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) type, typeSolver));
-                        }
+                        return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type));
                     } else {
                         throw new UnsupportedOperationException();
                     }
