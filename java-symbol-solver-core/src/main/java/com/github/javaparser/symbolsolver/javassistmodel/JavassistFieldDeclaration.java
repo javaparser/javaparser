@@ -26,6 +26,9 @@ import javassist.NotFoundException;
 
 import java.lang.reflect.Modifier;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavassistFieldDeclaration implements FieldDeclaration {
     private CtField ctField;
     private TypeSolver typeSolver;

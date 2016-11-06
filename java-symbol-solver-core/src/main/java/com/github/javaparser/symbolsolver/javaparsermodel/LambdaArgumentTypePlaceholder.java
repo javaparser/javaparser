@@ -23,6 +23,8 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 /**
  * Placeholder used to represent a lambda argument type while it is being
  * calculated.
+ *
+ * @author Federico Tomassetti
  */
 public class LambdaArgumentTypePlaceholder implements Type {
 

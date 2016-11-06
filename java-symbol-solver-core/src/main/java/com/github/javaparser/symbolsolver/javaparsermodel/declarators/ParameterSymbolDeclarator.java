@@ -24,8 +24,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ParameterSymbolDeclarator extends AbstractSymbolDeclarator<Parameter> {
-
 
     public ParameterSymbolDeclarator(Parameter wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);

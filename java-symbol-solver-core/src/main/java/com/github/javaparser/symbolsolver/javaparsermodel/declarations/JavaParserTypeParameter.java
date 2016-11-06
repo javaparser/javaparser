@@ -37,6 +37,9 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameterDeclaration {
 
     private com.github.javaparser.ast.type.TypeParameter wrappedNode;

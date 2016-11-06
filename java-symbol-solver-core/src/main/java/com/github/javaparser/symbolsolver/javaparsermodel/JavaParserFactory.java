@@ -35,6 +35,9 @@ import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavaParserFactory {
 
     public static Context getContext(Node node, TypeSolver typeSolver) {

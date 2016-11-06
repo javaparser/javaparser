@@ -34,6 +34,9 @@ import javassist.NotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private CtClass ctClass;

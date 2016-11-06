@@ -33,6 +33,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavassistMethodDeclaration implements MethodDeclaration {
     private CtMethod ctMethod;
     private TypeSolver typeSolver;

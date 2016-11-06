@@ -53,6 +53,8 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
+ *
+ * @author Federico Tomassetti
  */
 public class JavaParserFacade {
 

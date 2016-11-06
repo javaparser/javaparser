@@ -34,6 +34,9 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     private com.github.javaparser.ast.body.MethodDeclaration wrappedNode;

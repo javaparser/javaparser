@@ -23,6 +23,9 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavaParserParameterDeclaration implements ParameterDeclaration {
 
     private Parameter wrappedNode;

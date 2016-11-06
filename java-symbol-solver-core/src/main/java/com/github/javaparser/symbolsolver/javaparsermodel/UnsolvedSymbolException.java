@@ -19,6 +19,9 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+/**
+ * @author Federico Tomassetti
+ */
 // Use the one in model instead
 @Deprecated
 public class UnsolvedSymbolException extends RuntimeException {

@@ -41,6 +41,9 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
 
     private TypeSolver typeSolver;

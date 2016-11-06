@@ -38,6 +38,9 @@ import javassist.bytecode.SignatureAttribute;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     private CtClass ctClass;

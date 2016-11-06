@@ -23,6 +23,9 @@ import javassist.bytecode.SignatureAttribute;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     private SignatureAttribute.TypeParameter wrapped;

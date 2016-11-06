@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
 public class ReferenceTypeImpl extends ReferenceType {

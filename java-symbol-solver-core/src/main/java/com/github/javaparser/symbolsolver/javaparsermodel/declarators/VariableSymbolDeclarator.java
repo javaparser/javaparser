@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableDeclarationExpr> {
 
     public VariableSymbolDeclarator(VariableDeclarationExpr wrappedNode, TypeSolver typeSolver) {

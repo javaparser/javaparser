@@ -32,6 +32,9 @@ import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavaParserFieldDeclaration implements FieldDeclaration {
 
     private VariableDeclarator variableDeclarator;

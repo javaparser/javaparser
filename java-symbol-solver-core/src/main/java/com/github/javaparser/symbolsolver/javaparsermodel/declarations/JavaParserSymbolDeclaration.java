@@ -34,6 +34,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavaParserSymbolDeclaration implements ValueDeclaration {
 
     private String name;

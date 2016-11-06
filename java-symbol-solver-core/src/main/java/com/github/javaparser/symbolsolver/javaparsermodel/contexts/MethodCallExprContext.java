@@ -76,7 +76,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
             Map<TypeParameterDeclaration, Type> derivedValues = new HashMap<>();
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
-                //if (this.wrappedNode.getArgs().get(i) instanceof )
                 inferTypes(argumentsTypes.get(i), methodUsage.getDeclaration().getParam(i).getType(), derivedValues);
             }
 

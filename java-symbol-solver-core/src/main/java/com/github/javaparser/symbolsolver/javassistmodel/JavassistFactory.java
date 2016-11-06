@@ -22,6 +22,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.*;
 import javassist.CtClass;
 import javassist.NotFoundException;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavassistFactory {
 
     public static Type typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {

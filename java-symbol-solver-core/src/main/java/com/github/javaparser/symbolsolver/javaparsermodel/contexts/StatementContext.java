@@ -36,6 +36,9 @@ import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class StatementContext<N extends Statement> extends AbstractJavaParserContext<N> {
 
     public StatementContext(N wrappedNode, TypeSolver typeSolver) {

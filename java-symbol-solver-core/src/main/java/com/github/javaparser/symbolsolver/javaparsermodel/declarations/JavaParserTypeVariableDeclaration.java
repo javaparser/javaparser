@@ -32,6 +32,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     private TypeParameter wrappedNode;

@@ -23,6 +23,9 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class NoSymbolDeclarator<N extends Node> extends AbstractSymbolDeclarator<N> {
 
     public NoSymbolDeclarator(N wrappedNode, TypeSolver typeSolver) {

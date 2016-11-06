@@ -21,6 +21,9 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtClass;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JavassistParameterDeclaration implements ParameterDeclaration {
     private Type type;
     private TypeSolver typeSolver;
