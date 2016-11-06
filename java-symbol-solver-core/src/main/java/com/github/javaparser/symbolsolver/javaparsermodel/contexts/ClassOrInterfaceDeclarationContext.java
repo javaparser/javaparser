@@ -27,14 +27,11 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -49,7 +46,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     public ClassOrInterfaceDeclarationContext(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
-        this.javaParserTypeDeclarationAdapter = new JavaParserTypeDeclarationAdapter(wrappedNode, typeSolver, this);
+        this.javaParserTypeDeclarationAdapter = new JavaParserTypeDeclarationAdapter(wrappedNode, typeSolver,
+                getDeclaration(), this);
     }
 
     ///
@@ -97,28 +95,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        List<MethodDeclaration> candidateMethods = getDeclaration().getDeclaredMethods().stream()
-                .filter(m -> m.getName().equals(name))
-                .collect(Collectors.toList());
-
-        for (ReferenceType ancestor : getDeclaration ().getAncestors()) {
-            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, typeSolver);
-            // consider methods from superclasses and only default methods from interfaces
-            if (res.isSolved() && (!ancestor.getTypeDeclaration().isInterface() || res.getCorrespondingDeclaration().isDefaultMethod())) {
-                candidateMethods.add(res.getCorrespondingDeclaration());
-            }
-        }
-
-        // We want to avoid infinite recursion when a class is using its own method
-        // see issue #75
-        if (candidateMethods.isEmpty()) {
-            SymbolReference<MethodDeclaration> parentSolution = getParent().solveMethod(name, argumentsTypes, typeSolver);
-            if (parentSolution.isSolved()) {
-                candidateMethods.add(parentSolution.getCorrespondingDeclaration());
-            }
-        }
-
-        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, typeSolver);
     }
 
     ///

@@ -36,6 +36,9 @@ import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExpr> {
 
     private static final String ARRAY_LENGTH_FIELD_NAME = "length";

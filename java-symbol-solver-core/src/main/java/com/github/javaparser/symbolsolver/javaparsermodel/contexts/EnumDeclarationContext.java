@@ -16,20 +16,16 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumConstantDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,7 +37,8 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
 
     public EnumDeclarationContext(EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
-        this.javaParserTypeDeclarationAdapter = new JavaParserTypeDeclarationAdapter(wrappedNode, typeSolver, this);
+        this.javaParserTypeDeclarationAdapter = new JavaParserTypeDeclarationAdapter(wrappedNode, typeSolver,
+                getDeclaration(), this);
     }
 
     @Override
@@ -70,17 +67,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
 
     @Override
     public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        List<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> candidateMethods = new ArrayList<>();
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                com.github.javaparser.ast.body.MethodDeclaration method = (com.github.javaparser.ast.body.MethodDeclaration) member;
-                if (method.getName().equals(name)) {
-                    candidateMethods.add(new JavaParserMethodDeclaration(method, typeSolver));
-                }
-            }
-        }
-        // TODO consider inherited methods
-        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, typeSolver);
     }
 
     ///
