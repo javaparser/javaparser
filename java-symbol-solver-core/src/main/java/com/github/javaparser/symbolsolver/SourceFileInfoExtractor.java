@@ -44,7 +44,9 @@ import java.util.List;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
- * It print information extracted from a source file. It is mainly intended as an example usage of JavaSymbolSolver.
+ * It prints information extracted from a source file. It is mainly intended as an example usage of JavaSymbolSolver.
+ *
+ * @author Federico Tomassetti
  */
 public class SourceFileInfoExtractor {
 

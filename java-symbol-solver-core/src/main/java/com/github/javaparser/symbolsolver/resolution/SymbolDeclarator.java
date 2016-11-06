@@ -20,6 +20,9 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public interface SymbolDeclarator {
 
     List<ValueDeclaration> getSymbolDeclarations();

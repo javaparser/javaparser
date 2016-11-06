@@ -41,6 +41,9 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDec
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class SymbolSolver {
 
     private TypeSolver typeSolver;

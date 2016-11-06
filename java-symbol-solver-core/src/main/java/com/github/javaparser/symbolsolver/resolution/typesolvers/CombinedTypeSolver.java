@@ -24,6 +24,9 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class CombinedTypeSolver implements TypeSolver {
 
     private TypeSolver parent;

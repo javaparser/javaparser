@@ -37,6 +37,9 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDec
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class MethodResolutionLogic {
 
     private static List<Type> groupVariadicParamValues(List<Type> argumentsTypes, int startVariadic, Type variadicType) {

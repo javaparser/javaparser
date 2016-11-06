@@ -23,6 +23,9 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
 import java.util.Optional;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class ReflectionTypeSolver implements TypeSolver {
 
     private TypeSolver parent;

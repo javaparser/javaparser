@@ -33,6 +33,9 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class JarTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
