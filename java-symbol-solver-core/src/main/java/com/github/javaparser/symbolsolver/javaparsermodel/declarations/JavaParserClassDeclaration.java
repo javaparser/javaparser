@@ -144,18 +144,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeImpl getSuperClass() {
+    public ReferenceType getSuperClass() {
         if (wrappedNode.getExtends().isEmpty()) {
-            return new ReferenceTypeImpl(typeSolver.getRoot().solveType(Object.class.getCanonicalName()).asType().asClass(), typeSolver);
+            return object();
         } else {
-            SymbolReference<TypeDeclaration> ref = solveType(wrappedNode.getExtends().get(0).getName(), typeSolver);
-            if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(wrappedNode.getExtends().get(0).getName());
-            }
-            List<Type> superClassTypeParameters = wrappedNode.getExtends().get(0).getTypeArguments().orElse(new NodeList<>())
-                    .stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
-                    .collect(Collectors.toList());
-            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asClass(), superClassTypeParameters, typeSolver);
+            return toReferenceType(wrappedNode.getExtends().get(0));
         }
     }
 
@@ -164,13 +157,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         List<ReferenceType> interfaces = new ArrayList<>();
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
-                List<Type> interfaceTypeParameters = t.getTypeArguments().orElse(new NodeList<>())
-                        .stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
-                        .collect(Collectors.toList());
-                ReferenceType referenceType = new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asType().asInterface(),
-                        interfaceTypeParameters,
-                        typeSolver);
-                interfaces.add(referenceType);
+                interfaces.add(toReferenceType(t));
             }
         }
         return interfaces;
@@ -272,13 +259,13 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
-        ReferenceTypeImpl superclass = getSuperClass();
+        ReferenceType superclass = getSuperClass();
         if (superclass != null) {
             ancestors.add(superclass);
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
-                ReferenceTypeImpl ancestor = toTypeUsage(implemented, typeSolver);
+                ReferenceType ancestor = toReferenceType(implemented);
                 ancestors.add(ancestor);
             }
         }
@@ -330,20 +317,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     /// Private methods
     ///
 
-    private ReferenceTypeImpl toTypeUsage(ClassOrInterfaceType type, TypeSolver typeSolver) {
-        SymbolReference<TypeDeclaration> ancestor = solveType(type.getName(), typeSolver.getRoot());
-        if (!ancestor.isSolved()) {
-            throw new UnsolvedSymbolException(type.getName());
+    private ReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
+        SymbolReference<TypeDeclaration> ref = solveType(classOrInterfaceType.getName(), typeSolver);
+        if (!ref.isSolved()) {
+            throw new UnsolvedSymbolException(classOrInterfaceType.getName());
         }
-        if (type.getTypeArguments().isPresent()) {
-            List<Type> typeParams = type.getTypeArguments().get().stream().map((t) -> toTypeUsage(t, typeSolver)).collect(Collectors.toList());
-            return new ReferenceTypeImpl((ReferenceTypeDeclaration) ancestor.getCorrespondingDeclaration(), typeParams, typeSolver);
-        } else {
-            return new ReferenceTypeImpl((ReferenceTypeDeclaration) ancestor.getCorrespondingDeclaration(), typeSolver);
-        }
-    }
-
-    private Type toTypeUsage(com.github.javaparser.ast.type.Type type, TypeSolver typeSolver) {
-        return JavaParserFacade.get(typeSolver).convert(type, type);
+        List<Type> superClassTypeParameters = classOrInterfaceType.getTypeArguments().orElse(new NodeList<>())
+                .stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
+                .collect(Collectors.toList());
+        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
     }
 }

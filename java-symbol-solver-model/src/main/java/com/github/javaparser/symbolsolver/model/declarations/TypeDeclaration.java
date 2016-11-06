@@ -118,6 +118,10 @@ public interface TypeDeclaration extends Declaration {
         throw new UnsupportedOperationException(String.format("%s is not a type parameter", this));
     }
 
+    default ReferenceTypeDeclaration asReferenceType() {
+        throw new UnsupportedOperationException(String.format("%s is not a reference type", this));
+    }
+
     /**
      * The fully qualified name of the type declared.
      */
@@ -134,6 +138,5 @@ public interface TypeDeclaration extends Declaration {
         }
         return qname;
     }
-
 
 }

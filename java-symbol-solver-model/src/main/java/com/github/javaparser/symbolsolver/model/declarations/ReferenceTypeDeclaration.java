@@ -16,6 +16,11 @@ import java.util.stream.Collectors;
  */
 public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametrizable {
 
+    @Override
+    default ReferenceTypeDeclaration asReferenceType() {
+        return this;
+    }
+
     ///
     /// Ancestors
     ///
