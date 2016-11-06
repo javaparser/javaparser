@@ -17,11 +17,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -216,20 +218,12 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         List<ReferenceType> ancestors = new ArrayList<>();
         if (wrappedNode.getExtends() != null) {
             for (ClassOrInterfaceType extended : wrappedNode.getExtends()) {
-                SymbolReference<TypeDeclaration> ancestor = solveType(extended.getName(), typeSolver);
-                if (!ancestor.isSolved()) {
-                    throw new UnsolvedSymbolException(extended.getName());
-                }
-                ancestors.add(new ReferenceTypeImpl((ReferenceTypeDeclaration) ancestor.getCorrespondingDeclaration(), typeSolver));
+                ancestors.add(toReferenceType(extended));
             }
         }
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
-                SymbolReference<TypeDeclaration> ancestor = solveType(implemented.getName(), typeSolver);
-                if (!ancestor.isSolved()) {
-                    throw new UnsolvedSymbolException(implemented.getName());
-                }
-                ancestors.add(new ReferenceTypeImpl((ReferenceTypeDeclaration) ancestor.getCorrespondingDeclaration(), typeSolver));
+                ancestors.add(toReferenceType(implemented));
             }
         }
         return ancestors;
@@ -258,5 +252,20 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public AccessLevel accessLevel() {
         throw new UnsupportedOperationException();
+    }
+
+    ///
+    /// Private methods
+    ///
+
+    private ReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
+        SymbolReference<TypeDeclaration> ref = solveType(classOrInterfaceType.getName(), typeSolver);
+        if (!ref.isSolved()) {
+            throw new UnsolvedSymbolException(classOrInterfaceType.getName());
+        }
+        List<Type> superClassTypeParameters = classOrInterfaceType.getTypeArguments().orElse(new NodeList<>())
+                .stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
+                .collect(Collectors.toList());
+        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
     }
 }
