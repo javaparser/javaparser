@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -31,10 +32,17 @@ public interface NodeWithStatements<N extends Node> {
         expr.setParentNode(statement);
         return addStatement(statement);
     }
-
+    
+    /**
+     * It will use {@link JavaParser#parseStatement(String)} inside, so it should end with a semi column
+     * 
+     * @param statement
+     * @return
+     */
     default N addStatement(String statement) {
-        return addStatement(new NameExpr(statement));
+        return addStatement(JavaParser.parseStatement(statement));
     }
+
 
     default N addStatement(int index, final Expression expr) {
         Statement stmt = new ExpressionStmt(expr);
