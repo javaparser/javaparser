@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
@@ -41,6 +40,9 @@ import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
     public LambdaExprContext(LambdaExpr wrappedNode, TypeSolver typeSolver) {
