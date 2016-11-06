@@ -100,27 +100,6 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         return getParent().solveSymbolAsValue(name, typeSolver);
     }
 
-    private int pos(MethodCallExpr callExpr, Expression param) {
-        int i = 0;
-        for (Expression p : callExpr.getArgs()) {
-            if (p == param) {
-                return i;
-            }
-            i++;
-        }
-        throw new IllegalArgumentException();
-    }
-
-    protected final Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver) {
-        for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
-            if (decl.getName().equals(name)) {
-
-                throw new UnsupportedOperationException();
-            }
-        }
-        return Optional.empty();
-    }
-
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Parameter parameter : wrappedNode.getParameters()) {
@@ -146,4 +125,32 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         return getParent().solveMethod(name, argumentsTypes, typeSolver);
     }
 
+    ///
+    /// Protected methods
+    ///
+
+    protected final Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver) {
+        for (ValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
+            if (decl.getName().equals(name)) {
+
+                throw new UnsupportedOperationException();
+            }
+        }
+        return Optional.empty();
+    }
+
+    ///
+    /// Private methods
+    ///
+
+    private int pos(MethodCallExpr callExpr, Expression param) {
+        int i = 0;
+        for (Expression p : callExpr.getArgs()) {
+            if (p == param) {
+                return i;
+            }
+            i++;
+        }
+        throw new IllegalArgumentException();
+    }
 }
