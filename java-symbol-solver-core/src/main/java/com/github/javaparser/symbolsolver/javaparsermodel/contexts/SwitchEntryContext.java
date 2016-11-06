@@ -30,6 +30,9 @@ import java.util.List;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStmt> {
 
     public SwitchEntryContext(SwitchEntryStmt wrappedNode, TypeSolver typeSolver) {
