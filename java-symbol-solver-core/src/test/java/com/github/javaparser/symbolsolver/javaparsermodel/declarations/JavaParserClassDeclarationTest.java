@@ -16,7 +16,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
@@ -27,6 +30,7 @@ import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolExcepti
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -37,6 +41,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,6 +52,8 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
 
     private TypeSolver typeSolver;
     private TypeSolver typeSolverNewCode;
+    private ReferenceType string;
+    private ReferenceType listOfBoolean;
 
     @Before
     public void setup() {
@@ -63,6 +70,11 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
         combinedTypeSolverNewCode.add(new JavaParserTypeSolver(srcNewCode));
         combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-generated-sources"))));
         typeSolverNewCode = combinedTypeSolverNewCode;
+
+        TypeSolver ts = new ReflectionTypeSolver();
+        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
+        ReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()), ts);
+        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC), ts);
     }
 
     ///
@@ -452,6 +464,30 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
 
         fieldDeclaration = allFields.get(15);
         assertEquals("ABSOLUTE_END_LINE", fieldDeclaration.getName());
+    }
+
+    @Test
+    public void testGetAllGenericFields() throws FileNotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+
+        CompilationUnit cu = JavaParser.parse(adaptPath(new File("src/test/resources/GenericFields.java.txt")));
+        JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CB"), typeSolver);
+
+        assertEquals(3, classDeclaration.getAllFields().size());
+
+        ReferenceTypeImpl rtClassDeclaration = new ReferenceTypeImpl(classDeclaration, typeSolver);
+
+        assertEquals("s", classDeclaration.getAllFields().get(0).getName());
+        assertEquals(string, classDeclaration.getAllFields().get(0).getType());
+        assertEquals(string, rtClassDeclaration.getFieldType("s").get());
+
+        assertEquals("t", classDeclaration.getAllFields().get(1).getName());
+        assertEquals("T", classDeclaration.getAllFields().get(1).getType().describe());
+        assertEquals(listOfBoolean, rtClassDeclaration.getFieldType("t").get());
+
+        assertEquals("i", classDeclaration.getAllFields().get(2).getName());
+        assertEquals(PrimitiveType.INT, classDeclaration.getAllFields().get(2).getType());
+        assertEquals(PrimitiveType.INT, rtClassDeclaration.getFieldType("i").get());
     }
 
     @Test
