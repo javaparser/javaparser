@@ -35,9 +35,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import java.util.EnumSet;
 
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -177,14 +177,14 @@ public final class Parameter extends Node implements
         return getId().getName();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Parameter setName(String name) {
         assertNotNull(name);
-        if (id != null)
+        if (id != null) {
             id.setName(name);
-        else
+        } else {
             id = new VariableDeclaratorId(name);
+        }
         return this;
     }
 
@@ -204,7 +204,6 @@ public final class Parameter extends Node implements
      *            in the future, so please avoid passing null
      */
     @Override
-    @SuppressWarnings("unchecked")
     public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
@@ -217,7 +216,6 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Parameter setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = assertNotNull(modifiers);
         return this;

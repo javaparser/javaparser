@@ -2,7 +2,7 @@ Scenario: Check a whole lot of things at once that should be separate tests
 
 Given the class in the file "JavaConcepts.java"
 When the class is parsed by the Java parser
-Then it is dumped to:
+Then it is printed as:
 package japa.bdd.samples;
 
 import com.github.javaparser.JavaParser;

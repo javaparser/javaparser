@@ -7,36 +7,36 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
-public interface NodeWithStatements<T> {
+public interface NodeWithStatements<N extends Node> {
     NodeList<Statement> getStmts();
 
-    T setStmts(final NodeList<Statement> stmts);
+    N setStmts(final NodeList<Statement> stmts);
 
     @SuppressWarnings("unchecked")
-    default T addStatement(Statement statement) {
+    default N addStatement(Statement statement) {
         getStmts().add(statement);
         statement.setParentNode((Node) this);
-        return (T) this;
+        return (N) this;
     }
 
     @SuppressWarnings("unchecked")
-    default T addStatement(int index, final Statement statement) {
+    default N addStatement(int index, final Statement statement) {
         getStmts().add(index, statement);
         statement.setParentNode((Node) this);
-        return (T) this;
+        return (N) this;
     }
 
-    default T addStatement(Expression expr) {
+    default N addStatement(Expression expr) {
         ExpressionStmt statement = new ExpressionStmt(expr);
         expr.setParentNode(statement);
         return addStatement(statement);
     }
 
-    default T addStatement(String statement) {
+    default N addStatement(String statement) {
         return addStatement(new NameExpr(statement));
     }
 
-    default T addStatement(int index, final Expression expr) {
+    default N addStatement(int index, final Expression expr) {
         Statement stmt = new ExpressionStmt(expr);
         expr.setParentNode(stmt);
         return addStatement(index, stmt);

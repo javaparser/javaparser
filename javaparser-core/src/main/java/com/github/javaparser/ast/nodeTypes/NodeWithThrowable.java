@@ -5,8 +5,8 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 
-public interface NodeWithThrowable<T> {
-    T setThrows(NodeList<ReferenceType<?>> throws_);
+public interface NodeWithThrowable<N extends Node> {
+    N setThrows(NodeList<ReferenceType<?>> throws_);
 
     NodeList<ReferenceType<?>> getThrows();
 
@@ -17,10 +17,10 @@ public interface NodeWithThrowable<T> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default T addThrows(ReferenceType<?> throwType) {
+    default N addThrows(ReferenceType<?> throwType) {
         getThrows().add(throwType);
         throwType.setParentNode((Node) this);
-        return (T) this;
+        return (N) this;
     }
 
     /**
@@ -29,7 +29,7 @@ public interface NodeWithThrowable<T> {
      * @param clazz the exception class
      * @return this
      */
-    default T addThrows(Class<? extends Throwable> clazz) {
+    default N addThrows(Class<? extends Throwable> clazz) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
         return addThrows(new ClassOrInterfaceType(clazz.getSimpleName()));
     }

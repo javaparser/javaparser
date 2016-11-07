@@ -1,15 +1,16 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.Modifier;
-
 /**
  * A Node with Modifiers.
  */
-public interface NodeWithModifiers<T> {
+public interface NodeWithModifiers<N extends Node> {
     /**
      * Return the modifiers of this variable declaration.
      *
@@ -18,13 +19,13 @@ public interface NodeWithModifiers<T> {
      */
     EnumSet<Modifier> getModifiers();
 
-    T setModifiers(EnumSet<Modifier> modifiers);
+    N setModifiers(EnumSet<Modifier> modifiers);
 
     @SuppressWarnings("unchecked")
-    default T addModifier(Modifier... modifiers) {
+    default N addModifier(Modifier... modifiers) {
         getModifiers().addAll(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        return (T) this;
+        return (N) this;
     }
 
     default boolean isStatic() {

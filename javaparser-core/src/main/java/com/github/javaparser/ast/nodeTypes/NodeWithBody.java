@@ -4,10 +4,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
-public interface NodeWithBody<T> {
+public interface NodeWithBody<N extends Node> {
     Statement getBody();
 
-    T setBody(final Statement body);
+    N setBody(final Statement body);
 
     default BlockStmt createBlockStatementAsBody() {
         BlockStmt b = new BlockStmt();

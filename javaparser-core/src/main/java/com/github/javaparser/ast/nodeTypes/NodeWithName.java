@@ -29,8 +29,10 @@ import static com.github.javaparser.ast.expr.Name.name;
  * A node having a name.
  *  
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getName method.
+ * 
+ * @since 2.0.1 
  */
-public interface NodeWithName<T> {
+public interface NodeWithName<N extends Node> {
     Name getName();
 
     T setName(Name name);
