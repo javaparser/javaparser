@@ -21,9 +21,10 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 
-import static com.github.javaparser.ast.expr.Name.name;
+import static com.github.javaparser.ast.expr.Name.parse;
 
 /**
  * A node having a name.
@@ -35,11 +36,11 @@ import static com.github.javaparser.ast.expr.Name.name;
 public interface NodeWithName<N extends Node> {
     Name getName();
 
-    T setName(Name name);
+    N setName(Name name);
 
-    default T setName(String name){
-        setName(name(name));
-        return (T) this;
+    default N setName(String name){
+        setName(parse(name));
+        return (N) this;
     }
 
     default String getNameAsString(){

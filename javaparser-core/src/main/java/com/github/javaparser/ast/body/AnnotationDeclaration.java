@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -45,7 +46,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         this(Range.UNKNOWN,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
-                new NameExpr(),
+                new SimpleName(),
                 new NodeList<>());
     }
 
@@ -53,11 +54,11 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         this(Range.UNKNOWN,
                 modifiers,
                 new NodeList<>(),
-                name(name),
+                new SimpleName(name),
                 new NodeList<>());
     }
 
-    public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NameExpr name,
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
                                  NodeList<BodyDeclaration<?>> members) {
         this(Range.UNKNOWN,
                 modifiers,
@@ -66,7 +67,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
                 members);
     }
 
-    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NameExpr name,
+    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
                                  NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
     }

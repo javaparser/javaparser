@@ -39,7 +39,7 @@ public class NameExpr extends Expression {
     }
 
     public NameExpr(final String name) {
-        this(Range.UNKNOWN, new Name(name));
+        this(Range.UNKNOWN, Name.parse(name));
     }
 
     public NameExpr(final Name name) {

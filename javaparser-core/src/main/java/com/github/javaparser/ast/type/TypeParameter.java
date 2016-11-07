@@ -24,6 +24,7 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -44,7 +45,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithSimpleName<TypeParameter> {
 
-	private String name;
+	private SimpleName name;
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -52,26 +53,26 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
 	public TypeParameter() {
 		this(Range.UNKNOWN,
-				"empty",
+				new SimpleName(),
 				new NodeList<>(),
 				new NodeList<>());
 	}
 
 	public TypeParameter(final String name, final NodeList<ClassOrInterfaceType> typeBound) {
 		this(Range.UNKNOWN,
-				name,
+				new SimpleName(name),
 				typeBound,
 				new NodeList<>());
 	}
 
-	public TypeParameter(Range range, final String name, final NodeList<ClassOrInterfaceType> typeBound) {
+	public TypeParameter(Range range, final SimpleName name, final NodeList<ClassOrInterfaceType> typeBound) {
 		this(range,
 				name,
 				typeBound,
 				new NodeList<>());
 	}
 
-	public TypeParameter(Range range, String name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
+	public TypeParameter(Range range, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
 		super(range);
 		setName(name);
 		setTypeBound(typeBound);
@@ -92,7 +93,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 	 * @return the name of the paramenter
 	 */
 	@Override
-	public String getName() {
+	public SimpleName getName() {
 		return name;
 	}
 
@@ -107,8 +108,9 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 	}
 
     @Override
-    public TypeParameter setName(final String name) {
-		this.name = name;
+    public TypeParameter setName(final SimpleName name) {
+		this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
 	}
 

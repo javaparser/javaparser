@@ -31,6 +31,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -50,7 +51,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         this(Range.UNKNOWN, 
                 EnumSet.noneOf(Modifier.class), 
                 new NodeList<>(), 
-                new NameExpr(), 
+                new SimpleName(), 
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>());
@@ -60,13 +61,13 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         this(Range.UNKNOWN,
                 modifiers,
                 new NodeList<>(),
-                name(name),
+                new SimpleName(name),
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>());
     }
 
-    public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NameExpr name,
+    public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
                            NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         this(Range.UNKNOWN,
@@ -78,7 +79,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
                 members);
     }
 
-    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NameExpr name,
+    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
                            NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);

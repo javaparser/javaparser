@@ -28,6 +28,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
@@ -42,7 +43,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         NodeWithSimpleName<EnumConstantDeclaration>,
         NodeWithArguments<EnumConstantDeclaration> {
 
-    private String name;
+    private SimpleName name;
 
     private NodeList<Expression> args;
 
@@ -96,7 +97,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
-    public String getName() {
+    public SimpleName getName() {
         return name;
     }
 
@@ -113,8 +114,9 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
-    public EnumConstantDeclaration setName(String name) {
+    public EnumConstantDeclaration setName(SimpleName name) {
         this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 

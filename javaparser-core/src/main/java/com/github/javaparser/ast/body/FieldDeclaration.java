@@ -21,12 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.EnumSet;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
@@ -36,7 +30,10 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -44,8 +41,12 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.EnumSet;
+
 import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -189,7 +190,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                     "You can use this only when the field is attached to a class or an enum");
 
         VariableDeclarator variable = getVariables().get(0);
-        String fieldName = variable.getId().getName();
+        String fieldName = variable.getId().getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         if (parentClass != null)
@@ -199,7 +200,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
-        blockStmt.addStatement(new ReturnStmt(name(fieldName)));
+        blockStmt.addStatement(new ReturnStmt(fieldName));
         return getter;
     }
 
@@ -221,7 +222,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                     "You can use this only when the field is attached to a class or an enum");
 
         VariableDeclarator variable = getVariables().get(0);
-        String fieldName = variable.getId().getName();
+        String fieldName = variable.getId().getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;

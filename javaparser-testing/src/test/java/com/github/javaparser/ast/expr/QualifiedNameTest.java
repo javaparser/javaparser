@@ -7,13 +7,13 @@ import static org.junit.Assert.assertEquals;
 public class QualifiedNameTest {
     @Test
     public void outerNameExprIsTheRightMostIdentifier() {
-        Name name = Name.name("a.b.c");
+        Name name = Name.parse("a.b.c");
         assertEquals("c", name.getName());
     }
 
     @Test
     public void parsingAndUnparsingWorks() {
-        Name name = Name.name("a.b.c");
+        Name name = Name.parse("a.b.c");
         assertEquals("a.b.c", name.getQualifiedName());
     }
 }

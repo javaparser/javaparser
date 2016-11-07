@@ -28,7 +28,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.expr.Name.name;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -40,18 +40,17 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
     // TODO nullable
 	private NodeList<Type<?>> typeArguments;
 
-    // TODO make this a SimpleName
-	private Name field;
+	private SimpleName field;
 
 	public FieldAccessExpr() {
-        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new Name());
+        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new SimpleName());
 	}
 
 	public FieldAccessExpr(final Expression scope, final String field) {
-        this(Range.UNKNOWN, scope, new NodeList<>(), name(field));
+        this(Range.UNKNOWN, scope, new NodeList<>(), new SimpleName(field));
 	}
 
-	public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final Name field) {
+	public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final SimpleName field) {
 		super(range);
 		setScope(scope);
 		setTypeArguments(typeArguments);
@@ -66,11 +65,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 		v.visit(this, arg);
 	}
 
-	public String getFieldAsString() {
-		return field.getName();
-	}
-
-	public Name getField() {
+	public SimpleName getField() {
 		return field;
 	}
 
@@ -78,13 +73,8 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 		return scope;
 	}
 
-	public FieldAccessExpr setField(final String field) {
-		setField(new Name(field));
-		return this;
-	}
-
-	public FieldAccessExpr setField(Name field) {
-		this.field = field;
+	public FieldAccessExpr setField(SimpleName field) {
+		this.field = assertNotNull(field);
 		setAsParentNodeOf(this.field);
 		return this;
 	}

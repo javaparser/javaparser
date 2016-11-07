@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -36,23 +37,29 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class VariableDeclaratorId extends Node implements NodeWithSimpleName<VariableDeclaratorId> {
 
-    private String name;
+    private SimpleName name;
 
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterId;
 
     public VariableDeclaratorId() {
         this(Range.UNKNOWN,
-                "empty",
+                new SimpleName(),
                 new NodeList<>());
     }
 
     public VariableDeclaratorId(String name) {
         this(Range.UNKNOWN,
+                new SimpleName(name),
+                new NodeList<>());
+    }
+
+    public VariableDeclaratorId(SimpleName name) {
+        this(Range.UNKNOWN,
                 name,
                 new NodeList<>());
     }
 
-    public VariableDeclaratorId(Range range, String name, NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
+    public VariableDeclaratorId(Range range, SimpleName name, NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
         super(range);
         setName(name);
         setArrayBracketPairsAfterId(assertNotNull(arrayBracketPairsAfterId));
@@ -69,13 +76,14 @@ public final class VariableDeclaratorId extends Node implements NodeWithSimpleNa
     }
 
     @Override
-    public String getName() {
+    public SimpleName getName() {
         return name;
     }
 
     @Override
-    public VariableDeclaratorId setName(String name) {
+    public VariableDeclaratorId setName(SimpleName name) {
         this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 

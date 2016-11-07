@@ -34,19 +34,23 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class MemberValuePair extends Node implements NodeWithSimpleName<MemberValuePair> {
 
-	private String name;
+	private SimpleName name;
 
 	private Expression value;
 
 	public MemberValuePair() {
-        this(Range.UNKNOWN, "empty", new StringLiteralExpr());
+        this(Range.UNKNOWN, new SimpleName(), new StringLiteralExpr());
 	}
 
 	public MemberValuePair(final String name, final Expression value) {
+        this(Range.UNKNOWN, new SimpleName(name), value);
+	}
+
+	public MemberValuePair(final SimpleName name, final Expression value) {
         this(Range.UNKNOWN, name, value);
 	}
 
-	public MemberValuePair(final Range range, final String name, final Expression value) {
+	public MemberValuePair(final Range range, final SimpleName name, final Expression value) {
 		super(range);
 		setName(name);
 		setValue(value);
@@ -61,7 +65,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
 	}
 
 	@Override
-	public String getName() {
+	public SimpleName getName() {
 		return name;
 	}
 
@@ -70,8 +74,9 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
 	}
 
     @Override
-    public MemberValuePair setName(final String name) {
+    public MemberValuePair setName(final SimpleName name) {
 		this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
 	}
 

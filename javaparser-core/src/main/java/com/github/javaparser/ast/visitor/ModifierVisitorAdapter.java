@@ -498,7 +498,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 	@Override public Visitable visit(final PackageDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
-		n.setName((NameExpr) n.getName().accept(this, arg));
+		n.setName((Name) n.getName().accept(this, arg));
 		return n;
 	}
 	
@@ -516,13 +516,18 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 		return n;
 	}
 
-	@Override public Visitable visit(final QualifiedName n, final A arg) {
+	@Override public Visitable visit(final Name n, final A arg) {
 		visitComment(n, arg);
-		n.setQualifier((NameExpr) n.getQualifier().accept(this, arg));
+		n.setQualifier((Name) n.getQualifier().accept(this, arg));
 		return n;
 	}
 
-	@Override
+    @Override
+    public Visitable visit(SimpleName n, A arg) {
+        return n;
+    }
+
+    @Override
 	public Visitable visit(ArrayType n, A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
@@ -793,7 +798,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 	@Override
 	public Visitable visit(TypeImportOnDemandDeclaration n, A arg) {
         visitComment(n, arg);
-        n.setName((NameExpr) n.getName().accept(this, arg));
+        n.setName((Name) n.getName().accept(this, arg));
         return n;
 	}
 

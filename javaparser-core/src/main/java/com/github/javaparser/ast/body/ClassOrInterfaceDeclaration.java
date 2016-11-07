@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -61,7 +62,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                 EnumSet.noneOf(Modifier.class), 
                 new NodeList<>(), 
                 false, 
-                new NameExpr(),
+                new SimpleName(),
                 new NodeList<>(),
                 new NodeList<>(), 
                 new NodeList<>(), 
@@ -74,7 +75,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                 modifiers, 
                 new NodeList<>(), 
                 isInterface,
-                name(name),
+                new SimpleName(name),
                 new NodeList<>(),
                 new NodeList<>(), 
                 new NodeList<>(), 
@@ -83,7 +84,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
-                                       final NameExpr name,
+                                       final SimpleName name,
                                        final NodeList<TypeParameter> typeParameters,
                                        final NodeList<ClassOrInterfaceType> extendsList,
                                        final NodeList<ClassOrInterfaceType> implementsList,
@@ -93,7 +94,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
-                                       final NameExpr name,
+                                       final SimpleName name,
                                        final NodeList<TypeParameter> typeParameters,
                                        final NodeList<ClassOrInterfaceType> extendsList,
                                        final NodeList<ClassOrInterfaceType> implementsList,
