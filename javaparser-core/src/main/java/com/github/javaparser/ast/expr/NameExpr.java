@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -30,23 +31,23 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public class NameExpr extends Expression {
+public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr> {
 
-    private Name name;
+    private SimpleName name;
 
     public NameExpr() {
-        this(Range.UNKNOWN, new Name());
+        this(Range.UNKNOWN, new SimpleName());
     }
 
     public NameExpr(final String name) {
-        this(Range.UNKNOWN, Name.parse(name));
+        this(Range.UNKNOWN, new SimpleName(name));
     }
 
-    public NameExpr(final Name name) {
+    public NameExpr(final SimpleName name) {
         this(Range.UNKNOWN, name);
     }
 
-    public NameExpr(Range range, final Name name) {
+    public NameExpr(Range range, final SimpleName name) {
         super(range);
         setName(name);
     }
@@ -61,12 +62,13 @@ public class NameExpr extends Expression {
         v.visit(this, arg);
     }
 
-    public final Name getName() {
+    public final SimpleName getName() {
         return name;
     }
 
-    public NameExpr setName(final Name name) {
+    public NameExpr setName(final SimpleName name) {
         this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 }

@@ -34,6 +34,7 @@ import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -52,7 +53,7 @@ import com.github.javaparser.utils.Pair;
 public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements 
         NodeWithJavaDoc<MethodDeclaration>, 
         NodeWithDeclaration,
-        NodeWithName<MethodDeclaration>,
+        NodeWithSimpleName<MethodDeclaration>,
         NodeWithType<MethodDeclaration, Type<?>>,
         NodeWithElementType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>, 
@@ -67,7 +68,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private Type elementType;
 
-    private Name name;
+    private SimpleName name;
 
     private NodeList<Parameter> parameters;
 
@@ -89,7 +90,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
-                new Name(),
+                new SimpleName(),
                 false,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -104,7 +105,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 elementType,
                 new NodeList<>(),
-                parse(name),
+                new SimpleName(name),
                 false,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -120,7 +121,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 elementType,
                 new NodeList<>(),
-                parse(name),
+                new SimpleName(name),
                 false,
                 parameters,
                 new NodeList<>(),
@@ -133,7 +134,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final NodeList<TypeParameter> typeParameters, 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                             final Name name,
+                             final SimpleName name,
                              final boolean isDefault,
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
@@ -159,7 +160,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final NodeList<TypeParameter> typeParameters, 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                             final Name name,
+                             final SimpleName name,
                              final boolean isDefault,
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
@@ -205,7 +206,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public Name getName() {
+    public SimpleName getName() {
         return name;
     }
 
@@ -250,7 +251,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setName(final Name name) {
+    public MethodDeclaration setName(final SimpleName name) {
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;

@@ -37,14 +37,13 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.core.Is.is;
 
-
 public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
 
     private int numberOfNodesVisited;
 
     @Override public void visit(final AnnotationDeclaration n, final Object arg) {
         doTest(n);
-        doTest(n.getNameExpr());
+        doTest(n.getName());
         super.visit(n, arg);
     }
 
@@ -179,7 +178,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
 
     @Override public void visit(final ClassOrInterfaceDeclaration n, final Object arg) {
         doTest(n);
-        doTest(n.getNameExpr());
+        doTest(n.getName());
         super.visit(n, arg);
     }
 
@@ -245,7 +244,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
 
     @Override public void visit(final EnumDeclaration n, final Object arg) {
         doTest(n);
-        doTest(n.getNameExpr());
+        doTest(n.getName());
         super.visit(n, arg);
     }
 
@@ -346,7 +345,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
 
     @Override public void visit(final MethodDeclaration n, final Object arg) {
         doTest(n);
-        doTest(n.getNameExpr());
+        doTest(n.getName());
         super.visit(n, arg);
     }
 
@@ -385,7 +384,13 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
-    @Override public void visit(final QualifiedName n, final Object arg) {
+    @Override public void visit(final Name n, final Object arg) {
+        doTest(n);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(SimpleName n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
@@ -514,7 +519,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
-    void doTest(final Node node) {
+    private void doTest(final Node node) {
         assertThat(node.getBegin().line, is(greaterThanOrEqualTo(0)));
         assertThat(node.getBegin().column, is(greaterThanOrEqualTo(0)));
         assertThat(node.getEnd().line, is(greaterThanOrEqualTo(0)));

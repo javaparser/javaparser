@@ -32,6 +32,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
@@ -43,11 +44,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
@@ -126,7 +122,7 @@ public class ManipulationSteps {
     @When("the package declaration is set to \"$packageName\"")
     public void whenThePackageDeclarationIsSetTo(String packageName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        compilationUnit.setPackage(new PackageDeclaration(new NameExpr(packageName)));
+        compilationUnit.setPackage(new PackageDeclaration(Name.parse(packageName)));
         state.put("cu1", compilationUnit);
     }
 
@@ -182,7 +178,7 @@ public class ManipulationSteps {
     public void whenMethodInClassHasItsNameConvertedToUppercase(int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        method.setName(method.getName().toUpperCase());
+        method.setName(method.getNameAsString().toUpperCase());
     }
 
     @When("method $methodPosition in class $classPosition has an int parameter called \"$paramName\" added")
@@ -275,7 +271,7 @@ public class ManipulationSteps {
     private static class ChangeMethodNameToUpperCaseVisitor extends VoidVisitorAdapter<Void> {
         @Override
         public void visit(MethodDeclaration n, Void arg) {
-            n.setName(n.getName().toUpperCase());
+            n.setName(n.getNameAsString().toUpperCase());
         }
     }
 

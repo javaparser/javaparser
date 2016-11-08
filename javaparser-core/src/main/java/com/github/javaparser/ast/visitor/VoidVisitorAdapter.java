@@ -532,7 +532,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 		n.getQualifier().accept(this, arg);
 	}
 
-	@Override
+    @Override
+    public void visit(SimpleName n, A arg) {
+        visitComment(n.getComment(), arg);
+    }
+
+    @Override
 	public void visit(ArrayType n, A arg) {
 		visitComment(n.getComment(), arg);
 		visitAnnotations(n, arg);

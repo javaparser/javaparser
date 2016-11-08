@@ -35,7 +35,7 @@ public class MethodChanger_1 {
         @Override
         public void visit(MethodDeclaration n, Object arg) {
             // change the name of the method to upper case
-            n.setName(n.getName().toUpperCase());
+            n.setName(n.getNameAsString().toUpperCase());
 
             // create the new parameter
             n.addParameter(INT_TYPE, "value");

@@ -402,7 +402,13 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(QualifiedName n, Void arg) {
+        public void visit(Name n, Void arg) {
+            assertParentIsSet(n);
+            super.visit(n, arg);
+        }
+
+        @Override
+        public void visit(SimpleName n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
         }
