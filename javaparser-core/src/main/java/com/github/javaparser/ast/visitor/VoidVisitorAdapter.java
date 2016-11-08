@@ -435,7 +435,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 				t.accept(this, arg);
 			}
 		}
-		n.getNameExpr().accept(this, arg);
+		n.getName().accept(this, arg);
 		if (n.getArgs() != null) {
 			for (final Expression e : n.getArgs()) {
 				e.accept(this, arg);
@@ -452,7 +452,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 			}
 		}
 		n.getElementType().accept(this, arg);
-		n.getNameExpr().accept(this, arg);
+		n.getName().accept(this, arg);
 		if (n.getParameters() != null) {
 			for (final Parameter p : n.getParameters()) {
 				p.accept(this, arg);

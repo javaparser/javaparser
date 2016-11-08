@@ -300,7 +300,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             ann.accept(this, arg);
             printer.print(" ");
         }
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         if (!isNullOrEmpty(n.getTypeBound())) {
             printer.print(" extends ");
             for (final Iterator<ClassOrInterfaceType> i = n.getTypeBound().iterator(); i.hasNext(); ) {
@@ -460,7 +460,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final VariableDeclaratorId n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         for (ArrayBracketPair pair : n.getArrayBracketPairsAfterId()) {
             pair.accept(this, arg);
         }
@@ -767,7 +767,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print(".");
         }
         printTypeArgs(n, arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         printArguments(n.getArgs(), arg);
     }
 
@@ -895,7 +895,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             pair.accept(this, arg);
         }
         printer.print(" ");
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         printer.print("(");
         if (!isNullOrEmpty(n.getParameters())) {
@@ -1154,7 +1154,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final EnumConstantDeclaration n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         if (!n.getArgs().isEmpty()) {
             printArguments(n.getArgs(), arg);
@@ -1425,7 +1425,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final MemberValuePair n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         printer.print(" = ");
         n.getValue().accept(this, arg);
     }

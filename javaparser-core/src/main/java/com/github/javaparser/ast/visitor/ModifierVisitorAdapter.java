@@ -433,7 +433,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 
 	@Override public Visitable visit(final MarkerAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
-		n.setName((NameExpr) n.getName().accept(this, arg));
+		n.setName((Name) n.getName().accept(this, arg));
 		return n;
 	}
 
@@ -473,7 +473,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 
 	@Override public Visitable visit(final NormalAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
-		n.setName((NameExpr) n.getName().accept(this, arg));
+		n.setName((Name) n.getName().accept(this, arg));
         n.setPairs((NodeList<MemberValuePair>)n.getPairs().accept(this, arg));
 		return n;
 	}
@@ -571,7 +571,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 
 	@Override public Visitable visit(final SingleMemberAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
-		n.setName((NameExpr) n.getName().accept(this, arg));
+		n.setName((Name) n.getName().accept(this, arg));
 		n.setMemberValue((Expression) n.getMemberValue().accept(this, arg));
 		return n;
 	}

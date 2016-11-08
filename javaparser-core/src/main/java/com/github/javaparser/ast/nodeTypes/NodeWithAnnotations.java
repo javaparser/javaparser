@@ -74,7 +74,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                new NameExpr(name));
+                Name.parse(name));
         getAnnotations().add(markerAnnotationExpr);
         markerAnnotationExpr.setParentNode((Node) this);
         return (N) this;

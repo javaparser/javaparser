@@ -52,25 +52,25 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     public EnumConstantDeclaration() {
         this(Range.UNKNOWN, 
                 new NodeList<>(), 
-                "empty",
+                new SimpleName(),
                 new NodeList<>(),
                 new NodeList<>());
     }
 
     public EnumConstantDeclaration(String name) {
         this(Range.UNKNOWN, 
-                new NodeList<>(), 
-                name,
+                new NodeList<>(),
+                new SimpleName(name),
                 new NodeList<>(),
                 new NodeList<>());
     }
 
-    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, String name, NodeList<Expression> args,
+    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> args,
                                    NodeList<BodyDeclaration<?>> classBody) {
         this(Range.UNKNOWN, annotations, name, args, classBody);
     }
 
-    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, String name, NodeList<Expression> args,
+    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> args,
                                    NodeList<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);
