@@ -89,7 +89,6 @@ public class Name extends Node {
      * @param qualifiedName qualified name
      * @return instanceof {@link Name}
      */
-    // TODO this needs a more specific name, like "parse"
     public static Name parse(String qualifiedName) {
         String[] split = qualifiedName.split("\\.");
         Name ret = new Name(split[0]);
