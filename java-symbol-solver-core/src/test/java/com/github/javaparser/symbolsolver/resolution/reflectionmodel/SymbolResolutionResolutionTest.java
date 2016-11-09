@@ -54,7 +54,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         VariableDeclarator field = Navigator.demandField(clazz, "PUBLIC");
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        Type ref = JavaParserFacade.get(typeSolver).getType(field.getInit().get());
+        Type ref = JavaParserFacade.get(typeSolver).getType(field.getInit());
         assertEquals("int", ref.describe());
     }
 
@@ -64,7 +64,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo1");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        Expression expression = returnStmt.getExpr().get();
+        Expression expression = returnStmt.getExpr();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         Type ref = JavaParserFacade.get(typeSolver).getType(expression);

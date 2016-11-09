@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -60,7 +59,7 @@ public class JavaParserTypeDeclarationAdapter {
 
         if (wrappedNode instanceof NodeWithTypeParameters) {
             NodeWithTypeParameters nodeWithTypeParameters = (NodeWithTypeParameters) wrappedNode;
-            for (Node astTpRaw : nodeWithTypeParameters.getTypeParameters().getChildrenNodes()) {
+            for (TypeParameter astTpRaw : (Iterable<TypeParameter>)nodeWithTypeParameters.getTypeParameters()) {
                 TypeParameter astTp = (TypeParameter) astTpRaw;
                 if (astTp.getName().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeParameter(astTp, typeSolver));

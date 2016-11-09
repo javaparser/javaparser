@@ -18,7 +18,6 @@ package com.github.javaparser.symbolsolver.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -42,11 +41,7 @@ public final class Navigator {
 
     public static Node getParentNode(Node node) {
         Node parent = node.getParentNode();
-        if (parent instanceof NodeList) {
-            return Navigator.getParentNode(parent);
-        } else {
-            return parent;
-        }
+        return parent;
     }
 
     public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
@@ -68,7 +63,7 @@ public final class Navigator {
         final String typeName = getOuterTypeName(qualifiedName);
 
         Optional<TypeDeclaration<?>> type = Optional.empty();
-        for (Node n : td.getMembers().getChildrenNodes()) {
+        for (Node n : td.getMembers()) {
             if (n instanceof TypeDeclaration && ((TypeDeclaration<?>) n).getName().equals(typeName)) {
                 type = Optional.of((TypeDeclaration<?>) n);
                 break;
@@ -140,7 +135,7 @@ public final class Navigator {
                 return nameExpr;
             }
         }
-        for (Node child : node.getChildrenNodes()) {
+        for (Node child : node.getChildNodes()) {
             NameExpr res = findNameExpression(child, name);
             if (res != null) {
                 return res;
@@ -156,7 +151,7 @@ public final class Navigator {
                 return methodCallExpr;
             }
         }
-        for (Node child : node.getChildrenNodes()) {
+        for (Node child : node.getChildNodes()) {
             MethodCallExpr res = findMethodCall(child, methodName);
             if (res != null) {
                 return res;
@@ -172,7 +167,7 @@ public final class Navigator {
                 return variableDeclarator;
             }
         }
-        for (Node child : node.getChildrenNodes()) {
+        for (Node child : node.getChildNodes()) {
             VariableDeclarator res = demandVariableDeclaration(child, name);
             if (res != null) {
                 return res;
@@ -250,7 +245,7 @@ public final class Navigator {
         if (node instanceof SwitchStmt) {
             return (SwitchStmt) node;
         }
-        for (Node child : node.getChildrenNodes()) {
+        for (Node child : node.getChildNodes()) {
             SwitchStmt resChild = findSwitchHelper(child);
             if (resChild != null) {
                 return resChild;
@@ -263,7 +258,7 @@ public final class Navigator {
         if (clazz.isInstance(node)) {
             return clazz.cast(node);
         }
-        for (Node child : node.getChildrenNodes()) {
+        for (Node child : node.getChildNodes()) {
             N resChild = findNodeOfGivenClassHelper(child, clazz);
             if (resChild != null) {
                 return resChild;
@@ -276,7 +271,7 @@ public final class Navigator {
         if (clazz.isInstance(node)) {
             collector.add(clazz.cast(node));
         }
-        for (Node child : node.getChildrenNodes()) {
+        for (Node child : node.getChildNodes()) {
             findAllNodesOfGivenClassHelper(child, clazz, collector);
         }
     }

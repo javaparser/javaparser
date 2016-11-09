@@ -43,7 +43,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
-        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.findReturnStmt(methodDecl).getExpr().get();
+        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.findReturnStmt(methodDecl).getExpr();
         com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration methodDeclaration = javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
         for (TypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
             assertTrue(tp instanceof JavaParserTypeParameter);
@@ -60,7 +60,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
-        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.findReturnStmt(methodDecl).getExpr().get();
+        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.findReturnStmt(methodDecl).getExpr();
         com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration methodDeclaration = javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
         com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration typeDeclaration = methodDeclaration.declaringType();
         assertEquals(2, typeDeclaration.getTypeParameters().size());

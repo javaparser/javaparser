@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -263,7 +262,10 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName());
         }
-        List<Type> superClassTypeParameters = classOrInterfaceType.getTypeArguments().orElse(new NodeList<>())
+        if (classOrInterfaceType.getTypeArguments() == null) {
+            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
+        }
+        List<Type> superClassTypeParameters = classOrInterfaceType.getTypeArguments()
                 .stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
                 .collect(Collectors.toList());
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);

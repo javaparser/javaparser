@@ -23,7 +23,6 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 
 import java.util.EnumSet;
-import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -54,9 +53,9 @@ class Helper {
                 return b + "." + cn;
             }
         } else if (container instanceof CompilationUnit) {
-            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
-            if (p.isPresent()) {
-                String b = p.get().getName().toString();
+            PackageDeclaration p = ((CompilationUnit) container).getPackage();
+            if (p != null) {
+                String b = p.getName().toString();
                 if (base.isEmpty()) {
                     return b;
                 } else {

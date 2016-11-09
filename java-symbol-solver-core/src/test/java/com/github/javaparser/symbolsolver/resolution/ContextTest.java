@@ -61,7 +61,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("ReferencesToField");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method1");
-        ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStmts().get(0);
+        ExpressionStmt stmt = (ExpressionStmt) method1.getBody().getStmts().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
@@ -77,7 +77,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("ReferencesToField");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method2");
-        ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStmts().get(0);
+        ExpressionStmt stmt = (ExpressionStmt) method1.getBody().getStmts().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
@@ -387,7 +387,7 @@ public class ContextTest extends AbstractTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
-        Expression referenceToT = callToGetName.getScope().get();
+        Expression referenceToT = callToGetName.getScope();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));

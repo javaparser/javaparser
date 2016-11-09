@@ -80,7 +80,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
-        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope().get());
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
         assertTrue(ref.isSolved());
         assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType().describe());
 
@@ -97,7 +97,7 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
-        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope().get());
+        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope());
         assertTrue(ref.isSolved());
         assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType().describe());
 

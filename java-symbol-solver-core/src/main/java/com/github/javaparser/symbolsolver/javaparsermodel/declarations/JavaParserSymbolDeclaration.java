@@ -69,7 +69,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
 
     public static int getParamPos(Parameter parameter) {
         int pos = 0;
-        for (Node node : getParentNode(parameter).getChildrenNodes()) {
+        for (Node node : getParentNode(parameter).getChildNodes()) {
             if (node == parameter) {
                 return pos;
             } else if (node instanceof Parameter) {

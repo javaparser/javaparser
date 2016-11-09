@@ -139,7 +139,7 @@ public class SourceFileInfoExtractor {
         if (node instanceof MethodCallExpr) {
             out.println("  Line " + node.getBegin().line + ") " + node + " ==> " + toString((MethodCallExpr) node));
         }
-        for (Node child : node.getChildrenNodes()) {
+        for (Node child : node.getChildNodes()) {
             solveMethodCalls(child);
         }
     }
@@ -173,7 +173,7 @@ public class SourceFileInfoExtractor {
 
     private void collectAllNodes(Node node, List<Node> nodes) {
         nodes.add(node);
-        node.getChildrenNodes().forEach(c -> collectAllNodes(c, nodes));
+        node.getChildNodes().forEach(c -> collectAllNodes(c, nodes));
     }
 
     public void solve(File file) throws IOException, ParseException {

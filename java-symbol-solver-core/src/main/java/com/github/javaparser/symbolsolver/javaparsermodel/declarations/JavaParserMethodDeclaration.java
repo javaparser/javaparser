@@ -122,7 +122,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public boolean isAbstract() {
-        return (!wrappedNode.getBody().isPresent());
+        return (wrappedNode.getBody() == null);
     }
 
     private Optional<Type> typeParamByName(String name, TypeSolver typeSolver, Context context) {

@@ -307,12 +307,12 @@ public class JavaParserFacade {
                     //        the MethodDeclaration of filter is:
                     //        Stream<T> filter(Predicate<? super T> predicate)
                     //        but T in this case is equal to String
-                    if (callExpr.getScope().isPresent()) {
+                    if (callExpr.getScope() != null) {
 
                         // If it is a static call we should not try to get the type of the scope
                         boolean staticCall = false;
-                        if (callExpr.getScope().get() instanceof NameExpr) {
-                            NameExpr nameExpr = (NameExpr) callExpr.getScope().get();
+                        if (callExpr.getScope() instanceof NameExpr) {
+                            NameExpr nameExpr = (NameExpr) callExpr.getScope();
                             try {
                                 JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName(), typeSolver);
                                 staticCall = true;
@@ -322,7 +322,7 @@ public class JavaParserFacade {
                         }
 
                         if (!staticCall) {
-                            Type scopeType = JavaParserFacade.get(typeSolver).getType(callExpr.getScope().get());
+                            Type scopeType = JavaParserFacade.get(typeSolver).getType(callExpr.getScope());
                             if (scopeType.isReferenceType()) {
                                 result = scopeType.asReferenceType().useThisTypeParametersOnTheGivenType(result);
                             }
@@ -518,7 +518,7 @@ public class JavaParserFacade {
             return PrimitiveType.BOOLEAN;
         } else if (node instanceof EnclosedExpr) {
             EnclosedExpr enclosedExpr = (EnclosedExpr) node;
-            return getTypeConcrete(enclosedExpr.getInner().get(), solveLambdas);
+            return getTypeConcrete(enclosedExpr.getInner(), solveLambdas);
         } else if (node instanceof CastExpr) {
             CastExpr enclosedExpr = (CastExpr) node;
             return convertToUsage(enclosedExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
@@ -582,8 +582,8 @@ public class JavaParserFacade {
     // This is an hack around an issue in JavaParser
     private String qName(ClassOrInterfaceType classOrInterfaceType) {
         String name = classOrInterfaceType.getName();
-        if (classOrInterfaceType.getScope().isPresent()) {
-            return qName(classOrInterfaceType.getScope().get()) + "." + name;
+        if (classOrInterfaceType.getScope() != null) {
+            return qName(classOrInterfaceType.getScope()) + "." + name;
         } else {
             return name;
         }
@@ -599,8 +599,8 @@ public class JavaParserFacade {
             }
             TypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
             List<Type> typeParameters = Collections.emptyList();
-            if (classOrInterfaceType.getTypeArguments().isPresent()) {
-                typeParameters = classOrInterfaceType.getTypeArguments().get().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
+            if (classOrInterfaceType.getTypeArguments() != null) {
+                typeParameters = classOrInterfaceType.getTypeArguments().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList());
             }
             if (typeDeclaration.isTypeParameter()) {
                 if (typeDeclaration instanceof TypeParameterDeclaration) {
@@ -616,11 +616,11 @@ public class JavaParserFacade {
             return PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
-            if (wildcardType.getExtends().isPresent() && !wildcardType.getSuper().isPresent()) {
-                return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getExtends().get(), context));
-            } else if (!wildcardType.getExtends().isPresent() && wildcardType.getSuper().isPresent()) {
-                return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getSuper().get(), context));
-            } else if (!wildcardType.getExtends().isPresent() && !wildcardType.getSuper().isPresent()) {
+            if (wildcardType.getExtends() !=null && wildcardType.getSuper() == null) {
+                return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getExtends(), context));
+            } else if (wildcardType.getExtends() ==null && wildcardType.getSuper() != null) {
+                return Wildcard.extendsBound((ReferenceTypeImpl) convertToUsage(wildcardType.getSuper(), context));
+            } else if (wildcardType.getExtends() == null && wildcardType.getSuper() == null) {
                 return Wildcard.UNBOUNDED;
             } else {
                 throw new UnsupportedOperationException(wildcardType.toString());

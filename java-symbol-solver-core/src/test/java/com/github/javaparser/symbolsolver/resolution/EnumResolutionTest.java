@@ -41,7 +41,7 @@ public class EnumResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SwitchOnEnum");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         SwitchStmt switchStmt = Navigator.findSwitch(method);
-        Expression expression = switchStmt.getEntries().get(0).getLabel().get();
+        Expression expression = switchStmt.getEntries().get(0).getLabel();
 
         SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());
