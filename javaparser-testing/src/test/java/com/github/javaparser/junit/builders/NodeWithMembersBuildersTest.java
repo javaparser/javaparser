@@ -40,7 +40,7 @@ public class NodeWithMembersBuildersTest {
 		FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
 		assertEquals(1, classDeclaration.getMembers().size());
 		assertEquals(addField, classDeclaration.getMembers().get(0));
-		assertEquals("fieldName", addField.getVariables().get(0).getId().getName());
+		assertEquals("fieldName", addField.getVariables().get(0).getId().getNameAsString());
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class NodeWithMembersBuildersTest {
 		MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
 		assertEquals(1, classDeclaration.getMembers().size());
 		assertEquals(addMethod, classDeclaration.getMembers().get(0));
-		assertEquals("foo", addMethod.getName());
+		assertEquals("foo", addMethod.getNameAsString());
 	}
 
 	@Test

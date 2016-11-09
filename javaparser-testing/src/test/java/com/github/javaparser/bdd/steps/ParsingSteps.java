@@ -146,7 +146,7 @@ public class ParsingSteps {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr expression = (VariableDeclarationExpr) ((ExpressionStmt) statement).getExpression();
         VariableDeclarator variableDeclarator = expression.getVariables().get(0);
-        assertThat(variableDeclarator.getId().getName(), is(expectedName));
+        assertThat(variableDeclarator.getId().getNameAsString(), is(expectedName));
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition body is \"$expectedBody\"")
@@ -337,7 +337,7 @@ public class ParsingSteps {
         AssignExpr assignExpr = (AssignExpr) assignStmt.getExpression();
         assertNotNull(assignExpr.getTarget());
         assertEquals(NameExpr.class, assignExpr.getTarget().getClass());
-        assertEquals(((NameExpr) assignExpr.getTarget()).getName(), "mString");
+        assertEquals(((NameExpr) assignExpr.getTarget()).getNameAsString(), "mString");
     }
 
     private void setSelectedNodeFromCompilationUnit(Class<? extends Node> nodeType) {

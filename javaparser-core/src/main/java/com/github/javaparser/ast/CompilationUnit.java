@@ -358,7 +358,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the class otherwise
      */
     public ClassOrInterfaceDeclaration getClassByName(String className) {
-        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getName().equals(className)
+        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(className)
                 && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface())
                 .findFirst().orElse(null);
     }
@@ -370,7 +370,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the interface otherwise
      */
     public ClassOrInterfaceDeclaration getInterfaceByName(String interfaceName) {
-        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getName().equals(interfaceName)
+        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(interfaceName)
                 && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface())
                 .findFirst().orElse(null);
     }
@@ -382,7 +382,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the enum otherwise
      */
     public EnumDeclaration getEnumByName(String enumName) {
-        return (EnumDeclaration) getTypes().stream().filter(type -> type.getName().equals(enumName)
+        return (EnumDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(enumName)
                 && type instanceof EnumDeclaration)
                 .findFirst().orElse(null);
     }
@@ -394,7 +394,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the annotation otherwise
      */
     public AnnotationDeclaration getAnnotationDeclarationByName(String annotationName) {
-        return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getName().equals(annotationName)
+        return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName)
                 && type instanceof AnnotationDeclaration)
                 .findFirst().orElse(null);
     }

@@ -70,7 +70,7 @@ public interface NodeWithParameters<N extends Node> {
      */
     default Parameter getParamByName(String name) {
         return getParameters().stream()
-                .filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+                .filter(p -> p.getNameAsString().equals(name)).findFirst().orElse(null);
     }
 
     /**
