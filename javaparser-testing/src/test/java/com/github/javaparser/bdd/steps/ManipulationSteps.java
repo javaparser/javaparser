@@ -247,7 +247,7 @@ public class ManipulationSteps {
     public void thenMethodInClassHasTheName(int methodPosition, int classPosition, String expectedName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        assertThat(method.getName(), is(expectedName));
+        assertThat(method.getNameAsString(), is(expectedName));
     }
 
     @Then("method $methodPosition in class $classPosition has $expectedCount parameters")
