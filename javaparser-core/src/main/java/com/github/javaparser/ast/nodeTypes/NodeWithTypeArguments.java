@@ -21,11 +21,13 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.ast.NodeList.nodeList;
+
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
-
-import static com.github.javaparser.ast.NodeList.nodeList;
 
 /**
  * A node that can have type arguments.
@@ -39,24 +41,23 @@ public interface NodeWithTypeArguments<N extends Node> {
     /**
      * @return the types that can be found in the type arguments: &lt;String, Integer>.
      */
-    // TODO nullable
-    NodeList<Type<?>> getTypeArguments();
+    Optional<NodeList<Type<?>>> getTypeArguments();
 
     /**
      * Allows you to set the generic arguments
-     * @param typeArguments The list of types of the generics
+     * 
+     * @param typeArguments The list of types of the generics, can be null
      */
-    // TODO nullable
     N setTypeArguments(NodeList<Type<?>> typeArguments);
 
     /**
      * @return whether the type arguments look like &lt;>.
      */
     default boolean isUsingDiamondOperator() {
-        if(getTypeArguments()==null){
+        if (!getTypeArguments().isPresent()) {
             return false;
         }
-        return getTypeArguments().isEmpty();
+        return getTypeArguments().get().isEmpty();
     }
 
     /**

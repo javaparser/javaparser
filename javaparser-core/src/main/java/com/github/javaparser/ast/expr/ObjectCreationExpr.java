@@ -21,18 +21,20 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
-import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Defines constructor call expression.
@@ -43,17 +45,15 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ObjectCreationExpr extends Expression implements 
+public final class ObjectCreationExpr extends Expression implements
         NodeWithTypeArguments<ObjectCreationExpr>,
         NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>,
         NodeWithArguments<ObjectCreationExpr> {
 
-    // TODO nullable
     private Expression scope;
 
     private ClassOrInterfaceType type;
 
-    // TODO nullable
     private NodeList<Type<?>> typeArguments;
 
     private NodeList<Expression> args;
@@ -62,7 +62,7 @@ public final class ObjectCreationExpr extends Expression implements
     private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
     public ObjectCreationExpr() {
-        this(Range.UNKNOWN, 
+        this(Range.UNKNOWN,
                 null,
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
@@ -77,7 +77,8 @@ public final class ObjectCreationExpr extends Expression implements
      * @param type this is the class that the constructor is being called for.
      * @param args Any arguments to pass to the constructor
      */
-    public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final NodeList<Expression> args) {
+    public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type,
+                              final NodeList<Expression> args) {
         this(Range.UNKNOWN,
                 scope,
                 type,
@@ -86,16 +87,17 @@ public final class ObjectCreationExpr extends Expression implements
                 new NodeList<>());
     }
 
-	public ObjectCreationExpr(final Range range,
-			final Expression scope, final ClassOrInterfaceType type, final NodeList<Type<?>> typeArguments,
+    public ObjectCreationExpr(final Range range,
+                              final Expression scope, final ClassOrInterfaceType type,
+                              final NodeList<Type<?>> typeArguments,
                               final NodeList<Expression> args, final NodeList<BodyDeclaration<?>> anonymousBody) {
-		super(range);
-		setScope(scope);
-		setType(type);
-		setTypeArguments(typeArguments);
-		setArgs(args);
-		setAnonymousClassBody(anonymousBody);
-	}
+        super(range);
+        setScope(scope);
+        setType(type);
+        setTypeArguments(typeArguments);
+        setArgs(args);
+        setAnonymousClassBody(anonymousBody);
+    }
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -107,11 +109,8 @@ public final class ObjectCreationExpr extends Expression implements
         v.visit(this, arg);
     }
 
-    /**
-     * This can be null, to indicate there is no body
-     */
-    public NodeList<BodyDeclaration<?>> getAnonymousClassBody() {
-        return anonymousClassBody;
+    public Optional<NodeList<BodyDeclaration<?>>> getAnonymousClassBody() {
+        return Optional.ofNullable(anonymousClassBody);
     }
 
     public void addAnonymousClassBody(BodyDeclaration<?> body) {
@@ -120,12 +119,13 @@ public final class ObjectCreationExpr extends Expression implements
         anonymousClassBody.add(body);
     }
 
+    @Override
     public NodeList<Expression> getArgs() {
         return args;
     }
 
-    public Expression getScope() {
-        return scope;
+    public Optional<Expression> getScope() {
+        return Optional.ofNullable(scope);
     }
 
     @Override
@@ -133,6 +133,12 @@ public final class ObjectCreationExpr extends Expression implements
         return type;
     }
 
+    /**
+     * Sets the anonymousClassBody
+     * 
+     * @param anonymousClassBody the anonymousClassBody, can be null
+     * @return this, the ObjectCreationExpr
+     */
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
@@ -146,6 +152,12 @@ public final class ObjectCreationExpr extends Expression implements
         return this;
     }
 
+    /**
+     * Sets the scope
+     * 
+     * @param scope the scope, can be null
+     * @return this, the FieldAccessExpr
+     */
     public ObjectCreationExpr setScope(final Expression scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
@@ -161,10 +173,16 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     @Override
-    public NodeList<Type<?>> getTypeArguments() {
-        return typeArguments;
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
+        return Optional.ofNullable(typeArguments);
     }
 
+    /**
+     * Sets the typeArguments
+     * 
+     * @param typeArguments the typeArguments, can be null
+     * @return this, the ObjectCreationExpr
+     */
     @Override
     public ObjectCreationExpr setTypeArguments(final NodeList<Type<?>> typeArguments) {
         this.typeArguments = typeArguments;

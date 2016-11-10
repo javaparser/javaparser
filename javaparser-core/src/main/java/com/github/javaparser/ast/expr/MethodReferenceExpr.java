@@ -21,6 +21,8 @@
  
 package com.github.javaparser.ast.expr;
 
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -42,7 +44,6 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     private Expression scope;
 
-    // TODO nullable
     private NodeList<Type<?>> typeArguments;
 
     private String identifier;
@@ -84,10 +85,16 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Override
-    public NodeList<Type<?>> getTypeArguments() {
-        return typeArguments;
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
+        return Optional.ofNullable(typeArguments);
     }
 
+    /**
+     * Sets the typeArguments
+     * 
+     * @param typeArguments the typeArguments, can be null
+     * @return this, the MethodReferenceExpr
+     */
     @Override
     public MethodReferenceExpr setTypeArguments(final NodeList<Type<?>> types) {
         this.typeArguments = types;

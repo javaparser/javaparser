@@ -21,19 +21,23 @@
  
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Range.range;
+import static com.github.javaparser.bdd.TestUtils.getSampleStream;
+import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -41,20 +45,27 @@ import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.Set;
-
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.Range.range;
-import static com.github.javaparser.bdd.TestUtils.getSampleStream;
-import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
 public class CommentParsingSteps {
 
@@ -306,7 +317,7 @@ public class CommentParsingSteps {
 		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
-        BlockStmt blockStmtUnderTest = methodUnderTest.getBody();
+		BlockStmt blockStmtUnderTest = methodUnderTest.getBody().orElse(null);
         assertThat(blockStmtUnderTest.getAllContainedComments().size(), is(expectedCount));
     }
 
@@ -315,7 +326,7 @@ public class CommentParsingSteps {
 		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
-        BlockStmt blockStmtUnderTest = methodUnderTest.getBody();
+		BlockStmt blockStmtUnderTest = methodUnderTest.getBody().orElse(null);
         assertThat(blockStmtUnderTest.getOrphanComments().size(), is(expectedCount));
     }
 
@@ -324,7 +335,7 @@ public class CommentParsingSteps {
 		TypeDeclaration<?> classUnderTest = compilationUnit.getTypes().get(classPosition - 1);
         MethodDeclaration methodUnderTest = (MethodDeclaration) getMemberByTypeAndPosition(classUnderTest, methodPosition -1,
                 MethodDeclaration.class);
-        BlockStmt blockStmtUnderTest = methodUnderTest.getBody();
+		BlockStmt blockStmtUnderTest = methodUnderTest.getBody().orElse(null);
         Comment commentUnderTest = blockStmtUnderTest.getOrphanComments().get(commentPosition - 1);
         assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
     }
@@ -369,7 +380,7 @@ public class CommentParsingSteps {
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         VariableDeclarator variableUnderTest = fieldUnderTest.getVariables().get(variablePosition - 1);
-        Expression valueUnderTest = variableUnderTest.getInit();
+		Expression valueUnderTest = variableUnderTest.getInit().orElse(null);
         Comment commentUnderTest = valueUnderTest.getComment();
         assertThat(commentUnderTest.getContent(), is(expectedContent));
     }

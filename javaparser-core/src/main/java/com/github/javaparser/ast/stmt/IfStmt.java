@@ -21,13 +21,15 @@
  
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,7 +40,6 @@ public final class IfStmt extends Statement {
 
 	private Statement thenStmt;
 
-    // TODO nullable
 	private Statement elseStmt;
 
 	public IfStmt() {
@@ -72,8 +73,8 @@ public final class IfStmt extends Statement {
 		return condition;
 	}
 
-	public Statement getElseStmt() {
-		return elseStmt;
+    public Optional<Statement> getElseStmt() {
+        return Optional.ofNullable(elseStmt);
 	}
 
 	public Statement getThenStmt() {
@@ -86,6 +87,12 @@ public final class IfStmt extends Statement {
 		return this;
 	}
 
+    /**
+     * Sets the elseStmt
+     * 
+     * @param elseStmt the elseStmt, can be null
+     * @return this, the IfStmt
+     */
 	public IfStmt setElseStmt(final Statement elseStmt) {
 		this.elseStmt = elseStmt;
 		setAsParentNodeOf(this.elseStmt);

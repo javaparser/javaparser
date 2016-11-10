@@ -21,6 +21,10 @@
  
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -29,20 +33,15 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 
-    // TODO nullable
     private NodeList<Type<?>> typeArguments;
 
     private boolean isThis;
 
-    // TODO nullable
 	private Expression expr;
 
 	private NodeList<Expression> args;
@@ -80,8 +79,8 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return args;
 	}
 
-	public Expression getExpr() {
-		return expr;
+    public Optional<Expression> getExpr() {
+        return Optional.ofNullable(expr);
 	}
 
 	public boolean isThis() {
@@ -94,6 +93,12 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 		return this;
 	}
 
+    /**
+     * Sets the expr
+     * 
+     * @param expr the expression, can be null
+     * @return this, the ExplicitConstructorInvocationStmt
+     */
 	public ExplicitConstructorInvocationStmt setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
@@ -106,10 +111,16 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 	}
 
     @Override
-    public NodeList<Type<?>> getTypeArguments() {
-        return typeArguments;
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
+        return Optional.ofNullable(typeArguments);
     }
 
+    /**
+     * Sets the typeArguments
+     * 
+     * @param typeArguments the typeArguments, can be null
+     * @return this, the ExplicitConstructorInvocationStmt
+     */
     @Override
     public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type<?>> types) {
         this.typeArguments = types;

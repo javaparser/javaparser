@@ -21,22 +21,22 @@
  
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class SwitchEntryStmt extends Statement implements NodeWithStatements<SwitchEntryStmt> {
 
-    // TODO nullable
 	private Expression label;
 
 	private NodeList<Statement> stmts;
@@ -66,8 +66,8 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 		v.visit(this, arg);
 	}
 
-	public Expression getLabel() {
-		return label;
+    public Optional<Expression> getLabel() {
+        return Optional.ofNullable(label);
 	}
 
 	@Override
@@ -75,6 +75,12 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return stmts;
 	}
 
+    /**
+     * Sets the label
+     * 
+     * @param label the label, can be null
+     * @return this, the SwitchEntryStmt
+     */
 	public SwitchEntryStmt setLabel(final Expression label) {
 		this.label = label;
 		setAsParentNodeOf(this.label);

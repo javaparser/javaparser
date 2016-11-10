@@ -21,30 +21,39 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.ast.type.ArrayType.*;
+import static com.github.javaparser.ast.expr.NameExpr.name;
+import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.nodeTypes.*;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt;
+import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
+import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.Pair;
 
 /**
@@ -59,14 +68,14 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithModifiers<MethodDeclaration>, 
         NodeWithParameters<MethodDeclaration>,
         NodeWithThrowable<MethodDeclaration>, 
-        NodeWithBlockStmt<MethodDeclaration>,
+        NodeWithOptionalBlockStmt<MethodDeclaration>,
         NodeWithTypeParameters<MethodDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
     private NodeList<TypeParameter> typeParameters;
 
-    private Type elementType;
+    private Type<?> elementType;
 
     private NameExpr name;
 
@@ -74,7 +83,6 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NodeList<ReferenceType<?>> throws_;
 
-    // TODO nullable
     private BlockStmt body;
 
     private boolean isDefault;
@@ -98,7 +106,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new BlockStmt());
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type<?> elementType, final String name) {
         this(Range.UNKNOWN,
                 modifiers,
                 new NodeList<>(),
@@ -113,7 +121,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new BlockStmt());
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type<?> elementType, final String name,
                              final NodeList<Parameter> parameters) {
         this(Range.UNKNOWN,
                 modifiers,
@@ -132,7 +140,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, 
                              final NodeList<AnnotationExpr> annotations,
                              final NodeList<TypeParameter> typeParameters, 
-                             final Type elementType,
+                             final Type<?> elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final String name,
                              final boolean isDefault,
@@ -158,7 +166,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final EnumSet<Modifier> modifiers, 
                              final NodeList<AnnotationExpr> annotations,
                              final NodeList<TypeParameter> typeParameters, 
-                             final Type elementType,
+                             final Type<?> elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final NameExpr nameExpr,
                              final boolean isDefault,
@@ -190,8 +198,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public BlockStmt getBody() {
-        return body;
+    public Optional<BlockStmt> getBody() {
+        return Optional.ofNullable(body);
     }
 
     /**
@@ -225,14 +233,14 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public Type getType() {
+    public Type<?> getType() {
         return wrapInArrayTypes(getElementType(),
                 getArrayBracketPairsAfterElementType(),
                 getArrayBracketPairsAfterParameterList());
     }
 
     @Override
-    public Type getElementType() {
+    public Type<?> getElementType() {
         return elementType;
     }
 
@@ -241,6 +249,12 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         return typeParameters;
     }
 
+    /**
+     * Sets the body
+     * 
+     * @param body the body, can be null
+     * @return this, the MethodDeclaration
+     */
     @Override
     public MethodDeclaration setBody(final BlockStmt body) {
         this.body = body;
@@ -281,8 +295,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setType(final Type type) {
-        Pair<Type, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(assertNotNull(type));
+    public MethodDeclaration setType(final Type<?> type) {
+        Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(assertNotNull(type));
         setElementType(typeListPair.a);
         setArrayBracketPairsAfterElementType(typeListPair.b);
         setArrayBracketPairsAfterParameterList(new NodeList<>());
@@ -290,7 +304,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setElementType(final Type elementType) {
+    public MethodDeclaration setElementType(final Type<?> elementType) {
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
@@ -379,7 +393,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType thr : getThrows()) {
+            for (ReferenceType<?> thr : getThrows()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
@@ -403,6 +417,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
      */
+    @Override
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }

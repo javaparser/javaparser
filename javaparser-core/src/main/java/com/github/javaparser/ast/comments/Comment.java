@@ -21,6 +21,8 @@
  
 package com.github.javaparser.ast.comments;
 
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 
@@ -35,7 +37,6 @@ import com.github.javaparser.ast.Node;
 public abstract class Comment extends Node {
 
     private String content;
-    // TODO nullable
     private Node commentedNode;
     
     public Comment(Range range, String content) {
@@ -76,11 +77,17 @@ public abstract class Comment extends Node {
         }
     }
 
-    public Node getCommentedNode()
+    public Optional<Node> getCommentedNode()
     {
-        return this.commentedNode;
+        return Optional.ofNullable(this.commentedNode);
     }
 
+    /**
+     * Sets the commentedNode
+     * 
+     * @param commentedNode the commentedNode, can be null
+     * @return this, the Comment
+     */
     public Comment setCommentedNode(Node commentedNode)
     {
         if (commentedNode==null) {

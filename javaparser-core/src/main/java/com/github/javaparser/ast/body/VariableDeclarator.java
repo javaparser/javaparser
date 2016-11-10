@@ -21,6 +21,11 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
@@ -35,9 +40,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -46,7 +48,6 @@ public final class VariableDeclarator extends Node implements
 
     private VariableDeclaratorId id;
 
-    // TODO nullable
     private Expression init;
 
     public VariableDeclarator() {
@@ -97,8 +98,8 @@ public final class VariableDeclarator extends Node implements
         return id;
     }
 
-    public Expression getInit() {
-        return init;
+    public Optional<Expression> getInit() {
+        return Optional.ofNullable(init);
     }
 
     public VariableDeclarator setId(VariableDeclaratorId id) {
@@ -107,6 +108,12 @@ public final class VariableDeclarator extends Node implements
         return this;
     }
 
+    /**
+     * Sets the init expression
+     * 
+     * @param init the init expression, can be null
+     * @return this, the VariableDeclarator
+     */
     public VariableDeclarator setInit(Expression init) {
         this.init = init;
         setAsParentNodeOf(this.init);
@@ -115,6 +122,9 @@ public final class VariableDeclarator extends Node implements
 
     /**
      * Will create a {@link NameExpr} with the init param
+     * 
+     * @param init the init expression, can be null
+     * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInit(String init) {
         this.init = new NameExpr(assertNotNull(init));
@@ -133,8 +143,8 @@ public final class VariableDeclarator extends Node implements
     }
 
     @Override
-    public VariableDeclarator setType(Type type) {
-        Pair<Type, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
+    public VariableDeclarator setType(Type<?> type) {
+        Pair<Type<?>, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         NodeWithElementType<?> nodeWithElementType = getAncestorOfType(NodeWithElementType.class);
         if (nodeWithElementType == null) {
             throw new IllegalStateException("Cannot set type without a parent");

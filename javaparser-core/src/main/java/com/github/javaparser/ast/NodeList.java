@@ -1,12 +1,18 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.HasParentNode;
-import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import com.github.javaparser.HasParentNode;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * A list of nodes.
@@ -123,10 +129,16 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
     }
 
     @Override
-    public Node getParentNode() {
-        return parentNode;
+    public Optional<Node> getParentNode() {
+        return Optional.ofNullable(parentNode);
     }
 
+    /**
+     * Sets the parentNode
+     * 
+     * @param parentNode the parentNode
+     * @return this, the NodeList
+     */
     @Override
     public NodeList<N> setParentNode(Node parentNode) {
         this.parentNode = parentNode;
@@ -139,10 +151,12 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         return parentNode;
     }
 
+    @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
+    @Override
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }

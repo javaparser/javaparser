@@ -21,6 +21,8 @@
  
 package com.github.javaparser.ast.type;
 
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -32,11 +34,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class WildcardType extends Type<WildcardType> implements NodeWithAnnotations<WildcardType> {
 
-    // TODO nullable
-	private ReferenceType ext;
+    private ReferenceType<?> ext;
 
-    // TODO nullable
-	private ReferenceType sup;
+    private ReferenceType<?> sup;
 
 	public WildcardType() {
         this(Range.UNKNOWN, null, null);
@@ -65,21 +65,33 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
 		v.visit(this, arg);
 	}
 
-	public ReferenceType getExtends() {
-		return ext;
+    public Optional<ReferenceType<?>> getExtends() {
+        return Optional.ofNullable(ext);
 	}
 
-	public ReferenceType getSuper() {
-		return sup;
+    public Optional<ReferenceType<?>> getSuper() {
+        return Optional.ofNullable(sup);
 	}
 
-	public WildcardType setExtends(final ReferenceType ext) {
+    /**
+     * Sets the extends
+     * 
+     * @param ext the extends, can be null
+     * @return this, the WildcardType
+     */
+    public WildcardType setExtends(final ReferenceType<?> ext) {
 		this.ext = ext;
 		setAsParentNodeOf(this.ext);
 		return this;
 	}
 
-	public WildcardType setSuper(final ReferenceType sup) {
+    /**
+     * Sets the super
+     * 
+     * @param sup the super, can be null
+     * @return this, the WildcardType
+     */
+    public WildcardType setSuper(final ReferenceType<?> sup) {
 		this.sup = sup;
 		setAsParentNodeOf(this.sup);
 		return this;

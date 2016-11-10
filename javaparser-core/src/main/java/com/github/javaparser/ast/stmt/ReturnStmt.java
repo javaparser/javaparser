@@ -21,20 +21,20 @@
  
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.ast.expr.NameExpr.name;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.ast.expr.NameExpr.name;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ReturnStmt extends Statement {
 
-    // TODO nullable
 	private Expression expr;
 
 	public ReturnStmt() {
@@ -66,10 +66,16 @@ public final class ReturnStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public Expression getExpr() {
-		return expr;
+    public Optional<Expression> getExpr() {
+        return Optional.ofNullable(expr);
 	}
 
+    /**
+     * Sets the expr
+     * 
+     * @param expr the expr, can be null
+     * @return this, the ReturnStmt
+     */
 	public ReturnStmt setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);

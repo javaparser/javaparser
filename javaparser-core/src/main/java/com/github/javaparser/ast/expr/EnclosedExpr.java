@@ -21,6 +21,8 @@
  
 package com.github.javaparser.ast.expr;
 
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -30,7 +32,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class EnclosedExpr extends Expression {
 
-    // TODO nullable
 	private Expression inner;
 
 	public EnclosedExpr() {
@@ -54,10 +55,16 @@ public final class EnclosedExpr extends Expression {
 		v.visit(this, arg);
 	}
 
-	public Expression getInner() {
-		return inner;
+    public Optional<Expression> getInner() {
+        return Optional.ofNullable(inner);
 	}
 
+    /**
+     * Sets the inner expression
+     * 
+     * @param inner the inner expression, can be null
+     * @return this, the EnclosedExpr
+     */
 	public EnclosedExpr setInner(final Expression inner) {
 		this.inner = inner;
 		setAsParentNodeOf(this.inner);

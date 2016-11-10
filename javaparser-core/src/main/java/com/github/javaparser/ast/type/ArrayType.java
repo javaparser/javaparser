@@ -1,5 +1,8 @@
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.NodeList;
@@ -8,9 +11,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
-
-import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -70,7 +70,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
      *
      * @return a pair of the element type, and the unwrapped ArrayTypes, if any.
      */
-    public static Pair<Type, NodeList<ArrayBracketPair>> unwrapArrayTypes(Type type) {
+    public static Pair<Type<?>, NodeList<ArrayBracketPair>> unwrapArrayTypes(Type<?> type) {
         final NodeList<ArrayBracketPair> arrayBracketPairs = new NodeList<>();
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;

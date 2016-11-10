@@ -18,8 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
@@ -27,61 +31,66 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class AssertStmt extends Statement {
 
-	private Expression check;
+    private Expression check;
 
-    // TODO nullable
-	private Expression msg;
+    private Expression msg;
 
-	public AssertStmt() {
+    public AssertStmt() {
         this(Range.UNKNOWN, new BooleanLiteralExpr(), null);
-	}
+    }
 
-	public AssertStmt(final Expression check) {
-		this(Range.UNKNOWN, check, null);
-	}
+    public AssertStmt(final Expression check) {
+        this(Range.UNKNOWN, check, null);
+    }
 
-	public AssertStmt(final Expression check, final Expression msg) {
+    public AssertStmt(final Expression check, final Expression msg) {
         this(Range.UNKNOWN, check, msg);
-	}
+    }
 
-	public AssertStmt(final Range range, final Expression check, final Expression msg) {
-		super(range);
-		setCheck(check);
-		setMessage(msg);
-	}
+    public AssertStmt(final Range range, final Expression check, final Expression msg) {
+        super(range);
+        setCheck(check);
+        setMessage(msg);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Expression getCheck() {
-		return check;
-	}
+    public Expression getCheck() {
+        return check;
+    }
 
-	public Expression getMessage() {
-		return msg;
-	}
+    public Optional<Expression> getMessage() {
+        return Optional.ofNullable(msg);
+    }
 
-	public AssertStmt setCheck(final Expression check) {
-		this.check = assertNotNull(check);
-		setAsParentNodeOf(this.check);
-		return this;
-	}
+    public AssertStmt setCheck(final Expression check) {
+        this.check = assertNotNull(check);
+        setAsParentNodeOf(this.check);
+        return this;
+    }
 
-	public AssertStmt setMessage(final Expression msg) {
-		this.msg = msg;
-		setAsParentNodeOf(this.msg);
-		return this;
-	}
+    /**
+     * Sets the message
+     * 
+     * @param msg the message, can be null
+     * @return this, the AssertStmt
+     */
+    public AssertStmt setMessage(final Expression msg) {
+        this.msg = msg;
+        setAsParentNodeOf(this.msg);
+        return this;
+    }
 }
