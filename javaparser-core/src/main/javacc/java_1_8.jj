@@ -69,8 +69,10 @@ final class ASTParser {
     private final Position INVALID = pos(-1, 0);
     List<Problem> problems = new ArrayList<Problem>();
 
-    void reset(InputStream in, String encoding) throws IOException {
-        ReInit(new StreamProvider(in, encoding));
+    void reset(Provider provider) {
+        ReInit(provider);
+        problems = new ArrayList<Problem>();
+        token_source.reset();
     }
 
     private static <X extends Node> NodeList<X> emptyList() {
@@ -285,6 +287,11 @@ TOKEN_MGR_DECLS :
 {
     private List<Token> tokens = new ArrayList<Token>();
     private CommentsCollection commentsCollection = new CommentsCollection();
+
+    void reset() {
+        tokens = new ArrayList<Token>();
+        commentsCollection = new CommentsCollection();
+    }
 
     List<Token> getTokens() {
         return tokens;
