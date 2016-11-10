@@ -302,8 +302,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public boolean removeIf(Predicate<? super N> filter) {
         innerList.stream().filter(filter).forEach(n -> {
-            if (n != null && n instanceof Node)
-                ((Node) n).setParentNode(null);
+            if (n != null)
+                n.setParentNode(null);
         });
         return innerList.removeIf(filter);
     }
@@ -314,6 +314,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public void clear() {
+        for (Node n : innerList)
+            n.setParentNode(null);
         innerList.clear();
     }
 
