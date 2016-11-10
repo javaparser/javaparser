@@ -1,28 +1,39 @@
 package com.github.javaparser.manual;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.TokenMgrException;
+import com.github.javaparser.*;
+import com.github.javaparser.ast.CompilationUnit;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.provider;
+
 /**
  * Parses all files in a directory and its subdirectories.
- * 
+ * <p>
  * The OpenJDK for example: http://download.java.net/openjdk/jdk8/
  * Or the source of JavaParser: .
  */
 public class ParseDirectory {
     public static void main(String[] args) throws IOException {
-        Files.find(new File(".").toPath(), 30, (path, basicFileAttributes) -> true).forEach(p -> {
+        JavaParser parser = new JavaParser();
+        Files.find(new File("/home/danny/tmp/openjdk/").toPath(), 30, (path, basicFileAttributes) -> true).forEach(p -> {
             if (!Files.isDirectory(p) && p.toString().endsWith(".java")) {
                 try {
-                    System.out.print(p + "...");
-                    JavaParser.parse(p.toFile());
-                    System.out.println(" OK");
-                } catch (TokenMgrException | ParseException | IOException e) {
+                    ParseResult<CompilationUnit> parse = parser.parse(COMPILATION_UNIT, provider(p));
+                    if (parse.isSuccessful()) {
+                        System.out.print(".");
+                    } else {
+                        System.out.println(p);
+                        System.out.flush();
+                        for (Problem problem : parse.getProblems()) {
+                            System.err.println(problem.getMessage());
+                        }
+                        System.err.flush();
+                    }
+                } catch (Throwable e) {
                     System.out.println(" ERROR: " + e.getMessage());
                 }
             }
