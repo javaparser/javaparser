@@ -85,7 +85,7 @@ public final class JavaParser {
         if (astParser == null) {
             astParser = new ASTParser(provider);
         } else {
-            astParser.ReInit(provider);
+            astParser.reset(provider);
         }
         return astParser;
     }
