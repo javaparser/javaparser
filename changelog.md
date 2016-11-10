@@ -1,3 +1,8 @@
+Version 3.0.0-alpha.8
+------------------
+* 344 529 turn DumpVisitor into an official PrettyPrinter
+* 532 508 427 530 531 513 528 cleanups
+
 Version 3.0.0-alpha.7
 ------------------
 * 515 roll back attempt at using Optional
