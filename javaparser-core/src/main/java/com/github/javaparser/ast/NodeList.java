@@ -6,7 +6,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import com.github.javaparser.HasParentNode;
@@ -19,7 +24,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  *
  * @param <N> the type of nodes contained.
  */
-public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<NodeList<N>>, Visitable {
+public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable {
     private List<N> innerList = new ArrayList<>(0);
 
     private Node parentNode;
@@ -32,10 +37,10 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         setParentNode(parent);
     }
 
-    public NodeList<N> add(N node) {
+    @Override
+    public boolean add(N node) {
         own(node);
-        innerList.add(node);
-        return this;
+        return innerList.add(node);
     }
 
     private void own(N node) {
@@ -79,14 +84,17 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         return innerList.contains(node);
     }
 
+    @Override
     public Stream<N> stream() {
         return innerList.stream();
     }
 
+    @Override
     public int size() {
         return innerList.size();
     }
 
+    @Override
     public N get(int i) {
         return innerList.get(i);
     }
@@ -97,21 +105,23 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         return innerList.iterator();
     }
 
-    public NodeList<N> set(int index, N element) {
+    @Override
+    public N set(int index, N element) {
         setAsParentNodeOf(element);
-        innerList.set(index, element);
-        return this;
+        return innerList.set(index, element);
     }
 
-    public NodeList<N> remove(int index) {
-        innerList.remove(index);
-        return this;
+    @Override
+    public N remove(int index) {
+        return innerList.remove(index);
     }
 
+    @Override
     public boolean isEmpty() {
         return innerList.isEmpty();
     }
 
+    @Override
     public void sort(Comparator<? super N> comparator) {
         Collections.sort(innerList, comparator);
     }
@@ -122,10 +132,10 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         }
     }
 
-    public NodeList<N> add(int index, N node) {
+    @Override
+    public void add(int index, N node) {
         own(node);
         innerList.add(index, node);
-        return this;
     }
 
     @Override
@@ -159,6 +169,224 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
     @Override
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    /**
+     * @param action
+     * @see java.lang.Iterable#forEach(java.util.function.Consumer)
+     */
+    @Override
+    public void forEach(Consumer<? super N> action) {
+        innerList.forEach(action);
+    }
+
+    /**
+     * @param o
+     * @return
+     * @see java.util.List#contains(java.lang.Object)
+     */
+    @Override
+    public boolean contains(Object o) {
+        return innerList.contains(o);
+    }
+
+    /**
+     * @return
+     * @see java.util.List#toArray()
+     */
+    @Override
+    public Object[] toArray() {
+        return innerList.toArray();
+    }
+
+    /**
+     * @param a
+     * @return
+     * @see java.util.List#toArray(java.lang.Object[])
+     */
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return innerList.toArray(a);
+    }
+
+    /**
+     * @param o
+     * @return
+     * @see java.util.List#remove(java.lang.Object)
+     */
+    @Override
+    public boolean remove(Object o) {
+        return innerList.remove(o);
+    }
+
+    /**
+     * @param c
+     * @return
+     * @see java.util.List#containsAll(java.util.Collection)
+     */
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return innerList.containsAll(c);
+    }
+
+    /**
+     * @param c
+     * @return
+     * @see java.util.List#addAll(java.util.Collection)
+     */
+    @Override
+    public boolean addAll(Collection<? extends N> c) {
+        for (N n : c)
+            own(n);
+        return innerList.addAll(c);
+    }
+
+    /**
+     * @param index
+     * @param c
+     * @return
+     * @see java.util.List#addAll(int, java.util.Collection)
+     */
+    @Override
+    public boolean addAll(int index, Collection<? extends N> c) {
+        for (N n : c)
+            own(n);
+        return innerList.addAll(index, c);
+    }
+
+    /**
+     * @param c
+     * @return
+     * @see java.util.List#removeAll(java.util.Collection)
+     */
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return innerList.removeAll(c);
+    }
+
+    /**
+     * @param c
+     * @return
+     * @see java.util.List#retainAll(java.util.Collection)
+     */
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return innerList.retainAll(c);
+    }
+
+    /**
+     * @param operator
+     * @see java.util.List#replaceAll(java.util.function.UnaryOperator)
+     */
+    @Override
+    public void replaceAll(UnaryOperator<N> operator) {
+        innerList.replaceAll(operator);
+    }
+
+    /**
+     * @param filter
+     * @return
+     * @see java.util.Collection#removeIf(java.util.function.Predicate)
+     */
+    @Override
+    public boolean removeIf(Predicate<? super N> filter) {
+        return innerList.removeIf(filter);
+    }
+
+    /**
+     * 
+     * @see java.util.List#clear()
+     */
+    @Override
+    public void clear() {
+        innerList.clear();
+    }
+
+    /**
+     * @param o
+     * @return
+     * @see java.util.List#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object o) {
+        return innerList.equals(o);
+    }
+
+    /**
+     * @return
+     * @see java.util.List#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return innerList.hashCode();
+    }
+
+    /**
+     * @param o
+     * @return
+     * @see java.util.List#indexOf(java.lang.Object)
+     */
+    @Override
+    public int indexOf(Object o) {
+        return innerList.indexOf(o);
+    }
+
+    /**
+     * @param o
+     * @return
+     * @see java.util.List#lastIndexOf(java.lang.Object)
+     */
+    @Override
+    public int lastIndexOf(Object o) {
+        return innerList.lastIndexOf(o);
+    }
+
+    /**
+     * @return
+     * @see java.util.List#listIterator()
+     */
+    @Override
+    public ListIterator<N> listIterator() {
+        return innerList.listIterator();
+    }
+
+    /**
+     * @param index
+     * @return
+     * @see java.util.List#listIterator(int)
+     */
+    @Override
+    public ListIterator<N> listIterator(int index) {
+        return innerList.listIterator(index);
+    }
+
+    /**
+     * @return
+     * @see java.util.Collection#parallelStream()
+     */
+    @Override
+    public Stream<N> parallelStream() {
+        return innerList.parallelStream();
+    }
+
+    /**
+     * @param fromIndex
+     * @param toIndex
+     * @return
+     * @see java.util.List#subList(int, int)
+     */
+    @Override
+    public List<N> subList(int fromIndex, int toIndex) {
+        return innerList.subList(fromIndex, toIndex);
+    }
+
+    /**
+     * @return
+     * @see java.util.List#spliterator()
+     */
+    @Override
+    public Spliterator<N> spliterator() {
+        return innerList.spliterator();
     }
 
 }
