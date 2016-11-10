@@ -31,15 +31,16 @@ import com.github.javaparser.ast.type.Type;
 
 /**
  * A node that can have type arguments.
+ * 
  * <pre>
- *     new X();        --> typeArguments == null
+ *     new X();        --> typeArguments == Optional is empty
  *     new X&lt;>();      --> typeArguments = [], diamondOperator = true 
  *     new X&lt;C,D>();   --> typeArguments = [C,D], diamondOperator = false
  * </pre>
  */
 public interface NodeWithTypeArguments<N extends Node> {
     /**
-     * @return the types that can be found in the type arguments: &lt;String, Integer>.
+     * @return the types that can be found in the type arguments: &lt;String, Integer&gt;.
      */
     Optional<NodeList<Type<?>>> getTypeArguments();
 
