@@ -4,16 +4,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class QualifiedNameExprTest {
+public class NameTest {
     @Test
     public void outerNameExprIsTheRightMostIdentifier() {
-        NameExpr name = NameExpr.name("a.b.c");
-        assertEquals("c", name.getName());
+        Name name = Name.parse("a.b.c");
+        assertEquals("c", name.getId());
     }
 
     @Test
     public void parsingAndUnparsingWorks() {
-        NameExpr name = NameExpr.name("a.b.c");
-        assertEquals("a.b.c", name.getQualifiedName());
+        Name name = Name.parse("a.b.c");
+        assertEquals("a.b.c", name.toString());
     }
 }

@@ -111,7 +111,7 @@ public final class PositionUtils {
             return casted.getElementType();
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
-            return casted.getNameExpr();
+            return casted.getName();
         }  else {
             return node;
         }

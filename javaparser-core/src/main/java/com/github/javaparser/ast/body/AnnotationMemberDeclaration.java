@@ -27,9 +27,10 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -45,8 +46,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements 
-        NodeWithJavaDoc<AnnotationMemberDeclaration>, 
-        NodeWithName<AnnotationMemberDeclaration>,
+        NodeWithJavaDoc<AnnotationMemberDeclaration>,
+        NodeWithSimpleName<AnnotationMemberDeclaration>,
         NodeWithType<AnnotationMemberDeclaration, Type<?>>, 
         NodeWithModifiers<AnnotationMemberDeclaration> {
 
@@ -54,7 +55,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     private Type<?> type;
 
-    private String name;
+    private SimpleName name;
 
     private Expression defaultValue;
 
@@ -63,7 +64,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
-                "empty",
+                new SimpleName(),
                 null);
     }
 
@@ -72,11 +73,11 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
                 modifiers,
                 new NodeList<>(),
                 type,
-                name,
+                new SimpleName(name),
                 defaultValue);
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> type, String name,
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> type, SimpleName name,
                                        Expression defaultValue) {
         this(Range.UNKNOWN,
                 modifiers,
@@ -87,7 +88,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type,
-                                       String name, Expression defaultValue) {
+                                       SimpleName name, Expression defaultValue) {
         super(range, annotations);
         setModifiers(modifiers);
         setType(type);
@@ -121,7 +122,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
-    public String getName() {
+    public SimpleName getName() {
         return name;
     }
 
@@ -148,7 +149,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
-    public AnnotationMemberDeclaration setName(String name) {
+    public AnnotationMemberDeclaration setName(SimpleName name) {
         this.name = assertNotNull(name);
         return this;
     }

@@ -48,7 +48,7 @@ public class CompilationUnitBuildersTest {
     public void testAddClass() {
         ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", Modifier.PRIVATE);
         assertEquals(1, cu.getTypes().size());
-        assertEquals("testClass", cu.getTypes().get(0).getName());
+        assertEquals("testClass", cu.getTypes().get(0).getNameAsString());
         assertEquals(ClassOrInterfaceDeclaration.class, cu.getTypes().get(0).getClass());
         assertTrue(myClassDeclaration.isPrivate());
         assertFalse(myClassDeclaration.isInterface());
@@ -58,7 +58,7 @@ public class CompilationUnitBuildersTest {
     public void testAddInterface() {
         ClassOrInterfaceDeclaration myInterfaceDeclaration = cu.addInterface("testInterface");
         assertEquals(1, cu.getTypes().size());
-        assertEquals("testInterface", cu.getTypes().get(0).getName());
+        assertEquals("testInterface", cu.getTypes().get(0).getNameAsString());
         assertTrue(myInterfaceDeclaration.isPublic());
         assertEquals(ClassOrInterfaceDeclaration.class, cu.getTypes().get(0).getClass());
         assertTrue(myInterfaceDeclaration.isInterface());
@@ -68,7 +68,7 @@ public class CompilationUnitBuildersTest {
     public void testAddEnum() {
         EnumDeclaration myEnumDeclaration = cu.addEnum("test");
         assertEquals(1, cu.getTypes().size());
-        assertEquals("test", cu.getTypes().get(0).getName());
+        assertEquals("test", cu.getTypes().get(0).getNameAsString());
         assertTrue(myEnumDeclaration.isPublic());
         assertEquals(EnumDeclaration.class, cu.getTypes().get(0).getClass());
     }
@@ -77,7 +77,7 @@ public class CompilationUnitBuildersTest {
     public void testAddAnnotationDeclaration() {
         AnnotationDeclaration myAnnotationDeclaration = cu.addAnnotationDeclaration("test");
         assertEquals(1, cu.getTypes().size());
-        assertEquals("test", cu.getTypes().get(0).getName());
+        assertEquals("test", cu.getTypes().get(0).getNameAsString());
         assertTrue(myAnnotationDeclaration.isPublic());
         assertEquals(AnnotationDeclaration.class, cu.getTypes().get(0).getClass());
     }

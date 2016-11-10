@@ -47,6 +47,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -129,7 +130,7 @@ public class ManipulationSteps {
     @When("the package declaration is set to \"$packageName\"")
     public void whenThePackageDeclarationIsSetTo(String packageName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        compilationUnit.setPackage(new PackageDeclaration(new NameExpr(packageName)));
+        compilationUnit.setPackage(new PackageDeclaration(Name.parse(packageName)));
         state.put("cu1", compilationUnit);
     }
 
@@ -185,7 +186,7 @@ public class ManipulationSteps {
     public void whenMethodInClassHasItsNameConvertedToUppercase(int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        method.setName(method.getName().toUpperCase());
+        method.setName(method.getNameAsString().toUpperCase());
     }
 
     @When("method $methodPosition in class $classPosition has an int parameter called \"$paramName\" added")
@@ -254,7 +255,7 @@ public class ManipulationSteps {
     public void thenMethodInClassHasTheName(int methodPosition, int classPosition, String expectedName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        assertThat(method.getName(), is(expectedName));
+        assertThat(method.getNameAsString(), is(expectedName));
     }
 
     @Then("method $methodPosition in class $classPosition has $expectedCount parameters")
@@ -272,13 +273,13 @@ public class ManipulationSteps {
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameters().get(parameterPosition -1);
         assertThat(parameter.getType(), is(INT_TYPE));
-        assertThat(parameter.getId().getName(), is(expectedName));
+        assertThat(parameter.getId().getNameAsString(), is(expectedName));
     }
 
     private static class ChangeMethodNameToUpperCaseVisitor extends VoidVisitorAdapter<Void> {
         @Override
         public void visit(MethodDeclaration n, Void arg) {
-            n.setName(n.getName().toUpperCase());
+            n.setName(n.getNameAsString().toUpperCase());
         }
     }
 

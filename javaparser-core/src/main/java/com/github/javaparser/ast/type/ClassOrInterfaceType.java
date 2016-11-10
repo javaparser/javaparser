@@ -21,52 +21,54 @@
 
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import java.util.Optional;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements
-        NodeWithName<ClassOrInterfaceType>,
+        NodeWithSimpleName<ClassOrInterfaceType>,
         NodeWithAnnotations<ClassOrInterfaceType>,
         NodeWithTypeArguments<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;
 
-    private String name;
+    private SimpleName name;
 
     private NodeList<Type<?>> typeArguments;
 
     public ClassOrInterfaceType() {
         this(Range.UNKNOWN,
                 null,
-                "empty",
+                new SimpleName(),
                 null);
     }
 
     public ClassOrInterfaceType(final String name) {
         this(Range.UNKNOWN,
                 null,
-                name,
+                new SimpleName(name),
                 null);
     }
 
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
         this(Range.UNKNOWN,
                 scope,
-                name,
+                new SimpleName(name),
                 null);
     }
 
-    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final String name,
+    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final SimpleName name,
                                 final NodeList<Type<?>> typeArguments) {
         super(range);
         setScope(scope);
@@ -85,7 +87,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     @Override
-    public String getName() {
+    public SimpleName getName() {
         return name;
     }
 
@@ -105,8 +107,8 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     @Override
-    public ClassOrInterfaceType setName(final String name) {
-        this.name = name;
+    public ClassOrInterfaceType setName(final SimpleName name) {
+    	this.name = assertNotNull(name);
         return this;
     }
 

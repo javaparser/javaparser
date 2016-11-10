@@ -28,9 +28,10 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -38,11 +39,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements 
-        NodeWithJavaDoc<EnumConstantDeclaration>, 
-        NodeWithName<EnumConstantDeclaration>,
+        NodeWithJavaDoc<EnumConstantDeclaration>,
+        NodeWithSimpleName<EnumConstantDeclaration>,
         NodeWithArguments<EnumConstantDeclaration> {
 
-    private String name;
+    private SimpleName name;
 
     private NodeList<Expression> args;
 
@@ -51,25 +52,25 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     public EnumConstantDeclaration() {
         this(Range.UNKNOWN, 
                 new NodeList<>(), 
-                "empty",
+                new SimpleName(),
                 new NodeList<>(),
                 new NodeList<>());
     }
 
     public EnumConstantDeclaration(String name) {
         this(Range.UNKNOWN, 
-                new NodeList<>(), 
-                name,
+                new NodeList<>(),
+                new SimpleName(name),
                 new NodeList<>(),
                 new NodeList<>());
     }
 
-    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, String name, NodeList<Expression> args,
+    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> args,
                                    NodeList<BodyDeclaration<?>> classBody) {
         this(Range.UNKNOWN, annotations, name, args, classBody);
     }
 
-    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, String name, NodeList<Expression> args,
+    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> args,
                                    NodeList<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);
@@ -96,7 +97,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
-    public String getName() {
+    public SimpleName getName() {
         return name;
     }
 
@@ -113,8 +114,9 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
-    public EnumConstantDeclaration setName(String name) {
+    public EnumConstantDeclaration setName(SimpleName name) {
         this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 

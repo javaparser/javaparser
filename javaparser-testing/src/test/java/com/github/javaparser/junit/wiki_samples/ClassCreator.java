@@ -1,22 +1,18 @@
 package com.github.javaparser.junit.wiki_samples;
 
-import java.util.EnumSet;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.ast.type.VoidType.*;
+import java.util.EnumSet;
+
+import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
 
 public class ClassCreator {
 
@@ -34,7 +30,7 @@ public class ClassCreator {
     private static CompilationUnit createCU() {
         CompilationUnit cu = new CompilationUnit();
         // set the package
-        cu.setPackage(new PackageDeclaration(name("java.parser.test")));
+        cu.setPackage(new PackageDeclaration(Name.parse("java.parser.test")));
 
         // create the type declaration 
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");

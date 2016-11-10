@@ -1308,7 +1308,7 @@ CompilationUnit CompilationUnit():
 PackageDeclaration PackageDeclaration():
 {
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-	NameExpr name;
+	Name name;
 	Position begin;
 }
 {
@@ -1319,7 +1319,7 @@ PackageDeclaration PackageDeclaration():
 
 ImportDeclaration ImportDeclaration():
 {
-    NameExpr name;
+    Name name;
     boolean isStatic = false;
     boolean isAsterisk = false;
     Position begin;
@@ -1416,7 +1416,7 @@ TypeDeclaration TypeDeclaration():
 ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier):
 {
     boolean isInterface = false;
-    NameExpr name;
+    SimpleName name;
     RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyList());
     NodeList<ClassOrInterfaceType> extList = emptyList();
     NodeList<ClassOrInterfaceType> impList = emptyList();
@@ -1425,7 +1425,7 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
 }
 {
   ( "class" | "interface" { isInterface = true; } ) { begin = begin.orIfInvalid(tokenBegin()); }
-  name = Name()
+  name = SimpleName()
   [ typePar = TypeParameters() ]
   [ extList = ExtendsList(isInterface) ]
   [ impList = ImplementsList(isInterface) ]
@@ -1467,7 +1467,7 @@ NodeList<ClassOrInterfaceType> ImplementsList(boolean isInterface):
 
 EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 {
-	NameExpr name;
+	SimpleName name;
     NodeList<ClassOrInterfaceType> impList = emptyList();
 	EnumConstantDeclaration entry;
 	NodeList<EnumConstantDeclaration> entries = emptyList();
@@ -1477,7 +1477,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 }
 {
   "enum" { begin = begin.orIfInvalid(tokenBegin()); }
-  name = Name()
+  name = SimpleName()
   [ impList = ImplementsList(false) ]
   "{"
   	[
@@ -1497,7 +1497,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
 {
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	AnnotationExpr ann;
-	String name;
+	SimpleName name;
 	NodeList<Expression> args = emptyList();
 	NodeList<BodyDeclaration<?>> classBody = emptyList();
 	Position begin = INVALID;
@@ -1505,7 +1505,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
 {
   {  }
   ( ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin()); } )*
-  <IDENTIFIER> { name = token.image; begin = begin.orIfInvalid(tokenBegin()); } 
+  name = SimpleName() { begin = begin.orIfInvalid(tokenBegin()); } 
   [ args = Arguments() ] [ classBody = ClassOrInterfaceBody(false) ]
   { 
       return new EnumConstantDeclaration(range(begin, tokenEnd()), annotations, name, args, classBody);  
@@ -1535,12 +1535,12 @@ RangedList<TypeParameter> TypeParameters():
 
 TypeParameter TypeParameter():
 {
-	String name;
+	SimpleName name;
 	NodeList<ClassOrInterfaceType> typeBound  = emptyList();
 	Position begin;
 }
 {
-   <IDENTIFIER> { name = token.image; begin=tokenBegin(); } [ typeBound = TypeBound() ]
+   name = SimpleName() { begin=tokenBegin(); } [ typeBound = TypeBound() ]
    { return new TypeParameter(range(begin, tokenEnd()),name, typeBound); }
 }
 
@@ -1665,13 +1665,13 @@ VariableDeclarator VariableDeclarator():
 
 VariableDeclaratorId VariableDeclaratorId():
 {
-	String name;
+	SimpleName name;
 	Position begin;
 	ArrayBracketPair arrayBracketPair;
 	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
 }
 {
-  <IDENTIFIER> { name = token.image; begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+  name = SimpleName() { begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   { return new VariableDeclaratorId(range(begin, tokenEnd()),name, arrayBracketPairs); }
 }
 
@@ -1703,7 +1703,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	Type type;
-	NameExpr name;
+	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
 	ArrayBracketPair arrayBracketPair;
 	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
@@ -1716,7 +1716,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
   // Modifiers already matched in the caller!
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   type = ResultType() { begin = begin.orIfInvalid(type.getBegin()); }
-  name = Name() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+  name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
     ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
@@ -1801,7 +1801,7 @@ Parameter FormalParameter():
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
-	NameExpr name;
+	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
 	NodeList<ReferenceType<?>> throws_ = emptyList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
@@ -1924,7 +1924,7 @@ ArrayBracketPair ArrayBracketPair():
 IntersectionType IntersectionType():
 {
 	Position begin;
-	ReferenceType elementType;
+	ReferenceType<?> elementType;
 	NodeList<ReferenceType<?>> elements = emptyList();
 }
 {
@@ -1954,19 +1954,19 @@ ClassOrInterfaceType AnnotatedClassOrInterfaceType():
 ClassOrInterfaceType ClassOrInterfaceType():
 {
 	ClassOrInterfaceType ret;
-	String name;
+	SimpleName name;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Position begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  <IDENTIFIER> {begin=tokenBegin();} { name = token.image; }
+  name = SimpleName() {begin=tokenBegin();}
   [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
   {
       ret = new ClassOrInterfaceType(range(begin, tokenEnd()),null, name, typeArgs.list);
   }
   (
-	  LOOKAHEAD(2) "." annotations = Annotations()  <IDENTIFIER> { name = token.image; }
+	  LOOKAHEAD(2) "." annotations = Annotations()  name = SimpleName()
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
 	  {
 	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, typeArgs.list);
@@ -2069,26 +2069,26 @@ Type<?> ResultType():
   { return ret; }
 }
 
-NameExpr Name():
+Name Name():
 /*
  * A lookahead of 2 is required below since "Name" can be followed
  * by a ".*" when used in the context of an "ImportDeclaration".
  */
 {
-	NameExpr ret;
+	Name ret;
 }
 {
-  <IDENTIFIER> { ret = new NameExpr(tokenRange(), token.image); }
-  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new QualifiedNameExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
+  <IDENTIFIER> { ret = new Name(tokenRange(), null, token.image); }
+  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new Name(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
   { return ret; }
 }
 
-NameExpr SimpleName():
+SimpleName SimpleName():
 {
-    NameExpr ret;
+    SimpleName ret;
 }
 {
-  <IDENTIFIER> { ret = new NameExpr(tokenRange(), token.image); }
+  <IDENTIFIER> { ret = new SimpleName(tokenRange(), token.image); }
   { return ret; }
 }
 
@@ -2469,7 +2469,7 @@ Expression PrimaryExpressionWithoutSuperSuffix():
 Expression PrimaryPrefix():
 {
 	Expression ret = null;
-	NameExpr name;
+	SimpleName name;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	NodeList<Expression> args = emptyList();
 	NodeList<Parameter> params = emptyList();
@@ -2550,7 +2550,7 @@ Expression PrimaryPrefix():
 	  		if (hasArgs) {
 	  			ret = new MethodCallExpr(range(begin, tokenEnd()), null, emptyList(), name, args);
 			} else {
-	  			ret = name;
+	  			ret = new NameExpr(name);
 			}
 	  	}
   )
@@ -2577,7 +2577,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	NodeList<Expression> args = emptyList();
 	boolean hasArgs = false;
-	NameExpr name;
+	SimpleName name;
 }
 {
   (
@@ -3253,7 +3253,7 @@ AnnotationExpr Annotation():
 
 NormalAnnotationExpr NormalAnnotation():
 {
-	NameExpr name;
+	Name name;
 	NodeList<MemberValuePair> pairs = emptyList();
 	Position begin;
 }
@@ -3264,7 +3264,7 @@ NormalAnnotationExpr NormalAnnotation():
 
 MarkerAnnotationExpr MarkerAnnotation():
 {
-	NameExpr name;
+	Name name;
 	Position begin;
 }
 {
@@ -3274,7 +3274,7 @@ MarkerAnnotationExpr MarkerAnnotation():
 
 SingleMemberAnnotationExpr SingleMemberAnnotation():
 {
-	NameExpr name;
+	Name name;
 	Expression memberVal;
 	Position begin;
 }
@@ -3295,12 +3295,12 @@ NodeList<MemberValuePair> MemberValuePairs():
 
 MemberValuePair MemberValuePair():
 {
-	String name;
+	SimpleName name;
 	Expression value;
 	Position begin;
 }
 {
-    <IDENTIFIER> { name = token.image; begin=tokenBegin();} "=" value = MemberValue()
+    name = SimpleName() { begin=tokenBegin();} "=" value = MemberValue()
     { return new MemberValuePair(range(begin, tokenEnd()),name, value); }
 }
 
@@ -3337,13 +3337,13 @@ Expression  MemberValueArrayInitializer():
 
 AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
-	NameExpr name;
+	SimpleName name;
     NodeList<BodyDeclaration<?>> members = emptyList();
 	Position begin = modifier.begin;
 }
 {
   "@" { begin=begin.orIfInvalid(tokenBegin()); }
-  "interface" name = Name() members = AnnotationTypeBody()
+  "interface" name = SimpleName() members = AnnotationTypeBody()
 
   { 
       return new AnnotationDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, name, members);
@@ -3391,11 +3391,11 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modifier):
 {
 	Type type;
-	String name;
+	SimpleName name;
 	Expression defaultVal = null;
 }
 {
-  type = Type() <IDENTIFIER> { name = token.image; } "(" ")" [ defaultVal = DefaultValue() ] ";"
+  type = Type() name = SimpleName() "(" ")" [ defaultVal = DefaultValue() ] ";"
 
   {
 	Position begin = modifier.begin.orIfInvalid(tokenBegin());

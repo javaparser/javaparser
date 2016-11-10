@@ -21,12 +21,11 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.ast.expr.NameExpr.name;
-
 import java.util.Optional;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -54,7 +53,7 @@ public final class ReturnStmt extends Statement {
      * Will create a NameExpr with the string param
      */
     public ReturnStmt(String expr) {
-        this(Range.UNKNOWN, name(expr));
+        this(Range.UNKNOWN, new NameExpr(expr));
     }
 
     @Override

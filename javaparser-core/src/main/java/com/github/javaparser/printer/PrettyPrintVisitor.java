@@ -82,11 +82,12 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.QualifiedNameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.SuperExpr;
@@ -279,19 +280,26 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final NameExpr n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         printOrphanCommentsEnding(n);
     }
 
     @Override
-    public void visit(final QualifiedNameExpr n, final Void arg) {
+    public void visit(final Name n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        n.getQualifier().accept(this, arg);
-        printer.print(".");
-        printer.print(n.getName());
+        if(n.getQualifier()!=null) {
+            n.getQualifier().accept(this, arg);
+            printer.print(".");
+        }
+        printer.print(n.getId());
 
         printOrphanCommentsEnding(n);
+    }
+
+    @Override
+    public void visit(SimpleName n, Void arg) {
+        printer.print(n.getId());
     }
 
     @Override
@@ -306,7 +314,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print("class ");
         }
 
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         printTypeParameters(n.getTypeParameters(), arg);
 
@@ -372,7 +380,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print(" ");
         }
 
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         if (n.isUsingDiamondOperator()) {
             printer.print("<>");
@@ -388,7 +396,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             ann.accept(this, arg);
             printer.print(" ");
         }
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         if (!isNullOrEmpty(n.getTypeBound())) {
             printer.print(" extends ");
             for (final Iterator<ClassOrInterfaceType> i = n.getTypeBound().iterator(); i.hasNext();) {
@@ -547,7 +555,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final VariableDeclaratorId n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         for (ArrayBracketPair pair : n.getArrayBracketPairsAfterId()) {
             pair.accept(this, arg);
         }
@@ -758,7 +766,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.getScope().isPresent())
             n.getScope().get().accept(this, arg);
         printer.print(".");
-        printer.print(n.getField());
+        n.getField().accept(this, arg);
     }
 
     @Override
@@ -855,7 +863,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print(".");
         }
         printTypeArgs(n, arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         printArguments(n.getArgs(), arg);
     }
 
@@ -935,7 +943,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.isGeneric()) {
             printer.print(" ");
         }
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         printer.print("(");
         if (!n.getParameters().isEmpty()) {
@@ -983,7 +991,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             pair.accept(this, arg);
         }
         printer.print(" ");
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         printer.print("(");
         if (!isNullOrEmpty(n.getParameters())) {
@@ -1201,7 +1209,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printModifiers(n.getModifiers());
 
         printer.print("enum ");
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         if (!n.getImplements().isEmpty()) {
             printer.print(" implements ");
@@ -1242,7 +1250,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final EnumConstantDeclaration n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
 
         if (!n.getArgs().isEmpty()) {
             printArguments(n.getArgs(), arg);
@@ -1449,7 +1457,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printModifiers(n.getModifiers());
 
         printer.print("@interface ");
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         printer.println(" {");
         printer.indent();
         if (n.getMembers() != null) {
@@ -1467,7 +1475,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         n.getType().accept(this, arg);
         printer.print(" ");
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         printer.print("()");
         if (n.getDefaultValue().isPresent()) {
             printer.print(" default ");
@@ -1514,7 +1522,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final MemberValuePair n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        printer.print(n.getName());
+        n.getName().accept(this, arg);
         printer.print(" = ");
         n.getValue().accept(this, arg);
     }

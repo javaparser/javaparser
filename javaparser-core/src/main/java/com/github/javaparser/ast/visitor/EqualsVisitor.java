@@ -69,11 +69,12 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.QualifiedNameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.SuperExpr;
@@ -161,7 +162,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 		return true;
 	}
 
-	public <N extends Node> boolean nodesEquals(NodeList<N> n1, NodeList<N> n2) {
+	private <N extends Node> boolean nodesEquals(NodeList<N> n1, NodeList<N> n2) {
         if (n1 == n2) {
             return true;
         }
@@ -1083,21 +1084,28 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 		return true;
 	}
 
-	@Override public Boolean visit(final QualifiedNameExpr n1, final Visitable arg) {
-		final QualifiedNameExpr n2 = (QualifiedNameExpr) arg;
+	@Override public Boolean visit(final Name n1, final Visitable arg) {
+		final Name n2 = (Name) arg;
 
 		if (!nodeEquals(n1.getQualifier(), n2.getQualifier())) {
 			return false;
 		}
 
-		if (!objEquals(n1.getName(), n2.getName())) {
+		if (!objEquals(n1.getId(), n2.getId())) {
 			return false;
 		}
 
 		return true;
 	}
 
-	@Override public Boolean visit(final ThisExpr n1, final Visitable arg) {
+    @Override
+    public Boolean visit(SimpleName n, Visitable arg) {
+        final SimpleName n2 = (SimpleName) arg;
+
+        return objEquals(n.getId(), n2.getId());
+    }
+
+    @Override public Boolean visit(final ThisExpr n1, final Visitable arg) {
 		final ThisExpr n2 = (ThisExpr) arg;
 
 		if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr())) {

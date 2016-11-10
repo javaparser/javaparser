@@ -21,7 +21,7 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.ast.expr.NameExpr.name;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 import java.util.Optional;
 
@@ -41,18 +41,18 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 
     private NodeList<Type<?>> typeArguments;
 
-    private NameExpr field;
+    private SimpleName field;
 
     public FieldAccessExpr() {
-        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new NameExpr());
+        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new SimpleName());
     }
 
     public FieldAccessExpr(final Expression scope, final String field) {
-        this(Range.UNKNOWN, scope, new NodeList<>(), name(field));
+        this(Range.UNKNOWN, scope, new NodeList<>(), new SimpleName(field));
     }
 
     public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments,
-                           final NameExpr field) {
+                           final SimpleName field) {
         super(range);
         setScope(scope);
         setTypeArguments(typeArguments);
@@ -69,11 +69,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
         v.visit(this, arg);
     }
 
-    public String getField() {
-        return field.getName();
-    }
-
-    public NameExpr getFieldExpr() {
+    public SimpleName getField() {
         return field;
     }
 
@@ -82,13 +78,13 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
     }
 
     public FieldAccessExpr setField(final String field) {
-        setFieldExpr(new NameExpr(field));
+        setFieldExpr(new SimpleName(field));
         return this;
     }
 
-    public FieldAccessExpr setFieldExpr(NameExpr field) {
-        this.field = field;
-        setAsParentNodeOf(this.field);
+    public FieldAccessExpr setFieldExpr(SimpleName field) {
+        this.field = assertNotNull(field);
+		setAsParentNodeOf(this.field);
         return this;
     }
 

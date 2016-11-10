@@ -74,11 +74,12 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.QualifiedNameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.SuperExpr;
@@ -570,7 +571,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final MarkerAnnotationExpr n, final A arg) {
         visitComment(n, arg);
-        n.setName((NameExpr) n.getName().accept(this, arg));
+        n.setName((Name) n.getName().accept(this, arg));
         return n;
     }
 
@@ -615,7 +616,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final NormalAnnotationExpr n, final A arg) {
         visitComment(n, arg);
-        n.setName((NameExpr) n.getName().accept(this, arg));
+        n.setName((Name) n.getName().accept(this, arg));
         n.setPairs((NodeList<MemberValuePair>) n.getPairs().accept(this, arg));
         return n;
     }
@@ -644,7 +645,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final PackageDeclaration n, final A arg) {
         visitComment(n, arg);
         n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setName((NameExpr) n.getName().accept(this, arg));
+        n.setName((Name) n.getName().accept(this, arg));
         return n;
     }
 
@@ -658,6 +659,15 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
+    public Visitable visit(final Name n, final A arg) {
+        visitComment(n, arg);
+        if (n.getQualifier() != null) {
+            n.setQualifier((Name) n.getQualifier().accept(this, arg));
+        }
+        return n;
+    }
+
+    @Override
     public Visitable visit(final PrimitiveType n, final A arg) {
         visitComment(n, arg);
         visitAnnotations(n, arg);
@@ -665,9 +675,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final QualifiedNameExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setQualifier((NameExpr) n.getQualifier().accept(this, arg));
+    public Visitable visit(SimpleName n, A arg) {
         return n;
     }
 
@@ -717,7 +725,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final SingleMemberAnnotationExpr n, final A arg) {
         visitComment(n, arg);
-        n.setName((NameExpr) n.getName().accept(this, arg));
+        n.setName((Name) n.getName().accept(this, arg));
         n.setMemberValue((Expression) n.getMemberValue().accept(this, arg));
         return n;
     }
@@ -961,7 +969,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(TypeImportOnDemandDeclaration n, A arg) {
         visitComment(n, arg);
-        n.setName((NameExpr) n.getName().accept(this, arg));
+        n.setName((Name) n.getName().accept(this, arg));
         return n;
     }
 

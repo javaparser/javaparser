@@ -72,11 +72,12 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.QualifiedNameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.SuperExpr;
@@ -1242,14 +1243,20 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final QualifiedNameExpr n, final A arg) {
+    public R visit(final Name n, final A arg) {
         visitComment(n, arg);
-        {
+        if (n.getQualifier() != null) {
             R result = n.getQualifier().accept(this, arg);
             if (result != null) {
                 return result;
             }
         }
+        return null;
+    }
+
+    @Override
+    public R visit(SimpleName n, A arg) {
+        visitComment(n, arg);
         return null;
     }
 

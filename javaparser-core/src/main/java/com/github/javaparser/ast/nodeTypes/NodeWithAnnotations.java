@@ -23,14 +23,11 @@ package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.expr.*;
 
 import java.lang.annotation.Annotation;
 
-import static com.github.javaparser.ast.expr.NameExpr.name;
+import static com.github.javaparser.ast.expr.Name.*;
 
 /**
  * An element which can be the target of annotations.
@@ -51,7 +48,7 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     default NormalAnnotationExpr addAnnotation(String name) {
         NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                name(name), new NodeList<>());
+                parse(name), new NodeList<>());
         getAnnotations().add(normalAnnotationExpr);
         normalAnnotationExpr.setParentNode((Node) this);
         return normalAnnotationExpr;
@@ -77,7 +74,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                name(name));
+                Name.parse(name));
         getAnnotations().add(markerAnnotationExpr);
         markerAnnotationExpr.setParentNode((Node) this);
         return (N) this;
@@ -104,7 +101,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addSingleMemberAnnotation(String name, String value) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                name(name), name(value));
+                Name.parse(name), new NameExpr(value));
         getAnnotations().add(singleMemberAnnotationExpr);
         singleMemberAnnotationExpr.setParentNode((Node) this);
         return (N) this;
@@ -130,7 +127,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return true if found, false if not
      */
     default boolean isAnnotationPresent(String annotationName) {
-        return getAnnotations().stream().anyMatch(a -> a.getName().getName().equals(annotationName));
+        return getAnnotations().stream().anyMatch(a -> a.getName().getId().equals(annotationName));
     }
 
     /**
@@ -150,7 +147,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return null if not found, the annotation otherwise
      */
     default AnnotationExpr getAnnotationByName(String annotationName) {
-        return getAnnotations().stream().filter(a -> a.getName().getName().equals(annotationName)).findFirst()
+        return getAnnotations().stream().filter(a -> a.getName().getId().equals(annotationName)).findFirst()
                 .orElse(null);
     }
 

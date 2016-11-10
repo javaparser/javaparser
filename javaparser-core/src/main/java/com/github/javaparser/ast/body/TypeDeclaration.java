@@ -28,23 +28,26 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
-        implements NodeWithName<T>, NodeWithJavaDoc<T>, NodeWithModifiers<T>, NodeWithMembers<T> {
+public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T> implements 
+        NodeWithSimpleName<T>, 
+        NodeWithJavaDoc<T>, 
+        NodeWithModifiers<T>, 
+        NodeWithMembers<T> {
 
-	private NameExpr name;
+	private SimpleName name;
 
     private EnumSet<Modifier> modifiers;
 
@@ -54,7 +57,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
 		this(Range.UNKNOWN,
                 new NodeList<>(),
                 EnumSet.noneOf(Modifier.class),
-                new NameExpr(),
+                new SimpleName(),
                 new NodeList<>());
 	}
 
@@ -62,12 +65,12 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         this(Range.UNKNOWN,
                 new NodeList<>(),
                 modifiers,
-                name(name),
+                new SimpleName(name),
                 new NodeList<>());
 	}
 
 	public TypeDeclaration(NodeList<AnnotationExpr> annotations,
-                           EnumSet<Modifier> modifiers, NameExpr name,
+                           EnumSet<Modifier> modifiers, SimpleName name,
                            NodeList<BodyDeclaration<?>> members) {
         this(Range.UNKNOWN,
                 annotations,
@@ -77,10 +80,10 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
 	}
 
 	public TypeDeclaration(Range range, NodeList<AnnotationExpr> annotations,
-                           EnumSet<Modifier> modifiers, NameExpr name,
+                           EnumSet<Modifier> modifiers, SimpleName name,
                            NodeList<BodyDeclaration<?>> members) {
 		super(range, annotations);
-		setNameExpr(name);
+		setName(name);
 		setModifiers(modifiers);
 		setMembers(members);
 	}
@@ -113,11 +116,6 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
 		return modifiers;
 	}
 
-	@Override
-	public final String getName() {
-		return name.getName();
-	}
-
     @SuppressWarnings("unchecked")
     @Override
     public T setMembers(NodeList<BodyDeclaration<?>> members) {
@@ -133,21 +131,15 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         return (T) this;
 	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public T setName(String name) {
-		setNameExpr(new NameExpr(assertNotNull(name)));
-        return (T) this;
-	}
-
-    @SuppressWarnings("unchecked")
-    public T setNameExpr(NameExpr nameExpr) {
-		this.name = assertNotNull(nameExpr);
+	@Override
+    public T setName(SimpleName name) {
+		this.name = assertNotNull(name);
 		setAsParentNodeOf(name);
         return (T) this;
 	}
 
-	public final NameExpr getNameExpr() {
+	@Override
+	public final SimpleName getName() {
 		return name;
 	}
 

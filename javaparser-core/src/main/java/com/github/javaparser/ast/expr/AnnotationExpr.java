@@ -22,34 +22,35 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class AnnotationExpr extends Expression {
+public abstract class AnnotationExpr extends Expression implements NodeWithName<AnnotationExpr> {
 
-    protected NameExpr name;
+    protected Name name;
 
     public AnnotationExpr() {
-        this(Range.UNKNOWN, new NameExpr());
+        this(Range.UNKNOWN, new Name());
     }
 
-    public AnnotationExpr(NameExpr name) {
+    public AnnotationExpr(Name name) {
         this(Range.UNKNOWN, name);
     }
     
-    public AnnotationExpr(Range range, NameExpr name) {
+    public AnnotationExpr(Range range, Name name) {
         super(range);
         setName(name);
     }
 
-    public NameExpr getName() {
+    public Name getName() {
         return name;
     }
 
-    public AnnotationExpr setName(NameExpr name) {
+    public AnnotationExpr setName(Name name) {
         this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;
