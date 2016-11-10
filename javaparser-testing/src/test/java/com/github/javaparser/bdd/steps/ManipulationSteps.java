@@ -242,7 +242,7 @@ public class ManipulationSteps {
     @Then("all the VariableDeclarations parent is the TryStmt")
     public void thenAllTheVariableDeclarationsParentIsTheTryStmt() {
         for(VariableDeclarationExpr expr : variableDeclarationExprList){
-            assertThat(expr.getParentNode(), is(tryStmt));
+			assertThat(expr.getParentNode().get(), is(tryStmt));
         }
     }
 

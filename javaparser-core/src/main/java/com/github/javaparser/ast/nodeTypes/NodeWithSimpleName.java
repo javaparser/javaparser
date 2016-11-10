@@ -33,6 +33,7 @@ public interface NodeWithSimpleName<T> {
 
     T setName(SimpleName name);
 
+    @SuppressWarnings("unchecked")
     default T setName(String name){
         setName(new SimpleName(name));
         return (T) this;

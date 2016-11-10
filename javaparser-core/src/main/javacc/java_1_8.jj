@@ -158,9 +158,9 @@ final class ASTParser {
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
-            Expression inner = ((EnclosedExpr) ret).getInner().get();
-            if (inner != null && inner instanceof NameExpr) {
-                VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr) inner).getName(), emptyList());
+            Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
+            if (inner.isPresent() && inner.get() instanceof NameExpr) {
+                VariableDeclaratorId id = new VariableDeclaratorId(inner.get().getRange(), ((NameExpr) inner.get()).getName(), emptyList());
                 NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id));
                 ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
             } else {

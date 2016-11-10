@@ -21,6 +21,11 @@ public class Problem {
         StringBuilder str = new StringBuilder(message);
         if (range != null)
             str.append(" ").append(range);
+        if (cause != null) {
+            str.append(" stack : ").append(System.lineSeparator());
+            for (StackTraceElement ste : cause.getStackTrace())
+                str.append(ste.toString());
+        }
         return str.toString();
     }
 

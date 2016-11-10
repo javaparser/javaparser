@@ -1295,7 +1295,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getThenStmt().accept(this, arg);
         if (!thenBlock)
             printer.unindent();
-        if (n.getElseStmt() != null) {
+        if (n.getElseStmt().isPresent()) {
             if (thenBlock)
                 printer.print(" ");
             else
