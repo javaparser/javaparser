@@ -21,6 +21,10 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
@@ -30,8 +34,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
@@ -40,10 +42,8 @@ public final class MethodCallExpr extends Expression implements
         NodeWithArguments<MethodCallExpr>,
         NodeWithSimpleName<MethodCallExpr> {
 
-    // TODO nullable
     private Expression scope;
 
-    // TODO nullable
     private NodeList<Type<?>> typeArguments;
 
     private SimpleName name;
@@ -113,6 +113,7 @@ public final class MethodCallExpr extends Expression implements
         return this;
 	}
 
+    @Override
     public MethodCallExpr setName(final SimpleName name) {
         this.name = name;
         setAsParentNodeOf(this.name);
@@ -126,10 +127,16 @@ public final class MethodCallExpr extends Expression implements
     }
 
     @Override
-    public NodeList<Type<?>> getTypeArguments() {
-        return typeArguments;
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
+        return Optional.ofNullable(typeArguments);
     }
 
+    /**
+     * Sets the typeArguments
+     * 
+     * @param typeArguments the typeArguments, can be null
+     * @return this, the MethodCallExpr
+     */
     @Override
     public MethodCallExpr setTypeArguments(final NodeList<Type<?>> types) {
         this.typeArguments = types;

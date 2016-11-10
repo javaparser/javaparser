@@ -21,8 +21,8 @@
  
 package com.github.javaparser.bdd.steps;
 
-import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.ast.type.PrimitiveType.*;
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.ast.type.PrimitiveType.INT_TYPE;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
@@ -31,22 +31,30 @@ import static org.junit.Assert.assertThat;
 import java.util.EnumSet;
 import java.util.Map;
 
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
@@ -171,7 +179,7 @@ public class ManipulationSteps {
         FieldAccessExpr field = new FieldAccessExpr(clazz, fieldName);
         MethodCallExpr call = new MethodCallExpr(field, methodName);
         call.addArgument(new StringLiteralExpr(stringValue));
-        method.getBody().addStatement(call);
+		method.getBody().get().addStatement(call);
     }
 
     @When("method $methodPosition in class $classPosition has it's name converted to uppercase")
@@ -234,7 +242,7 @@ public class ManipulationSteps {
     @Then("all the VariableDeclarations parent is the TryStmt")
     public void thenAllTheVariableDeclarationsParentIsTheTryStmt() {
         for(VariableDeclarationExpr expr : variableDeclarationExprList){
-            assertThat(expr.getParentNode(), is(tryStmt));
+			assertThat(expr.getParentNode().get(), is(tryStmt));
         }
     }
 

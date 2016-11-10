@@ -21,6 +21,8 @@
  
 package com.github.javaparser.ast.expr;
 
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -30,7 +32,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class SuperExpr extends Expression {
 
-    // TODO nullable
 	private Expression classExpr;
 
 	public SuperExpr() {
@@ -54,10 +55,16 @@ public final class SuperExpr extends Expression {
 		v.visit(this, arg);
 	}
 
-	public Expression getClassExpr() {
-		return classExpr;
+    public Optional<Expression> getClassExpr() {
+        return Optional.ofNullable(classExpr);
 	}
 
+    /**
+     * Sets the classExpr
+     * 
+     * @param classExpr the classExpr, can be null
+     * @return this, the SuperExpr
+     */
 	public SuperExpr setClassExpr(final Expression classExpr) {
 		this.classExpr = classExpr;
 		setAsParentNodeOf(this.classExpr);

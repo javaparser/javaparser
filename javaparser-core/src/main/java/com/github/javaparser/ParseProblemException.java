@@ -23,7 +23,7 @@ public class ParseProblemException extends RuntimeException {
     }
 
     ParseProblemException(Throwable throwable) {
-        this(singletonList(new Problem(throwable.getMessage(), Optional.empty(), Optional.of(throwable))));
+        this(singletonList(new Problem(throwable.getMessage(), null, throwable)));
     }
 
     private static String createMessage(List<Problem> problems) {

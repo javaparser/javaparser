@@ -21,6 +21,17 @@
 
 package com.github.javaparser.ast;
 
+import static java.util.Collections.unmodifiableList;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -32,11 +43,6 @@ import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
-
-import java.lang.reflect.Field;
-import java.util.*;
-
-import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -196,8 +202,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     @Override
-    public Node getParentNode() {
-        return parentNode;
+    public Optional<Node> getParentNode() {
+        return Optional.ofNullable(parentNode);
     }
 
     /**

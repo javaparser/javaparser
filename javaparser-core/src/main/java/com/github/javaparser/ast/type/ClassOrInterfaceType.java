@@ -21,6 +21,10 @@
 
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -29,23 +33,18 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements
-        NodeWithSimpleName<ClassOrInterfaceType>, 
+        NodeWithSimpleName<ClassOrInterfaceType>,
         NodeWithAnnotations<ClassOrInterfaceType>,
         NodeWithTypeArguments<ClassOrInterfaceType> {
 
-    // TODO nullable
     private ClassOrInterfaceType scope;
 
     private SimpleName name;
 
-    // TODO nullable
     private NodeList<Type<?>> typeArguments;
 
     public ClassOrInterfaceType() {
@@ -69,23 +68,31 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
                 null);
     }
 
-    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type<?>> typeArguments) {
+    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final SimpleName name,
+                                final NodeList<Type<?>> typeArguments) {
         super(range);
         setScope(scope);
         setName(name);
         setTypeArguments(typeArguments);
     }
 
-    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
-    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
-    public ClassOrInterfaceType getScope() {
-        return scope;
+    @Override
+    public SimpleName getName() {
+        return name;
+    }
+
+    public Optional<ClassOrInterfaceType> getScope() {
+        return Optional.ofNullable(scope);
     }
 
     public boolean isBoxedType() {
@@ -100,16 +107,17 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     @Override
-    public SimpleName getName() {
-        return name;
-    }
-
-    @Override
     public ClassOrInterfaceType setName(final SimpleName name) {
-        this.name = assertNotNull(name);
+    	this.name = assertNotNull(name);
         return this;
     }
 
+    /**
+     * Sets the scope
+     * 
+     * @param scope the scope, can be null
+     * @return this, the ClassOrInterfaceType
+     */
     public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
         this.scope = scope;
         setAsParentNodeOf(this.scope);
@@ -117,10 +125,16 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     @Override
-    public NodeList<Type<?>> getTypeArguments() {
-        return typeArguments;
+    public Optional<NodeList<Type<?>>> getTypeArguments() {
+        return Optional.ofNullable(typeArguments);
     }
 
+    /**
+     * Sets the typeArguments
+     * 
+     * @param typeArguments the typeArguments, can be null
+     * @return this, the ClassOrInterfaceType
+     */
     @Override
     public ClassOrInterfaceType setTypeArguments(final NodeList<Type<?>> types) {
         this.typeArguments = types;

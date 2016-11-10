@@ -1,5 +1,9 @@
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -8,15 +12,12 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
  * the first one contains the expression "1",
  * the second the expression "2".
  */
 public class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
-    // TODO nullable
     private Expression dimension;
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
@@ -51,20 +52,29 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
-
-    public void setDimension(Expression dimension) {
+    
+    /**
+     * Sets the dimension
+     * 
+     * @param dimension the dimension, can be null
+     * @return this, the ArrayCreationLevel
+     */
+    public ArrayCreationLevel setDimension(Expression dimension) {
         this.dimension = dimension;
         setAsParentNodeOf(dimension);
+        return this;
     }
 
-    public Expression getDimension() {
-        return dimension;
+    public Optional<Expression> getDimension() {
+        return Optional.ofNullable(dimension);
     }
 
+    @Override
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
+    @Override
     public ArrayCreationLevel setAnnotations(NodeList<AnnotationExpr> annotations) {
         setAsParentNodeOf(annotations);
         this.annotations = assertNotNull(annotations);

@@ -21,15 +21,18 @@
 
 package com.github.javaparser;
 
+import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeSet;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
-
-import java.util.*;
-
-import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -63,9 +66,9 @@ class CommentsInserter {
         List<Node> children = cu.getChildNodes();
 
         Comment firstComment = comments.iterator().next();
-        if (cu.getPackage() != null
+        if (cu.getPackage().isPresent()
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                firstComment, cu.getPackage()))) {
+                        firstComment, cu.getPackage().get()))) {
             cu.setComment(firstComment);
             comments.remove(firstComment);
         }
@@ -173,7 +176,7 @@ class CommentsInserter {
         } else {
             // try with all the children, sorted by reverse position (so the
             // first one is the nearest to the comment
-            List<Node> children = new LinkedList<Node>();
+            List<Node> children = new LinkedList<>();
             children.addAll(node.getChildNodes());
             PositionUtils.sortByBeginPosition(children);
             Collections.reverse(children);

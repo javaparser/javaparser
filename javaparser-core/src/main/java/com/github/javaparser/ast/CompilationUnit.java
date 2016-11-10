@@ -21,8 +21,20 @@
 
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EmptyTypeDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
@@ -30,13 +42,6 @@ import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.ClassUtils;
-
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <p>
@@ -57,7 +62,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class CompilationUnit extends Node {
 
-    // TODO nullable
     private PackageDeclaration pakage;
 
     private NodeList<ImportDeclaration> imports;
@@ -123,8 +127,8 @@ public final class CompilationUnit extends Node {
      * 
      * @return the package declaration or <code>null</code>
      */
-    public PackageDeclaration getPackage() {
-        return pakage;
+    public Optional<PackageDeclaration> getPackage() {
+        return Optional.ofNullable(pakage);
     }
 
     /**

@@ -21,6 +21,10 @@
  
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -30,7 +34,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class ContinueStmt extends Statement {
 
-    // TODO nullable
 	private String id;
 
 	public ContinueStmt() {
@@ -54,12 +57,18 @@ public final class ContinueStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public String getId() {
-		return id;
-	}
+    public Optional<String> getId() {
+        return Optional.ofNullable(id);
+    }
 
-	public ContinueStmt setId(final String id) {
-		this.id = id;
-		return this;
-	}
+    /**
+     * Sets the id
+     * 
+     * @param id the id, can be null
+     * @return this, the ContinueStmt
+     */
+    public ContinueStmt setId(final String id) {
+        this.id = assertNotNull(id);
+        return this;
+    }
 }

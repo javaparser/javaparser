@@ -18,8 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
+ 
 package com.github.javaparser.ast.stmt;
+
+import java.util.Optional;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
@@ -32,21 +34,20 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class ReturnStmt extends Statement {
 
-    // TODO nullable
-    private Expression expr;
+	private Expression expr;
 
-    public ReturnStmt() {
+	public ReturnStmt() {
         this(Range.UNKNOWN, null);
-    }
+	}
 
-    public ReturnStmt(final Expression expr) {
-        this(Range.UNKNOWN, expr);
-    }
+	public ReturnStmt(final Expression expr) {
+		this(Range.UNKNOWN, expr);
+	}
 
-    public ReturnStmt(Range range, final Expression expr) {
-        super(range);
-        setExpr(expr);
-    }
+	public ReturnStmt(Range range, final Expression expr) {
+		super(range);
+		setExpr(expr);
+	}
 
     /**
      * Will create a NameExpr with the string param
@@ -57,21 +58,26 @@ public final class ReturnStmt extends Statement {
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
-    }
+		return v.visit(this, arg);
+	}
 
-    @Override
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
-    }
+	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+		v.visit(this, arg);
+	}
 
-    public Expression getExpr() {
-        return expr;
-    }
+    public Optional<Expression> getExpr() {
+        return Optional.ofNullable(expr);
+	}
 
-    public ReturnStmt setExpr(final Expression expr) {
-        this.expr = expr;
-        setAsParentNodeOf(this.expr);
-        return this;
-    }
+    /**
+     * Sets the expr
+     * 
+     * @param expr the expr, can be null
+     * @return this, the ReturnStmt
+     */
+	public ReturnStmt setExpr(final Expression expr) {
+		this.expr = expr;
+		setAsParentNodeOf(this.expr);
+		return this;
+	}
 }

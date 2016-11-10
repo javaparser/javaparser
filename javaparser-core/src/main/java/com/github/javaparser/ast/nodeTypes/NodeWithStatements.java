@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -32,8 +33,14 @@ public interface NodeWithStatements<N extends Node> {
         return addStatement(statement);
     }
 
+    /**
+     * It will use {@link JavaParser#parseStatement(String)} inside, so it should end with a semi column
+     * 
+     * @param statement
+     * @return
+     */
     default N addStatement(String statement) {
-        return addStatement(new NameExpr(statement));
+        return addStatement(JavaParser.parseStatement(statement));
     }
 
     default N addStatement(int index, final Expression expr) {
@@ -63,8 +70,20 @@ public interface NodeWithStatements<N extends Node> {
     default ExpressionStmt addAndGetStatement(String statement) {
         return addAndGetStatement(new NameExpr(statement));
     }
-    
+
     default boolean isEmpty() {
         return getStmts().isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    default N copyStatements(NodeList<Statement> nodeList) {
+        for (Statement n : nodeList) {
+            addStatement((Statement) n.clone());
+        }
+        return (N) this;
+    }
+
+    default N copyStatements(NodeWithStatements<?> other) {
+        return copyStatements(other.getStmts());
     }
 }
