@@ -257,10 +257,6 @@ public final class JavaParser {
         if (result.isSuccessful()) {
             return result.getResult().get();
         }
-        for (Problem p : result.getProblems())
-            p.getCause().ifPresent(c -> {
-                throw new RuntimeException(c);
-            });
         throw new ParseProblemException(result.getProblems());
     }
 
