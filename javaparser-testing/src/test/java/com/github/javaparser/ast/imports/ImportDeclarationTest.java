@@ -1,10 +1,11 @@
 package com.github.javaparser.ast.imports;
 
-import com.github.javaparser.ast.expr.Name;
-import org.junit.Test;
-
 import static com.github.javaparser.Range.UNKNOWN;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+import com.github.javaparser.ast.expr.Name;
 
 public class ImportDeclarationTest {
     @Test
@@ -35,9 +36,9 @@ public class ImportDeclarationTest {
         ImportDeclaration importDeclaration = ImportDeclaration.create(UNKNOWN, Name.parse("a.b.c.X"), true, true);
         StaticImportOnDemandDeclaration i = (StaticImportOnDemandDeclaration) importDeclaration;
         assertEquals("X", i.getType().getNameAsString());
-        assertEquals("c", i.getType().getScope().getNameAsString());
-        assertEquals("b", i.getType().getScope().getScope().getNameAsString());
-        assertEquals("a", i.getType().getScope().getScope().getScope().getNameAsString());
+		assertEquals("c", i.getType().getScope().get().getNameAsString());
+		assertEquals("b", i.getType().getScope().get().getScope().get().getNameAsString());
+		assertEquals("a", i.getType().getScope().get().getScope().get().getScope().get().getNameAsString());
     }
 
 }
