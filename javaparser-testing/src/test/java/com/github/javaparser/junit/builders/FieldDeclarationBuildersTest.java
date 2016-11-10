@@ -55,7 +55,7 @@ public class FieldDeclarationBuildersTest {
 		List<MethodDeclaration> methodsWithName = testClass.getMethodsByName("getMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration getter = methodsWithName.get(0);
-		assertEquals("getMyField", getter.getName());
+		assertEquals("getMyField", getter.getNameAsString());
 		assertEquals("int", getter.getType().toString());
 		assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
 	}
@@ -68,7 +68,7 @@ public class FieldDeclarationBuildersTest {
 		List<MethodDeclaration> methodsWithName = testClass.getMethodsByName("setMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration setter = methodsWithName.get(0);
-		assertEquals("setMyField", setter.getName());
+		assertEquals("setMyField", setter.getNameAsString());
 		assertEquals("int", setter.getParameters().get(0).getType().toString());
 		assertEquals(ExpressionStmt.class, setter.getBody().getStmts().get(0).getClass());
 		assertEquals("this.myField = myField;", setter.getBody().getStmts().get(0).toString());
@@ -82,7 +82,7 @@ public class FieldDeclarationBuildersTest {
 		List<MethodDeclaration> methodsWithName = testEnum.getMethodsByName("getMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration getter = methodsWithName.get(0);
-		assertEquals("getMyField", getter.getName());
+		assertEquals("getMyField", getter.getNameAsString());
 		assertEquals("int", getter.getType().toString());
 		assertEquals(ReturnStmt.class, getter.getBody().getStmts().get(0).getClass());
 	}
@@ -95,7 +95,7 @@ public class FieldDeclarationBuildersTest {
 		List<MethodDeclaration> methodsWithName = testEnum.getMethodsByName("setMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration setter = methodsWithName.get(0);
-		assertEquals("setMyField", setter.getName());
+		assertEquals("setMyField", setter.getNameAsString());
 		assertEquals("int", setter.getParameters().get(0).getType().toString());
 		assertEquals(ExpressionStmt.class, setter.getBody().getStmts().get(0).getClass());
 		assertEquals("this.myField = myField;", setter.getBody().getStmts().get(0).toString());

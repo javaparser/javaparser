@@ -31,14 +31,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class MarkerAnnotationExpr extends AnnotationExpr {
 
     public MarkerAnnotationExpr() {
-        this(Range.UNKNOWN, new NameExpr());
+        this(Range.UNKNOWN, new Name());
     }
 
-    public MarkerAnnotationExpr(final NameExpr name) {
+    public MarkerAnnotationExpr(final Name name) {
         this(Range.UNKNOWN, name);
     }
 
-    public MarkerAnnotationExpr(final Range range, final NameExpr name) {
+    public MarkerAnnotationExpr(final Range range, final Name name) {
         super(range, name);
     }
 

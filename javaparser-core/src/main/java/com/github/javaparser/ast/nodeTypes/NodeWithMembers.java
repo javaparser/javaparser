@@ -200,7 +200,7 @@ public interface NodeWithMembers<N extends Node> {
      */
     default List<MethodDeclaration> getMethodsByName(String name) {
         return getMembers().stream()
-                .filter(m -> m instanceof MethodDeclaration && ((MethodDeclaration) m).getName().equals(name))
+                .filter(m -> m instanceof MethodDeclaration && ((MethodDeclaration) m).getNameAsString().equals(name))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
 
@@ -256,7 +256,7 @@ public interface NodeWithMembers<N extends Node> {
     default FieldDeclaration getFieldByName(String name) {
         return (FieldDeclaration) getMembers().stream()
                 .filter(m -> m instanceof FieldDeclaration && ((FieldDeclaration) m).getVariables().stream()
-                        .anyMatch(var -> var.getId().getName().equals(name)))
+                        .anyMatch(var -> var.getId().getNameAsString().equals(name)))
                 .findFirst().orElse(null);
     }
 

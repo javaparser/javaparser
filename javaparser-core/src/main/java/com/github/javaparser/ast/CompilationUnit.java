@@ -25,7 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.imports.*;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.ClassUtils;
@@ -35,10 +36,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * <p>
@@ -198,7 +196,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageName(String name) {
-        setPackage(new PackageDeclaration(name(name)));
+        setPackage(new PackageDeclaration(Name.parse(name)));
         return this;
     }
 
@@ -239,7 +237,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
-        final ImportDeclaration importDeclaration = ImportDeclaration.create(Range.UNKNOWN, name(name), isStatic, isAsterisk);
+        final ImportDeclaration importDeclaration = ImportDeclaration.create(Range.UNKNOWN, Name.parse(name), isStatic, isAsterisk);
         if (getImports().stream().anyMatch(i -> i.toString().equals(importDeclaration.toString())))
             return this;
         else {
@@ -360,7 +358,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the class otherwise
      */
     public ClassOrInterfaceDeclaration getClassByName(String className) {
-        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getName().equals(className)
+        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(className)
                 && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface())
                 .findFirst().orElse(null);
     }
@@ -372,7 +370,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the interface otherwise
      */
     public ClassOrInterfaceDeclaration getInterfaceByName(String interfaceName) {
-        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getName().equals(interfaceName)
+        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(interfaceName)
                 && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface())
                 .findFirst().orElse(null);
     }
@@ -384,7 +382,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the enum otherwise
      */
     public EnumDeclaration getEnumByName(String enumName) {
-        return (EnumDeclaration) getTypes().stream().filter(type -> type.getName().equals(enumName)
+        return (EnumDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(enumName)
                 && type instanceof EnumDeclaration)
                 .findFirst().orElse(null);
     }
@@ -396,7 +394,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the annotation otherwise
      */
     public AnnotationDeclaration getAnnotationDeclarationByName(String annotationName) {
-        return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getName().equals(annotationName)
+        return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName)
                 && type instanceof AnnotationDeclaration)
                 .findFirst().orElse(null);
     }

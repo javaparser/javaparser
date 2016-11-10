@@ -433,7 +433,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 
 	@Override public Visitable visit(final MarkerAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
-		n.setName((NameExpr) n.getName().accept(this, arg));
+		n.setName((Name) n.getName().accept(this, arg));
 		return n;
 	}
 
@@ -473,7 +473,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 
 	@Override public Visitable visit(final NormalAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
-		n.setName((NameExpr) n.getName().accept(this, arg));
+		n.setName((Name) n.getName().accept(this, arg));
         n.setPairs((NodeList<MemberValuePair>)n.getPairs().accept(this, arg));
 		return n;
 	}
@@ -498,7 +498,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 	@Override public Visitable visit(final PackageDeclaration n, final A arg) {
 		visitComment(n, arg);
 		n.setAnnotations((NodeList<AnnotationExpr>)n.getAnnotations().accept(this, arg));
-		n.setName((NameExpr) n.getName().accept(this, arg));
+		n.setName((Name) n.getName().accept(this, arg));
 		return n;
 	}
 	
@@ -516,13 +516,20 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 		return n;
 	}
 
-	@Override public Visitable visit(final QualifiedNameExpr n, final A arg) {
+	@Override public Visitable visit(final Name n, final A arg) {
 		visitComment(n, arg);
-		n.setQualifier((NameExpr) n.getQualifier().accept(this, arg));
+		if(n.getQualifier()!=null) {
+			n.setQualifier((Name) n.getQualifier().accept(this, arg));
+		}
 		return n;
 	}
 
-	@Override
+    @Override
+    public Visitable visit(SimpleName n, A arg) {
+        return n;
+    }
+
+    @Override
 	public Visitable visit(ArrayType n, A arg) {
 		visitComment(n, arg);
 		visitAnnotations(n, arg);
@@ -566,7 +573,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 
 	@Override public Visitable visit(final SingleMemberAnnotationExpr n, final A arg) {
 		visitComment(n, arg);
-		n.setName((NameExpr) n.getName().accept(this, arg));
+		n.setName((Name) n.getName().accept(this, arg));
 		n.setMemberValue((Expression) n.getMemberValue().accept(this, arg));
 		return n;
 	}
@@ -793,7 +800,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
 	@Override
 	public Visitable visit(TypeImportOnDemandDeclaration n, A arg) {
         visitComment(n, arg);
-        n.setName((NameExpr) n.getName().accept(this, arg));
+        n.setName((Name) n.getName().accept(this, arg));
         return n;
 	}
 

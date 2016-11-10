@@ -21,7 +21,7 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
+import static com.github.javaparser.ast.expr.Name.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -33,18 +33,18 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.Pair;
 
 /**
@@ -52,8 +52,8 @@ import com.github.javaparser.utils.Pair;
  */
 public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements 
         NodeWithJavaDoc<MethodDeclaration>, 
-        NodeWithDeclaration, 
-        NodeWithName<MethodDeclaration>,
+        NodeWithDeclaration,
+        NodeWithSimpleName<MethodDeclaration>,
         NodeWithType<MethodDeclaration, Type<?>>,
         NodeWithElementType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>, 
@@ -68,7 +68,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private Type elementType;
 
-    private NameExpr name;
+    private SimpleName name;
 
     private NodeList<Parameter> parameters;
 
@@ -90,7 +90,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
-                new NameExpr(),
+                new SimpleName(),
                 false,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -105,7 +105,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 elementType,
                 new NodeList<>(),
-                name(name),
+                new SimpleName(name),
                 false,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -121,7 +121,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new NodeList<>(),
                 elementType,
                 new NodeList<>(),
-                name(name),
+                new SimpleName(name),
                 false,
                 parameters,
                 new NodeList<>(),
@@ -134,7 +134,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final NodeList<TypeParameter> typeParameters, 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                             final String name,
+                             final SimpleName name,
                              final boolean isDefault,
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
@@ -146,7 +146,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 typeParameters,
                 elementType,
                 arrayBracketPairsAfterElementType,
-                name(name),
+                name,
                 isDefault,
                 parameters,
                 arrayBracketPairsAfterParameterList,
@@ -160,7 +160,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final NodeList<TypeParameter> typeParameters, 
                              final Type elementType,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                             final NameExpr nameExpr,
+                             final SimpleName name,
                              final boolean isDefault,
                              final NodeList<Parameter> parameters, 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
@@ -170,7 +170,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setElementType(elementType);
-        setNameExpr(nameExpr);
+        setName(name);
         setParameters(parameters);
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
         setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
@@ -206,11 +206,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public String getName() {
-        return name.getName();
-    }
-
-    public NameExpr getNameExpr() {
+    public SimpleName getName() {
         return name;
     }
 
@@ -255,12 +251,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setName(final String name) {
-        setNameExpr(new NameExpr(assertNotNull(name)));
-        return this;
-    }
-
-    public MethodDeclaration setNameExpr(final NameExpr name) {
+    public MethodDeclaration setName(final SimpleName name) {
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;

@@ -25,19 +25,18 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,7 +45,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements 
         NodeWithJavaDoc<ConstructorDeclaration>, 
         NodeWithDeclaration,
-        NodeWithName<ConstructorDeclaration>, 
+        NodeWithSimpleName<ConstructorDeclaration>, 
         NodeWithModifiers<ConstructorDeclaration>,
         NodeWithParameters<ConstructorDeclaration>, 
         NodeWithThrowable<ConstructorDeclaration>,
@@ -57,7 +56,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     private NodeList<TypeParameter> typeParameters;
 
-    private NameExpr name;
+    private SimpleName name;
 
     private NodeList<Parameter> parameters;
 
@@ -70,7 +69,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new NodeList<>(),
-                new NameExpr(),
+                new SimpleName(),
                 new NodeList<>(),
                 new NodeList<>(),
                 new BlockStmt());
@@ -81,7 +80,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                 modifiers,
                 new NodeList<>(),
                 new NodeList<>(),
-                name(name),
+                new SimpleName(name),
                 new NodeList<>(),
                 new NodeList<>(),
                 new BlockStmt());
@@ -89,7 +88,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                                   NodeList<TypeParameter> typeParameters,
-                                  NameExpr name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_,
+                                  SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_,
                                   BlockStmt block) {
         this(Range.UNKNOWN,
                 modifiers,
@@ -102,12 +101,12 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
-                                  NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, NameExpr name,
+                                  NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name,
                                   NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_, BlockStmt block) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
-        setNameExpr(name);
+        setName(name);
         setParameters(parameters);
         setThrows(throws_);
         setBody(block);
@@ -135,11 +134,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public String getName() {
-        return name.getName();
-    }
-
-    public NameExpr getNameExpr() {
+    public SimpleName getName() {
         return name;
     }
 
@@ -163,13 +158,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         return this;
     }
 
-    @Override
-    public ConstructorDeclaration setName(String name) {
-        setNameExpr(new NameExpr(assertNotNull(name)));
-        return this;
-    }
-
-    public ConstructorDeclaration setNameExpr(NameExpr name) {
+    public ConstructorDeclaration setName(SimpleName name) {
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;

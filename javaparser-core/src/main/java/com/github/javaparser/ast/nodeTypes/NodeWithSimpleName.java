@@ -21,29 +21,24 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Name;
-
-import static com.github.javaparser.ast.expr.Name.parse;
+import com.github.javaparser.ast.expr.SimpleName;
 
 /**
  * A node having a name.
  *  
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getName method.
- * 
- * @since 2.0.1 
  */
-public interface NodeWithName<N extends Node> {
-    Name getName();
+public interface NodeWithSimpleName<T> {
+    SimpleName getName();
 
-    N setName(Name name);
+    T setName(SimpleName name);
 
-    default N setName(String name){
-        setName(parse(name));
-        return (N) this;
+    default T setName(String name){
+        setName(new SimpleName(name));
+        return (T) this;
     }
 
     default String getNameAsString(){
-        return getName().toString();
+        return getName().getId();
     }
 }

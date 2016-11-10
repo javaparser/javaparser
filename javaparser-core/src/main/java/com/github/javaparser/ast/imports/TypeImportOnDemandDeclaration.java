@@ -1,7 +1,9 @@
 package com.github.javaparser.ast.imports;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -14,17 +16,17 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *     import com.github.javaparser.*;
  *     import com.github.javaparser.JavaParser.*;
  * </code>
- * Since a parser cannot differentiate between a type name and a package name, we simply store a NameExpr.
+ * Since a parser cannot differentiate between a type name and a package name, we can only store a Name.
  * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.2">JLS 7.5.2. Type-Import-on-Demand Declarations</a></p>
  */
-public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration {
-    private NameExpr name;
+public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration implements NodeWithName<TypeImportOnDemandDeclaration> {
+    private Name name;
 
     public TypeImportOnDemandDeclaration() {
-        this(Range.UNKNOWN, new NameExpr());
+        this(Range.UNKNOWN, new Name());
     }
     
-    public TypeImportOnDemandDeclaration(Range range, NameExpr name) {
+    public TypeImportOnDemandDeclaration(Range range, Name name) {
         super(range);
         setName(name);
     }
@@ -45,7 +47,8 @@ public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration {
      * @return the name of the import
      * @throws UnsupportedOperationException when invoked on an empty import declaration
      */
-    public NameExpr getName() {
+    @Override
+    public Name getName() {
         return name;
     }
 
@@ -55,7 +58,8 @@ public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration {
      * @param name
      *            the name to set
      */
-    public ImportDeclaration setName(NameExpr name) {
+    @Override
+    public TypeImportOnDemandDeclaration setName(Name name) {
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;

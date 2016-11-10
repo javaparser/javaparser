@@ -1,3 +1,7 @@
+Version 3.0.0-alpha.9
+------------------
+* 403 358 549 Make all names nodes: either SimpleName or Name. This makes every name in the AST visitable. NameExpr is now a wrapper to use SimpleName in an expression.
+
 Version 3.0.0-alpha.8
 ------------------
 * 344 529 turn DumpVisitor into an official PrettyPrinter

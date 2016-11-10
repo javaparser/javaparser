@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -316,4 +317,15 @@ public final class JavaParser {
 	public static BodyDeclaration parseInterfaceBodyDeclaration(String body) {
 		return simplifiedParse(INTERFACE_BODY, provider(body));
 	}
+
+    /**
+     * Parses a Java type name and returns a {@link ClassOrInterfaceType} that represents it.
+     *
+     * @param type the type name like a.b.c.X or Y
+     * @return ClassOrInterfaceType representing the type
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static ClassOrInterfaceType parseClassOrInterfaceType(String type) {
+        return simplifiedParse(CLASS_OR_INTERFACE_TYPE, provider(type));
+    }
 }

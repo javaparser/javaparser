@@ -1,12 +1,14 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 /**
  * The start production for JavaParser.
@@ -27,6 +29,7 @@ public interface ParseStart<R> {
 	ParseStart<BodyDeclaration<?>> ANNOTATION_BODY = ASTParser::AnnotationBodyDeclaration;
 	ParseStart<BodyDeclaration<?>> CLASS_BODY = p -> p.ClassOrInterfaceBodyDeclaration(false);
 	ParseStart<BodyDeclaration<?>> INTERFACE_BODY = p -> p.ClassOrInterfaceBodyDeclaration(true);
+	ParseStart<ClassOrInterfaceType> CLASS_OR_INTERFACE_TYPE = ASTParser::ClassOrInterfaceType;
 
 	R parse(ASTParser parser) throws ParseException;
 }

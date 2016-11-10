@@ -33,7 +33,7 @@ public class EnumDeclarationBuildersTest {
         assertEquals("import " + Function.class.getName() + ";" + EOL,
                 cu.getImports().get(0).toString());
         assertEquals(1, testEnum.getImplements().size());
-        assertEquals(Function.class.getSimpleName(), testEnum.getImplements().get(0).getName());
+        assertEquals(Function.class.getSimpleName(), testEnum.getImplements().get(0).getNameAsString());
     }
 
     @Test
@@ -41,6 +41,6 @@ public class EnumDeclarationBuildersTest {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addEnumConstant("MY_ENUM_CONSTANT");
         assertEquals(1, testEnum.getEntries().size());
-        assertEquals("MY_ENUM_CONSTANT", testEnum.getEntries().get(0).getName());
+        assertEquals("MY_ENUM_CONSTANT", testEnum.getEntries().get(0).getNameAsString());
     }
 }

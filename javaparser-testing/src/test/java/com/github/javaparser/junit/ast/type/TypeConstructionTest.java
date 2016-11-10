@@ -5,6 +5,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.ArrayType;
@@ -15,7 +16,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.ast.expr.NameExpr.name;
 import static com.github.javaparser.ast.type.ArrayType.arrayOf;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,13 +32,13 @@ public class TypeConstructionTest {
         ArrayType arrayType4 = (ArrayType) arrayType3.getComponentType();
         PrimitiveType elementType = (PrimitiveType) arrayType4.getComponentType();
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("B")));
-        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("X")));
-        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("Y")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("A")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("B")));
+        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("X")));
+        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("Y")));
 
         assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.Int);
-        assertThat(fieldDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("C")));
+        assertThat(fieldDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
     }
 
     @Test
@@ -52,13 +52,13 @@ public class TypeConstructionTest {
         ArrayType arrayType4 = (ArrayType) arrayType3.getComponentType();
         PrimitiveType elementType = (PrimitiveType) arrayType4.getComponentType();
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("B")));
-        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("X")));
-        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("Y")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("A")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("B")));
+        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("X")));
+        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("Y")));
 
         assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.Int);
-        assertThat(variableDeclarationExpr.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("C")));
+        assertThat(variableDeclarationExpr.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
     }
 
     @Test
@@ -69,9 +69,9 @@ public class TypeConstructionTest {
         ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
         Assertions.assertThat(arrayType2.getComponentType()).isInstanceOf(PrimitiveType.class);
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("B")));
-        assertThat(methodDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("C")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("A")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("B")));
+        assertThat(methodDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
     }
 
     @Test
@@ -86,9 +86,9 @@ public class TypeConstructionTest {
         PrimitiveType elementType = (PrimitiveType) innerArrayType.getComponentType();
 
         assertThat(elementType).isInstanceOf(PrimitiveType.class);
-        assertThat(outerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("A")));
-        assertThat(innerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("B")));
-        assertThat(parameter.getAnnotations()).containsExactly(new MarkerAnnotationExpr(name("C")));
+        assertThat(outerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("A")));
+        assertThat(innerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("B")));
+        assertThat(parameter.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
     }
 
     @Test

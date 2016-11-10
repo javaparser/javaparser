@@ -27,6 +27,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -47,7 +48,7 @@ public final class Parameter extends Node implements
         NodeWithType<Parameter, Type<?>>,
         NodeWithElementType<Parameter>,
         NodeWithAnnotations<Parameter>,
-        NodeWithName<Parameter>,
+        NodeWithSimpleName<Parameter>,
         NodeWithModifiers<Parameter> {
 
     private Type<?> elementType;
@@ -173,12 +174,12 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public String getName() {
+    public SimpleName getName() {
         return getId().getName();
     }
 
     @Override
-    public Parameter setName(String name) {
+    public Parameter setName(SimpleName name) {
         assertNotNull(name);
         if (id != null) {
             id.setName(name);

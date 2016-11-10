@@ -59,7 +59,7 @@ public class VisitorSteps {
         toUpperCaseVariableNameVisitor = new VoidVisitorAdapter<AtomicReference<String>>() {
             @Override
             public void visit(VariableDeclaratorId n, AtomicReference<String> arg) {
-                n.setName(n.getName().toUpperCase());
+                n.setName(n.getNameAsString().toUpperCase());
             }
         };
     }
@@ -79,7 +79,7 @@ public class VisitorSteps {
         nameReturningVisitor = new GenericVisitorAdapter<String, Void>() {
             @Override
             public String visit(VariableDeclaratorId n, Void arg) {
-                return n.getName();
+                return n.getNameAsString();
             }
         };
     }

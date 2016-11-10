@@ -21,13 +21,12 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -37,14 +36,14 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     private NodeList<MemberValuePair> pairs;
 
     public NormalAnnotationExpr() {
-        this(Range.UNKNOWN, new NameExpr(), new NodeList<>());
+        this(Range.UNKNOWN, new Name(), new NodeList<>());
     }
 
-    public NormalAnnotationExpr(final NameExpr name, final NodeList<MemberValuePair> pairs) {
+    public NormalAnnotationExpr(final Name name, final NodeList<MemberValuePair> pairs) {
         this(Range.UNKNOWN, name, pairs);
     }
 
-    public NormalAnnotationExpr(final Range range, final NameExpr name, final NodeList<MemberValuePair> pairs) {
+    public NormalAnnotationExpr(final Range range, final Name name, final NodeList<MemberValuePair> pairs) {
         super(range, name);
         setPairs(pairs);
     }
@@ -75,7 +74,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
      * @return this, the {@link NormalAnnotationExpr}
      */
     public NormalAnnotationExpr addPair(String key, String value) {
-        return addPair(key, name(value));
+        return addPair(key, new NameExpr(value));
     }
 
     /**

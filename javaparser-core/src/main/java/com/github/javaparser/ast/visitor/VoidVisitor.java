@@ -184,8 +184,6 @@ public interface VoidVisitor<A> {
 
 	void visit(ObjectCreationExpr n, A arg);
 
-	void visit(QualifiedNameExpr n, A arg);
-
 	void visit(ThisExpr n, A arg);
 
 	void visit(SuperExpr n, A arg);
@@ -265,4 +263,8 @@ public interface VoidVisitor<A> {
 	void visit(StaticImportOnDemandDeclaration n, A arg);
 
 	void visit(TypeImportOnDemandDeclaration n, A arg);
+
+    void visit(Name n, A arg);
+
+    void visit(SimpleName n, A arg);
 }

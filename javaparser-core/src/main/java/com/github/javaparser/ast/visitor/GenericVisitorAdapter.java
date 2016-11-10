@@ -1146,8 +1146,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 	}
 
 	@Override
-	public R visit(final QualifiedNameExpr n, final A arg) {
+	public R visit(final Name n, final A arg) {
 		visitComment(n, arg);
+		if(n.getQualifier()!=null)
 		{
 			R result = n.getQualifier().accept(this, arg);
 			if (result != null) {
@@ -1157,7 +1158,13 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 		return null;
 	}
 
-	@Override
+    @Override
+    public R visit(SimpleName n, A arg) {
+        visitComment(n, arg);
+        return null;
+    }
+
+    @Override
 	public R visit(ArrayType n, A arg) {
 		visitComment(n, arg);
 		for (final AnnotationExpr a : n.getAnnotations()) {

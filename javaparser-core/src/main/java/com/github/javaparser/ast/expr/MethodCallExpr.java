@@ -24,12 +24,12 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -37,7 +37,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class MethodCallExpr extends Expression implements 
         NodeWithTypeArguments<MethodCallExpr>,
-        NodeWithArguments<MethodCallExpr> {
+        NodeWithArguments<MethodCallExpr>,
+        NodeWithSimpleName<MethodCallExpr> {
 
     // TODO nullable
     private Expression scope;
@@ -45,7 +46,7 @@ public final class MethodCallExpr extends Expression implements
     // TODO nullable
     private NodeList<Type<?>> typeArguments;
 
-    private NameExpr name;
+    private SimpleName name;
 
     private NodeList<Expression> args;
 
@@ -53,7 +54,7 @@ public final class MethodCallExpr extends Expression implements
         this(Range.UNKNOWN,
                 null,
                 new NodeList<>(),
-                new NameExpr(),
+                new SimpleName(),
                 new NodeList<>());
     }
 
@@ -61,11 +62,11 @@ public final class MethodCallExpr extends Expression implements
         this(Range.UNKNOWN,
                 scope,
                 new NodeList<>(),
-                name(name),
+                new SimpleName(name),
                 new NodeList<>());
     }
 
-    public MethodCallExpr(final Expression scope, final NameExpr name, final NodeList<Expression> args) {
+    public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> args) {
         this(Range.UNKNOWN,
                 scope,
                 new NodeList<>(),
@@ -73,11 +74,11 @@ public final class MethodCallExpr extends Expression implements
                 args);
     }
 
-	public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final NameExpr name, final NodeList<Expression> args) {
+	public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final SimpleName name, final NodeList<Expression> args) {
 		super(range);
 		setScope(scope);
 		setTypeArguments(typeArguments);
-		setNameExpr(name);
+		setName(name);
 		setArgs(args);
 	}
 
@@ -96,11 +97,8 @@ public final class MethodCallExpr extends Expression implements
         return args;
     }
 
-    public String getName() {
-        return name.getName();
-    }
-
-    public NameExpr getNameExpr() {
+    @Override
+    public SimpleName getName() {
         return name;
     }
 
@@ -115,12 +113,7 @@ public final class MethodCallExpr extends Expression implements
         return this;
 	}
 
-    public MethodCallExpr setName(final String name) {
-        setNameExpr(new NameExpr(name));
-        return this;
-    }
-
-    public MethodCallExpr setNameExpr(NameExpr name) {
+    public MethodCallExpr setName(final SimpleName name) {
         this.name = name;
         setAsParentNodeOf(this.name);
         return this;
