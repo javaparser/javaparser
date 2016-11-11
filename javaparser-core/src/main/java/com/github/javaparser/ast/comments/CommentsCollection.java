@@ -21,6 +21,8 @@
 
 package com.github.javaparser.ast.comments;
 
+import com.github.javaparser.Range;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
@@ -67,14 +69,21 @@ public class CommentsCollection {
     }
 
     public boolean contains(Comment comment) {
+        Range commentRange = comment.getRange();
+        if (commentRange == null) {
+            return false;
+        }
         for (Comment c : getComments()) {
-            // we tolerate a difference of one element in the end column:
-            // it depends how \r and \n are calculated...
-            if (c.getBegin().line == comment.getBegin().line &&
-                    c.getBegin().column == comment.getBegin().column &&
-                    c.getEnd().line == comment.getEnd().line &&
-                    Math.abs(c.getEnd().column - comment.getEnd().column) < 2) {
-                return true;
+            Range cRange = c.getRange();
+            if(cRange!=null) {
+                // we tolerate a difference of one element in the end column:
+                // it depends how \r and \n are calculated...
+                if (cRange.begin.line == commentRange.begin.line &&
+                        cRange.begin.column == commentRange.begin.column &&
+                        cRange.end.line == commentRange.end.line &&
+                        Math.abs(cRange.end.column - commentRange.end.column) < 2) {
+                    return true;
+                }
             }
         }
         return false;

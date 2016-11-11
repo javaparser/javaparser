@@ -21,22 +21,22 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeSet;
+
+import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
+
 /**
  * Assigns comments to nodes of the AST.
- * 
+ *
  * @author Sebastian Kuerten
  * @author Júlio Vilmar Gesser
  */
@@ -46,7 +46,7 @@ class CommentsInserter {
     CommentsInserter(ParserConfiguration configuration) {
         this.configuration = configuration;
     }
-    
+
     /**
      * Comments are attributed to the thing they comment and are removed from
      * the comments.
@@ -68,7 +68,7 @@ class CommentsInserter {
         Comment firstComment = comments.iterator().next();
         if (cu.getPackage().isPresent()
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                        firstComment, cu.getPackage().get()))) {
+                firstComment, cu.getPackage().get()))) {
             cu.setComment(firstComment);
             comments.remove(firstComment);
         }
@@ -81,9 +81,9 @@ class CommentsInserter {
     void insertComments(Node node, TreeSet<Comment> commentsToAttribute) {
         if (commentsToAttribute.isEmpty())
             return;
-        
-        if(node instanceof CompilationUnit){
-            insertComments((CompilationUnit)node, commentsToAttribute);
+
+        if (node instanceof CompilationUnit) {
+            insertComments((CompilationUnit) node, commentsToAttribute);
         }
 
         // the comments can:
@@ -99,9 +99,11 @@ class CommentsInserter {
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
             for (Comment c : commentsToAttribute) {
-                if (PositionUtils.nodeContains(child, c,
-                        configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)) {
-                    commentsInsideChild.add(c);
+                if (c.getRange() != null) {
+                    if (PositionUtils.nodeContains(child, c,
+                            configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)) {
+                        commentsInsideChild.add(c);
+                    }
                 }
             }
             commentsToAttribute.removeAll(commentsInsideChild);
@@ -112,12 +114,18 @@ class CommentsInserter {
          there is something contained in their line */
         List<Comment> attributedComments = new LinkedList<>();
         for (Comment comment : commentsToAttribute) {
-            if (comment.isLineComment()) {
-                for (Node child : children) {
-                    if (child.getEnd().line == comment.getBegin().line
-                        && attributeLineCommentToNodeOrChild(child,
-                                comment.asLineComment())) {
-                            attributedComments.add(comment);
+            if (comment.getRange() != null) {
+                Range commentRange = comment.getRange();
+                if (comment.isLineComment()) {
+                    for (Node child : children) {
+                        Range childRange = child.getRange();
+                        if (childRange != null) {
+                            if (childRange.end.line == commentRange.begin.line
+                                    && attributeLineCommentToNodeOrChild(child,
+                                    comment.asLineComment())) {
+                                attributedComments.add(comment);
+                            }
+                        }
                     }
                 }
             }
@@ -167,9 +175,10 @@ class CommentsInserter {
     private boolean attributeLineCommentToNodeOrChild(Node node, LineComment lineComment) {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
-        if (node.getBegin().line == lineComment.getBegin().line
+
+        if (node.getRange().begin.line == lineComment.getRange().begin.line
                 && !node.hasComment()) {
-            if(!(node instanceof Comment)) {
+            if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
             }
             return true;
@@ -192,11 +201,14 @@ class CommentsInserter {
     }
 
     private boolean thereAreLinesBetween(Node a, Node b) {
+        if (a.getRange() == null || b.getRange() == null) {
+            return true;
+        }
         if (!PositionUtils.areInOrder(a, b)) {
             return thereAreLinesBetween(b, a);
         }
-        int endOfA = a.getEnd().line;
-        return b.getBegin().line > (endOfA + 1);
+        int endOfA = a.getRange().end.line;
+        return b.getRange().begin.line > endOfA + 1;
     }
 
 }

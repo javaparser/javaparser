@@ -18,10 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.utils;
 
 import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -42,27 +43,27 @@ public final class PositionUtils {
         // prevent instantiation
     }
 
-    public static <T extends Node> void sortByBeginPosition(List<T> nodes){
+    public static <T extends Node> void sortByBeginPosition(List<T> nodes) {
         sortByBeginPosition(nodes, false);
     }
 
-    public static <T extends Node> void sortByBeginPosition(NodeList<T> nodes){
+    public static <T extends Node> void sortByBeginPosition(NodeList<T> nodes) {
         sortByBeginPosition(nodes, false);
     }
 
-    public static <T extends Node> void sortByBeginPosition(List<T> nodes, final boolean ignoringAnnotations){
+    public static <T extends Node> void sortByBeginPosition(List<T> nodes, final boolean ignoringAnnotations) {
         Collections.sort(nodes, (o1, o2) -> PositionUtils.compare(o1, o2, ignoringAnnotations));
     }
 
-    public static <T extends Node> void sortByBeginPosition(NodeList<T> nodes, final boolean ignoringAnnotations){
+    public static <T extends Node> void sortByBeginPosition(NodeList<T> nodes, final boolean ignoringAnnotations) {
         nodes.sort((o1, o2) -> PositionUtils.compare(o1, o2, ignoringAnnotations));
     }
 
-    public static boolean areInOrder(Node a, Node b){
+    public static boolean areInOrder(Node a, Node b) {
         return areInOrder(a, b, false);
     }
 
-    public static boolean areInOrder(Node a, Node b, boolean ignoringAnnotations){
+    public static boolean areInOrder(Node a, Node b, boolean ignoringAnnotations) {
         return compare(a, b, ignoringAnnotations) <= 0;
     }
 
@@ -88,25 +89,25 @@ public final class PositionUtils {
     }
 
     public static AnnotationExpr getLastAnnotation(Node node) {
-        if (node instanceof NodeWithAnnotations){
+        if (node instanceof NodeWithAnnotations) {
             NodeList<AnnotationExpr> annotations = NodeList.nodeList(((NodeWithAnnotations<?>) node).getAnnotations());
-            if (annotations.isEmpty()){
+            if (annotations.isEmpty()) {
                 return null;
             }
             sortByBeginPosition(annotations);
-            return annotations.get(annotations.size()-1);
+            return annotations.get(annotations.size() - 1);
         } else {
             return null;
         }
     }
 
     private static int beginLineWithoutConsideringAnnotation(Node node) {
-        return beginNodeWithoutConsideringAnnotations(node).getBegin().line;
+        return beginNodeWithoutConsideringAnnotations(node).getRange().begin.line;
     }
 
 
     private static int beginColumnWithoutConsideringAnnotation(Node node) {
-        return beginNodeWithoutConsideringAnnotations(node).getBegin().column;
+        return beginNodeWithoutConsideringAnnotations(node).getRange().begin.column;
     }
 
     private static Node beginNodeWithoutConsideringAnnotations(Node node) {
@@ -116,28 +117,33 @@ public final class PositionUtils {
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
             return casted.getName();
-        }  else {
+        } else {
             return node;
         }
     }
 
-    public static boolean nodeContains(Node container, Node contained, boolean ignoringAnnotations){
-        if (!ignoringAnnotations || PositionUtils.getLastAnnotation(container)==null){
+    public static boolean nodeContains(Node container, Node contained, boolean ignoringAnnotations) {
+        final Range containedRange = contained.getRange();
+        final Range containerRange = container.getRange();
+        if (containerRange == null || containedRange == null) {
+            return false;
+        }
+        if (!ignoringAnnotations || PositionUtils.getLastAnnotation(container) == null) {
             return container.containsWithin(contained);
         }
-        if (!container.containsWithin(contained)){
+        if (!container.containsWithin(contained)) {
             return false;
         }
         // if the node is contained, but it comes immediately after the annotations,
         // let's not consider it contained
-        if (container instanceof NodeWithAnnotations){
+        if (container instanceof NodeWithAnnotations) {
             int bl = beginLineWithoutConsideringAnnotation(container);
             int bc = beginColumnWithoutConsideringAnnotation(container);
-            if (bl>contained.getBegin().line) return false;
-            if (bl==contained.getBegin().line && bc>contained.getBegin().column) return false;
-            if (container.getEnd().line<contained.getEnd().line) return false;
+            if (bl > containedRange.begin.line) return false;
+            if (bl == containedRange.begin.line && bc > containedRange.begin.column) return false;
+            if (containerRange.end.line < containedRange.end.line) return false;
             // TODO < or <= ?
-            return !(container.getEnd().line == contained.getEnd().line && container.getEnd().column < contained.getEnd().column);
+            return !(containerRange.end.line == containedRange.end.line && containerRange.end.column < containedRange.end.column);
         }
         return true;
     }

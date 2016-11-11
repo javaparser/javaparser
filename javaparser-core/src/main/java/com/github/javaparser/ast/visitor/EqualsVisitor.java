@@ -265,7 +265,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 			return false;
 		}
 
-        if (!objEquals(n1.getBegin().line, n2.getBegin().line)) {
+        if (!objEquals(n1.getRange(), n2.getRange())) {
       		return false;
       	}
 
@@ -279,7 +279,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 			return false;
 		}
 
-        if (!objEquals(n1.getBegin().line, n2.getBegin().line)) {
+        if (!objEquals(n1.getRange(), n2.getRange())) {
       			return false;
       	}
 

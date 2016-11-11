@@ -21,17 +21,6 @@
 
 package com.github.javaparser.ast;
 
-import static java.util.Collections.unmodifiableList;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.IdentityHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -43,6 +32,11 @@ import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+
+import java.lang.reflect.Field;
+import java.util.*;
+
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -58,7 +52,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     /**
      * This can be used to sort nodes on position.
      */
-    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> a.getBegin().compareTo(b.getBegin());
+    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> {
+        if (a.getRange() == null || b.getRange() == null) {
+            if (a.getRange() == null && b.getRange() == null) {
+                return 0;
+            }
+            if (a.getRange() == null) {
+                return -1;
+            }
+            return 1;
+        }
+        return a.getRange().begin.compareTo(b.getRange().begin);
+    };
 
     private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
     protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
@@ -105,6 +110,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * Sets the begin position of this node in the source file.
      */
     public Node setBegin(Position begin) {
+        if (range == null) {
+            range = Range.range(0, 0, 0, 0);
+        }
         range = range.withBegin(begin);
         return this;
     }
@@ -113,6 +121,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * Sets the end position of this node in the source file.
      */
     public Node setEnd(Position end) {
+        if (range == null) {
+            range = Range.range(0, 0, 0, 0);
+        }
         range = range.withEnd(end);
         return this;
     }
@@ -286,11 +297,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     public static final int ABSOLUTE_BEGIN_LINE = -1;
     public static final int ABSOLUTE_END_LINE = -2;
 
+    @Deprecated
     public boolean isPositionedAfter(Position position) {
+        if (range == null) {
+            return false;
+        }
         return range.isAfter(position);
     }
 
+    @Deprecated
     public boolean isPositionedBefore(Position position) {
+        if (range == null) {
+            return true;
+        }
         return range.isBefore(position);
     }
 
