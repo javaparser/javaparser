@@ -74,12 +74,14 @@ public final class SwitchStmt extends Statement {
 	}
 
 	public SwitchStmt setEntries(final NodeList<SwitchEntryStmt> entries) {
+		notifyPropertyChange("entries", this.entries, entries);
 		this.entries = assertNotNull(entries);
 		setAsParentNodeOf(this.entries);
 		return this;
 	}
 
 	public SwitchStmt setSelector(final Expression selector) {
+		notifyPropertyChange("selector", this.selector, selector);
 		this.selector = selector;
 		setAsParentNodeOf(this.selector);
 		return this;

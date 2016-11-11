@@ -62,6 +62,7 @@ public final class ExpressionStmt extends Statement {
 	}
 
 	public ExpressionStmt setExpression(final Expression expr) {
+		notifyPropertyChange("expr", this.expr, expr);
 		this.expr = assertNotNull(expr);
 		setAsParentNodeOf(this.expr);
 		return this;

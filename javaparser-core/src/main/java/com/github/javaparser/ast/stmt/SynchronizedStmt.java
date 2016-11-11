@@ -84,6 +84,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     }
 
     public SynchronizedStmt setExpr(final Expression expr) {
+        notifyPropertyChange("expr", this.expr, expr);
         this.expr = assertNotNull(expr);
         setAsParentNodeOf(this.expr);
         return this;
@@ -96,6 +97,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
 
     @Override
     public SynchronizedStmt setBody(BlockStmt block) {
+        notifyPropertyChange("block", this.block, block);
         this.block = assertNotNull(block);
         setAsParentNodeOf(this.block);
         return this;

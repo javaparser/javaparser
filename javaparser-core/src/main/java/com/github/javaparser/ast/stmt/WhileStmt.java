@@ -70,12 +70,14 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
 
 	@Override
     public WhileStmt setBody(final Statement body) {
+		notifyPropertyChange("body", this.body, body);
 		this.body = body;
 		setAsParentNodeOf(this.body);
         return this;
 	}
 
 	public WhileStmt setCondition(final Expression condition) {
+		notifyPropertyChange("condition", this.condition, condition);
 		this.condition = condition;
 		setAsParentNodeOf(this.condition);
 		return this;

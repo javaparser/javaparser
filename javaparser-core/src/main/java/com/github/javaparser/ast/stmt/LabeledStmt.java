@@ -67,11 +67,13 @@ public final class LabeledStmt extends Statement {
 	}
 
 	public LabeledStmt setLabel(final String label) {
+		notifyPropertyChange("label", this.label, label);
 		this.label = assertNotNull(label);
 		return this;
 	}
 
 	public LabeledStmt setStmt(final Statement stmt) {
+		notifyPropertyChange("stmt", this.stmt, stmt);
 		this.stmt = assertNotNull(stmt);
 		setAsParentNodeOf(this.stmt);
 		return this;

@@ -60,6 +60,7 @@ public final class ThrowStmt extends Statement {
 	}
 
 	public ThrowStmt setExpr(final Expression expr) {
+		notifyPropertyChange("expr", this.expr, expr);
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;

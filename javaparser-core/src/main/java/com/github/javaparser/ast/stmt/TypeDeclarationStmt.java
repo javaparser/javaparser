@@ -62,6 +62,7 @@ public final class TypeDeclarationStmt extends Statement {
 	}
 
 	public TypeDeclarationStmt setTypeDeclaration(final TypeDeclaration typeDecl) {
+		notifyPropertyChange("typeDecl", this.typeDecl, typeDecl);
 		this.typeDecl = assertNotNull(typeDecl);
 		setAsParentNodeOf(this.typeDecl);
 		return this;

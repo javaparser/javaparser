@@ -97,24 +97,28 @@ public final class TryStmt extends Statement {
 	}
 
 	public TryStmt setCatchs(final NodeList<CatchClause> catchs) {
+		notifyPropertyChange("catchs", this.catchs, catchs);
 		this.catchs = assertNotNull(catchs);
 		setAsParentNodeOf(this.catchs);
 		return this;
 	}
 
 	public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
+		notifyPropertyChange("finallyBlock", this.finallyBlock, finallyBlock);
 		this.finallyBlock = finallyBlock;
 		setAsParentNodeOf(this.finallyBlock);
 		return this;
 	}
 
 	public TryStmt setTryBlock(final BlockStmt tryBlock) {
+		notifyPropertyChange("tryBlock", this.tryBlock, tryBlock);
 		this.tryBlock = tryBlock;
 		setAsParentNodeOf(this.tryBlock);
 		return this;
 	}
 	
 	public TryStmt setResources(NodeList<VariableDeclarationExpr> resources) {
+		notifyPropertyChange("resources", this.resources, resources);
 		this.resources = assertNotNull(resources);
 		setAsParentNodeOf(this.resources);
 		return this;

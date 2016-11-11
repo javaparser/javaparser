@@ -88,6 +88,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 	}
 
 	public ExplicitConstructorInvocationStmt setArgs(final NodeList<Expression> args) {
+		notifyPropertyChange("typeArguments", this.typeArguments, typeArguments);
 		this.args = assertNotNull(args);
 		setAsParentNodeOf(this.args);
 		return this;
@@ -100,12 +101,14 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      * @return this, the ExplicitConstructorInvocationStmt
      */
 	public ExplicitConstructorInvocationStmt setExpr(final Expression expr) {
+		notifyPropertyChange("typeArguments", this.typeArguments, typeArguments);
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;
 	}
 
 	public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
+		notifyPropertyChange("typeArguments", this.typeArguments, typeArguments);
 		this.isThis = isThis;
 		return this;
 	}
@@ -123,6 +126,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      */
     @Override
     public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type<?>> types) {
+	    notifyPropertyChange("typeArguments", this.typeArguments, typeArguments);
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

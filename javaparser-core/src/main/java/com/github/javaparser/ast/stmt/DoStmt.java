@@ -70,12 +70,14 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 
 	@Override
     public DoStmt setBody(final Statement body) {
+		notifyPropertyChange("body", this.body, body);
 		this.body = body;
 		setAsParentNodeOf(this.body);
         return this;
 	}
 
 	public DoStmt setCondition(final Expression condition) {
+		notifyPropertyChange("condition", this.condition, condition);
 		this.condition = condition;
 		setAsParentNodeOf(this.condition);
 		return this;
