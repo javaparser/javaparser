@@ -145,7 +145,7 @@ public class ManipulationSteps {
     @When("a public static method called \"$methodName\" returning void is added to class $position in the compilation unit")
     public void whenAStaticMethodCalledReturningIsAddedToClassInTheCompilationUnit(String methodName, int position) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-		 TypeDeclaration<?> type = compilationUnit.getTypes().get(position -1);
+		 TypeDeclaration<?> type = compilationUnit.getType(position -1);
 		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
 		MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), methodName);
 		modifiers.add(Modifier.STATIC);
@@ -230,7 +230,7 @@ public class ManipulationSteps {
 
     @Then("Statement $position in BlockStmt toString is \"$expectedContent\"")
     public void thenTheBlockStmtContentIs(int position, String expectedContent) {
-        Statement statementUnderTest = blockStmt.getStmts().get(position-1);
+        Statement statementUnderTest = blockStmt.getStmt(position-1);
         assertThat(statementUnderTest.toString(), is(expectedContent));
     }
 
@@ -271,7 +271,7 @@ public class ManipulationSteps {
     public void thenMethodInClassParameterIsTypeIntCalled(int methodPosition, int classPosition, int parameterPosition, String expectedName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter parameter = method.getParameters().get(parameterPosition -1);
+        Parameter parameter = method.getParameter(parameterPosition -1);
         assertThat(parameter.getType(), is(INT_TYPE));
         assertThat(parameter.getId().getNameAsString(), is(expectedName));
     }

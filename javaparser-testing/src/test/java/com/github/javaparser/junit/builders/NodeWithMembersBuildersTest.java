@@ -39,15 +39,15 @@ public class NodeWithMembersBuildersTest {
 	public void testAddField() {
 		FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
 		assertEquals(1, classDeclaration.getMembers().size());
-		assertEquals(addField, classDeclaration.getMembers().get(0));
-		assertEquals("fieldName", addField.getVariables().get(0).getId().getNameAsString());
+		assertEquals(addField, classDeclaration.getMember(0));
+		assertEquals("fieldName", addField.getVariable(0).getId().getNameAsString());
 	}
 
 	@Test
 	public void testAddMethod() {
 		MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
 		assertEquals(1, classDeclaration.getMembers().size());
-		assertEquals(addMethod, classDeclaration.getMembers().get(0));
+		assertEquals(addMethod, classDeclaration.getMember(0));
 		assertEquals("foo", addMethod.getNameAsString());
 	}
 
@@ -55,7 +55,7 @@ public class NodeWithMembersBuildersTest {
 	public void testAddCtor() {
 		ConstructorDeclaration addCtor = classDeclaration.addCtor(Modifier.PUBLIC);
 		assertEquals(1, classDeclaration.getMembers().size());
-		assertEquals(addCtor, classDeclaration.getMembers().get(0));
+		assertEquals(addCtor, classDeclaration.getMember(0));
 		assertEquals(classDeclaration.getName(), addCtor.getName());
 	}
 
@@ -63,11 +63,11 @@ public class NodeWithMembersBuildersTest {
 	public void testAddInitializers() {
 		classDeclaration.addInitializer();
 		assertEquals(1, classDeclaration.getMembers().size());
-		assertEquals(InitializerDeclaration.class, classDeclaration.getMembers().get(0).getClass());
+		assertEquals(InitializerDeclaration.class, classDeclaration.getMember(0).getClass());
 
 		classDeclaration.addStaticInitializer();
 		assertEquals(2, classDeclaration.getMembers().size());
-		assertEquals(InitializerDeclaration.class, classDeclaration.getMembers().get(0).getClass());
+		assertEquals(InitializerDeclaration.class, classDeclaration.getMember(0).getClass());
 	}
 
 	@Test

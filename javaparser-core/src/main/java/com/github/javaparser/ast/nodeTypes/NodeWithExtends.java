@@ -7,6 +7,10 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 public interface NodeWithExtends<N extends Node> {
     NodeList<ClassOrInterfaceType> getExtends();
 
+    default ClassOrInterfaceType getExtends(int i) {
+        return getExtends().get(i);
+    }
+
     N setExtends(NodeList<ClassOrInterfaceType> extendsList);
 
     /**

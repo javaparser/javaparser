@@ -69,6 +69,10 @@ public final class SwitchStmt extends Statement {
         return entries;
 	}
 
+	public SwitchEntryStmt getEntry(int i) {
+		return getEntries().get(i);
+	}
+
 	public Expression getSelector() {
 		return selector;
 	}

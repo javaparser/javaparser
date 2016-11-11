@@ -10,6 +10,10 @@ import com.github.javaparser.ast.type.Type;
 public interface NodeWithParameters<N extends Node> {
     NodeList<Parameter> getParameters();
 
+    default Parameter getParameter(int i) {
+        return getParameters().get(i);
+    }
+
     N setParameters(NodeList<Parameter> parameters);
 
     default N addParameter(Type type, String name) {

@@ -34,7 +34,7 @@ public class ParseResultTest {
         assertThat(result.getResult().isPresent()).isFalse();
         assertThat(result.getProblems().size()).isEqualTo(1);
 
-        Problem problem = result.getProblems().get(0);
+        Problem problem = result.getProblem(0);
         assertThat(problem.getMessage()).startsWith("Encountered unexpected token: \"{\" \"{\"");
         assertThat(result.getTokens().isPresent()).isFalse();
 

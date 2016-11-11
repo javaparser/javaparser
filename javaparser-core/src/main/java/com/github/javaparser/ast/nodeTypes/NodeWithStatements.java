@@ -11,6 +11,10 @@ import com.github.javaparser.ast.stmt.Statement;
 public interface NodeWithStatements<N extends Node> {
     NodeList<Statement> getStmts();
 
+    default Statement getStmt(int i) {
+        return getStmts().get(i);
+    }
+
     N setStmts(final NodeList<Statement> stmts);
 
     @SuppressWarnings("unchecked")

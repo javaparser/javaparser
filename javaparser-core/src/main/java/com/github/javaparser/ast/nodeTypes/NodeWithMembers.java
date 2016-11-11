@@ -27,6 +27,10 @@ import static java.util.stream.Collectors.*;
 public interface NodeWithMembers<N extends Node> {
     NodeList<BodyDeclaration<?>> getMembers();
 
+    default BodyDeclaration<?> getMember(int i) {
+        return getMembers().get(i);
+    }
+
     N setMembers(NodeList<BodyDeclaration<?>> members);
 
     /**
