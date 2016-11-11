@@ -40,6 +40,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
 import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
@@ -428,5 +430,16 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         this.arrayBracketPairsAfterParameterList = assertNotNull(arrayBracketPairsAfterParameterList);
         setAsParentNodeOf(arrayBracketPairsAfterParameterList);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(typeParameters);
+        res.add(parameters);
+        res.add(throws_);
+        res.add(arrayBracketPairsAfterType);
+        res.add(arrayBracketPairsAfterParameterList);
+        return res;
     }
 }

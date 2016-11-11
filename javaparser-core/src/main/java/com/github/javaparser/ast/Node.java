@@ -432,10 +432,15 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     public void registerForSubtree(AstObserver observer) {
         register(observer);
         this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
+        this.getNodeLists().forEach(nl -> nl.register(observer));
     }
 
     @Override
     public boolean isRegistered(AstObserver observer) {
         return this.observers.contains(observer);
+    }
+
+    public List<NodeList<?>> getNodeLists() {
+        return Collections.emptyList();
     }
 }

@@ -36,7 +36,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -244,5 +246,10 @@ public final class Parameter extends Node implements
         this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(annotations, arrayBracketPairsAfterType);
     }
 }

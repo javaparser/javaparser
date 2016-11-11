@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -127,5 +129,11 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return enumConstant;
     }
 
-
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(implementsList);
+        res.add(entries);
+        return res;
+    }
 }

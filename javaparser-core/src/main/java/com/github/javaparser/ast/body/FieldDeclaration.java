@@ -42,6 +42,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
@@ -266,5 +268,13 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         this.arrayBracketPairsAfterElementType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(variables);
+        res.add(arrayBracketPairsAfterElementType);
+        return res;
     }
 }

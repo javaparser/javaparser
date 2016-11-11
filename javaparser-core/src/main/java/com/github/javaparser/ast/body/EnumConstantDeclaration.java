@@ -33,6 +33,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -129,5 +132,13 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
             return (JavadocComment) getComment();
         }
         return null;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(args);
+        res.add(classBody);
+        return res;
     }
 }

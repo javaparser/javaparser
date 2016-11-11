@@ -34,6 +34,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 
 import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -151,4 +153,10 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
 		return null;
 	}
 
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(members);
+        return res;
+    }
 }

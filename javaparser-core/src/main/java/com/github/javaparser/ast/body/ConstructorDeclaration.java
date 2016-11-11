@@ -36,6 +36,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -263,5 +265,14 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         this.body = assertNotNull(body);
         setAsParentNodeOf(body);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(typeParameters);
+        res.add(parameters);
+        res.add(throws_);
+        return res;
     }
 }

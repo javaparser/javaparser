@@ -21,21 +21,15 @@
  
 package com.github.javaparser.ast.body;
 
-import java.util.List;
-
-import java.util.EnumSet;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.ast.expr.NameExpr.*;
+import java.util.EnumSet;
 
 /**
  * @author Julio Vilmar Gesser
@@ -81,4 +75,5 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
     }
+
 }

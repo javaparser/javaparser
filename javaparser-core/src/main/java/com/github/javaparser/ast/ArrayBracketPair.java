@@ -6,6 +6,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -44,5 +47,10 @@ public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayB
         setAsParentNodeOf(annotations);
         this.annotations = assertNotNull(annotations);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(annotations);
     }
 }

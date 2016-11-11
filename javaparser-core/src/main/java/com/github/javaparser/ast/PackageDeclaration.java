@@ -30,6 +30,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -129,6 +132,11 @@ public final class PackageDeclaration extends Node implements
         this.name = name;
         setAsParentNodeOf(this.name);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(annotations);
     }
 
 }

@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
@@ -39,6 +34,11 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
+
+import java.util.Optional;
+
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -103,6 +103,7 @@ public final class VariableDeclarator extends Node implements
     }
 
     public VariableDeclarator setId(VariableDeclaratorId id) {
+        notifyPropertyChange("id", this.id, id);
         this.id = assertNotNull(id);
         setAsParentNodeOf(this.id);
         return this;
