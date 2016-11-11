@@ -74,12 +74,14 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     public InitializerDeclaration setBlock(BlockStmt block) {
+        notifyPropertyChange("block", this.block, block);
         this.block = assertNotNull(block);
 		setAsParentNodeOf(this.block);
         return this;
     }
 
     public InitializerDeclaration setStatic(boolean isStatic) {
+        notifyPropertyChange("static", this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
     }

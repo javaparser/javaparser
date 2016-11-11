@@ -137,6 +137,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @return this, the AnnotationMemberDeclaration
      */
     public AnnotationMemberDeclaration setDefaultValue(Expression defaultValue) {
+        notifyPropertyChange("defaultValue", this.defaultValue, defaultValue);
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
         return this;
@@ -144,18 +145,21 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     @Override
     public AnnotationMemberDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+        notifyPropertyChange("modifiers", this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
     public AnnotationMemberDeclaration setName(SimpleName name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = assertNotNull(name);
         return this;
     }
 
     @Override
     public AnnotationMemberDeclaration setType(Type<?> type) {
+        notifyPropertyChange("type", this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(type);
         return this;

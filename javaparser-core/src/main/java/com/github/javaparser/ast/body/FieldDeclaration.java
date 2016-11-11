@@ -153,12 +153,14 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+        notifyPropertyChange("modifiers", this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
     public FieldDeclaration setVariables(NodeList<VariableDeclarator> variables) {
+        notifyPropertyChange("variables", this.variables, variables);
         this.variables = assertNotNull(variables);
         setAsParentNodeOf(this.variables);
         return this;
@@ -246,6 +248,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public FieldDeclaration setElementType(final Type<?> elementType) {
+        notifyPropertyChange("elementType", this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;

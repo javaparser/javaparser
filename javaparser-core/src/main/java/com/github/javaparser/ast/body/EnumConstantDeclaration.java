@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -34,6 +32,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -102,12 +102,14 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     public EnumConstantDeclaration setArgs(NodeList<Expression> args) {
+        notifyPropertyChange("args", this.args, args);
         this.args = assertNotNull(args);
 		setAsParentNodeOf(this.args);
         return this;
     }
 
     public EnumConstantDeclaration setClassBody(NodeList<BodyDeclaration<?>> classBody) {
+        notifyPropertyChange("classBody", this.classBody, classBody);
         this.classBody = assertNotNull(classBody);
 		setAsParentNodeOf(this.classBody);
         return this;
@@ -115,6 +117,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     @Override
     public EnumConstantDeclaration setName(SimpleName name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;

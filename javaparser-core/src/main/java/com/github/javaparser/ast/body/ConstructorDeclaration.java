@@ -154,11 +154,13 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+        notifyPropertyChange("modifiers", this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     public ConstructorDeclaration setName(SimpleName name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;
@@ -166,6 +168,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public ConstructorDeclaration setParameters(NodeList<Parameter> parameters) {
+        notifyPropertyChange("parameters", this.parameters, parameters);
         this.parameters = assertNotNull(parameters);
         setAsParentNodeOf(this.parameters);
         return this;
@@ -173,12 +176,14 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public ConstructorDeclaration setThrows(NodeList<ReferenceType<?>> throws_) {
+        notifyPropertyChange("throws", this.throws_, throws_);
         this.throws_ = assertNotNull(throws_);
         setAsParentNodeOf(this.throws_);
         return this;
     }
 
     public ConstructorDeclaration setTypeParameters(NodeList<TypeParameter> typeParameters) {
+        notifyPropertyChange("typeParameters", this.typeParameters, typeParameters);
         this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(this.typeParameters);
         return this;

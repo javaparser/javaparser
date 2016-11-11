@@ -62,6 +62,7 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     @SuppressWarnings("unchecked")
     @Override
     public final T setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange("annotations", this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
 		setAsParentNodeOf(this.annotations);
         return (T) this;

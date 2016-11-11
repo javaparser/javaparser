@@ -27,9 +27,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.observing.ListChangeType;
+import com.github.javaparser.ast.observing.NodeObserver;
 import com.github.javaparser.ast.observing.Observable;
-import com.github.javaparser.ast.observing.Observer;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -51,7 +50,7 @@ import static java.util.Collections.unmodifiableList;
  * @author Julio Vilmar Gesser
  */
 // Use <Node> to prevent Node from becoming generic.
-public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, Observable {
+public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, Observable<NodeObserver> {
     /**
      * This can be used to sort nodes on position.
      */
@@ -71,7 +70,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     private Comment comment;
 
-    private List<com.github.javaparser.ast.observing.Observer> observers = new ArrayList<>();
+    private List<NodeObserver> observers = new ArrayList<>();
 
     public Node(Range range) {
         this.range = range;
@@ -419,17 +418,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         this.observers.forEach(o -> o.propertyChange(this, propertyName, oldValue, newValue));
     }
 
-    protected <P> void notifyListChange(String listName, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-        this.observers.forEach(o -> o.listChange(this, listName, type, index, nodeAddedOrRemoved));
-    }
-
     @Override
-    public void unregister(Observer observer) {
+    public void unregister(NodeObserver observer) {
         this.observers.remove(observer);
     }
 
     @Override
-    public void register(Observer observer) {
+    public void register(NodeObserver observer) {
         this.observers.add(observer);
     }
 }
