@@ -41,11 +41,11 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
 	private ReferenceType<?> type;
 
 	public InstanceOfExpr() {
-        this(Range.UNKNOWN, new NameExpr(), new ClassOrInterfaceType());
+        this(null, new NameExpr(), new ClassOrInterfaceType());
 	}
 
 	public InstanceOfExpr(final Expression expr, final ReferenceType<?> type) {
-        this(Range.UNKNOWN, expr, type);
+        this(null, expr, type);
 	}
 
 	public InstanceOfExpr(final Range range, final Expression expr, final ReferenceType<?> type) {

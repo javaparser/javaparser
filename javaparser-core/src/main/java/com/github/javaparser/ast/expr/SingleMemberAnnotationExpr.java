@@ -33,11 +33,11 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 	private Expression memberValue;
 
 	public SingleMemberAnnotationExpr() {
-        this(Range.UNKNOWN, new Name(), new StringLiteralExpr());
+        this(null, new Name(), new StringLiteralExpr());
 	}
 
 	public SingleMemberAnnotationExpr(final Name name, final Expression memberValue) {
-        this(Range.UNKNOWN, name, memberValue);
+        this(null, name, memberValue);
 	}
 
 	public SingleMemberAnnotationExpr(final Range range, final Name name, final Expression memberValue) {

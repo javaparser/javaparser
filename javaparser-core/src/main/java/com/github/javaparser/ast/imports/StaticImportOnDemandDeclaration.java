@@ -15,7 +15,7 @@ public class StaticImportOnDemandDeclaration extends NonEmptyImportDeclaration {
     private ClassOrInterfaceType type;
 
     public StaticImportOnDemandDeclaration() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType());
+        this(null, new ClassOrInterfaceType());
     }
 
     public StaticImportOnDemandDeclaration(Range range, ClassOrInterfaceType type) {

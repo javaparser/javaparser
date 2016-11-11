@@ -47,7 +47,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     private Statement body;
 
     public ForStmt() {
-        this(Range.UNKNOWN,
+        this(null,
                 new NodeList<>(),
                 new BooleanLiteralExpr(),
                 new NodeList<>(),
@@ -56,7 +56,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     public ForStmt(final NodeList<Expression> init, final Expression compare,
                    final NodeList<Expression> update, final Statement body) {
-        this(Range.UNKNOWN, init, compare, update, body);
+        this(null, init, compare, update, body);
     }
 
     public ForStmt(Range range,

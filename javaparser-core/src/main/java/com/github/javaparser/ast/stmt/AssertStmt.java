@@ -41,15 +41,15 @@ public final class AssertStmt extends Statement {
     private Expression msg;
 
     public AssertStmt() {
-        this(Range.UNKNOWN, new BooleanLiteralExpr(), null);
+        this(null, new BooleanLiteralExpr(), null);
     }
 
     public AssertStmt(final Expression check) {
-        this(Range.UNKNOWN, check, null);
+        this(null, check, null);
     }
 
     public AssertStmt(final Expression check, final Expression msg) {
-        this(Range.UNKNOWN, check, msg);
+        this(null, check, msg);
     }
 
     public AssertStmt(final Range range, final Expression check, final Expression msg) {

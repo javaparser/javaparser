@@ -40,11 +40,11 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     private Expression expr;
 
     public CastExpr() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType(), new NameExpr());
+        this(null, new ClassOrInterfaceType(), new NameExpr());
     }
 
     public CastExpr(Type<?> type, Expression expr) {
-        this(Range.UNKNOWN, type, expr);
+        this(null, type, expr);
     }
 
     public CastExpr(Range range, Type<?> type, Expression expr) {

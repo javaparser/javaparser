@@ -30,9 +30,13 @@ public class NodePositionTest {
 
         CompilationUnit cu = res.getResult().get();
         getAllNodes(cu).forEach(n -> {
+            if (n.getRange() == null) {
+                throw new IllegalArgumentException("There should be no node without a range: " + n + " (class: "
+                        + n.getClass().getCanonicalName() + ")");
+            }
             if (n.getBegin().line == 0 && !n.toString().isEmpty() && !(n instanceof ArrayBracketPair)) {
                 throw new IllegalArgumentException("There should be no node at line 0: " + n + " (class: "
-                        + n.getClass().getCanonicalName()+ ")");
+                        + n.getClass().getCanonicalName() + ")");
             }
         });
     }

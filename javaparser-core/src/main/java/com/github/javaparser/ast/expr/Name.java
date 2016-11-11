@@ -46,15 +46,15 @@ public class Name extends Node {
     private Name qualifier;
 
     public Name() {
-        this(Range.UNKNOWN, null, "empty");
+        this(null, null, "empty");
     }
 
     public Name(final String id) {
-        this(Range.UNKNOWN, null, id);
+        this(null, null, id);
     }
 
     public Name(Name qualifier, final String id) {
-        this(Range.UNKNOWN, qualifier, id);
+        this(null, qualifier, id);
     }
 
     public Name(Range range, Name qualifier, final String id) {

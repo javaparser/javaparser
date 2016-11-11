@@ -35,7 +35,7 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
         implements NodeWithJavaDoc<EmptyMemberDeclaration> {
 
     public EmptyMemberDeclaration() {
-        this(Range.UNKNOWN);
+        this(null);
     }
 
     public EmptyMemberDeclaration(Range range) {

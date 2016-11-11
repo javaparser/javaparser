@@ -22,19 +22,19 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     public ArrayCreationLevel() {
-        this(Range.UNKNOWN, null, new NodeList<>());
+        this(null, null, new NodeList<>());
     }
 
     public ArrayCreationLevel(int dimension) {
-        this(Range.UNKNOWN, new IntegerLiteralExpr("" + dimension), new NodeList<>());
+        this(null, new IntegerLiteralExpr("" + dimension), new NodeList<>());
     }
 
     public ArrayCreationLevel(Expression dimension) {
-        this(Range.UNKNOWN, dimension, new NodeList<>());
+        this(null, dimension, new NodeList<>());
     }
 
     public ArrayCreationLevel(Expression dimension, NodeList<AnnotationExpr> annotations) {
-        this(Range.UNKNOWN, dimension, annotations);
+        this(null, dimension, annotations);
     }
 
     public ArrayCreationLevel(Range range, Expression dimension, NodeList<AnnotationExpr> annotations) {

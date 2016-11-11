@@ -37,11 +37,11 @@ public final class ArrayAccessExpr extends Expression {
     private Expression index;
 
     public ArrayAccessExpr() {
-        this(Range.UNKNOWN, new NameExpr(), new IntegerLiteralExpr());
+        this(null, new NameExpr(), new IntegerLiteralExpr());
     }
 
     public ArrayAccessExpr(Expression name, Expression index) {
-        this(Range.UNKNOWN, name, index);
+        this(null, name, index);
     }
 
     public ArrayAccessExpr(Range range, Expression name, Expression index) {

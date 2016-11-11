@@ -24,7 +24,7 @@ public class UnionType extends Type<UnionType> implements NodeWithAnnotations<Un
     }
 
     public UnionType(NodeList<ReferenceType<?>> elements) {
-        this(Range.UNKNOWN, elements);
+        this(null, elements);
     }
 
     public NodeList<ReferenceType<?>> getElements() {

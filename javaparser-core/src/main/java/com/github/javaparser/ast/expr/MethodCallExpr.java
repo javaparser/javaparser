@@ -51,7 +51,7 @@ public final class MethodCallExpr extends Expression implements
     private NodeList<Expression> args;
 
     public MethodCallExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 null,
                 new NodeList<>(),
                 new SimpleName(),
@@ -59,7 +59,7 @@ public final class MethodCallExpr extends Expression implements
     }
 
     public MethodCallExpr(final Expression scope, final String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 scope,
                 new NodeList<>(),
                 new SimpleName(name),
@@ -67,7 +67,7 @@ public final class MethodCallExpr extends Expression implements
     }
 
     public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> args) {
-        this(Range.UNKNOWN,
+        this(null,
                 scope,
                 new NodeList<>(),
                 name,

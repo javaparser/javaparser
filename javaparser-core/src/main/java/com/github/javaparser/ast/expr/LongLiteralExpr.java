@@ -35,7 +35,7 @@ public class LongLiteralExpr extends StringLiteralExpr {
 	protected static final String MIN_VALUE = "-" + UNSIGNED_MIN_VALUE + "L";
 
 	public LongLiteralExpr() {
-        this(Range.UNKNOWN, "0");
+        this(null, "0");
 	}
 
 	public LongLiteralExpr(final String value) {

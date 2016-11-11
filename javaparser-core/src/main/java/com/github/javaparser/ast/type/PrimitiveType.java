@@ -81,11 +81,11 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 	private Primitive type;
 
 	public PrimitiveType() {
-        this(Range.UNKNOWN, Primitive.Int);
+        this(null, Primitive.Int);
 	}
 
 	public PrimitiveType(final Primitive type) {
-        this(Range.UNKNOWN, type);
+        this(null, type);
 	}
 
 	public PrimitiveType(Range range, final Primitive type) {

@@ -68,7 +68,7 @@ public final class Parameter extends Node implements
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public Parameter() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
@@ -78,7 +78,7 @@ public final class Parameter extends Node implements
     }
 
     public Parameter(Type<?> elementType, VariableDeclaratorId id) {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 elementType,
@@ -96,7 +96,7 @@ public final class Parameter extends Node implements
      *            name of the parameter
      */
     public Parameter(Type<?> elementType, String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 elementType,
@@ -106,7 +106,7 @@ public final class Parameter extends Node implements
     }
 
     public Parameter(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclaratorId id) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 elementType,

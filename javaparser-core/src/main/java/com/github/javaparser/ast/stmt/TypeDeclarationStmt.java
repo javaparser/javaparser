@@ -37,11 +37,11 @@ public final class TypeDeclarationStmt extends Statement {
 	private TypeDeclaration typeDecl;
 
 	public TypeDeclarationStmt() {
-        this(Range.UNKNOWN, new EmptyTypeDeclaration());
+        this(null, new EmptyTypeDeclaration());
 	}
 
 	public TypeDeclarationStmt(final TypeDeclaration typeDecl) {
-		this(Range.UNKNOWN, typeDecl);
+		this(null, typeDecl);
 	}
 
 	public TypeDeclarationStmt(Range range, final TypeDeclaration typeDecl) {

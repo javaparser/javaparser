@@ -43,7 +43,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     private Statement body;
 
     public ForeachStmt() {
-        this(Range.UNKNOWN,
+        this(null,
                 new VariableDeclarationExpr(),
                 new NameExpr(),
                 new EmptyStmt());
@@ -51,7 +51,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 
     public ForeachStmt(final VariableDeclarationExpr var,
                        final Expression iterable, final Statement body) {
-        this(Range.UNKNOWN, var, iterable, body);
+        this(null, var, iterable, body);
     }
 
     public ForeachStmt(Range range,
@@ -64,7 +64,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     }
 
     public ForeachStmt(VariableDeclarationExpr var, String iterable, BlockStmt body) {
-        this(Range.UNKNOWN, var, new NameExpr(iterable), body);
+        this(null, var, new NameExpr(iterable), body);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class IntersectionType extends Type<IntersectionType> implements NodeWith
     private NodeList<ReferenceType<?>> elements;
 
     public IntersectionType(NodeList<ReferenceType<?>> elements) {
-        this(Range.UNKNOWN, elements);
+        this(null, elements);
     }
 
     public IntersectionType(Range range, NodeList<ReferenceType<?>> elements) {

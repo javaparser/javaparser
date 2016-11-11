@@ -209,7 +209,7 @@ final class ASTParser {
     }
 
     private static class RangedList<T extends Node> {
-        Range range = Range.UNKNOWN;
+        Range range = Range.range(0, 0, 0, 0);
         NodeList<T> list;
         RangedList(NodeList<T> list) {
             this.list = list;
@@ -1309,7 +1309,7 @@ CompilationUnit CompilationUnit():
   ( in = ImportDeclaration()      { begin = begin.orIfInvalid(in.getBegin()); imports = add(imports, in); } )*
   ( tn = TypeDeclaration() { begin = begin.orIfInvalid(tn.getBegin()); types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
-  { return new CompilationUnit(begin.invalid() ? Range.UNKNOWN : range(begin, tokenEnd()), pakage, imports, types); }
+  { return new CompilationUnit(begin.invalid() ? Range.range(1,1,1,1) : range(begin, tokenEnd()), pakage, imports, types); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -3126,10 +3126,6 @@ SynchronizedStmt SynchronizedStatement():
 }
 
 TryStmt TryStatement():
-/*
- * Semantic check required here to make sure that at least one
- * finally/catch is present.
- */
 {
 	NodeList<VariableDeclarationExpr> resources = emptyList();
 	BlockStmt tryBlock;
@@ -3142,6 +3138,7 @@ TryStmt TryStatement():
 	VariableDeclaratorId exceptId;
 	Position begin;
 	Position catchBegin;
+	Position typesBegin;
 	Type type;
 }
 {
@@ -3152,7 +3149,7 @@ TryStmt TryStatement():
         LOOKAHEAD(2)
   		(
   			"catch" {catchBegin=tokenBegin();}
-  			"(" 
+  			"(" { typesBegin=tokenBegin(); }
   			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); }
   			( "|" exceptionType = ReferenceTypeWithAnnotations() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId()
@@ -3161,11 +3158,11 @@ TryStmt TryStatement():
   			catchBlock = Block()
   			{
   			    if (exceptionTypes.size() > 1) {
-  			        type = new UnionType(exceptionTypes);
+  			        type = new UnionType(range(typesBegin, tokenEnd()), exceptionTypes);
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
-				Parameter catchType = new Parameter(Range.UNKNOWN, exceptModifier.modifiers, exceptModifier.annotations, type, emptyList(), false, exceptId);
+				Parameter catchType = new Parameter(type.getRange(), exceptModifier.modifiers, exceptModifier.annotations, type, emptyList(), false, exceptId);
   			    catchs = add(catchs, new CatchClause(range(catchBegin, tokenEnd()), catchType, catchBlock));
   			    exceptionTypes = emptyList(); }
   		)*

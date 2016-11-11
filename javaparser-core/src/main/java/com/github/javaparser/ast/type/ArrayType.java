@@ -20,7 +20,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
     private Type componentType;
 
     public ArrayType(Type<?> componentType, NodeList<AnnotationExpr> annotations) {
-        this(Range.UNKNOWN, componentType, annotations);
+        this(null, componentType, annotations);
     }
 
     public ArrayType(Range range, Type<?> componentType, NodeList<AnnotationExpr> annotations) {
@@ -74,7 +74,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         final NodeList<ArrayBracketPair> arrayBracketPairs = new NodeList<>();
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
-            arrayBracketPairs.add(new ArrayBracketPair(Range.UNKNOWN, arrayType.getAnnotations()));
+            arrayBracketPairs.add(new ArrayBracketPair(type.getRange(), arrayType.getAnnotations()));
             type = arrayType.getComponentType();
         }
         return new Pair<>(type, arrayBracketPairs);

@@ -64,7 +64,7 @@ public final class VariableDeclarationExpr extends Expression implements
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public VariableDeclarationExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
@@ -73,7 +73,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName) {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 elementType,
@@ -82,7 +82,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var) {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 elementType,
@@ -91,7 +91,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     public VariableDeclarationExpr(final Type elementType, String variableName, Modifier... modifiers) {
-        this(Range.UNKNOWN,
+        this(null,
                 Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 new NodeList<>(),
                 elementType,
@@ -100,7 +100,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     public VariableDeclarationExpr(final Type elementType, VariableDeclarator var, Modifier... modifiers) {
-        this(Range.UNKNOWN,
+        this(null,
                 Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 new NodeList<>(),
                 elementType,
@@ -109,7 +109,7 @@ public final class VariableDeclarationExpr extends Expression implements
     }
 
     public VariableDeclarationExpr(final Type elementType, final NodeList<VariableDeclarator> variables) {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 elementType,
@@ -119,7 +119,7 @@ public final class VariableDeclarationExpr extends Expression implements
 
     public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type elementType,
                                    final NodeList<VariableDeclarator> variables) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 elementType,

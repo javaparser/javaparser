@@ -37,7 +37,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class UnknownType extends Type<UnknownType> {
 
     public UnknownType() {
-        super(Range.UNKNOWN, new NodeList<>());
+        super(null, new NodeList<>());
     }
 
     @Override

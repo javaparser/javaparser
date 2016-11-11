@@ -48,21 +48,21 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     private NodeList<Type<?>> typeArguments;
 
     public ClassOrInterfaceType() {
-        this(Range.UNKNOWN,
+        this(null,
                 null,
                 new SimpleName(),
                 null);
     }
 
     public ClassOrInterfaceType(final String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 null,
                 new SimpleName(name),
                 null);
     }
 
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 scope,
                 new SimpleName(name),
                 null);

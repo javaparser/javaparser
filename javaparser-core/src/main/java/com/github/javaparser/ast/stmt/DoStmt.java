@@ -38,11 +38,11 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 	private Expression condition;
 
 	public DoStmt() {
-        this(Range.UNKNOWN, new EmptyStmt(), new BooleanLiteralExpr());
+        this(null, new EmptyStmt(), new BooleanLiteralExpr());
 	}
 
 	public DoStmt(final Statement body, final Expression condition) {
-        this(Range.UNKNOWN, body, condition);
+        this(null, body, condition);
 	}
 
 	public DoStmt(Range range, final Statement body, final Expression condition) {

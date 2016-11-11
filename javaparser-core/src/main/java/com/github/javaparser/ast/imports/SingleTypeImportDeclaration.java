@@ -15,7 +15,7 @@ public class SingleTypeImportDeclaration extends NonEmptyImportDeclaration {
     private ClassOrInterfaceType type;
 
     public SingleTypeImportDeclaration() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType());
+        this(null, new ClassOrInterfaceType());
     }
 
     public SingleTypeImportDeclaration(Range range, ClassOrInterfaceType type) {

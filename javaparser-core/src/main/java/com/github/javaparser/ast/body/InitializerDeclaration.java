@@ -42,11 +42,11 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     private BlockStmt block;
 
     public InitializerDeclaration() {
-        this(Range.UNKNOWN, false, new BlockStmt());
+        this(null, false, new BlockStmt());
     }
 
     public InitializerDeclaration(boolean isStatic, BlockStmt block) {
-        this(Range.UNKNOWN, isStatic, block);
+        this(null, isStatic, block);
     }
 
     public InitializerDeclaration(Range range, boolean isStatic, BlockStmt block) {

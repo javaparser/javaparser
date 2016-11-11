@@ -23,7 +23,7 @@ public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration imp
     private Name name;
 
     public TypeImportOnDemandDeclaration() {
-        this(Range.UNKNOWN, new Name());
+        this(null, new Name());
     }
     
     public TypeImportOnDemandDeclaration(Range range, Name name) {

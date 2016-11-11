@@ -51,15 +51,15 @@ public final class VariableDeclarator extends Node implements
     private Expression init;
 
     public VariableDeclarator() {
-        this(Range.UNKNOWN, new VariableDeclaratorId(), null);
+        this(null, new VariableDeclaratorId(), null);
     }
 
     public VariableDeclarator(VariableDeclaratorId id) {
-        this(Range.UNKNOWN, id, null);
+        this(null, id, null);
     }
 
     public VariableDeclarator(String variableName) {
-        this(Range.UNKNOWN, new VariableDeclaratorId(variableName), null);
+        this(null, new VariableDeclaratorId(variableName), null);
     }
 
     /**
@@ -71,11 +71,11 @@ public final class VariableDeclarator extends Node implements
      *            already added.
      */
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
-        this(Range.UNKNOWN, id, init);
+        this(null, id, init);
     }
 
     public VariableDeclarator(String variableName, Expression init) {
-        this(Range.UNKNOWN, new VariableDeclaratorId(variableName), init);
+        this(null, new VariableDeclaratorId(variableName), init);
     }
 
     public VariableDeclarator(Range range, VariableDeclaratorId id, Expression init) {

@@ -40,7 +40,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type<
     private Type<?> type;
 
     public TypeExpr() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType());
+        this(null, new ClassOrInterfaceType());
     }
 
     public TypeExpr(Range range, Type<?> type) {

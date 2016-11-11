@@ -43,7 +43,7 @@ import static com.github.javaparser.ast.expr.NameExpr.*;
 public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> {
 
     public AnnotationDeclaration() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new SimpleName(),
@@ -51,7 +51,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     }
 
     public AnnotationDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new SimpleName(name),
@@ -60,7 +60,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
 
     public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
                                  NodeList<BodyDeclaration<?>> members) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 name,

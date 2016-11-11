@@ -50,7 +50,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public abstract class ImportDeclaration extends Node {
     public ImportDeclaration() {
-        this(Range.UNKNOWN);
+        this(null);
     }
 
     public ImportDeclaration(Range range) {
@@ -60,13 +60,12 @@ public abstract class ImportDeclaration extends Node {
     /**
      * Factory method for import declarations.
      *
-     * @param range      the range the import declaration covers. Range.UNKNOWN if not known.
+     * @param range      the range the import declaration covers. null if not known.
      * @param name       the qualified name of the import.
      * @param isStatic   whether the import is static.
      * @param isAsterisk whether the import is on demand.
      */
     public static ImportDeclaration create(Range range, Name name, boolean isStatic, boolean isAsterisk) {
-        assertNotNull(range);
         assertNotNull(name);
         if (isStatic) {
             if (isAsterisk) {

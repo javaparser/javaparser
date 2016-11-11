@@ -39,11 +39,11 @@ public final class ConditionalExpr extends Expression {
     private Expression elseExpr;
 
     public ConditionalExpr() {
-        this(Range.UNKNOWN, new BooleanLiteralExpr(), new StringLiteralExpr(), new StringLiteralExpr());
+        this(null, new BooleanLiteralExpr(), new StringLiteralExpr(), new StringLiteralExpr());
     }
 
     public ConditionalExpr(Expression condition, Expression thenExpr, Expression elseExpr) {
-        this(Range.UNKNOWN, condition, thenExpr, elseExpr);
+        this(null, condition, thenExpr, elseExpr);
     }
 
     public ConditionalExpr(Range range, Expression condition, Expression thenExpr, Expression elseExpr) {

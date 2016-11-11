@@ -46,11 +46,11 @@ public final class UnaryExpr extends Expression {
 	private Operator op;
 
 	public UnaryExpr() {
-        this(Range.UNKNOWN, new IntegerLiteralExpr(), Operator.postIncrement);
+        this(null, new IntegerLiteralExpr(), Operator.postIncrement);
 	}
 
 	public UnaryExpr(final Expression expr, final Operator op) {
-        this(Range.UNKNOWN, expr, op);
+        this(null, expr, op);
 	}
 
 	public UnaryExpr(final Range range, final Expression expr, final Operator op) {

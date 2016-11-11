@@ -30,7 +30,7 @@ import com.github.javaparser.ast.NodeList;
 public abstract class ReferenceType<T extends ReferenceType> extends Type<T> {
 
     public ReferenceType() {
-        this(Range.UNKNOWN);
+        this(null);
 	}
 
 	public ReferenceType(final Range range) {

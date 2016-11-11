@@ -34,11 +34,11 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     protected Name name;
 
     public AnnotationExpr() {
-        this(Range.UNKNOWN, new Name());
+        this(null, new Name());
     }
 
     public AnnotationExpr(Name name) {
-        this(Range.UNKNOWN, name);
+        this(null, name);
     }
     
     public AnnotationExpr(Range range, Name name) {

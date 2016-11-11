@@ -37,11 +37,11 @@ public final class ReturnStmt extends Statement {
 	private Expression expr;
 
 	public ReturnStmt() {
-        this(Range.UNKNOWN, null);
+        this(null, null);
 	}
 
 	public ReturnStmt(final Expression expr) {
-		this(Range.UNKNOWN, expr);
+		this(null, expr);
 	}
 
 	public ReturnStmt(Range range, final Expression expr) {
@@ -53,7 +53,7 @@ public final class ReturnStmt extends Statement {
      * Will create a NameExpr with the string param
      */
     public ReturnStmt(String expr) {
-        this(Range.UNKNOWN, new NameExpr(expr));
+        this(null, new NameExpr(expr));
     }
 
     @Override

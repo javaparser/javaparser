@@ -60,7 +60,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     private Expression defaultValue;
 
     public AnnotationMemberDeclaration() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
@@ -69,7 +69,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name, Expression defaultValue) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 type,
@@ -79,7 +79,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> type, SimpleName name,
                                        Expression defaultValue) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 type,

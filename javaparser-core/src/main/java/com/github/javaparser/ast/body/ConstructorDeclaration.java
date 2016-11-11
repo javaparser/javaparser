@@ -65,7 +65,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     private BlockStmt body;
 
     public ConstructorDeclaration() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new NodeList<>(),
@@ -76,7 +76,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -90,7 +90,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                                   NodeList<TypeParameter> typeParameters,
                                   SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_,
                                   BlockStmt block) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 typeParameters,

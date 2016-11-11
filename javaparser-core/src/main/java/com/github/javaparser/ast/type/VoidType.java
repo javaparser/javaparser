@@ -35,7 +35,7 @@ public final class VoidType extends Type<VoidType> implements NodeWithAnnotation
 	public static final VoidType VOID_TYPE = new VoidType();
 
 	public VoidType() {
-        this(Range.UNKNOWN);
+        this(null);
 	}
 
 	public VoidType(Range range) {

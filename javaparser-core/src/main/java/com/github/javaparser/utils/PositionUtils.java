@@ -21,11 +21,7 @@
  
 package com.github.javaparser.utils;
 
-import static java.lang.Integer.signum;
-
-import java.util.Collections;
-import java.util.List;
-
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -34,6 +30,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
+
+import java.util.Collections;
+import java.util.List;
+
+import static java.lang.Integer.signum;
 
 public final class PositionUtils {
 
@@ -75,9 +76,12 @@ public final class PositionUtils {
             }
         }
 
-        int signLine = signum( a.getBegin().line - b.getBegin().line );
+        Position aBegin = a.getRange() == null ? Position.UNKNOWN : a.getRange().begin;
+        Position bBegin = b.getRange() == null ? Position.UNKNOWN : b.getRange().begin;
+
+        int signLine = signum(aBegin.line - bBegin.line);
         if (signLine == 0) {
-            return signum(a.getBegin().column - b.getBegin().column);
+            return signum(aBegin.column - bBegin.column);
         } else {
             return signLine;
         }

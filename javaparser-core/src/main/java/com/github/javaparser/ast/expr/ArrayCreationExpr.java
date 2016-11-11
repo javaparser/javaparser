@@ -51,21 +51,21 @@ public final class ArrayCreationExpr extends Expression {
     private ArrayInitializerExpr initializer;
 
     public ArrayCreationExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
                 new ArrayInitializerExpr());
     }
 
     public ArrayCreationExpr(Type<?> elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
-        this(Range.UNKNOWN,
+        this(null,
                 elementType,
                 levels,
                 initializer);
     }
 
     public ArrayCreationExpr(Type<?> elementType) {
-        this(Range.UNKNOWN,
+        this(null,
                 elementType,
                 new NodeList<>(),
                 new ArrayInitializerExpr());

@@ -50,7 +50,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     private NodeList<BodyDeclaration<?>> classBody;
 
     public EnumConstantDeclaration() {
-        this(Range.UNKNOWN, 
+        this(null, 
                 new NodeList<>(), 
                 new SimpleName(),
                 new NodeList<>(),
@@ -58,7 +58,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     public EnumConstantDeclaration(String name) {
-        this(Range.UNKNOWN, 
+        this(null, 
                 new NodeList<>(),
                 new SimpleName(name),
                 new NodeList<>(),
@@ -67,7 +67,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> args,
                                    NodeList<BodyDeclaration<?>> classBody) {
-        this(Range.UNKNOWN, annotations, name, args, classBody);
+        this(null, annotations, name, args, classBody);
     }
 
     public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> args,

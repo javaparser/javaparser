@@ -11,7 +11,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public class EmptyImportDeclaration extends ImportDeclaration {
     
     public EmptyImportDeclaration() {
-        this(Range.UNKNOWN);
+        this(null);
     }
 
     public EmptyImportDeclaration(Range range) {

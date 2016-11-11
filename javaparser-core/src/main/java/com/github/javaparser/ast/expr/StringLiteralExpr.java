@@ -37,11 +37,11 @@ public class StringLiteralExpr extends LiteralExpr {
 	protected String value;
 
 	public StringLiteralExpr() {
-        this(Range.UNKNOWN, "empty");
+        this(null, "empty");
 	}
 
 	public StringLiteralExpr(final String value) {
-		this(Range.UNKNOWN, value);
+		this(null, value);
 	}
 
 	/**
