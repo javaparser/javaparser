@@ -21,28 +21,25 @@
 
 package com.github.javaparser.ast;
 
-import static java.util.Collections.unmodifiableList;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.IdentityHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.observing.ListChangeType;
+import com.github.javaparser.ast.observing.Observable;
+import com.github.javaparser.ast.observing.Observer;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+
+import java.lang.reflect.Field;
+import java.util.*;
+
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -54,7 +51,7 @@ import com.github.javaparser.printer.PrettyPrinterConfiguration;
  * @author Julio Vilmar Gesser
  */
 // Use <Node> to prevent Node from becoming generic.
-public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable {
+public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, Observable {
     /**
      * This can be used to sort nodes on position.
      */
@@ -73,6 +70,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     private IdentityHashMap<UserDataKey<?>, Object> userData = null;
 
     private Comment comment;
+
+    private List<com.github.javaparser.ast.observing.Observer> observers = new ArrayList<>();
 
     public Node(Range range) {
         this.range = range;
@@ -414,5 +413,23 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         if (list != null) {
             list.setParentNode(getParentNodeForChildren());
         }
+    }
+
+    protected <P> void notifyPropertyChange(String propertyName, P oldValue, P newValue) {
+        this.observers.forEach(o -> o.propertyChange(this, propertyName, oldValue, newValue));
+    }
+
+    protected <P> void notifyListChange(String listName, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        this.observers.forEach(o -> o.listChange(this, listName, type, index, nodeAddedOrRemoved));
+    }
+
+    @Override
+    public void unregister(Observer observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void register(Observer observer) {
+        this.observers.add(observer);
     }
 }
