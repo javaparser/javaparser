@@ -120,6 +120,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
      * @return this, the ClassOrInterfaceType
      */
     public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
+        notifyPropertyChange("typeArguments", this.typeArguments, typeArguments);
         this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
@@ -138,6 +139,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
      */
     @Override
     public ClassOrInterfaceType setTypeArguments(final NodeList<Type<?>> types) {
+        notifyPropertyChange("typeArguments", this.typeArguments, typeArguments);
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

@@ -116,6 +116,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 	}
 
 	public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
+        notifyPropertyChange("typeBound", this.typeBound, typeBound);
 		this.typeBound = assertNotNull(typeBound);
 		setAsParentNodeOf(typeBound);
 		return this;
@@ -128,6 +129,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
 	@Override
     public TypeParameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange("annotations", this.annotations, annotations);
 		this.annotations = assertNotNull(annotations);
 	    setAsParentNodeOf(this.annotations);
 		return this;

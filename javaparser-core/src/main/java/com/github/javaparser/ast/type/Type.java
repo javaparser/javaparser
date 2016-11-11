@@ -45,6 +45,7 @@ public abstract class Type<T extends Type> extends Node {
     }
 
     public T setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange("annotations", this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(annotations);
         return (T) this;

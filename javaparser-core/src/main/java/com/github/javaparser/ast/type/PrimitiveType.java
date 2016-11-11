@@ -110,6 +110,7 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 	}
 
 	public PrimitiveType setType(final Primitive type) {
+		notifyPropertyChange("type", this.type, type);
 		this.type = type;
 		return this;
 	}
