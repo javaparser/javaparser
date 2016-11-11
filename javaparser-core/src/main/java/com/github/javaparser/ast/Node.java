@@ -431,6 +431,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         this.observers.add(observer);
     }
 
+    /**
+     * Register the observer for the current node and all the contained node and nodelists, recursively.
+     */
     public void registerForSubtree(AstObserver observer) {
         register(observer);
         this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
@@ -442,6 +445,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return this.observers.contains(observer);
     }
 
+    /**
+     * The list of NodeLists owned by this node.
+     */
     public List<NodeList<?>> getNodeLists() {
         return Collections.emptyList();
     }

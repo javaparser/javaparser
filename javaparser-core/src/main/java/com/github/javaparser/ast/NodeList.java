@@ -2,7 +2,6 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.observing.AstObserver;
-import com.github.javaparser.ast.observing.ListChangeType;
 import com.github.javaparser.ast.observing.Observable;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -408,11 +407,11 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     private void notifyElementAdded(int index, Node nodeAddedOrRemoved) {
-        this.observers.forEach(o -> o.listChange(this, ListChangeType.ADDITION, index, nodeAddedOrRemoved));
+        this.observers.forEach(o -> o.listChange(this, AstObserver.ListChangeType.ADDITION, index, nodeAddedOrRemoved));
     }
 
     private void notifyElementRemoved(int index, Node nodeAddedOrRemoved) {
-        this.observers.forEach(o -> o.listChange(this, ListChangeType.REMOVAL, index, nodeAddedOrRemoved));
+        this.observers.forEach(o -> o.listChange(this, AstObserver.ListChangeType.REMOVAL, index, nodeAddedOrRemoved));
     }
 
     @Override
