@@ -1,6 +1,5 @@
 package com.github.javaparser.ast;
 
-<<<<<<< e35fb78d58750176ee0175f27ba1b2e9c9da61d6
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,12 +14,9 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-=======
->>>>>>> observing: create separate observers for node and nodelist
 import com.github.javaparser.HasParentNode;
+import com.github.javaparser.ast.observing.AstObserver;
 import com.github.javaparser.ast.observing.ListChangeType;
-import com.github.javaparser.ast.observing.ListObserver;
-import com.github.javaparser.ast.observing.Observable;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -33,16 +29,12 @@ import java.util.stream.Stream;
  *
  * @param <N> the type of nodes contained.
  */
-<<<<<<< e35fb78d58750176ee0175f27ba1b2e9c9da61d6
-public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable {
-=======
-public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable<ListObserver> {
->>>>>>> observing: create separate observers for node and nodelist
+public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable<ListObserver> {
     private List<N> innerList = new ArrayList<>(0);
 
     private Node parentNode;
 
-    private List<ListObserver> observers = new ArrayList<>();
+    private List<AstObserver> observers = new ArrayList<>();
 
     public NodeList() {
         this(null);
@@ -52,13 +44,9 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         setParentNode(parent);
     }
 
-<<<<<<< e35fb78d58750176ee0175f27ba1b2e9c9da61d6
     @Override
     public boolean add(N node) {
-=======
-    public NodeList<N> add(N node) {
         notifyElementAdded(innerList.size(), node);
->>>>>>> observing: create separate observers for node and nodelist
         own(node);
         return innerList.add(node);
     }
@@ -132,19 +120,13 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         return innerList.set(index, element);
     }
 
-<<<<<<< e35fb78d58750176ee0175f27ba1b2e9c9da61d6
     @Override
     public N remove(int index) {
+        notifyElementRemoved(index, innerList.get(index));
         N remove = innerList.remove(index);
         if (remove != null)
             remove.setParentNode(null);
         return remove;
-=======
-    public NodeList<N> remove(int index) {
-        notifyElementRemoved(index, innerList.get(index));
-        innerList.remove(index);
-        return this;
->>>>>>> observing: create separate observers for node and nodelist
     }
 
     @Override
@@ -163,13 +145,9 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         }
     }
 
-<<<<<<< e35fb78d58750176ee0175f27ba1b2e9c9da61d6
     @Override
     public void add(int index, N node) {
-=======
-    public NodeList<N> add(int index, N node) {
         notifyElementAdded(index, node);
->>>>>>> observing: create separate observers for node and nodelist
         own(node);
         innerList.add(index, node);
     }
@@ -207,7 +185,6 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
         v.visit(this, arg);
     }
 
-<<<<<<< e35fb78d58750176ee0175f27ba1b2e9c9da61d6
     /**
      * @param action
      * @see java.lang.Iterable#forEach(java.util.function.Consumer)
@@ -438,7 +415,7 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
     @Override
     public Spliterator<N> spliterator() {
         return innerList.spliterator();
-=======
+
     private void notifyElementAdded(int index, Node nodeAddedOrRemoved) {
         this.observers.forEach(o -> o.listChange(this, ListChangeType.ADDITION, index, nodeAddedOrRemoved));
     }
@@ -448,14 +425,18 @@ public class NodeList<N extends Node> implements Iterable<N>, HasParentNode<Node
     }
 
     @Override
-    public void unregister(ListObserver observer) {
+    public void unregister(AstObserver observer) {
         this.observers.remove(observer);
     }
 
     @Override
-    public void register(ListObserver observer) {
+    public void register(AstObserver observer) {
         this.observers.add(observer);
->>>>>>> observing: create separate observers for node and nodelist
+    }
+
+    @Override
+    public boolean isRegistered(AstObserver observer) {
+        return this.observers.contains(observer);
     }
 
 }

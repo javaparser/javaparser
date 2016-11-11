@@ -1,14 +1,15 @@
 package com.github.javaparser;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observing.Observable;
+
 import java.util.List;
 import java.util.Optional;
-
-import com.github.javaparser.ast.Node;
 
 /**
  * An object that has a parent node.
  */
-public interface HasParentNode<T> {
+public interface HasParentNode<T> extends Observable {
 
     /**
      * Return the parent node or null, if no parent is set.

@@ -27,8 +27,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.observing.NodeObserver;
-import com.github.javaparser.ast.observing.Observable;
+import com.github.javaparser.ast.observing.AstObserver;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -50,7 +49,7 @@ import static java.util.Collections.unmodifiableList;
  * @author Julio Vilmar Gesser
  */
 // Use <Node> to prevent Node from becoming generic.
-public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, Observable<NodeObserver> {
+public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable {
     /**
      * This can be used to sort nodes on position.
      */
@@ -70,7 +69,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     private Comment comment;
 
-    private List<NodeObserver> observers = new ArrayList<>();
+    private List<AstObserver> observers = new ArrayList<>();
 
     public Node(Range range) {
         this.range = range;
@@ -269,6 +268,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     @Override
     public Node setParentNode(Node parentNode) {
+        observers.forEach(o -> o.parentChange(this, this.parentNode, parentNode));
+
         // remove from old parent, if any
         if (this.parentNode != null) {
             this.parentNode.childrenNodes.remove(this);
@@ -419,12 +420,22 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     @Override
-    public void unregister(NodeObserver observer) {
+    public void unregister(AstObserver observer) {
         this.observers.remove(observer);
     }
 
     @Override
-    public void register(NodeObserver observer) {
+    public void register(AstObserver observer) {
         this.observers.add(observer);
+    }
+
+    public void registerForSubtree(AstObserver observer) {
+        register(observer);
+        this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
+    }
+
+    @Override
+    public boolean isRegistered(AstObserver observer) {
+        return this.observers.contains(observer);
     }
 }
