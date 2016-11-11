@@ -83,8 +83,8 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
     }
 
     public FieldAccessExpr setFieldExpr(SimpleName inner) {
-        notifyPropertyChange("field", this.field, field);
-        this.field = assertNotNull(field);
+        notifyPropertyChange("field", this.field, inner);
+        this.field = assertNotNull(inner);
 		setAsParentNodeOf(this.field);
         return this;
     }
