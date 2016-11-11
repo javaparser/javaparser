@@ -6,14 +6,14 @@ import com.github.javaparser.ast.NodeList;
 public abstract class PropagatingAstObserver implements AstObserver {
 
     @Override
-    public void propertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue) {
+    final public void propertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue) {
         considerRemoving(oldValue);
         considerAdding(newValue);
         concretePropertyChange(observedNode, propertyName, oldValue, newValue);
     }
 
     @Override
-    public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+    final public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
         if (type == ListChangeType.REMOVAL) {
             considerRemoving(nodeAddedOrRemoved);
         } else if (type == ListChangeType.ADDITION) {
@@ -22,11 +22,15 @@ public abstract class PropagatingAstObserver implements AstObserver {
         concreteListChange(observedNode, type, index, nodeAddedOrRemoved);
     }
 
-    protected abstract void concretePropertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue);
+    protected void concretePropertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue) {
+        // do nothing
+    }
 
-    protected abstract void concreteListChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved);
+    protected void concreteListChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        // do nothing
+    }
 
-    private void considerRemoving(Object element) {
+    final private void considerRemoving(Object element) {
         if (element instanceof Observable) {
             if (((Observable) element).isRegistered(this)) {
                 ((Observable) element).unregister(this);
@@ -34,7 +38,7 @@ public abstract class PropagatingAstObserver implements AstObserver {
         }
     }
 
-    private void considerAdding(Object element) {
+    final private void considerAdding(Object element) {
         if (element instanceof Observable) {
             ((Observable) element).register(this);
         }
