@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
 public abstract class AstObserverAdapter implements AstObserver {
+
     @Override
     public void propertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue) {
         // do nothing

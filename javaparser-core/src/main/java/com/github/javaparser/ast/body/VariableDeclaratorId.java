@@ -82,6 +82,7 @@ public final class VariableDeclaratorId extends Node implements NodeWithSimpleNa
 
     @Override
     public VariableDeclaratorId setName(SimpleName name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;

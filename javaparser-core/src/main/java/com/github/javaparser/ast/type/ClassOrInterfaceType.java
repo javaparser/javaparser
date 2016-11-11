@@ -108,6 +108,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
 
     @Override
     public ClassOrInterfaceType setName(final SimpleName name) {
+        notifyPropertyChange("name", this.name, name);
     	this.name = assertNotNull(name);
         return this;
     }

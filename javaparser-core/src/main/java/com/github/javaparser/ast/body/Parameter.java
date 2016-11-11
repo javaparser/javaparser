@@ -21,11 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.EnumSet;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
@@ -33,17 +28,18 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
+
+import java.util.EnumSet;
+
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser

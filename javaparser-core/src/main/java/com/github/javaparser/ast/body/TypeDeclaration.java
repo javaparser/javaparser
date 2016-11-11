@@ -27,7 +27,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
@@ -133,6 +132,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
 
 	@Override
     public T setName(SimpleName name) {
+		notifyPropertyChange("name", this.name, name);
 		this.name = assertNotNull(name);
 		setAsParentNodeOf(name);
         return (T) this;

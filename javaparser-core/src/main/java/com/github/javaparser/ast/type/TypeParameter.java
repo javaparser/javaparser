@@ -109,6 +109,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
     @Override
     public TypeParameter setName(final SimpleName name) {
+	    notifyPropertyChange("name", this.name, name);
 		this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;

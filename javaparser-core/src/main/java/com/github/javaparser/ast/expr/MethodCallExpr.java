@@ -115,6 +115,7 @@ public final class MethodCallExpr extends Expression implements
 
     @Override
     public MethodCallExpr setName(final SimpleName name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = name;
         setAsParentNodeOf(this.name);
         return this;
