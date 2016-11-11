@@ -42,6 +42,7 @@ public class SingleStaticImportDeclaration extends NonEmptyImportDeclaration {
     }
 
     public SingleStaticImportDeclaration setType(ClassOrInterfaceType type) {
+        notifyPropertyChange("type", this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(type);
         return this;
@@ -52,6 +53,7 @@ public class SingleStaticImportDeclaration extends NonEmptyImportDeclaration {
     }
 
     public SingleStaticImportDeclaration setStaticMember(String staticMember) {
+        notifyPropertyChange("staticMember", this.staticMember, staticMember);
         this.staticMember = assertNotNull(staticMember);
         return this;
     }

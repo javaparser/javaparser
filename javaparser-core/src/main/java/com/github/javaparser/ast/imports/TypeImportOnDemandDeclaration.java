@@ -2,12 +2,10 @@ package com.github.javaparser.ast.imports;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -60,6 +58,7 @@ public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration imp
      */
     @Override
     public TypeImportOnDemandDeclaration setName(Name name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;

@@ -38,6 +38,7 @@ public class SingleTypeImportDeclaration extends NonEmptyImportDeclaration {
     }
 
     public SingleTypeImportDeclaration setType(ClassOrInterfaceType type) {
+        notifyPropertyChange("type", this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(type);
         return this;

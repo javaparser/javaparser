@@ -38,6 +38,7 @@ public class StaticImportOnDemandDeclaration extends NonEmptyImportDeclaration {
     }
 
     public StaticImportOnDemandDeclaration setType(ClassOrInterfaceType type) {
+        notifyPropertyChange("type", this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(type);
         return this;
