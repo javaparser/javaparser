@@ -160,6 +160,7 @@ public final class Parameter extends Node implements
     }
 
     public Parameter setVarArgs(boolean isVarArgs) {
+        notifyPropertyChange("varArgs", this.isVarArgs, isVarArgs);
         this.isVarArgs = isVarArgs;
         return this;
     }
@@ -186,7 +187,9 @@ public final class Parameter extends Node implements
         if (id != null) {
             id.setName(name);
         } else {
-            id = new VariableDeclaratorId(name);
+            VariableDeclaratorId newId = new VariableDeclaratorId(name);
+            notifyPropertyChange("id", this.id, newId);
+            id = newId;
         }
         return this;
     }
@@ -208,6 +211,7 @@ public final class Parameter extends Node implements
      */
     @Override
     public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange("annotations", this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
@@ -220,6 +224,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setModifiers(EnumSet<Modifier> modifiers) {
+        notifyPropertyChange("modifiers", this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
@@ -231,6 +236,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setElementType(final Type<?> elementType) {
+        notifyPropertyChange("modifiers", this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
@@ -243,6 +249,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        notifyPropertyChange("arrayBracketPairsAfterType", this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
         this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;

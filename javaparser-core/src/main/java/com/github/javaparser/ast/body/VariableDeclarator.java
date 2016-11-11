@@ -116,6 +116,7 @@ public final class VariableDeclarator extends Node implements
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInit(Expression init) {
+        notifyPropertyChange("init", this.init, init);
         this.init = init;
         setAsParentNodeOf(this.init);
         return this;
@@ -128,6 +129,7 @@ public final class VariableDeclarator extends Node implements
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInit(String init) {
+        notifyPropertyChange("init", this.init, init);
         this.init = new NameExpr(assertNotNull(init));
         setAsParentNodeOf(this.init);
         return this;

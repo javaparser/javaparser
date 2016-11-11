@@ -125,6 +125,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @param range the range of characters in the source code that this node covers.
      */
     public Node setRange(Range range) {
+        notifyPropertyChange("range", this.range, range);
         this.range = range;
         return this;
     }
@@ -138,6 +139,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
+        notifyPropertyChange("comment", this.comment, comment);
         if (this.comment != null) {
             this.comment.setCommentedNode(null);
         }

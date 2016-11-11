@@ -116,6 +116,7 @@ public final class PackageDeclaration extends Node implements
      *            the annotations to set
      */
     public PackageDeclaration setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange("annotations", this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
@@ -129,6 +130,7 @@ public final class PackageDeclaration extends Node implements
      */
     @Override
     public PackageDeclaration setName(Name name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = name;
         setAsParentNodeOf(this.name);
         return this;

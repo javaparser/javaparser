@@ -96,6 +96,7 @@ public final class VariableDeclaratorId extends Node implements NodeWithSimpleNa
     }
 
     public VariableDeclaratorId setArrayBracketPairsAfterId(NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
+        notifyPropertyChange("arrayBracketPairsAfterId", this.arrayBracketPairsAfterId, arrayBracketPairsAfterId);
         this.arrayBracketPairsAfterId = assertNotNull(arrayBracketPairsAfterId);
         setAsParentNodeOf(arrayBracketPairsAfterId);
         return this;

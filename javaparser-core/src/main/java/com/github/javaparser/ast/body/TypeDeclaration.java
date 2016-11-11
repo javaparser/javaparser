@@ -120,6 +120,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     @SuppressWarnings("unchecked")
     @Override
     public T setMembers(NodeList<BodyDeclaration<?>> members) {
+        notifyPropertyChange("members", this.members, members);
 		this.members = assertNotNull(members);
 		setAsParentNodeOf(this.members);
         return (T) this;
@@ -128,6 +129,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     @SuppressWarnings("unchecked")
     @Override
     public T setModifiers(EnumSet<Modifier> modifiers) {
+        notifyPropertyChange("modifiers", this.modifiers, modifiers);
 		this.modifiers = assertNotNull(modifiers);
         return (T) this;
 	}

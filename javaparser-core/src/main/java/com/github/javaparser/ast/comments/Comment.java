@@ -21,10 +21,10 @@
  
 package com.github.javaparser.ast.comments;
 
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+
+import java.util.Optional;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -60,6 +60,7 @@ public abstract class Comment extends Node {
      *            the text of the comment to set
      */
     public Comment setContent(String content) {
+        notifyPropertyChange("content", this.content, content);
         this.content = content;
         return this;
     }
@@ -90,6 +91,7 @@ public abstract class Comment extends Node {
      */
     public Comment setCommentedNode(Node commentedNode)
     {
+        notifyPropertyChange("commentedNode", this.commentedNode, commentedNode);
         if (commentedNode==null) {
             this.commentedNode = null;
             return this;

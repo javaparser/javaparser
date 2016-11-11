@@ -159,6 +159,7 @@ public final class CompilationUnit extends Node {
      *            the list of imports
      */
     public CompilationUnit setImports(NodeList<ImportDeclaration> imports) {
+        notifyPropertyChange("imports", this.imports, imports);
         this.imports = assertNotNull(imports);
         setAsParentNodeOf(this.imports);
         return this;
@@ -172,6 +173,7 @@ public final class CompilationUnit extends Node {
      *            package
      */
     public CompilationUnit setPackage(PackageDeclaration pakage) {
+        notifyPropertyChange("package", this.pakage, pakage);
         this.pakage = pakage;
         setAsParentNodeOf(this.pakage);
         return this;
@@ -184,6 +186,7 @@ public final class CompilationUnit extends Node {
      *            the lis of types
      */
     public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
+        notifyPropertyChange("types", this.types, types);
         this.types = assertNotNull(types);
         setAsParentNodeOf(this.types);
         return this;

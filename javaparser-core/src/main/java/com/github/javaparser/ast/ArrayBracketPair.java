@@ -44,6 +44,7 @@ public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayB
     }
 
     public ArrayBracketPair setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange("annotations", this.annotations, annotations);
         setAsParentNodeOf(annotations);
         this.annotations = assertNotNull(annotations);
         return this;
