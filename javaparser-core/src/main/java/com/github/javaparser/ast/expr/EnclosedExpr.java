@@ -21,11 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
 
 /**
  * @author Julio Vilmar Gesser
@@ -66,6 +66,7 @@ public final class EnclosedExpr extends Expression {
      * @return this, the EnclosedExpr
      */
 	public EnclosedExpr setInner(final Expression inner) {
+		notifyPropertyChange("inner", this.inner, inner);
 		this.inner = inner;
 		setAsParentNodeOf(this.inner);
 		return this;

@@ -25,7 +25,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -72,6 +71,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
 	}
 
 	public InstanceOfExpr setExpr(final Expression expr) {
+		notifyPropertyChange("type", this.type, type);
 		this.expr = assertNotNull(expr);
 		setAsParentNodeOf(this.expr);
 		return this;
@@ -79,6 +79,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
 
 	@Override
     public InstanceOfExpr setType(final ReferenceType<?> type) {
+		notifyPropertyChange("type", this.type, type);
 		this.type = assertNotNull(type);
 		setAsParentNodeOf(this.type);
         return this;

@@ -60,6 +60,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     }
 
     public BooleanLiteralExpr setValue(boolean value) {
+        notifyPropertyChange("value", this.value, value);
         this.value = value;
         return this;
     }

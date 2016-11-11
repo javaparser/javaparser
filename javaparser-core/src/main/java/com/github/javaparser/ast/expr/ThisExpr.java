@@ -59,6 +59,7 @@ public final class ThisExpr extends Expression {
 	}
 
 	public ThisExpr setClassExpr(final Expression classExpr) {
+		notifyPropertyChange("classExpr", this.classExpr, classExpr);
 		this.classExpr = classExpr;
 		setAsParentNodeOf(this.classExpr);
 		return this;

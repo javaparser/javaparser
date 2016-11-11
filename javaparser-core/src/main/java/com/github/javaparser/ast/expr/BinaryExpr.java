@@ -96,17 +96,20 @@ public final class BinaryExpr extends Expression {
     }
 
     public BinaryExpr setLeft(Expression left) {
+        notifyPropertyChange("left", this.left, left);
         this.left = left;
 		setAsParentNodeOf(this.left);
         return this;
     }
 
     public BinaryExpr setOperator(Operator op) {
+        notifyPropertyChange("op", this.op, op);
         this.op = op;
         return this;
     }
 
     public BinaryExpr setRight(Expression right) {
+        notifyPropertyChange("right", this.right, right);
         this.right = right;
 		setAsParentNodeOf(this.right);
         return this;

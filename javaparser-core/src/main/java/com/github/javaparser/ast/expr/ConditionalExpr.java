@@ -76,18 +76,21 @@ public final class ConditionalExpr extends Expression {
     }
 
     public ConditionalExpr setCondition(Expression condition) {
+        notifyPropertyChange("condition", this.condition, condition);
         this.condition = assertNotNull(condition);
 		setAsParentNodeOf(this.condition);
         return this;
     }
 
     public ConditionalExpr setElseExpr(Expression elseExpr) {
+        notifyPropertyChange("elseExpr", this.elseExpr, elseExpr);
         this.elseExpr = assertNotNull(elseExpr);
 		setAsParentNodeOf(this.elseExpr);
         return this;
     }
 
     public ConditionalExpr setThenExpr(Expression thenExpr) {
+        notifyPropertyChange("thenExpr", this.thenExpr, thenExpr);
         this.thenExpr = assertNotNull(thenExpr);
 		setAsParentNodeOf(this.thenExpr);
         return this;

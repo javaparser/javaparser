@@ -82,6 +82,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
 	}
 
 	public MemberValuePair setValue(final Expression value) {
+        notifyPropertyChange("value", this.value, value);
 		this.value = assertNotNull(value);
 		setAsParentNodeOf(this.value);
 		return this;

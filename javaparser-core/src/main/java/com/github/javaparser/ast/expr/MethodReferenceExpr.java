@@ -21,14 +21,14 @@
  
 package com.github.javaparser.ast.expr;
 
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -79,6 +79,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     public MethodReferenceExpr setScope(Expression scope) {
+        notifyPropertyChange("scope", this.scope, scope);
         this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
@@ -96,8 +97,9 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
      * @return this, the MethodReferenceExpr
      */
     @Override
-    public MethodReferenceExpr setTypeArguments(final NodeList<Type<?>> types) {
-        this.typeArguments = types;
+    public MethodReferenceExpr setTypeArguments(final NodeList<Type<?>> typeArguments) {
+        notifyPropertyChange("type", this.typeArguments, typeArguments);
+        this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);
         return this;
     }
@@ -107,6 +109,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     public MethodReferenceExpr setIdentifier(String identifier) {
+        notifyPropertyChange("identifier", this.identifier, identifier);
         this.identifier = identifier;
         return this;
     }

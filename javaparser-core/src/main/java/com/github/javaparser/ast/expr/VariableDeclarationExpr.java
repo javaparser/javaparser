@@ -21,15 +21,6 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
@@ -43,6 +34,13 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -179,6 +177,7 @@ public final class VariableDeclarationExpr extends Expression implements
 
     @Override
     public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange("annotations", this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
@@ -186,12 +185,14 @@ public final class VariableDeclarationExpr extends Expression implements
 
     @Override
     public VariableDeclarationExpr setModifiers(final EnumSet<Modifier> modifiers) {
+        notifyPropertyChange("modifiers", this.modifiers, modifiers);
         this.modifiers = modifiers;
         return this;
     }
 
     @Override
     public VariableDeclarationExpr setElementType(final Type elementType) {
+        notifyPropertyChange("elementType", this.elementType, elementType);
         this.elementType = elementType;
         setAsParentNodeOf(this.elementType);
         return this;
@@ -199,6 +200,7 @@ public final class VariableDeclarationExpr extends Expression implements
 
     @Override
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
+        notifyPropertyChange("variables", this.variables, variables);
         this.variables = variables;
         setAsParentNodeOf(this.variables);
         return this;
@@ -210,6 +212,7 @@ public final class VariableDeclarationExpr extends Expression implements
 
     @Override
     public VariableDeclarationExpr setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        notifyPropertyChange("arrayBracketPairsAfterType", this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
         this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;

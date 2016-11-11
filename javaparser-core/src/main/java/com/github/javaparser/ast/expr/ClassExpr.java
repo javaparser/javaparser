@@ -70,6 +70,7 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
 
     @Override
     public ClassExpr setType(Type type) {
+        notifyPropertyChange("type", this.type, type);
         this.type = type;
 		setAsParentNodeOf(this.type);
         return this;

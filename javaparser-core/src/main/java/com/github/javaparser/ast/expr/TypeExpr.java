@@ -65,6 +65,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type<
 
     @Override
     public TypeExpr setType(Type<?> type) {
+        notifyPropertyChange("type", this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(this.type);
         return this;

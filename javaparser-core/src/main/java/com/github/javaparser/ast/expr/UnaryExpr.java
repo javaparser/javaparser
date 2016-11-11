@@ -76,12 +76,14 @@ public final class UnaryExpr extends Expression {
 	}
 
 	public UnaryExpr setExpr(final Expression expr) {
+		notifyPropertyChange("expr", this.expr, expr);
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;
 	}
 
 	public UnaryExpr setOperator(final Operator op) {
+		notifyPropertyChange("op", this.op, op);
 		this.op = op;
 		return this;
 	}

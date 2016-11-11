@@ -51,6 +51,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     }
 
     public AnnotationExpr setName(Name name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;

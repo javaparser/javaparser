@@ -94,12 +94,14 @@ public final class AssignExpr extends Expression {
     }
 
     public AssignExpr setTarget(Expression target) {
+        notifyPropertyChange("target", this.target, target);
         this.target = target;
 		setAsParentNodeOf(this.target);
         return this;
     }
 
     public AssignExpr setValue(Expression value) {
+        notifyPropertyChange("value", this.value, value);
         this.value = value;
 		setAsParentNodeOf(this.value);
         return this;

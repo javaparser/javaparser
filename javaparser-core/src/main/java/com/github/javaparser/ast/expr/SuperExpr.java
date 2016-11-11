@@ -21,11 +21,11 @@
  
 package com.github.javaparser.ast.expr;
 
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
 
 /**
  * @author Julio Vilmar Gesser
@@ -66,6 +66,7 @@ public final class SuperExpr extends Expression {
      * @return this, the SuperExpr
      */
 	public SuperExpr setClassExpr(final Expression classExpr) {
+		notifyPropertyChange("classExpr", this.classExpr, classExpr);
 		this.classExpr = classExpr;
 		setAsParentNodeOf(this.classExpr);
 		return this;

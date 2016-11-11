@@ -43,6 +43,7 @@ public class SimpleName extends Node {
     }
 
     public SimpleName setId(final String id) {
+        notifyPropertyChange("id", this.id, id);
         this.id = assertNotNull(id);
         return this;
     }

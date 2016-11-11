@@ -58,6 +58,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 	}
 
 	public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
+		notifyPropertyChange("memberValue", this.memberValue, memberValue);
 		this.memberValue = memberValue;
 		setAsParentNodeOf(this.memberValue);
 		return this;

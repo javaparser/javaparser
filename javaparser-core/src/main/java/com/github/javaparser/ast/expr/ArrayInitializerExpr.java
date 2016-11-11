@@ -63,6 +63,7 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     public ArrayInitializerExpr setValues(NodeList<Expression> values) {
+        notifyPropertyChange("values", this.values, values);
         this.values = assertNotNull(values);
 		setAsParentNodeOf(this.values);
         return this;

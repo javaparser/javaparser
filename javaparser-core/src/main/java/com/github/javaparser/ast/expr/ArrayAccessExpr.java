@@ -69,12 +69,14 @@ public final class ArrayAccessExpr extends Expression {
     }
 
     public ArrayAccessExpr setIndex(Expression index) {
+        notifyPropertyChange("index", this.index, index);
         this.index = assertNotNull(index);
 		setAsParentNodeOf(this.index);
         return this;
     }
 
     public ArrayAccessExpr setName(Expression name) {
+        notifyPropertyChange("name", this.name, name);
         this.name = assertNotNull(name);
 		setAsParentNodeOf(this.name);
         return this;

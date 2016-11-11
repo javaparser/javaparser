@@ -78,6 +78,7 @@ public class Name extends Node {
     }
 
     public Name setId(final String id) {
+        notifyPropertyChange("id", this.id, id);
         this.id = assertNotNull(id);
         return this;
     }
@@ -103,6 +104,7 @@ public class Name extends Node {
     }
 
     public Name setQualifier(final Name qualifier) {
+        notifyPropertyChange("qualifier", this.qualifier, qualifier);
         this.qualifier = qualifier;
         setAsParentNodeOf(qualifier);
         return this;
