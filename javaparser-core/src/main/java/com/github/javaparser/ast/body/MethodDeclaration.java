@@ -30,6 +30,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
@@ -245,7 +246,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
      */
     @Override
     public MethodDeclaration setBody(final BlockStmt body) {
-        notifyPropertyChange("body", this.body, body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         this.body = body;
         setAsParentNodeOf(this.body);
         return this;
@@ -253,14 +254,14 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     @Override
     public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
-        notifyPropertyChange("modifiers", this.modifiers, modifiers);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
     public MethodDeclaration setName(final SimpleName name) {
-        notifyPropertyChange("name", this.name, name);
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;
@@ -268,7 +269,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     @Override
     public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
-        notifyPropertyChange("parameters", this.parameters, parameters);
+        notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
         this.parameters = assertNotNull(parameters);
         setAsParentNodeOf(this.parameters);
         return this;
@@ -276,7 +277,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     @Override
     public MethodDeclaration setThrows(final NodeList<ReferenceType<?>> throws_) {
-        notifyPropertyChange("throws", this.throws_, throws_);
+        notifyPropertyChange(ObservableProperty.THROWS, this.throws_, throws_);
         this.throws_ = assertNotNull(throws_);
         setAsParentNodeOf(this.throws_);
         return this;
@@ -293,7 +294,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     @Override
     public MethodDeclaration setElementType(final Type<?> elementType) {
-        notifyPropertyChange("elementType", this.elementType, elementType);
+        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
@@ -301,7 +302,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     @Override
     public MethodDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
-        notifyPropertyChange("typeParameters", this.typeParameters, typeParameters);
+        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(typeParameters);
         return this;

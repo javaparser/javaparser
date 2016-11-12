@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -70,7 +71,7 @@ public final class BreakStmt extends Statement {
      * @return this, the BreakStmt
      */
     public BreakStmt setId(final String id) {
-        notifyPropertyChange("id", this.id, id);
+        notifyPropertyChange(ObservableProperty.ID, this.id, id);
         this.id = assertNotNull(id);
         return this;
     }

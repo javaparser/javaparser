@@ -26,6 +26,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -109,14 +110,14 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
     @Override
     public TypeParameter setName(final SimpleName name) {
-	    notifyPropertyChange("name", this.name, name);
+	    notifyPropertyChange(ObservableProperty.NAME, this.name, name);
 		this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;
 	}
 
 	public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
-        notifyPropertyChange("typeBound", this.typeBound, typeBound);
+        notifyPropertyChange(ObservableProperty.TYPE_BOUND, this.typeBound, typeBound);
 		this.typeBound = assertNotNull(typeBound);
 		setAsParentNodeOf(typeBound);
 		return this;
@@ -129,7 +130,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
 	@Override
     public TypeParameter setAnnotations(NodeList<AnnotationExpr> annotations) {
-        notifyPropertyChange("annotations", this.annotations, annotations);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
 		this.annotations = assertNotNull(annotations);
 	    setAsParentNodeOf(this.annotations);
 		return this;

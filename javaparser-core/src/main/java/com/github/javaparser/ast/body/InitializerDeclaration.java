@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -74,14 +75,14 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     public InitializerDeclaration setBlock(BlockStmt block) {
-        notifyPropertyChange("block", this.block, block);
+        notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
         this.block = assertNotNull(block);
 		setAsParentNodeOf(this.block);
         return this;
     }
 
     public InitializerDeclaration setStatic(boolean isStatic) {
-        notifyPropertyChange("static", this.isStatic, isStatic);
+        notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
     }

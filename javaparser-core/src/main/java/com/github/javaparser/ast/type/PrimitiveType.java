@@ -24,6 +24,7 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -110,7 +111,7 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 	}
 
 	public PrimitiveType setType(final Primitive type) {
-		notifyPropertyChange("type", this.type, type);
+		notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
 		this.type = type;
 		return this;
 	}

@@ -24,6 +24,7 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -80,7 +81,7 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
      * @return this, the WildcardType
      */
     public WildcardType setExtends(final ReferenceType<?> ext) {
-	    notifyPropertyChange("ext", this.ext, ext);
+	    notifyPropertyChange(ObservableProperty.EXTENDS, this.ext, ext);
 		this.ext = ext;
 		setAsParentNodeOf(this.ext);
 		return this;
@@ -93,7 +94,7 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
      * @return this, the WildcardType
      */
     public WildcardType setSuper(final ReferenceType<?> sup) {
-	    notifyPropertyChange("sup", this.sup, sup);
+	    notifyPropertyChange(ObservableProperty.SUPER, this.sup, sup);
 		this.sup = sup;
 		setAsParentNodeOf(this.sup);
 		return this;

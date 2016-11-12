@@ -3,6 +3,7 @@ package com.github.javaparser.ast;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -44,7 +45,7 @@ public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayB
     }
 
     public ArrayBracketPair setAnnotations(NodeList<AnnotationExpr> annotations) {
-        notifyPropertyChange("annotations", this.annotations, annotations);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         setAsParentNodeOf(annotations);
         this.annotations = assertNotNull(annotations);
         return this;

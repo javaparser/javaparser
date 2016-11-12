@@ -6,7 +6,7 @@ import com.github.javaparser.ast.NodeList;
 public abstract class AstObserverAdapter implements AstObserver {
 
     @Override
-    public void propertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue) {
+    public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
         // do nothing
     }
 

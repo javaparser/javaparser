@@ -27,6 +27,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -140,7 +141,7 @@ public final class ObjectCreationExpr extends Expression implements
      * @return this, the ObjectCreationExpr
      */
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
-        notifyPropertyChange("anonymousClassBody", this.anonymousClassBody, anonymousClassBody);
+        notifyPropertyChange(ObservableProperty.ANONYMOUS_CLASS_BODY, this.anonymousClassBody, anonymousClassBody);
         this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
         return this;
@@ -148,7 +149,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     @Override
     public ObjectCreationExpr setArgs(final NodeList<Expression> args) {
-        notifyPropertyChange("args", this.args, args);
+        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
         this.args = assertNotNull(args);
         setAsParentNodeOf(this.args);
         return this;
@@ -161,7 +162,7 @@ public final class ObjectCreationExpr extends Expression implements
      * @return this, the FieldAccessExpr
      */
     public ObjectCreationExpr setScope(final Expression scope) {
-        notifyPropertyChange("scope", this.scope, scope);
+        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
@@ -169,7 +170,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     @Override
     public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
-        notifyPropertyChange("type", this.type, type);
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         assertNotNull(type);
         this.type = type;
         setAsParentNodeOf(this.type);
@@ -189,7 +190,7 @@ public final class ObjectCreationExpr extends Expression implements
      */
     @Override
     public ObjectCreationExpr setTypeArguments(final NodeList<Type<?>> typeArguments) {
-        notifyPropertyChange("typeArguments", this.typeArguments, typeArguments);
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);
         return this;

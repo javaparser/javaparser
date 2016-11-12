@@ -21,8 +21,8 @@ public class PropagatingAstObserverTest {
         List<String> changes = new ArrayList<>();
         AstObserver observer = new PropagatingAstObserver() {
             @Override
-            public void concretePropertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue) {
-                changes.add(String.format("%s.%s changed from %s to %s", observedNode.getClass().getSimpleName(), propertyName, oldValue, newValue));
+            public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                changes.add(String.format("%s.%s changed from %s to %s", observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };
         cu.registerForSubtree(observer);
@@ -31,14 +31,14 @@ public class PropagatingAstObserverTest {
 
         FieldDeclaration fieldDeclaration = cu.getClassByName("A").addField("String", "foo");
         assertEquals(Arrays.asList("FieldDeclaration.modifiers changed from [] to []",
-                "FieldDeclaration.elementType changed from empty to String",
-                "VariableDeclaratorId.arrayBracketPairsAfterId changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1"), changes);
+                "FieldDeclaration.element_type changed from empty to String",
+                "VariableDeclaratorId.array_bracket_pairs_after_id changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1"), changes);
         assertEquals(true, fieldDeclaration.isRegistered(observer));
 
         cu.getClassByName("A").getFieldByName("foo").getVariables().get(0).setId(new VariableDeclaratorId("Bar"));
         assertEquals(Arrays.asList("FieldDeclaration.modifiers changed from [] to []",
-                "FieldDeclaration.elementType changed from empty to String",
-                "VariableDeclaratorId.arrayBracketPairsAfterId changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1",
+                "FieldDeclaration.element_type changed from empty to String",
+                "VariableDeclaratorId.array_bracket_pairs_after_id changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1",
                 "VariableDeclarator.id changed from foo to Bar"), changes);
     }
 }

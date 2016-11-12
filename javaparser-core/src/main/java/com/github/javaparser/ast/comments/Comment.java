@@ -23,6 +23,7 @@ package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observing.ObservableProperty;
 
 import java.util.Optional;
 
@@ -60,7 +61,7 @@ public abstract class Comment extends Node {
      *            the text of the comment to set
      */
     public Comment setContent(String content) {
-        notifyPropertyChange("content", this.content, content);
+        notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
         this.content = content;
         return this;
     }
@@ -91,12 +92,12 @@ public abstract class Comment extends Node {
      */
     public Comment setCommentedNode(Node commentedNode)
     {
-        notifyPropertyChange("commentedNode", this.commentedNode, commentedNode);
-        if (commentedNode==null) {
+        notifyPropertyChange(ObservableProperty.COMMENTED_NODE, this.commentedNode, commentedNode);
+        if (commentedNode == null) {
             this.commentedNode = null;
             return this;
         }
-        if (commentedNode==this) {
+        if (commentedNode == this) {
             throw new IllegalArgumentException();
         }
         if (commentedNode instanceof Comment) {

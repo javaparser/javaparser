@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.stmt.EmptyStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -69,7 +70,7 @@ public class LambdaExpr extends Expression implements
 
     @Override
 	public LambdaExpr setParameters(NodeList<Parameter> parameters) {
-	    notifyPropertyChange("parameters", this.parameters, parameters);
+	    notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
 		this.parameters = assertNotNull(parameters);
 		setAsParentNodeOf(this.parameters);
 		return this;
@@ -100,7 +101,7 @@ public class LambdaExpr extends Expression implements
 	}
 
 	public LambdaExpr setParametersEnclosed(boolean parametersEnclosed) {
-		notifyPropertyChange("parametersEnclosed", this.parametersEnclosed, parametersEnclosed);
+		notifyPropertyChange(ObservableProperty.PARAMETERS_ENCLOSED, this.parametersEnclosed, parametersEnclosed);
 		this.parametersEnclosed = parametersEnclosed;
 		return this;
 	}

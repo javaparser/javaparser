@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -67,13 +68,13 @@ public final class LabeledStmt extends Statement {
 	}
 
 	public LabeledStmt setLabel(final String label) {
-		notifyPropertyChange("label", this.label, label);
+		notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
 		this.label = assertNotNull(label);
 		return this;
 	}
 
 	public LabeledStmt setStmt(final Statement stmt) {
-		notifyPropertyChange("stmt", this.stmt, stmt);
+		notifyPropertyChange(ObservableProperty.STMT, this.stmt, stmt);
 		this.stmt = assertNotNull(stmt);
 		setAsParentNodeOf(this.stmt);
 		return this;

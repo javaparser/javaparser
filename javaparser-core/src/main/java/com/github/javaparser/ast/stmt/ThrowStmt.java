@@ -24,6 +24,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -60,7 +61,7 @@ public final class ThrowStmt extends Statement {
 	}
 
 	public ThrowStmt setExpr(final Expression expr) {
-		notifyPropertyChange("expr", this.expr, expr);
+		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;

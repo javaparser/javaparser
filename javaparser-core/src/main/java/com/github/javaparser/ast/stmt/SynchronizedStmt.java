@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -84,7 +85,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     }
 
     public SynchronizedStmt setExpr(final Expression expr) {
-        notifyPropertyChange("expr", this.expr, expr);
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
         this.expr = assertNotNull(expr);
         setAsParentNodeOf(this.expr);
         return this;
@@ -97,7 +98,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
 
     @Override
     public SynchronizedStmt setBody(BlockStmt block) {
-        notifyPropertyChange("block", this.block, block);
+        notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
         this.block = assertNotNull(block);
         setAsParentNodeOf(this.block);
         return this;

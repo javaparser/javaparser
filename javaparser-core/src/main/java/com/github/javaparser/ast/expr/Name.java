@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -78,7 +79,7 @@ public class Name extends Node {
     }
 
     public Name setId(final String id) {
-        notifyPropertyChange("id", this.id, id);
+        notifyPropertyChange(ObservableProperty.ID, this.id, id);
         this.id = assertNotNull(id);
         return this;
     }
@@ -104,7 +105,7 @@ public class Name extends Node {
     }
 
     public Name setQualifier(final Name qualifier) {
-        notifyPropertyChange("qualifier", this.qualifier, qualifier);
+        notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
         this.qualifier = qualifier;
         setAsParentNodeOf(qualifier);
         return this;

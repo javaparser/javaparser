@@ -20,11 +20,11 @@ public interface AstObserver {
      * The value of a property is changed
      *
      * @param observedNode owner of the property
-     * @param propertyName name of the property
+     * @param property property changed
      * @param oldValue value of the property before the change
      * @param newValue value of the property after the change
      */
-    void propertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue);
+    void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue);
 
     /**
      * The parent of a node is changed

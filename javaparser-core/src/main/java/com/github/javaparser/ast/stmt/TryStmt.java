@@ -23,6 +23,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -97,28 +98,28 @@ public final class TryStmt extends Statement {
 	}
 
 	public TryStmt setCatchs(final NodeList<CatchClause> catchs) {
-		notifyPropertyChange("catchs", this.catchs, catchs);
+		notifyPropertyChange(ObservableProperty.CATCHS, this.catchs, catchs);
 		this.catchs = assertNotNull(catchs);
 		setAsParentNodeOf(this.catchs);
 		return this;
 	}
 
 	public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
-		notifyPropertyChange("finallyBlock", this.finallyBlock, finallyBlock);
+		notifyPropertyChange(ObservableProperty.FINALLY_BLOCK, this.finallyBlock, finallyBlock);
 		this.finallyBlock = finallyBlock;
 		setAsParentNodeOf(this.finallyBlock);
 		return this;
 	}
 
 	public TryStmt setTryBlock(final BlockStmt tryBlock) {
-		notifyPropertyChange("tryBlock", this.tryBlock, tryBlock);
+		notifyPropertyChange(ObservableProperty.TRY_BLOCK, this.tryBlock, tryBlock);
 		this.tryBlock = tryBlock;
 		setAsParentNodeOf(this.tryBlock);
 		return this;
 	}
 	
 	public TryStmt setResources(NodeList<VariableDeclarationExpr> resources) {
-		notifyPropertyChange("resources", this.resources, resources);
+		notifyPropertyChange(ObservableProperty.RESOURCES, this.resources, resources);
 		this.resources = assertNotNull(resources);
 		setAsParentNodeOf(this.resources);
 		return this;

@@ -27,6 +27,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -108,7 +109,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumDeclaration setEntries(NodeList<EnumConstantDeclaration> entries) {
-        notifyPropertyChange("entries", this.entries, entries);
+        notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         this.entries = assertNotNull(entries);
 		setAsParentNodeOf(this.entries);
         return this;
@@ -116,7 +117,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 
     @Override
     public EnumDeclaration setImplements(NodeList<ClassOrInterfaceType> implementsList) {
-        notifyPropertyChange("implementsList", this.implementsList, implementsList);
+        notifyPropertyChange(ObservableProperty.IMPLEMENTS_LIST, this.implementsList, implementsList);
         this.implementsList = assertNotNull(implementsList);
 		setAsParentNodeOf(this.implementsList);
         return this;

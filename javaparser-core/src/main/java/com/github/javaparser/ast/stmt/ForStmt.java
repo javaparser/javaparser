@@ -26,6 +26,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -98,7 +99,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     @Override
     public ForStmt setBody(final Statement body) {
-        notifyPropertyChange("body", this.body, body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         this.body = body;
         setAsParentNodeOf(this.body);
         return this;
@@ -111,21 +112,21 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
      * @return this, the ForStmt
      */
     public ForStmt setCompare(final Expression compare) {
-        notifyPropertyChange("compare", this.compare, compare);
+        notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
         this.compare = compare;
         setAsParentNodeOf(this.compare);
         return this;
     }
 
     public ForStmt setInit(final NodeList<Expression> init) {
-        notifyPropertyChange("init", this.init, init);
+        notifyPropertyChange(ObservableProperty.INIT, this.init, init);
         this.init = assertNotNull(init);
         setAsParentNodeOf(this.init);
         return this;
     }
 
     public ForStmt setUpdate(final NodeList<Expression> update) {
-        notifyPropertyChange("update", this.update, update);
+        notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
         this.update = assertNotNull(update);
         setAsParentNodeOf(this.update);
         return this;

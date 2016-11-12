@@ -29,6 +29,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -105,14 +106,11 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
      */
     @Deprecated
 	public CatchClause setCatchBlock(final BlockStmt catchBlock) {
-        notifyPropertyChange("catchBlock", this.catchBlock, catchBlock);
-		this.catchBlock = catchBlock;
-		setAsParentNodeOf(this.catchBlock);
-        return this;
+        return setBody(catchBlock);
 	}
 
 	public CatchClause setParam(final Parameter param) {
-        notifyPropertyChange("param", this.param, param);
+        notifyPropertyChange(ObservableProperty.PARAM, this.param, param);
 		this.param = param;
 		setAsParentNodeOf(this.param);
         return this;
@@ -125,7 +123,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     @Override
     public CatchClause setBody(BlockStmt block) {
-        notifyPropertyChange("catchBlock", this.catchBlock, block);
+        notifyPropertyChange(ObservableProperty.CATCH_BLOCK, this.catchBlock, block);
         this.catchBlock = block;
         setAsParentNodeOf(this.catchBlock);
         return this;

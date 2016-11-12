@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -63,7 +64,7 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     public ArrayInitializerExpr setValues(NodeList<Expression> values) {
-        notifyPropertyChange("values", this.values, values);
+        notifyPropertyChange(ObservableProperty.VALUES, this.values, values);
         this.values = assertNotNull(values);
 		setAsParentNodeOf(this.values);
         return this;

@@ -29,6 +29,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -160,7 +161,7 @@ public final class Parameter extends Node implements
     }
 
     public Parameter setVarArgs(boolean isVarArgs) {
-        notifyPropertyChange("varArgs", this.isVarArgs, isVarArgs);
+        notifyPropertyChange(ObservableProperty.VAR_ARGS, this.isVarArgs, isVarArgs);
         this.isVarArgs = isVarArgs;
         return this;
     }
@@ -188,7 +189,7 @@ public final class Parameter extends Node implements
             id.setName(name);
         } else {
             VariableDeclaratorId newId = new VariableDeclaratorId(name);
-            notifyPropertyChange("id", this.id, newId);
+            notifyPropertyChange(ObservableProperty.ID, this.id, newId);
             id = newId;
         }
         return this;
@@ -211,7 +212,7 @@ public final class Parameter extends Node implements
      */
     @Override
     public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
-        notifyPropertyChange("annotations", this.annotations, annotations);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
@@ -224,7 +225,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setModifiers(EnumSet<Modifier> modifiers) {
-        notifyPropertyChange("modifiers", this.modifiers, modifiers);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
@@ -236,7 +237,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setElementType(final Type<?> elementType) {
-        notifyPropertyChange("modifiers", this.elementType, elementType);
+        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
@@ -249,7 +250,8 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
-        notifyPropertyChange("arrayBracketPairsAfterType", this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
+        notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_TYPE,
+                this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
         this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;

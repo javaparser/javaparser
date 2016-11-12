@@ -30,6 +30,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -177,7 +178,7 @@ public final class VariableDeclarationExpr extends Expression implements
 
     @Override
     public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
-        notifyPropertyChange("annotations", this.annotations, annotations);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
@@ -185,14 +186,14 @@ public final class VariableDeclarationExpr extends Expression implements
 
     @Override
     public VariableDeclarationExpr setModifiers(final EnumSet<Modifier> modifiers) {
-        notifyPropertyChange("modifiers", this.modifiers, modifiers);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
         return this;
     }
 
     @Override
     public VariableDeclarationExpr setElementType(final Type elementType) {
-        notifyPropertyChange("elementType", this.elementType, elementType);
+        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = elementType;
         setAsParentNodeOf(this.elementType);
         return this;
@@ -200,7 +201,7 @@ public final class VariableDeclarationExpr extends Expression implements
 
     @Override
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
-        notifyPropertyChange("variables", this.variables, variables);
+        notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         this.variables = variables;
         setAsParentNodeOf(this.variables);
         return this;
@@ -212,7 +213,7 @@ public final class VariableDeclarationExpr extends Expression implements
 
     @Override
     public VariableDeclarationExpr setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
-        notifyPropertyChange("arrayBracketPairsAfterType", this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
+        notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_TYPE, this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
         this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;

@@ -5,6 +5,7 @@ import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
@@ -42,7 +43,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
     }
 
     public ArrayType setComponentType(final Type<?> type) {
-        notifyPropertyChange("componentType", this.componentType, componentType);
+        notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
         this.componentType = assertNotNull(type);
         setAsParentNodeOf(this.componentType);
         return this;

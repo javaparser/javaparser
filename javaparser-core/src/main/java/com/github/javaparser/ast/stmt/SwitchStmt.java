@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -74,14 +75,14 @@ public final class SwitchStmt extends Statement {
 	}
 
 	public SwitchStmt setEntries(final NodeList<SwitchEntryStmt> entries) {
-		notifyPropertyChange("entries", this.entries, entries);
+		notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
 		this.entries = assertNotNull(entries);
 		setAsParentNodeOf(this.entries);
 		return this;
 	}
 
 	public SwitchStmt setSelector(final Expression selector) {
-		notifyPropertyChange("selector", this.selector, selector);
+		notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
 		this.selector = selector;
 		setAsParentNodeOf(this.selector);
 		return this;

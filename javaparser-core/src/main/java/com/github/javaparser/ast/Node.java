@@ -28,6 +28,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observing.AstObserver;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -125,7 +126,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @param range the range of characters in the source code that this node covers.
      */
     public Node setRange(Range range) {
-        notifyPropertyChange("range", this.range, range);
+        notifyPropertyChange(ObservableProperty.RANGE, this.range, range);
         this.range = range;
         return this;
     }
@@ -139,7 +140,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
-        notifyPropertyChange("comment", this.comment, comment);
+        notifyPropertyChange(ObservableProperty.COMMENT, this.comment, comment);
         if (this.comment != null) {
             this.comment.setCommentedNode(null);
         }
@@ -417,8 +418,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         }
     }
 
-    protected <P> void notifyPropertyChange(String propertyName, P oldValue, P newValue) {
-        this.observers.forEach(o -> o.propertyChange(this, propertyName, oldValue, newValue));
+    protected <P> void notifyPropertyChange(ObservableProperty property, P oldValue, P newValue) {
+        this.observers.forEach(o -> o.propertyChange(this, property, oldValue, newValue));
     }
 
     @Override

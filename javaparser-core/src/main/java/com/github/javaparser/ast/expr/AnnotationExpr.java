@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.observing.ObservableProperty;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -51,7 +52,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     }
 
     public AnnotationExpr setName(Name name) {
-        notifyPropertyChange("name", this.name, name);
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;

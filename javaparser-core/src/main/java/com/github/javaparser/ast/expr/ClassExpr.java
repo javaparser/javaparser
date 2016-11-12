@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -70,7 +71,7 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
 
     @Override
     public ClassExpr setType(Type type) {
-        notifyPropertyChange("type", this.type, type);
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
 		setAsParentNodeOf(this.type);
         return this;

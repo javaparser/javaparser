@@ -24,6 +24,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -67,7 +68,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
 
     @Override
     public BlockStmt setStmts(final NodeList<Statement> stmts) {
-        notifyPropertyChange("stmts", this.stmts, stmts);
+        notifyPropertyChange(ObservableProperty.STMTS, this.stmts, stmts);
         this.stmts = assertNotNull(stmts);
         setAsParentNodeOf(this.stmts);
         return this;

@@ -34,6 +34,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -155,14 +156,14 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
-        notifyPropertyChange("modifiers", this.modifiers, modifiers);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
     public FieldDeclaration setVariables(NodeList<VariableDeclarator> variables) {
-        notifyPropertyChange("variables", this.variables, variables);
+        notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         this.variables = assertNotNull(variables);
         setAsParentNodeOf(this.variables);
         return this;
@@ -250,7 +251,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public FieldDeclaration setElementType(final Type<?> elementType) {
-        notifyPropertyChange("elementType", this.elementType, elementType);
+        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;

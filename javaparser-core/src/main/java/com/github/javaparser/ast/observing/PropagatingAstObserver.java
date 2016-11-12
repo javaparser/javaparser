@@ -6,10 +6,10 @@ import com.github.javaparser.ast.NodeList;
 public abstract class PropagatingAstObserver implements AstObserver {
 
     @Override
-    public final void propertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue) {
+    public final void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
         considerRemoving(oldValue);
         considerAdding(newValue);
-        concretePropertyChange(observedNode, propertyName, oldValue, newValue);
+        concretePropertyChange(observedNode, property, oldValue, newValue);
     }
 
     @Override
@@ -22,7 +22,7 @@ public abstract class PropagatingAstObserver implements AstObserver {
         concreteListChange(observedNode, type, index, nodeAddedOrRemoved);
     }
 
-    public void concretePropertyChange(Node observedNode, String propertyName, Object oldValue, Object newValue) {
+    public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
         // do nothing
     }
 

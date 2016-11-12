@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -136,7 +137,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     @Override
     public ClassOrInterfaceDeclaration setExtends(final NodeList<ClassOrInterfaceType> extendsList) {
-        notifyPropertyChange("extends", this.extendsList, extendsList);
+        notifyPropertyChange(ObservableProperty.EXTENDS, this.extendsList, extendsList);
         this.extendsList = assertNotNull(extendsList);
         setAsParentNodeOf(this.extendsList);
         return this;
@@ -144,21 +145,21 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     @Override
     public ClassOrInterfaceDeclaration setImplements(final NodeList<ClassOrInterfaceType> implementsList) {
-        notifyPropertyChange("implementsList", this.implementsList, implementsList);
+        notifyPropertyChange(ObservableProperty.IMPLEMENTS_LIST, this.implementsList, implementsList);
         this.implementsList = assertNotNull(implementsList);
         setAsParentNodeOf(this.implementsList);
         return this;
     }
 
     public ClassOrInterfaceDeclaration setInterface(final boolean interface_) {
-        notifyPropertyChange("interface", this.interface_, interface_);
+        notifyPropertyChange(ObservableProperty.INTERFACE, this.interface_, interface_);
         this.interface_ = interface_;
         return this;
     }
 
     @Override
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
-        notifyPropertyChange("typeParameters", this.typeParameters, typeParameters);
+        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(this.typeParameters);
         return this;

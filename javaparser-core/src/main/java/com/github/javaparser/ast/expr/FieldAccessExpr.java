@@ -24,6 +24,7 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -83,7 +84,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
     }
 
     public FieldAccessExpr setFieldExpr(SimpleName inner) {
-        notifyPropertyChange("field", this.field, inner);
+        notifyPropertyChange(ObservableProperty.FIELD, this.field, inner);
         this.field = assertNotNull(inner);
 		setAsParentNodeOf(this.field);
         return this;
@@ -96,7 +97,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
      * @return this, the FieldAccessExpr
      */
     public FieldAccessExpr setScope(final Expression scope) {
-        notifyPropertyChange("scope", this.scope, scope);
+        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
@@ -115,7 +116,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
      */
     @Override
     public FieldAccessExpr setTypeArguments(final NodeList<Type<?>> types) {
-        notifyPropertyChange("typeArguments", this.typeArguments, typeArguments);
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

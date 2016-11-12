@@ -27,6 +27,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.imports.ImportDeclaration;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.ClassUtils;
@@ -159,7 +160,7 @@ public final class CompilationUnit extends Node {
      *            the list of imports
      */
     public CompilationUnit setImports(NodeList<ImportDeclaration> imports) {
-        notifyPropertyChange("imports", this.imports, imports);
+        notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
         this.imports = assertNotNull(imports);
         setAsParentNodeOf(this.imports);
         return this;
@@ -173,7 +174,7 @@ public final class CompilationUnit extends Node {
      *            package
      */
     public CompilationUnit setPackage(PackageDeclaration pakage) {
-        notifyPropertyChange("package", this.pakage, pakage);
+        notifyPropertyChange(ObservableProperty.PACKAGE, this.pakage, pakage);
         this.pakage = pakage;
         setAsParentNodeOf(this.pakage);
         return this;
@@ -186,7 +187,7 @@ public final class CompilationUnit extends Node {
      *            the lis of types
      */
     public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
-        notifyPropertyChange("types", this.types, types);
+        notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
         this.types = assertNotNull(types);
         setAsParentNodeOf(this.types);
         return this;

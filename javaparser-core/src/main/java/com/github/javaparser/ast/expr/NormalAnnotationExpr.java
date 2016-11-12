@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -63,7 +64,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     }
 
     public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
-        notifyPropertyChange("pairs", this.pairs, pairs);
+        notifyPropertyChange(ObservableProperty.PAIRS, this.pairs, pairs);
         this.pairs = assertNotNull(pairs);
         setAsParentNodeOf(this.pairs);
         return this;

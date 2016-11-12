@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -103,7 +104,7 @@ public final class VariableDeclarator extends Node implements
     }
 
     public VariableDeclarator setId(VariableDeclaratorId id) {
-        notifyPropertyChange("id", this.id, id);
+        notifyPropertyChange(ObservableProperty.ID, this.id, id);
         this.id = assertNotNull(id);
         setAsParentNodeOf(this.id);
         return this;
@@ -116,7 +117,7 @@ public final class VariableDeclarator extends Node implements
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInit(Expression init) {
-        notifyPropertyChange("init", this.init, init);
+        notifyPropertyChange(ObservableProperty.INIT, this.init, init);
         this.init = init;
         setAsParentNodeOf(this.init);
         return this;
@@ -129,8 +130,9 @@ public final class VariableDeclarator extends Node implements
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInit(String init) {
-        notifyPropertyChange("init", this.init, init);
-        this.init = new NameExpr(assertNotNull(init));
+        NameExpr newInit = new NameExpr(assertNotNull(init));
+        notifyPropertyChange(ObservableProperty.INIT, this.init, newInit);
+        this.init = newInit;
         setAsParentNodeOf(this.init);
         return this;
     }

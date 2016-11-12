@@ -32,6 +32,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.observing.ObservableProperty;
 
 import java.util.EnumSet;
 import java.util.LinkedList;
@@ -120,7 +121,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     @SuppressWarnings("unchecked")
     @Override
     public T setMembers(NodeList<BodyDeclaration<?>> members) {
-        notifyPropertyChange("members", this.members, members);
+        notifyPropertyChange(ObservableProperty.MEMBERS, this.members, members);
 		this.members = assertNotNull(members);
 		setAsParentNodeOf(this.members);
         return (T) this;
@@ -129,14 +130,14 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     @SuppressWarnings("unchecked")
     @Override
     public T setModifiers(EnumSet<Modifier> modifiers) {
-        notifyPropertyChange("modifiers", this.modifiers, modifiers);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
 		this.modifiers = assertNotNull(modifiers);
         return (T) this;
 	}
 
 	@Override
     public T setName(SimpleName name) {
-		notifyPropertyChange("name", this.name, name);
+		notifyPropertyChange(ObservableProperty.NAME, this.name, name);
 		this.name = assertNotNull(name);
 		setAsParentNodeOf(name);
         return (T) this;

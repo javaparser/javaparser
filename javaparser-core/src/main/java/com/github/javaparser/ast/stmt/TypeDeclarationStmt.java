@@ -24,6 +24,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.EmptyTypeDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -62,7 +63,7 @@ public final class TypeDeclarationStmt extends Statement {
 	}
 
 	public TypeDeclarationStmt setTypeDeclaration(final TypeDeclaration typeDecl) {
-		notifyPropertyChange("typeDecl", this.typeDecl, typeDecl);
+		notifyPropertyChange(ObservableProperty.TYPE_DECLARATION, this.typeDecl, typeDecl);
 		this.typeDecl = assertNotNull(typeDecl);
 		setAsParentNodeOf(this.typeDecl);
 		return this;

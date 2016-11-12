@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -66,7 +67,7 @@ public final class EnclosedExpr extends Expression {
      * @return this, the EnclosedExpr
      */
 	public EnclosedExpr setInner(final Expression inner) {
-		notifyPropertyChange("inner", this.inner, inner);
+		notifyPropertyChange(ObservableProperty.INNER, this.inner, inner);
 		this.inner = inner;
 		setAsParentNodeOf(this.inner);
 		return this;

@@ -3,6 +3,7 @@ package com.github.javaparser.ast.imports;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -58,7 +59,7 @@ public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration imp
      */
     @Override
     public TypeImportOnDemandDeclaration setName(Name name) {
-        notifyPropertyChange("name", this.name, name);
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;

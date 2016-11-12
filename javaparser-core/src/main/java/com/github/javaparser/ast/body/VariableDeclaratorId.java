@@ -27,6 +27,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -85,7 +86,7 @@ public final class VariableDeclaratorId extends Node implements NodeWithSimpleNa
 
     @Override
     public VariableDeclaratorId setName(SimpleName name) {
-        notifyPropertyChange("name", this.name, name);
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;
@@ -96,7 +97,7 @@ public final class VariableDeclaratorId extends Node implements NodeWithSimpleNa
     }
 
     public VariableDeclaratorId setArrayBracketPairsAfterId(NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
-        notifyPropertyChange("arrayBracketPairsAfterId", this.arrayBracketPairsAfterId, arrayBracketPairsAfterId);
+        notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_ID, this.arrayBracketPairsAfterId, arrayBracketPairsAfterId);
         this.arrayBracketPairsAfterId = assertNotNull(arrayBracketPairsAfterId);
         setAsParentNodeOf(arrayBracketPairsAfterId);
         return this;

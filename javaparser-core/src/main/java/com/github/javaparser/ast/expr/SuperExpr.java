@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -66,7 +67,7 @@ public final class SuperExpr extends Expression {
      * @return this, the SuperExpr
      */
 	public SuperExpr setClassExpr(final Expression classExpr) {
-		notifyPropertyChange("classExpr", this.classExpr, classExpr);
+		notifyPropertyChange(ObservableProperty.CLASS_EXPR, this.classExpr, classExpr);
 		this.classExpr = classExpr;
 		setAsParentNodeOf(this.classExpr);
 		return this;
