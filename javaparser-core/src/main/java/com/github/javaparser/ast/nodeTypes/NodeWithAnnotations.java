@@ -38,6 +38,10 @@ import static com.github.javaparser.ast.expr.Name.*;
 public interface NodeWithAnnotations<N extends Node> {
     NodeList<AnnotationExpr> getAnnotations();
 
+    default AnnotationExpr getAnnotation(int i) {
+        return getAnnotations().get(i);
+    }
+
     N setAnnotations(NodeList<AnnotationExpr> annotations);
 
     /**

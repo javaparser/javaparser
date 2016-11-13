@@ -7,6 +7,10 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 public interface NodeWithImplements<N extends Node> {
     NodeList<ClassOrInterfaceType> getImplements();
 
+    default ClassOrInterfaceType getImplements(int i) {
+        return getImplements().get(i);
+    }
+
     N setImplements(NodeList<ClassOrInterfaceType> implementsList);
 
     /**

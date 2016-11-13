@@ -149,14 +149,14 @@ public class SharedSteps {
 
     public static MethodDeclaration getMethodByPositionAndClassPosition(CompilationUnit compilationUnit,
                                                                          int methodPosition, int classPosition) {
-		TypeDeclaration<?> type = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> type = compilationUnit.getType(classPosition - 1);
 
         int memberCount = 0;
         int methodCount = 0;
 		for (BodyDeclaration<?> bodyDeclaration : type.getMembers()) {
             if(bodyDeclaration instanceof MethodDeclaration){
                 if(methodCount == methodPosition -1) {
-                    return (MethodDeclaration) type.getMembers().get(memberCount);
+                    return (MethodDeclaration) type.getMember(memberCount);
                 }
                 methodCount++;
             }

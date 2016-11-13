@@ -33,6 +33,6 @@ public class NodeWithThrowableBuildersTest {
 		assertEquals(true, addMethod.isThrows(IllegalStateException.class));
 		addMethod.addThrows(new ClassOrInterfaceType("Test"));
 		assertEquals(2, addMethod.getThrows().size());
-		assertEquals("Test", addMethod.getThrows().get(1).toString());
+		assertEquals("Test", addMethod.getThrow(1).toString());
 	}
 }

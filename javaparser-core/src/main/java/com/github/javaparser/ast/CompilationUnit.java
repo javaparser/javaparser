@@ -117,6 +117,10 @@ public final class CompilationUnit extends Node {
         return imports;
     }
 
+    public ImportDeclaration getImport(int i) {
+        return getImports().get(i);
+    }
+
     /**
      * Retrieves the package declaration of this compilation unit.<br>
      * If this compilation unit has no package declaration (default package),
@@ -140,6 +144,16 @@ public final class CompilationUnit extends Node {
      */
     public NodeList<TypeDeclaration<?>> getTypes() {
         return types;
+    }
+
+    /**
+     * Convenience method that wraps <code>getTypes()</code>.<br>
+     * If <code>i</code> is out of bounds, throws <code>IndexOutOfBoundsException.</code>
+     * @param i
+     *            the index of the type declaration to retrieve
+     */
+    public TypeDeclaration<?> getType(int i) {
+        return getTypes().get(i);
     }
 
     /**

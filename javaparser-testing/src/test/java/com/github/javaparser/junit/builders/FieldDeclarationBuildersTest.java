@@ -51,54 +51,54 @@ public class FieldDeclarationBuildersTest {
 	public void testCreateGetterInAClass() {
 		testClass.addPrivateField(int.class, "myField").createGetter();
 		assertEquals(2, testClass.getMembers().size());
-		assertEquals(MethodDeclaration.class, testClass.getMembers().get(1).getClass());
+		assertEquals(MethodDeclaration.class, testClass.getMember(1).getClass());
 		List<MethodDeclaration> methodsWithName = testClass.getMethodsByName("getMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration getter = methodsWithName.get(0);
 		assertEquals("getMyField", getter.getNameAsString());
 		assertEquals("int", getter.getType().toString());
-		assertEquals(ReturnStmt.class, getter.getBody().get().getStmts().get(0).getClass());
+		assertEquals(ReturnStmt.class, getter.getBody().get().getStmt(0).getClass());
 	}
 
 	@Test
 	public void testCreateSetterInAClass() {
 		testClass.addPrivateField(int.class, "myField").createSetter();
 		assertEquals(2, testClass.getMembers().size());
-		assertEquals(MethodDeclaration.class, testClass.getMembers().get(1).getClass());
+		assertEquals(MethodDeclaration.class, testClass.getMember(1).getClass());
 		List<MethodDeclaration> methodsWithName = testClass.getMethodsByName("setMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration setter = methodsWithName.get(0);
 		assertEquals("setMyField", setter.getNameAsString());
-		assertEquals("int", setter.getParameters().get(0).getType().toString());
-		assertEquals(ExpressionStmt.class, setter.getBody().get().getStmts().get(0).getClass());
-		assertEquals("this.myField = myField;", setter.getBody().get().getStmts().get(0).toString());
+		assertEquals("int", setter.getParameter(0).getType().toString());
+		assertEquals(ExpressionStmt.class, setter.getBody().get().getStmt(0).getClass());
+		assertEquals("this.myField = myField;", setter.getBody().get().getStmt(0).toString());
 	}
 
 	@Test
 	public void testCreateGetterInEnum() {
 		testEnum.addPrivateField(int.class, "myField").createGetter();
 		assertEquals(2, testEnum.getMembers().size());
-		assertEquals(MethodDeclaration.class, testEnum.getMembers().get(1).getClass());
+		assertEquals(MethodDeclaration.class, testEnum.getMember(1).getClass());
 		List<MethodDeclaration> methodsWithName = testEnum.getMethodsByName("getMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration getter = methodsWithName.get(0);
 		assertEquals("getMyField", getter.getNameAsString());
 		assertEquals("int", getter.getType().toString());
-		assertEquals(ReturnStmt.class, getter.getBody().get().getStmts().get(0).getClass());
+		assertEquals(ReturnStmt.class, getter.getBody().get().getStmt(0).getClass());
 	}
 
 	@Test
 	public void testCreateSetterInEnum() {
 		testEnum.addPrivateField(int.class, "myField").createSetter();
 		assertEquals(2, testEnum.getMembers().size());
-		assertEquals(MethodDeclaration.class, testEnum.getMembers().get(1).getClass());
+		assertEquals(MethodDeclaration.class, testEnum.getMember(1).getClass());
 		List<MethodDeclaration> methodsWithName = testEnum.getMethodsByName("setMyField");
 		assertEquals(1, methodsWithName.size());
 		MethodDeclaration setter = methodsWithName.get(0);
 		assertEquals("setMyField", setter.getNameAsString());
-		assertEquals("int", setter.getParameters().get(0).getType().toString());
-		assertEquals(ExpressionStmt.class, setter.getBody().get().getStmts().get(0).getClass());
-		assertEquals("this.myField = myField;", setter.getBody().get().getStmts().get(0).toString());
+		assertEquals("int", setter.getParameter(0).getType().toString());
+		assertEquals(ExpressionStmt.class, setter.getBody().get().getStmt(0).getClass());
+		assertEquals("this.myField = myField;", setter.getBody().get().getStmt(0).toString());
 	}
 
 	@Test(expected = IllegalStateException.class)

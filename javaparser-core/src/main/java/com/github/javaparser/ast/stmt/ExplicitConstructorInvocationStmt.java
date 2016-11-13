@@ -80,6 +80,10 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return args;
 	}
 
+	public Expression getArg(int i) {
+		return getArgs().get(i);
+	}
+
     public Optional<Expression> getExpr() {
         return Optional.ofNullable(expr);
 	}

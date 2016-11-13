@@ -45,6 +45,10 @@ public abstract class Type<T extends Type> extends Node {
         return annotations;
     }
 
+    public AnnotationExpr getAnnotation(int i) {
+        return getAnnotations().get(i);
+    }
+
     public T setAnnotations(NodeList<AnnotationExpr> annotations) {
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);

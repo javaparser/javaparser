@@ -103,6 +103,10 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return entries;
     }
 
+    public EnumConstantDeclaration getEntry(int i) {
+        return getEntries().get(i);
+    }
+
     @Override
     public NodeList<ClassOrInterfaceType> getImplements() {
         return implementsList;
