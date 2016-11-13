@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -76,18 +77,21 @@ public final class ConditionalExpr extends Expression {
     }
 
     public ConditionalExpr setCondition(Expression condition) {
+        notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         this.condition = assertNotNull(condition);
 		setAsParentNodeOf(this.condition);
         return this;
     }
 
     public ConditionalExpr setElseExpr(Expression elseExpr) {
+        notifyPropertyChange(ObservableProperty.ELSE_EXPR, this.elseExpr, elseExpr);
         this.elseExpr = assertNotNull(elseExpr);
 		setAsParentNodeOf(this.elseExpr);
         return this;
     }
 
     public ConditionalExpr setThenExpr(Expression thenExpr) {
+        notifyPropertyChange(ObservableProperty.THEN_EXPR, this.thenExpr, thenExpr);
         this.thenExpr = assertNotNull(thenExpr);
 		setAsParentNodeOf(this.thenExpr);
         return this;

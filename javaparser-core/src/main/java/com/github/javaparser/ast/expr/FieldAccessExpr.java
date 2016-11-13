@@ -21,16 +21,17 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -82,8 +83,9 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
         return this;
     }
 
-    public FieldAccessExpr setFieldExpr(SimpleName field) {
-        this.field = assertNotNull(field);
+    public FieldAccessExpr setFieldExpr(SimpleName inner) {
+        notifyPropertyChange(ObservableProperty.FIELD, this.field, inner);
+        this.field = assertNotNull(inner);
 		setAsParentNodeOf(this.field);
         return this;
     }
@@ -95,6 +97,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
      * @return this, the FieldAccessExpr
      */
     public FieldAccessExpr setScope(final Expression scope) {
+        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
@@ -113,6 +116,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
      */
     @Override
     public FieldAccessExpr setTypeArguments(final NodeList<Type<?>> types) {
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);
         return this;

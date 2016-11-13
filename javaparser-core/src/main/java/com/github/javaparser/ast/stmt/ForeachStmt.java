@@ -26,6 +26,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -92,18 +93,21 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 
     @Override
     public ForeachStmt setBody(final Statement body) {
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         this.body = assertNotNull(body);
         setAsParentNodeOf(this.body);
         return this;
     }
 
     public ForeachStmt setIterable(final Expression iterable) {
+        notifyPropertyChange(ObservableProperty.ITERABLE, this.iterable, iterable);
         this.iterable = assertNotNull(iterable);
         setAsParentNodeOf(this.iterable);
         return this;
     }
 
     public ForeachStmt setVariable(final VariableDeclarationExpr var) {
+        notifyPropertyChange(ObservableProperty.VARIABLE, this.var, var);
         this.var = assertNotNull(var);
         setAsParentNodeOf(this.var);
         return this;

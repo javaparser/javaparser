@@ -3,10 +3,9 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -50,6 +49,7 @@ public class IntersectionType extends Type<IntersectionType> implements NodeWith
     }
 
     public IntersectionType setElements(NodeList<ReferenceType<?>> elements) {
+        notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
         this.elements = assertNotNull(elements);
         setAsParentNodeOf(this.elements);
         return this;

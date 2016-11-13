@@ -26,6 +26,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.observing.ObservableProperty;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -62,8 +66,14 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     @SuppressWarnings("unchecked")
     @Override
     public final T setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
 		setAsParentNodeOf(this.annotations);
         return (T) this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(annotations);
     }
 }

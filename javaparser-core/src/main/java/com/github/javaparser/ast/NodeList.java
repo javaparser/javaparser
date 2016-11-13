@@ -1,33 +1,29 @@
 package com.github.javaparser.ast;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Optional;
-import java.util.Spliterator;
+import com.github.javaparser.HasParentNode;
+import com.github.javaparser.ast.observing.AstObserver;
+import com.github.javaparser.ast.observing.Observable;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
-
-import com.github.javaparser.HasParentNode;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * A list of nodes.
  *
  * @param <N> the type of nodes contained.
  */
-public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable {
+public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable {
     private List<N> innerList = new ArrayList<>(0);
 
     private Node parentNode;
+
+    private List<AstObserver> observers = new ArrayList<>();
 
     public NodeList() {
         this(null);
@@ -39,6 +35,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public boolean add(N node) {
+        notifyElementAdded(innerList.size(), node);
         own(node);
         return innerList.add(node);
     }
@@ -51,6 +48,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     public boolean remove(Node node) {
+        notifyElementRemoved(innerList.indexOf(node), node);
         boolean remove = innerList.remove(node);
         node.setParentNode(null);
         return remove;
@@ -113,6 +111,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public N remove(int index) {
+        notifyElementRemoved(index, innerList.get(index));
         N remove = innerList.remove(index);
         if (remove != null)
             remove.setParentNode(null);
@@ -137,6 +136,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public void add(int index, N node) {
+        notifyElementAdded(index, node);
         own(node);
         innerList.add(index, node);
     }
@@ -404,6 +404,29 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public Spliterator<N> spliterator() {
         return innerList.spliterator();
+    }
+
+    private void notifyElementAdded(int index, Node nodeAddedOrRemoved) {
+        this.observers.forEach(o -> o.listChange(this, AstObserver.ListChangeType.ADDITION, index, nodeAddedOrRemoved));
+    }
+
+    private void notifyElementRemoved(int index, Node nodeAddedOrRemoved) {
+        this.observers.forEach(o -> o.listChange(this, AstObserver.ListChangeType.REMOVAL, index, nodeAddedOrRemoved));
+    }
+
+    @Override
+    public void unregister(AstObserver observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void register(AstObserver observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public boolean isRegistered(AstObserver observer) {
+        return this.observers.contains(observer);
     }
 
 }

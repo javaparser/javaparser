@@ -25,14 +25,13 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.stmt.EmptyStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Lambda expression.
@@ -71,6 +70,7 @@ public class LambdaExpr extends Expression implements
 
     @Override
 	public LambdaExpr setParameters(NodeList<Parameter> parameters) {
+	    notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
 		this.parameters = assertNotNull(parameters);
 		setAsParentNodeOf(this.parameters);
 		return this;
@@ -101,6 +101,7 @@ public class LambdaExpr extends Expression implements
 	}
 
 	public LambdaExpr setParametersEnclosed(boolean parametersEnclosed) {
+		notifyPropertyChange(ObservableProperty.PARAMETERS_ENCLOSED, this.parametersEnclosed, parametersEnclosed);
 		this.parametersEnclosed = parametersEnclosed;
 		return this;
 	}

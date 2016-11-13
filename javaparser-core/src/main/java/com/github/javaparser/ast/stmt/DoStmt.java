@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -70,12 +71,14 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 
 	@Override
     public DoStmt setBody(final Statement body) {
+		notifyPropertyChange(ObservableProperty.BODY, this.body, body);
 		this.body = body;
 		setAsParentNodeOf(this.body);
         return this;
 	}
 
 	public DoStmt setCondition(final Expression condition) {
+		notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
 		this.condition = condition;
 		setAsParentNodeOf(this.condition);
 		return this;

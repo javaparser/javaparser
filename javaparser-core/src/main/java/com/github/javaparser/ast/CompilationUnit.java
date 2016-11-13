@@ -21,7 +21,16 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.imports.ImportDeclaration;
+import com.github.javaparser.ast.observing.ObservableProperty;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.ClassUtils;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -29,19 +38,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.imports.ImportDeclaration;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.utils.ClassUtils;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <p>
@@ -163,6 +160,7 @@ public final class CompilationUnit extends Node {
      *            the list of imports
      */
     public CompilationUnit setImports(NodeList<ImportDeclaration> imports) {
+        notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
         this.imports = assertNotNull(imports);
         setAsParentNodeOf(this.imports);
         return this;
@@ -176,6 +174,7 @@ public final class CompilationUnit extends Node {
      *            package
      */
     public CompilationUnit setPackage(PackageDeclaration pakage) {
+        notifyPropertyChange(ObservableProperty.PACKAGE, this.pakage, pakage);
         this.pakage = pakage;
         setAsParentNodeOf(this.pakage);
         return this;
@@ -188,6 +187,7 @@ public final class CompilationUnit extends Node {
      *            the lis of types
      */
     public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
+        notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
         this.types = assertNotNull(types);
         setAsParentNodeOf(this.types);
         return this;
@@ -401,5 +401,10 @@ public final class CompilationUnit extends Node {
         return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName)
                 && type instanceof AnnotationDeclaration)
                 .findFirst().orElse(null);
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(imports, types);
     }
 }

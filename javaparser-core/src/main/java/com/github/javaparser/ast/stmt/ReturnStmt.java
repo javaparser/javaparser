@@ -21,13 +21,14 @@
  
 package com.github.javaparser.ast.stmt;
 
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
 
 /**
  * @author Julio Vilmar Gesser
@@ -76,6 +77,7 @@ public final class ReturnStmt extends Statement {
      * @return this, the ReturnStmt
      */
 	public ReturnStmt setExpr(final Expression expr) {
+		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;
