@@ -14,7 +14,7 @@ Version 2.4.0
 * introduce MultiBoundType
 * refactored IntersectionType and UnionType
 * refactored CatchClause
-* parsing annotationsList in throws declarations
+* parsing annotations in throws declarations
 * parse orphan semicolons in import statements
 * added PackageDeclaration.getPackageName
 * solved issue with newlines in string literals
@@ -33,7 +33,7 @@ API breaking changes:
 * 328, 270: upgrade JavaCC (use TokenMgrException now)
 Other changes:
 
-* 297: enable access to tokensList.
+* 297: enable access to tokens.
 * 341, 361: node positions are now OO
 * 211, 373: escaping of \n \r for string literals
 * 336, 276, 141: JavaDoc support now works
