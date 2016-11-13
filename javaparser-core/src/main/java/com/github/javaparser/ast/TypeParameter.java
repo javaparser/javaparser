@@ -21,16 +21,16 @@
  
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * <p>
@@ -48,28 +48,28 @@ public final class TypeParameter extends Node implements NodeWithName<TypeParame
 
 	private String name;
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotationsList;
 
-	private List<ClassOrInterfaceType> typeBound;
+	private List<ClassOrInterfaceType> typeBoundList;
 
 	public TypeParameter() {
 	}
 
-	public TypeParameter(final String name, final List<ClassOrInterfaceType> typeBound) {
+	public TypeParameter(final String name, final List<ClassOrInterfaceType> typeBoundList) {
 		setName(name);
-		setTypeBound(typeBound);
+		setTypeBoundList(typeBoundList);
 	}
 
-	public TypeParameter(Range range, final String name, final List<ClassOrInterfaceType> typeBound) {
+	public TypeParameter(Range range, final String name, final List<ClassOrInterfaceType> typeBoundList) {
 		super(range);
 		setName(name);
-		setTypeBound(typeBound);
+		setTypeBoundList(typeBoundList);
 	}
 
-	public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
-		this(range, name, typeBound);
-		setTypeBound(typeBound);
-		setAnnotations(annotations);
+	public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBoundList, List<AnnotationExpr> annotationsList) {
+		this(range, name, typeBoundList);
+		setTypeBoundList(typeBoundList);
+		setAnnotationsList(annotationsList);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -96,9 +96,9 @@ public final class TypeParameter extends Node implements NodeWithName<TypeParame
 	 * 
 	 * @return list of types that this paramente extends or <code>null</code>
 	 */
-	public List<ClassOrInterfaceType> getTypeBound() {
-        typeBound = ensureNotNull(typeBound);
-        return typeBound;
+	public List<ClassOrInterfaceType> getTypeBoundList() {
+        typeBoundList = ensureNotNull(typeBoundList);
+        return typeBoundList;
 	}
 
 	/**
@@ -116,21 +116,21 @@ public final class TypeParameter extends Node implements NodeWithName<TypeParame
 	/**
 	 * Sets the list o types.
 	 * 
-	 * @param typeBound
-	 *            the typeBound to set
+	 * @param typeBoundList
+	 *            the typeBoundList to set
 	 */
-	public void setTypeBound(final List<ClassOrInterfaceType> typeBound) {
-		this.typeBound = typeBound;
-		setAsParentNodeOf(typeBound);
+	public void setTypeBoundList(final List<ClassOrInterfaceType> typeBoundList) {
+		this.typeBoundList = typeBoundList;
+		setAsParentNodeOf(typeBoundList);
 	}
 
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
-        return annotations;
+    public List<AnnotationExpr> getAnnotationsList() {
+        annotationsList = ensureNotNull(annotationsList);
+        return annotationsList;
     }
 
-    public void setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
-	    setAsParentNodeOf(this.annotations);
+    public void setAnnotationsList(List<AnnotationExpr> annotationsList) {
+        this.annotationsList = annotationsList;
+	    setAsParentNodeOf(this.annotationsList);
     }
 }

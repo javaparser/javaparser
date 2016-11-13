@@ -21,9 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -35,6 +32,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.EnumSet;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
@@ -48,7 +48,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotationsList;
 
     private VariableDeclaratorId id;
 
@@ -79,14 +79,14 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
         setType(type);
     }
 
-    public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+    public Parameter(final Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotationsList, Type type,
                      boolean isVarArgs, VariableDeclaratorId id) {
         super(range);
         setModifiers(modifiers);
-        setAnnotations(annotations);
+        setAnnotationsList(annotationsList);
         setId(id);
         setType(type);
-        setVarArgs(isVarArgs);
+        setIsVarArgs(isVarArgs);
     }
 
     @Override
@@ -115,16 +115,16 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
         return this;
     }
 
-    public void setVarArgs(boolean isVarArgs) {
+    public void setIsVarArgs(boolean isVarArgs) {
         this.isVarArgs = isVarArgs;
     }
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
     @Override
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
-        return annotations;
+    public List<AnnotationExpr> getAnnotationsList() {
+        annotationsList = ensureNotNull(annotationsList);
+        return annotationsList;
     }
 
     public VariableDeclaratorId getId() {
@@ -158,14 +158,14 @@ public final class Parameter extends Node implements NodeWithType<Parameter>, No
     }
 
     /**
-     * @param annotations a null value is currently treated as an empty list. This behavior could change
+     * @param annotationsList a null value is currently treated as an empty list. This behavior could change
      *            in the future, so please avoid passing null
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Parameter setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
-        setAsParentNodeOf(this.annotations);
+    public Parameter setAnnotationsList(List<AnnotationExpr> annotationsList) {
+        this.annotationsList = annotationsList;
+        setAsParentNodeOf(this.annotationsList);
         return this;
     }
 

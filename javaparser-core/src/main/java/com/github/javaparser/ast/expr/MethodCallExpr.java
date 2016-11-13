@@ -38,11 +38,11 @@ public final class MethodCallExpr extends Expression {
 
 	private Expression scope;
 
-	private List<Type> typeArgs;
+	private List<Type> typeArgsList;
 
 	private NameExpr name;
 
-	private List<Expression> args;
+	private List<Expression> argsList;
 
 	public MethodCallExpr() {
 	}
@@ -52,18 +52,18 @@ public final class MethodCallExpr extends Expression {
 		setName(name);
 	}
 
-	public MethodCallExpr(final Expression scope, final String name, final List<Expression> args) {
+	public MethodCallExpr(final Expression scope, final String name, final List<Expression> argsList) {
 		setScope(scope);
 		setName(name);
-		setArgs(args);
+		setArgsList(argsList);
 	}
 
-	public MethodCallExpr(final Range range, final Expression scope, final List<Type> typeArgs, final String name, final List<Expression> args) {
+	public MethodCallExpr(final Range range, final Expression scope, final List<Type> typeArgsList, final String name, final List<Expression> argsList) {
 		super(range);
 		setScope(scope);
-		setTypeArgs(typeArgs);
+		setTypeArgsList(typeArgsList);
 		setName(name);
-		setArgs(args);
+		setArgsList(argsList);
 	}
 
 
@@ -75,10 +75,10 @@ public final class MethodCallExpr extends Expression {
 	 *            argument value
 	 */
 	public MethodCallExpr addArgument(Expression arg) {
-		List<Expression> args = getArgs();
+		List<Expression> args = getArgsList();
 		if (isNullOrEmpty(args)) {
 			args = new ArrayList<>();
-			setArgs(args);
+			setArgsList(args);
 		}
 		args.add(arg);
 		arg.setParentNode(this);
@@ -93,9 +93,9 @@ public final class MethodCallExpr extends Expression {
 		v.visit(this, arg);
 	}
 
-	public List<Expression> getArgs() {
-        args = ensureNotNull(args);
-        return args;
+	public List<Expression> getArgsList() {
+        argsList = ensureNotNull(argsList);
+        return argsList;
 	}
 
 	public String getName() {
@@ -110,14 +110,14 @@ public final class MethodCallExpr extends Expression {
 		return scope;
 	}
 
-	public List<Type> getTypeArgs() {
-        typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
+	public List<Type> getTypeArgsList() {
+        typeArgsList = ensureNotNull(typeArgsList);
+        return typeArgsList;
 	}
 
-	public void setArgs(final List<Expression> args) {
-		this.args = args;
-		setAsParentNodeOf(this.args);
+	public void setArgsList(final List<Expression> argsList) {
+		this.argsList = argsList;
+		setAsParentNodeOf(this.argsList);
 	}
 
 	public void setName(final String name) {
@@ -134,8 +134,8 @@ public final class MethodCallExpr extends Expression {
 		setAsParentNodeOf(this.scope);
 	}
 
-	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
+	public void setTypeArgsList(final List<Type> typeArgsList) {
+		this.typeArgsList = typeArgsList;
+		setAsParentNodeOf(this.typeArgsList);
 	}
 }

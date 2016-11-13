@@ -56,22 +56,22 @@ public final class BinaryExpr extends Expression {
 
     private Expression right;
 
-    private Operator op;
+    private Operator operator;
 
     public BinaryExpr() {
     }
 
-    public BinaryExpr(Expression left, Expression right, Operator op) {
+    public BinaryExpr(Expression left, Expression right, Operator operator) {
     	setLeft(left);
     	setRight(right);
-    	setOperator(op);
+    	setOperator(operator);
     }
 
-    public BinaryExpr(Range range, Expression left, Expression right, Operator op) {
+    public BinaryExpr(Range range, Expression left, Expression right, Operator operator) {
         super(range);
     	setLeft(left);
     	setRight(right);
-    	setOperator(op);
+    	setOperator(operator);
     }
 
     @Override
@@ -89,7 +89,7 @@ public final class BinaryExpr extends Expression {
     }
 
     public Operator getOperator() {
-        return op;
+        return operator;
     }
 
     public Expression getRight() {
@@ -101,8 +101,8 @@ public final class BinaryExpr extends Expression {
 		setAsParentNodeOf(this.left);
     }
 
-    public void setOperator(Operator op) {
-        this.op = op;
+    public void setOperator(Operator operator) {
+        this.operator = operator;
     }
 
     public void setRight(Expression right) {

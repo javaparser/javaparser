@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.TypeParameter;
@@ -36,6 +31,11 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -44,7 +44,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     private boolean interface_;
 
-    private List<TypeParameter> typeParameters;
+    private List<TypeParameter> typeParameterList;
 
     // Can contain more than one item if this is an interface
     private List<ClassOrInterfaceType> extendsList;
@@ -57,35 +57,35 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
                                        final String name) {
         super(modifiers, name);
-        setInterface(isInterface);
+        setInterface_(isInterface);
     }
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
                                        final List<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
-                                       final List<TypeParameter> typeParameters,
+                                       final List<TypeParameter> typeParameterList,
                                        final List<ClassOrInterfaceType> extendsList,
                                        final List<ClassOrInterfaceType> implementsList,
                                        final List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
-        setInterface(isInterface);
-        setTypeParameters(typeParameters);
-        setExtends(extendsList);
-        setImplements(implementsList);
+        setInterface_(isInterface);
+        setTypeParameterList(typeParameterList);
+        setExtendsList(extendsList);
+        setImplementsList(implementsList);
     }
 
     public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
                                        final List<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
-                                       final List<TypeParameter> typeParameters,
+                                       final List<TypeParameter> typeParameterList,
                                        final List<ClassOrInterfaceType> extendsList,
                                        final List<ClassOrInterfaceType> implementsList,
                                        final List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
-        setInterface(isInterface);
-        setTypeParameters(typeParameters);
-        setExtends(extendsList);
-        setImplements(implementsList);
+        setInterface_(isInterface);
+        setTypeParameterList(typeParameterList);
+        setExtendsList(extendsList);
+        setImplementsList(implementsList);
     }
 
     @Override
@@ -98,20 +98,20 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         v.visit(this, arg);
     }
 
-    public List<ClassOrInterfaceType> getExtends() {
+    public List<ClassOrInterfaceType> getExtendsList() {
         extendsList = ensureNotNull(extendsList);
         return extendsList;
     }
 
     @Override
-    public List<ClassOrInterfaceType> getImplements() {
+    public List<ClassOrInterfaceType> getImplementsList() {
         implementsList = ensureNotNull(implementsList);
         return implementsList;
     }
 
-    public List<TypeParameter> getTypeParameters() {
-        typeParameters = ensureNotNull(typeParameters);
-        return typeParameters;
+    public List<TypeParameter> getTypeParameterList() {
+        typeParameterList = ensureNotNull(typeParameterList);
+        return typeParameterList;
     }
 
     public boolean isInterface() {
@@ -125,7 +125,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @return
      */
     @Override
-    public ClassOrInterfaceDeclaration setExtends(final List<ClassOrInterfaceType> extendsList) {
+    public ClassOrInterfaceDeclaration setExtendsList(final List<ClassOrInterfaceType> extendsList) {
         this.extendsList = extendsList;
         setAsParentNodeOf(this.extendsList);
         return this;
@@ -137,27 +137,27 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      *            in the future, so please avoid passing null
      */
     @Override
-    public ClassOrInterfaceDeclaration setImplements(final List<ClassOrInterfaceType> implementsList) {
+    public ClassOrInterfaceDeclaration setImplementsList(final List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
         setAsParentNodeOf(this.implementsList);
         return this;
     }
 
-    public void setInterface(final boolean interface_) {
+    public void setInterface_(final boolean interface_) {
         this.interface_ = interface_;
     }
 
     /**
      *
-     * @param typeParameters a null value is currently treated as an empty list. This behavior could change
+     * @param typeParameterList a null value is currently treated as an empty list. This behavior could change
      *            in the future, so please avoid passing null
      */
-    public void setTypeParameters(final List<TypeParameter> typeParameters) {
-        this.typeParameters = typeParameters;
-        setAsParentNodeOf(this.typeParameters);
+    public void setTypeParameterList(final List<TypeParameter> typeParameterList) {
+        this.typeParameterList = typeParameterList;
+        setAsParentNodeOf(this.typeParameterList);
     }
 
-   
+
 
 
 }

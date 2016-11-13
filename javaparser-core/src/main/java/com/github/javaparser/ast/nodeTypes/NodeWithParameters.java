@@ -1,19 +1,17 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
-public interface NodeWithParameters<T> {
-    List<Parameter> getParameters();
+import java.util.List;
 
-    T setParameters(List<Parameter> parameters);
+public interface NodeWithParameters<T> {
+    List<Parameter> getParametersList();
+
+    T setParametersList(List<Parameter> parametersList);
 
     default T addParameter(Type type, String name) {
         return addParameter(new Parameter(type, new VariableDeclaratorId(name)));
@@ -26,7 +24,7 @@ public interface NodeWithParameters<T> {
 
     @SuppressWarnings("unchecked")
     default T addParameter(Parameter parameter) {
-        getParameters().add(parameter);
+        getParametersList().add(parameter);
         parameter.setParentNode((Node) this);
         return (T) this;
     }
@@ -41,7 +39,7 @@ public interface NodeWithParameters<T> {
     }
 
     default Parameter addAndGetParameter(Parameter parameter) {
-        getParameters().add(parameter);
+        getParametersList().add(parameter);
         parameter.setParentNode((Node) this);
         return parameter;
     }
@@ -53,7 +51,7 @@ public interface NodeWithParameters<T> {
      * @return null if not found, the param found otherwise
      */
     default Parameter getParamByName(String name){
-        return getParameters().stream()
+        return getParametersList().stream()
                 .filter(p -> p.getName().equals(name)).findFirst().orElse(null);
     }
 
@@ -64,7 +62,7 @@ public interface NodeWithParameters<T> {
      * @return null if not found, the param found otherwise
      */
     default Parameter getParamByType(String type) {
-        return getParameters().stream()
+        return getParametersList().stream()
                 .filter(p -> p.getType().toString().equals(type)).findFirst().orElse(null);
     }
 
@@ -75,7 +73,7 @@ public interface NodeWithParameters<T> {
      * @return null if not found, the param found otherwise
      */
     default Parameter getParamByType(Class<?> type) {
-        return getParameters().stream()
+        return getParametersList().stream()
                 .filter(p -> p.getType().toString().equals(type.getSimpleName())).findFirst().orElse(null);
     }
 }

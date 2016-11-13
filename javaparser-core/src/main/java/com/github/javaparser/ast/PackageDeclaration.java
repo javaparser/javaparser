@@ -46,7 +46,7 @@ import java.util.List;
  */
 public final class PackageDeclaration extends Node implements NodeWithAnnotations<PackageDeclaration> {
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotationsList;
 
     private NameExpr name;
 
@@ -57,14 +57,14 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
         setName(name);
     }
 
-    public PackageDeclaration(List<AnnotationExpr> annotations, NameExpr name) {
-        setAnnotations(annotations);
+    public PackageDeclaration(List<AnnotationExpr> annotationsList, NameExpr name) {
+        setAnnotationsList(annotationsList);
         setName(name);
     }
 
-    public PackageDeclaration(Range range, List<AnnotationExpr> annotations, NameExpr name) {
+    public PackageDeclaration(Range range, List<AnnotationExpr> annotationsList, NameExpr name) {
         super(range);
-        setAnnotations(annotations);
+        setAnnotationsList(annotationsList);
         setName(name);
     }
 
@@ -79,14 +79,14 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     }
 
     /**
-     * Retrieves the list of annotations declared before the package
-     * declaration. Return <code>null</code> if there are no annotations.
+     * Retrieves the list of annotationsList declared before the package
+     * declaration. Return <code>null</code> if there are no annotationsList.
      * 
-     * @return list of annotations or <code>null</code>
+     * @return list of annotationsList or <code>null</code>
      */
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = Utils.ensureNotNull(annotations);
-        return annotations;
+    public List<AnnotationExpr> getAnnotationsList() {
+        annotationsList = Utils.ensureNotNull(annotationsList);
+        return annotationsList;
     }
 
     /**
@@ -106,12 +106,12 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     }
 
     /**
-     * @param annotations
-     *            the annotations to set
+     * @param annotationsList
+     *            the annotationsList to set
      */
-    public PackageDeclaration setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
-        setAsParentNodeOf(this.annotations);
+    public PackageDeclaration setAnnotationsList(List<AnnotationExpr> annotationsList) {
+        this.annotationsList = annotationsList;
+        setAsParentNodeOf(this.annotationsList);
         return this;
     }
 

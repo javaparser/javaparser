@@ -21,14 +21,14 @@
 
 package com.github.javaparser.ast.type;
 
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.TypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
@@ -77,8 +77,8 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
         return scope;
     }
 
-    public List<Type> getTypeArgs() {
-        return typeArguments.getTypeArguments();
+    public List<Type> getTypeArgsList() {
+        return typeArguments.getTypeArgumentsList();
     }
 
     public TypeArguments getTypeArguments() {
@@ -113,14 +113,14 @@ public final class ClassOrInterfaceType extends Type<ClassOrInterfaceType> imple
 
     /**
      * Allows you to set the generic arguments
-     * @param typeArgs The list of types of the generics
+     * @param typeArgsList The list of types of the generics
      */
-    public void setTypeArgs(final List<Type> typeArgs) {
-        setTypeArguments(TypeArguments.withArguments(typeArgs));
+    public void setTypeArgsList(final List<Type> typeArgsList) {
+        setTypeArguments(TypeArguments.withArguments(typeArgsList));
     }
 
     public void setTypeArguments(TypeArguments typeArguments) {
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments.getTypeArguments());
+        setAsParentNodeOf(this.typeArguments.getTypeArgumentsList());
     }
 }

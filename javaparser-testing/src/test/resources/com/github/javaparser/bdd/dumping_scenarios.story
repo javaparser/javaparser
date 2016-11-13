@@ -134,7 +134,7 @@ enum XYZ {
 
 }
 
-Scenario: An enum without fields has no () on its members
+Scenario: An enum without fields has no () on its membersList
 Given the compilation unit:
 package test; enum XYZ {A,B,C}
 When the class is parsed by the Java parser
@@ -215,14 +215,14 @@ Then it is dumped to:
 while (true) {
 }
 
-Scenario: we can parse imports
+Scenario: we can parse importsList
 Given the import:
 import static a.b.c.Abc.*;
 When the import is parsed by the Java parser
 Then it is dumped to:
 import static a.b.c.Abc.*;
 
-Scenario: we can parse annotations
+Scenario: we can parse annotationsList
 Given the annotation:
 @Abc
 When the annotation is parsed by the Java parser
@@ -374,7 +374,7 @@ class Foo {
     }
 }
 
-Scenario: Annotations are supported on annotations
+Scenario: Annotations are supported on annotationsList
 Given the class:
 @C @interface D {
 }
@@ -476,7 +476,7 @@ public class Abc {
     }
 }
 
-Scenario: Inner class notation does not confuse annotations (#107)
+Scenario: Inner class notation does not confuse annotationsList (#107)
 Given the class:
 class A extends @Ann1 B.@Ann2 C {
 }

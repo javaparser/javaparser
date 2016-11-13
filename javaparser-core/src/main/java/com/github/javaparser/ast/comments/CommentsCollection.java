@@ -28,32 +28,32 @@ import java.util.List;
  * Set of comments produced by CommentsParser.
  */
 public class CommentsCollection {
-    private List<LineComment> lineComments = new LinkedList<LineComment>();
-    private List<BlockComment> blockComments = new LinkedList<BlockComment>();
-    private List<JavadocComment> javadocComments = new LinkedList<JavadocComment>();
+    private List<LineComment> lineCommentsList = new LinkedList<LineComment>();
+    private List<BlockComment> blockCommentsList = new LinkedList<BlockComment>();
+    private List<JavadocComment> javadocCommentsList = new LinkedList<JavadocComment>();
 
-    public List<LineComment> getLineComments(){
-        return lineComments;
+    public List<LineComment> getLineCommentsList(){
+        return lineCommentsList;
     }
 
-    public List<BlockComment> getBlockComments(){
-        return blockComments;
+    public List<BlockComment> getBlockCommentsList(){
+        return blockCommentsList;
     }
 
-    public List<JavadocComment> getJavadocComments(){
-        return javadocComments;
+    public List<JavadocComment> getJavadocCommentsList(){
+        return javadocCommentsList;
     }
 
     public void addComment(LineComment lineComment){
-        this.lineComments.add(lineComment);
+        this.lineCommentsList.add(lineComment);
     }
 
     public void addComment(BlockComment blockComment){
-        this.blockComments.add(blockComment);
+        this.blockCommentsList.add(blockComment);
     }
 
     public void addComment(JavadocComment javadocComment){
-        this.javadocComments.add(javadocComment);
+        this.javadocCommentsList.add(javadocComment);
     }
 
     public boolean contains(Comment comment){
@@ -71,32 +71,32 @@ public class CommentsCollection {
     }
 
     public List<Comment> getAll(){
-        List<Comment> comments = new LinkedList<Comment>();
-        comments.addAll(lineComments);
-        comments.addAll(blockComments);
-        comments.addAll(javadocComments);
-        return comments;
+        List<Comment> commentsList = new LinkedList<Comment>();
+        commentsList.addAll(lineCommentsList);
+        commentsList.addAll(blockCommentsList);
+        commentsList.addAll(javadocCommentsList);
+        return commentsList;
     }
 
     public int size(){
-        return lineComments.size()+blockComments.size()+javadocComments.size();
+        return lineCommentsList.size()+ blockCommentsList.size()+ javadocCommentsList.size();
     }
 
     public CommentsCollection minus(CommentsCollection other){
         CommentsCollection result = new CommentsCollection();
-        for (LineComment comment : lineComments){
+        for (LineComment comment : lineCommentsList){
             if (!other.contains(comment)){
-                result.lineComments.add(comment);
+                result.lineCommentsList.add(comment);
             }
         }
-        for (BlockComment comment : blockComments){
+        for (BlockComment comment : blockCommentsList){
             if (!other.contains(comment)){
-                result.blockComments.add(comment);
+                result.blockCommentsList.add(comment);
             }
         }
-        for (JavadocComment comment : javadocComments){
+        for (JavadocComment comment : javadocCommentsList){
             if (!other.contains(comment)){
-                result.javadocComments.add(comment);
+                result.javadocCommentsList.add(comment);
             }
         }
         return result;

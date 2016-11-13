@@ -30,16 +30,16 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 public class TypeArguments {
     public static final TypeArguments EMPTY = withArguments(Collections.<Type>emptyList());
 
-    private final List<Type> typeArguments;
+    private final List<Type> typeArgumentsList;
     private final boolean usesDiamondOperator;
 
-    private TypeArguments(List<Type> typeArguments, boolean usesDiamondOperator) {
-        this.typeArguments = ensureNotNull(typeArguments);
+    private TypeArguments(List<Type> typeArgumentsList, boolean usesDiamondOperator) {
+        this.typeArgumentsList = ensureNotNull(typeArgumentsList);
         this.usesDiamondOperator = usesDiamondOperator;
     }
 
-    public List<Type> getTypeArguments() {
-        return typeArguments;
+    public List<Type> getTypeArgumentsList() {
+        return typeArgumentsList;
     }
 
     public boolean isUsingDiamondOperator() {
@@ -50,7 +50,7 @@ public class TypeArguments {
         return new TypeArguments(Collections.<Type>emptyList(), true);
     }
 
-    public static TypeArguments withArguments(List<Type> typeArguments) {
-        return new TypeArguments(typeArguments, false);
+    public static TypeArguments withArguments(List<Type> typeArgumentsList) {
+        return new TypeArguments(typeArgumentsList, false);
     }
 }

@@ -21,49 +21,49 @@
  
 package com.github.javaparser.ast.body;
 
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.utils.Utils;
+
+import java.util.List;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotations<T> {
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotationsList;
 
     public BodyDeclaration() {
     }
 
-    public BodyDeclaration(List<AnnotationExpr> annotations) {
-    	setAnnotations(annotations);
+    public BodyDeclaration(List<AnnotationExpr> annotationsList) {
+    	setAnnotationsList(annotationsList);
     }
 
-    public BodyDeclaration(Range range, List<AnnotationExpr> annotations) {
+    public BodyDeclaration(Range range, List<AnnotationExpr> annotationsList) {
         super(range);
-    	setAnnotations(annotations);
+    	setAnnotationsList(annotationsList);
     }
 
     @Override
-    public final List<AnnotationExpr> getAnnotations() {
-        annotations = Utils.ensureNotNull(annotations);
-        return annotations;
+    public final List<AnnotationExpr> getAnnotationsList() {
+        annotationsList = Utils.ensureNotNull(annotationsList);
+        return annotationsList;
     }
 
     /**
      *
-     * @param annotations a null value is currently treated as an empty list. This behavior could change
+     * @param annotationsList a null value is currently treated as an empty list. This behavior could change
      *                    in the future, so please avoid passing null
      */
     @SuppressWarnings("unchecked")
     @Override
-    public final T setAnnotations(List<AnnotationExpr> annotations) {
-        this.annotations = annotations;
-		setAsParentNodeOf(this.annotations);
+    public final T setAnnotationsList(List<AnnotationExpr> annotationsList) {
+        this.annotationsList = annotationsList;
+		setAsParentNodeOf(this.annotationsList);
         return (T) this;
     }
 }

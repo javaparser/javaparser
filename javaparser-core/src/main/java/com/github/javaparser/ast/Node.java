@@ -46,8 +46,8 @@ public abstract class Node implements Cloneable {
 
     private Node parentNode;
 
-    private List<Node> childrenNodes = new LinkedList<>();
-    private List<Comment> orphanComments = new LinkedList<>();
+    private List<Node> childrenNodesList = new LinkedList<>();
+    private List<Comment> orphanCommentsList = new LinkedList<>();
 
     /**
      * This attribute can store additional information from semantic analysis.
@@ -249,8 +249,8 @@ public abstract class Node implements Cloneable {
         return null;
     }
 
-    public List<Node> getChildrenNodes() {
-        return childrenNodes;
+    public List<Node> getChildrenNodesList() {
+        return childrenNodesList;
     }
 
     public boolean contains(Node other) {
@@ -258,7 +258,7 @@ public abstract class Node implements Cloneable {
     }
 
     public void addOrphanComment(Comment comment) {
-        orphanComments.add(comment);
+        orphanCommentsList.add(comment);
         comment.setParentNode(this);
     }
 
@@ -274,8 +274,8 @@ public abstract class Node implements Cloneable {
      * 
      * @return all comments that cannot be attributed to a concept
      */
-    public List<Comment> getOrphanComments() {
-        return orphanComments;
+    public List<Comment> getOrphanCommentsList() {
+        return orphanCommentsList;
     }
 
     /**
@@ -286,17 +286,17 @@ public abstract class Node implements Cloneable {
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments() {
-        List<Comment> comments = new LinkedList<>();
-        comments.addAll(getOrphanComments());
+        List<Comment> commentsList = new LinkedList<>();
+        commentsList.addAll(getOrphanCommentsList());
 
-        for (Node child : getChildrenNodes()) {
+        for (Node child : getChildrenNodesList()) {
             if (child.getComment() != null) {
-                comments.add(child.getComment());
+                commentsList.add(child.getComment());
             }
-            comments.addAll(child.getAllContainedComments());
+            commentsList.addAll(child.getAllContainedComments());
         }
 
-        return comments;
+        return commentsList;
     }
 
     /**
@@ -308,12 +308,12 @@ public abstract class Node implements Cloneable {
     public void setParentNode(Node parentNode) {
         // remove from old parent, if any
         if (this.parentNode != null) {
-            this.parentNode.childrenNodes.remove(this);
+            this.parentNode.childrenNodesList.remove(this);
         }
         this.parentNode = parentNode;
         // add to new parent, if any
         if (this.parentNode != null) {
-            this.parentNode.childrenNodes.add(this);
+            this.parentNode.childrenNodesList.add(this);
         }
     }
 
@@ -360,7 +360,7 @@ public abstract class Node implements Cloneable {
      */
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
         List<N> nodes = new ArrayList<>();
-        for (Node child : getChildrenNodes()) {
+        for (Node child : getChildrenNodesList()) {
             if (clazz.isInstance(child)) {
                 nodes.add(clazz.cast(child));
             }

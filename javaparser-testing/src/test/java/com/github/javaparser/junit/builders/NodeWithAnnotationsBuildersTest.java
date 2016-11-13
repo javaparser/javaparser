@@ -35,23 +35,23 @@ public class NodeWithAnnotationsBuildersTest {
 	@Test
 	public void testAddAnnotation() {
 		NormalAnnotationExpr annotation = testClass.addAnnotation(hey.class);
-		assertEquals("com.github.javaparser.junit.builders.NodeWithAnnotationsBuildersTest$hey", cu.getImports().get(0).getName().toString());
-		assertEquals(1, testClass.getAnnotations().size());
-		assertEquals(annotation, testClass.getAnnotations().get(0));
-		assertEquals(NormalAnnotationExpr.class, testClass.getAnnotations().get(0).getClass());
+		assertEquals("com.github.javaparser.junit.builders.NodeWithAnnotationsBuildersTest$hey", cu.getImportsList().get(0).getName().toString());
+		assertEquals(1, testClass.getAnnotationsList().size());
+		assertEquals(annotation, testClass.getAnnotationsList().get(0));
+		assertEquals(NormalAnnotationExpr.class, testClass.getAnnotationsList().get(0).getClass());
 	}
 
 	@Test
 	public void testAddMarkerAnnotation() {
 		testClass.addMarkerAnnotation("test");
-		assertEquals(1, testClass.getAnnotations().size());
+		assertEquals(1, testClass.getAnnotationsList().size());
 	}
 
 	@Test
 	public void testAddSingleMemberAnnotation() {
 		testClass.addSingleMemberAnnotation("test", "value");
-		assertEquals(1, testClass.getAnnotations().size());
-		assertEquals("value", ((SingleMemberAnnotationExpr) testClass.getAnnotations().get(0)).getMemberValue().toString());
+		assertEquals(1, testClass.getAnnotationsList().size());
+		assertEquals("value", ((SingleMemberAnnotationExpr) testClass.getAnnotationsList().get(0)).getMemberValue().toString());
 	}
 
 	@Test

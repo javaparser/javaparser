@@ -21,16 +21,16 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * Defines constructor call expression.
@@ -47,12 +47,12 @@ public final class ObjectCreationExpr extends Expression {
 
 	private ClassOrInterfaceType type;
 
-	private List<Type> typeArgs;
+	private List<Type> typeArgsList;
 
-	private List<Expression> args;
+	private List<Expression> argsList;
 
     // This can be null, to indicate there is no body
-    private List<BodyDeclaration<?>> anonymousClassBody;
+    private List<BodyDeclaration<?>> anonymousClassBodyList;
 
 	public ObjectCreationExpr() {
 	}
@@ -61,23 +61,23 @@ public final class ObjectCreationExpr extends Expression {
 	 * Defines a call to a constructor.
 	 * @param scope may be null
 	 * @param type this is the class that the constructor is being called for.
-	 * @param args Any arguments to pass to the constructor
+	 * @param argsList Any arguments to pass to the constructor
 	 */
-	public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final List<Expression> args) {
+	public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final List<Expression> argsList) {
 		setScope(scope);
 		setType(type);
-		setArgs(args);
+		setArgsList(argsList);
 	}
 
 	public ObjectCreationExpr(final Range range,
-			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgs,
-                              final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
+			final Expression scope, final ClassOrInterfaceType type, final List<Type> typeArgsList,
+                              final List<Expression> argsList, final List<BodyDeclaration<?>> anonymousBodyList) {
 		super(range);
 		setScope(scope);
 		setType(type);
-		setTypeArgs(typeArgs);
-		setArgs(args);
-		setAnonymousClassBody(anonymousBody);
+		setTypeArgsList(typeArgsList);
+		setArgsList(argsList);
+		setAnonymousClassBodyList(anonymousBodyList);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -91,13 +91,13 @@ public final class ObjectCreationExpr extends Expression {
     /**
      * This can be null, to indicate there is no body
      */
-    public List<BodyDeclaration<?>> getAnonymousClassBody() {
-		return anonymousClassBody;
+    public List<BodyDeclaration<?>> getAnonymousClassBodyList() {
+		return anonymousClassBodyList;
 	}
 
-	public List<Expression> getArgs() {
-		args = ensureNotNull(args);
-		return args;
+	public List<Expression> getArgsList() {
+		argsList = ensureNotNull(argsList);
+		return argsList;
 	}
 
 	public Expression getScope() {
@@ -108,19 +108,19 @@ public final class ObjectCreationExpr extends Expression {
 		return type;
 	}
 
-	public List<Type> getTypeArgs() {
-		typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
+	public List<Type> getTypeArgsList() {
+		typeArgsList = ensureNotNull(typeArgsList);
+        return typeArgsList;
 	}
 
-    public void setAnonymousClassBody(final List<BodyDeclaration<?>> anonymousClassBody) {
-		this.anonymousClassBody = anonymousClassBody;
-        setAsParentNodeOf(this.anonymousClassBody);
+    public void setAnonymousClassBodyList(final List<BodyDeclaration<?>> anonymousClassBodyList) {
+		this.anonymousClassBodyList = anonymousClassBodyList;
+        setAsParentNodeOf(this.anonymousClassBodyList);
 	}
 
-	public void setArgs(final List<Expression> args) {
-		this.args = args;
-		setAsParentNodeOf(this.args);
+	public void setArgsList(final List<Expression> argsList) {
+		this.argsList = argsList;
+		setAsParentNodeOf(this.argsList);
 	}
 
 	public void setScope(final Expression scope) {
@@ -133,8 +133,8 @@ public final class ObjectCreationExpr extends Expression {
 		setAsParentNodeOf(this.type);
 	}
 
-	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
+	public void setTypeArgsList(final List<Type> typeArgsList) {
+		this.typeArgsList = typeArgsList;
+		setAsParentNodeOf(this.typeArgsList);
 	}
 }

@@ -21,14 +21,14 @@
  
 package com.github.javaparser.ast.expr;
 
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
@@ -43,9 +43,9 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
 
     private ArrayInitializerExpr initializer;
 
-    private List<Expression> dimensions;
+    private List<Expression> dimensionsList;
 
-    private List<List<AnnotationExpr>> arraysAnnotations;
+    private List<List<AnnotationExpr>> arraysAnnotationsList;
 
     public ArrayCreationExpr() {
     }
@@ -54,7 +54,7 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         setType(type);
         setArrayCount(arrayCount);
         setInitializer(initializer);
-        setDimensions(null);
+        setDimensionsList(null);
     }
 
     public ArrayCreationExpr(Range range, Type type, int arrayCount, ArrayInitializerExpr initializer) {
@@ -62,21 +62,21 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         setType(type);
         setArrayCount(arrayCount);
         setInitializer(initializer);
-        setDimensions(null);
+        setDimensionsList(null);
     }
 
-    public ArrayCreationExpr(Type type, List<Expression> dimensions, int arrayCount) {
+    public ArrayCreationExpr(Type type, List<Expression> dimensionsList, int arrayCount) {
         setType(type);
         setArrayCount(arrayCount);
-        setDimensions(dimensions);
+        setDimensionsList(dimensionsList);
         setInitializer(null);
     }
 
-    public ArrayCreationExpr(Range range, Type type, List<Expression> dimensions, int arrayCount) {
+    public ArrayCreationExpr(Range range, Type type, List<Expression> dimensionsList, int arrayCount) {
         super(range);
         setType(type);
         setArrayCount(arrayCount);
-        setDimensions(dimensions);
+        setDimensionsList(dimensionsList);
         setInitializer(null);
     }
 
@@ -95,9 +95,9 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return arrayCount;
     }
 
-    public List<Expression> getDimensions() {
-        dimensions = ensureNotNull(dimensions);
-        return dimensions;
+    public List<Expression> getDimensionsList() {
+        dimensionsList = ensureNotNull(dimensionsList);
+        return dimensionsList;
     }
 
     public ArrayInitializerExpr getInitializer() {
@@ -115,9 +115,9 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
         return this;
     }
 
-    public void setDimensions(List<Expression> dimensions) {
-        this.dimensions = dimensions;
-		setAsParentNodeOf(this.dimensions);
+    public void setDimensionsList(List<Expression> dimensionsList) {
+        this.dimensionsList = dimensionsList;
+		setAsParentNodeOf(this.dimensionsList);
     }
 
     public void setInitializer(ArrayInitializerExpr initializer) {
@@ -133,15 +133,15 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
     }
 
     @Override
-    public List<List<AnnotationExpr>> getArraysAnnotations() {
-        arraysAnnotations = ensureNotNull(arraysAnnotations);
-        return arraysAnnotations;
+    public List<List<AnnotationExpr>> getArraysAnnotationsList() {
+        arraysAnnotationsList = ensureNotNull(arraysAnnotationsList);
+        return arraysAnnotationsList;
     }
 
     @Override
-    public ArrayCreationExpr setArraysAnnotations(
-            List<List<AnnotationExpr>> arraysAnnotations) {
-        this.arraysAnnotations = arraysAnnotations;
+    public ArrayCreationExpr setArraysAnnotationsList(
+            List<List<AnnotationExpr>> arraysAnnotationsList) {
+        this.arraysAnnotationsList = arraysAnnotationsList;
         return this;
     }
 }

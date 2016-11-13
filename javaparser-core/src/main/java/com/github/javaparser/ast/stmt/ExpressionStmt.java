@@ -37,13 +37,13 @@ public final class ExpressionStmt extends Statement {
 	}
 
 	public ExpressionStmt(final Expression expr) {
-		setExpression(expr);
+		setExpr(expr);
 	}
 
 	public ExpressionStmt(Range range,
 	                      final Expression expr) {
 		super(range);
-		setExpression(expr);
+		setExpr(expr);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -54,11 +54,11 @@ public final class ExpressionStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public Expression getExpression() {
+	public Expression getExpr() {
 		return expr;
 	}
 
-	public void setExpression(final Expression expr) {
+	public void setExpr(final Expression expr) {
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 	}

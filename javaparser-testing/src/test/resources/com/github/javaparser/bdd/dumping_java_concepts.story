@@ -64,7 +64,7 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
 
         static int x = 0;
 
-        public static void main(String[] args) {
+        public static void main(String[] argsList) {
             x = +x;
             x = ~x;
             --x;
@@ -263,7 +263,7 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
         }
     }
 
-    public static void main(String[] args) throws ParseException, IOException {
+    public static void main(String[] argsList) throws ParseException, IOException {
         int x = 2;
         CompilationUnit cu = parse(new File("src/japa/parser/javacc/Parser.java"));
         System.out.println(cu);

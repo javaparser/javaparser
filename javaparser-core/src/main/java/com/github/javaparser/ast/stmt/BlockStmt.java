@@ -21,32 +21,32 @@
 
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
 
-    private List<Statement> stmts;
+    private List<Statement> stmtsList;
 
     public BlockStmt() {
     }
 
-    public BlockStmt(final List<Statement> stmts) {
-        setStmts(stmts);
+    public BlockStmt(final List<Statement> stmtsList) {
+        setStmtsList(stmtsList);
     }
 
-    public BlockStmt(final Range range, final List<Statement> stmts) {
+    public BlockStmt(final Range range, final List<Statement> stmtsList) {
         super(range);
-        setStmts(stmts);
+        setStmtsList(stmtsList);
     }
 
     @Override
@@ -60,15 +60,15 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
-    public List<Statement> getStmts() {
-        stmts = ensureNotNull(stmts);
-        return stmts;
+    public List<Statement> getStmtsList() {
+        stmtsList = ensureNotNull(stmtsList);
+        return stmtsList;
     }
 
     @Override
-    public BlockStmt setStmts(final List<Statement> stmts) {
-        this.stmts = stmts;
-        setAsParentNodeOf(this.stmts);
+    public BlockStmt setStmtsList(final List<Statement> stmtsList) {
+        this.stmtsList = stmtsList;
+        setAsParentNodeOf(this.stmtsList);
         return this;
     }
 

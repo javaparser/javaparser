@@ -41,43 +41,43 @@ public class NodeWithMembersBuildersTest {
 	@Test
 	public void testAddField() {
 		FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
-		assertEquals(1, classDeclaration.getMembers().size());
-		assertEquals(addField, classDeclaration.getMembers().get(0));
-		assertEquals("fieldName", addField.getVariables().get(0).getId().getName());
+		assertEquals(1, classDeclaration.getMembersList().size());
+		assertEquals(addField, classDeclaration.getMembersList().get(0));
+		assertEquals("fieldName", addField.getVariablesList().get(0).getId().getName());
 	}
 
 	@Test
 	public void testAddMethod() {
 		MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
-		assertEquals(1, classDeclaration.getMembers().size());
-		assertEquals(addMethod, classDeclaration.getMembers().get(0));
+		assertEquals(1, classDeclaration.getMembersList().size());
+		assertEquals(addMethod, classDeclaration.getMembersList().get(0));
 		assertEquals("foo", addMethod.getName());
 	}
 
 	@Test
 	public void testAddCtor() {
 		ConstructorDeclaration addCtor = classDeclaration.addCtor(Modifier.PUBLIC);
-		assertEquals(1, classDeclaration.getMembers().size());
-		assertEquals(addCtor, classDeclaration.getMembers().get(0));
+		assertEquals(1, classDeclaration.getMembersList().size());
+		assertEquals(addCtor, classDeclaration.getMembersList().get(0));
 		assertEquals(classDeclaration.getName(), addCtor.getName());
 	}
 
 	@Test
 	public void testAddInitializers() {
 		classDeclaration.addInitializer();
-		assertEquals(1, classDeclaration.getMembers().size());
-		assertEquals(InitializerDeclaration.class, classDeclaration.getMembers().get(0).getClass());
+		assertEquals(1, classDeclaration.getMembersList().size());
+		assertEquals(InitializerDeclaration.class, classDeclaration.getMembersList().get(0).getClass());
 
 		classDeclaration.addStaticInitializer();
-		assertEquals(2, classDeclaration.getMembers().size());
-		assertEquals(InitializerDeclaration.class, classDeclaration.getMembers().get(0).getClass());
+		assertEquals(2, classDeclaration.getMembersList().size());
+		assertEquals(InitializerDeclaration.class, classDeclaration.getMembersList().get(0).getClass());
 	}
 
 	@Test
 	public void testGetMethodsWithName() {
 		MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
 		MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
-		List<MethodDeclaration> methodsByName = classDeclaration.getMethodsByName("foo");
+		List<MethodDeclaration> methodsByName = classDeclaration.getMethodsByNameList("foo");
 		assertEquals(2, methodsByName.size());
 		assertTrue(methodsByName.contains(addMethod));
 		assertTrue(methodsByName.contains(addMethod2));
@@ -88,7 +88,7 @@ public class NodeWithMembersBuildersTest {
 		MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
 		MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
 
-		List<MethodDeclaration> methods = classDeclaration.getMethods();
+		List<MethodDeclaration> methods = classDeclaration.getMethodsList();
 
 		assertEquals(2, methods.size());
 		assertTrue(methods.contains(addMethod));
@@ -106,11 +106,11 @@ public class NodeWithMembersBuildersTest {
 		MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", Modifier.PUBLIC).addParameter(new ReferenceType(type), "overload");
 		MethodDeclaration addMethod3 = classDeclaration.addMethod("foo2", Modifier.PUBLIC).addParameter(int.class, "overload");
 
-		List<MethodDeclaration> methodsByParam = classDeclaration.getMethodsByParameterTypes(int.class);
+		List<MethodDeclaration> methodsByParam = classDeclaration.getMethodsByParameterTypesList(int.class);
 		assertEquals(2, methodsByParam.size());
 		assertTrue(methodsByParam.contains(addMethod2));
 		assertTrue(methodsByParam.contains(addMethod3));
-		List<MethodDeclaration> methodsByParam2 = classDeclaration.getMethodsByParameterTypes("List<String>");
+		List<MethodDeclaration> methodsByParam2 = classDeclaration.getMethodsByParameterTypesList("List<String>");
 		assertEquals(1, methodsByParam2.size());
 		assertTrue(methodsByParam2.contains(methodWithListParam));
 	}
@@ -128,7 +128,7 @@ public class NodeWithMembersBuildersTest {
 		FieldDeclaration firstField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
 		FieldDeclaration secondField = classDeclaration.addField(float.class, "secondField", Modifier.PRIVATE);
 
-		List<FieldDeclaration> fields = classDeclaration.getFields();
+		List<FieldDeclaration> fields = classDeclaration.getFieldsList();
 
 		assertTrue(fields.contains(firstField));
 		assertTrue(fields.contains(secondField));

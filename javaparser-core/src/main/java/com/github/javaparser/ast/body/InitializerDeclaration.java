@@ -43,13 +43,13 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
 
     public InitializerDeclaration(boolean isStatic, BlockStmt block) {
         super(null);
-        setStatic(isStatic);
+        setIsStatic(isStatic);
         setBlock(block);
     }
 
     public InitializerDeclaration(Range range, boolean isStatic, BlockStmt block) {
         super(range, null);
-        setStatic(isStatic);
+        setIsStatic(isStatic);
         setBlock(block);
     }
 
@@ -76,7 +76,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
 		setAsParentNodeOf(this.block);
     }
 
-    public void setStatic(boolean isStatic) {
+    public void setIsStatic(boolean isStatic) {
         this.isStatic = isStatic;
     }
 

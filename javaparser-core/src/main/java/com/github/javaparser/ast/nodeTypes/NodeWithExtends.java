@@ -1,14 +1,14 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-public interface NodeWithExtends<T> {
-    public List<ClassOrInterfaceType> getExtends();
+import java.util.List;
 
-    public T setExtends(final List<ClassOrInterfaceType> extendsList);
+public interface NodeWithExtends<T> {
+    public List<ClassOrInterfaceType> getExtendsList();
+
+    public T setExtendsList(final List<ClassOrInterfaceType> extendsList);
 
     /**
      * Add an extends to this and automatically add the import
@@ -30,7 +30,7 @@ public interface NodeWithExtends<T> {
     @SuppressWarnings("unchecked")
     public default T addExtends(String name) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
-        getExtends().add(classOrInterfaceType);
+        getExtendsList().add(classOrInterfaceType);
         classOrInterfaceType.setParentNode((Node) this);
         return (T) this;
     }

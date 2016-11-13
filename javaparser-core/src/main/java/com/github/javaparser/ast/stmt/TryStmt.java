@@ -35,30 +35,30 @@ import static com.github.javaparser.utils.Utils.*;
  */
 public final class TryStmt extends Statement {
 	
-	private List<VariableDeclarationExpr> resources;
+	private List<VariableDeclarationExpr> resourcesList;
 
 	private BlockStmt tryBlock;
 
-	private List<CatchClause> catchs;
+	private List<CatchClause> catchsList;
 
 	private BlockStmt finallyBlock;
 
 	public TryStmt() {
 	}
 
-	public TryStmt(final BlockStmt tryBlock, final List<CatchClause> catchs,
+	public TryStmt(final BlockStmt tryBlock, final List<CatchClause> catchsList,
 			final BlockStmt finallyBlock) {
 		setTryBlock(tryBlock);
-		setCatchs(catchs);
+		setCatchsList(catchsList);
 		setFinallyBlock(finallyBlock);
 	}
 
-	public TryStmt(Range range, List<VariableDeclarationExpr> resources,
-	               final BlockStmt tryBlock, final List<CatchClause> catchs, final BlockStmt finallyBlock) {
+	public TryStmt(Range range, List<VariableDeclarationExpr> resourcesList,
+	               final BlockStmt tryBlock, final List<CatchClause> catchsList, final BlockStmt finallyBlock) {
 		super(range);
-		setResources(resources);
+		setResourcesList(resourcesList);
 		setTryBlock(tryBlock);
-		setCatchs(catchs);
+		setCatchsList(catchsList);
 		setFinallyBlock(finallyBlock);
 	}
 
@@ -72,9 +72,9 @@ public final class TryStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public List<CatchClause> getCatchs() {
-        catchs = ensureNotNull(catchs);
-        return catchs;
+	public List<CatchClause> getCatchsList() {
+        catchsList = ensureNotNull(catchsList);
+        return catchsList;
 	}
 
 	public BlockStmt getFinallyBlock() {
@@ -85,14 +85,14 @@ public final class TryStmt extends Statement {
 		return tryBlock;
 	}
 	
-	public List<VariableDeclarationExpr> getResources() {
-        resources = ensureNotNull(resources);
-        return resources;
+	public List<VariableDeclarationExpr> getResourcesList() {
+        resourcesList = ensureNotNull(resourcesList);
+        return resourcesList;
 	}
 
-	public void setCatchs(final List<CatchClause> catchs) {
-		this.catchs = catchs;
-		setAsParentNodeOf(this.catchs);
+	public void setCatchsList(final List<CatchClause> catchsList) {
+		this.catchsList = catchsList;
+		setAsParentNodeOf(this.catchsList);
 	}
 
 	public void setFinallyBlock(final BlockStmt finallyBlock) {
@@ -105,8 +105,8 @@ public final class TryStmt extends Statement {
 		setAsParentNodeOf(this.tryBlock);
 	}
 	
-	public void setResources(List<VariableDeclarationExpr> resources) {
-		this.resources = resources;
-		setAsParentNodeOf(this.resources);
+	public void setResourcesList(List<VariableDeclarationExpr> resourcesList) {
+		this.resourcesList = resourcesList;
+		setAsParentNodeOf(this.resourcesList);
 	}
 }

@@ -49,22 +49,22 @@ public final class AssignExpr extends Expression {
 
     private Expression value;
 
-    private Operator op;
+    private Operator operator;
 
     public AssignExpr() {
     }
 
-    public AssignExpr(Expression target, Expression value, Operator op) {
+    public AssignExpr(Expression target, Expression value, Operator operator) {
         setTarget(target);
         setValue(value);
-        setOperator(op);
+        setOperator(operator);
     }
 
-    public AssignExpr(Range range, Expression target, Expression value, Operator op) {
+    public AssignExpr(Range range, Expression target, Expression value, Operator operator) {
         super(range);
         setTarget(target);
         setValue(value);
-        setOperator(op);
+        setOperator(operator);
     }
 
     @Override
@@ -78,7 +78,7 @@ public final class AssignExpr extends Expression {
     }
 
     public Operator getOperator() {
-        return op;
+        return operator;
     }
 
     public Expression getTarget() {
@@ -89,8 +89,8 @@ public final class AssignExpr extends Expression {
         return value;
     }
 
-    public void setOperator(Operator op) {
-        this.op = op;
+    public void setOperator(Operator operator) {
+        this.operator = operator;
     }
 
     public void setTarget(Expression target) {

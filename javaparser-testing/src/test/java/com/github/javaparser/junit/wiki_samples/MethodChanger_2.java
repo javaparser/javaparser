@@ -30,9 +30,9 @@ public class MethodChanger_2 {
     }
 
     private static void changeMethods(CompilationUnit cu) {
-		List<TypeDeclaration<?>> types = cu.getTypes();
+		List<TypeDeclaration<?>> types = cu.getTypesList();
 		for (TypeDeclaration<?> type : types) {
-			List<BodyDeclaration<?>> members = type.getMembers();
+			List<BodyDeclaration<?>> members = type.getMembersList();
 			for (BodyDeclaration<?> member : members) {
                 if (member instanceof MethodDeclaration) {
                     MethodDeclaration method = (MethodDeclaration) member;

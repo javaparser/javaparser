@@ -21,11 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -33,6 +28,11 @@ import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -42,7 +42,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
 
     private List<ClassOrInterfaceType> implementsList;
 
-    private List<EnumConstantDeclaration> entries;
+    private List<EnumConstantDeclaration> entriesList;
 
     public EnumDeclaration() {
     }
@@ -52,19 +52,19 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
-                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entriesList,
                            List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
-        setImplements(implementsList);
-        setEntries(entries);
+        setImplementsList(implementsList);
+        setEntriesList(entriesList);
     }
 
     public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
-                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
+                           List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entriesList,
                            List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
-        setImplements(implementsList);
-        setEntries(entries);
+        setImplementsList(implementsList);
+        setEntriesList(entriesList);
     }
 
     @Override
@@ -78,25 +78,25 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
         v.visit(this, arg);
     }
 
-    public List<EnumConstantDeclaration> getEntries() {
-        entries = ensureNotNull(entries);
-        return entries;
+    public List<EnumConstantDeclaration> getEntriesList() {
+        entriesList = ensureNotNull(entriesList);
+        return entriesList;
     }
 
     @Override
-    public List<ClassOrInterfaceType> getImplements() {
+    public List<ClassOrInterfaceType> getImplementsList() {
         implementsList = ensureNotNull(implementsList);
         return implementsList;
     }
 
-    public EnumDeclaration setEntries(List<EnumConstantDeclaration> entries) {
-        this.entries = entries;
-		setAsParentNodeOf(this.entries);
+    public EnumDeclaration setEntriesList(List<EnumConstantDeclaration> entriesList) {
+        this.entriesList = entriesList;
+		setAsParentNodeOf(this.entriesList);
         return this;
     }
 
     @Override
-    public EnumDeclaration setImplements(List<ClassOrInterfaceType> implementsList) {
+    public EnumDeclaration setImplementsList(List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
 		setAsParentNodeOf(this.implementsList);
         return this;
@@ -106,7 +106,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
 
     public EnumConstantDeclaration addEnumConstant(String name) {
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
-        getEntries().add(enumConstant);
+        getEntriesList().add(enumConstant);
         enumConstant.setParentNode(this);
         return enumConstant;
     }

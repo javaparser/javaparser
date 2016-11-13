@@ -21,10 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -35,6 +31,10 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -43,9 +43,9 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     private String name;
 
-    private List<Expression> args;
+    private List<Expression> argsList;
 
-    private List<BodyDeclaration<?>> classBody;
+    private List<BodyDeclaration<?>> classBodyList;
 
     public EnumConstantDeclaration() {
     }
@@ -54,20 +54,20 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         setName(name);
     }
 
-    public EnumConstantDeclaration(List<AnnotationExpr> annotations, String name, List<Expression> args,
-                                   List<BodyDeclaration<?>> classBody) {
+    public EnumConstantDeclaration(List<AnnotationExpr> annotations, String name, List<Expression> argsList,
+                                   List<BodyDeclaration<?>> classBodyList) {
         super(annotations);
         setName(name);
-        setArgs(args);
-        setClassBody(classBody);
+        setArgsList(argsList);
+        setClassBodyList(classBodyList);
     }
 
-    public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> args,
-                                   List<BodyDeclaration<?>> classBody) {
+    public EnumConstantDeclaration(Range range, List<AnnotationExpr> annotations, String name, List<Expression> argsList,
+                                   List<BodyDeclaration<?>> classBodyList) {
         super(range, annotations);
         setName(name);
-        setArgs(args);
-        setClassBody(classBody);
+        setArgsList(argsList);
+        setClassBodyList(classBodyList);
     }
 
     @Override
@@ -80,14 +80,14 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         v.visit(this, arg);
     }
 
-    public List<Expression> getArgs() {
-        args = ensureNotNull(args);
-        return args;
+    public List<Expression> getArgsList() {
+        argsList = ensureNotNull(argsList);
+        return argsList;
     }
 
-    public List<BodyDeclaration<?>> getClassBody() {
-        classBody = ensureNotNull(classBody);
-        return classBody;
+    public List<BodyDeclaration<?>> getClassBodyList() {
+        classBodyList = ensureNotNull(classBodyList);
+        return classBodyList;
     }
 
     @Override
@@ -95,14 +95,14 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return name;
     }
 
-    public void setArgs(List<Expression> args) {
-        this.args = args;
-		setAsParentNodeOf(this.args);
+    public void setArgsList(List<Expression> argsList) {
+        this.argsList = argsList;
+		setAsParentNodeOf(this.argsList);
     }
 
-    public void setClassBody(List<BodyDeclaration<?>> classBody) {
-        this.classBody = classBody;
-		setAsParentNodeOf(this.classBody);
+    public void setClassBodyList(List<BodyDeclaration<?>> classBodyList) {
+        this.classBodyList = classBodyList;
+		setAsParentNodeOf(this.classBodyList);
     }
 
     @Override
@@ -120,7 +120,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     public EnumConstantDeclaration addArgument(String valueExpr) {
-        getArgs().add(NameExpr.create(valueExpr));
+        getArgsList().add(NameExpr.create(valueExpr));
         return this;
     }
 }

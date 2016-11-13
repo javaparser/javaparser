@@ -33,7 +33,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
-import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.type.ReferenceType;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
@@ -41,7 +40,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -122,12 +120,12 @@ public class ManipulationSteps {
 
     @When("the List of VariableDeclarations are set as the resources on TryStmt")
     public void whenTheListOfVariableDeclarationsAreSetAsTheResourcesOnTryStmt() {
-        tryStmt.setResources(variableDeclarationExprList);
+        tryStmt.setResourcesList(variableDeclarationExprList);
     }
 
     @When("null is set as the resources on TryStmt")
     public void whenNullIsSetAsTheResourcesOnTryStmt() {
-        tryStmt.setResources(null);
+        tryStmt.setResourcesList(null);
     }
 
     @When("the package declaration is set to \"$packageName\"")
@@ -141,14 +139,14 @@ public class ManipulationSteps {
     public void whenAClassCalledIsAddedToTheCompilationUnit(String className) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
 		TypeDeclaration<?> type = new ClassOrInterfaceDeclaration(EnumSet.of(Modifier.PUBLIC), false, "CreateClass");
-        compilationUnit.setTypes(Arrays.asList(type));
+        compilationUnit.setTypesList(Arrays.asList(type));
         state.put("cu1", compilationUnit);
     }
 
     @When("a public static method called \"$methodName\" returning void is added to class $position in the compilation unit")
     public void whenAStaticMethodCalledReturningIsAddedToClassInTheCompilationUnit(String methodName, int position) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-		 TypeDeclaration<?> type = compilationUnit.getTypes().get(position -1);
+		 TypeDeclaration<?> type = compilationUnit.getTypesList().get(position -1);
 		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
 		MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), methodName);
 		modifiers.add(Modifier.STATIC);
@@ -162,7 +160,7 @@ public class ManipulationSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter param = Parameter.create(ReferenceType.create(typeName, 0), parameterName);
-        param.setVarArgs(true);
+        param.setIsVarArgs(true);
         method.addParameter(param);
     }
 
@@ -233,7 +231,7 @@ public class ManipulationSteps {
 
     @Then("Statement $position in BlockStmt toString is \"$expectedContent\"")
     public void thenTheBlockStmtContentIs(int position, String expectedContent) {
-        Statement statementUnderTest = blockStmt.getStmts().get(position-1);
+        Statement statementUnderTest = blockStmt.getStmtsList().get(position-1);
         assertThat(statementUnderTest.toString(), is(expectedContent));
     }
 
@@ -251,7 +249,7 @@ public class ManipulationSteps {
 
     @Then("the TryStmt has no child nodes")
     public void thenTheTryStmtHasNotChildNodes() {
-        assertThat(tryStmt.getChildrenNodes().size(), is(0));
+        assertThat(tryStmt.getChildrenNodesList().size(), is(0));
     }
 
     @Then("method $methodPosition in class $classPosition has the name \"$expectedName\"")
@@ -267,14 +265,14 @@ public class ManipulationSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
 
-        assertThat(method.getParameters().size(), is(expectedCount));
+        assertThat(method.getParametersList().size(), is(expectedCount));
     }
 
     @Then("method $methodPosition in class $classPosition parameter $parameterPosition is type int called \"$expectedName\"")
     public void thenMethodInClassParameterIsTypeIntCalled(int methodPosition, int classPosition, int parameterPosition, String expectedName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter parameter = method.getParameters().get(parameterPosition -1);
+        Parameter parameter = method.getParametersList().get(parameterPosition -1);
         assertThat(parameter.getType(), is(INT_TYPE));
         assertThat(parameter.getId().getName(), is(expectedName));
     }

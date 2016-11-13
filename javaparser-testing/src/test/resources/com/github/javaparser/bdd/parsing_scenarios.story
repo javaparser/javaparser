@@ -160,7 +160,7 @@ package bdd.samples;
 import java.util.stream.Stream;
 public class Lambdas {
 
-    public static void main(String[] args) {
+    public static void main(String[] argsList) {
         // Lambda Runnable
         Runnable r1 = () -> System.out.println("Hello world!");
         Runnable r2 = () -> {};
@@ -188,7 +188,7 @@ When the following source is parsed:
 package com.github.javapasrser.bdd.parsing;
 import java.util.function.Function;
 public class ParameterizedLambdas {
-    public static void main(String[] args) {
+    public static void main(String[] argsList) {
         Function<Integer,String> f1 = (Integer i) -> String.valueOf(i);
         Function<Integer,String> f2 = (i) -> String.valueOf(i);
         Function<Integer,String> f3 = i -> String.valueOf(i);
@@ -200,23 +200,23 @@ Then lambda in statement 3 in method 1 in class 1 is parent of contained paramet
 Then lambda in statement 1 in method 1 in class 1 is parent of contained body
 Then lambda in statement 2 in method 1 in class 1 is parent of contained body
 Then lambda in statement 3 in method 1 in class 1 is parent of contained body
-Then lambda in statement 1 in method 1 in class 1 has parameters with non-null type
-Then lambda in statement 2 in method 1 in class 1 has parameters with non-null type
-Then lambda in statement 3 in method 1 in class 1 has parameters with non-null type
+Then lambda in statement 1 in method 1 in class 1 has parametersList with non-null type
+Then lambda in statement 2 in method 1 in class 1 has parametersList with non-null type
+Then lambda in statement 3 in method 1 in class 1 has parametersList with non-null type
 
 
-Scenario: A class with multi-parameters Lambdas is parsed by the Java Parser
+Scenario: A class with multi-parametersList Lambdas is parsed by the Java Parser
 
 Given a CompilationUnit
 When the following source is parsed:
 package com.github.javapasrser.bdd.parsing;
 import java.util.function.Function;
 public class MultiParameterizedLambdas {
-    public static void main(String[] args) {
+    public static void main(String[] argsList) {
         BiFunction<Integer, Integer, String> f = (a, b) -> String.valueOf(a) + String.valueOf(b);
     }
 }
-Then lambda in statement 1 in method 1 in class 1 has parameters with non-null type
+Then lambda in statement 1 in method 1 in class 1 has parametersList with non-null type
 
 
 Scenario: A class with a method reference is parsed by the Java Parser
@@ -316,7 +316,7 @@ class A {
 Then all nodes refer to their parent
 
 
-Scenario: Parsing trailing semicolons at the end of the imports area should work
+Scenario: Parsing trailing semicolons at the end of the importsList area should work
 
 Given a CompilationUnit
 When the following source is parsed:
@@ -347,7 +347,7 @@ class A {
 Then no errors are reported
 
 
-Scenario: Parsing trailing semicolons inside the imports area should work
+Scenario: Parsing trailing semicolons inside the importsList area should work
 
 Given a CompilationUnit
 When the following source is parsed:
@@ -394,7 +394,7 @@ Scenario: Diamond Operator information is exposed
 Given a CompilationUnit
 When the following source is parsed:
 class A {
-    List<String> args = new ArrayList<>();
+    List<String> argsList = new ArrayList<>();
 }
 When I take the ObjectCreationExpr
 Then the type's diamond operator flag should be true
@@ -404,7 +404,7 @@ Scenario: Diamond Operator can be parsed also with space and comments
 Given a CompilationUnit
 When the following source is parsed:
 class A {
-    List<String> args = new ArrayList<  /*hello*/  >();
+    List<String> argsList = new ArrayList<  /*hello*/  >();
 }
 When I take the ObjectCreationExpr
 Then the type's diamond operator flag should be true
@@ -414,7 +414,7 @@ Scenario: Type Arguments are not specified
 Given a CompilationUnit
 When the following source is parsed:
 class A {
-    List args = new ArrayList();
+    List argsList = new ArrayList();
 }
 When I take the ObjectCreationExpr
 Then the type's diamond operator flag should be false
@@ -462,7 +462,7 @@ public class Example {
 }
 Then no errors are reported
 
-Scenario: try requires resources, a finally or a catch (issue 442)
+Scenario: try requires resourcesList, a finally or a catch (issue 442)
 Given the class:
 class A {
     public void helloWorld() {

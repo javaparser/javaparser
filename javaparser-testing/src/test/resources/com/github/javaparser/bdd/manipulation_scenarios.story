@@ -23,14 +23,14 @@ Scenario: Adding declarations to a TryStmt it is set as the parent of all provid
 
 Given a TryStmt
 Given a List of VariableDeclarations
-When the List of VariableDeclarations are set as the resources on TryStmt
+When the List of VariableDeclarations are set as the resourcesList on TryStmt
 Then all the VariableDeclarations parent is the TryStmt
 
 
 Scenario: Adding null to a TryStmt it handles the outcome gracefully
 
 Given a TryStmt
-When null is set as the resources on TryStmt
+When null is set as the resourcesList on TryStmt
 Then the TryStmt has no child nodes
 
 
@@ -40,7 +40,7 @@ Given a CompilationUnit
 When the package declaration is set to "japa.parser.ast.manipulation"
 When a public class called "CreateClass" is added to the CompilationUnit
 When a public static method called "main" returning void is added to class 1 in the compilation unit
-When String varargs called "args" are added to method 1 in class 1
+When String varargs called "argsList" are added to method 1 in class 1
 When a BlockStmt is added to method 1 in class 1
 When System.out.println("Hello World!"); is added to the body of method 1 in class 1
 Then the expected source should be:
@@ -48,7 +48,7 @@ package japa.parser.ast.manipulation;
 
 public class CreateClass {
 
-    public static void main(String... args) {
+    public static void main(String... argsList) {
         System.out.println("Hello World!");
     }
 }
@@ -101,7 +101,7 @@ public class UpdateMethod {
     public void anotherMethodToChange(){}
 }
 When method 2 in class 1 has an int parameter called "value" added
-Then method 1 in class 1 has 1 parameters
+Then method 1 in class 1 has 1 parametersList
 Then method 2 in class 1 has 1 parameter
 Then method 2 in class 1 parameter 1 is type int called "value"
 
@@ -120,7 +120,7 @@ public class UpdateMethod {
 }
 Given a AddNewIntParameterCalledValueVisitor
 When the AddNewIntParameterCalledValueVisitor visits to compilation unit
-Then method 1 in class 1 has 2 parameters
+Then method 1 in class 1 has 2 parametersList
 Then method 2 in class 1 has 1 parameter
 Then method 1 in class 1 parameter 2 is type int called "value"
 Then method 2 in class 1 parameter 1 is type int called "value"
@@ -140,5 +140,5 @@ public class UpdateMethod {
 }
 When the compilation unit is cloned
 Then method 1 in class 1 has the name "changeToUpperCase"
-Then method 1 in class 1 has 1 parameters
+Then method 1 in class 1 has 1 parametersList
 Then method 2 in class 1 has 0 parameter

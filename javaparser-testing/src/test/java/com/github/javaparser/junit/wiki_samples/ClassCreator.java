@@ -46,7 +46,7 @@ public class ClassCreator {
 
         // add a parameter to the method
         Parameter param = Parameter.create(ReferenceType.create("String", 0), "args");
-        param.setVarArgs(true);
+        param.setIsVarArgs(true);
         method.addParameter(param);
 
         // add a body to the method

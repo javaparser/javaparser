@@ -21,15 +21,15 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -38,21 +38,21 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 
 	private Expression label;
 
-	private List<Statement> stmts;
+	private List<Statement> stmtsList;
 
 	public SwitchEntryStmt() {
 	}
 
-	public SwitchEntryStmt(final Expression label, final List<Statement> stmts) {
+	public SwitchEntryStmt(final Expression label, final List<Statement> stmtsList) {
 		setLabel(label);
-		setStmts(stmts);
+		setStmtsList(stmtsList);
 	}
 
 	public SwitchEntryStmt(Range range, final Expression label,
-	                       final List<Statement> stmts) {
+	                       final List<Statement> stmtsList) {
 		super(range);
 		setLabel(label);
-		setStmts(stmts);
+		setStmtsList(stmtsList);
 	}
 
 	@Override
@@ -70,9 +70,9 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 	}
 
 	@Override
-    public List<Statement> getStmts() {
-        stmts = ensureNotNull(stmts);
-        return stmts;
+    public List<Statement> getStmtsList() {
+        stmtsList = ensureNotNull(stmtsList);
+        return stmtsList;
 	}
 
 	public void setLabel(final Expression label) {
@@ -81,9 +81,9 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 	}
 
 	@Override
-    public SwitchEntryStmt setStmts(final List<Statement> stmts) {
-		this.stmts = stmts;
-		setAsParentNodeOf(this.stmts);
+    public SwitchEntryStmt setStmtsList(final List<Statement> stmtsList) {
+		this.stmtsList = stmtsList;
+		setAsParentNodeOf(this.stmtsList);
         return this;
 	}
 }

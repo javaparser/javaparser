@@ -65,7 +65,7 @@ version:
   The object code form of an Application may incorporate material from
 a header file that is part of the Library.  You may convey such object
 code under terms of your choice, provided that, if the incorporated
-material is not limited to numerical parameters, data structure
+material is not limited to numerical parametersList, data structure
 layouts and accessors, or small macros, inline functions and templates
 (ten or fewer lines in length), you do both of the following:
 
@@ -146,7 +146,7 @@ choice, if you do both of the following:
   The Free Software Foundation may publish revised and/or new versions
 of the GNU Lesser General Public License from time to time. Such new
 versions will be similar in spirit to the present version, but may
-differ in detail to address new problems or concerns.
+differ in detail to address new problemsList or concerns.
 
   Each version is given a distinguishing version number. If the
 Library as you received it specifies that a certain numbered version

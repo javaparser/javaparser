@@ -29,21 +29,21 @@ public class ClassOrInterfaceDeclarationBuildersTest {
 	public void testAddExtends() {
         ClassOrInterfaceDeclaration testClass = cu.addClass("test");
         testClass.addExtends(List.class);
-        assertEquals(1, cu.getImports().size());
+        assertEquals(1, cu.getImportsList().size());
         assertEquals("import " + List.class.getName() + ";" + System.getProperty("line.separator"),
-                cu.getImports().get(0).toString());
-        assertEquals(1, testClass.getExtends().size());
-        assertEquals(List.class.getSimpleName(), testClass.getExtends().get(0).getName());
+                cu.getImportsList().get(0).toString());
+        assertEquals(1, testClass.getExtendsList().size());
+        assertEquals(List.class.getSimpleName(), testClass.getExtendsList().get(0).getName());
 	}
 
     @Test
     public void testAddImplements() {
         ClassOrInterfaceDeclaration testClass = cu.addClass("test");
         testClass.addImplements(Function.class);
-        assertEquals(1, cu.getImports().size());
+        assertEquals(1, cu.getImportsList().size());
         assertEquals("import " + Function.class.getName() + ";" + System.getProperty("line.separator"),
-                cu.getImports().get(0).toString());
-        assertEquals(1, testClass.getImplements().size());
-        assertEquals(Function.class.getSimpleName(), testClass.getImplements().get(0).getName());
+                cu.getImportsList().get(0).toString());
+        assertEquals(1, testClass.getImplementsList().size());
+        assertEquals(Function.class.getSimpleName(), testClass.getImplementsList().get(0).getName());
     }
 }

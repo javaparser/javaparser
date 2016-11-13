@@ -35,20 +35,20 @@ public class CompilationUnitBuildersTest {
 		cu.addImport(Map.class);
 		cu.addImport(Map.class);
 		cu.addImport(List.class);
-		assertEquals(2, cu.getImports().size());
+		assertEquals(2, cu.getImportsList().size());
 		cu.addImport("myImport");
-		assertEquals(3, cu.getImports().size());
-		assertEquals("import " + Map.class.getName() + ";" + System.getProperty("line.separator"), cu.getImports().get(0).toString());
-		assertEquals("import " + List.class.getName() + ";" + System.getProperty("line.separator"), cu.getImports().get(1).toString());
-		assertEquals("import myImport;" + System.getProperty("line.separator"), cu.getImports().get(2).toString());
+		assertEquals(3, cu.getImportsList().size());
+		assertEquals("import " + Map.class.getName() + ";" + System.getProperty("line.separator"), cu.getImportsList().get(0).toString());
+		assertEquals("import " + List.class.getName() + ";" + System.getProperty("line.separator"), cu.getImportsList().get(1).toString());
+		assertEquals("import myImport;" + System.getProperty("line.separator"), cu.getImportsList().get(2).toString());
 	}
 
     @Test
     public void testAddClass() {
         ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", Modifier.PRIVATE);
-        assertEquals(1, cu.getTypes().size());
-        assertEquals("testClass", cu.getTypes().get(0).getName());
-        assertEquals(ClassOrInterfaceDeclaration.class, cu.getTypes().get(0).getClass());
+        assertEquals(1, cu.getTypesList().size());
+        assertEquals("testClass", cu.getTypesList().get(0).getName());
+        assertEquals(ClassOrInterfaceDeclaration.class, cu.getTypesList().get(0).getClass());
         assertTrue(myClassDeclaration.isPrivate());
         assertFalse(myClassDeclaration.isInterface());
     }
@@ -56,29 +56,29 @@ public class CompilationUnitBuildersTest {
     @Test
     public void testAddInterface() {
         ClassOrInterfaceDeclaration myInterfaceDeclaration = cu.addInterface("testInterface");
-        assertEquals(1, cu.getTypes().size());
-        assertEquals("testInterface", cu.getTypes().get(0).getName());
+        assertEquals(1, cu.getTypesList().size());
+        assertEquals("testInterface", cu.getTypesList().get(0).getName());
         assertTrue(myInterfaceDeclaration.isPublic());
-        assertEquals(ClassOrInterfaceDeclaration.class, cu.getTypes().get(0).getClass());
+        assertEquals(ClassOrInterfaceDeclaration.class, cu.getTypesList().get(0).getClass());
         assertTrue(myInterfaceDeclaration.isInterface());
     }
 
     @Test
     public void testAddEnum() {
         EnumDeclaration myEnumDeclaration = cu.addEnum("test");
-        assertEquals(1, cu.getTypes().size());
-        assertEquals("test", cu.getTypes().get(0).getName());
+        assertEquals(1, cu.getTypesList().size());
+        assertEquals("test", cu.getTypesList().get(0).getName());
         assertTrue(myEnumDeclaration.isPublic());
-        assertEquals(EnumDeclaration.class, cu.getTypes().get(0).getClass());
+        assertEquals(EnumDeclaration.class, cu.getTypesList().get(0).getClass());
     }
 
     @Test
     public void testAddAnnotationDeclaration() {
         AnnotationDeclaration myAnnotationDeclaration = cu.addAnnotationDeclaration("test");
-        assertEquals(1, cu.getTypes().size());
-        assertEquals("test", cu.getTypes().get(0).getName());
+        assertEquals(1, cu.getTypesList().size());
+        assertEquals("test", cu.getTypesList().get(0).getName());
         assertTrue(myAnnotationDeclaration.isPublic());
-        assertEquals(AnnotationDeclaration.class, cu.getTypes().get(0).getClass());
+        assertEquals(AnnotationDeclaration.class, cu.getTypesList().get(0).getClass());
     }
 
     @Test

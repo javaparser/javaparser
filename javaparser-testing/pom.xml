@@ -52,21 +52,21 @@
                 <version>${maven-resources-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-resourcesList</id>
                         <!-- here the phase you need -->
                         <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>copy-resourcesList</goal>
                         </goals>
                         <configuration>
                             <encoding>UTF-8</encoding>
                             <outputDirectory>${basedir}/target/classes</outputDirectory>
-                            <resources>
+                            <resourcesList>
                                 <resource>
                                     <directory>../javaparser-core/target/classes</directory>
                                     <filtering>false</filtering>
                                 </resource>
-                            </resources>
+                            </resourcesList>
                         </configuration>
                     </execution>
                 </executions>

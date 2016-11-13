@@ -1,14 +1,14 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-public interface NodeWithImplements<T> {
-    public List<ClassOrInterfaceType> getImplements();
+import java.util.List;
 
-    public T setImplements(List<ClassOrInterfaceType> implementsList);
+public interface NodeWithImplements<T> {
+    public List<ClassOrInterfaceType> getImplementsList();
+
+    public T setImplementsList(List<ClassOrInterfaceType> implementsList);
 
     /**
      * Add an implements to this
@@ -19,7 +19,7 @@ public interface NodeWithImplements<T> {
     @SuppressWarnings("unchecked")
     public default T addImplements(String name) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
-        getImplements().add(classOrInterfaceType);
+        getImplementsList().add(classOrInterfaceType);
         classOrInterfaceType.setParentNode((Node) this);
         return (T) this;
     }

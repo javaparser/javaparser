@@ -21,47 +21,47 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
-	private List<Expression> init;
+	private List<Expression> initList;
 
 	private Expression compare;
 
-	private List<Expression> update;
+	private List<Expression> updateList;
 
 	private Statement body;
 
 	public ForStmt() {
 	}
 
-	public ForStmt(final List<Expression> init, final Expression compare,
-			final List<Expression> update, final Statement body) {
+	public ForStmt(final List<Expression> initList, final Expression compare,
+			final List<Expression> updateList, final Statement body) {
 		setCompare(compare);
-		setInit(init);
-		setUpdate(update);
+		setInitList(initList);
+		setUpdateList(updateList);
 		setBody(body);
 	}
 
 	public ForStmt(Range range,
-	               final List<Expression> init, final Expression compare,
-	               final List<Expression> update, final Statement body) {
+	               final List<Expression> initList, final Expression compare,
+	               final List<Expression> updateList, final Statement body) {
 		super(range);
 		setCompare(compare);
-		setInit(init);
-		setUpdate(update);
+		setInitList(initList);
+		setUpdateList(updateList);
 		setBody(body);
 	}
 
@@ -84,14 +84,14 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 		return compare;
 	}
 
-	public List<Expression> getInit() {
-        init = ensureNotNull(init);
-        return init;
+	public List<Expression> getInitList() {
+        initList = ensureNotNull(initList);
+        return initList;
 	}
 
-	public List<Expression> getUpdate() {
-        update = ensureNotNull(update);
-        return update;
+	public List<Expression> getUpdateList() {
+        updateList = ensureNotNull(updateList);
+        return updateList;
 	}
 
 	@Override
@@ -106,13 +106,13 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 		setAsParentNodeOf(this.compare);
 	}
 
-	public void setInit(final List<Expression> init) {
-		this.init = init;
-		setAsParentNodeOf(this.init);
+	public void setInitList(final List<Expression> initList) {
+		this.initList = initList;
+		setAsParentNodeOf(this.initList);
 	}
 
-	public void setUpdate(final List<Expression> update) {
-		this.update = update;
-		setAsParentNodeOf(this.update);
+	public void setUpdateList(final List<Expression> updateList) {
+		this.updateList = updateList;
+		setAsParentNodeOf(this.updateList);
 	}
 }

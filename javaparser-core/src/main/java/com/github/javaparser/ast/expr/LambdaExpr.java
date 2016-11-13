@@ -38,7 +38,7 @@ import static com.github.javaparser.utils.Utils.*;
  */
 public class LambdaExpr extends Expression {
 
-	private List<Parameter> parameters;
+	private List<Parameter> parametersList;
 
 	private boolean parametersEnclosed;
 
@@ -47,23 +47,23 @@ public class LambdaExpr extends Expression {
 	public LambdaExpr() {
 	}
 
-	public LambdaExpr(Range range, List<Parameter> parameters, Statement body,
+	public LambdaExpr(Range range, List<Parameter> parametersList, Statement body,
                       boolean parametersEnclosed) {
 
 		super(range);
-		setParameters(parameters);
+		setParametersList(parametersList);
 		setBody(body);
         setParametersEnclosed(parametersEnclosed);
 	}
 
-	public List<Parameter> getParameters() {
-        parameters = ensureNotNull(parameters);
-        return parameters;
+	public List<Parameter> getParametersList() {
+        parametersList = ensureNotNull(parametersList);
+        return parametersList;
 	}
 
-	public void setParameters(List<Parameter> parameters) {
-		this.parameters = parameters;
-		setAsParentNodeOf(this.parameters);
+	public void setParametersList(List<Parameter> parametersList) {
+		this.parametersList = parametersList;
+		setAsParentNodeOf(this.parametersList);
 	}
 
 	public Statement getBody() {

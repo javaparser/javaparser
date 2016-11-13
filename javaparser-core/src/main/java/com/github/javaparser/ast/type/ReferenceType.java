@@ -21,11 +21,6 @@
  
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -33,6 +28,11 @@ import com.github.javaparser.ast.nodeTypes.NodeWithArrays;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.List;
+
+import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -43,7 +43,7 @@ public final class ReferenceType extends Type<ReferenceType> implements NodeWith
 
 	private int arrayCount;
 
-    private List<List<AnnotationExpr>> arraysAnnotations;
+    private List<List<AnnotationExpr>> arraysAnnotationsList;
 
     public ReferenceType() {
 	}
@@ -66,17 +66,17 @@ public final class ReferenceType extends Type<ReferenceType> implements NodeWith
     public ReferenceType(int beginLine, int beginColumn, int endLine,
                          int endColumn, Type type, int arrayCount,
                          List<AnnotationExpr> annotations,
-                         List<List<AnnotationExpr>> arraysAnnotations) {
-	    this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount, annotations, arraysAnnotations);
+                         List<List<AnnotationExpr>> arraysAnnotationsList) {
+	    this(new Range(pos(beginLine, beginColumn), pos(endLine, endColumn)), type, arrayCount, annotations, arraysAnnotationsList);
     }
 	
     public ReferenceType(Range range, Type type, int arrayCount,
                          List<AnnotationExpr> annotations,
-                         List<List<AnnotationExpr>> arraysAnnotations) {
+                         List<List<AnnotationExpr>> arraysAnnotationsList) {
         super(range, annotations);
         setType(type);
         setArrayCount(arrayCount);
-        this.arraysAnnotations = arraysAnnotations;
+        this.arraysAnnotationsList = arraysAnnotationsList;
     }
 
 	/**
@@ -137,14 +137,14 @@ public final class ReferenceType extends Type<ReferenceType> implements NodeWith
 	}
 
 	@Override
-    public List<List<AnnotationExpr>> getArraysAnnotations() {
-        arraysAnnotations = ensureNotNull(arraysAnnotations);
-        return arraysAnnotations;
+    public List<List<AnnotationExpr>> getArraysAnnotationsList() {
+        arraysAnnotationsList = ensureNotNull(arraysAnnotationsList);
+        return arraysAnnotationsList;
     }
 
 	@Override
-    public ReferenceType setArraysAnnotations(List<List<AnnotationExpr>> arraysAnnotations) {
-        this.arraysAnnotations = arraysAnnotations;
+    public ReferenceType setArraysAnnotationsList(List<List<AnnotationExpr>> arraysAnnotationsList) {
+        this.arraysAnnotationsList = arraysAnnotationsList;
 		return this;
     }
 }

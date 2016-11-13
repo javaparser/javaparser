@@ -34,18 +34,18 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
  */
 public final class ArrayInitializerExpr extends Expression {
 
-    private List<Expression> values;
+    private List<Expression> valuesList;
 
     public ArrayInitializerExpr() {
     }
 
-    public ArrayInitializerExpr(List<Expression> values) {
-       setValues(values);
+    public ArrayInitializerExpr(List<Expression> valuesList) {
+       setValuesList(valuesList);
     }
 
-    public ArrayInitializerExpr(Range range, List<Expression> values) {
+    public ArrayInitializerExpr(Range range, List<Expression> valuesList) {
         super(range);
-        setValues(values);
+        setValuesList(valuesList);
     }
 
     @Override
@@ -58,13 +58,13 @@ public final class ArrayInitializerExpr extends Expression {
         v.visit(this, arg);
     }
 
-    public List<Expression> getValues() {
-        values = ensureNotNull(values);
-        return values;
+    public List<Expression> getValuesList() {
+        valuesList = ensureNotNull(valuesList);
+        return valuesList;
     }
 
-    public void setValues(List<Expression> values) {
-        this.values = values;
-		setAsParentNodeOf(this.values);
+    public void setValuesList(List<Expression> valuesList) {
+        this.valuesList = valuesList;
+		setAsParentNodeOf(this.valuesList);
     }
 }

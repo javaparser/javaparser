@@ -29,13 +29,13 @@ public interface NodeWithArrays<T> {
 	 * be a list containing just @Ann2.
 	 * </p>
 	 *
-	 * <p>This property is guaranteed to hold: <pre>{@code getArraysAnnotations().size() == getArrayCount()}</pre>
+	 * <p>This property is guaranteed to hold: <pre>{@code getArraysAnnotationsList().size() == getArrayCount()}</pre>
 	 * If a certain array modifier has no annotation the corresponding entry of arraysAnnotations will be null</p>
 	 */
-	List<List<AnnotationExpr>> getArraysAnnotations();
+	List<List<AnnotationExpr>> getArraysAnnotationsList();
 
 	/**
-	 * For a description of the arrayAnnotations field refer to {@link #getArraysAnnotations()}
+	 * For a description of the arrayAnnotations field refer to {@link #getArraysAnnotationsList()}
 	 */
-	T setArraysAnnotations(List<List<AnnotationExpr>> arraysAnnotations);
+	T setArraysAnnotationsList(List<List<AnnotationExpr>> arraysAnnotationsList);
 }

@@ -44,7 +44,7 @@ giving you legal permission to copy, distribute and/or modify it.
   For the developers' and authors' protection, the GPL clearly explains
 that there is no warranty for this free software.  For both users' and
 authors' sake, the GPL requires that modified versions be marked as
-changed, so that their problems will not be attributed erroneously to
+changed, so that their problemsList will not be attributed erroneously to
 authors of previous versions.
 
   Some devices are designed to deny users access to install or run
@@ -54,7 +54,7 @@ protecting users' freedom to change the software.  The systematic
 pattern of such abuse occurs in the area of products for individuals to
 use, which is precisely where it is most unacceptable.  Therefore, we
 have designed this version of the GPL to prohibit the practice for those
-products.  If such problems arise substantially in other domains, we
+products.  If such problemsList arise substantially in other domains, we
 stand ready to extend this provision to those domains in future versions
 of the GPL, as needed to protect the freedom of users.
 
@@ -565,7 +565,7 @@ combination as such.
   The Free Software Foundation may publish revised and/or new versions of
 the GNU General Public License from time to time.  Such new versions will
 be similar in spirit to the present version, but may differ in detail to
-address new problems or concerns.
+address new problemsList or concerns.
 
   Each version is given a distinguishing version number.  If the
 Program specifies that a certain numbered version of the GNU General

@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
@@ -33,17 +28,16 @@ import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
-import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
-import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -56,13 +50,13 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<TypeParameter> typeParameters;
+    private List<TypeParameter> typeParameterList;
 
     private NameExpr name;
 
-    private List<Parameter> parameters;
+    private List<Parameter> parametersList;
 
-    private List<ReferenceType> throws_;
+    private List<ReferenceType> throwsList;
 
     private BlockStmt body;
 
@@ -75,27 +69,27 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
-                                  List<TypeParameter> typeParameters,
-                                  String name, List<Parameter> parameters, List<ReferenceType> throws_,
+                                  List<TypeParameter> typeParameterList,
+                                  String name, List<Parameter> parametersList, List<ReferenceType> throwsList,
                                   BlockStmt block) {
         super(annotations);
         setModifiers(modifiers);
-        setTypeParameters(typeParameters);
+        setTypeParameterList(typeParameterList);
         setName(name);
-        setParameters(parameters);
-        setThrows(throws_);
+        setParametersList(parametersList);
+        setThrowsList(throwsList);
         setBody(block);
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
-                                  List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
-                                  List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
+                                  List<AnnotationExpr> annotations, List<TypeParameter> typeParameterList, String name,
+                                  List<Parameter> parametersList, List<ReferenceType> throwsList, BlockStmt block) {
         super(range, annotations);
         setModifiers(modifiers);
-        setTypeParameters(typeParameters);
+        setTypeParameterList(typeParameterList);
         setName(name);
-        setParameters(parameters);
-        setThrows(throws_);
+        setParametersList(parametersList);
+        setThrowsList(throwsList);
         setBody(block);
     }
 
@@ -130,20 +124,20 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public List<Parameter> getParameters() {
-        parameters = ensureNotNull(parameters);
-        return parameters;
+    public List<Parameter> getParametersList() {
+        parametersList = ensureNotNull(parametersList);
+        return parametersList;
     }
 
     @Override
-    public List<ReferenceType> getThrows() {
-        throws_ = ensureNotNull(throws_);
-        return throws_;
+    public List<ReferenceType> getThrowsList() {
+        throwsList = ensureNotNull(throwsList);
+        return throwsList;
     }
 
-    public List<TypeParameter> getTypeParameters() {
-        typeParameters = ensureNotNull(typeParameters);
-        return typeParameters;
+    public List<TypeParameter> getTypeParameterList() {
+        typeParameterList = ensureNotNull(typeParameterList);
+        return typeParameterList;
     }
 
     @Override
@@ -165,22 +159,22 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setParameters(List<Parameter> parameters) {
-        this.parameters = parameters;
-        setAsParentNodeOf(this.parameters);
+    public ConstructorDeclaration setParametersList(List<Parameter> parametersList) {
+        this.parametersList = parametersList;
+        setAsParentNodeOf(this.parametersList);
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setThrows(List<ReferenceType> throws_) {
-        this.throws_ = throws_;
-        setAsParentNodeOf(this.throws_);
+    public ConstructorDeclaration setThrowsList(List<ReferenceType> throwsList) {
+        this.throwsList = throwsList;
+        setAsParentNodeOf(this.throwsList);
         return this;
     }
 
-    public void setTypeParameters(List<TypeParameter> typeParameters) {
-        this.typeParameters = typeParameters;
-        setAsParentNodeOf(this.typeParameters);
+    public void setTypeParameterList(List<TypeParameter> typeParameterList) {
+        this.typeParameterList = typeParameterList;
+        setAsParentNodeOf(this.typeParameterList);
     }
 
     /**
@@ -201,7 +195,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         sb.append(getName());
         sb.append("(");
         boolean firstParam = true;
-        for (Parameter param : getParameters()) {
+        for (Parameter param : getParametersList()) {
             if (firstParam) {
                 firstParam = false;
             } else {
@@ -216,7 +210,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType thr : getThrows()) {
+            for (ReferenceType thr : getThrowsList()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");

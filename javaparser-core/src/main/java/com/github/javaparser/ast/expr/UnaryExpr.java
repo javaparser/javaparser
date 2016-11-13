@@ -43,20 +43,20 @@ public final class UnaryExpr extends Expression {
 
 	private Expression expr;
 
-	private Operator op;
+	private Operator operator;
 
 	public UnaryExpr() {
 	}
 
-	public UnaryExpr(final Expression expr, final Operator op) {
+	public UnaryExpr(final Expression expr, final Operator operator) {
 		setExpr(expr);
-		setOperator(op);
+		setOperator(operator);
 	}
 
-	public UnaryExpr(final Range range, final Expression expr, final Operator op) {
+	public UnaryExpr(final Range range, final Expression expr, final Operator operator) {
 		super(range);
 		setExpr(expr);
-		setOperator(op);
+		setOperator(operator);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -72,7 +72,7 @@ public final class UnaryExpr extends Expression {
 	}
 
 	public Operator getOperator() {
-		return op;
+		return operator;
 	}
 
 	public void setExpr(final Expression expr) {
@@ -81,6 +81,6 @@ public final class UnaryExpr extends Expression {
 	}
 
 	public void setOperator(final Operator op) {
-		this.op = op;
+		this.operator = op;
 	}
 }

@@ -21,16 +21,16 @@ import java.util.List;
  */
 public class IntersectionType extends Type<IntersectionType> implements NodeWithAnnotations<IntersectionType> {
 
-    private List<ReferenceType> elements;
+    private List<ReferenceType> elementsList;
 
-    public IntersectionType(Range range, List<ReferenceType> elements) {
+    public IntersectionType(Range range, List<ReferenceType> elementsList) {
         super(range);
-        setElements(elements);
+        setElementsList(elementsList);
     }
 
-    public IntersectionType(List<ReferenceType> elements) {
+    public IntersectionType(List<ReferenceType> elementsList) {
         super();
-        setElements(elements);
+        setElementsList(elementsList);
     }
 
     @Override
@@ -43,17 +43,17 @@ public class IntersectionType extends Type<IntersectionType> implements NodeWith
         v.visit(this, arg);
     }
 
-    public List<ReferenceType> getElements() {
-        return elements;
+    public List<ReferenceType> getElementsList() {
+        return elementsList;
     }
 
-    public void setElements(List<ReferenceType> elements) {
-        if (this.elements != null) {
-            for (ReferenceType element : elements){
+    public void setElementsList(List<ReferenceType> elementsList) {
+        if (this.elementsList != null) {
+            for (ReferenceType element : elementsList){
                 element.setParentNode(null);
             }
         }
-        this.elements = elements;
-        setAsParentNodeOf(this.elements);
+        this.elementsList = elementsList;
+        setAsParentNodeOf(this.elementsList);
     }
 }

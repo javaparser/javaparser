@@ -24,7 +24,6 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 
 import java.util.List;
 
@@ -35,32 +34,32 @@ import static com.github.javaparser.utils.Utils.*;
  */
 public abstract class Type<T extends Type> extends Node {
 
-    private List<AnnotationExpr> annotations;
+    private List<AnnotationExpr> annotationsList;
 
     public Type() {
     }
 
-    public Type(List<AnnotationExpr> annotation){
-        this.annotations = annotation;
+    public Type(List<AnnotationExpr> annotationList){
+        this.annotationsList = annotationList;
     }
 
     public Type(Range range) {
         super(range);
     }
     
-    public Type(Range range, List<AnnotationExpr> annotations) {
+    public Type(Range range, List<AnnotationExpr> annotationsList) {
         super(range);
-        setAnnotations(annotations);
+        setAnnotationsList(annotationsList);
     }
 
-    public List<AnnotationExpr> getAnnotations() {
-        annotations = ensureNotNull(annotations);
-        return annotations;
+    public List<AnnotationExpr> getAnnotationsList() {
+        annotationsList = ensureNotNull(annotationsList);
+        return annotationsList;
     }
 
-    public T setAnnotations(List<AnnotationExpr> annotations) {
-        setAsParentNodeOf(annotations);
-        this.annotations = annotations;
+    public T setAnnotationsList(List<AnnotationExpr> annotationsList) {
+        setAsParentNodeOf(annotationsList);
+        this.annotationsList = annotationsList;
         return (T) this;
     }
 

@@ -78,13 +78,13 @@ public final class JavaParser {
 	 * @param context  refer to the constants in ParseContext to see what can be parsed.
 	 * @param provider refer to Providers to see how you can read source
 	 * @param <N>      the subclass of Node that is the result of parsing in the context.
-	 * @return the parse result and a collection of encountered problems.
+	 * @return the parse result and a collection of encountered problemsList.
 	 */
 	public <N> ParseResult<N> parseStructure(ParseContext<N> context, Provider provider) {
 		final ASTParser parser = getParserForProvider(provider);
 		try {
 			N resultNode = context.parse(parser);
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, astParser.getTokens());
+			return new ParseResult<>(Optional.of(resultNode), parser.problemsList, astParser.getTokens());
 		} catch (ParseException e) {
 			return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))), new LinkedList<>());
         } catch (TokenMgrException e) {
@@ -103,7 +103,7 @@ public final class JavaParser {
 	 * It takes the source code from a Provider.
 	 *
 	 * @param provider refer to Providers to see how you can read source
-	 * @return the parse result and a collection of encountered problems.
+	 * @return the parse result and a collection of encountered problemsList.
 	 */
 	public ParseResult<CompilationUnit> parseFull(Provider provider) {
 		try {
@@ -112,7 +112,7 @@ public final class JavaParser {
 			final CompilationUnit resultNode = COMPILATION_UNIT.parse(parser);
 			commentsInserter.insertComments(resultNode, sourceCode);
 
-			return new ParseResult<>(Optional.of(resultNode), parser.problems, astParser.getTokens());
+			return new ParseResult<>(Optional.of(resultNode), parser.problemsList, astParser.getTokens());
 		} catch (ParseException e) {
             return new ParseResult<>(Optional.empty(), singletonList(new Problem(e.getMessage(), tokenRange(e.currentToken))), new LinkedList<>());
         } catch (TokenMgrException e) {
@@ -285,7 +285,7 @@ public final class JavaParser {
 		if (result.isSuccessful()) {
 			return result.result.get();
 		}
-		throw new ParseProblemException(result.problems);
+		throw new ParseProblemException(result.problemsList);
 	}
 
     private static CompilationUnit simplifiedParse(Provider provider, boolean considerComments) {
@@ -298,7 +298,7 @@ public final class JavaParser {
         if (result.isSuccessful()) {
             return result.result.get();
         }
-        throw new ParseProblemException(result.problems);
+        throw new ParseProblemException(result.problemsList);
     }
 
 	/**
@@ -309,7 +309,7 @@ public final class JavaParser {
 	 * @return list of Statement representing the Java statement
 	 * @throws ParseProblemException if the source code has parser errors
 	 */
-	public static List<Statement> parseStatements(final String statements) {
+	public static List<Statement> parseStatementsList(final String statements) {
 		return simplifiedParse(STATEMENTS, provider(statements));
 	}
 

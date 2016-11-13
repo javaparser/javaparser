@@ -45,7 +45,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 
 	public ForeachStmt(final VariableDeclarationExpr var,
 			final Expression iterable, final Statement body) {
-		setVariable(var);
+		setVar(var);
 		setIterable(iterable);
 		setBody(body);
 	}
@@ -54,7 +54,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 	                   final VariableDeclarationExpr var, final Expression iterable,
 	                   final Statement body) {
 		super(range);
-		setVariable(var);
+		setVar(var);
 		setIterable(iterable);
 		setBody(body);
 	}
@@ -67,7 +67,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
      * @param body
      */
     public ForeachStmt(VariableDeclarationExpr var, String iterable, BlockStmt body) {
-        setVariable(var);
+        setVar(var);
         setIterable(new NameExpr(iterable));
         setBody(body);
     }
@@ -91,7 +91,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 		return iterable;
 	}
 
-	public VariableDeclarationExpr getVariable() {
+	public VariableDeclarationExpr getVar() {
 		return var;
 	}
 
@@ -107,7 +107,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 		setAsParentNodeOf(this.iterable);
 	}
 
-	public void setVariable(final VariableDeclarationExpr var) {
+	public void setVar(final VariableDeclarationExpr var) {
 		this.var = var;
 		setAsParentNodeOf(this.var);
 	}

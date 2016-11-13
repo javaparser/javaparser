@@ -29,10 +29,10 @@ public class NodeWithThrowableBuildersTest {
 	public void testThrows() {
 		MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
 		addMethod.addThrows(IllegalStateException.class);
-		assertEquals(1, addMethod.getThrows().size());
+		assertEquals(1, addMethod.getThrowsList().size());
 		assertEquals(true, addMethod.isThrows(IllegalStateException.class));
 		addMethod.addThrows(new ReferenceType(new ClassOrInterfaceType("Test")));
-		assertEquals(2, addMethod.getThrows().size());
-		assertEquals("Test", addMethod.getThrows().get(1).getType().toString());
+		assertEquals(2, addMethod.getThrowsList().size());
+		assertEquals("Test", addMethod.getThrowsList().get(1).getType().toString());
 	}
 }

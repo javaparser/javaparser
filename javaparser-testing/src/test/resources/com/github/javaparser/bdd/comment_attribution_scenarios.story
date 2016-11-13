@@ -243,7 +243,7 @@ class Issue40{
         return userService.getOriginalUser(userName);
     }
 }
-When the do not consider annotations as node start for code attribution is true on the Java parser
+When the do not consider annotationsList as node start for code attribution is true on the Java parser
 When the class is parsed by the Java parser
 Then the compilation unit has 1 contained comments
 Then comment 1 in compilation unit is not an orphan
@@ -264,7 +264,7 @@ class Issue40{
         return userService.getOriginalUser(userName);
     }
 }
-When the do not consider annotations as node start for code attribution is false on the Java parser
+When the do not consider annotationsList as node start for code attribution is false on the Java parser
 When the class is parsed by the Java parser
 Then the compilation unit has 1 contained comments
 Then comment 1 in compilation unit is not an orphan
@@ -403,7 +403,7 @@ class A {
     /* A block comment that
     // Contains a line comment
     */
-    public static void main(String args[]) {
+    public static void main(String argsList[]) {
     }
 }
 When the class is parsed by the Java parser

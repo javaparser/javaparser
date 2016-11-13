@@ -21,14 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.Modifier.*;
-import static com.github.javaparser.ast.type.VoidType.*;
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -42,9 +34,16 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -57,7 +56,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
     private Type type;
 
-    private List<VariableDeclarator> variables;
+    private List<VariableDeclarator> variablesList;
 
     public FieldDeclaration() {
     }
@@ -67,29 +66,29 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         setType(type);
         List<VariableDeclarator> aux = new ArrayList<>();
         aux.add(variable);
-        setVariables(aux);
+        setVariablesList(aux);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, List<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, List<VariableDeclarator> variablesList) {
         setModifiers(modifiers);
         setType(type);
-        setVariables(variables);
+        setVariablesList(variablesList);
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
-                            List<VariableDeclarator> variables) {
+                            List<VariableDeclarator> variablesList) {
         super(annotations);
         setModifiers(modifiers);
         setType(type);
-        setVariables(variables);
+        setVariablesList(variablesList);
     }
 
     public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
-                            List<VariableDeclarator> variables) {
+                            List<VariableDeclarator> variablesList) {
         super(range, annotations);
         setModifiers(modifiers);
         setType(type);
-        setVariables(variables);
+        setVariablesList(variablesList);
     }
 
     /**
@@ -105,9 +104,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      */
     public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type,
                                                           VariableDeclarator variable) {
-        List<VariableDeclarator> variables = new ArrayList<>();
-        variables.add(variable);
-        return new FieldDeclaration(modifiers, type, variables);
+        List<VariableDeclarator> variablesList = new ArrayList<>();
+        variablesList.add(variable);
+        return new FieldDeclaration(modifiers, type, variablesList);
     }
 
     /**
@@ -153,9 +152,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return type;
     }
 
-    public List<VariableDeclarator> getVariables() {
-        variables = ensureNotNull(variables);
-        return variables;
+    public List<VariableDeclarator> getVariablesList() {
+        variablesList = ensureNotNull(variablesList);
+        return variablesList;
     }
 
     @Override
@@ -171,9 +170,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return this;
     }
 
-    public void setVariables(List<VariableDeclarator> variables) {
-        this.variables = variables;
-        setAsParentNodeOf(this.variables);
+    public void setVariablesList(List<VariableDeclarator> variablesList) {
+        this.variablesList = variablesList;
+        setAsParentNodeOf(this.variablesList);
     }
 
     @Override
@@ -193,7 +192,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      *             class or enum
      */
     public MethodDeclaration createGetter() {
-        if (getVariables().size() != 1)
+        if (getVariablesList().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
         ClassOrInterfaceDeclaration parentClass = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
         EnumDeclaration parentEnum = getParentNodeOfType(EnumDeclaration.class);
@@ -201,7 +200,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
 
-        String fieldName = getVariables().get(0).getId().getName();
+        String fieldName = getVariablesList().get(0).getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         if (parentClass != null)
@@ -224,7 +223,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      *             class or enum
      */
     public MethodDeclaration createSetter() {
-        if (getVariables().size() != 1)
+        if (getVariablesList().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
         ClassOrInterfaceDeclaration parentClass = getParentNodeOfType(ClassOrInterfaceDeclaration.class);
         EnumDeclaration parentEnum = getParentNodeOfType(EnumDeclaration.class);
@@ -232,7 +231,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
 
-        String fieldName = getVariables().get(0).getId().getName();
+        String fieldName = getVariablesList().get(0).getId().getName();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;
@@ -241,7 +240,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         else
             setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
         setter.setType(VOID_TYPE);
-        setter.getParameters().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
+        setter.getParametersList().add(new Parameter(getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
         blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));

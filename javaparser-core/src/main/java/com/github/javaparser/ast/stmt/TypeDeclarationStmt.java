@@ -31,18 +31,18 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class TypeDeclarationStmt extends Statement {
 
-	private TypeDeclaration typeDecl;
+	private TypeDeclaration typeDeclaration;
 
 	public TypeDeclarationStmt() {
 	}
 
-	public TypeDeclarationStmt(final TypeDeclaration typeDecl) {
-		setTypeDeclaration(typeDecl);
+	public TypeDeclarationStmt(final TypeDeclaration typeDeclaration) {
+		setTypeDeclaration(typeDeclaration);
 	}
 
-	public TypeDeclarationStmt(Range range, final TypeDeclaration typeDecl) {
+	public TypeDeclarationStmt(Range range, final TypeDeclaration typeDeclaration) {
 		super(range);
-		setTypeDeclaration(typeDecl);
+		setTypeDeclaration(typeDeclaration);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -54,11 +54,11 @@ public final class TypeDeclarationStmt extends Statement {
 	}
 
 	public TypeDeclaration getTypeDeclaration() {
-		return typeDecl;
+		return typeDeclaration;
 	}
 
 	public void setTypeDeclaration(final TypeDeclaration typeDecl) {
-		this.typeDecl = typeDecl;
-		setAsParentNodeOf(this.typeDecl);
+		this.typeDeclaration = typeDecl;
+		setAsParentNodeOf(this.typeDeclaration);
 	}
 }

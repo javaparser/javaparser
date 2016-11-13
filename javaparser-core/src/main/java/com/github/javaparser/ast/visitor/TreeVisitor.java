@@ -35,7 +35,7 @@ public abstract class TreeVisitor {
 	 */
 	public void visitDepthFirst(Node node) {
 		process(node);
-		for (Node child : node.getChildrenNodes()) {
+		for (Node child : node.getChildrenNodesList()) {
 			visitDepthFirst(child);
 		}
 	}

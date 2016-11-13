@@ -21,11 +21,11 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import java.lang.annotation.Annotation;
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
+
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * An element which can be the target of annotations.
@@ -34,9 +34,9 @@ import com.github.javaparser.ast.expr.*;
  * @since July 2014
  */
 public interface NodeWithAnnotations<T> {
-    List<AnnotationExpr> getAnnotations();
+    List<AnnotationExpr> getAnnotationsList();
 
-    T setAnnotations(List<AnnotationExpr> annotations);
+    T setAnnotationsList(List<AnnotationExpr> annotationsList);
 
     /**
      * Annotates this
@@ -47,7 +47,7 @@ public interface NodeWithAnnotations<T> {
     public default NormalAnnotationExpr addAnnotation(String name) {
         NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
                 NameExpr.create(name), null);
-        getAnnotations().add(normalAnnotationExpr);
+        getAnnotationsList().add(normalAnnotationExpr);
         normalAnnotationExpr.setParentNode((Node) this);
         return normalAnnotationExpr;
     }
@@ -73,7 +73,7 @@ public interface NodeWithAnnotations<T> {
     public default T addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
                 NameExpr.create(name));
-        getAnnotations().add(markerAnnotationExpr);
+        getAnnotationsList().add(markerAnnotationExpr);
         markerAnnotationExpr.setParentNode((Node) this);
         return (T) this;
     }
@@ -99,7 +99,7 @@ public interface NodeWithAnnotations<T> {
     public default T addSingleMemberAnnotation(String name, String value) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
                 NameExpr.create(name), NameExpr.create(value));
-        getAnnotations().add(singleMemberAnnotationExpr);
+        getAnnotationsList().add(singleMemberAnnotationExpr);
         singleMemberAnnotationExpr.setParentNode((Node) this);
         return (T) this;
     }
@@ -123,7 +123,7 @@ public interface NodeWithAnnotations<T> {
      * @return true if found, false if not
      */
     public default boolean isAnnotationPresent(String annotationName) {
-        return getAnnotations().stream().anyMatch(a -> a.getName().getName().equals(annotationName));
+        return getAnnotationsList().stream().anyMatch(a -> a.getName().getName().equals(annotationName));
     }
 
     /**
@@ -143,7 +143,7 @@ public interface NodeWithAnnotations<T> {
      * @return null if not found, the annotation otherwise
      */
     public default AnnotationExpr getAnnotationByName(String annotationName) {
-        return getAnnotations().stream().filter(a -> a.getName().getName().equals(annotationName)).findFirst()
+        return getAnnotationsList().stream().filter(a -> a.getName().getName().equals(annotationName)).findFirst()
                 .orElse(null);
     }
 

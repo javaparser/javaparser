@@ -1,15 +1,15 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 
-public interface NodeWithThrowable<T> {
-    T setThrows(List<ReferenceType> throws_);
+import java.util.List;
 
-    List<ReferenceType> getThrows();
+public interface NodeWithThrowable<T> {
+    T setThrowsList(List<ReferenceType> throwsList);
+
+    List<ReferenceType> getThrowsList();
 
     /**
      * Adds this type to the throws clause
@@ -19,7 +19,7 @@ public interface NodeWithThrowable<T> {
      */
     @SuppressWarnings("unchecked")
     default T addThrows(ReferenceType throwType) {
-        getThrows().add(throwType);
+        getThrowsList().add(throwType);
         throwType.setParentNode((Node) this);
         return (T) this;
     }
@@ -52,6 +52,6 @@ public interface NodeWithThrowable<T> {
      * @return true if found in throws clause, false if not
      */
     public default boolean isThrows(String throwableName) {
-        return getThrows().stream().anyMatch(t -> t.toString().equals(throwableName));
+        return getThrowsList().stream().anyMatch(t -> t.toString().equals(throwableName));
     }
 }

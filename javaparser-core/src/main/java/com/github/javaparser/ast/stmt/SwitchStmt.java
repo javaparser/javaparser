@@ -37,22 +37,22 @@ public final class SwitchStmt extends Statement {
 
 	private Expression selector;
 
-	private List<SwitchEntryStmt> entries;
+	private List<SwitchEntryStmt> entriesList;
 
 	public SwitchStmt() {
 	}
 
 	public SwitchStmt(final Expression selector,
-			final List<SwitchEntryStmt> entries) {
+			final List<SwitchEntryStmt> entriesList) {
 		setSelector(selector);
-		setEntries(entries);
+		setEntriesList(entriesList);
 	}
 
 	public SwitchStmt(Range range, final Expression selector,
-	                  final List<SwitchEntryStmt> entries) {
+	                  final List<SwitchEntryStmt> entriesList) {
 		super(range);
 		setSelector(selector);
-		setEntries(entries);
+		setEntriesList(entriesList);
 	}
 
 	@Override
@@ -65,18 +65,18 @@ public final class SwitchStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public List<SwitchEntryStmt> getEntries() {
-        entries = ensureNotNull(entries);
-        return entries;
+	public List<SwitchEntryStmt> getEntriesList() {
+        entriesList = ensureNotNull(entriesList);
+        return entriesList;
 	}
 
 	public Expression getSelector() {
 		return selector;
 	}
 
-	public void setEntries(final List<SwitchEntryStmt> entries) {
-		this.entries = entries;
-		setAsParentNodeOf(this.entries);
+	public void setEntriesList(final List<SwitchEntryStmt> entriesList) {
+		this.entriesList = entriesList;
+		setAsParentNodeOf(this.entriesList);
 	}
 
 	public void setSelector(final Expression selector) {

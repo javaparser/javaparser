@@ -13,30 +13,30 @@ import java.util.List;
  */
 public class UnionType extends Type<UnionType> implements NodeWithAnnotations<UnionType> {
 
-    private List<ReferenceType> elements;
+    private List<ReferenceType> elementsList;
 
-    public UnionType(Range range, List<ReferenceType> elements) {
+    public UnionType(Range range, List<ReferenceType> elementsList) {
         super(range);
-        setElements(elements);
+        setElementsList(elementsList);
     }
 
-    public UnionType(List<ReferenceType> elements) {
+    public UnionType(List<ReferenceType> elementsList) {
         super();
-        setElements(elements);
+        setElementsList(elementsList);
     }
 
-    public List<ReferenceType> getElements() {
-        return elements;
+    public List<ReferenceType> getElementsList() {
+        return elementsList;
     }
 
-    public void setElements(List<ReferenceType> elements) {
-        if (this.elements != null) {
-            for (ReferenceType element : elements){
+    public void setElementsList(List<ReferenceType> elementsList) {
+        if (this.elementsList != null) {
+            for (ReferenceType element : elementsList){
                 element.setParentNode(null);
             }
         }
-        this.elements = elements;
-        setAsParentNodeOf(this.elements);
+        this.elementsList = elementsList;
+        setAsParentNodeOf(this.elementsList);
     }
 
     @Override

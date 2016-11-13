@@ -43,7 +43,7 @@ class MyVisitor_2 extends ModifierVisitorAdapter {
     @Override
     public Node visit(ExpressionStmt stmt, Object args) {
         super.visit(stmt, args);
-        if (stmt.getExpression() == null) {
+        if (stmt.getExpr() == null) {
             return null;
         }
         return stmt;
@@ -53,7 +53,7 @@ class MyVisitor_2 extends ModifierVisitorAdapter {
     public Node visit(VariableDeclarationExpr declarationExpr, Object args) {
         super.visit(declarationExpr, args);
 
-        if (declarationExpr.getVars().isEmpty()) {
+        if (declarationExpr.getVarsList().isEmpty()) {
             return null;
         }
 

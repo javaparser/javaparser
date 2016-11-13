@@ -28,18 +28,18 @@ public class EnumDeclarationBuildersTest {
     public void testAddImplements() {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addImplements(Function.class);
-        assertEquals(1, cu.getImports().size());
+        assertEquals(1, cu.getImportsList().size());
         assertEquals("import " + Function.class.getName() + ";" + System.getProperty("line.separator"),
-                cu.getImports().get(0).toString());
-        assertEquals(1, testEnum.getImplements().size());
-        assertEquals(Function.class.getSimpleName(), testEnum.getImplements().get(0).getName());
+                cu.getImportsList().get(0).toString());
+        assertEquals(1, testEnum.getImplementsList().size());
+        assertEquals(Function.class.getSimpleName(), testEnum.getImplementsList().get(0).getName());
     }
 
     @Test
     public void testAddEnumConstant() {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addEnumConstant("MY_ENUM_CONSTANT");
-        assertEquals(1, testEnum.getEntries().size());
-        assertEquals("MY_ENUM_CONSTANT", testEnum.getEntries().get(0).getName());
+        assertEquals(1, testEnum.getEntriesList().size());
+        assertEquals("MY_ENUM_CONSTANT", testEnum.getEntriesList().get(0).getName());
     }
 }

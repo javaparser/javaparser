@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
-
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
@@ -33,19 +28,17 @@ import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
-import com.github.javaparser.ast.nodeTypes.NodeWithDeclaration;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
-import com.github.javaparser.ast.nodeTypes.NodeWithThrowable;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -58,17 +51,17 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
-    private List<TypeParameter> typeParameters;
+    private List<TypeParameter> typeParametersList;
 
     private Type type;
 
     private NameExpr name;
 
-    private List<Parameter> parameters;
+    private List<Parameter> parametersList;
 
     private int arrayCount;
 
-    private List<ReferenceType> throws_;
+    private List<ReferenceType> throwsList;
 
     private BlockStmt body;
 
@@ -84,41 +77,41 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name,
-                             final List<Parameter> parameters) {
+                             final List<Parameter> parametersList) {
         setModifiers(modifiers);
         setType(type);
         setName(name);
-        setParameters(parameters);
+        setParametersList(parametersList);
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, final Type type, final String name,
-                             final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_,
+                             final List<TypeParameter> typeParametersList, final Type type, final String name,
+                             final List<Parameter> parametersList, final int arrayCount, final List<ReferenceType> throwsList,
                              final BlockStmt body) {
         super(annotations);
         setModifiers(modifiers);
-        setTypeParameters(typeParameters);
+        setTypeParametersList(typeParametersList);
         setType(type);
         setName(name);
-        setParameters(parameters);
+        setParametersList(parametersList);
         setArrayCount(arrayCount);
-        setThrows(throws_);
+        setThrowsList(throwsList);
         setBody(body);
     }
 
     public MethodDeclaration(Range range,
                              final EnumSet<Modifier> modifiers, final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, final Type type, final String name,
-                             final List<Parameter> parameters, final int arrayCount, final List<ReferenceType> throws_,
+                             final List<TypeParameter> typeParametersList, final Type type, final String name,
+                             final List<Parameter> parametersList, final int arrayCount, final List<ReferenceType> throwsList,
                              final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
-        setTypeParameters(typeParameters);
+        setTypeParametersList(typeParametersList);
         setType(type);
         setName(name);
-        setParameters(parameters);
+        setParametersList(parametersList);
         setArrayCount(arrayCount);
-        setThrows(throws_);
+        setThrowsList(throwsList);
         setBody(body);
     }
 
@@ -162,15 +155,15 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     }
 
     @Override
-    public List<Parameter> getParameters() {
-        parameters = ensureNotNull(parameters);
-        return parameters;
+    public List<Parameter> getParametersList() {
+        parametersList = ensureNotNull(parametersList);
+        return parametersList;
     }
 
     @Override
-    public List<ReferenceType> getThrows() {
-        throws_ = ensureNotNull(throws_);
-        return throws_;
+    public List<ReferenceType> getThrowsList() {
+        throwsList = ensureNotNull(throwsList);
+        return throwsList;
     }
 
     @Override
@@ -178,9 +171,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         return type;
     }
 
-    public List<TypeParameter> getTypeParameters() {
-        typeParameters = ensureNotNull(typeParameters);
-        return typeParameters;
+    public List<TypeParameter> getTypeParametersList() {
+        typeParametersList = ensureNotNull(typeParametersList);
+        return typeParametersList;
     }
 
     public void setArrayCount(final int arrayCount) {
@@ -213,16 +206,16 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
     }
 
     @Override
-    public MethodDeclaration setParameters(final List<Parameter> parameters) {
-        this.parameters = parameters;
-        setAsParentNodeOf(this.parameters);
+    public MethodDeclaration setParametersList(final List<Parameter> parametersList) {
+        this.parametersList = parametersList;
+        setAsParentNodeOf(this.parametersList);
         return this;
     }
 
     @Override
-    public MethodDeclaration setThrows(final List<ReferenceType> throws_) {
-        this.throws_ = throws_;
-        setAsParentNodeOf(this.throws_);
+    public MethodDeclaration setThrowsList(final List<ReferenceType> throwsList) {
+        this.throwsList = throwsList;
+        setAsParentNodeOf(this.throwsList);
         return this;
     }
 
@@ -233,9 +226,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         return this;
     }
 
-    public MethodDeclaration setTypeParameters(final List<TypeParameter> typeParameters) {
-        this.typeParameters = typeParameters;
-        setAsParentNodeOf(typeParameters);
+    public MethodDeclaration setTypeParametersList(final List<TypeParameter> typeParametersList) {
+        this.typeParametersList = typeParametersList;
+        setAsParentNodeOf(typeParametersList);
         return this;
     }
 
@@ -297,7 +290,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         sb.append(getName());
         sb.append("(");
         boolean firstParam = true;
-        for (Parameter param : getParameters()) {
+        for (Parameter param : getParametersList()) {
             if (firstParam) {
                 firstParam = false;
             } else {
@@ -315,7 +308,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration>
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType thr : getThrows()) {
+            for (ReferenceType thr : getThrowsList()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");

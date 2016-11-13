@@ -21,25 +21,21 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.utils.Utils.ensureNotNull;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.ClassUtils;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.utils.ClassUtils;
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.utils.Utils.ensureNotNull;
 
 /**
  * <p>
@@ -62,25 +58,25 @@ public final class CompilationUnit extends Node {
 
     private PackageDeclaration pakage;
 
-    private List<ImportDeclaration> imports;
+    private List<ImportDeclaration> importsList;
 
-    private List<TypeDeclaration<?>> types;
+    private List<TypeDeclaration<?>> typesList;
 
     public CompilationUnit() {
     }
 
-    public CompilationUnit(PackageDeclaration pakage, List<ImportDeclaration> imports, List<TypeDeclaration<?>> types) {
+    public CompilationUnit(PackageDeclaration pakage, List<ImportDeclaration> importsList, List<TypeDeclaration<?>> typesList) {
         setPackage(pakage);
-        setImports(imports);
-        setTypes(types);
+        setImportsList(importsList);
+        setTypesList(typesList);
     }
 
-    public CompilationUnit(Range range, PackageDeclaration pakage, List<ImportDeclaration> imports,
-                           List<TypeDeclaration<?>> types) {
+    public CompilationUnit(Range range, PackageDeclaration pakage, List<ImportDeclaration> importsList,
+                           List<TypeDeclaration<?>> typesList) {
         super(range);
         setPackage(pakage);
-        setImports(imports);
-        setTypes(types);
+        setImportsList(importsList);
+        setTypesList(typesList);
     }
 
     @Override
@@ -95,7 +91,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Return a list containing all comments declared in this compilation unit.
-     * Including javadocs, line comments and block comments of all types,
+     * Including javadocs, line comments and block comments of all typesList,
      * inner-classes and other members.<br>
      * If there is no comment, <code>null</code> is returned.
      * 
@@ -110,14 +106,14 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Retrieves the list of imports declared in this compilation unit or
+     * Retrieves the list of importsList declared in this compilation unit or
      * <code>null</code> if there is no import.
      * 
-     * @return the list of imports or <code>null</code> if there is no import
+     * @return the list of importsList or <code>null</code> if there is no import
      */
-    public List<ImportDeclaration> getImports() {
-        imports = ensureNotNull(imports);
-        return imports;
+    public List<ImportDeclaration> getImportsList() {
+        importsList = ensureNotNull(importsList);
+        return importsList;
     }
 
     /**
@@ -132,18 +128,18 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Return the list of types declared in this compilation unit.<br>
-     * If there is no types declared, <code>null</code> is returned.
+     * Return the list of typesList declared in this compilation unit.<br>
+     * If there is no typesList declared, <code>null</code> is returned.
      * 
-     * @return the list of types or <code>null</code> null if there is no type
+     * @return the list of typesList or <code>null</code> null if there is no type
      * @see AnnotationDeclaration
      * @see ClassOrInterfaceDeclaration
      * @see EmptyTypeDeclaration
      * @see EnumDeclaration
      */
-    public List<TypeDeclaration<?>> getTypes() {
-        types = ensureNotNull(types);
-        return types;
+    public List<TypeDeclaration<?>> getTypesList() {
+        typesList = ensureNotNull(typesList);
+        return typesList;
     }
 
     /**
@@ -157,15 +153,15 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Sets the list of imports of this compilation unit. The list is initially
+     * Sets the list of importsList of this compilation unit. The list is initially
      * <code>null</code>.
      * 
-     * @param imports
-     *            the list of imports
+     * @param importsList
+     *            the list of importsList
      */
-    public void setImports(List<ImportDeclaration> imports) {
-        this.imports = imports;
-        setAsParentNodeOf(this.imports);
+    public void setImportsList(List<ImportDeclaration> importsList) {
+        this.importsList = importsList;
+        setAsParentNodeOf(this.importsList);
     }
 
     /**
@@ -181,14 +177,14 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Sets the list of types declared in this compilation unit.
+     * Sets the list of typesList declared in this compilation unit.
      * 
-     * @param types
-     *            the lis of types
+     * @param typesList
+     *            the lis of typesList
      */
-    public void setTypes(List<TypeDeclaration<?>> types) {
-        this.types = types;
-        setAsParentNodeOf(this.types);
+    public void setTypesList(List<TypeDeclaration<?>> typesList) {
+        this.typesList = typesList;
+        setAsParentNodeOf(this.typesList);
     }
 
     /**
@@ -239,19 +235,19 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
-        if (getImports().stream().anyMatch(i -> i.getName().toString().equals(name)))
+        if (getImportsList().stream().anyMatch(i -> i.getName().toString().equals(name)))
             return this;
         else {
             ImportDeclaration importDeclaration = new ImportDeclaration(NameExpr.create(name), isStatic,
                     isAsterisk);
-            getImports().add(importDeclaration);
+            getImportsList().add(importDeclaration);
             importDeclaration.setParentNode(this);
             return this;
         }
     }
 
     /**
-     * Add a public class to the types of this compilation unit
+     * Add a public class to the typesList of this compilation unit
      * 
      * @param name the class name
      * @return the newly created class
@@ -261,7 +257,7 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Add a class to the types of this compilation unit
+     * Add a class to the typesList of this compilation unit
      * 
      * @param name the class name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
@@ -272,13 +268,13 @@ public final class CompilationUnit extends Node {
                 Arrays.stream(modifiers)
                         .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 false, name);
-        getTypes().add(classOrInterfaceDeclaration);
+        getTypesList().add(classOrInterfaceDeclaration);
         classOrInterfaceDeclaration.setParentNode(this);
         return classOrInterfaceDeclaration;
     }
 
     /**
-     * Add a public interface class to the types of this compilation unit
+     * Add a public interface class to the typesList of this compilation unit
      * 
      * @param name the interface name
      * @return the newly created class
@@ -288,7 +284,7 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Add an interface to the types of this compilation unit
+     * Add an interface to the typesList of this compilation unit
      * 
      * @param name the interface name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
@@ -299,13 +295,13 @@ public final class CompilationUnit extends Node {
                 Arrays.stream(modifiers)
                         .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 true, name);
-        getTypes().add(classOrInterfaceDeclaration);
+        getTypesList().add(classOrInterfaceDeclaration);
         classOrInterfaceDeclaration.setParentNode(this);
         return classOrInterfaceDeclaration;
     }
 
     /**
-     * Add a public enum to the types of this compilation unit
+     * Add a public enum to the typesList of this compilation unit
      * 
      * @param name the enum name
      * @return the newly created class
@@ -315,7 +311,7 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Add an enum to the types of this compilation unit
+     * Add an enum to the typesList of this compilation unit
      * 
      * @param name the enum name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
@@ -324,13 +320,13 @@ public final class CompilationUnit extends Node {
     public EnumDeclaration addEnum(String name, Modifier... modifiers) {
         EnumDeclaration enumDeclaration = new EnumDeclaration(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
-        getTypes().add(enumDeclaration);
+        getTypesList().add(enumDeclaration);
         enumDeclaration.setParentNode(this);
         return enumDeclaration;
     }
 
     /**
-     * Add a public annotation declaration to the types of this compilation unit
+     * Add a public annotation declaration to the typesList of this compilation unit
      * 
      * @param name the annotation name
      * @return the newly created class
@@ -340,7 +336,7 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Add an annotation declaration to the types of this compilation unit
+     * Add an annotation declaration to the typesList of this compilation unit
      * 
      * @param name the annotation name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
@@ -349,7 +345,7 @@ public final class CompilationUnit extends Node {
     public AnnotationDeclaration addAnnotationDeclaration(String name, Modifier... modifiers) {
         AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
-        getTypes().add(annotationDeclaration);
+        getTypesList().add(annotationDeclaration);
         annotationDeclaration.setParentNode(this);
         return annotationDeclaration;
     }
@@ -361,7 +357,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the class otherwise
      */
     public ClassOrInterfaceDeclaration getClassByName(String className) {
-        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getName().equals(className)
+        return (ClassOrInterfaceDeclaration) getTypesList().stream().filter(type -> type.getName().equals(className)
                 && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface())
                 .findFirst().orElse(null);
     }
@@ -373,7 +369,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the interface otherwise
      */
     public ClassOrInterfaceDeclaration getInterfaceByName(String interfaceName) {
-        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getName().equals(interfaceName)
+        return (ClassOrInterfaceDeclaration) getTypesList().stream().filter(type -> type.getName().equals(interfaceName)
                 && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface())
                 .findFirst().orElse(null);
     }
@@ -385,7 +381,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the enum otherwise
      */
     public EnumDeclaration getEnumByName(String enumName) {
-        return (EnumDeclaration) getTypes().stream().filter(type -> type.getName().equals(enumName)
+        return (EnumDeclaration) getTypesList().stream().filter(type -> type.getName().equals(enumName)
                 && type instanceof EnumDeclaration)
                 .findFirst().orElse(null);
     }
@@ -397,7 +393,7 @@ public final class CompilationUnit extends Node {
      * @return null if not found, the annotation otherwise
      */
     public AnnotationDeclaration getAnnotationDeclarationByName(String annotationName) {
-        return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getName().equals(annotationName)
+        return (AnnotationDeclaration) getTypesList().stream().filter(type -> type.getName().equals(annotationName)
                 && type instanceof AnnotationDeclaration)
                 .findFirst().orElse(null);
     }

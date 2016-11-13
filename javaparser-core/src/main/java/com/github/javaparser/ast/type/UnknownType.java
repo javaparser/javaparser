@@ -50,12 +50,12 @@ public final class UnknownType extends Type<UnknownType> {
     }
 
     @Override
-    public List<AnnotationExpr> getAnnotations() {
+    public List<AnnotationExpr> getAnnotationsList() {
         throw new IllegalStateException("Inferred lambda types cannot be annotated.");
     }
 
     @Override
-    public UnknownType setAnnotations(List<AnnotationExpr> annotations) {
+    public UnknownType setAnnotationsList(List<AnnotationExpr> annotationsList) {
         throw new IllegalStateException("Inferred lambda types cannot be annotated.");
     }
 

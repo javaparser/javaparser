@@ -44,14 +44,14 @@ public final class AssertStmt extends Statement {
 
 	public AssertStmt(final Expression check, final Expression msg) {
 		setCheck(check);
-		setMessage(msg);
+		setMsg(msg);
 	}
 
 	public AssertStmt(final Range range, final Expression check, final Expression msg) {
 		super(range);
 		
 		setCheck(check);
-		setMessage(msg);
+		setMsg(msg);
 		
 	}
 
@@ -67,7 +67,7 @@ public final class AssertStmt extends Statement {
 		return check;
 	}
 
-	public Expression getMessage() {
+	public Expression getMsg() {
 		return msg;
 	}
 
@@ -76,7 +76,7 @@ public final class AssertStmt extends Statement {
 		setAsParentNodeOf(this.check);
 	}
 
-	public void setMessage(final Expression msg) {
+	public void setMsg(final Expression msg) {
 		this.msg = msg;
 		setAsParentNodeOf(this.msg);
 	}

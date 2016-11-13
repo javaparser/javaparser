@@ -29,19 +29,16 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
-import com.github.javaparser.ParseProblemException;
 import org.hamcrest.CoreMatchers;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -136,7 +133,7 @@ public class SharedSteps {
 
 	public static BodyDeclaration<?> getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<? extends BodyDeclaration<?>> typeClass) {
         int typeCount = 0;
-		for (BodyDeclaration<?> declaration : typeDeclaration.getMembers()) {
+		for (BodyDeclaration<?> declaration : typeDeclaration.getMembersList()) {
             if(declaration.getClass().equals(typeClass)){
                 if(typeCount == position){
                     return declaration;
@@ -149,14 +146,14 @@ public class SharedSteps {
 
     public static MethodDeclaration getMethodByPositionAndClassPosition(CompilationUnit compilationUnit,
                                                                          int methodPosition, int classPosition) {
-		TypeDeclaration<?> type = compilationUnit.getTypes().get(classPosition - 1);
+		TypeDeclaration<?> type = compilationUnit.getTypesList().get(classPosition - 1);
 
         int memberCount = 0;
         int methodCount = 0;
-		for (BodyDeclaration<?> bodyDeclaration : type.getMembers()) {
+		for (BodyDeclaration<?> bodyDeclaration : type.getMembersList()) {
             if(bodyDeclaration instanceof MethodDeclaration){
                 if(methodCount == methodPosition -1) {
-                    return (MethodDeclaration) type.getMembers().get(memberCount);
+                    return (MethodDeclaration) type.getMembersList().get(memberCount);
                 }
                 methodCount++;
             }

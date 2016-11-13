@@ -76,19 +76,19 @@ class CommentsInserter {
         // so I could use some heuristics in these cases to distinguish the two
         // cases
 
-        List<Comment> comments = commentsCollection.getAll();
-        PositionUtils.sortByBeginPosition(comments);
-        List<Node> children = cu.getChildrenNodes();
+        List<Comment> commentsList = commentsCollection.getAll();
+        PositionUtils.sortByBeginPosition(commentsList);
+        List<Node> children = cu.getChildrenNodesList();
         PositionUtils.sortByBeginPosition(children);
 
         if (cu.getPackage() != null
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                        comments.get(0), children.get(0)))) {
-            cu.setComment(comments.get(0));
-            comments.remove(0);
+                commentsList.get(0), children.get(0)))) {
+            cu.setComment(commentsList.get(0));
+            commentsList.remove(0);
         }
 
-        insertCommentsInNode(cu, comments);
+        insertCommentsInNode(cu, commentsList);
     }
 
     /**
@@ -108,32 +108,32 @@ class CommentsInserter {
         // if they preceed a child they are assigned to it, otherweise they
         // remain "orphans"
 
-        List<Node> children = node.getChildrenNodes();
-        PositionUtils.sortByBeginPosition(children);
+        List<Node> childrenList = node.getChildrenNodesList();
+        PositionUtils.sortByBeginPosition(childrenList);
 
-        for (Node child : children) {
-            List<Comment> commentsInsideChild = new LinkedList<Comment>();
+        for (Node child : childrenList) {
+            List<Comment> commentsInsideChildList = new LinkedList<Comment>();
             for (Comment c : commentsToAttribute) {
                 if (PositionUtils.nodeContains(child, c,
                         configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)) {
-                    commentsInsideChild.add(c);
+                    commentsInsideChildList.add(c);
                 }
             }
-            commentsToAttribute.removeAll(commentsInsideChild);
-            insertCommentsInNode(child, commentsInsideChild);
+            commentsToAttribute.removeAll(commentsInsideChildList);
+            insertCommentsInNode(child, commentsInsideChildList);
         }
 
         // I can attribute in line comments to elements preceeding them, if
         // there
         // is something contained in their line
-        List<Comment> attributedComments = new LinkedList<Comment>();
+        List<Comment> attributedCommentsList = new LinkedList<Comment>();
         for (Comment comment : commentsToAttribute) {
             if (comment.isLineComment()) {
-                for (Node child : children) {
+                for (Node child : childrenList) {
                     if (child.getEnd().line == comment.getBegin().line
                         && attributeLineCommentToNodeOrChild(child,
                                 comment.asLineComment())) {
-                            attributedComments.add(comment);
+                            attributedCommentsList.add(comment);
                     }
                 }
             }
@@ -142,14 +142,14 @@ class CommentsInserter {
         // at this point I create an ordered list of all remaining comments and
         // children
         Comment previousComment = null;
-        attributedComments = new LinkedList<Comment>();
-        List<Node> childrenAndComments = new LinkedList<Node>();
-        childrenAndComments.addAll(children);
-        childrenAndComments.addAll(commentsToAttribute);
-        PositionUtils.sortByBeginPosition(childrenAndComments,
+        attributedCommentsList = new LinkedList<Comment>();
+        List<Node> childrenAndCommentsList = new LinkedList<Node>();
+        childrenAndCommentsList.addAll(childrenList);
+        childrenAndCommentsList.addAll(commentsToAttribute);
+        PositionUtils.sortByBeginPosition(childrenAndCommentsList,
                 configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
 
-        for (Node thing : childrenAndComments) {
+        for (Node thing : childrenAndCommentsList) {
             if (thing instanceof Comment) {
                 previousComment = (Comment) thing;
                 if (!previousComment.isOrphan()) {
@@ -160,14 +160,14 @@ class CommentsInserter {
                     if (!configuration.doNotAssignCommentsPrecedingEmptyLines
                             || !thereAreLinesBetween(previousComment, thing)) {
                         thing.setComment(previousComment);
-                        attributedComments.add(previousComment);
+                        attributedCommentsList.add(previousComment);
                         previousComment = null;
                     }
                 }
             }
         }
 
-        commentsToAttribute.removeAll(attributedComments);
+        commentsToAttribute.removeAll(attributedCommentsList);
 
         // all the remaining are orphan nodes
         for (Comment c : commentsToAttribute) {
@@ -190,12 +190,12 @@ class CommentsInserter {
         } else {
             // try with all the children, sorted by reverse position (so the
             // first one is the nearest to the comment
-            List<Node> children = new LinkedList<Node>();
-            children.addAll(node.getChildrenNodes());
-            PositionUtils.sortByBeginPosition(children);
-            Collections.reverse(children);
+            List<Node> childrenList = new LinkedList<Node>();
+            childrenList.addAll(node.getChildrenNodesList());
+            PositionUtils.sortByBeginPosition(childrenList);
+            Collections.reverse(childrenList);
 
-            for (Node child : children) {
+            for (Node child : childrenList) {
                 if (attributeLineCommentToNodeOrChild(child, lineComment)) {
                     return true;
                 }

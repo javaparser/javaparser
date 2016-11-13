@@ -36,32 +36,32 @@ import static com.github.javaparser.utils.Utils.*;
  */
 public final class ExplicitConstructorInvocationStmt extends Statement {
 
-	private List<Type> typeArgs;
+	private List<Type> typeArgsList;
 
 	private boolean isThis;
 
 	private Expression expr;
 
-	private List<Expression> args;
+	private List<Expression> argsList;
 
 	public ExplicitConstructorInvocationStmt() {
 	}
 
 	public ExplicitConstructorInvocationStmt(final boolean isThis,
-			final Expression expr, final List<Expression> args) {
+			final Expression expr, final List<Expression> argsList) {
 		setThis(isThis);
 		setExpr(expr);
-		setArgs(args);
+		setArgsList(argsList);
 	}
 
 	public ExplicitConstructorInvocationStmt(Range range,
-	                                         final List<Type> typeArgs, final boolean isThis,
-	                                         final Expression expr, final List<Expression> args) {
+	                                         final List<Type> typeArgsList, final boolean isThis,
+	                                         final Expression expr, final List<Expression> argsList) {
 		super(range);
-		setTypeArgs(typeArgs);
+		setTypeArgsList(typeArgsList);
 		setThis(isThis);
 		setExpr(expr);
-		setArgs(args);
+		setArgsList(argsList);
 	}
 
 	@Override
@@ -74,27 +74,27 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public List<Expression> getArgs() {
-        args = ensureNotNull(args);
-        return args;
+	public List<Expression> getArgsList() {
+        argsList = ensureNotNull(argsList);
+        return argsList;
 	}
 
 	public Expression getExpr() {
 		return expr;
 	}
 
-	public List<Type> getTypeArgs() {
-        typeArgs = ensureNotNull(typeArgs);
-        return typeArgs;
+	public List<Type> getTypeArgsList() {
+        typeArgsList = ensureNotNull(typeArgsList);
+        return typeArgsList;
 	}
 
 	public boolean isThis() {
 		return isThis;
 	}
 
-	public void setArgs(final List<Expression> args) {
-		this.args = args;
-		setAsParentNodeOf(this.args);
+	public void setArgsList(final List<Expression> argsList) {
+		this.argsList = argsList;
+		setAsParentNodeOf(this.argsList);
 	}
 
 	public void setExpr(final Expression expr) {
@@ -106,8 +106,8 @@ public final class ExplicitConstructorInvocationStmt extends Statement {
 		this.isThis = isThis;
 	}
 
-	public void setTypeArgs(final List<Type> typeArgs) {
-		this.typeArgs = typeArgs;
-		setAsParentNodeOf(this.typeArgs);
+	public void setTypeArgsList(final List<Type> typeArgsList) {
+		this.typeArgsList = typeArgsList;
+		setAsParentNodeOf(this.typeArgsList);
 	}
 }
