@@ -29,6 +29,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observing.AstObserver;
 import com.github.javaparser.ast.observing.ObservableProperty;
+import com.github.javaparser.ast.observing.PropagatingAstObserver;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -51,6 +52,31 @@ import static java.util.Collections.unmodifiableList;
  */
 // Use <Node> to prevent Node from becoming generic.
 public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable {
+
+    /**
+     * Different registration mode for observers on nodes.
+     */
+    public enum ObserverRegistrationMode {
+
+        /**
+         * Notify exclusively for changes happening on this node alone.
+         */
+        JUST_THIS_NODE,
+
+        /**
+         * Notify for changes happening on this node and all its descendants existing at the moment in
+         * which the observer was registered. Nodes attached later will not be observed.
+         */
+        THIS_NODE_AND_EXISTING_DESCENDANTS,
+
+        /**
+         * Notify for changes happening on this node and all its descendants. The descendants existing at the moment in
+         * which the observer was registered will be observed immediately. As new nodes are attached later they are
+         * automatically registered to be observed.
+         */
+        SELF_PROPAGATING
+    }
+
     /**
      * This can be used to sort nodes on position.
      */
@@ -430,6 +456,29 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     @Override
     public void register(AstObserver observer) {
         this.observers.add(observer);
+    }
+
+    /**
+     * Register a new observer for the given node. Depending on the mode specified also descendants, existing
+     * and new, could be observed. For more details see <i>ObserverRegistrationMode</i>.
+     */
+    public void register(AstObserver observer, ObserverRegistrationMode mode) {
+        if (mode == null) {
+            throw new IllegalArgumentException("Mode should be not null");
+        }
+        switch (mode) {
+            case JUST_THIS_NODE:
+                register(observer);
+                break;
+            case THIS_NODE_AND_EXISTING_DESCENDANTS:
+                registerForSubtree(observer);
+                break;
+            case SELF_PROPAGATING:
+                registerForSubtree(PropagatingAstObserver.transformInPropagatingObserver(observer));
+                break;
+            default:
+                throw new UnsupportedOperationException("This mode is not supported: " + mode);
+        }
     }
 
     /**
