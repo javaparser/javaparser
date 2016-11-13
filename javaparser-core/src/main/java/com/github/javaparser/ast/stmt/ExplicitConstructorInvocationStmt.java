@@ -21,17 +21,18 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -92,6 +93,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 	}
 
 	public ExplicitConstructorInvocationStmt setArgs(final NodeList<Expression> args) {
+		notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
 		this.args = assertNotNull(args);
 		setAsParentNodeOf(this.args);
 		return this;
@@ -104,12 +106,14 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      * @return this, the ExplicitConstructorInvocationStmt
      */
 	public ExplicitConstructorInvocationStmt setExpr(final Expression expr) {
+		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;
 	}
 
 	public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
+		notifyPropertyChange(ObservableProperty.IS_THIS, this.isThis, isThis);
 		this.isThis = isThis;
 		return this;
 	}
@@ -126,8 +130,9 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      * @return this, the ExplicitConstructorInvocationStmt
      */
     @Override
-    public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type<?>> types) {
-        this.typeArguments = types;
+    public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type<?>> typeArguments) {
+	    notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);
         return this;
     }

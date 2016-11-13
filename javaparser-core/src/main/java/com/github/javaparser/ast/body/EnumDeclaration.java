@@ -21,21 +21,22 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.EnumSet;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -112,6 +113,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumDeclaration setEntries(NodeList<EnumConstantDeclaration> entries) {
+        notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         this.entries = assertNotNull(entries);
 		setAsParentNodeOf(this.entries);
         return this;
@@ -119,6 +121,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 
     @Override
     public EnumDeclaration setImplements(NodeList<ClassOrInterfaceType> implementsList) {
+        notifyPropertyChange(ObservableProperty.IMPLEMENTS_LIST, this.implementsList, implementsList);
         this.implementsList = assertNotNull(implementsList);
 		setAsParentNodeOf(this.implementsList);
         return this;
@@ -131,5 +134,11 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return enumConstant;
     }
 
-
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(implementsList);
+        res.add(entries);
+        return res;
+    }
 }

@@ -21,13 +21,14 @@
 
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Optional;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -70,6 +71,7 @@ public final class BreakStmt extends Statement {
      * @return this, the BreakStmt
      */
     public BreakStmt setId(final String id) {
+        notifyPropertyChange(ObservableProperty.ID, this.id, id);
         this.id = assertNotNull(id);
         return this;
     }

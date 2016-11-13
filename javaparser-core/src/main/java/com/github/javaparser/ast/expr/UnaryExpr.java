@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -76,12 +77,14 @@ public final class UnaryExpr extends Expression {
 	}
 
 	public UnaryExpr setExpr(final Expression expr) {
+		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
 		this.expr = expr;
 		setAsParentNodeOf(this.expr);
 		return this;
 	}
 
 	public UnaryExpr setOperator(final Operator op) {
+		notifyPropertyChange(ObservableProperty.OPERATOR, this.op, op);
 		this.op = op;
 		return this;
 	}

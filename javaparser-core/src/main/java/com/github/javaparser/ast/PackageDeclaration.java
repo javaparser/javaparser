@@ -27,8 +27,12 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -113,6 +117,7 @@ public final class PackageDeclaration extends Node implements
      *            the annotations to set
      */
     public PackageDeclaration setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
@@ -126,9 +131,15 @@ public final class PackageDeclaration extends Node implements
      */
     @Override
     public PackageDeclaration setName(Name name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = name;
         setAsParentNodeOf(this.name);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(annotations);
     }
 
 }

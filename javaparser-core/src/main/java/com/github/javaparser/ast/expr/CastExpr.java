@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -73,6 +74,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     }
 
     public CastExpr setExpr(Expression expr) {
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
         this.expr = assertNotNull(expr);
 		setAsParentNodeOf(this.expr);
         return this;
@@ -80,6 +82,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
 
     @Override
     public CastExpr setType(Type<?> type) {
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = assertNotNull(type);
 		setAsParentNodeOf(this.type);
         return this;

@@ -21,15 +21,16 @@
 
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -77,6 +78,7 @@ public final class AssertStmt extends Statement {
     }
 
     public AssertStmt setCheck(final Expression check) {
+        notifyPropertyChange(ObservableProperty.CHECK, this.check, check);
         this.check = assertNotNull(check);
         setAsParentNodeOf(this.check);
         return this;
@@ -89,6 +91,7 @@ public final class AssertStmt extends Statement {
      * @return this, the AssertStmt
      */
     public AssertStmt setMessage(final Expression msg) {
+        notifyPropertyChange(ObservableProperty.MSG, this.msg, msg);
         this.msg = msg;
         setAsParentNodeOf(this.msg);
         return this;

@@ -21,28 +21,25 @@
 
 package com.github.javaparser.ast;
 
-import static java.util.Collections.unmodifiableList;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.IdentityHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.observing.AstObserver;
+import com.github.javaparser.ast.observing.ObservableProperty;
+import com.github.javaparser.ast.observing.PropagatingAstObserver;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+
+import java.lang.reflect.Field;
+import java.util.*;
+
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -55,6 +52,31 @@ import com.github.javaparser.printer.PrettyPrinterConfiguration;
  */
 // Use <Node> to prevent Node from becoming generic.
 public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable {
+
+    /**
+     * Different registration mode for observers on nodes.
+     */
+    public enum ObserverRegistrationMode {
+
+        /**
+         * Notify exclusively for changes happening on this node alone.
+         */
+        JUST_THIS_NODE,
+
+        /**
+         * Notify for changes happening on this node and all its descendants existing at the moment in
+         * which the observer was registered. Nodes attached later will not be observed.
+         */
+        THIS_NODE_AND_EXISTING_DESCENDANTS,
+
+        /**
+         * Notify for changes happening on this node and all its descendants. The descendants existing at the moment in
+         * which the observer was registered will be observed immediately. As new nodes are attached later they are
+         * automatically registered to be observed.
+         */
+        SELF_PROPAGATING
+    }
+
     /**
      * This can be used to sort nodes on position.
      */
@@ -73,6 +95,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     private IdentityHashMap<UserDataKey<?>, Object> userData = null;
 
     private Comment comment;
+
+    private List<AstObserver> observers = new ArrayList<>();
 
     public Node(Range range) {
         this.range = range;
@@ -128,6 +152,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @param range the range of characters in the source code that this node covers.
      */
     public Node setRange(Range range) {
+        notifyPropertyChange(ObservableProperty.RANGE, this.range, range);
         this.range = range;
         return this;
     }
@@ -141,6 +166,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
+        notifyPropertyChange(ObservableProperty.COMMENT, this.comment, comment);
         if (this.comment != null) {
             this.comment.setCommentedNode(null);
         }
@@ -271,6 +297,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     @Override
     public Node setParentNode(Node parentNode) {
+        observers.forEach(o -> o.parentChange(this, this.parentNode, parentNode));
+
         // remove from old parent, if any
         if (this.parentNode != null) {
             this.parentNode.childrenNodes.remove(this);
@@ -414,5 +442,63 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         if (list != null) {
             list.setParentNode(getParentNodeForChildren());
         }
+    }
+
+    protected <P> void notifyPropertyChange(ObservableProperty property, P oldValue, P newValue) {
+        this.observers.forEach(o -> o.propertyChange(this, property, oldValue, newValue));
+    }
+
+    @Override
+    public void unregister(AstObserver observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void register(AstObserver observer) {
+        this.observers.add(observer);
+    }
+
+    /**
+     * Register a new observer for the given node. Depending on the mode specified also descendants, existing
+     * and new, could be observed. For more details see <i>ObserverRegistrationMode</i>.
+     */
+    public void register(AstObserver observer, ObserverRegistrationMode mode) {
+        if (mode == null) {
+            throw new IllegalArgumentException("Mode should be not null");
+        }
+        switch (mode) {
+            case JUST_THIS_NODE:
+                register(observer);
+                break;
+            case THIS_NODE_AND_EXISTING_DESCENDANTS:
+                registerForSubtree(observer);
+                break;
+            case SELF_PROPAGATING:
+                registerForSubtree(PropagatingAstObserver.transformInPropagatingObserver(observer));
+                break;
+            default:
+                throw new UnsupportedOperationException("This mode is not supported: " + mode);
+        }
+    }
+
+    /**
+     * Register the observer for the current node and all the contained node and nodelists, recursively.
+     */
+    public void registerForSubtree(AstObserver observer) {
+        register(observer);
+        this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
+        this.getNodeLists().forEach(nl -> nl.register(observer));
+    }
+
+    @Override
+    public boolean isRegistered(AstObserver observer) {
+        return this.observers.contains(observer);
+    }
+
+    /**
+     * The list of NodeLists owned by this node.
+     */
+    public List<NodeList<?>> getNodeLists() {
+        return Collections.emptyList();
     }
 }

@@ -21,18 +21,19 @@
 
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
@@ -108,6 +109,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
 
     @Override
     public ClassOrInterfaceType setName(final SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
     	this.name = assertNotNull(name);
         return this;
     }
@@ -119,6 +121,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
      * @return this, the ClassOrInterfaceType
      */
     public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
@@ -136,8 +139,9 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
      * @return this, the ClassOrInterfaceType
      */
     @Override
-    public ClassOrInterfaceType setTypeArguments(final NodeList<Type<?>> types) {
-        this.typeArguments = types;
+    public ClassOrInterfaceType setTypeArguments(final NodeList<Type<?>> typeArguments) {
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);
         return this;
     }

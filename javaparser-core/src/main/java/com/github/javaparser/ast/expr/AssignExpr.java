@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -94,12 +95,14 @@ public final class AssignExpr extends Expression {
     }
 
     public AssignExpr setTarget(Expression target) {
+        notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
         this.target = target;
 		setAsParentNodeOf(this.target);
         return this;
     }
 
     public AssignExpr setValue(Expression value) {
+        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
 		setAsParentNodeOf(this.value);
         return this;

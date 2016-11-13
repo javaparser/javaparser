@@ -1,16 +1,19 @@
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
@@ -60,6 +63,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
      * @return this, the ArrayCreationLevel
      */
     public ArrayCreationLevel setDimension(Expression dimension) {
+        notifyPropertyChange(ObservableProperty.DIMENSION, this.dimension, dimension);
         this.dimension = dimension;
         setAsParentNodeOf(dimension);
         return this;
@@ -76,8 +80,14 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
 
     @Override
     public ArrayCreationLevel setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         setAsParentNodeOf(annotations);
         this.annotations = assertNotNull(annotations);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(annotations);
     }
 }
