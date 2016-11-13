@@ -53,16 +53,17 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * This can be used to sort nodes on position.
      */
     public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> {
-        if (a.getRange() == null || b.getRange() == null) {
-            if (a.getRange() == null && b.getRange() == null) {
-                return 0;
-            }
-            if (a.getRange() == null) {
-                return -1;
-            }
-            return 1;
+        if (a.getRange().isPresent() && b.getRange().isPresent()) {
+            return a.getRange().get().begin.compareTo(b.getRange().get().begin);
         }
-        return a.getRange().begin.compareTo(b.getRange().begin);
+        if (a.getRange().isPresent() || b.getRange().isPresent()) {
+            if (a.getRange().isPresent()) {
+                return 1;
+            }
+            return -1;
+        }
+        return 0;
+
     };
 
     private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
@@ -95,15 +96,21 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     /**
      * The begin position of this node in the source file.
      */
-    public Position getBegin() {
-        return range.begin;
+    public Optional<Position> getBegin() {
+        if (range == null) {
+            return Optional.empty();
+        }
+        return Optional.of(range.begin);
     }
 
     /**
      * The end position of this node in the source file.
      */
-    public Position getEnd() {
-        return range.end;
+    public Optional<Position> getEnd() {
+        if (range == null) {
+            return Optional.empty();
+        }
+        return Optional.of(range.end);
     }
 
     /**
@@ -131,12 +138,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     /**
      * @return the range of characters in the source code that this node covers.
      */
-    public Range getRange() {
-        return range;
+    public Optional<Range> getRange() {
+        return Optional.ofNullable(range);
     }
 
     /**
      * @param range the range of characters in the source code that this node covers.
+     * null can be used to indicate that no range information is known,
+     * or that it is not of interest. 
      */
     public Node setRange(Range range) {
         this.range = range;
@@ -229,7 +238,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     public <N extends Node> boolean containsWithin(N other) {
-        return range.contains(other.getRange());
+        if (getRange().isPresent() && other.getRange().isPresent()) {
+            return range.contains(other.getRange().get());
+        }
+        return false;
     }
 
     public void addOrphanComment(Comment comment) {

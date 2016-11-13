@@ -58,7 +58,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
-                    type = new ArrayType(pair.getRange(), type, pair.getAnnotations());
+                    type = new ArrayType(pair.getRange().orElse(null), type, pair.getAnnotations());
                 }
             }
         }
@@ -74,7 +74,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         final NodeList<ArrayBracketPair> arrayBracketPairs = new NodeList<>();
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
-            arrayBracketPairs.add(new ArrayBracketPair(type.getRange(), arrayType.getAnnotations()));
+            arrayBracketPairs.add(new ArrayBracketPair(type.getRange().orElse(null), arrayType.getAnnotations()));
             type = arrayType.getComponentType();
         }
         return new Pair<>(type, arrayBracketPairs);

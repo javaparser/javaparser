@@ -69,11 +69,17 @@ public class CommentsCollection {
     }
 
     public boolean contains(Comment comment) {
+        if(!comment.getRange().isPresent()){
+            return false;
+        }
         Range commentRange = comment.getRange();
         if (commentRange == null) {
             return false;
         }
         for (Comment c : getComments()) {
+            if(!c.getRange().isPresent()){
+                return false;
+            }
             Range cRange = c.getRange();
             if(cRange!=null) {
                 // we tolerate a difference of one element in the end column:

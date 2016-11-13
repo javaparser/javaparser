@@ -114,16 +114,18 @@ class CommentsInserter {
          there is something contained in their line */
         List<Comment> attributedComments = new LinkedList<>();
         for (Comment comment : commentsToAttribute) {
-            if (comment.getRange() != null) {
-                Range commentRange = comment.getRange();
+            if (comment.getRange().isPresent()) {
+                Range commentRange = comment.getRange().get();
                 if (comment.isLineComment()) {
                     for (Node child : children) {
-                        Range childRange = child.getRange();
-                        if (childRange != null) {
-                            if (childRange.end.line == commentRange.begin.line
-                                    && attributeLineCommentToNodeOrChild(child,
-                                    comment.asLineComment())) {
-                                attributedComments.add(comment);
+                        if (child.getRange().isPresent()) {
+                            Range childRange = child.getRange().get();
+                            if (childRange != null) {
+                                if (childRange.end.line == commentRange.begin.line
+                                        && attributeLineCommentToNodeOrChild(child,
+                                        comment.asLineComment())) {
+                                    attributedComments.add(comment);
+                                }
                             }
                         }
                     }
@@ -176,7 +178,7 @@ class CommentsInserter {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
 
-        if (node.getRange().begin.line == lineComment.getRange().begin.line
+        if (node.getRange().get().begin.line == lineComment.getRange().get().begin.line
                 && !node.hasComment()) {
             if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
@@ -201,14 +203,14 @@ class CommentsInserter {
     }
 
     private boolean thereAreLinesBetween(Node a, Node b) {
-        if (a.getRange() == null || b.getRange() == null) {
+        if (!a.getRange().isPresent() || !b.getRange().isPresent()) {
             return true;
         }
         if (!PositionUtils.areInOrder(a, b)) {
             return thereAreLinesBetween(b, a);
         }
-        int endOfA = a.getRange().end.line;
-        return b.getRange().begin.line > endOfA + 1;
+        int endOfA = a.getRange().get().end.line;
+        return b.getRange().get().begin.line > endOfA + 1;
     }
 
 }

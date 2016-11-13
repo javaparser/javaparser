@@ -44,7 +44,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     }
 
     public NameExpr(final SimpleName name) {
-        this(name.getRange(), name);
+        this(name.getRange().orElse(null), name);
     }
 
     public NameExpr(Range range, final SimpleName name) {
