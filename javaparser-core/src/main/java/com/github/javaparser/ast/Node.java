@@ -21,6 +21,18 @@
 
 package com.github.javaparser.ast;
 
+import static java.util.Collections.unmodifiableList;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -35,11 +47,6 @@ import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
-
-import java.lang.reflect.Field;
-import java.util.*;
-
-import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -411,14 +418,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                         Collection<?> l = (Collection<?>) object;
                         boolean remove = l.remove(this);
                         success |= remove;
-                    } else if (NodeList.class.isAssignableFrom(object.getClass())) {
-                        NodeList<Node> l = (NodeList<Node>) object;
-                        success |= l.remove(this);
-                    } else if (Optional.class.equals(f.getType())) {
-                        Optional<?> opt = (Optional<?>) object;
-                        if (opt.isPresent())
-                            if (opt.get() == this)
-                                f.set(parentNode, Optional.empty());
                     } else if (object == this) {
                         f.set(parentNode, null);
                         success |= true;
