@@ -134,9 +134,11 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     /**
-     * Sets the anonymousClassBody
+     * Sets the anonymousClassBody<br>
+     * Null means no class body<br>
+     * Empty NodeList means new ClassName(){ }
      * 
-     * @param anonymousClassBody the anonymousClassBody, can be null
+     * @param anonymousClassBody the anonymousClassBody, can be null or empty
      * @return this, the ObjectCreationExpr
      */
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
