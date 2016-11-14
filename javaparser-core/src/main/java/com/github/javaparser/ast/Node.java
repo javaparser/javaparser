@@ -24,6 +24,7 @@ package com.github.javaparser.ast;
 import static java.util.Collections.unmodifiableList;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -408,6 +409,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         Class<?> parentClass = parentNode.getClass();
         while (parentClass != Object.class) {
             for (Field f : parentClass.getDeclaredFields()) {
+                if (Modifier.isStatic(f.getModifiers()))
+                    continue;
                 f.setAccessible(true);
                 try {
                     Object object = f.get(parentNode);
