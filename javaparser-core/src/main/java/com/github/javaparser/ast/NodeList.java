@@ -48,9 +48,12 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     public boolean remove(Node node) {
-        notifyElementRemoved(innerList.indexOf(node), node);
+        int index = innerList.indexOf(node);
+        if (index != -1) {
+            notifyElementRemoved(index, node);
+            node.setParentNode(null);
+        }
         boolean remove = innerList.remove(node);
-        node.setParentNode(null);
         return remove;
     }
 
