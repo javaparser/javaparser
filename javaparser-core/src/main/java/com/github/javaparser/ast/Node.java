@@ -52,7 +52,6 @@ import static java.util.Collections.unmodifiableList;
  */
 // Use <Node> to prevent Node from becoming generic.
 public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable {
-
     /**
      * Different registration mode for observers on nodes.
      */
@@ -92,7 +91,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     private List<Node> childrenNodes = new LinkedList<>();
     private List<Comment> orphanComments = new LinkedList<>();
 
-    private IdentityHashMap<UserDataKey<?>, Object> userData = null;
+    private IdentityHashMap<DataKey<?>, Object> userData = null;
 
     private Comment comment;
 
@@ -101,7 +100,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     public Node(Range range) {
         this.range = range;
     }
-    
+
     /**
      * This is a comment associated with this node.
      *
@@ -358,9 +357,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @param key
      *            The key for the data
      * @return The user data or null of no user data was found for the given key
-     * @see UserDataKey
+     * @see DataKey
      */
-    public <M> M getUserData(final UserDataKey<M> key) {
+    public <M> M getData(final DataKey<M> key) {
         if (userData == null) {
             return null;
         }
@@ -369,7 +368,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
     /**
      * Sets user data for this component using the given key.
-     * For information on creating UserDataKey, see {@link UserDataKey}.
+     * For information on creating DataKey, see {@link DataKey}.
      *
      * @param <M>
      *            The type of user data
@@ -379,9 +378,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @param object
      *            The user data object
      * @throws IllegalArgumentException
-     * @see UserDataKey
+     * @see DataKey
      */
-    public <M> void setUserData(UserDataKey<M> key, M object) {
+    public <M> void setData(DataKey<M> key, M object) {
         if (userData == null) {
             userData = new IdentityHashMap<>();
         }
