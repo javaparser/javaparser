@@ -36,7 +36,7 @@ import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
@@ -395,41 +395,53 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     public boolean remove() {
         Node parentNode = this.parentNode;
-        if (parentNode == null)
+        if (parentNode == null) {
             return false;
-        boolean success = false;
+        }
+        boolean removed = false;
         Class<?> parentClass = parentNode.getClass();
-        while (parentClass != Object.class) {
-            for (Field f : parentClass.getDeclaredFields()) {
-                f.setAccessible(true);
-                try {
-                    Object object = f.get(parentNode);
-                    if (object == null)
-                        continue;
-                    if (Collection.class.isAssignableFrom(object.getClass())) {
-                        Collection<?> l = (Collection<?>) object;
-                        boolean remove = l.remove(this);
-                        success |= remove;
-                    } else if (NodeList.class.isAssignableFrom(object.getClass())) {
-                        NodeList<Node> l = (NodeList<Node>) object;
-                        success |= l.remove(this);
-                    } else if (Optional.class.equals(f.getType())) {
-                        Optional<?> opt = (Optional<?>) object;
-                        if (opt.isPresent())
-                            if (opt.get() == this)
-                                f.set(parentNode, Optional.empty());
-                    } else if (object == this) {
-                        f.set(parentNode, null);
-                        success |= true;
+
+        // we are going to look to remove the node either by checking if it is part of a NodeList
+        // of if there is an explicit setter for it
+
+        for (Method method : parentClass.getMethods()){
+            if (!removed && !java.lang.reflect.Modifier.isStatic(method.getModifiers())) {
+                // looking for methods returning a NodeList
+                if (method.getParameterCount() == 0 && NodeList.class.isAssignableFrom(method.getReturnType())) {
+                    try {
+                        NodeList result = (NodeList) method.invoke(parentNode);
+                        removed = result.remove(this);
+                    } catch (IllegalAccessException|InvocationTargetException e) {
+                        // nothing to do here
                     }
-                } catch (IllegalArgumentException | IllegalAccessException e) {
-                    throw new RuntimeException("Error while removing " + getClass().getSimpleName(), e);
+                } else if (!java.lang.reflect.Modifier.isStatic(method.getModifiers())
+                        && method.getReturnType().isAssignableFrom(this.getClass())
+                        && method.getParameterCount() == 0
+                        && method.getName().startsWith("get")) {
+                    // ok, we found a potential getter. Before invoking let's check there is a corresponding setter,
+                    // otherwise there is no point
+                    String setterName = "set" + method.getName().substring("get".length());
+                    Optional<Method> optSetter = Arrays.stream(parentClass.getMethods())
+                            .filter(m -> m.getName().equals(setterName))
+                            .filter(m -> !java.lang.reflect.Modifier.isStatic(m.getModifiers()))
+                            .filter(m -> m.getParameterCount() == 1)
+                            .filter(m -> m.getParameterTypes()[0].equals(method.getReturnType()))
+                            .findFirst();
+                    if (optSetter.isPresent()) {
+                        try {
+                            Node result = (Node) method.invoke(parentNode);
+                            if (this == result) {
+                                optSetter.get().invoke(parentNode, null);
+                                removed = true;
+                            }
+                        } catch (IllegalAccessException|InvocationTargetException e) {
+                            // nothing to do here
+                        }
+                    }
                 }
             }
-            parentClass = parentClass.getSuperclass();
         }
-        setParentNode(null);
-        return success;
+        return removed;
     }
 
     @Override
