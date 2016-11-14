@@ -21,6 +21,10 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -32,10 +36,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Defines constructor call expression.
@@ -59,7 +59,6 @@ public final class ObjectCreationExpr extends Expression implements
 
     private NodeList<Expression> args;
 
-    // TODO This can be null, to indicate there is no body
     private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
     public ObjectCreationExpr() {
@@ -68,7 +67,7 @@ public final class ObjectCreationExpr extends Expression implements
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
                 new NodeList<>(),
-                new NodeList<>());
+                null);
     }
 
     /**
@@ -85,7 +84,7 @@ public final class ObjectCreationExpr extends Expression implements
                 type,
                 new NodeList<>(),
                 args,
-                new NodeList<>());
+                null);
     }
 
     public ObjectCreationExpr(final Range range,

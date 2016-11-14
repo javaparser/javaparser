@@ -886,7 +886,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         printArguments(n.getArgs(), arg);
 
-        if (n.getAnonymousClassBody().isPresent() && n.getAnonymousClassBody().get().size() > 0) {
+        if (n.getAnonymousClassBody().isPresent()) {
             printer.println(" {");
             printer.indent();
             printMembers(n.getAnonymousClassBody().get(), arg);
