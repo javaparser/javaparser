@@ -414,10 +414,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                     } catch (IllegalAccessException|InvocationTargetException e) {
                         // nothing to do here
                     }
-                } else if (!java.lang.reflect.Modifier.isStatic(method.getModifiers())
-                        && method.getReturnType().isAssignableFrom(this.getClass())
+                } else if ((method.getReturnType().isAssignableFrom(this.getClass()) || isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()))
                         && method.getParameterCount() == 0
                         && method.getName().startsWith("get")) {
+                    final Class<?> setterParamType = isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()) ?
+                            getOptionalParameterType(method.getGenericReturnType()) : method.getReturnType();
                     // ok, we found a potential getter. Before invoking let's check there is a corresponding setter,
                     // otherwise there is no point
                     String setterName = "set" + method.getName().substring("get".length());
@@ -425,13 +426,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                             .filter(m -> m.getName().equals(setterName))
                             .filter(m -> !java.lang.reflect.Modifier.isStatic(m.getModifiers()))
                             .filter(m -> m.getParameterCount() == 1)
-                            .filter(m -> m.getParameterTypes()[0].equals(method.getReturnType()))
+                            .filter(m -> m.getParameterTypes()[0].equals(setterParamType))
                             .findFirst();
                     if (optSetter.isPresent()) {
                         try {
-                            Node result = (Node) method.invoke(parentNode);
+                            Object resultRaw = method.invoke(parentNode);
+                            Node result = isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()) ? (Node)((Optional)resultRaw).get(): (Node) resultRaw;
                             if (this == result) {
-                                optSetter.get().invoke(parentNode, null);
+                                optSetter.get().invoke(parentNode, (Object) null);
                                 removed = true;
                             }
                         } catch (IllegalAccessException|InvocationTargetException e) {
@@ -511,5 +513,37 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     public List<NodeList<?>> getNodeLists() {
         return Collections.emptyList();
+    }
+
+    private boolean isOptionalAssignableFrom(Type type, Class<?> clazz) {
+        return internalGetOptionalParameterType(type).isPresent();
+    }
+
+    private Class getOptionalParameterType(Type type) {
+        Optional<Class> res = internalGetOptionalParameterType(type);
+        if (res.isPresent()) {
+            return res.get();
+        } else {
+            throw new IllegalArgumentException("This type is not an Optional " + type);
+        }
+    }
+
+    private Optional<Class> internalGetOptionalParameterType(Type type) {
+        if (!(type instanceof ParameterizedType)) {
+            return Optional.empty();
+        }
+        ParameterizedType parameterizedType = (ParameterizedType)type;
+        if (!(parameterizedType.getRawType() instanceof Class)) {
+            return Optional.empty();
+        }
+        Class rawType = (Class)parameterizedType.getRawType();
+        if (!(rawType.equals(Optional.class))) {
+            return Optional.empty();
+        }
+        if (!(parameterizedType.getActualTypeArguments()[0] instanceof Class)) {
+            return Optional.empty();
+        }
+        Class parameterType = (Class)parameterizedType.getActualTypeArguments()[0];
+        return Optional.of(parameterType);
     }
 }
