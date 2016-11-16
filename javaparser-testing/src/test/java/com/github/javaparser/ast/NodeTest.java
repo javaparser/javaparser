@@ -140,4 +140,64 @@ public class NodeTest {
                 "VariableDeclaratorId.array_bracket_pairs_after_id changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1",
                 "VariableDeclarator.init changed from null to 0"), changes);
     }
+
+    @Test
+    public void deleteAParameterTriggerNotifications() {
+        String code = "class A { void foo(int p) { }}";
+        CompilationUnit cu = JavaParser.parse(code);
+        List<String> changes = new ArrayList<>();
+        AstObserver observer = new AstObserverAdapter() {
+
+            @Override
+            public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+                changes.add("removing [" + nodeAddedOrRemoved + "] from index " + index);
+            }
+        };
+        cu.register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
+
+        cu.getClassByName("A").getMethodsByName("foo").get(0).getParameter(0).remove();
+        assertEquals(Arrays.asList("removing [int p] from index 0"), changes);
+    }
+
+    @Test
+    public void deleteClassNameDoesNotTriggerNotifications() {
+        String code = "class A { void foo(int p) { }}";
+        CompilationUnit cu = JavaParser.parse(code);
+        List<String> changes = new ArrayList<>();
+        AstObserver observer = new AstObserverAdapter() {
+
+            @Override
+            public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+                changes.add("removing [" + nodeAddedOrRemoved + "] from index " + index);
+            }
+        };
+        cu.register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
+
+        // I cannot remove the name of a type
+        assertEquals(false, cu.getClassByName("A").getName().remove());
+        assertEquals(Arrays.asList(), changes);
+    }
+
+    @Test
+    public void deleteMethodBodyDoesTriggerNotifications() {
+        String code = "class A { void foo(int p) { }}";
+        CompilationUnit cu = JavaParser.parse(code);
+        List<String> changes = new ArrayList<>();
+        AstObserver observer = new AstObserverAdapter() {
+
+            @Override
+            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                changes.add("setting [" + property + "] to " + newValue);
+            }
+
+            @Override
+            public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+                changes.add("removing [" + nodeAddedOrRemoved + "] from index " + index);
+            }
+        };
+        cu.register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
+
+        assertEquals(true, cu.getClassByName("A").getMethodsByName("foo").get(0).getBody().get().remove());
+        assertEquals(Arrays.asList("setting [BODY] to null"), changes);
+    }
 }
