@@ -160,7 +160,7 @@ public final class ObjectCreationExpr extends Expression implements
      * Sets the scope
      * 
      * @param scope the scope, can be null
-     * @return this, the FieldAccessExpr
+     * @return this, the ObjectCreationExpr
      */
     public ObjectCreationExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
