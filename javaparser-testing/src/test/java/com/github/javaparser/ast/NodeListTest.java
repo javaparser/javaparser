@@ -51,4 +51,18 @@ public class NodeListTest {
                 "'int b;' ADDITION in list 'int b;' at 2",
                 "'int c;' ADDITION in list 'int c;' at 3"), changes);
     }
+
+    @Test
+    public void addAllWithIndex() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { void foo(int p) { }}";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().addAll(0, Arrays.asList(createIntField("a"), createIntField("b"), createIntField("c")));
+        assertEquals(Arrays.asList("'int a;' ADDITION in list 'int a;' at 0",
+                "'int b;' ADDITION in list 'int b;' at 1",
+                "'int c;' ADDITION in list 'int c;' at 2"), changes);
+    }
 }
