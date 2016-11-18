@@ -65,4 +65,18 @@ public class NodeListTest {
                 "'int b;' ADDITION in list 'int b;' at 1",
                 "'int c;' ADDITION in list 'int c;' at 2"), changes);
     }
+
+    @Test
+    public void clear() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().clear();
+        assertEquals(Arrays.asList("'int a;' REMOVAL in list 'int a;' at 0",
+                "'int b;' REMOVAL in list 'int b;' at 0",
+                "'int c;' REMOVAL in list 'int c;' at 0"), changes);
+    }
 }

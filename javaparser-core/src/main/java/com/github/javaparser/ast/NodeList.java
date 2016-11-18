@@ -317,9 +317,9 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public void clear() {
-        for (Node n : innerList)
-            n.setParentNode(null);
-        innerList.clear();
+        while (!isEmpty()) {
+            remove(0);
+        }
     }
 
     /**
