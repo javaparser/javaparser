@@ -165,4 +165,16 @@ public class NodeListTest {
                 "'int b;' REMOVAL in list at 1", "'int B;' ADDITION in list at 1",
                 "'int c;' REMOVAL in list at 2", "'int C;' ADDITION in list at 2"), changes);
     }
+
+    @Test
+    public void removeIf() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int longName; int c; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().removeIf(m -> ((FieldDeclaration)m).getVariable(0).getId().getName().getId().length() > 3);
+        assertEquals(Arrays.asList("'int longName;' REMOVAL in list at 1"), changes);
+    }
 }

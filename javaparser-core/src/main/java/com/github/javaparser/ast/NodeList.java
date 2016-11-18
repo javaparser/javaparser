@@ -314,11 +314,11 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean removeIf(Predicate<? super N> filter) {
-        innerList.stream().filter(filter).forEach(n -> {
-            if (n != null)
-                n.setParentNode(null);
-        });
-        return innerList.removeIf(filter);
+        boolean changed = false;
+        for (Object e : this.stream().filter(filter).toArray()){
+            changed = remove(e) || changed;
+        }
+        return changed;
     }
 
     /**
