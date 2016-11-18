@@ -108,6 +108,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public N set(int index, N element) {
+        notifyElementRemoved(index, innerList.get(index));
+        notifyElementAdded(index, element);
         setAsParentNodeOf(element);
         return innerList.set(index, element);
     }

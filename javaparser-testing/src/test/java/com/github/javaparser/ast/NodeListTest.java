@@ -29,7 +29,7 @@ public class NodeListTest {
 
             @Override
             public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-                changes.add(String.format("'%s' %s in list '%s' at %d", nodeAddedOrRemoved, type, nodeAddedOrRemoved, index));
+                changes.add(String.format("'%s' %s in list at %d", nodeAddedOrRemoved, type, index));
             }
         };
     }
@@ -47,9 +47,9 @@ public class NodeListTest {
         cd.getMembers().register(createObserver(changes));
 
         cd.getMembers().addAll(Arrays.asList(createIntField("a"), createIntField("b"), createIntField("c")));
-        assertEquals(Arrays.asList("'int a;' ADDITION in list 'int a;' at 1",
-                "'int b;' ADDITION in list 'int b;' at 2",
-                "'int c;' ADDITION in list 'int c;' at 3"), changes);
+        assertEquals(Arrays.asList("'int a;' ADDITION in list at 1",
+                "'int b;' ADDITION in list at 2",
+                "'int c;' ADDITION in list at 3"), changes);
     }
 
     @Test
@@ -61,9 +61,9 @@ public class NodeListTest {
         cd.getMembers().register(createObserver(changes));
 
         cd.getMembers().addAll(0, Arrays.asList(createIntField("a"), createIntField("b"), createIntField("c")));
-        assertEquals(Arrays.asList("'int a;' ADDITION in list 'int a;' at 0",
-                "'int b;' ADDITION in list 'int b;' at 1",
-                "'int c;' ADDITION in list 'int c;' at 2"), changes);
+        assertEquals(Arrays.asList("'int a;' ADDITION in list at 0",
+                "'int b;' ADDITION in list at 1",
+                "'int c;' ADDITION in list at 2"), changes);
     }
 
     @Test
@@ -75,8 +75,21 @@ public class NodeListTest {
         cd.getMembers().register(createObserver(changes));
 
         cd.getMembers().clear();
-        assertEquals(Arrays.asList("'int a;' REMOVAL in list 'int a;' at 0",
-                "'int b;' REMOVAL in list 'int b;' at 0",
-                "'int c;' REMOVAL in list 'int c;' at 0"), changes);
+        assertEquals(Arrays.asList("'int a;' REMOVAL in list at 0",
+                "'int b;' REMOVAL in list at 0",
+                "'int c;' REMOVAL in list at 0"), changes);
+    }
+
+    @Test
+    public void set() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().set(1, createIntField("d"));
+        assertEquals(Arrays.asList("'int b;' REMOVAL in list at 1",
+                "'int d;' ADDITION in list at 1"), changes);
     }
 }
