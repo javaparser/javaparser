@@ -1,8 +1,10 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.observing.AstObserver;
 import com.github.javaparser.ast.observing.AstObserverAdapter;
 import com.github.javaparser.ast.observing.ObservableProperty;
@@ -10,6 +12,7 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.UnaryOperator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -142,5 +145,24 @@ public class NodeListTest {
         assertEquals(Arrays.asList("'int a;' REMOVAL in list at 0",
                 "'int c;' REMOVAL in list at 1",
                 "'int e;' REMOVAL in list at 2"), changes);
+    }
+
+    @Test
+    public void replaceAll() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().replaceAll(bodyDeclaration -> {
+            FieldDeclaration clone = (FieldDeclaration)bodyDeclaration.clone();
+            VariableDeclaratorId id = clone.getVariable(0).getId();
+            id.setName(id.getName().getId().toUpperCase());
+            return clone;
+        });
+        assertEquals(Arrays.asList("'int a;' REMOVAL in list at 0", "'int A;' ADDITION in list at 0",
+                "'int b;' REMOVAL in list at 1", "'int B;' ADDITION in list at 1",
+                "'int c;' REMOVAL in list at 2", "'int C;' ADDITION in list at 2"), changes);
     }
 }

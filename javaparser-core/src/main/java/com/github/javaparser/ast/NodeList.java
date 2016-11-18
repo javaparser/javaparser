@@ -302,7 +302,9 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public void replaceAll(UnaryOperator<N> operator) {
-        innerList.replaceAll(operator);
+        for (int i=0; i<this.size(); i++) {
+            set(i, operator.apply(this.get(i)));
+        }
     }
 
     /**
