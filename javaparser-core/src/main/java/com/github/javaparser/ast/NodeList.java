@@ -245,9 +245,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean addAll(Collection<? extends N> c) {
-        for (N n : c)
-            own(n);
-        return innerList.addAll(c);
+        c.forEach(e -> add(e));
+        return !c.isEmpty();
     }
 
     /**
@@ -258,8 +257,9 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean addAll(int index, Collection<? extends N> c) {
-        for (N n : c)
+        for (N n : c) {
             own(n);
+        }
         return innerList.addAll(index, c);
     }
 
