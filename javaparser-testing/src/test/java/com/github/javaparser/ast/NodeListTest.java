@@ -129,4 +129,18 @@ public class NodeListTest {
         assertEquals(Arrays.asList("'int b;' REMOVAL in list at 1",
                 "'int d;' REMOVAL in list at 2"), changes);
     }
+
+    @Test
+    public void retainAll() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; int d; int e; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().retainAll(Arrays.asList(cd.getFieldByName("b"), "foo", cd.getFieldByName("d")));
+        assertEquals(Arrays.asList("'int a;' REMOVAL in list at 0",
+                "'int c;' REMOVAL in list at 1",
+                "'int e;' REMOVAL in list at 2"), changes);
+    }
 }

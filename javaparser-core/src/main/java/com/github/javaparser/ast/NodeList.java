@@ -287,7 +287,13 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean retainAll(Collection<?> c) {
-        return innerList.retainAll(c);
+        boolean changed = false;
+        for (Object e : this.stream().filter(it -> !c.contains(it)).toArray()) {
+            if (!c.contains(e)) {
+                changed = remove(e) || changed;
+            }
+        }
+        return changed;
     }
 
     /**
