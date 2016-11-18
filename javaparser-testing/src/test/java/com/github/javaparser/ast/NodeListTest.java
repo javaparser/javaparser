@@ -92,4 +92,41 @@ public class NodeListTest {
         assertEquals(Arrays.asList("'int b;' REMOVAL in list at 1",
                 "'int d;' ADDITION in list at 1"), changes);
     }
+
+    @Test
+    public void removeNode() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; int d; int e; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().remove(cd.getFieldByName("c"));
+        assertEquals(Arrays.asList("'int c;' REMOVAL in list at 2"), changes);
+    }
+
+    @Test
+    public void removeObject() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; int d; int e; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().remove("hi");
+        assertEquals(Arrays.asList(), changes);
+    }
+
+    @Test
+    public void removeAll() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; int d; int e; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().removeAll(Arrays.asList(cd.getFieldByName("b"), "foo", cd.getFieldByName("d")));
+        assertEquals(Arrays.asList("'int b;' REMOVAL in list at 1",
+                "'int d;' REMOVAL in list at 2"), changes);
+    }
 }
