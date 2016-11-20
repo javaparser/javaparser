@@ -1,3 +1,7 @@
+Version 3.0.0-alpha.10
+------------------
+* 578 579 577 575 290 570 568 567 562 564 551 bug fixes and improvements
+
 Version 3.0.0-alpha.9
 ------------------
 * 403 358 549 Make all names nodes: either SimpleName or Name. This makes every name in the AST visitable. NameExpr is now a wrapper to use SimpleName in an expression.
