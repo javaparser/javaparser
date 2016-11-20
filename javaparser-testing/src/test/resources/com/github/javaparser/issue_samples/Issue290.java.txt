@@ -1,0 +1,34 @@
+package org.test;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+
+import java.io.File;
+import java.io.FileInputStream;
+
+public class TestComments {
+    String str = "\\";
+
+    /**
+     * Comment that is ignored
+     */
+    public void someTestMethod() {}
+
+    public static void main(String[] args) throws Exception {
+        // Correct path so that it will point to the file with this code
+        try (FileInputStream in = new FileInputStream(
+                new File(".\\src\\main\\java\\org\\test\\TestComments.java"))) {
+            CompilationUnit compilationUnit = JavaParser.parse(in);
+
+            new VoidVisitorAdapter<Object>() {
+                public void visit(MethodDeclaration method, Object arg) {
+                    System.out.println("Method: " + method.getName());
+                    System.out.println("Comment: " + method.getComment());
+                    System.out.println("JavaDoc: " + method.getJavaDoc() + "\n");
+                }
+            }.visit(compilationUnit, null);
+        }
+    }
+}
