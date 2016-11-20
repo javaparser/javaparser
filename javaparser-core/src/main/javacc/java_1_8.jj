@@ -1308,7 +1308,7 @@ CompilationUnit CompilationUnit():
   ( in = ImportDeclaration() { imports = add(imports, in); } )*
   ( tn = TypeDeclaration() { types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
-  { return new CompilationUnit(range(pos(1, 1), tokenEnd()), pakage, imports, types); }
+  { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
 }
 
 PackageDeclaration PackageDeclaration():
