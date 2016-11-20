@@ -108,6 +108,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public N set(int index, N element) {
+        notifyElementRemoved(index, innerList.get(index));
+        notifyElementAdded(index, element);
         setAsParentNodeOf(element);
         return innerList.set(index, element);
     }
@@ -222,10 +224,11 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean remove(Object o) {
-        boolean remove = innerList.remove(o);
-        if (o != null && o instanceof Node)
-            ((Node) o).setParentNode(null);
-        return remove;
+        if (o instanceof Node) {
+            return remove((Node)o);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -245,9 +248,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean addAll(Collection<? extends N> c) {
-        for (N n : c)
-            own(n);
-        return innerList.addAll(c);
+        c.forEach(e -> add(e));
+        return !c.isEmpty();
     }
 
     /**
@@ -258,9 +260,10 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean addAll(int index, Collection<? extends N> c) {
-        for (N n : c)
-            own(n);
-        return innerList.addAll(index, c);
+        for (N e : c) {
+            add(index++, e);
+        }
+        return !c.isEmpty();
     }
 
     /**
@@ -270,12 +273,11 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean removeAll = innerList.removeAll(c);
-        for (Object o : c) {
-            if (o != null && o instanceof Node)
-                ((Node) o).setParentNode(null);
+        boolean changed = false;
+        for (Object e : c) {
+            changed = remove(e) || changed;
         }
-        return removeAll;
+        return changed;
     }
 
     /**
@@ -285,7 +287,13 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean retainAll(Collection<?> c) {
-        return innerList.retainAll(c);
+        boolean changed = false;
+        for (Object e : this.stream().filter(it -> !c.contains(it)).toArray()) {
+            if (!c.contains(e)) {
+                changed = remove(e) || changed;
+            }
+        }
+        return changed;
     }
 
     /**
@@ -294,7 +302,9 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public void replaceAll(UnaryOperator<N> operator) {
-        innerList.replaceAll(operator);
+        for (int i=0; i<this.size(); i++) {
+            set(i, operator.apply(this.get(i)));
+        }
     }
 
     /**
@@ -304,11 +314,11 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public boolean removeIf(Predicate<? super N> filter) {
-        innerList.stream().filter(filter).forEach(n -> {
-            if (n != null)
-                n.setParentNode(null);
-        });
-        return innerList.removeIf(filter);
+        boolean changed = false;
+        for (Object e : this.stream().filter(filter).toArray()){
+            changed = remove(e) || changed;
+        }
+        return changed;
     }
 
     /**
@@ -317,9 +327,9 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public void clear() {
-        for (Node n : innerList)
-            n.setParentNode(null);
-        innerList.clear();
+        while (!isEmpty()) {
+            remove(0);
+        }
     }
 
     /**
