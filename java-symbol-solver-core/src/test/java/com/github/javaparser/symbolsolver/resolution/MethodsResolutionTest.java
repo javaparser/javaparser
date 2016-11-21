@@ -38,8 +38,8 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessThroughSuper");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "methodTest");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().getStmts().get(0);
-        Expression expression = returnStmt.getExpr();
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStmts().get(0);
+        Expression expression = returnStmt.getExpr().get();
 
         Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());

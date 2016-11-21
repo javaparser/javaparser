@@ -60,7 +60,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpr();
+        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpr().get();
         LambdaExpr lambdaExpr = (LambdaExpr) methodCallExpr.getArgs().get(0);
 
         Context context = new LambdaExprContext(lambdaExpr, typeSolver);
@@ -76,7 +76,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         VariableDeclarator field = Navigator.demandField(clazz, "functional");
-        LambdaExpr lambdaExpr = (LambdaExpr) field.getInit();
+        LambdaExpr lambdaExpr = (LambdaExpr) field.getInit().get();
 
         File src = new File("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
@@ -97,7 +97,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testFunctionalVar");
         VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a");
-        LambdaExpr lambdaExpr = (LambdaExpr) varDecl.getInit();
+        LambdaExpr lambdaExpr = (LambdaExpr) varDecl.getInit().get();
 
         File src = new File("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();

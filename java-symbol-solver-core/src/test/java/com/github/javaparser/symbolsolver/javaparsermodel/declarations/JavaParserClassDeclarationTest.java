@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.AbstractTest;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -42,6 +43,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -467,7 +469,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     }
 
     @Test
-    public void testGetAllGenericFields() throws FileNotFoundException {
+    public void testGetAllGenericFields() throws IOException, ParseException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
         CompilationUnit cu = JavaParser.parse(adaptPath(new File("src/test/resources/GenericFields.java.txt")));
@@ -824,7 +826,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     // hasDirectlyAnnotation
 
     @Test
-    public void testHasDirectlyAnnotation() throws FileNotFoundException {
+    public void testHasDirectlyAnnotation() throws IOException, ParseException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
         CompilationUnit cu = JavaParser.parse(adaptPath(new File("src/test/resources/Annotations.java.txt")));
@@ -845,7 +847,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     // hasAnnotation
 
     @Test
-    public void testHasAnnotation() throws FileNotFoundException {
+    public void testHasAnnotation() throws IOException, ParseException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
         CompilationUnit cu = JavaParser.parse(adaptPath(new File("src/test/resources/Annotations.java.txt")));
