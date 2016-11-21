@@ -1332,14 +1332,20 @@ ImportDeclaration ImportDeclaration():
     ImportDeclaration ret;
 }
 {
-    (
-        "import" {begin = tokenBegin();} 
-        [ "static" { isStatic = true; } ] 
-        name = Name() 
-        [ "." "*" { isAsterisk = true; } ] ";"
-        { ret = ImportDeclaration.create(range(begin, tokenEnd()), name, isStatic, isAsterisk); }
+    ( LOOKAHEAD("import" "static" Name() "." "*")
+        "import" {begin = tokenBegin();} "static" name = Name() "." "*" ";"
+        { ret = ImportDeclaration.create(range(begin, tokenEnd()), name, true, true); }
+    | LOOKAHEAD("import" "static")
+        "import" {begin = tokenBegin();} "static" name = Name() ";"
+        { ret = ImportDeclaration.create(range(begin, tokenEnd()), name, true, false); }
+    | LOOKAHEAD("import" Name() "." "*")
+        "import" {begin = tokenBegin();} name = Name() "." "*" ";"
+        { ret = ImportDeclaration.create(range(begin, tokenEnd()), name, false, true); }
     |
-        ";" {begin = tokenBegin();} 
+        "import" {begin = tokenBegin();} name = Name() ";"
+        { ret = ImportDeclaration.create(range(begin, tokenEnd()), name, false, false); }
+    |
+        ";" {begin = tokenBegin();}
         { ret = new EmptyImportDeclaration(range(begin, tokenEnd())); }
     )    
     { return ret; }
