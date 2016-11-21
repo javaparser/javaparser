@@ -68,7 +68,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithName<T> & NodeWithMe
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.type.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
-                if (typeParameter.getName().equals(name)) {
+                if (typeParameter.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter, typeSolver));
                 }
             }
@@ -79,7 +79,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithName<T> & NodeWithMe
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
                 com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
                 String prefix = internalType.getName() + ".";
-                if (internalType.getName().equals(name)) {
+                if (internalType.getName().getId().equals(name)) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
                     } else if (internalType instanceof EnumDeclaration) {

@@ -39,7 +39,7 @@ public class JavaParserTypeDeclarationAdapter {
     }
 
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        if (this.wrappedNode.getName().equals(name)) {
+        if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
 
@@ -47,7 +47,7 @@ public class JavaParserTypeDeclarationAdapter {
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
                 com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
-                if (internalType.getName().equals(name)) {
+                if (internalType.getName().getId().equals(name)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
                 } else if (name.startsWith(String.format("%s.%s", wrappedNode.getName(), internalType.getName()))) {
                     return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1), typeSolver);
@@ -61,7 +61,7 @@ public class JavaParserTypeDeclarationAdapter {
             NodeWithTypeParameters nodeWithTypeParameters = (NodeWithTypeParameters) wrappedNode;
             for (TypeParameter astTpRaw : (Iterable<TypeParameter>)nodeWithTypeParameters.getTypeParameters()) {
                 TypeParameter astTp = (TypeParameter) astTpRaw;
-                if (astTp.getName().equals(name)) {
+                if (astTp.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeParameter(astTp, typeSolver));
                 }
             }

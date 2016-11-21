@@ -239,7 +239,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Deprecated
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        if (this.wrappedNode.getName().equals(name)) {
+        if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(this);
         }
         SymbolReference<TypeDeclaration> ref = javaParserTypeAdapter.solveType(name, typeSolver);

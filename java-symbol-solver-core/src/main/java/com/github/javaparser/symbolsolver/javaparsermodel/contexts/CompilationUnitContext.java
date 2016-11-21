@@ -108,7 +108,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypes() != null) {
             for (TypeDeclaration type : wrappedNode.getTypes()) {
-                if (type.getName().equals(name)) {
+                if (type.getName().getId().equals(name)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
                         return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type));
                     } else if (type instanceof AnnotationDeclaration) {

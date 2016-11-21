@@ -45,7 +45,7 @@ public abstract class AbstractMethodLikeDeclarationContext
     @Override
     public final Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
-            if (tp.getName().equals(name)) {
+            if (tp.getName().getId().equals(name)) {
                 return Optional.of(new TypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
@@ -71,7 +71,7 @@ public abstract class AbstractMethodLikeDeclarationContext
     public final SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
-                if (tp.getName().equals(name)) {
+                if (tp.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeParameter(tp, typeSolver));
                 }
             }

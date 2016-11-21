@@ -42,7 +42,7 @@ public class ForechStatementContext extends AbstractJavaParserContext<ForeachStm
             throw new IllegalStateException();
         }
         VariableDeclarator variableDeclarator = wrappedNode.getVariable().getVariables().get(0);
-        if (variableDeclarator.getId().getName().equals(name)) {
+        if (variableDeclarator.getId().getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
         } else {
             if (getParentNode(wrappedNode) instanceof BlockStmt) {

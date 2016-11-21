@@ -64,7 +64,7 @@ public final class Navigator {
 
         Optional<TypeDeclaration<?>> type = Optional.empty();
         for (Node n : td.getMembers()) {
-            if (n instanceof TypeDeclaration && ((TypeDeclaration<?>) n).getName().equals(typeName)) {
+            if (n instanceof TypeDeclaration && ((TypeDeclaration<?>) n).getName().getId().equals(typeName)) {
                 type = Optional.of((TypeDeclaration<?>) n);
                 break;
             }
@@ -100,7 +100,7 @@ public final class Navigator {
         for (BodyDeclaration<?> bd : cd.getMembers()) {
             if (bd instanceof MethodDeclaration) {
                 MethodDeclaration md = (MethodDeclaration) bd;
-                if (md.getName().equals(name)) {
+                if (md.getName().getId().equals(name)) {
                     if (found != null) {
                         throw new IllegalStateException("Ambiguous getName");
                     }
@@ -119,7 +119,7 @@ public final class Navigator {
             if (bd instanceof FieldDeclaration) {
                 FieldDeclaration fd = (FieldDeclaration) bd;
                 for (VariableDeclarator vd : fd.getVariables()) {
-                    if (vd.getId().getName().equals(name)) {
+                    if (vd.getId().getName().getId().equals(name)) {
                         return vd;
                     }
                 }
@@ -131,7 +131,7 @@ public final class Navigator {
     public static NameExpr findNameExpression(Node node, String name) {
         if (node instanceof NameExpr) {
             NameExpr nameExpr = (NameExpr) node;
-            if (nameExpr.getName() != null && nameExpr.getName().equals(name)) {
+            if (nameExpr.getName() != null && nameExpr.getName().getId().equals(name)) {
                 return nameExpr;
             }
         }
@@ -147,7 +147,7 @@ public final class Navigator {
     public static MethodCallExpr findMethodCall(Node node, String methodName) {
         if (node instanceof MethodCallExpr) {
             MethodCallExpr methodCallExpr = (MethodCallExpr) node;
-            if (methodCallExpr.getName().equals(methodName)) {
+            if (methodCallExpr.getName().getId().equals(methodName)) {
                 return methodCallExpr;
             }
         }
@@ -163,7 +163,7 @@ public final class Navigator {
     public static VariableDeclarator demandVariableDeclaration(Node node, String name) {
         if (node instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) node;
-            if (variableDeclarator.getId().getName().equals(name)) {
+            if (variableDeclarator.getId().getName().getId().equals(name)) {
                 return variableDeclarator;
             }
         }
