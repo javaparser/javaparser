@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
@@ -255,8 +256,17 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
-        final ImportDeclaration importDeclaration = ImportDeclaration.create(Range.UNKNOWN, Name.parse(name), isStatic, isAsterisk);
-        if (getImports().stream().anyMatch(i -> i.toString().equals(importDeclaration.toString())))
+        final StringBuilder i = new StringBuilder("import ");
+        if (isStatic) {
+            i.append("static ");
+        }
+        i.append(name);
+        if (isAsterisk) {
+            i.append(".*");
+        }
+        i.append(";");
+        ImportDeclaration importDeclaration = JavaParser.parseImport(i.toString());
+        if (getImports().stream().anyMatch(im -> im.toString().equals(importDeclaration.toString())))
             return this;
         else {
             getImports().add(importDeclaration);
