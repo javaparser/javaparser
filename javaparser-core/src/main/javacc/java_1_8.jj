@@ -1327,31 +1327,37 @@ ImportDeclaration ImportDeclaration():
 {
     Name name;
     ClassOrInterfaceType type;
-    boolean isStatic = false;
-    boolean isAsterisk = false;
     Position begin;
     ImportDeclaration ret;
 }
 {
-    ( LOOKAHEAD("import" "static" ClassOrInterfaceType() "." "*")
-        "import" {begin = tokenBegin();} "static" type = ClassOrInterfaceType() "." "*" ";"
-        { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
-    | LOOKAHEAD("import" "static")
-        "import" {begin = tokenBegin();} "static" type = ClassOrInterfaceType() ";"
-        {
-            if(!type.getScope().isPresent()){
-                addProblem("import static has only one identifier");
-                ret = new EmptyImportDeclaration(range(begin, tokenEnd()));
-            } else {
-                ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
-            }
-        }
-    | LOOKAHEAD("import" Name() "." "*")
-        "import" {begin = tokenBegin();} name = Name() "." "*" ";"
-        { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
-    |
-        "import" {begin = tokenBegin();} type = ClassOrInterfaceType() ";"
-        { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
+    (
+        "import" {begin = tokenBegin();}
+        (
+            "static" type = ClassOrInterfaceType()
+            (
+                "." "*" ";"
+                { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
+            |
+                ";"
+                {
+                    if(!type.getScope().isPresent()){
+                        addProblem("import static has only one identifier");
+                        ret = new EmptyImportDeclaration(range(begin, tokenEnd()));
+                    } else {
+                        ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
+                    }
+                }
+            )
+        |
+            ( LOOKAHEAD(Name() "." "*")
+                name = Name() "." "*" ";"
+                { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
+            |
+                type = ClassOrInterfaceType() ";"
+                { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
+            )
+        )
     |
         ";" {begin = tokenBegin();}
         { ret = new EmptyImportDeclaration(range(begin, tokenEnd())); }
