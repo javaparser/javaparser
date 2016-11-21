@@ -38,7 +38,7 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public String getName() {
-        return wrappedNode.getName();
+        return wrappedNode.getName().getId();
     }
 
     @Override

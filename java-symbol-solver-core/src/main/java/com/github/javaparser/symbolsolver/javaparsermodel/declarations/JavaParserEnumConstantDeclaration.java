@@ -44,7 +44,7 @@ public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
 
     @Override
     public String getName() {
-        return wrappedNode.getName();
+        return wrappedNode.getName().getId();
     }
 
     /**

@@ -58,7 +58,7 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     public String getQualifiedName() {
         String containerName = Helper.containerName("", getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
-            return wrappedNode.getName();
+            return wrappedNode.getName().getId();
         } else {
             return containerName + "." + wrappedNode.getName();
         }
@@ -66,7 +66,7 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public String getName() {
-        return wrappedNode.getName();
+        return wrappedNode.getName().getId();
     }
 
     @Override

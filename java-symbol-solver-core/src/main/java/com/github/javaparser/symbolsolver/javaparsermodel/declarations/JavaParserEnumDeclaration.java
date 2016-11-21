@@ -79,7 +79,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public String getName() {
-        return wrappedNode.getName();
+        return wrappedNode.getName().getId();
     }
 
     @Override
@@ -212,9 +212,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         ancestors.add(enumClass);
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
-                SymbolReference<TypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName());
+                SymbolReference<TypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName().getId());
                 if (!implementedDeclRef.isSolved()) {
-                    throw new UnsolvedSymbolException(implementedType.getName());
+                    throw new UnsolvedSymbolException(implementedType.getName().getId());
                 }
                 ancestors.add(new ReferenceTypeImpl((ReferenceTypeDeclaration) implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
             }

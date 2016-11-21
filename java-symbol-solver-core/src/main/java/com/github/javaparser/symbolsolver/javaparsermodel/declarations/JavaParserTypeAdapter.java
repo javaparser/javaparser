@@ -36,7 +36,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithName<T> & NodeWithMe
     public String getQualifiedName() {
         String containerName = Helper.containerName("", getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
-            return wrappedNode.getName();
+            return wrappedNode.getName().getId();
         } else {
             return containerName + "." + wrappedNode.getName();
         }

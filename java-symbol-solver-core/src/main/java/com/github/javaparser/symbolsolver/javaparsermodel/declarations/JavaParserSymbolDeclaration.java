@@ -64,7 +64,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     public static JavaParserSymbolDeclaration localVar(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
-        return new JavaParserSymbolDeclaration(variableDeclarator, variableDeclarator.getId().getName(), typeSolver, false, false, true);
+        return new JavaParserSymbolDeclaration(variableDeclarator, variableDeclarator.getId().getName().getId(), typeSolver, false, false, true);
     }
 
     public static int getParamPos(Parameter parameter) {

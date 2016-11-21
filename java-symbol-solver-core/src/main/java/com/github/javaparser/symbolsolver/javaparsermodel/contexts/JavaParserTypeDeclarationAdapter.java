@@ -50,9 +50,9 @@ public class JavaParserTypeDeclarationAdapter {
                 if (internalType.getName().equals(name)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
                 } else if (name.startsWith(String.format("%s.%s", wrappedNode.getName(), internalType.getName()))) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().length() + 1), typeSolver);
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1), typeSolver);
                 } else if (name.startsWith(String.format("%s.", internalType.getName()))) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().length() + 1), typeSolver);
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1), typeSolver);
                 }
             }
         }

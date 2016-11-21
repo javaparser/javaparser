@@ -115,7 +115,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     @Override
     public String getName() {
-        return wrappedNode.getName();
+        return wrappedNode.getName().getId();
     }
 
     @Override

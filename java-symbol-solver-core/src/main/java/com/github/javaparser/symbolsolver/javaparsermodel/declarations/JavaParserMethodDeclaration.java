@@ -159,7 +159,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public String getName() {
-        return wrappedNode.getName();
+        return wrappedNode.getName().getId();
     }
 
     @Override

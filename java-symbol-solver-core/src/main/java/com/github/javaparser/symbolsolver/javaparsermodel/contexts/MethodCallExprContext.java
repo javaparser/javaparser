@@ -68,7 +68,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
             // Consider static method calls
             if (wrappedNode.getScope() instanceof NameExpr) {
-                String className = ((NameExpr) wrappedNode.getScope()).getName();
+                String className = ((NameExpr) wrappedNode.getScope()).getName().getId();
                 SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
                 if (ref.isSolved()) {
                     SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
@@ -127,7 +127,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // consider static methods
             if (wrappedNode.getScope() instanceof NameExpr) {
                 NameExpr scopeAsName = (NameExpr) wrappedNode.getScope();
-                SymbolReference symbolReference = this.solveType(scopeAsName.getName(), typeSolver);
+                SymbolReference symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
                     return MethodResolutionLogic.solveMethodInType(typeDeclaration, name, argumentsTypes, typeSolver);

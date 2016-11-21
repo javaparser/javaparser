@@ -23,6 +23,7 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -46,16 +47,16 @@ class Helper {
     public static String containerName(String base, Node container) {
         if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
             String b = containerName(base, getParentNode(container));
-            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName();
+            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName().getId();
             if (b.isEmpty()) {
                 return cn;
             } else {
                 return b + "." + cn;
             }
         } else if (container instanceof CompilationUnit) {
-            PackageDeclaration p = ((CompilationUnit) container).getPackage();
-            if (p != null) {
-                String b = p.getName().toString();
+            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
+            if (p.isPresent()) {
+                String b = p.get().getName().toString();
                 if (base.isEmpty()) {
                     return b;
                 } else {

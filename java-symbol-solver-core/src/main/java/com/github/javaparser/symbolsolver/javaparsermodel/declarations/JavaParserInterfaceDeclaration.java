@@ -93,7 +93,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public String getName() {
-        return wrappedNode.getName();
+        return wrappedNode.getName().getId();
     }
 
     @Override
@@ -116,7 +116,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         List<ReferenceType> interfaces = new ArrayList<>();
         if (wrappedNode.getImplements() != null) {
             for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
-                interfaces.add(new ReferenceTypeImpl(solveType(t.getName(), typeSolver).getCorrespondingDeclaration().asInterface(), typeSolver));
+                interfaces.add(new ReferenceTypeImpl(solveType(t.getName().getId(), typeSolver).getCorrespondingDeclaration().asInterface(), typeSolver));
             }
         }
         return interfaces;
@@ -258,14 +258,14 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     ///
 
     private ReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
-        SymbolReference<TypeDeclaration> ref = solveType(classOrInterfaceType.getName(), typeSolver);
+        SymbolReference<TypeDeclaration> ref = solveType(classOrInterfaceType.getName().getId(), typeSolver);
         if (!ref.isSolved()) {
-            throw new UnsolvedSymbolException(classOrInterfaceType.getName());
+            throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
-        if (classOrInterfaceType.getTypeArguments() == null) {
+        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
-        List<Type> superClassTypeParameters = classOrInterfaceType.getTypeArguments()
+        List<Type> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
                 .stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
                 .collect(Collectors.toList());
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);

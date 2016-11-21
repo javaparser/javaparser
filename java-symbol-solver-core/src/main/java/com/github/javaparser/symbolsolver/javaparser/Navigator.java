@@ -40,7 +40,7 @@ public final class Navigator {
     }
 
     public static Node getParentNode(Node node) {
-        Node parent = node.getParentNode();
+        Node parent = node.getParentNode().orElse(null);
         return parent;
     }
 
@@ -217,12 +217,12 @@ public final class Navigator {
     }
 
     public static <N extends Node> Optional<N> findAncestor(Node node, Class<N> clazz) {
-        if (node.getParentNode() == null) {
+        if (!node.getParentNode().isPresent()) {
             return Optional.empty();
         } else if (clazz.isInstance(node.getParentNode())) {
             return Optional.of(clazz.cast(node.getParentNode()));
         } else {
-            return findAncestor(node.getParentNode(), clazz);
+            return findAncestor(node.getParentNode().get(), clazz);
         }
     }
 

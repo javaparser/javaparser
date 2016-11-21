@@ -80,7 +80,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public String getName() {
-        return wrappedNode.getName();
+        return wrappedNode.getName().getId();
     }
 
     @Override

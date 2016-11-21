@@ -75,9 +75,9 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
     @Override
     public String getName() {
         if (enumConstantDeclaration != null) {
-            return enumConstantDeclaration.getName();
+            return enumConstantDeclaration.getName().getId();
         } else {
-            return variableDeclarator.getId().getName();
+            return variableDeclarator.getId().getName().getId();
         }
     }
 
