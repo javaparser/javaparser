@@ -122,6 +122,10 @@ public class JavaParserFacade {
         return symbolSolver.solveSymbol(nameExpr.getName().getId(), nameExpr);
     }
 
+    public SymbolReference<? extends ValueDeclaration> solve(SimpleName nameExpr) {
+        return symbolSolver.solveSymbol(nameExpr.getId(), nameExpr);
+    }
+
     public SymbolReference solve(Expression expr) {
         if (expr instanceof NameExpr) {
             return solve((NameExpr) expr);

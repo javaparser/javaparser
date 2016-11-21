@@ -19,10 +19,7 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -77,7 +74,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessEnumMemberThroughThis");
         com.github.javaparser.ast.body.EnumDeclaration enumDecl = Navigator.demandEnum(cu, "AccessEnumMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(enumDecl, "getLabel");
-        NameExpr expression = Navigator.findNameExpression(method, "label");
+        SimpleName expression = Navigator.findSimpleName(method, "label");
 
         SymbolReference ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());

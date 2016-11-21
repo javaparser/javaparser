@@ -21,6 +21,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 
@@ -137,6 +138,22 @@ public final class Navigator {
         }
         for (Node child : node.getChildNodes()) {
             NameExpr res = findNameExpression(child, name);
+            if (res != null) {
+                return res;
+            }
+        }
+        return null;
+    }
+
+    public static SimpleName findSimpleName(Node node, String name) {
+        if (node instanceof SimpleName) {
+            SimpleName nameExpr = (SimpleName) node;
+            if (nameExpr.getId() != null && nameExpr.getId().equals(name)) {
+                return nameExpr;
+            }
+        }
+        for (Node child : node.getChildNodes()) {
+            SimpleName res = findSimpleName(child, name);
             if (res != null) {
                 return res;
             }

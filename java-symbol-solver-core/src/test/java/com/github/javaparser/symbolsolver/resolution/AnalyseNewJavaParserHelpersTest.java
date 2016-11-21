@@ -83,7 +83,7 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
     @Test
     public void nodesTypeIsCorrect() throws IOException, ParseException {
         CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
-        NameExpr nodes = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().equals("nodes")).findFirst().get();
+        NameExpr nodes = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().getId().equals("nodes")).findFirst().get();
         Type type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
         assertEquals("java.util.List<T>", type.describe());
         assertEquals(1, type.asReferenceType().typeParametersValues().size());
