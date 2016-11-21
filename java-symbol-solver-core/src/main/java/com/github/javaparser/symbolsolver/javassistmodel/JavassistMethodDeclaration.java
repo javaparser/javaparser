@@ -117,7 +117,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
                 SignatureAttribute.Type signatureType = methodSignature.getParameterTypes()[i];
                 return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType, typeSolver, this), typeSolver, variadic);
             } else {
-                return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[0], typeSolver, variadic);
+                return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic);
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
