@@ -21,16 +21,10 @@
 
 package com.github.javaparser.ast.imports;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
-import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <p>
@@ -49,10 +43,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public abstract class ImportDeclaration extends Node {
-    public ImportDeclaration() {
-        this(Range.UNKNOWN);
-    }
-
     public ImportDeclaration(Range range) {
         super(range);
     }
