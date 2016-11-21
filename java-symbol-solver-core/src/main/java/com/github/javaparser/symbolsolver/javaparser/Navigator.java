@@ -219,8 +219,8 @@ public final class Navigator {
     public static <N extends Node> Optional<N> findAncestor(Node node, Class<N> clazz) {
         if (!node.getParentNode().isPresent()) {
             return Optional.empty();
-        } else if (clazz.isInstance(node.getParentNode())) {
-            return Optional.of(clazz.cast(node.getParentNode()));
+        } else if (clazz.isInstance(node.getParentNode().get())) {
+            return Optional.of(clazz.cast(node.getParentNode().get()));
         } else {
             return findAncestor(node.getParentNode().get(), clazz);
         }
