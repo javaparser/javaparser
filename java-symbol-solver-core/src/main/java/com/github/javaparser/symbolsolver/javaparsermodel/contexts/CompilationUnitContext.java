@@ -124,7 +124,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (importDecl instanceof SingleTypeImportDeclaration) {
                     ClassOrInterfaceType importedType = ((SingleTypeImportDeclaration) importDecl).getType();
-                    String qName = importedType.getName().getId();
+                    String qName = qName(importedType);
                     if (qName.equals(name) || qName.endsWith("." + name)) {
                         SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref.isSolved()) {
@@ -162,6 +162,14 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             return SymbolReference.adapt(typeSolver.tryToSolveType(name), com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
         } else {
             return SymbolReference.unsolved(com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.class);
+        }
+    }
+
+    private String qName(ClassOrInterfaceType type) {
+        if (type.getScope().isPresent()) {
+            return qName(type.getScope().get()) + "." + type.getName().getId();
+        } else {
+            return type.getName().getId();
         }
     }
 

@@ -5,7 +5,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
@@ -23,7 +23,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeAdapter<T extends Node & NodeWithName<T> & NodeWithMembers<T> & NodeWithTypeParameters<T>> {
+public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T> & NodeWithTypeParameters<T>> {
 
     private T wrappedNode;
     private TypeSolver typeSolver;
@@ -38,7 +38,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithName<T> & NodeWithMe
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
         } else {
-            return containerName + "." + wrappedNode.getName();
+            return containerName + "." + wrappedNode.getName().getId();
         }
     }
 
