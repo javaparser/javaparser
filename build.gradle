@@ -109,11 +109,11 @@ if (project.hasProperty('release')) {
             name project.name
             description project.description
             packaging 'jar'
-            url 'https://github.com/ftomassetti/java-symbol-solver'
+            url 'https://github.com/javaparser/java-symbol-solver'
 
             scm {
-              connection 'scm:git:https://github.com/ftomassetti/java-symbol-solver.git'
-              developerConnection 'scm:git:git@github.com:ftomassetti/java-symbol-solver.git'
+              connection 'scm:git:https://github.com/javaparser/java-symbol-solver.git'
+              developerConnection 'scm:git:git@github.com:javaparser/java-symbol-solver.git'
               url 'https://github.com/ftomassetti/java-symbol-solver.git'
             }
 
