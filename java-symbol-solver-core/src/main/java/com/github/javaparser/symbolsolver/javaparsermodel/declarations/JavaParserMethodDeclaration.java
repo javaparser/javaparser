@@ -103,9 +103,9 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
-        //Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
+        // Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
         InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-        for (int i = 0; i < getNumberOfParams(); i++) {
+        for (int i = 0; i < getNumberOfParams() - (hasVariadicParameter() ? 1 : 0); i++) {
             Type formalParamType = getParam(i).getType();
             Type actualParamType = parameterTypes.get(i);
             inferenceContext.addPair(formalParamType, actualParamType);
