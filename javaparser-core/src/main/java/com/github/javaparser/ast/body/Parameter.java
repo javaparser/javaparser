@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -89,10 +89,8 @@ public final class Parameter extends Node implements
     /**
      * Creates a new {@link Parameter}.
      *
-     * @param elementType
-     *            type of the parameter
-     * @param name
-     *            name of the parameter
+     * @param elementType type of the parameter
+     * @param name name of the parameter
      */
     public Parameter(Type<?> elementType, String name) {
         this(Range.UNKNOWN,
@@ -114,12 +112,12 @@ public final class Parameter extends Node implements
                 id);
     }
 
-    public Parameter(final Range range, 
+    public Parameter(final Range range,
                      EnumSet<Modifier> modifiers,
                      NodeList<AnnotationExpr> annotations,
                      Type<?> elementType,
                      NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                     boolean isVarArgs, 
+                     boolean isVarArgs,
                      VariableDeclaratorId id) {
         super(range);
         setModifiers(modifiers);
@@ -142,7 +140,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Type<?> getType() {
-        return wrapInArrayTypes(elementType,
+        return wrapInArrayTypes((Type<?>) elementType.clone(),
                 getArrayBracketPairsAfterElementType(),
                 getId().getArrayBracketPairsAfterId());
     }
@@ -165,6 +163,7 @@ public final class Parameter extends Node implements
         this.isVarArgs = isVarArgs;
         return this;
     }
+
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
@@ -198,8 +197,8 @@ public final class Parameter extends Node implements
     /**
      * Return the modifiers of this parameter declaration.
      *
-     * @see Modifier
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -207,8 +206,8 @@ public final class Parameter extends Node implements
     }
 
     /**
-     * @param annotations a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
+     * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
+     * so please avoid passing null
      */
     @Override
     public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {

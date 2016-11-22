@@ -65,11 +65,10 @@ public final class VariableDeclarator extends Node implements
 
     /**
      * Defines the declaration of a variable.
-     * 
+     *
      * @param id The identifier for this variable. IE. The variables name.
-     * @param init What this variable should be initialized to.
-     *            An {@link com.github.javaparser.ast.expr.AssignExpr} is unnecessary as the <code>=</code> operator is
-     *            already added.
+     * @param init What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr} is
+     * unnecessary as the <code>=</code> operator is already added.
      */
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
         this(Range.UNKNOWN, id, init);
@@ -112,7 +111,7 @@ public final class VariableDeclarator extends Node implements
 
     /**
      * Sets the init expression
-     * 
+     *
      * @param init the init expression, can be null
      * @return this, the VariableDeclarator
      */
@@ -125,7 +124,7 @@ public final class VariableDeclarator extends Node implements
 
     /**
      * Will create a {@link NameExpr} with the init param
-     * 
+     *
      * @param init the init expression, can be null
      * @return this, the VariableDeclarator
      */
@@ -142,7 +141,7 @@ public final class VariableDeclarator extends Node implements
     public Type getType() {
         NodeWithElementType<?> elementType = getAncestorOfType(NodeWithElementType.class);
 
-        return wrapInArrayTypes(elementType.getElementType(),
+        return wrapInArrayTypes((Type<?>) elementType.getElementType().clone(),
                 elementType.getArrayBracketPairsAfterElementType(),
                 getId().getArrayBracketPairsAfterId());
     }
