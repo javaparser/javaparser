@@ -20,16 +20,15 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
@@ -94,26 +93,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
-        Type returnType = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getReturnType(), typeSolver, context);
-        List<Type> params = new ArrayList<>();
-        for (int i = 0; i < wrappedNode.getParameters().size(); i++) {
-            Type replaced = replaceTypeParams(new JavaParserMethodDeclaration(wrappedNode, typeSolver).getParam(i).getType(), typeSolver, context);
-            params.add(replaced);
-        }
-
-        // We now look at the type parameter for the method which we can derive from the parameter types
-        // and then we replace them in the return type
-        // Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
-        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-        for (int i = 0; i < getNumberOfParams() - (hasVariadicParameter() ? 1 : 0); i++) {
-            Type formalParamType = getParam(i).getType();
-            Type actualParamType = parameterTypes.get(i);
-            inferenceContext.addPair(formalParamType, actualParamType);
-        }
-
-        returnType = inferenceContext.resolve(inferenceContext.addSingle(returnType));
-
-        return new MethodUsage(new JavaParserMethodDeclaration(wrappedNode, typeSolver), params, returnType);
+        return new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes);
     }
 
     private Context getContext() {
@@ -123,38 +103,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     @Override
     public boolean isAbstract() {
         return !wrappedNode.getBody().isPresent();
-    }
-
-    private Optional<Type> typeParamByName(String name, TypeSolver typeSolver, Context context) {
-        int i = 0;
-        if (wrappedNode.getTypeParameters() != null) {
-            for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
-                if (tp.getName().getId().equals(name)) {
-                    Type type = JavaParserFacade.get(typeSolver).convertToUsage(this.wrappedNode.getParameters().get(i).getType(), context);
-                    return Optional.of(type);
-                }
-                i++;
-            }
-        }
-        return Optional.empty();
-    }
-
-    private Type replaceTypeParams(Type type, TypeSolver typeSolver, Context context) {
-        if (type.isTypeVariable()) {
-            TypeParameterDeclaration typeParameter = type.asTypeParameter();
-            if (typeParameter.declaredOnType()) {
-                Optional<Type> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
-                if (typeParam.isPresent()) {
-                    type = typeParam.get();
-                }
-            }
-        }
-
-        if (type.isReferenceType()) {
-            type.asReferenceType().transformTypeParameters(tp -> replaceTypeParams(tp, typeSolver, context));
-        }
-
-        return type;
     }
 
     @Override

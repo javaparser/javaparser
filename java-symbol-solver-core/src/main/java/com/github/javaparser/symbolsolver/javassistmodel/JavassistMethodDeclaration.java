@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -131,7 +132,7 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
-        throw new UnsupportedOperationException();
+        return new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes);
     }
 
     @Override
