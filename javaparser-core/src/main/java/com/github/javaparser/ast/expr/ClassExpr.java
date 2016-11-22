@@ -39,7 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class ClassExpr extends Expression implements NodeWithType<ClassExpr, Type<?>> {
 
-    private Type type;
+    private Type<?> type;
 
     public ClassExpr() {
         this(Range.UNKNOWN, new ClassOrInterfaceType());
@@ -65,12 +65,12 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     }
 
     @Override
-    public Type getType() {
+    public Type<?> getType() {
         return type;
     }
 
     @Override
-    public ClassExpr setType(Type type) {
+    public ClassExpr setType(Type<?> type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
 		setAsParentNodeOf(this.type);
