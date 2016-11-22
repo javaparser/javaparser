@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
+import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -25,19 +25,14 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
 public class ReflectionMethodDeclaration implements MethodDeclaration {
-
-    // TODO
-    // This class contains a huge portion of code just copied from JavaParserMethodDeclaration
 
     private Method method;
     private TypeSolver typeSolver;
@@ -111,57 +106,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
-        Type returnType = replaceTypeParams(new ReflectionMethodDeclaration(method, typeSolver).getReturnType(), typeSolver, context);
-        List<Type> params = new ArrayList<>();
-        for (int i = 0; i < method.getParameterCount(); i++) {
-            Type replaced = replaceTypeParams(new ReflectionMethodDeclaration(method, typeSolver).getParam(i).getType(), typeSolver, context);
-            params.add(replaced);
-        }
-
-        // We now look at the type parameter for the method which we can derive from the parameter types
-        // and then we replace them in the return type
-        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-        for (int i = 0; i < getNumberOfParams(); i++) {
-            Type formalParamType = getParam(i).getType();
-            Type actualParamType = parameterTypes.get(i);
-            inferenceContext.addPair(formalParamType, actualParamType);
-        }
-
-        returnType = inferenceContext.resolve(inferenceContext.addSingle(returnType));
-
-        return new MethodUsage(new ReflectionMethodDeclaration(method, typeSolver), params, returnType);
-    }
-
-    private Optional<Type> typeParamByName(String name, TypeSolver typeSolver, Context context) {
-        int i = 0;
-        if (this.getTypeParameters() != null) {
-            for (TypeParameterDeclaration tp : this.getTypeParameters()) {
-                if (tp.getName().equals(name)) {
-                    Type type = this.getParam(i).getType();
-                    return Optional.of(type);
-                }
-                i++;
-            }
-        }
-        return Optional.empty();
-    }
-
-    private Type replaceTypeParams(Type type, TypeSolver typeSolver, Context context) {
-        if (type.isTypeVariable()) {
-            TypeParameterDeclaration typeParameter = type.asTypeParameter();
-            if (typeParameter.declaredOnType()) {
-                Optional<Type> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
-                if (typeParam.isPresent()) {
-                    type = typeParam.get();
-                }
-            }
-        }
-
-        if (type.isReferenceType()) {
-            type = type.asReferenceType().transformTypeParameters(tp -> replaceTypeParams(tp, typeSolver, context));
-        }
-
-        return type;
+        return new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes);
     }
 
     @Override
