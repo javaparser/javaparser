@@ -21,16 +21,17 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -82,6 +83,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
      * @return this, the SwitchEntryStmt
      */
 	public SwitchEntryStmt setLabel(final Expression label) {
+		notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
 		this.label = label;
 		setAsParentNodeOf(this.label);
 		return this;
@@ -89,6 +91,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 
 	@Override
     public SwitchEntryStmt setStmts(final NodeList<Statement> stmts) {
+		notifyPropertyChange(ObservableProperty.STMTS, this.stmts, stmts);
 		this.stmts = assertNotNull(stmts);
 		setAsParentNodeOf(this.stmts);
         return this;

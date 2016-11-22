@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -32,8 +30,14 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -102,12 +106,14 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     public EnumConstantDeclaration setArgs(NodeList<Expression> args) {
+        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
         this.args = assertNotNull(args);
 		setAsParentNodeOf(this.args);
         return this;
     }
 
     public EnumConstantDeclaration setClassBody(NodeList<BodyDeclaration<?>> classBody) {
+        notifyPropertyChange(ObservableProperty.CLASS_BODY, this.classBody, classBody);
         this.classBody = assertNotNull(classBody);
 		setAsParentNodeOf(this.classBody);
         return this;
@@ -115,6 +121,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     @Override
     public EnumConstantDeclaration setName(SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;
@@ -126,5 +133,13 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
             return (JavadocComment) getComment();
         }
         return null;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(args);
+        res.add(classBody);
+        return res;
     }
 }

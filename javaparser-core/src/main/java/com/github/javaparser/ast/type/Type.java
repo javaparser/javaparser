@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.observing.ObservableProperty;
 
 import static com.github.javaparser.utils.Utils.*;
 
@@ -44,7 +45,12 @@ public abstract class Type<T extends Type> extends Node {
         return annotations;
     }
 
+    public AnnotationExpr getAnnotation(int i) {
+        return getAnnotations().get(i);
+    }
+
     public T setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(annotations);
         return (T) this;

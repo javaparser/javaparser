@@ -31,6 +31,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -58,7 +59,6 @@ public final class ObjectCreationExpr extends Expression implements
 
     private NodeList<Expression> args;
 
-    // TODO This can be null, to indicate there is no body
     private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
     public ObjectCreationExpr() {
@@ -67,7 +67,7 @@ public final class ObjectCreationExpr extends Expression implements
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
                 new NodeList<>(),
-                new NodeList<>());
+                null);
     }
 
     /**
@@ -84,7 +84,7 @@ public final class ObjectCreationExpr extends Expression implements
                 type,
                 new NodeList<>(),
                 args,
-                new NodeList<>());
+                null);
     }
 
     public ObjectCreationExpr(final Range range,
@@ -134,12 +134,15 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     /**
-     * Sets the anonymousClassBody
+     * Sets the anonymousClassBody<br>
+     * Null means no class body<br>
+     * Empty NodeList means new ClassName(){ }
      * 
-     * @param anonymousClassBody the anonymousClassBody, can be null
+     * @param anonymousClassBody the anonymousClassBody, can be null or empty
      * @return this, the ObjectCreationExpr
      */
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
+        notifyPropertyChange(ObservableProperty.ANONYMOUS_CLASS_BODY, this.anonymousClassBody, anonymousClassBody);
         this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(this.anonymousClassBody);
         return this;
@@ -147,6 +150,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     @Override
     public ObjectCreationExpr setArgs(final NodeList<Expression> args) {
+        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
         this.args = assertNotNull(args);
         setAsParentNodeOf(this.args);
         return this;
@@ -156,9 +160,10 @@ public final class ObjectCreationExpr extends Expression implements
      * Sets the scope
      * 
      * @param scope the scope, can be null
-     * @return this, the FieldAccessExpr
+     * @return this, the ObjectCreationExpr
      */
     public ObjectCreationExpr setScope(final Expression scope) {
+        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
@@ -166,6 +171,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     @Override
     public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         assertNotNull(type);
         this.type = type;
         setAsParentNodeOf(this.type);
@@ -185,6 +191,7 @@ public final class ObjectCreationExpr extends Expression implements
      */
     @Override
     public ObjectCreationExpr setTypeArguments(final NodeList<Type<?>> typeArguments) {
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);
         return this;

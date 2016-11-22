@@ -21,19 +21,20 @@
  
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>
@@ -110,12 +111,14 @@ public final class ArrayCreationExpr extends Expression {
      * @return this, the ArrayCreationExpr
      */
     public ArrayCreationExpr setInitializer(ArrayInitializerExpr initializer) {
+        notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         this.initializer = initializer;
 		setAsParentNodeOf(this.initializer);
         return this;
     }
 
     public ArrayCreationExpr setElementType(Type<?> elementType) {
+        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
 		setAsParentNodeOf(this.elementType);
         return this;
@@ -126,6 +129,7 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     public ArrayCreationExpr setLevels(NodeList<ArrayCreationLevel> levels) {
+        notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
         this.levels = assertNotNull(levels);
         setAsParentNodeOf(levels);
         return this;

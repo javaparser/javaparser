@@ -24,20 +24,21 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
-import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 
-import static com.github.javaparser.ast.expr.NameExpr.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -136,6 +137,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     @Override
     public ClassOrInterfaceDeclaration setExtends(final NodeList<ClassOrInterfaceType> extendsList) {
+        notifyPropertyChange(ObservableProperty.EXTENDS, this.extendsList, extendsList);
         this.extendsList = assertNotNull(extendsList);
         setAsParentNodeOf(this.extendsList);
         return this;
@@ -143,20 +145,32 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     @Override
     public ClassOrInterfaceDeclaration setImplements(final NodeList<ClassOrInterfaceType> implementsList) {
+        notifyPropertyChange(ObservableProperty.IMPLEMENTS_LIST, this.implementsList, implementsList);
         this.implementsList = assertNotNull(implementsList);
         setAsParentNodeOf(this.implementsList);
         return this;
     }
 
     public ClassOrInterfaceDeclaration setInterface(final boolean interface_) {
+        notifyPropertyChange(ObservableProperty.INTERFACE, this.interface_, interface_);
         this.interface_ = interface_;
         return this;
     }
 
     @Override
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(this.typeParameters);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(typeParameters);
+        res.add(extendsList);
+        res.add(implementsList);
+        return res;
     }
 }

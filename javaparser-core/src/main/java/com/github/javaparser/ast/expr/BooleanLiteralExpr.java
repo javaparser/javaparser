@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -60,6 +61,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     }
 
     public BooleanLiteralExpr setValue(boolean value) {
+        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
         return this;
     }

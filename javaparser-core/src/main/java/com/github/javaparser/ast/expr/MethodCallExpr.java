@@ -21,18 +21,19 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -108,6 +109,7 @@ public final class MethodCallExpr extends Expression implements
 
     @Override
 	public MethodCallExpr setArgs(final NodeList<Expression> args) {
+        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
 		this.args = assertNotNull(args);
 		setAsParentNodeOf(this.args);
         return this;
@@ -115,12 +117,14 @@ public final class MethodCallExpr extends Expression implements
 
     @Override
     public MethodCallExpr setName(final SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = name;
         setAsParentNodeOf(this.name);
         return this;
     }
 
     public MethodCallExpr setScope(final Expression scope) {
+        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;
         setAsParentNodeOf(this.scope);
         return this;
@@ -138,8 +142,9 @@ public final class MethodCallExpr extends Expression implements
      * @return this, the MethodCallExpr
      */
     @Override
-    public MethodCallExpr setTypeArguments(final NodeList<Type<?>> types) {
-        this.typeArguments = types;
+    public MethodCallExpr setTypeArguments(final NodeList<Type<?>> typeArguments) {
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);
         return this;
     }

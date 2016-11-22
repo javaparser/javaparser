@@ -10,6 +10,10 @@ public interface NodeWithArguments<N extends Node> {
 
     NodeList<Expression> getArgs();
 
+    default Expression getArg(int i) {
+        return getArgs().get(i);
+    }
+
     default N addArgument(String arg) {
         addArgument(new NameExpr(arg));
         return (N) this;

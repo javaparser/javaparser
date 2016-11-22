@@ -18,13 +18,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
-
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.EnumSet;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
@@ -33,17 +28,21 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -90,10 +89,8 @@ public final class Parameter extends Node implements
     /**
      * Creates a new {@link Parameter}.
      *
-     * @param elementType
-     *            type of the parameter
-     * @param name
-     *            name of the parameter
+     * @param elementType type of the parameter
+     * @param name name of the parameter
      */
     public Parameter(Type<?> elementType, String name) {
         this(null,
@@ -115,12 +112,12 @@ public final class Parameter extends Node implements
                 id);
     }
 
-    public Parameter(final Range range, 
+    public Parameter(final Range range,
                      EnumSet<Modifier> modifiers,
                      NodeList<AnnotationExpr> annotations,
                      Type<?> elementType,
                      NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                     boolean isVarArgs, 
+                     boolean isVarArgs,
                      VariableDeclaratorId id) {
         super(range);
         setModifiers(modifiers);
@@ -143,7 +140,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Type<?> getType() {
-        return wrapInArrayTypes(elementType,
+        return wrapInArrayTypes((Type<?>) elementType.clone(),
                 getArrayBracketPairsAfterElementType(),
                 getId().getArrayBracketPairsAfterId());
     }
@@ -162,9 +159,11 @@ public final class Parameter extends Node implements
     }
 
     public Parameter setVarArgs(boolean isVarArgs) {
+        notifyPropertyChange(ObservableProperty.VAR_ARGS, this.isVarArgs, isVarArgs);
         this.isVarArgs = isVarArgs;
         return this;
     }
+
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
@@ -188,7 +187,9 @@ public final class Parameter extends Node implements
         if (id != null) {
             id.setName(name);
         } else {
-            id = new VariableDeclaratorId(name);
+            VariableDeclaratorId newId = new VariableDeclaratorId(name);
+            notifyPropertyChange(ObservableProperty.ID, this.id, newId);
+            id = newId;
         }
         return this;
     }
@@ -196,8 +197,8 @@ public final class Parameter extends Node implements
     /**
      * Return the modifiers of this parameter declaration.
      *
-     * @see Modifier
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -205,11 +206,12 @@ public final class Parameter extends Node implements
     }
 
     /**
-     * @param annotations a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
+     * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
+     * so please avoid passing null
      */
     @Override
     public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(this.annotations);
         return this;
@@ -222,6 +224,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setModifiers(EnumSet<Modifier> modifiers) {
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
@@ -233,6 +236,7 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setElementType(final Type<?> elementType) {
+        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
         return this;
@@ -245,8 +249,15 @@ public final class Parameter extends Node implements
 
     @Override
     public Parameter setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+        notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_TYPE,
+                this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
         this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
         setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(annotations, arrayBracketPairsAfterType);
     }
 }

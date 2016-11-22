@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -58,6 +59,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 	}
 
 	public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
+		notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
 		this.memberValue = memberValue;
 		setAsParentNodeOf(this.memberValue);
 		return this;

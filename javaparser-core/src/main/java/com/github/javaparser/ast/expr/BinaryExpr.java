@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -96,17 +97,20 @@ public final class BinaryExpr extends Expression {
     }
 
     public BinaryExpr setLeft(Expression left) {
+        notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
         this.left = left;
 		setAsParentNodeOf(this.left);
         return this;
     }
 
     public BinaryExpr setOperator(Operator op) {
+        notifyPropertyChange(ObservableProperty.OPERATOR, this.op, op);
         this.op = op;
         return this;
     }
 
     public BinaryExpr setRight(Expression right) {
+        notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
         this.right = right;
 		setAsParentNodeOf(this.right);
         return this;

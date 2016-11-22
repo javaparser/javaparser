@@ -10,6 +10,10 @@ public interface NodeWithThrowable<N extends Node> {
 
     NodeList<ReferenceType<?>> getThrows();
 
+    default ReferenceType getThrow(int i) {
+        return getThrows().get(i);
+    }
+
     /**
      * Adds this type to the throws clause
      * 

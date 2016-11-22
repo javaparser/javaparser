@@ -61,6 +61,13 @@ public class ParseResult<T> {
     }
 
     /**
+     * @return the <code>i</code>'th encountered parsing problem. May throw <code>IndexOutOfBoundsException</code>.
+     */
+    public Problem getProblem(int i) {
+        return getProblems().get(i);
+    }
+
+    /**
      * @return the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
     public Optional<List<Token>> getTokens() {

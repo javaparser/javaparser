@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -69,12 +70,14 @@ public final class ArrayAccessExpr extends Expression {
     }
 
     public ArrayAccessExpr setIndex(Expression index) {
+        notifyPropertyChange(ObservableProperty.INDEX, this.index, index);
         this.index = assertNotNull(index);
 		setAsParentNodeOf(this.index);
         return this;
     }
 
     public ArrayAccessExpr setName(Expression name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
 		setAsParentNodeOf(this.name);
         return this;

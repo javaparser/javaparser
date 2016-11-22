@@ -29,6 +29,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -36,6 +37,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -154,11 +157,13 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     public ConstructorDeclaration setName(SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;
@@ -166,6 +171,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public ConstructorDeclaration setParameters(NodeList<Parameter> parameters) {
+        notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
         this.parameters = assertNotNull(parameters);
         setAsParentNodeOf(this.parameters);
         return this;
@@ -173,12 +179,14 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     @Override
     public ConstructorDeclaration setThrows(NodeList<ReferenceType<?>> throws_) {
+        notifyPropertyChange(ObservableProperty.THROWS, this.throws_, throws_);
         this.throws_ = assertNotNull(throws_);
         setAsParentNodeOf(this.throws_);
         return this;
     }
 
     public ConstructorDeclaration setTypeParameters(NodeList<TypeParameter> typeParameters) {
+        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(this.typeParameters);
         return this;
@@ -258,5 +266,14 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         this.body = assertNotNull(body);
         setAsParentNodeOf(body);
         return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
+        res.add(typeParameters);
+        res.add(parameters);
+        res.add(throws_);
+        return res;
     }
 }

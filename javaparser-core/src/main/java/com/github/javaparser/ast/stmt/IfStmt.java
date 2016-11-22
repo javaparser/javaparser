@@ -21,15 +21,16 @@
  
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -82,6 +83,7 @@ public final class IfStmt extends Statement {
 	}
 
 	public IfStmt setCondition(final Expression condition) {
+		notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
 		this.condition = assertNotNull(condition);
 		setAsParentNodeOf(this.condition);
 		return this;
@@ -94,12 +96,14 @@ public final class IfStmt extends Statement {
      * @return this, the IfStmt
      */
 	public IfStmt setElseStmt(final Statement elseStmt) {
+		notifyPropertyChange(ObservableProperty.ELSE_STMT, this.elseStmt, elseStmt);
 		this.elseStmt = elseStmt;
 		setAsParentNodeOf(this.elseStmt);
 		return this;
 	}
 
 	public IfStmt setThenStmt(final Statement thenStmt) {
+		notifyPropertyChange(ObservableProperty.THEN_STMT, this.thenStmt, thenStmt);
 		this.thenStmt = assertNotNull(thenStmt);
 		setAsParentNodeOf(this.thenStmt);
 		return this;

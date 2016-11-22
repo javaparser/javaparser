@@ -33,11 +33,11 @@ public class NodeWithParametersBuildersTest {
 		addMethod.addParameter(int.class, "yay");
 		Parameter myNewParam = addMethod.addAndGetParameter(List.class, "myList");
 		assertEquals(1, cu.getImports().size());
-		assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImports().get(0).toString());
+		assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(0).toString());
 		assertEquals(2, addMethod.getParameters().size());
-		assertEquals("yay", addMethod.getParameters().get(0).getNameAsString());
-		assertEquals("List", addMethod.getParameters().get(1).getType().toString());
-		assertEquals(myNewParam, addMethod.getParameters().get(1));
+		assertEquals("yay", addMethod.getParameter(0).getNameAsString());
+		assertEquals("List", addMethod.getParameter(1).getType().toString());
+		assertEquals(myNewParam, addMethod.getParameter(1));
 	}
 
 	@Test

@@ -31,5 +31,9 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 public interface NodeWithVariables<N extends Node> {
     NodeList<VariableDeclarator> getVariables();
 
+    default VariableDeclarator getVariable(int i) {
+        return getVariables().get(i);
+    }
+
     N setVariables(NodeList<VariableDeclarator> variables);
 }

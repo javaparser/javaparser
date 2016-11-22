@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.imports;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -38,6 +39,7 @@ public class SingleTypeImportDeclaration extends NonEmptyImportDeclaration {
     }
 
     public SingleTypeImportDeclaration setType(ClassOrInterfaceType type) {
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(type);
         return this;

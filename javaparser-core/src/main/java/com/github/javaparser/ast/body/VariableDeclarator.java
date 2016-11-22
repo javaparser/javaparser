@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
@@ -34,11 +29,17 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
+
+import java.util.Optional;
+
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -64,11 +65,10 @@ public final class VariableDeclarator extends Node implements
 
     /**
      * Defines the declaration of a variable.
-     * 
+     *
      * @param id The identifier for this variable. IE. The variables name.
-     * @param init What this variable should be initialized to.
-     *            An {@link com.github.javaparser.ast.expr.AssignExpr} is unnecessary as the <code>=</code> operator is
-     *            already added.
+     * @param init What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr} is
+     * unnecessary as the <code>=</code> operator is already added.
      */
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
         this(null, id, init);
@@ -103,6 +103,7 @@ public final class VariableDeclarator extends Node implements
     }
 
     public VariableDeclarator setId(VariableDeclaratorId id) {
+        notifyPropertyChange(ObservableProperty.ID, this.id, id);
         this.id = assertNotNull(id);
         setAsParentNodeOf(this.id);
         return this;
@@ -110,11 +111,12 @@ public final class VariableDeclarator extends Node implements
 
     /**
      * Sets the init expression
-     * 
+     *
      * @param init the init expression, can be null
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInit(Expression init) {
+        notifyPropertyChange(ObservableProperty.INIT, this.init, init);
         this.init = init;
         setAsParentNodeOf(this.init);
         return this;
@@ -122,12 +124,14 @@ public final class VariableDeclarator extends Node implements
 
     /**
      * Will create a {@link NameExpr} with the init param
-     * 
+     *
      * @param init the init expression, can be null
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInit(String init) {
-        this.init = new NameExpr(assertNotNull(init));
+        NameExpr newInit = new NameExpr(assertNotNull(init));
+        notifyPropertyChange(ObservableProperty.INIT, this.init, newInit);
+        this.init = newInit;
         setAsParentNodeOf(this.init);
         return this;
     }
@@ -137,7 +141,7 @@ public final class VariableDeclarator extends Node implements
     public Type getType() {
         NodeWithElementType<?> elementType = getAncestorOfType(NodeWithElementType.class);
 
-        return wrapInArrayTypes(elementType.getElementType(),
+        return wrapInArrayTypes((Type<?>) elementType.getElementType().clone(),
                 elementType.getArrayBracketPairsAfterElementType(),
                 getId().getArrayBracketPairsAfterId());
     }

@@ -2,6 +2,7 @@ package com.github.javaparser.ast.imports;
 
 import static org.junit.Assert.assertEquals;
 
+import com.github.javaparser.JavaParser;
 import org.junit.Test;
 
 import com.github.javaparser.ast.expr.Name;
@@ -9,14 +10,14 @@ import com.github.javaparser.ast.expr.Name;
 public class ImportDeclarationTest {
     @Test
     public void singleTypeImportDeclaration() {
-        ImportDeclaration importDeclaration = ImportDeclaration.create(null, Name.parse("a.b.c.X"), false, false);
+        ImportDeclaration importDeclaration = JavaParser.parseImport("import a.b.c.X;");
         SingleTypeImportDeclaration i = (SingleTypeImportDeclaration) importDeclaration;
         assertEquals("a.b.c.X", i.getType().toString());
     }
 
     @Test
     public void typeImportOnDemandDeclaration() {
-        ImportDeclaration importDeclaration = ImportDeclaration.create(null, Name.parse("a.b.c.D"), false, true);
+        ImportDeclaration importDeclaration = JavaParser.parseImport("import a.b.c.D.*;");
         TypeImportOnDemandDeclaration i = (TypeImportOnDemandDeclaration) importDeclaration;
         assertEquals("a.b.c.D", i.getName().toString());
         assertEquals("D", i.getName().getId());
@@ -24,7 +25,7 @@ public class ImportDeclarationTest {
 
     @Test
     public void singleStaticImportDeclaration() {
-        ImportDeclaration importDeclaration = ImportDeclaration.create(null, Name.parse("a.b.c.X.def"), true, false);
+        ImportDeclaration importDeclaration = JavaParser.parseImport("import static a.b.c.X.def;");
         SingleStaticImportDeclaration i = (SingleStaticImportDeclaration) importDeclaration;
         assertEquals("a.b.c.X", i.getType().toString());
         assertEquals("def", i.getStaticMember());
@@ -32,7 +33,7 @@ public class ImportDeclarationTest {
 
     @Test
     public void staticImportOnDemandDeclaration() {
-        ImportDeclaration importDeclaration = ImportDeclaration.create(null, Name.parse("a.b.c.X"), true, true);
+        ImportDeclaration importDeclaration = JavaParser.parseImport("import static a.b.c.X.*;");
         StaticImportOnDemandDeclaration i = (StaticImportOnDemandDeclaration) importDeclaration;
         assertEquals("X", i.getType().getNameAsString());
 		assertEquals("c", i.getType().getScope().get().getNameAsString());

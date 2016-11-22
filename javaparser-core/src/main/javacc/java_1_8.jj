@@ -1302,14 +1302,13 @@ CompilationUnit CompilationUnit():
 	ImportDeclaration in = null;
 	NodeList<TypeDeclaration<?>> types = emptyList();
 	TypeDeclaration tn = null;
-	Position begin = INVALID;
 }
 {
-  [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() {begin = begin.orIfInvalid(pakage.getBegin());} ]
-  ( in = ImportDeclaration()      { begin = begin.orIfInvalid(in.getBegin()); imports = add(imports, in); } )*
-  ( tn = TypeDeclaration() { begin = begin.orIfInvalid(tn.getBegin()); types = add(types, tn); } )*
+  [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+  ( in = ImportDeclaration() { imports = add(imports, in); } )*
+  ( tn = TypeDeclaration() { types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
-  { return new CompilationUnit(begin.invalid() ? Range.range(1,1,1,1) : range(begin, tokenEnd()), pakage, imports, types); }
+  { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -1327,20 +1326,40 @@ PackageDeclaration PackageDeclaration():
 ImportDeclaration ImportDeclaration():
 {
     Name name;
-    boolean isStatic = false;
-    boolean isAsterisk = false;
+    ClassOrInterfaceType type;
     Position begin;
     ImportDeclaration ret;
 }
 {
     (
-        "import" {begin = tokenBegin();} 
-        [ "static" { isStatic = true; } ] 
-        name = Name() 
-        [ "." "*" { isAsterisk = true; } ] ";"
-        { ret = ImportDeclaration.create(range(begin, tokenEnd()), name, isStatic, isAsterisk); }
+        "import" {begin = tokenBegin();}
+        (
+            "static" type = ClassOrInterfaceType()
+            (
+                "." "*" ";"
+                { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
+            |
+                ";"
+                {
+                    if(!type.getScope().isPresent()){
+                        addProblem("import static has only one identifier");
+                        ret = new EmptyImportDeclaration(range(begin, tokenEnd()));
+                    } else {
+                        ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
+                    }
+                }
+            )
+        |
+            ( LOOKAHEAD(Name() "." "*")
+                name = Name() "." "*" ";"
+                { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
+            |
+                type = ClassOrInterfaceType() ";"
+                { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
+            )
+        )
     |
-        ";" {begin = tokenBegin();} 
+        ";" {begin = tokenBegin();}
         { ret = new EmptyImportDeclaration(range(begin, tokenEnd())); }
     )    
     { return ret; }

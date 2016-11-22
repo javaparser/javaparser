@@ -32,6 +32,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -137,6 +138,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @return this, the AnnotationMemberDeclaration
      */
     public AnnotationMemberDeclaration setDefaultValue(Expression defaultValue) {
+        notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
         return this;
@@ -144,18 +146,21 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     @Override
     public AnnotationMemberDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
 
     @Override
     public AnnotationMemberDeclaration setName(SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
         return this;
     }
 
     @Override
     public AnnotationMemberDeclaration setType(Type<?> type) {
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(type);
         return this;
