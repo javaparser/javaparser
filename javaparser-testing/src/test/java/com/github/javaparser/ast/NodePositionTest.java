@@ -34,7 +34,7 @@ public class NodePositionTest {
                 throw new IllegalArgumentException("There should be no node without a range: " + n + " (class: "
                         + n.getClass().getCanonicalName() + ")");
             }
-            if (n.getBegin().line == 0 && !n.toString().isEmpty() && !(n instanceof ArrayBracketPair)) {
+            if (n.getBegin().get().line == 0 && !n.toString().isEmpty() && !(n instanceof ArrayBracketPair)) {
                 throw new IllegalArgumentException("There should be no node at line 0: " + n + " (class: "
                         + n.getClass().getCanonicalName() + ")");
             }

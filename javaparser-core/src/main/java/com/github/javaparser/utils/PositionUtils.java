@@ -68,6 +68,9 @@ public final class PositionUtils {
     }
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
+        if (!a.getRange().isPresent() || !b.getRange().isPresent()) {
+            return -1;
+        }
         if (ignoringAnnotations) {
             int signLine = signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b));
             if (signLine == 0) {
@@ -77,8 +80,8 @@ public final class PositionUtils {
             }
         }
 
-        Position aBegin = a.getRange() == null ? Position.UNKNOWN : a.getRange().begin;
-        Position bBegin = b.getRange() == null ? Position.UNKNOWN : b.getRange().begin;
+        Position aBegin = a.getRange() == null ? Position.UNKNOWN : a.getRange().get().begin;
+        Position bBegin = b.getRange() == null ? Position.UNKNOWN : b.getRange().get().begin;
 
         int signLine = signum(aBegin.line - bBegin.line);
         if (signLine == 0) {
@@ -102,12 +105,12 @@ public final class PositionUtils {
     }
 
     private static int beginLineWithoutConsideringAnnotation(Node node) {
-        return beginNodeWithoutConsideringAnnotations(node).getRange().begin.line;
+        return beginNodeWithoutConsideringAnnotations(node).getRange().get().begin.line;
     }
 
 
     private static int beginColumnWithoutConsideringAnnotation(Node node) {
-        return beginNodeWithoutConsideringAnnotations(node).getRange().begin.column;
+        return beginNodeWithoutConsideringAnnotations(node).getRange().get().begin.column;
     }
 
     private static Node beginNodeWithoutConsideringAnnotations(Node node) {
@@ -123,8 +126,8 @@ public final class PositionUtils {
     }
 
     public static boolean nodeContains(Node container, Node contained, boolean ignoringAnnotations) {
-        final Range containedRange = contained.getRange();
-        final Range containerRange = container.getRange();
+        final Range containedRange = contained.getRange().get();
+        final Range containerRange = container.getRange().get();
         if (containerRange == null || containedRange == null) {
             return false;
         }

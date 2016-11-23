@@ -21,6 +21,7 @@
  
 package com.github.javaparser.bdd.visitors;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -520,15 +521,17 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     private void doTest(final Node node) {
-        assertThat(node.getBegin().line, is(greaterThanOrEqualTo(0)));
-        assertThat(node.getBegin().column, is(greaterThanOrEqualTo(0)));
-        assertThat(node.getEnd().line, is(greaterThanOrEqualTo(0)));
-        assertThat(node.getEnd().column, is(greaterThanOrEqualTo(0)));
+        Position begin = node.getRange().get().begin;
+        Position end = node.getRange().get().end;
+        assertThat(begin.line, is(greaterThanOrEqualTo(0)));
+        assertThat(begin.column, is(greaterThanOrEqualTo(0)));
+        assertThat(end.line, is(greaterThanOrEqualTo(0)));
+        assertThat(end.column, is(greaterThanOrEqualTo(0)));
 
-        if (node.getBegin().line == node.getEnd().line) {
-            assertThat(node.getBegin().column, is(lessThanOrEqualTo(node.getEnd().column)));
+        if (begin.line == end.line) {
+            assertThat(begin.column, is(lessThanOrEqualTo(end.column)));
         } else {
-            assertThat(node.getBegin().line, is(lessThanOrEqualTo(node.getEnd().line)));
+            assertThat(begin.line, is(lessThanOrEqualTo(end.line)));
         }
         numberOfNodesVisited++;
     }

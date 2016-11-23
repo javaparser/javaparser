@@ -72,7 +72,7 @@ public class CommentsCollection {
         if(!comment.getRange().isPresent()){
             return false;
         }
-        Range commentRange = comment.getRange();
+        Range commentRange = comment.getRange().get();
         if (commentRange == null) {
             return false;
         }
@@ -80,7 +80,7 @@ public class CommentsCollection {
             if(!c.getRange().isPresent()){
                 return false;
             }
-            Range cRange = c.getRange();
+            Range cRange = c.getRange().get();
             if(cRange!=null) {
                 // we tolerate a difference of one element in the end column:
                 // it depends how \r and \n are calculated...
