@@ -473,7 +473,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                     if (optSetter.isPresent()) {
                         try {
                             Object resultRaw = method.invoke(parentNode);
-                            Node result = isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()) ? (Node)((Optional)resultRaw).get(): (Node) resultRaw;
+                            Node result;
+                            if (isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass())) {
+                                Optional optionalResultRaw = (Optional) resultRaw;
+                                if (optionalResultRaw.isPresent()) {
+                                    Object o = optionalResultRaw.get();
+                                    if (Node.class.isAssignableFrom(o.getClass())) {
+                                        result = (Node) o;
+                                    } else continue;
+                                } else continue;
+                            }else {
+                                result = (Node) resultRaw;
+                            }
                             if (this == result) {
                                 optSetter.get().invoke(parentNode, (Object) null);
                                 removed = true;
