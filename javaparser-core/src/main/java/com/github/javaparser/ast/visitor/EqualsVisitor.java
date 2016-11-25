@@ -629,6 +629,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 		if (!objEquals(n1.getContent(), n2.getContent())) {
 			return false;
 		}
+		if (!objEquals(n1.getBeginLine(), n2.getBeginLine())) {
+            		return Boolean.FALSE;
+        	}
 
 		return true;
 	}
