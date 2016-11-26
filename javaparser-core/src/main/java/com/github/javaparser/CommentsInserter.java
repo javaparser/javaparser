@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 
@@ -98,50 +99,26 @@ class CommentsInserter {
 
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
-            for (Comment c : commentsToAttribute) {
-                if (c.getRange() != null) {
-                    if (PositionUtils.nodeContains(child, c,
-                            configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)) {
-                        commentsInsideChild.add(c);
-                    }
-                }
-            }
+            commentsInsideChild.addAll(
+                    commentsToAttribute.stream()
+                            .filter(c -> c.getRange().isPresent())
+                            .filter(c -> PositionUtils.nodeContains(child, c,
+                                    configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)).collect(Collectors.toList()));
             commentsToAttribute.removeAll(commentsInsideChild);
             insertComments(child, commentsInsideChild);
         }
 
-        /* I can attribute in line comments to elements preceeding them, if
-         there is something contained in their line */
-        List<Comment> attributedComments = new LinkedList<>();
-        for (Comment comment : commentsToAttribute) {
-            if (comment.getRange().isPresent()) {
-                Range commentRange = comment.getRange().get();
-                if (comment.isLineComment()) {
-                    for (Node child : children) {
-                        if (child.getRange().isPresent()) {
-                            Range childRange = child.getRange().get();
-                            if (childRange != null) {
-                                if (childRange.end.line == commentRange.begin.line
-                                        && attributeLineCommentToNodeOrChild(child,
-                                        comment.asLineComment())) {
-                                    attributedComments.add(comment);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        attributeLineCommentsOnSameLine(commentsToAttribute, children);
 
         /* at this point I create an ordered list of all remaining comments and
          children */
         Comment previousComment = null;
-        attributedComments = new LinkedList<>();
+        final List<Comment> attributedComments = new LinkedList<>();
         List<Node> childrenAndComments = new LinkedList<>();
-        for (Node child : children) {
-            // Avoid attributing comments to a meaningless container.
-            childrenAndComments.add(child);
-        }
+        // Avoid attributing comments to a meaningless container.
+        childrenAndComments.addAll(children);
+        commentsToAttribute.removeAll(attributedComments);
+
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
                 configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
@@ -174,11 +151,31 @@ class CommentsInserter {
         }
     }
 
+    private void attributeLineCommentsOnSameLine(TreeSet<Comment> commentsToAttribute, List<Node> children) {
+        /* I can attribute in line comments to elements preceeding them, if
+         there is something contained in their line */
+        List<Comment> attributedComments = new LinkedList<>();
+        commentsToAttribute.stream()
+                .filter(comment -> comment.getRange().isPresent())
+                .filter(Comment::isLineComment)
+                .forEach(comment -> children.stream()
+                        .filter(child -> child.getRange().isPresent())
+                        .forEach(child -> {
+                            Range commentRange = comment.getRange().get();
+                            Range childRange = child.getRange().get();
+                            if (childRange.end.line == commentRange.begin.line
+                                    && attributeLineCommentToNodeOrChild(child,
+                                    comment.asLineComment())) {
+                                attributedComments.add(comment);
+                            }
+                        }));
+        commentsToAttribute.removeAll(attributedComments);
+    }
+
     private boolean attributeLineCommentToNodeOrChild(Node node, LineComment lineComment) {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
-
-        if (node.getRange().get().begin.line == lineComment.getRange().get().begin.line
+        if (node.getBegin().get().line == lineComment.getBegin().get().line
                 && !node.hasComment()) {
             if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
@@ -209,8 +206,8 @@ class CommentsInserter {
         if (!PositionUtils.areInOrder(a, b)) {
             return thereAreLinesBetween(b, a);
         }
-        int endOfA = a.getRange().get().end.line;
-        return b.getRange().get().begin.line > endOfA + 1;
+        int endOfA = a.getEnd().get().line;
+        return b.getBegin().get().line > endOfA + 1;
     }
 
 }

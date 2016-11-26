@@ -80,8 +80,8 @@ public final class PositionUtils {
             }
         }
 
-        Position aBegin = a.getRange() == null ? Position.UNKNOWN : a.getRange().get().begin;
-        Position bBegin = b.getRange() == null ? Position.UNKNOWN : b.getRange().get().begin;
+        Position aBegin = a.getBegin().get();
+        Position bBegin = b.getBegin().get();
 
         int signLine = signum(aBegin.line - bBegin.line);
         if (signLine == 0) {

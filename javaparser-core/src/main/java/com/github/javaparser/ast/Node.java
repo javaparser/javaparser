@@ -36,15 +36,11 @@ import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
 
 import java.lang.reflect.*;
-import java.util.*;
-
-import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract class for all nodes of the AST.
@@ -108,7 +104,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     private List<Node> childrenNodes = new LinkedList<>();
     private List<Comment> orphanComments = new LinkedList<>();
 
-    private IdentityHashMap<DataKey<?>, Object> userData = null;
+    private IdentityHashMap<DataKey<?>, Object> data = null;
 
     private Comment comment;
 
@@ -145,28 +141,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
             return Optional.empty();
         }
         return Optional.of(range.end);
-    }
-
-    /**
-     * Sets the begin position of this node in the source file.
-     */
-    public Node setBegin(Position begin) {
-        if (range == null) {
-            range = Range.range(0, 0, 0, 0);
-        }
-        range = range.withBegin(begin);
-        return this;
-    }
-
-    /**
-     * Sets the end position of this node in the source file.
-     */
-    public Node setEnd(Position end) {
-        if (range == null) {
-            range = Range.range(0, 0, 0, 0);
-        }
-        range = range.withEnd(end);
-        return this;
     }
 
     /**
@@ -391,42 +365,42 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     /**
-     * Gets user data for this component using the given key.
+     * Gets data for this component using the given key.
      *
      * @param <M>
-     *            The type of the user data.
+     *            The type of the data.
      *
      * @param key
      *            The key for the data
-     * @return The user data or null of no user data was found for the given key
+     * @return The data or null of no data was found for the given key
      * @see DataKey
      */
     public <M> M getData(final DataKey<M> key) {
-        if (userData == null) {
+        if (data == null) {
             return null;
         }
-        return (M) userData.get(key);
+        return (M) data.get(key);
     }
 
     /**
-     * Sets user data for this component using the given key.
+     * Sets data for this component using the given key.
      * For information on creating DataKey, see {@link DataKey}.
      *
      * @param <M>
-     *            The type of user data
+     *            The type of data
      *
      * @param key
-     *            The singleton key for the user data
+     *            The singleton key for the data
      * @param object
-     *            The user data object
+     *            The data object
      * @throws IllegalArgumentException
      * @see DataKey
      */
     public <M> void setData(DataKey<M> key, M object) {
-        if (userData == null) {
-            userData = new IdentityHashMap<>();
+        if (data == null) {
+            data = new IdentityHashMap<>();
         }
-        userData.put(key, object);
+        data.put(key, object);
     }
 
     /**

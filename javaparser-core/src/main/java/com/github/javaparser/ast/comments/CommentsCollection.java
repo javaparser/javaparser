@@ -69,7 +69,7 @@ public class CommentsCollection {
     }
 
     public boolean contains(Comment comment) {
-        if(!comment.getRange().isPresent()){
+        if (!comment.getRange().isPresent()) {
             return false;
         }
         Range commentRange = comment.getRange().get();
@@ -77,15 +77,14 @@ public class CommentsCollection {
             return false;
         }
         for (Comment c : getComments()) {
-            if(!c.getRange().isPresent()){
+            if (!c.getRange().isPresent()) {
                 return false;
             }
             Range cRange = c.getRange().get();
-            if(cRange!=null) {
+            if (cRange != null) {
                 // we tolerate a difference of one element in the end column:
                 // it depends how \r and \n are calculated...
-                if (cRange.begin.line == commentRange.begin.line &&
-                        cRange.begin.column == commentRange.begin.column &&
+                if (cRange.begin.equals(commentRange.begin) &&
                         cRange.end.line == commentRange.end.line &&
                         Math.abs(cRange.end.column - commentRange.end.column) < 2) {
                     return true;

@@ -174,7 +174,7 @@ final class ASTParser {
             ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
-            ret.setEnd(lambdaBody.getEnd().get());
+            ret.setRange(range(ret.getBegin().get(), lambdaBody.getEnd().get()));
         } else if (ret instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) ret;
             Expression inner = generateLambda(castExpr.getExpr(), lambdaBody);
@@ -209,7 +209,9 @@ final class ASTParser {
     }
 
     private static class RangedList<T extends Node> {
-        Range range = Range.range(0, 0, 0, 0);
+        /* A ranged list MUST be set to a begin and end,
+           or these temporary values will leak out */
+        Range range = range(0, 0, 0, 0);
         NodeList<T> list;
         RangedList(NodeList<T> list) {
             this.list = list;
