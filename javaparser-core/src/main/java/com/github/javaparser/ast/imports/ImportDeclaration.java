@@ -21,16 +21,10 @@
 
 package com.github.javaparser.ast.imports;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
-import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <p>
@@ -49,43 +43,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public abstract class ImportDeclaration extends Node {
-    public ImportDeclaration() {
-        this(Range.UNKNOWN);
-    }
-
     public ImportDeclaration(Range range) {
         super(range);
-    }
-
-    /**
-     * Factory method for import declarations.
-     *
-     * @param range      the range the import declaration covers. Range.UNKNOWN if not known.
-     * @param name       the qualified name of the import.
-     * @param isStatic   whether the import is static.
-     * @param isAsterisk whether the import is on demand.
-     */
-    public static ImportDeclaration create(Range range, Name name, boolean isStatic, boolean isAsterisk) {
-        assertNotNull(range);
-        assertNotNull(name);
-        if (isStatic) {
-            if (isAsterisk) {
-                return new StaticImportOnDemandDeclaration(range, parseClassOrInterfaceType(name.toString()));
-            } 
-            else {
-                if(name.getQualifier()==null){
-                    throw new IllegalArgumentException("import static name has only one identifier.");
-                }
-                String staticMember = name.getId();
-                String className = name.getQualifier().toString();
-                return new SingleStaticImportDeclaration(range, parseClassOrInterfaceType(className), staticMember);
-            }
-        } else {
-            if (isAsterisk) {
-                return new TypeImportOnDemandDeclaration(range, name);
-            } else {
-                return new SingleTypeImportDeclaration(range, parseClassOrInterfaceType(name.toString()));
-            }
-        }
     }
 }
