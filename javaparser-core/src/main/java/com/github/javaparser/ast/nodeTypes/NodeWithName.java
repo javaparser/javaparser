@@ -44,6 +44,6 @@ public interface NodeWithName<N extends Node> {
     }
 
     default String getNameAsString(){
-        return getName().toString();
+        return getName().asString();
     }
 }

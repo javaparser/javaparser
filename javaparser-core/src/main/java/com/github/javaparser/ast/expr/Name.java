@@ -100,6 +100,16 @@ public class Name extends Node {
         return ret;
     }
 
+    /**
+     * @return the complete qualified name. Only the identifiers and the dots, so no comments or whitespace.
+     */
+    public String asString() {
+        if (qualifier != null) {
+            return qualifier.asString() + "." + id;
+        }
+        return id;
+    }
+
     public Name getQualifier() {
         return qualifier;
     }
