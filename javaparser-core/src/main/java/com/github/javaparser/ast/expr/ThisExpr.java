@@ -35,11 +35,11 @@ public final class ThisExpr extends Expression {
 	private Expression classExpr;
 
 	public ThisExpr() {
-        this(Range.UNKNOWN, null); 
+        this(null, null); 
 	}
 
 	public ThisExpr(final Expression classExpr) {
-		this(Range.UNKNOWN, classExpr);
+		this(null, classExpr);
 	}
 
 	public ThisExpr(final Range range, final Expression classExpr) {

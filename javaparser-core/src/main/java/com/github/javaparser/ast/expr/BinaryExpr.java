@@ -60,11 +60,11 @@ public final class BinaryExpr extends Expression {
     private Operator op;
 
     public BinaryExpr() {
-        this(Range.UNKNOWN, new BooleanLiteralExpr(), new BooleanLiteralExpr(), Operator.equals);
+        this(null, new BooleanLiteralExpr(), new BooleanLiteralExpr(), Operator.equals);
     }
 
     public BinaryExpr(Expression left, Expression right, Operator op) {
-        this(Range.UNKNOWN, left, right, op);
+        this(null, left, right, op);
     }
 
     public BinaryExpr(Range range, Expression left, Expression right, Operator op) {

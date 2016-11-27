@@ -41,11 +41,11 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     private NodeList<AnnotationExpr> annotations;
 
     public BodyDeclaration() {
-        this(Range.UNKNOWN, new NodeList<>());
+        this(null, new NodeList<>());
     }
 
     public BodyDeclaration(NodeList<AnnotationExpr> annotations) {
-        this(Range.UNKNOWN, annotations);
+        this(null, annotations);
     }
 
     public BodyDeclaration(Range range, NodeList<AnnotationExpr> annotations) {

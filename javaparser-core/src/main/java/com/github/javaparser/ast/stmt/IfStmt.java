@@ -44,14 +44,14 @@ public final class IfStmt extends Statement {
 	private Statement elseStmt;
 
 	public IfStmt() {
-        this(Range.UNKNOWN,
+        this(null,
                 new BooleanLiteralExpr(),
                 new EmptyStmt(),
                 null);
 	}
 
 	public IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
-        this(Range.UNKNOWN, condition, thenStmt, elseStmt);
+        this(null, condition, thenStmt, elseStmt);
 	}
 
 	public IfStmt(Range range,

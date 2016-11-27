@@ -53,14 +53,14 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 	private NodeList<ClassOrInterfaceType> typeBound;
 
 	public TypeParameter() {
-		this(Range.UNKNOWN,
+		this(null,
 				new SimpleName(),
 				new NodeList<>(),
 				new NodeList<>());
 	}
 
 	public TypeParameter(final String name, final NodeList<ClassOrInterfaceType> typeBound) {
-		this(Range.UNKNOWN,
+		this(null,
 				new SimpleName(name),
 				typeBound,
 				new NodeList<>());

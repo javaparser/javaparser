@@ -36,11 +36,11 @@ public final class ThrowStmt extends Statement {
 	private Expression expr;
 
 	public ThrowStmt() {
-        this(Range.UNKNOWN, new NameExpr());
+        this(null, new NameExpr());
 	}
 
 	public ThrowStmt(final Expression expr) {
-		this(Range.UNKNOWN, expr);
+		this(null, expr);
 	}
 
 	public ThrowStmt(Range range, final Expression expr) {

@@ -6,8 +6,6 @@ import static com.github.javaparser.Position.pos;
  * A range of characters in a source file, from "begin" to "end", including the characters at "begin" and "end".
  */
 public class Range {
-    public static final Range UNKNOWN = range(Position.UNKNOWN, Position.UNKNOWN);
-
     public final Position begin;
     public final Position end;
 

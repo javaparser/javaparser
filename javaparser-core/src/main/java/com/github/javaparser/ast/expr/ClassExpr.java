@@ -42,11 +42,11 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     private Type<?> type;
 
     public ClassExpr() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType());
+        this(null, new ClassOrInterfaceType());
     }
 
     public ClassExpr(Type<?> type) {
-       this(Range.UNKNOWN, type);
+       this(null, type);
     }
 
     public ClassExpr(Range range, Type type) {

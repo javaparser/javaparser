@@ -45,11 +45,11 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
     private SimpleName field;
 
     public FieldAccessExpr() {
-        this(Range.UNKNOWN, new ThisExpr(), new NodeList<>(), new SimpleName());
+        this(null, new ThisExpr(), new NodeList<>(), new SimpleName());
     }
 
     public FieldAccessExpr(final Expression scope, final String field) {
-        this(Range.UNKNOWN, scope, new NodeList<>(), new SimpleName(field));
+        this(null, scope, new NodeList<>(), new SimpleName(field));
     }
 
     public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments,

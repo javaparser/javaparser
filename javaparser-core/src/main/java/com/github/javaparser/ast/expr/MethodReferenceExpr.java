@@ -50,7 +50,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     private String identifier;
 
     public MethodReferenceExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 new ClassExpr(),
                 null,
                 "empty");

@@ -38,11 +38,11 @@ public final class ExpressionStmt extends Statement {
 	private Expression expr;
 
 	public ExpressionStmt() {
-        this(Range.UNKNOWN, new BooleanLiteralExpr());
+        this(null, new BooleanLiteralExpr());
 	}
 
 	public ExpressionStmt(final Expression expr) {
-		this(Range.UNKNOWN, expr);
+		this(null, expr);
 	}
 
 	public ExpressionStmt(Range range, final Expression expr) {

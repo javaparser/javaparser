@@ -19,7 +19,7 @@ public class SingleStaticImportDeclaration extends NonEmptyImportDeclaration {
     private String staticMember;
 
     public SingleStaticImportDeclaration() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType(), "empty");
+        this(null, new ClassOrInterfaceType(), "empty");
     }
 
     public SingleStaticImportDeclaration(Range range, ClassOrInterfaceType type, String staticMember) {

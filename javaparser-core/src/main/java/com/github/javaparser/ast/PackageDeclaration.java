@@ -58,15 +58,15 @@ public final class PackageDeclaration extends Node implements
     private Name name;
 
     public PackageDeclaration() {
-        this(Range.UNKNOWN, new NodeList<>(), new Name());
+        this(null, new NodeList<>(), new Name());
     }
 
     public PackageDeclaration(Name name) {
-        this(Range.UNKNOWN, new NodeList<>(), name);
+        this(null, new NodeList<>(), name);
     }
 
     public PackageDeclaration(NodeList<AnnotationExpr> annotations, Name name) {
-        this(Range.UNKNOWN, annotations, name);
+        this(null, annotations, name);
     }
 
     public PackageDeclaration(Range range, NodeList<AnnotationExpr> annotations, Name name) {

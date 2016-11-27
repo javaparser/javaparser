@@ -41,11 +41,11 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     private BlockStmt block;
 
     public SynchronizedStmt() {
-        this(Range.UNKNOWN, new NameExpr(), new BlockStmt());
+        this(null, new NameExpr(), new BlockStmt());
     }
 
     public SynchronizedStmt(final Expression expr, final BlockStmt block) {
-        this(Range.UNKNOWN, expr, block);
+        this(null, expr, block);
     }
 
     public SynchronizedStmt(Range range, final Expression expr, final BlockStmt block) {

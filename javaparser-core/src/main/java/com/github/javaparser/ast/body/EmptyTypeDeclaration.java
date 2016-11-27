@@ -39,7 +39,7 @@ import static com.github.javaparser.ast.NodeList.*;
 public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclaration> {
 
     public EmptyTypeDeclaration() {
-        this(Range.UNKNOWN);
+        this(null);
     }
 
     public EmptyTypeDeclaration(Range range) {

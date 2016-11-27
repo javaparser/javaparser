@@ -1,6 +1,5 @@
 package com.github.javaparser.ast.imports;
 
-import static com.github.javaparser.Range.UNKNOWN;
 import static org.junit.Assert.assertEquals;
 
 import com.github.javaparser.JavaParser;

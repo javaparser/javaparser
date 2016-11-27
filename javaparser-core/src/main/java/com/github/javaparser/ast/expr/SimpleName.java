@@ -17,11 +17,11 @@ public class SimpleName extends Node {
     private String id;
 
     public SimpleName() {
-        this(Range.UNKNOWN, "empty");
+        this(null, "empty");
     }
 
     public SimpleName(final String id) {
-        this(Range.UNKNOWN, id);
+        this(null, id);
     }
 
     public SimpleName(Range range, final String id) {

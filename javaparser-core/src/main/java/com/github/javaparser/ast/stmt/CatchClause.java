@@ -46,11 +46,11 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     private BlockStmt catchBlock;
 
     public CatchClause() {
-        this(Range.UNKNOWN, new Parameter(), new BlockStmt());         
+        this(null, new Parameter(), new BlockStmt());         
     }
 
     public CatchClause(final Parameter param, final BlockStmt catchBlock) {
-        this(Range.UNKNOWN, param, catchBlock);
+        this(null, param, catchBlock);
     }
 
     public CatchClause(final EnumSet<Modifier> exceptModifier,
@@ -58,8 +58,8 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
                        final ClassOrInterfaceType exceptType,
                        final VariableDeclaratorId exceptId,
                        final BlockStmt catchBlock) {
-        this(Range.UNKNOWN, 
-                new Parameter(Range.UNKNOWN, 
+        this(null, 
+                new Parameter(null, 
                         exceptModifier, 
                         exceptAnnotations, 
                         exceptType, 

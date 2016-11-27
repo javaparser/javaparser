@@ -48,7 +48,7 @@ public class LambdaExpr extends Expression implements
 	private Statement body;
 
 	public LambdaExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 new NodeList<>(),
                 new EmptyStmt(),
                 false);

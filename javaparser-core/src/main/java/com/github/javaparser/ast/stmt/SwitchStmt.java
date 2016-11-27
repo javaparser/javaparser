@@ -41,12 +41,12 @@ public final class SwitchStmt extends Statement {
 	private NodeList<SwitchEntryStmt> entries;
 
 	public SwitchStmt() {
-		this(Range.UNKNOWN, new NameExpr(), new NodeList<>());
+		this(null, new NameExpr(), new NodeList<>());
 	}
 
 	public SwitchStmt(final Expression selector,
 			final NodeList<SwitchEntryStmt> entries) {
-		this(Range.UNKNOWN, selector, entries);
+		this(null, selector, entries);
 	}
 
 	public SwitchStmt(Range range, final Expression selector,

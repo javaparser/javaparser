@@ -49,7 +49,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     private NodeList<EnumConstantDeclaration> entries;
 
     public EnumDeclaration() {
-        this(Range.UNKNOWN, 
+        this(null, 
                 EnumSet.noneOf(Modifier.class), 
                 new NodeList<>(), 
                 new SimpleName(), 
@@ -59,7 +59,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new SimpleName(name),
@@ -71,7 +71,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
                            NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 name,

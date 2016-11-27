@@ -38,11 +38,11 @@ public final class LabeledStmt extends Statement {
 	private Statement stmt;
 
 	public LabeledStmt() {
-        this(Range.UNKNOWN, "empty", new EmptyStmt());
+        this(null, "empty", new EmptyStmt());
 	}
 
 	public LabeledStmt(final String label, final Statement stmt) {
-        this(Range.UNKNOWN, label, stmt);
+        this(null, label, stmt);
 	}
 
 	public LabeledStmt(Range range, final String label, final Statement stmt) {

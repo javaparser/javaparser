@@ -35,11 +35,11 @@ public class IntegerLiteralExpr extends StringLiteralExpr {
 	static final String MIN_VALUE = "-" + UNSIGNED_MIN_VALUE;
 
 	public IntegerLiteralExpr() {
-        this(Range.UNKNOWN, "0");
+        this(null, "0");
 	}
 
 	public IntegerLiteralExpr(final String value) {
-		this(Range.UNKNOWN, value);
+		this(null, value);
 	}
 
 	public IntegerLiteralExpr(final Range range, final String value) {

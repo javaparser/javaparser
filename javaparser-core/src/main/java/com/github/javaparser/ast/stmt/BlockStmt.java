@@ -38,11 +38,11 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     private NodeList<Statement> stmts;
 
     public BlockStmt() {
-        this(Range.UNKNOWN, new NodeList<>());
+        this(null, new NodeList<>());
     }
 
     public BlockStmt(final NodeList<Statement> stmts) {
-        this(Range.UNKNOWN, stmts);
+        this(null, stmts);
 
     }
 

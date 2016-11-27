@@ -31,7 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class LongLiteralMinValueExpr extends LongLiteralExpr {
 
 	public LongLiteralMinValueExpr() {
-		this(Range.UNKNOWN);
+		this(null);
 	}
 
 	public LongLiteralMinValueExpr(final Range range) {

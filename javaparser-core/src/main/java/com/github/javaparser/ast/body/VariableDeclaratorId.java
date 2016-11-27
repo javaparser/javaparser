@@ -46,19 +46,19 @@ public final class VariableDeclaratorId extends Node implements NodeWithSimpleNa
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterId;
 
     public VariableDeclaratorId() {
-        this(Range.UNKNOWN,
+        this(null,
                 new SimpleName(),
                 new NodeList<>());
     }
 
     public VariableDeclaratorId(String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 new SimpleName(name),
                 new NodeList<>());
     }
 
     public VariableDeclaratorId(SimpleName name) {
-        this(Range.UNKNOWN,
+        this(null,
                 name,
                 new NodeList<>());
     }

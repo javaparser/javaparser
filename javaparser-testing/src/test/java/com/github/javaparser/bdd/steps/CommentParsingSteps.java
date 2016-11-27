@@ -38,6 +38,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.github.javaparser.Range;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -160,10 +161,13 @@ public class CommentParsingSteps {
             Comment expectedLineComment = toComment(exampleRow, new LineComment());
             Comment lineCommentUnderTest = getCommentAt(commentsCollection.getLineComments(), index);
 
-            assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
-            assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));
-            assertThat(lineCommentUnderTest.getEnd().line, is(expectedLineComment.getEnd().line));
-            assertThat(lineCommentUnderTest.getEnd().column, is(expectedLineComment.getEnd().column));
+            Range underTestRange = lineCommentUnderTest.getRange().get();
+            Range expectedRange = expectedLineComment.getRange().get();
+            
+            assertThat(underTestRange.begin.line, is(expectedRange.begin.line));
+            assertThat(underTestRange.begin.column, is(expectedRange.begin.column));
+            assertThat(underTestRange.end.line, is(expectedRange.end.line));
+            assertThat(underTestRange.end.column, is(expectedRange.end.column));
             index ++;
         }
     }
@@ -175,10 +179,13 @@ public class CommentParsingSteps {
             Comment expectedLineComment = toComment(exampleRow, new BlockComment());
             Comment lineCommentUnderTest = getCommentAt(commentsCollection.getBlockComments(), index);
 
-            assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
-            assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));
-            assertThat(lineCommentUnderTest.getEnd().line, is(expectedLineComment.getEnd().line));
-            assertThat(lineCommentUnderTest.getEnd().column, is(expectedLineComment.getEnd().column));
+            Range underTestRange = lineCommentUnderTest.getRange().get();
+            Range expectedRange = expectedLineComment.getRange().get();
+
+            assertThat(underTestRange.begin.line, is(expectedRange.begin.line));
+            assertThat(underTestRange.begin.column, is(expectedRange.begin.column));
+            assertThat(underTestRange.end.line, is(expectedRange.end.line));
+            assertThat(underTestRange.end.column, is(expectedRange.end.column));
             index ++;
         }
     }
@@ -190,10 +197,13 @@ public class CommentParsingSteps {
             Comment expectedLineComment = toComment(exampleRow, new BlockComment());
             Comment lineCommentUnderTest = getCommentAt(commentsCollection.getJavadocComments(), index);
 
-            assertThat(lineCommentUnderTest.getBegin().line, is(expectedLineComment.getBegin().line));
-            assertThat(lineCommentUnderTest.getBegin().column, is(expectedLineComment.getBegin().column));
-            assertThat(lineCommentUnderTest.getEnd().line, is(expectedLineComment.getEnd().line));
-            assertThat(lineCommentUnderTest.getEnd().column, is(expectedLineComment.getEnd().column));
+            Range underTestRange = lineCommentUnderTest.getRange().get();
+            Range expectedRange = expectedLineComment.getRange().get();
+
+            assertThat(underTestRange.begin.line, is(expectedRange.begin.line));
+            assertThat(underTestRange.begin.column, is(expectedRange.begin.column));
+            assertThat(underTestRange.end.line, is(expectedRange.end.line));
+            assertThat(underTestRange.end.column, is(expectedRange.end.column));
             index ++;
         }
     }

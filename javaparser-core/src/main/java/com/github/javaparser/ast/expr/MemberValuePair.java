@@ -40,15 +40,15 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
 	private Expression value;
 
 	public MemberValuePair() {
-        this(Range.UNKNOWN, new SimpleName(), new StringLiteralExpr());
+        this(null, new SimpleName(), new StringLiteralExpr());
 	}
 
 	public MemberValuePair(final String name, final Expression value) {
-        this(Range.UNKNOWN, new SimpleName(name), value);
+        this(null, new SimpleName(name), value);
 	}
 
 	public MemberValuePair(final SimpleName name, final Expression value) {
-        this(Range.UNKNOWN, name, value);
+        this(null, name, value);
 	}
 
 	public MemberValuePair(final Range range, final SimpleName name, final Expression value) {

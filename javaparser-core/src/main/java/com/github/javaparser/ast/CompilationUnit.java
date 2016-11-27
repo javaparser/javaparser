@@ -67,11 +67,11 @@ public final class CompilationUnit extends Node {
     private NodeList<TypeDeclaration<?>> types;
 
     public CompilationUnit() {
-        this(Range.UNKNOWN, null, new NodeList<>(), new NodeList<>());
+        this(null, null, new NodeList<>(), new NodeList<>());
     }
 
     public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
-        this(Range.UNKNOWN, pakage, imports, types);
+        this(null, pakage, imports, types);
     }
 
     public CompilationUnit(Range range, PackageDeclaration pakage, NodeList<ImportDeclaration> imports,
@@ -96,10 +96,9 @@ public final class CompilationUnit extends Node {
      * Return a list containing all comments declared in this compilation unit.
      * Including javadocs, line comments and block comments of all types,
      * inner-classes and other members.<br>
-     * If there is no comment, <code>null</code> is returned.
+     * If there is no comment, an empty list is returned.
      * 
-     * @return list with all comments of this compilation unit or
-     *         <code>null</code>
+     * @return list with all comments of this compilation unit.
      * @see JavadocComment
      * @see com.github.javaparser.ast.comments.LineComment
      * @see com.github.javaparser.ast.comments.BlockComment
@@ -155,16 +154,6 @@ public final class CompilationUnit extends Node {
      */
     public TypeDeclaration<?> getType(int i) {
         return getTypes().get(i);
-    }
-
-    /**
-     * Sets the list of comments of this compilation unit.
-     * 
-     * @param comments
-     *            the list of comments
-     */
-    public CompilationUnit setComments(List<Comment> comments) {
-        throw new RuntimeException("Not implemented!");
     }
 
     /**

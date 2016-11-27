@@ -85,7 +85,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList;
 
     public MethodDeclaration() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new NodeList<>(),
@@ -100,7 +100,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type<?> elementType, final String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -116,7 +116,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type<?> elementType, final String name,
                              final NodeList<Parameter> parameters) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -141,7 +141,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
                              final NodeList<ReferenceType<?>> throws_,
                              final BlockStmt body) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 typeParameters,

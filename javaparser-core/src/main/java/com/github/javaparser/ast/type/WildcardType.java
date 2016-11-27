@@ -40,15 +40,15 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
     private ReferenceType<?> sup;
 
 	public WildcardType() {
-        this(Range.UNKNOWN, null, null);
+        this(null, null, null);
 	}
 
 	public WildcardType(final ReferenceType<?> ext) {
-		this(Range.UNKNOWN, ext, null);
+		this(null, ext, null);
 	}
 
 	public WildcardType(final ReferenceType<?> ext, final ReferenceType<?> sup) {
-        this(Range.UNKNOWN, ext, sup);
+        this(null, ext, sup);
 	}
 
 	public WildcardType(final Range range,

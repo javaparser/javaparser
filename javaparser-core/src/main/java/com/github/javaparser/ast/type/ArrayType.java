@@ -21,7 +21,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
     private Type componentType;
 
     public ArrayType(Type<?> componentType, NodeList<AnnotationExpr> annotations) {
-        this(Range.UNKNOWN, componentType, annotations);
+        this(null, componentType, annotations);
     }
 
     public ArrayType(Range range, Type<?> componentType, NodeList<AnnotationExpr> annotations) {
@@ -60,7 +60,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
-                    type = new ArrayType(pair.getRange(), type, pair.getAnnotations());
+                    type = new ArrayType(pair.getRange().orElse(null), type, pair.getAnnotations());
                 }
             }
         }
@@ -76,7 +76,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         final NodeList<ArrayBracketPair> arrayBracketPairs = new NodeList<>();
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
-            arrayBracketPairs.add(new ArrayBracketPair(Range.UNKNOWN, arrayType.getAnnotations()));
+            arrayBracketPairs.add(new ArrayBracketPair(type.getRange().orElse(null), arrayType.getAnnotations()));
             type = arrayType.getComponentType();
         }
         return new Pair<>(type, arrayBracketPairs);

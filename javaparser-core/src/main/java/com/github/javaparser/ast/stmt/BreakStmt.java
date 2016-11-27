@@ -38,11 +38,11 @@ public final class BreakStmt extends Statement {
     private String id;
 
     public BreakStmt() {
-        this(Range.UNKNOWN, "empty");
+        this(null, "empty");
     }
 
     public BreakStmt(final String id) {
-        this(Range.UNKNOWN, id);
+        this(null, id);
     }
 
     public BreakStmt(final Range range, final String id) {

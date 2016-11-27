@@ -36,11 +36,11 @@ public final class SuperExpr extends Expression {
 	private Expression classExpr;
 
 	public SuperExpr() {
-        this(Range.UNKNOWN, null);
+        this(null, null);
 	}
 
 	public SuperExpr(final Expression classExpr) {
-		this(Range.UNKNOWN, classExpr);
+		this(null, classExpr);
 	}
 
 	public SuperExpr(final Range range, final Expression classExpr) {

@@ -38,11 +38,11 @@ public final class ContinueStmt extends Statement {
 	private String id;
 
 	public ContinueStmt() {
-        this(Range.UNKNOWN, null);
+        this(null, null);
 	}
 
 	public ContinueStmt(final String id) {
-		this(Range.UNKNOWN, id);
+		this(null, id);
 	}
 
 	public ContinueStmt(Range range, final String id) {

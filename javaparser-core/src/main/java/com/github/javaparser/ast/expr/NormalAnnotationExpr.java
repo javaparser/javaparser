@@ -37,11 +37,11 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     private NodeList<MemberValuePair> pairs;
 
     public NormalAnnotationExpr() {
-        this(Range.UNKNOWN, new Name(), new NodeList<>());
+        this(null, new Name(), new NodeList<>());
     }
 
     public NormalAnnotationExpr(final Name name, final NodeList<MemberValuePair> pairs) {
-        this(Range.UNKNOWN, name, pairs);
+        this(null, name, pairs);
     }
 
     public NormalAnnotationExpr(final Range range, final Name name, final NodeList<MemberValuePair> pairs) {

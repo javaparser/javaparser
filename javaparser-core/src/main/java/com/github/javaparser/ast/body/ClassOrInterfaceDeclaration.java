@@ -59,7 +59,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     private NodeList<ClassOrInterfaceType> implementsList;
 
     public ClassOrInterfaceDeclaration() {
-        this(Range.UNKNOWN, 
+        this(null, 
                 EnumSet.noneOf(Modifier.class), 
                 new NodeList<>(), 
                 false, 
@@ -72,7 +72,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
                                        final String name) {
-        this(Range.UNKNOWN, 
+        this(null, 
                 modifiers, 
                 new NodeList<>(), 
                 isInterface,
@@ -90,7 +90,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                                        final NodeList<ClassOrInterfaceType> extendsList,
                                        final NodeList<ClassOrInterfaceType> implementsList,
                                        final NodeList<BodyDeclaration<?>> members) {
-        this(Range.UNKNOWN, modifiers, annotations, isInterface, name, typeParameters, extendsList, implementsList, members);
+        this(null, modifiers, annotations, isInterface, name, typeParameters, extendsList, implementsList, members);
     }
 
     public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,

@@ -62,7 +62,7 @@ public final class ObjectCreationExpr extends Expression implements
     private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
     public ObjectCreationExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 null,
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
@@ -79,7 +79,7 @@ public final class ObjectCreationExpr extends Expression implements
      */
     public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type,
                               final NodeList<Expression> args) {
-        this(Range.UNKNOWN,
+        this(null,
                 scope,
                 type,
                 new NodeList<>(),

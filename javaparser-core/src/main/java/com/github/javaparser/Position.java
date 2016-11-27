@@ -32,14 +32,10 @@ public class Position implements Comparable<Position> {
 	public final int line;
 	public final int column;
 
-	public static final Position ABSOLUTE_START = new Position(Node.ABSOLUTE_BEGIN_LINE, -1);
-	public static final Position ABSOLUTE_END = new Position(Node.ABSOLUTE_END_LINE, -1);
-
 	/**
 	 * The first position in the file
 	 */
 	public static final Position HOME = new Position(1, 1);
-	public static final Position UNKNOWN = new Position(0, 0);
 
 	public Position(int line, int column) {
 		if (line < Node.ABSOLUTE_END_LINE) {

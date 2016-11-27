@@ -56,7 +56,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     private NodeList<BodyDeclaration<?>> members;
 
 	public TypeDeclaration() {
-		this(Range.UNKNOWN,
+		this(null,
                 new NodeList<>(),
                 EnumSet.noneOf(Modifier.class),
                 new SimpleName(),
@@ -64,7 +64,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
 	}
 
     public TypeDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 new NodeList<>(),
                 modifiers,
                 new SimpleName(name),
@@ -74,7 +74,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
 	public TypeDeclaration(NodeList<AnnotationExpr> annotations,
                            EnumSet<Modifier> modifiers, SimpleName name,
                            NodeList<BodyDeclaration<?>> members) {
-        this(Range.UNKNOWN,
+        this(null,
                 annotations,
                 modifiers,
                 name,

@@ -69,7 +69,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType;
 
     public FieldDeclaration() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
@@ -78,7 +78,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclarator variable) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 elementType,
@@ -87,7 +87,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> elementType, NodeList<VariableDeclarator> variables) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 elementType,
@@ -97,7 +97,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> elementType, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                             NodeList<VariableDeclarator> variables) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 elementType,

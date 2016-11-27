@@ -31,7 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class EmptyStmt extends Statement {
 
 	public EmptyStmt() {
-        this(Range.UNKNOWN);
+        this(null);
 	}
 
 	public EmptyStmt(Range range) {

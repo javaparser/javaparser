@@ -20,11 +20,11 @@ public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayB
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     public ArrayBracketPair() {
-        this(Range.UNKNOWN, new NodeList<AnnotationExpr>());
+        this(null, new NodeList<>());
     }
 
     public ArrayBracketPair(NodeList<AnnotationExpr> annotations) {
-        this(Range.UNKNOWN, annotations);
+        this(null, annotations);
     }
 
     public ArrayBracketPair(Range range, NodeList<AnnotationExpr> annotations) {
