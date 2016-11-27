@@ -1,3 +1,8 @@
+Version 3.0.0-alpha.11
+------------------
+* 547 595 Node.range is now using Optional instead of Range.UNKNOWN
+* 588 548 585 bug fixes and improvements
+
 Version 3.0.0-alpha.10
 ------------------
 * 578 579 577 575 290 570 568 567 562 564 551 bug fixes and improvements
