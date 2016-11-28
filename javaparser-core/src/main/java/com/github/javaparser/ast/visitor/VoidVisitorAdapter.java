@@ -328,8 +328,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
                 p.accept(this, arg);
             }
         }
-        if (n.getThrownTypes() != null) {
-            for (final ReferenceType name : n.getThrownTypes()) {
+        if (n.getThrownExceptions() != null) {
+            for (final ReferenceType name : n.getThrownExceptions()) {
                 name.accept(this, arg);
             }
         }
@@ -587,8 +587,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
                 p.accept(this, arg);
             }
         }
-        if (n.getThrownTypes() != null) {
-            for (final ReferenceType<?> name : n.getThrownTypes()) {
+        if (n.getThrownExceptions() != null) {
+            for (final ReferenceType<?> name : n.getThrownExceptions()) {
                 name.accept(this, arg);
             }
         }

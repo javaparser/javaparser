@@ -352,7 +352,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
         n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
         n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        n.setThrownTypes((NodeList<ReferenceType<?>>) n.getThrownTypes().accept(this, arg));
+        n.setThrownExceptions((NodeList<ReferenceType<?>>) n.getThrownExceptions().accept(this, arg));
         n.setBody((BlockStmt) n.getBody().accept(this, arg));
         return n;
     }
@@ -600,7 +600,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
         n.setElementType((Type) n.getElementType().accept(this, arg));
         n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        n.setThrownTypes((NodeList<ReferenceType<?>>) n.getThrownTypes().accept(this, arg));
+        n.setThrownExceptions((NodeList<ReferenceType<?>>) n.getThrownExceptions().accept(this, arg));
         if (n.getBody().isPresent()) {
             n.setBody((BlockStmt) n.getBody().get().accept(this, arg));
         }

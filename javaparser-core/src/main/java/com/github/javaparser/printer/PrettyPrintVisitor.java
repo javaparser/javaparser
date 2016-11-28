@@ -957,9 +957,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         printer.print(")");
 
-        if (!isNullOrEmpty(n.getThrownTypes())) {
+        if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrownTypes().iterator(); i.hasNext();) {
+            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext();) {
                 final ReferenceType<?> name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {
@@ -1009,9 +1009,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             pair.accept(this, arg);
         }
 
-        if (!isNullOrEmpty(n.getThrownTypes())) {
+        if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrownTypes().iterator(); i.hasNext();) {
+            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext();) {
                 final ReferenceType name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {

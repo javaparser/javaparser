@@ -50,7 +50,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.imports.*;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expression.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
@@ -1735,7 +1735,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	NodeList<Parameter> parameters = emptyList();
 	ArrayBracketPair arrayBracketPair;
 	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
-	NodeList<ReferenceType<?>> thrownTypes = emptyList();
+	NodeList<ReferenceType<?>> thrownExceptions = emptyList();
 	BlockStmt block = null;
 	Position begin = modifier.begin;
 	ReferenceType throwType;
@@ -1745,12 +1745,12 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   type = ResultType() { begin = begin.orIfInvalid(type.getBegin().get()); }
   name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-  [ "throws" throwType = ReferenceTypeWithAnnotations() { thrownTypes = add(thrownTypes, throwType); }
-    ("," throwType = ReferenceTypeWithAnnotations() { thrownTypes = add(thrownTypes, throwType); })* ]
+  [ "throws" throwType = ReferenceTypeWithAnnotations() { thrownExceptions = add(thrownExceptions, throwType); }
+    ("," throwType = ReferenceTypeWithAnnotations() { thrownExceptions = add(thrownExceptions, throwType); })* ]
   ( block = Block() | ";" )
   { 
         Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, false, parameters, arrayBracketPairs, thrownTypes, block);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, false, parameters, arrayBracketPairs, thrownExceptions, block);
   }
 }
 
@@ -1831,7 +1831,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
-	NodeList<ReferenceType<?>> thrownTypes = emptyList();
+	NodeList<ReferenceType<?>> thrownExceptions = emptyList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyList();
     Position begin = modifier.begin;
@@ -1841,8 +1841,8 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   // Modifiers matched in the caller
-  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { thrownTypes = add(thrownTypes, throwType); }
-  ("," throwType = ReferenceTypeWithAnnotations() { thrownTypes = add(thrownTypes, throwType); })* ]
+  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { thrownExceptions = add(thrownExceptions, throwType); }
+  ("," throwType = ReferenceTypeWithAnnotations() { thrownExceptions = add(thrownExceptions, throwType); })* ]
   "{" { blockBegin=tokenBegin(); }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
     stmts = Statements()
@@ -1852,7 +1852,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   	if (exConsInv != null) {
   		stmts = add(0, stmts, exConsInv);
   	}
-  	return new ConstructorDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, thrownTypes, new BlockStmt(range(blockBegin, tokenEnd()), stmts));
+  	return new ConstructorDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, thrownExceptions, new BlockStmt(range(blockBegin, tokenEnd()), stmts));
   }
 }
 

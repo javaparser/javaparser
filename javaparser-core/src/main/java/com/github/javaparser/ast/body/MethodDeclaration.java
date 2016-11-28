@@ -60,7 +60,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithElementType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>,
         NodeWithParameters<MethodDeclaration>,
-        NodeWithThrowable<MethodDeclaration>,
+        NodeWithThrownExceptions<MethodDeclaration>,
         NodeWithOptionalBlockStmt<MethodDeclaration>,
         NodeWithTypeParameters<MethodDeclaration> {
 
@@ -74,7 +74,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> thrownTypes;
+    private NodeList<ReferenceType<?>> thrownExceptions;
 
     private BlockStmt body;
 
@@ -139,7 +139,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final boolean isDefault,
                              final NodeList<Parameter> parameters,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final NodeList<ReferenceType<?>> thrownTypes,
+                             final NodeList<ReferenceType<?>> thrownExceptions,
                              final BlockStmt body) {
         this(null,
                 modifiers,
@@ -151,7 +151,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 isDefault,
                 parameters,
                 arrayBracketPairsAfterParameterList,
-                thrownTypes,
+                thrownExceptions,
                 body);
     }
 
@@ -165,7 +165,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final boolean isDefault,
                              final NodeList<Parameter> parameters,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final NodeList<ReferenceType<?>> thrownTypes,
+                             final NodeList<ReferenceType<?>> thrownExceptions,
                              final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -175,7 +175,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         setParameters(parameters);
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
         setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
-        setThrownTypes(thrownTypes);
+        setThrownExceptions(thrownExceptions);
         setBody(body);
         setDefault(isDefault);
     }
@@ -217,8 +217,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public NodeList<ReferenceType<?>> getThrownTypes() {
-        return thrownTypes;
+    public NodeList<ReferenceType<?>> getThrownExceptions() {
+        return thrownExceptions;
     }
 
     @Override
@@ -276,10 +276,10 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setThrownTypes(final NodeList<ReferenceType<?>> thrownTypes) {
-        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownTypes, thrownTypes);
-        this.thrownTypes = assertNotNull(thrownTypes);
-        setAsParentNodeOf(this.thrownTypes);
+    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
+        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
+        this.thrownExceptions = assertNotNull(thrownExceptions);
+        setAsParentNodeOf(this.thrownExceptions);
         return this;
     }
 
@@ -384,7 +384,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType<?> thr : getThrownTypes()) {
+            for (ReferenceType<?> thr : getThrownExceptions()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
@@ -438,7 +438,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(typeParameters);
         res.add(parameters);
-        res.add(thrownTypes);
+        res.add(thrownExceptions);
         res.add(arrayBracketPairsAfterType);
         res.add(arrayBracketPairsAfterParameterList);
         return res;

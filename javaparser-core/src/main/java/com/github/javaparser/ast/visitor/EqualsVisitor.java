@@ -519,7 +519,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getThrownTypes(), n2.getThrownTypes())) {
+		if (!nodesEquals(n1.getThrownExceptions(), n2.getThrownExceptions())) {
 			return false;
 		}
 
@@ -567,7 +567,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 			return false;
 		}
 
-		if (!nodesEquals(n1.getThrownTypes(), n2.getThrownTypes())) {
+		if (!nodesEquals(n1.getThrownExceptions(), n2.getThrownExceptions())) {
 			return false;
 		}
 

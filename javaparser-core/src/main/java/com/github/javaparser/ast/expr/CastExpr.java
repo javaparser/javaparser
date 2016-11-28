@@ -41,20 +41,20 @@ public final class CastExpr extends Expression implements
 
     private Type<?> type;
 
-    private Expression expr;
+    private Expression expression;
 
     public CastExpr() {
         this(null, new ClassOrInterfaceType(), new NameExpr());
     }
 
-    public CastExpr(Type<?> type, Expression expr) {
-        this(null, type, expr);
+    public CastExpr(Type<?> type, Expression expression) {
+        this(null, type, expression);
     }
 
-    public CastExpr(Range range, Type<?> type, Expression expr) {
+    public CastExpr(Range range, Type<?> type, Expression expression) {
         super(range);
         setType(type);
-        setExpression(expr);
+        setExpression(expression);
     }
 
     @Override
@@ -69,7 +69,7 @@ public final class CastExpr extends Expression implements
 
     @Override
     public Expression getExpression() {
-        return expr;
+        return expression;
     }
 
     @Override
@@ -79,9 +79,9 @@ public final class CastExpr extends Expression implements
 
     @Override
     public CastExpr setExpression(Expression expr) {
-        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expr, expr);
-        this.expr = assertNotNull(expr);
-        setAsParentNodeOf(this.expr);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expr);
+        this.expression = assertNotNull(expr);
+        setAsParentNodeOf(this.expression);
         return this;
     }
 

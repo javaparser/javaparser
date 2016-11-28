@@ -325,7 +325,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 		NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
 		NodeList<TypeParameter> typeParameters = cloneList(_n.getTypeParameters(), _arg);
 		NodeList<Parameter> parameters= cloneList(_n.getParameters(), _arg);
-        NodeList<ReferenceType<?>> throws_ = cloneList(_n.getThrownTypes(), _arg);
+        NodeList<ReferenceType<?>> throws_ = cloneList(_n.getThrownExceptions(), _arg);
 		BlockStmt block = cloneNode(_n.getBody(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
         SimpleName nameExpr_ = cloneNode(_n.getName(), _arg);
@@ -345,7 +345,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 		Type<?> type_ = cloneNode(_n.getElementType(), _arg);
         SimpleName nameExpr_ = cloneNode(_n.getName(), _arg);
 		NodeList<Parameter> parameters_ = cloneList(_n.getParameters(), _arg);
-        NodeList<ReferenceType<?>> throws_ = cloneList(_n.getThrownTypes(), _arg);
+        NodeList<ReferenceType<?>> throws_ = cloneList(_n.getThrownExceptions(), _arg);
 		BlockStmt block_ = cloneNode(_n.getBody(), _arg);
 		Comment comment = cloneNode(_n.getComment(), _arg);
 		NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType_ = cloneList(_n.getArrayBracketPairsAfterElementType(), _arg);

@@ -37,19 +37,19 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public final class ExpressionStmt extends Statement implements
         NodeWithExpression<ExpressionStmt> {
 
-	private Expression expr;
+	private Expression expression;
 
 	public ExpressionStmt() {
         this(null, new BooleanLiteralExpr());
 	}
 
-	public ExpressionStmt(final Expression expr) {
-		this(null, expr);
+	public ExpressionStmt(final Expression expression) {
+		this(null, expression);
 	}
 
-	public ExpressionStmt(Range range, final Expression expr) {
+	public ExpressionStmt(Range range, final Expression expression) {
 		super(range);
-		setExpression(expr);
+		setExpression(expression);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -62,14 +62,14 @@ public final class ExpressionStmt extends Statement implements
 
 	@Override
 	public Expression getExpression() {
-		return expr;
+		return expression;
 	}
 
 	@Override
 	public ExpressionStmt setExpression(final Expression expression) {
-		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expr, expression);
-		this.expr = assertNotNull(expression);
-		setAsParentNodeOf(this.expr);
+		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+		this.expression = assertNotNull(expression);
+		setAsParentNodeOf(this.expression);
 		return this;
 	}
 }

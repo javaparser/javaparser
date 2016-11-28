@@ -177,7 +177,7 @@ public final class Parameter extends Node implements
     public VariableDeclaratorId getIdentifier() {
         return identifier;
     }
-    
+
     @Override
     public SimpleName getName() {
         return getIdentifier().getName();
