@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -29,7 +30,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class UnaryExpr extends Expression {
+public final class UnaryExpr extends Expression implements 
+        NodeWithExpression<UnaryExpr> {
 
 	public enum Operator {
 		positive, // +
@@ -42,7 +44,7 @@ public final class UnaryExpr extends Expression {
         postDecrement, // --
 	}
 
-	private Expression expr;
+	private Expression expression;
 
 	private Operator op;
 
@@ -50,13 +52,13 @@ public final class UnaryExpr extends Expression {
         this(null, new IntegerLiteralExpr(), Operator.postIncrement);
 	}
 
-	public UnaryExpr(final Expression expr, final Operator op) {
-        this(null, expr, op);
+	public UnaryExpr(final Expression expression, final Operator op) {
+        this(null, expression, op);
 	}
 
-	public UnaryExpr(final Range range, final Expression expr, final Operator op) {
+	public UnaryExpr(final Range range, final Expression expression, final Operator op) {
 		super(range);
-		setExpr(expr);
+		setExpression(expression);
 		setOperator(op);
 	}
 
@@ -68,18 +70,20 @@ public final class UnaryExpr extends Expression {
 		v.visit(this, arg);
 	}
 
-	public Expression getExpr() {
-		return expr;
+	@Override
+	public Expression getExpression() {
+		return expression;
 	}
 
 	public Operator getOperator() {
 		return op;
 	}
 
-	public UnaryExpr setExpr(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
+    @Override
+	public UnaryExpr setExpression(final Expression expr) {
+		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expr);
+		this.expression = expr;
+		setAsParentNodeOf(this.expression);
 		return this;
 	}
 

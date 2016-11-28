@@ -18,10 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -34,7 +35,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class CastExpr extends Expression implements NodeWithType<CastExpr, Type<?>> {
+public final class CastExpr extends Expression implements
+        NodeWithType<CastExpr, Type<?>>,
+        NodeWithExpression<CastExpr> {
 
     private Type<?> type;
 
@@ -51,7 +54,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     public CastExpr(Range range, Type<?> type, Expression expr) {
         super(range);
         setType(type);
-    	setExpr(expr);
+        setExpression(expr);
     }
 
     @Override
@@ -64,7 +67,8 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         v.visit(this, arg);
     }
 
-    public Expression getExpr() {
+    @Override
+    public Expression getExpression() {
         return expr;
     }
 
@@ -73,10 +77,11 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         return type;
     }
 
-    public CastExpr setExpr(Expression expr) {
-        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
+    @Override
+    public CastExpr setExpression(Expression expr) {
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expr, expr);
         this.expr = assertNotNull(expr);
-		setAsParentNodeOf(this.expr);
+        setAsParentNodeOf(this.expr);
         return this;
     }
 
@@ -84,7 +89,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     public CastExpr setType(Type<?> type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = assertNotNull(type);
-		setAsParentNodeOf(this.type);
+        setAsParentNodeOf(this.type);
         return this;
     }
 }

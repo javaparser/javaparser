@@ -260,7 +260,7 @@ public interface NodeWithMembers<N extends Node> {
     default FieldDeclaration getFieldByName(String name) {
         return (FieldDeclaration) getMembers().stream()
                 .filter(m -> m instanceof FieldDeclaration && ((FieldDeclaration) m).getVariables().stream()
-                        .anyMatch(var -> var.getId().getNameAsString().equals(name)))
+                        .anyMatch(var -> var.getIdentifier().getNameAsString().equals(name)))
                 .findFirst().orElse(null);
     }
 

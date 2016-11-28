@@ -6,12 +6,12 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 
 public interface NodeWithThrowable<N extends Node> {
-    N setThrows(NodeList<ReferenceType<?>> throws_);
+    N setThrownTypes(NodeList<ReferenceType<?>> thrownTypes);
 
-    NodeList<ReferenceType<?>> getThrows();
+    NodeList<ReferenceType<?>> getThrownTypes();
 
-    default ReferenceType getThrow(int i) {
-        return getThrows().get(i);
+    default ReferenceType getThrownType(int i) {
+        return getThrownTypes().get(i);
     }
 
     /**
@@ -21,8 +21,8 @@ public interface NodeWithThrowable<N extends Node> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default N addThrows(ReferenceType<?> throwType) {
-        getThrows().add(throwType);
+    default N addThrownType(ReferenceType<?> throwType) {
+        getThrownTypes().add(throwType);
         throwType.setParentNode((Node) this);
         return (N) this;
     }
@@ -33,28 +33,32 @@ public interface NodeWithThrowable<N extends Node> {
      * @param clazz the exception class
      * @return this
      */
-    default N addThrows(Class<? extends Throwable> clazz) {
+    default N addThrownType(Class<? extends Throwable> clazz) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
-        return addThrows(new ClassOrInterfaceType(clazz.getSimpleName()));
+        return addThrownType(new ClassOrInterfaceType(clazz.getSimpleName()));
     }
 
     /**
-     * Check whether this elements throws this exception class
+     * Check whether this elements throws this exception class.
+     * Note that this is simply a text compare of the simple name of the class,
+     * no actual type resolution takes place.
      * 
      * @param clazz the class of the exception
      * @return true if found in throws clause, false if not
      */
-    default boolean isThrows(Class<? extends Throwable> clazz) {
-        return isThrows(clazz.getSimpleName());
+    default boolean isThrown(Class<? extends Throwable> clazz) {
+        return isThrown(clazz.getSimpleName());
     }
 
     /**
      * Check whether this elements throws this exception class
+     * Note that this is simply a text compare,
+     * no actual type resolution takes place.
      * 
      * @param throwableName the class of the exception
      * @return true if found in throws clause, false if not
      */
-    default boolean isThrows(String throwableName) {
-        return getThrows().stream().anyMatch(t -> t.toString().equals(throwableName));
+    default boolean isThrown(String throwableName) {
+        return getThrownTypes().stream().anyMatch(t -> t.toString().equals(throwableName));
     }
 }

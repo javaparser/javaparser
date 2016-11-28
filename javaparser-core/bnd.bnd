@@ -11,7 +11,8 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.ast.expr, \
     com.github.javaparser.ast.stmt, \
     com.github.javaparser.ast.type, \
-    com.github.javaparser.ast.visitor
+    com.github.javaparser.ast.visitor, \
+    com.github.javaparser.ast.observing
 
 # Don't use the project's version for the packages
 # We prefer not setting a version as we don't follow OSGi version semantics

@@ -157,7 +157,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     private void printModifiers(final EnumSet<Modifier> modifiers) {
         if (modifiers.size() > 0)
-            printer.print(modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) + " ");
+            printer.print(modifiers.stream().map(Modifier::asString).collect(Collectors.joining(" ")) + " ");
     }
 
     private void printMembers(final NodeList<BodyDeclaration<?>> members, final Void arg) {
@@ -545,10 +545,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final VariableDeclarator n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        n.getId().accept(this, arg);
-        if (n.getInit().isPresent()) {
+        n.getIdentifier().accept(this, arg);
+        if (n.getInitializer().isPresent()) {
             printer.print(" = ");
-            n.getInit().get().accept(this, arg);
+            n.getInitializer().get().accept(this, arg);
         }
     }
 
@@ -730,7 +730,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("(");
         n.getType().accept(this, arg);
         printer.print(") ");
-        n.getExpr().accept(this, arg);
+        n.getExpression().accept(this, arg);
     }
 
     @Override
@@ -772,7 +772,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final InstanceOfExpr n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        n.getExpr().accept(this, arg);
+        n.getExpression().accept(this, arg);
         printer.print(" instanceof ");
         n.getType().accept(this, arg);
     }
@@ -864,7 +864,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         printTypeArgs(n, arg);
         n.getName().accept(this, arg);
-        printArguments(n.getArgs(), arg);
+        printArguments(n.getArguments(), arg);
     }
 
     @Override
@@ -884,7 +884,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         n.getType().accept(this, arg);
 
-        printArguments(n.getArgs(), arg);
+        printArguments(n.getArguments(), arg);
 
         if (n.getAnonymousClassBody().isPresent()) {
             printer.println(" {");
@@ -920,7 +920,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             default:
         }
 
-        n.getExpr().accept(this, arg);
+        n.getExpression().accept(this, arg);
 
         switch (n.getOperator()) {
             case postIncrement:
@@ -957,9 +957,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         printer.print(")");
 
-        if (!isNullOrEmpty(n.getThrows())) {
+        if (!isNullOrEmpty(n.getThrownTypes())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrows().iterator(); i.hasNext();) {
+            for (final Iterator<ReferenceType<?>> i = n.getThrownTypes().iterator(); i.hasNext();) {
                 final ReferenceType<?> name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {
@@ -1009,9 +1009,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             pair.accept(this, arg);
         }
 
-        if (!isNullOrEmpty(n.getThrows())) {
+        if (!isNullOrEmpty(n.getThrownTypes())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrows().iterator(); i.hasNext();) {
+            for (final Iterator<ReferenceType<?>> i = n.getThrownTypes().iterator(); i.hasNext();) {
                 final ReferenceType name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {
@@ -1042,7 +1042,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print("...");
         }
         printer.print(" ");
-        n.getId().accept(this, arg);
+        n.getIdentifier().accept(this, arg);
     }
 
     @Override
@@ -1052,14 +1052,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printTypeArgs(n, arg);
             printer.print("this");
         } else {
-            if (n.getExpr().isPresent()) {
-                n.getExpr().get().accept(this, arg);
+            if (n.getExpression().isPresent()) {
+                n.getExpression().get().accept(this, arg);
                 printer.print(".");
             }
             printTypeArgs(n, arg);
             printer.print("super");
         }
-        printArguments(n.getArgs(), arg);
+        printArguments(n.getArguments(), arg);
         printer.print(";");
     }
 
@@ -1195,9 +1195,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ReturnStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("return");
-        if (n.getExpr().isPresent()) {
+        if (n.getExpression().isPresent()) {
             printer.print(" ");
-            n.getExpr().get().accept(this, arg);
+            n.getExpression().get().accept(this, arg);
         }
         printer.print(";");
     }
@@ -1252,8 +1252,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printMemberAnnotations(n.getAnnotations(), arg);
         n.getName().accept(this, arg);
 
-        if (!n.getArgs().isEmpty()) {
-            printArguments(n.getArgs(), arg);
+        if (!n.getArguments().isEmpty()) {
+            printArguments(n.getArguments(), arg);
         }
 
         if (!n.getClassBody().isEmpty()) {
@@ -1391,7 +1391,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ThrowStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("throw ");
-        n.getExpr().accept(this, arg);
+        n.getExpression().accept(this, arg);
         printer.print(";");
     }
 
@@ -1399,7 +1399,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final SynchronizedStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("synchronized (");
-        n.getExpr().accept(this, arg);
+        n.getExpression().accept(this, arg);
         printer.print(") ");
         n.getBody().accept(this, arg);
     }

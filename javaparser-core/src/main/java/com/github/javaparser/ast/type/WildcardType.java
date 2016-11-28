@@ -81,7 +81,7 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
      * @return this, the WildcardType
      */
     public WildcardType setExtends(final ReferenceType<?> ext) {
-	    notifyPropertyChange(ObservableProperty.EXTENDS, this.ext, ext);
+	    notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.ext, ext);
 		this.ext = ext;
 		setAsParentNodeOf(this.ext);
 		return this;

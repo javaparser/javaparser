@@ -195,7 +195,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                     "You can use this only when the field is attached to a class or an enum");
 
         VariableDeclarator variable = getVariable(0);
-        String fieldName = variable.getId().getNameAsString();
+        String fieldName = variable.getIdentifier().getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         if (parentClass != null)
@@ -227,7 +227,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                     "You can use this only when the field is attached to a class or an enum");
 
         VariableDeclarator variable = getVariable(0);
-        String fieldName = variable.getId().getNameAsString();
+        String fieldName = variable.getIdentifier().getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;

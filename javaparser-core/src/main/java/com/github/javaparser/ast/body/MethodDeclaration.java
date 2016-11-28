@@ -74,7 +74,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> throws_;
+    private NodeList<ReferenceType<?>> thrownTypes;
 
     private BlockStmt body;
 
@@ -139,7 +139,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final boolean isDefault,
                              final NodeList<Parameter> parameters,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final NodeList<ReferenceType<?>> throws_,
+                             final NodeList<ReferenceType<?>> thrownTypes,
                              final BlockStmt body) {
         this(null,
                 modifiers,
@@ -151,7 +151,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 isDefault,
                 parameters,
                 arrayBracketPairsAfterParameterList,
-                throws_,
+                thrownTypes,
                 body);
     }
 
@@ -165,7 +165,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final boolean isDefault,
                              final NodeList<Parameter> parameters,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final NodeList<ReferenceType<?>> throws_,
+                             final NodeList<ReferenceType<?>> thrownTypes,
                              final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -175,7 +175,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         setParameters(parameters);
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
         setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
-        setThrows(throws_);
+        setThrownTypes(thrownTypes);
         setBody(body);
         setDefault(isDefault);
     }
@@ -217,8 +217,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public NodeList<ReferenceType<?>> getThrows() {
-        return throws_;
+    public NodeList<ReferenceType<?>> getThrownTypes() {
+        return thrownTypes;
     }
 
     @Override
@@ -276,10 +276,10 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setThrows(final NodeList<ReferenceType<?>> throws_) {
-        notifyPropertyChange(ObservableProperty.THROWS, this.throws_, throws_);
-        this.throws_ = assertNotNull(throws_);
-        setAsParentNodeOf(this.throws_);
+    public MethodDeclaration setThrownTypes(final NodeList<ReferenceType<?>> thrownTypes) {
+        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownTypes, thrownTypes);
+        this.thrownTypes = assertNotNull(thrownTypes);
+        setAsParentNodeOf(this.thrownTypes);
         return this;
     }
 
@@ -384,7 +384,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType<?> thr : getThrows()) {
+            for (ReferenceType<?> thr : getThrownTypes()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
@@ -438,7 +438,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(typeParameters);
         res.add(parameters);
-        res.add(throws_);
+        res.add(thrownTypes);
         res.add(arrayBracketPairsAfterType);
         res.add(arrayBracketPairsAfterParameterList);
         return res;

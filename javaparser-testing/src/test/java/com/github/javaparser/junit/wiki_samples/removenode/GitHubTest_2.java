@@ -62,7 +62,7 @@ class MyVisitor_2 extends ModifierVisitorAdapter {
 
     @Override
     public Node visit(VariableDeclarator declarator, Object args) {
-        if (declarator.getId().getName().equals("a") && declarator.getInit().toString().equals("20")) {
+        if (declarator.getIdentifier().getName().equals("a") && declarator.getInitializer().toString().equals("20")) {
             return null;
         }
         return declarator;

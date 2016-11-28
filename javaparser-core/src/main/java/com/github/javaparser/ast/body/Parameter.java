@@ -52,7 +52,8 @@ public final class Parameter extends Node implements
         NodeWithElementType<Parameter>,
         NodeWithAnnotations<Parameter>,
         NodeWithSimpleName<Parameter>,
-        NodeWithModifiers<Parameter> {
+        NodeWithModifiers<Parameter>,
+        NodeWithVariableDeclaratorId<Parameter> {
 
     private Type<?> elementType;
 
@@ -62,7 +63,7 @@ public final class Parameter extends Node implements
 
     private NodeList<AnnotationExpr> annotations;
 
-    private VariableDeclaratorId id;
+    private VariableDeclaratorId identifier;
 
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
@@ -76,14 +77,14 @@ public final class Parameter extends Node implements
                 new VariableDeclaratorId());
     }
 
-    public Parameter(Type<?> elementType, VariableDeclaratorId id) {
+    public Parameter(Type<?> elementType, VariableDeclaratorId identifier) {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 elementType,
                 new NodeList<>(),
                 false,
-                id);
+                identifier);
     }
 
     /**
@@ -102,14 +103,14 @@ public final class Parameter extends Node implements
                 new VariableDeclaratorId(name));
     }
 
-    public Parameter(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclaratorId id) {
+    public Parameter(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclaratorId identifier) {
         this(null,
                 modifiers,
                 new NodeList<>(),
                 elementType,
                 new NodeList<>(),
                 false,
-                id);
+                identifier);
     }
 
     public Parameter(final Range range,
@@ -118,11 +119,11 @@ public final class Parameter extends Node implements
                      Type<?> elementType,
                      NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
                      boolean isVarArgs,
-                     VariableDeclaratorId id) {
+                     VariableDeclaratorId identifier) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
-        setId(id);
+        setIdentifier(identifier);
         setElementType(elementType);
         setVarArgs(isVarArgs);
         setArrayBracketPairsAfterElementType(assertNotNull(arrayBracketPairsAfterElementType));
@@ -142,7 +143,7 @@ public final class Parameter extends Node implements
     public Type<?> getType() {
         return wrapInArrayTypes((Type<?>) elementType.clone(),
                 getArrayBracketPairsAfterElementType(),
-                getId().getArrayBracketPairsAfterId());
+                getIdentifier().getArrayBracketPairsAfterId());
     }
 
     public boolean isVarArgs() {
@@ -154,7 +155,7 @@ public final class Parameter extends Node implements
         Pair<Type<?>, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
         setElementType(unwrapped.a);
         setArrayBracketPairsAfterElementType(unwrapped.b);
-        getId().setArrayBracketPairsAfterId(new NodeList<>());
+        getIdentifier().setArrayBracketPairsAfterId(new NodeList<>());
         return this;
     }
 
@@ -172,24 +173,25 @@ public final class Parameter extends Node implements
         return annotations;
     }
 
-    public VariableDeclaratorId getId() {
-        return id;
+    @Override
+    public VariableDeclaratorId getIdentifier() {
+        return identifier;
     }
-
+    
     @Override
     public SimpleName getName() {
-        return getId().getName();
+        return getIdentifier().getName();
     }
 
     @Override
     public Parameter setName(SimpleName name) {
         assertNotNull(name);
-        if (id != null) {
-            id.setName(name);
+        if (identifier != null) {
+            identifier.setName(name);
         } else {
             VariableDeclaratorId newId = new VariableDeclaratorId(name);
-            notifyPropertyChange(ObservableProperty.ID, this.id, newId);
-            id = newId;
+            notifyPropertyChange(ObservableProperty.ID, this.identifier, newId);
+            identifier = newId;
         }
         return this;
     }
@@ -217,9 +219,11 @@ public final class Parameter extends Node implements
         return this;
     }
 
-    public void setId(VariableDeclaratorId id) {
-        this.id = id;
-        setAsParentNodeOf(this.id);
+    @Override
+    public Parameter setIdentifier(VariableDeclaratorId identifier) {
+        this.identifier = identifier;
+        setAsParentNodeOf(this.identifier);
+        return this;
     }
 
     @Override

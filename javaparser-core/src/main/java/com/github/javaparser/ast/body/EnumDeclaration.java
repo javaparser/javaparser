@@ -44,7 +44,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements 
         NodeWithImplements<EnumDeclaration> {
 
-    private NodeList<ClassOrInterfaceType> implementsList;
+    private NodeList<ClassOrInterfaceType> implementedTypes;
 
     private NodeList<EnumConstantDeclaration> entries;
 
@@ -69,22 +69,22 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
-                           NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
+                           NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         this(null,
                 modifiers,
                 annotations,
                 name,
-                implementsList,
+                implementedTypes,
                 entries,
                 members);
     }
 
     public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
-                           NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
+                           NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
-        setImplements(implementsList);
+        setImplements(implementedTypes);
         setEntries(entries);
     }
 
@@ -109,7 +109,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 
     @Override
     public NodeList<ClassOrInterfaceType> getImplements() {
-        return implementsList;
+        return implementedTypes;
     }
 
     public EnumDeclaration setEntries(NodeList<EnumConstantDeclaration> entries) {
@@ -121,9 +121,9 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 
     @Override
     public EnumDeclaration setImplements(NodeList<ClassOrInterfaceType> implementsList) {
-        notifyPropertyChange(ObservableProperty.IMPLEMENTS_LIST, this.implementsList, implementsList);
-        this.implementsList = assertNotNull(implementsList);
-		setAsParentNodeOf(this.implementsList);
+        notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementsList);
+        this.implementedTypes = assertNotNull(implementsList);
+		setAsParentNodeOf(this.implementedTypes);
         return this;
     }
 
@@ -137,7 +137,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     @Override
     public List<NodeList<?>> getNodeLists() {
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(implementsList);
+        res.add(implementedTypes);
         res.add(entries);
         return res;
     }

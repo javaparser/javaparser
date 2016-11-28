@@ -43,27 +43,27 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 
     private boolean isThis;
 
-	private Expression expr;
+	private Expression expression;
 
-	private NodeList<Expression> args;
+	private NodeList<Expression> arguments;
 
 	public ExplicitConstructorInvocationStmt() {
 		this(null, new NodeList<>(), true, null, new NodeList<>());
 	}
 
 	public ExplicitConstructorInvocationStmt(final boolean isThis,
-			final Expression expr, final NodeList<Expression> args) {
-		this(null, new NodeList<>(), isThis, expr, args);
+                                             final Expression expression, final NodeList<Expression> arguments) {
+		this(null, new NodeList<>(), isThis, expression, arguments);
 	}
 
 	public ExplicitConstructorInvocationStmt(Range range,
-	                                         final NodeList<Type<?>> typeArguments, final boolean isThis,
-	                                         final Expression expr, final NodeList<Expression> args) {
+                                             final NodeList<Type<?>> typeArguments, final boolean isThis,
+                                             final Expression expression, final NodeList<Expression> arguments) {
 		super(range);
 		setTypeArguments(typeArguments);
 		setThis(isThis);
-		setExpr(expr);
-		setArgs(args);
+		setExpression(expression);
+		setArguments(arguments);
 	}
 
 	@Override
@@ -76,39 +76,39 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 		v.visit(this, arg);
 	}
 
-	public NodeList<Expression> getArgs() {
-        return args;
+	public NodeList<Expression> getArguments() {
+        return arguments;
 	}
 
-	public Expression getArg(int i) {
-		return getArgs().get(i);
+	public Expression getArgument(int i) {
+		return getArguments().get(i);
 	}
 
-    public Optional<Expression> getExpr() {
-        return Optional.ofNullable(expr);
+    public Optional<Expression> getExpression() {
+        return Optional.ofNullable(expression);
 	}
 
 	public boolean isThis() {
 		return isThis;
 	}
 
-	public ExplicitConstructorInvocationStmt setArgs(final NodeList<Expression> args) {
-		notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
-		this.args = assertNotNull(args);
-		setAsParentNodeOf(this.args);
+	public ExplicitConstructorInvocationStmt setArguments(final NodeList<Expression> arguments) {
+		notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+		this.arguments = assertNotNull(arguments);
+		setAsParentNodeOf(this.arguments);
 		return this;
 	}
 
     /**
-     * Sets the expr
+     * Sets the expression
      * 
-     * @param expr the expression, can be null
+     * @param expression the expression, can be null
      * @return this, the ExplicitConstructorInvocationStmt
      */
-	public ExplicitConstructorInvocationStmt setExpr(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
+	public ExplicitConstructorInvocationStmt setExpression(final Expression expression) {
+		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+		this.expression = expression;
+		setAsParentNodeOf(this.expression);
 		return this;
 	}
 

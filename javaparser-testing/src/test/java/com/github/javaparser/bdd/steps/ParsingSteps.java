@@ -159,7 +159,7 @@ public class ParsingSteps {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr expression = (VariableDeclarationExpr) ((ExpressionStmt) statement).getExpression();
         VariableDeclarator variableDeclarator = expression.getVariable(0);
-        assertThat(variableDeclarator.getId().getNameAsString(), is(expectedName));
+        assertThat(variableDeclarator.getIdentifier().getNameAsString(), is(expectedName));
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition body is \"$expectedBody\"")
@@ -175,9 +175,9 @@ public class ParsingSteps {
         ExpressionStmt statement = (ExpressionStmt) getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) statement.getExpression();
         VariableDeclarator variableDeclarator = variableDeclarationExpr.getVariable(0);
-		MethodCallExpr methodCallExpr = (MethodCallExpr) variableDeclarator.getInit().orElse(null);
-        CastExpr castExpr = (CastExpr) methodCallExpr.getArg(0);
-        LambdaExpr lambdaExpr = (LambdaExpr) castExpr.getExpr();
+		MethodCallExpr methodCallExpr = (MethodCallExpr) variableDeclarator.getInitializer().orElse(null);
+        CastExpr castExpr = (CastExpr) methodCallExpr.getArgument(0);
+        LambdaExpr lambdaExpr = (LambdaExpr) castExpr.getExpression();
         assertThat(lambdaExpr.getBody().toString(), is(expectedBody));
     }
 
@@ -263,7 +263,7 @@ public class ParsingSteps {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr expression = (VariableDeclarationExpr) ((ExpressionStmt) statement).getExpression();
         VariableDeclarator variableDeclarator = expression.getVariable(0);
-		return (LambdaExpr) variableDeclarator.getInit().orElse(null);
+		return (LambdaExpr) variableDeclarator.getInitializer().orElse(null);
     }
 
     @Then("all nodes refer to their parent")
@@ -286,7 +286,7 @@ public class ParsingSteps {
     public void thenLambdaInConditionalExpressionInMethodInClassIsParentOfContainedParameter(int statementPosition, int methodPosition, int classPosition) {
     	Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
     	ReturnStmt returnStmt = (ReturnStmt) statement;
-		ConditionalExpr conditionalExpr = (ConditionalExpr) returnStmt.getExpr().orElse(null);
+		ConditionalExpr conditionalExpr = (ConditionalExpr) returnStmt.getExpression().orElse(null);
         assertThat(conditionalExpr.getElseExpr().getClass().getName(), is(LambdaExpr.class.getName()));
     }
 

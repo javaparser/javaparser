@@ -390,7 +390,7 @@ public class CommentParsingSteps {
         FieldDeclaration fieldUnderTest = (FieldDeclaration) getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         VariableDeclarator variableUnderTest = fieldUnderTest.getVariable(variablePosition - 1);
-		Expression valueUnderTest = variableUnderTest.getInit().orElse(null);
+		Expression valueUnderTest = variableUnderTest.getInitializer().orElse(null);
         Comment commentUnderTest = valueUnderTest.getComment();
         assertThat(commentUnderTest.getContent(), is(expectedContent));
     }

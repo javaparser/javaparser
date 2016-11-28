@@ -24,6 +24,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -33,7 +34,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ExpressionStmt extends Statement {
+public final class ExpressionStmt extends Statement implements
+        NodeWithExpression<ExpressionStmt> {
 
 	private Expression expr;
 
@@ -58,13 +60,15 @@ public final class ExpressionStmt extends Statement {
 		v.visit(this, arg);
 	}
 
+	@Override
 	public Expression getExpression() {
 		return expr;
 	}
 
-	public ExpressionStmt setExpression(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-		this.expr = assertNotNull(expr);
+	@Override
+	public ExpressionStmt setExpression(final Expression expression) {
+		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expr, expression);
+		this.expr = assertNotNull(expression);
 		setAsParentNodeOf(this.expr);
 		return this;
 	}

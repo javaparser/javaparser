@@ -6,12 +6,12 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 
 public interface NodeWithArguments<N extends Node> {
-    N setArgs(NodeList<Expression> args);
+    N setArguments(NodeList<Expression> arguments);
 
-    NodeList<Expression> getArgs();
+    NodeList<Expression> getArguments();
 
-    default Expression getArg(int i) {
-        return getArgs().get(i);
+    default Expression getArgument(int i) {
+        return getArguments().get(i);
     }
 
     default N addArgument(String arg) {
@@ -20,7 +20,7 @@ public interface NodeWithArguments<N extends Node> {
     }
 
     default N addArgument(Expression arg) {
-        getArgs().add(arg);
+        getArguments().add(arg);
         return (N) this;
     }
 

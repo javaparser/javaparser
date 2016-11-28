@@ -63,7 +63,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> throws_;
+    private NodeList<ReferenceType<?>> thrownTypes;
 
     private BlockStmt body;
 
@@ -91,7 +91,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                                   NodeList<TypeParameter> typeParameters,
-                                  SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_,
+                                  SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownTypes,
                                   BlockStmt block) {
         this(null,
                 modifiers,
@@ -99,19 +99,19 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                 typeParameters,
                 name,
                 parameters,
-                throws_,
+                thrownTypes,
                 block);
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
                                   NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name,
-                                  NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_, BlockStmt block) {
+                                  NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownTypes, BlockStmt block) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
         setParameters(parameters);
-        setThrows(throws_);
+        setThrownTypes(thrownTypes);
         setBody(block);
     }
 
@@ -147,8 +147,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public NodeList<ReferenceType<?>> getThrows() {
-        return throws_;
+    public NodeList<ReferenceType<?>> getThrownTypes() {
+        return thrownTypes;
     }
 
     public NodeList<TypeParameter> getTypeParameters() {
@@ -178,10 +178,10 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setThrows(NodeList<ReferenceType<?>> throws_) {
-        notifyPropertyChange(ObservableProperty.THROWS, this.throws_, throws_);
-        this.throws_ = assertNotNull(throws_);
-        setAsParentNodeOf(this.throws_);
+    public ConstructorDeclaration setThrownTypes(NodeList<ReferenceType<?>> thrownTypes) {
+        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownTypes, thrownTypes);
+        this.thrownTypes = assertNotNull(thrownTypes);
+        setAsParentNodeOf(this.thrownTypes);
         return this;
     }
 
@@ -225,7 +225,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType thr : getThrows()) {
+            for (ReferenceType thr : getThrownTypes()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
@@ -273,7 +273,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(typeParameters);
         res.add(parameters);
-        res.add(throws_);
+        res.add(thrownTypes);
         return res;
     }
 }
