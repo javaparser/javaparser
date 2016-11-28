@@ -3,22 +3,22 @@ package com.github.javaparser.ast;
 import java.util.EnumSet;
 
 public enum Modifier {
-    PUBLIC("public"),
-    PROTECTED("protected"),
-    PRIVATE("private"),
-    ABSTRACT("abstract"),
-    STATIC("static"),
-    FINAL("final"),
-    TRANSIENT("transient"),
-    VOLATILE("volatile"),
-    SYNCHRONIZED("synchronized"),
-    NATIVE("native"),
-    STRICTFP("strictfp");
+    PUBLIC,
+    PROTECTED,
+    PRIVATE,
+    ABSTRACT,
+    STATIC,
+    FINAL,
+    TRANSIENT,
+    VOLATILE,
+    SYNCHRONIZED,
+    NATIVE,
+    STRICTFP;
 
     String asString;
 
-    Modifier(String asString) {
-        this.asString = asString;
+    Modifier() {
+        this.asString = name().toLowerCase();
     }
 
     /**
