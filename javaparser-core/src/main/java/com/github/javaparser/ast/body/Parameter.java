@@ -233,11 +233,15 @@ public final class Parameter extends Node implements
         return this;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public Type getElementType() {
         return elementType;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public Parameter setElementType(final Type<?> elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
@@ -246,11 +250,15 @@ public final class Parameter extends Node implements
         return this;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public Parameter setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
         notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_TYPE,

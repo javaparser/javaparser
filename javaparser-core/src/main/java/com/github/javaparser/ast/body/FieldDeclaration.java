@@ -244,11 +244,15 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public Type<?> getElementType() {
         return elementType;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public FieldDeclaration setElementType(final Type<?> elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
@@ -259,11 +263,14 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
-     */
+    * @deprecated will be removed in 3.0 */
+    @Deprecated
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterElementType;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public FieldDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
         this.arrayBracketPairsAfterElementType = assertNotNull(arrayBracketPairsAfterType);
