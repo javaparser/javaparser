@@ -320,32 +320,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final PrimitiveType n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), true, arg);
-        switch (n.getType()) {
-            case Boolean:
-                printer.print("boolean");
-                break;
-            case Byte:
-                printer.print("byte");
-                break;
-            case Char:
-                printer.print("char");
-                break;
-            case Double:
-                printer.print("double");
-                break;
-            case Float:
-                printer.print("float");
-                break;
-            case Int:
-                printer.print("int");
-                break;
-            case Long:
-                printer.print("long");
-                break;
-            case Short:
-                printer.print("short");
-                break;
-        }
+        printer.print(n.getType().asString());
     }
 
     @Override

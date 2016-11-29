@@ -2065,21 +2065,21 @@ PrimitiveType PrimitiveType():
 }
 {
 (
-  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Boolean); }
+  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN); }
 |
-  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Char); }
+  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR); }
 |
-  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Byte); }
+  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE); }
 |
-  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Short); }
+  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT); }
 |
-  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Int); }
+  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT); }
 |
-  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Long); }
+  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG); }
 |
-  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Float); }
+  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT); }
 |
-  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Double); }
+  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE); }
 )
 { return ret; }
 }

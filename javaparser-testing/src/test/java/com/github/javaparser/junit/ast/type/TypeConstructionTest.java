@@ -37,7 +37,7 @@ public class TypeConstructionTest {
         assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("X")));
         assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("Y")));
 
-        assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.Int);
+        assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.INT);
         assertThat(fieldDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
 
         assertThat(fieldDeclaration.getElementType().getParentNode().get()).isSameAs(fieldDeclaration);
@@ -59,7 +59,7 @@ public class TypeConstructionTest {
         assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("X")));
         assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("Y")));
 
-        assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.Int);
+        assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.INT);
         assertThat(variableDeclarationExpr.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
 
         assertThat(variableDeclarationExpr.getElementType().getParentNode().get()).isSameAs(variableDeclarationExpr);
