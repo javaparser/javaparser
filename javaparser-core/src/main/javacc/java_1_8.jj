@@ -162,23 +162,23 @@ final class ASTParser {
         if (ret instanceof EnclosedExpr) {
             Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
             if (inner.isPresent() && inner.get() instanceof NameExpr) {
-                VariableDeclaratorId identifier = new VariableDeclaratorId(inner.get().getRange().get(), ((NameExpr) inner.get()).getName(), emptyList());
-                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, identifier));
+                VariableDeclaratorId id = new VariableDeclaratorId(inner.get().getRange().get(), ((NameExpr) inner.get()).getName(), emptyList());
+                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id));
                 ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), params, lambdaBody, true);
             } else {
                 ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), emptyList(), lambdaBody, true);
             }
         } else if (ret instanceof NameExpr) {
-            VariableDeclaratorId identifier = new VariableDeclaratorId(ret.getRange().get(), ((NameExpr) ret).getName(), emptyList());
-            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, identifier));
+            VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange().get(), ((NameExpr) ret).getName(), emptyList());
+            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id));
             ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
             ret.setRange(range(ret.getBegin().get(), lambdaBody.getEnd().get()));
         } else if (ret instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) ret;
-            Expression inner = generateLambda(castExpr.getExpression(), lambdaBody);
-            castExpr.setExpression(inner);
+            Expression inner = generateLambda(castExpr.getExpr(), lambdaBody);
+            castExpr.setExpr(inner);
         } else {
             addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
         }
@@ -1526,7 +1526,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	AnnotationExpr ann;
 	SimpleName name;
-	NodeList<Expression> arguments = emptyList();
+	NodeList<Expression> args = emptyList();
 	NodeList<BodyDeclaration<?>> classBody = emptyList();
 	Position begin = INVALID;
 }
@@ -1534,9 +1534,9 @@ EnumConstantDeclaration EnumConstantDeclaration():
   {  }
   ( ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); } )*
   name = SimpleName() { begin = begin.orIfInvalid(tokenBegin()); } 
-  [ arguments = Arguments() ] [ classBody = ClassOrInterfaceBody(false) ]
+  [ args = Arguments() ] [ classBody = ClassOrInterfaceBody(false) ]
   { 
-      return new EnumConstantDeclaration(range(begin, tokenEnd()), annotations, name, arguments, classBody);  
+      return new EnumConstantDeclaration(range(begin, tokenEnd()), annotations, name, args, classBody);  
   }
 }
 
@@ -1683,12 +1683,12 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 
 VariableDeclarator VariableDeclarator():
 {
-	VariableDeclaratorId identifier;
-	Expression initializer = null;
+	VariableDeclaratorId id;
+	Expression init = null;
 }
 {
-  identifier = VariableDeclaratorId() [ "=" initializer = VariableInitializer() ]
-  { return new  VariableDeclarator(range(identifier.getBegin().get(), tokenEnd()), identifier, initializer); }
+  id = VariableDeclaratorId() [ "=" init = VariableInitializer() ]
+  { return new  VariableDeclarator(range(id.getBegin().get(), tokenEnd()), id, init); }
 }
 
 VariableDeclaratorId VariableDeclaratorId():
@@ -1735,7 +1735,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	NodeList<Parameter> parameters = emptyList();
 	ArrayBracketPair arrayBracketPair;
 	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
-	NodeList<ReferenceType<?>> thrownExceptions = emptyList();
+	NodeList<ReferenceType<?>> throws_ = emptyList();
 	BlockStmt block = null;
 	Position begin = modifier.begin;
 	ReferenceType throwType;
@@ -1745,12 +1745,12 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   type = ResultType() { begin = begin.orIfInvalid(type.getBegin().get()); }
   name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-  [ "throws" throwType = ReferenceTypeWithAnnotations() { thrownExceptions = add(thrownExceptions, throwType); }
-    ("," throwType = ReferenceTypeWithAnnotations() { thrownExceptions = add(thrownExceptions, throwType); })* ]
+  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   ( block = Block() | ";" )
   { 
         Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, false, parameters, arrayBracketPairs, thrownExceptions, block);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, false, parameters, arrayBracketPairs, throws_, block);
   }
 }
 
@@ -1798,13 +1798,13 @@ NodeList<Parameter> FormalLambdaParameters():
 NodeList<Parameter> InferredLambdaParameters():
 {
   NodeList<Parameter> ret = null;
-  VariableDeclaratorId identifier;
+  VariableDeclaratorId id;
 }
 {
    ","
-  	identifier = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(identifier.getBegin().get(), identifier.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, identifier));}
+  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin().get(), id.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id));}
   (
-    "," identifier = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(identifier.getBegin().get(), identifier.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, identifier)); }
+    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin().get(), id.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id)); }
   )*
   { return ret;  }
 }
@@ -1814,15 +1814,15 @@ Parameter FormalParameter():
 	ModifierHolder modifier;
 	Type type;
 	boolean isVarArg = false;
-	VariableDeclaratorId identifier;
+	VariableDeclaratorId id;
 }
 {
-  modifier = Modifiers() type = Type() [ "..." { isVarArg = true;} ] identifier = VariableDeclaratorId()
+  modifier = Modifiers() type = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
 
   {
         Position begin = modifier.begin.orIfInvalid(type.getBegin().get());
         Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, typeListPair.b, isVarArg, identifier);
+        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, typeListPair.b, isVarArg, id);
   }
 }
 
@@ -1831,7 +1831,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
-	NodeList<ReferenceType<?>> thrownExceptions = emptyList();
+	NodeList<ReferenceType<?>> throws_ = emptyList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyList();
     Position begin = modifier.begin;
@@ -1841,8 +1841,8 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   // Modifiers matched in the caller
-  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { thrownExceptions = add(thrownExceptions, throwType); }
-  ("," throwType = ReferenceTypeWithAnnotations() { thrownExceptions = add(thrownExceptions, throwType); })* ]
+  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+  ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   "{" { blockBegin=tokenBegin(); }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
     stmts = Statements()
@@ -1852,15 +1852,15 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   	if (exConsInv != null) {
   		stmts = add(0, stmts, exConsInv);
   	}
-  	return new ConstructorDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, thrownExceptions, new BlockStmt(range(blockBegin, tokenEnd()), stmts));
+  	return new ConstructorDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, tokenEnd()), stmts));
   }
 }
 
 ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 {
 	boolean isThis = false;
-	NodeList<Expression> arguments;
-	Expression expression = null;
+	NodeList<Expression> args;
+	Expression expr = null;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	Position begin = INVALID;
 }
@@ -1869,18 +1869,18 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	  LOOKAHEAD([ TypeArguments() ] <THIS> "(")
 	  [ typeArgs = TypeArguments() { begin=typeArgs.range.begin; } ]
 	  <THIS> { begin = begin.orIfInvalid(tokenBegin()); isThis = true; }
-	  arguments = Arguments() ";"
+	  args = Arguments() ";"
 	|
 	  [
 	    LOOKAHEAD( PrimaryExpressionWithoutSuperSuffix() "." )
-	  	expression = PrimaryExpressionWithoutSuperSuffix() "."
-	  	{ begin=expression.getBegin().get(); }
+	  	expr = PrimaryExpressionWithoutSuperSuffix() "."
+	  	{ begin=expr.getBegin().get(); }
 	  ]
 	  [ typeArgs = TypeArguments() { begin = begin.orIfInvalid(typeArgs.range.begin); } ]
 	  <SUPER> {begin = begin.orIfInvalid(tokenBegin());}
-	  arguments = Arguments() ";"
+	  args = Arguments() ";"
   )
-  { return new ExplicitConstructorInvocationStmt(range(begin, tokenEnd()),typeArgs.list, isThis, expression, arguments); }
+  { return new ExplicitConstructorInvocationStmt(range(begin, tokenEnd()),typeArgs.list, isThis, expr, args); }
 }
 
 NodeList<Statement> Statements():
@@ -2499,14 +2499,14 @@ Expression PrimaryPrefix():
 	Expression ret = null;
 	SimpleName name;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
-	NodeList<Expression> arguments = emptyList();
+	NodeList<Expression> args = emptyList();
 	NodeList<Parameter> params = emptyList();
 	boolean hasArgs = false;
 	boolean isLambda = false;
 	Type type;
 	Position begin;
 	Parameter p = null;
-	VariableDeclaratorId identifier = null;
+	VariableDeclaratorId id = null;
 }
 {
   (
@@ -2519,10 +2519,10 @@ Expression PrimaryPrefix():
 	     "."
 	  [ typeArgs = TypeArguments() ]
 	  name = SimpleName()
-	  [ arguments = Arguments() {hasArgs=true;} ]
+	  [ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, name, arguments);
+	  			ret = new MethodCallExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, name, args);
 			} else {
 	  			ret = new FieldAccessExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, emptyList(), name);
 			}
@@ -2547,8 +2547,8 @@ Expression PrimaryPrefix():
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
-	  		  		    identifier = new VariableDeclaratorId(range(ret.getBegin().get(), ret.getEnd().get()), ((NameExpr)ret).getName(), emptyList());
-	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, identifier);
+	  		  		    id = new VariableDeclaratorId(range(ret.getBegin().get(), ret.getEnd().get()), ((NameExpr)ret).getName(), emptyList());
+	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id);
 	  		  		  }
 
 	  		  		}
@@ -2573,10 +2573,10 @@ Expression PrimaryPrefix():
 
 	|
 	  	name = SimpleName() { begin=tokenBegin(); }
-	  	[ arguments = Arguments() { hasArgs=true; } ]
+	  	[ args = Arguments() { hasArgs=true; } ]
 	  	{
 	  		if (hasArgs) {
-	  			ret = new MethodCallExpr(range(begin, tokenEnd()), null, emptyList(), name, arguments);
+	  			ret = new MethodCallExpr(range(begin, tokenEnd()), null, emptyList(), name, args);
 			} else {
 	  			ret = new NameExpr(name);
 			}
@@ -2603,7 +2603,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 {
 	Expression ret;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
-	NodeList<Expression> arguments = emptyList();
+	NodeList<Expression> args = emptyList();
 	boolean hasArgs = false;
 	SimpleName name;
 }
@@ -2618,10 +2618,10 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  	LOOKAHEAD( [ TypeArguments() ] <IDENTIFIER> )
 	  	[ typeArgs = TypeArguments() ]
 	  	name = SimpleName()
-	  	[ arguments = Arguments() {hasArgs=true;} ]
+	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(scope.getBegin().get(), tokenEnd()), scope, typeArgs.list, name, arguments);
+	  			ret = new MethodCallExpr(range(scope.getBegin().get(), tokenEnd()), scope, typeArgs.list, name, args);
 			} else {
 	  			ret =  new FieldAccessExpr(range(scope.getBegin().get(), tokenEnd()), scope, typeArgs.list, name);
 			}
@@ -2698,10 +2698,10 @@ NodeList<Expression> Arguments():
 NodeList<Expression> ArgumentList():
 {
 	NodeList<Expression> ret = emptyList();
-	Expression expression;
+	Expression expr;
 }
 {
-  expression = Expression() { ret.add(expression); } ( "," expression = Expression() { ret.add(expression); } )*
+  expr = Expression() { ret.add(expr); } ( "," expr = Expression() { ret.add(expr); } )*
   { return ret; }
 }
 
@@ -2711,7 +2711,7 @@ Expression AllocationExpression(Expression scope):
 	Type type;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
-	NodeList<Expression> arguments;
+	NodeList<Expression> args;
 	Position begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
@@ -2728,8 +2728,8 @@ Expression AllocationExpression(Expression scope):
       (
 	      ret = ArrayCreation(begin, type)
 	  |
-	      arguments = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, arguments, anonymousBody); }
+	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
+	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
       )
   )
   { return ret; }
@@ -2741,7 +2741,7 @@ Expression AllocationExpression(Expression scope):
  */
 ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
-	Expression expression = null;
+	Expression expr = null;
 	ArrayInitializerExpr arrayInitializerExpr = null;
 	NodeList<Expression> inits = emptyList();
 	List<NodeList<AnnotationExpr>> accum = new ArrayList<NodeList<AnnotationExpr>>();
@@ -2751,8 +2751,8 @@ ArrayCreationExpr ArrayCreation(Position begin, Type type):
     (
         annotations = Annotations() 
         "[" 
-        (expression = Expression())? 
-            { accum = add(accum, annotations); inits = add(inits, expression); annotations=null; expression=null; } 
+        (expr = Expression())? 
+            { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
         "]" 
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
@@ -2847,7 +2847,7 @@ BlockStmt Block():
 Statement BlockStatement():
 {
 	Statement ret;
-	Expression expression;
+	Expression expr;
 	ClassOrInterfaceDeclaration typeDecl;
 	ModifierHolder modifier;
 }
@@ -2859,8 +2859,8 @@ Statement BlockStatement():
 	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new TypeDeclarationStmt(range(typeDecl.getBegin().get().line, typeDecl.getBegin().get().column, token.endLine, token.endColumn), typeDecl); }
 	|
   	  LOOKAHEAD(VariableDeclarationExpression() )
-	  expression = VariableDeclarationExpression() ";"
-	  { ret = new ExpressionStmt(range(expression.getBegin().get().line, expression.getBegin().get().column, token.endLine, token.endColumn), expression); } 
+	  expr = VariableDeclarationExpression() ";"
+	  { ret = new ExpressionStmt(range(expr.getBegin().get().line, expr.getBegin().get().column, token.endLine, token.endColumn), expr); } 
     |
 	  ret = Statement()
   )
@@ -2892,14 +2892,14 @@ EmptyStmt EmptyStatement():
 
 Statement LambdaBody():
 {
-  Expression expression;
+  Expression expr;
   Statement n = null;
 }
 {
   (
-  	expression = Expression()
+  	expr = Expression()
   	{
-  	  n = new ExpressionStmt(range(expression.getBegin().get(), tokenEnd()), expression);
+  	  n = new ExpressionStmt(range(expr.getBegin().get(), tokenEnd()), expr);
   	}
  	|  n = Block()
   )
@@ -2916,7 +2916,7 @@ ExpressionStmt StatementExpression():
  * use PostfixExpression for performance reasons.
  */
 {
-	Expression expression;
+	Expression expr;
 	AssignExpr.Operator op;
 	Expression value;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
@@ -2924,28 +2924,28 @@ ExpressionStmt StatementExpression():
 }
 {
   ( LOOKAHEAD(2)
-	  expression = PreIncrementExpression()
+	  expr = PreIncrementExpression()
 	|
-	  expression = PreDecrementExpression()
+	  expr = PreDecrementExpression()
 	|
-	  expression = PrimaryExpression()
+	  expr = PrimaryExpression()
 	  [
-	    "++" { expression = new UnaryExpr(range(expression.getBegin().get(), tokenEnd()), expression, UnaryExpr.Operator.postIncrement);  }
+	    "++" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.postIncrement);  }
 	  |
-	    "--" { expression = new UnaryExpr(range(expression.getBegin().get(), tokenEnd()), expression, UnaryExpr.Operator.postDecrement);  }
+	    "--" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.postDecrement);  }
 	  |
-	    op = AssignmentOperator() value = Expression() { expression = new AssignExpr(range(expression.getBegin().get(), tokenEnd()), expression, value, op); }
-	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expression = new MethodReferenceExpr(range(expression.getBegin().get(), tokenEnd()), expression, typeArgs.list, token.image); 	  }
+	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin().get(), tokenEnd()), expr, value, op); }
+	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
 
 	 |
 	   "->" lambdaBody = LambdaBody()
 	   {
-            expression = generateLambda(expression, lambdaBody);
+            expr = generateLambda(expr, lambdaBody);
 	   }
 	  ]
   )
   ";"
-  { return new ExpressionStmt(range(expression.getBegin().get(), tokenEnd()), expression); }
+  { return new ExpressionStmt(range(expr.getBegin().get(), tokenEnd()), expr); }
 }
 
 SwitchStmt SwitchStatement():
@@ -3033,8 +3033,8 @@ DoStmt DoStatement():
 Statement ForStatement():
 {
 	VariableDeclarationExpr varExpr = null;
-	Expression expression = null;
-	NodeList<Expression> initializer = emptyList();
+	Expression expr = null;
+	NodeList<Expression> init = emptyList();
 	NodeList<Expression> update = emptyList();
 	Statement body;
 	Position begin;
@@ -3044,30 +3044,30 @@ Statement ForStatement():
 
   (
       LOOKAHEAD(VariableDeclarationExpression() ":")
-      varExpr = VariableDeclarationExpression() ":" expression = Expression()
+      varExpr = VariableDeclarationExpression() ":" expr = Expression()
     |
-     [ initializer = ForInit() ] ";" [ expression = Expression() ] ";" [ update = ForUpdate() ]
+     [ init = ForInit() ] ";" [ expr = Expression() ] ";" [ update = ForUpdate() ]
   )
 
   ")" body = Statement()
 
   {
   	if (varExpr != null) {
-  		return new ForeachStmt(range(begin, tokenEnd()),varExpr, expression, body);
+  		return new ForeachStmt(range(begin, tokenEnd()),varExpr, expr, body);
   	}
-	return new ForStmt(range(begin, tokenEnd()),initializer, expression, update, body);
+	return new ForStmt(range(begin, tokenEnd()),init, expr, update, body);
   }
 }
 
 NodeList<Expression> ForInit():
 {
 	NodeList<Expression> ret;
-	Expression expression;
+	Expression expr;
 }
 {
   (
 	  LOOKAHEAD( Modifiers() Type() <IDENTIFIER> )
-	  expression = VariableDeclarationExpression() { ret = new NodeList<Expression>(); ret.add(expression); }
+	  expr = VariableDeclarationExpression() { ret = new NodeList<Expression>(); ret.add(expr); }
 	|
 	  ret = ExpressionList()
   )
@@ -3077,10 +3077,10 @@ NodeList<Expression> ForInit():
 NodeList<Expression> ExpressionList():
 {
 	NodeList<Expression> ret = new NodeList<Expression>();
-	Expression expression;
+	Expression expr;
 }
 {
-  expression = Expression() { ret.add(expression); } ( "," expression = Expression()  { ret.add(expression); } )*
+  expr = Expression() { ret.add(expr); } ( "," expr = Expression()  { ret.add(expr); } )*
 
   { return ret; }
 }
@@ -3097,53 +3097,53 @@ NodeList<Expression> ForUpdate():
 
 BreakStmt BreakStatement():
 {
-	String identifier = null;
+	String id = null;
 	Position begin;
 }
 {
-  "break" {begin=tokenBegin();} [ <IDENTIFIER> { identifier = token.image; } ] ";"
-  { return new BreakStmt(range(begin, tokenEnd()),identifier); }
+  "break" {begin=tokenBegin();} [ <IDENTIFIER> { id = token.image; } ] ";"
+  { return new BreakStmt(range(begin, tokenEnd()),id); }
 }
 
 ContinueStmt ContinueStatement():
 {
-	String identifier = null;
+	String id = null;
 	Position begin;
 }
 {
-  "continue" {begin=tokenBegin();} [ <IDENTIFIER> { identifier = token.image; } ] ";"
-  { return new ContinueStmt(range(begin, tokenEnd()),identifier); }
+  "continue" {begin=tokenBegin();} [ <IDENTIFIER> { id = token.image; } ] ";"
+  { return new ContinueStmt(range(begin, tokenEnd()),id); }
 }
 
 ReturnStmt ReturnStatement():
 {
-	Expression expression = null;
+	Expression expr = null;
 	Position begin;
 }
 {
-  "return" {begin=tokenBegin();} [ expression = Expression() ] ";"
-  { return new ReturnStmt(range(begin, tokenEnd()),expression); }
+  "return" {begin=tokenBegin();} [ expr = Expression() ] ";"
+  { return new ReturnStmt(range(begin, tokenEnd()),expr); }
 }
 
 ThrowStmt ThrowStatement():
 {
-	Expression expression;
+	Expression expr;
 	Position begin;
 }
 {
-  "throw" {begin=tokenBegin();} expression = Expression() ";"
-  { return new ThrowStmt(range(begin, tokenEnd()),expression); }
+  "throw" {begin=tokenBegin();} expr = Expression() ";"
+  { return new ThrowStmt(range(begin, tokenEnd()),expr); }
 }
 
 SynchronizedStmt SynchronizedStatement():
 {
-	Expression expression;
+	Expression expr;
 	BlockStmt block;
 	Position begin;
 }
 {
-  "synchronized" {begin=tokenBegin();} "(" expression = Expression() ")" block = Block()
-  { return new SynchronizedStmt(range(begin, tokenEnd()),expression, block); }
+  "synchronized" {begin=tokenBegin();} "(" expr = Expression() ")" block = Block()
+  { return new SynchronizedStmt(range(begin, tokenEnd()),expr, block); }
 }
 
 TryStmt TryStatement():
