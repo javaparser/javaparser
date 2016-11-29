@@ -190,7 +190,7 @@ public final class Parameter extends Node implements
             identifier.setName(name);
         } else {
             VariableDeclaratorId newId = new VariableDeclaratorId(name);
-            notifyPropertyChange(ObservableProperty.ID, this.identifier, newId);
+            notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, newId);
             identifier = newId;
         }
         return this;

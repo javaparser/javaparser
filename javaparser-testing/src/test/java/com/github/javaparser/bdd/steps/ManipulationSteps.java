@@ -230,7 +230,7 @@ public class ManipulationSteps {
 
     @Then("Statement $position in BlockStmt toString is \"$expectedContent\"")
     public void thenTheBlockStmtContentIs(int position, String expectedContent) {
-        Statement statementUnderTest = blockStmt.getStmt(position-1);
+        Statement statementUnderTest = blockStmt.getStatement(position-1);
         assertThat(statementUnderTest.toString(), is(expectedContent));
     }
 

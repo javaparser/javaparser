@@ -35,7 +35,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class BreakStmt extends Statement {
 
-    private String id;
+    private String identifier;
 
     public BreakStmt() {
         this(null, "empty");
@@ -47,7 +47,7 @@ public final class BreakStmt extends Statement {
 
     public BreakStmt(final Range range, final String id) {
         super(range);
-        this.id = id;
+        this.identifier = id;
     }
 
     @Override
@@ -60,19 +60,19 @@ public final class BreakStmt extends Statement {
         v.visit(this, arg);
     }
 
-    public Optional<String> getId() {
-        return Optional.ofNullable(id);
+    public Optional<String> getIdentifier() {
+        return Optional.ofNullable(identifier);
     }
 
     /**
-     * Sets the id
+     * Sets the identifier
      * 
-     * @param id the id, can be null
+     * @param identifier the identifier, can be null
      * @return this, the BreakStmt
      */
-    public BreakStmt setId(final String id) {
-        notifyPropertyChange(ObservableProperty.ID, this.id, id);
-        this.id = assertNotNull(id);
+    public BreakStmt setIdentifier(final String identifier) {
+        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        this.identifier = assertNotNull(identifier);
         return this;
     }
 }

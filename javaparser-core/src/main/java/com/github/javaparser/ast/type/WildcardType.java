@@ -35,27 +35,27 @@ import java.util.Optional;
  */
 public final class WildcardType extends Type<WildcardType> implements NodeWithAnnotations<WildcardType> {
 
-    private ReferenceType<?> ext;
+    private ReferenceType<?> extendedTypes;
 
-    private ReferenceType<?> sup;
+    private ReferenceType<?> superTypes;
 
 	public WildcardType() {
         this(null, null, null);
 	}
 
-	public WildcardType(final ReferenceType<?> ext) {
-		this(null, ext, null);
+	public WildcardType(final ReferenceType<?> extendedTypes) {
+		this(null, extendedTypes, null);
 	}
 
-	public WildcardType(final ReferenceType<?> ext, final ReferenceType<?> sup) {
-        this(null, ext, sup);
+	public WildcardType(final ReferenceType<?> extendedTypes, final ReferenceType<?> superTypes) {
+        this(null, extendedTypes, superTypes);
 	}
 
 	public WildcardType(final Range range,
-			final ReferenceType<?> ext, final ReferenceType<?> sup) {
+                        final ReferenceType<?> extendedTypes, final ReferenceType<?> superTypes) {
 		super(range, new NodeList<>());
-		setExtends(ext);
-		setSuper(sup);
+		setExtendedTypes(extendedTypes);
+		setSuperTypes(superTypes);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -66,12 +66,12 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
 		v.visit(this, arg);
 	}
 
-    public Optional<ReferenceType<?>> getExtends() {
-        return Optional.ofNullable(ext);
+    public Optional<ReferenceType<?>> getExtendedTypes() {
+        return Optional.ofNullable(extendedTypes);
 	}
 
-    public Optional<ReferenceType<?>> getSuper() {
-        return Optional.ofNullable(sup);
+    public Optional<ReferenceType<?>> getSuperTypes() {
+        return Optional.ofNullable(superTypes);
 	}
 
     /**
@@ -80,10 +80,10 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
      * @param ext the extends, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setExtends(final ReferenceType<?> ext) {
-	    notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.ext, ext);
-		this.ext = ext;
-		setAsParentNodeOf(this.ext);
+    public WildcardType setExtendedTypes(final ReferenceType<?> ext) {
+	    notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, ext);
+		this.extendedTypes = ext;
+		setAsParentNodeOf(this.extendedTypes);
 		return this;
 	}
 
@@ -93,10 +93,10 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
      * @param sup the super, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setSuper(final ReferenceType<?> sup) {
-	    notifyPropertyChange(ObservableProperty.SUPER, this.sup, sup);
-		this.sup = sup;
-		setAsParentNodeOf(this.sup);
+    public WildcardType setSuperTypes(final ReferenceType<?> sup) {
+	    notifyPropertyChange(ObservableProperty.SUPER, this.superTypes, sup);
+		this.superTypes = sup;
+		setAsParentNodeOf(this.superTypes);
 		return this;
 	}
 

@@ -35,19 +35,19 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class ContinueStmt extends Statement {
 
-	private String id;
+	private String identifier;
 
 	public ContinueStmt() {
         this(null, null);
 	}
 
-	public ContinueStmt(final String id) {
-		this(null, id);
+	public ContinueStmt(final String identifier) {
+		this(null, identifier);
 	}
 
-	public ContinueStmt(Range range, final String id) {
+	public ContinueStmt(Range range, final String identifier) {
 		super(range);
-		this.id = id;
+		this.identifier = identifier;
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -58,19 +58,19 @@ public final class ContinueStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-    public Optional<String> getId() {
-        return Optional.ofNullable(id);
+    public Optional<String> getIdentifier() {
+        return Optional.ofNullable(identifier);
     }
 
     /**
-     * Sets the id
+     * Sets the identifier
      * 
-     * @param id the id, can be null
+     * @param identifier the identifier, can be null
      * @return this, the ContinueStmt
      */
-    public ContinueStmt setId(final String id) {
-	    notifyPropertyChange(ObservableProperty.ID, this.id, id);
-        this.id = assertNotNull(id);
+    public ContinueStmt setIdentifier(final String identifier) {
+	    notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        this.identifier = assertNotNull(identifier);
         return this;
     }
 }

@@ -80,7 +80,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     }
 
     public Name setIdentifier(final String identifier) {
-        notifyPropertyChange(ObservableProperty.ID, this.identifier, identifier);
+        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = assertNotNull(identifier);
         return this;
     }

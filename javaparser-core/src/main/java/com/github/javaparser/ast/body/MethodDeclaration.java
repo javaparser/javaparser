@@ -346,7 +346,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
-            sb.append(accessSpecifier.getCodeRepresenation());
+            sb.append(accessSpecifier.asString());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
             if (getModifiers().contains(Modifier.STATIC)) {
                 sb.append("static ");

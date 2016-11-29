@@ -15,17 +15,17 @@ public enum Modifier {
     NATIVE,
     STRICTFP;
 
-    String asString;
+    final String codeRepresentation;
 
     Modifier() {
-        this.asString = name().toLowerCase();
+        this.codeRepresentation = name().toLowerCase();
     }
 
     /**
      * @return the keyword represented by this modifier.
      */
     public String asString() {
-        return asString;
+        return codeRepresentation;
     }
 
     public EnumSet<Modifier> toEnumSet() {

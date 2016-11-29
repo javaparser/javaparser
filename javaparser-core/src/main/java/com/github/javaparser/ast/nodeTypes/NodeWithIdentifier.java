@@ -11,7 +11,7 @@ public interface NodeWithIdentifier<N extends Node> {
         return getIdentifier();
     }
 
-    default N setId(String id) {
-        return setIdentifier(id);
+    default N setId(String identifier) {
+        return setIdentifier(identifier);
     }
 }

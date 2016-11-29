@@ -53,9 +53,9 @@ public class NodeRemovalTest {
 		MethodDeclaration addMethod = testClass.addMethod("testM");
 		BlockStmt methodBody = addMethod.createBody();
 		Statement addStatement = methodBody.addAndGetStatement("test");
-		assertEquals(1, methodBody.getStmts().size());
+		assertEquals(1, methodBody.getStatements().size());
 		boolean remove = addStatement.remove();
 		assertEquals(true, remove);
-		assertEquals(0, methodBody.getStmts().size());
+		assertEquals(0, methodBody.getStatements().size());
 	}
 }

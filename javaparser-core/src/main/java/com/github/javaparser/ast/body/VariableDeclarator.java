@@ -105,7 +105,7 @@ public final class VariableDeclarator extends Node implements
     }
 
     public VariableDeclarator setIdentifier(VariableDeclaratorId identifier) {
-        notifyPropertyChange(ObservableProperty.ID, this.identifier, identifier);
+        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = assertNotNull(identifier);
         setAsParentNodeOf(this.identifier);
         return this;
@@ -118,7 +118,7 @@ public final class VariableDeclarator extends Node implements
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInitializer(Expression initializer) {
-        notifyPropertyChange(ObservableProperty.INIT, this.initializer, initializer);
+        notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         this.initializer = initializer;
         setAsParentNodeOf(this.initializer);
         return this;
@@ -132,7 +132,7 @@ public final class VariableDeclarator extends Node implements
      */
     public VariableDeclarator setInit(String init) {
         NameExpr newInit = new NameExpr(assertNotNull(init));
-        notifyPropertyChange(ObservableProperty.INIT, this.initializer, newInit);
+        notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, newInit);
         this.initializer = newInit;
         setAsParentNodeOf(this.initializer);
         return this;

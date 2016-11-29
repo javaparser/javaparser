@@ -35,20 +35,20 @@ public final class LabeledStmt extends Statement {
 
 	private String label;
 
-	private Statement stmt;
+	private Statement statement;
 
 	public LabeledStmt() {
         this(null, "empty", new EmptyStmt());
 	}
 
-	public LabeledStmt(final String label, final Statement stmt) {
-        this(null, label, stmt);
+	public LabeledStmt(final String label, final Statement statement) {
+        this(null, label, statement);
 	}
 
-	public LabeledStmt(Range range, final String label, final Statement stmt) {
+	public LabeledStmt(Range range, final String label, final Statement statement) {
 		super(range);
 		setLabel(label);
-		setStmt(stmt);
+		setStatement(statement);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -63,8 +63,8 @@ public final class LabeledStmt extends Statement {
 		return label;
 	}
 
-	public Statement getStmt() {
-		return stmt;
+	public Statement getStatement() {
+		return statement;
 	}
 
 	public LabeledStmt setLabel(final String label) {
@@ -73,10 +73,10 @@ public final class LabeledStmt extends Statement {
 		return this;
 	}
 
-	public LabeledStmt setStmt(final Statement stmt) {
-		notifyPropertyChange(ObservableProperty.STMT, this.stmt, stmt);
-		this.stmt = assertNotNull(stmt);
-		setAsParentNodeOf(this.stmt);
+	public LabeledStmt setStatement(final Statement statement) {
+		notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
+		this.statement = assertNotNull(statement);
+		setAsParentNodeOf(this.statement);
 		return this;
 	}
 }

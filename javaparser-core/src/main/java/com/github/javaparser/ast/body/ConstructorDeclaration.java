@@ -204,7 +204,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
-            sb.append(accessSpecifier.getCodeRepresenation());
+            sb.append(accessSpecifier.asString());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
         }
         sb.append(getName());

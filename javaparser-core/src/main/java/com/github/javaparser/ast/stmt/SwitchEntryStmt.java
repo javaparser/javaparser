@@ -40,21 +40,21 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 
 	private Expression label;
 
-	private NodeList<Statement> stmts;
+	private NodeList<Statement> statements;
 
 	public SwitchEntryStmt() {
 		this(null, null, new NodeList<>());
 	}
 
-	public SwitchEntryStmt(final Expression label, final NodeList<Statement> stmts) {
-		this(null, label, stmts);
+	public SwitchEntryStmt(final Expression label, final NodeList<Statement> statements) {
+		this(null, label, statements);
 	}
 
 	public SwitchEntryStmt(Range range, final Expression label,
-	                       final NodeList<Statement> stmts) {
+	                       final NodeList<Statement> statements) {
 		super(range);
 		setLabel(label);
-		setStmts(stmts);
+		setStatements(statements);
 	}
 
 	@Override
@@ -71,9 +71,8 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return Optional.ofNullable(label);
 	}
 
-	@Override
-    public NodeList<Statement> getStmts() {
-        return stmts;
+	public NodeList<Statement> getStatements() {
+        return statements;
 	}
 
     /**
@@ -89,11 +88,10 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
 		return this;
 	}
 
-	@Override
-    public SwitchEntryStmt setStmts(final NodeList<Statement> stmts) {
-		notifyPropertyChange(ObservableProperty.STMTS, this.stmts, stmts);
-		this.stmts = assertNotNull(stmts);
-		setAsParentNodeOf(this.stmts);
+	public SwitchEntryStmt setStatements(final NodeList<Statement> statements) {
+		notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
+		this.statements = assertNotNull(statements);
+		setAsParentNodeOf(this.statements);
         return this;
 	}
 }

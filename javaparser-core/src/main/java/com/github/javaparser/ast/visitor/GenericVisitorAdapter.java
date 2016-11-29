@@ -303,8 +303,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final BlockStmt n, final A arg) {
         visitComment(n, arg);
-        if (n.getStmts() != null) {
-            for (final Statement s : n.getStmts()) {
+        if (n.getStatements() != null) {
+            for (final Statement s : n.getStatements()) {
                 {
                     R result = s.accept(this, arg);
                     if (result != null) {
@@ -351,7 +351,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final CatchClause n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getParam().accept(this, arg);
+            R result = n.getParameter().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -848,8 +848,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ForStmt n, final A arg) {
         visitComment(n, arg);
-        if (n.getInit() != null) {
-            for (final Expression e : n.getInit()) {
+        if (n.getInitialization() != null) {
+            for (final Expression e : n.getInitialization()) {
                 {
                     R result = e.accept(this, arg);
                     if (result != null) {
@@ -962,7 +962,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final LabeledStmt n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getStmt().accept(this, arg);
+            R result = n.getStatement().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1401,8 +1401,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getStmts() != null) {
-            for (final Statement s : n.getStmts()) {
+        if (n.getStatements() != null) {
+            for (final Statement s : n.getStatements()) {
                 {
                     R result = s.accept(this, arg);
                     if (result != null) {
@@ -1502,8 +1502,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
             }
         }
-        if (n.getCatchs() != null) {
-            for (final CatchClause c : n.getCatchs()) {
+        if (n.getCatchClauses() != null) {
+            for (final CatchClause c : n.getCatchClauses()) {
                 {
                     R result = c.accept(this, arg);
                     if (result != null) {
@@ -1660,17 +1660,17 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
             }
         }
-        if (n.getExtends().isPresent()) {
+        if (n.getExtendedTypes().isPresent()) {
             {
-                R result = n.getExtends().get().accept(this, arg);
+                R result = n.getExtendedTypes().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
             }
         }
-        if (n.getSuper().isPresent()) {
+        if (n.getSuperTypes().isPresent()) {
             {
-                R result = n.getSuper().get().accept(this, arg);
+                R result = n.getSuperTypes().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }

@@ -503,13 +503,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         printer.print("?");
-        if (n.getExtends().isPresent()) {
+        if (n.getExtendedTypes().isPresent()) {
             printer.print(" extends ");
-            n.getExtends().get().accept(this, arg);
+            n.getExtendedTypes().get().accept(this, arg);
         }
-        if (n.getSuper().isPresent()) {
+        if (n.getSuperTypes().isPresent()) {
             printer.print(" super ");
-            n.getSuper().get().accept(this, arg);
+            n.getSuperTypes().get().accept(this, arg);
         }
     }
 
@@ -1107,9 +1107,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printJavaComment(n.getComment(), arg);
         printer.println("{");
-        if (n.getStmts() != null) {
+        if (n.getStatements() != null) {
             printer.indent();
-            for (final Statement s : n.getStmts()) {
+            for (final Statement s : n.getStatements()) {
                 s.accept(this, arg);
                 printer.println();
             }
@@ -1125,7 +1125,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printer.print(n.getLabel());
         printer.print(": ");
-        n.getStmt().accept(this, arg);
+        n.getStatement().accept(this, arg);
     }
 
     @Override
@@ -1171,8 +1171,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         printer.println();
         printer.indent();
-        if (n.getStmts() != null) {
-            for (final Statement s : n.getStmts()) {
+        if (n.getStatements() != null) {
+            for (final Statement s : n.getStatements()) {
                 s.accept(this, arg);
                 printer.println();
             }
@@ -1184,9 +1184,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final BreakStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("break");
-        if (n.getId().isPresent()) {
+        if (n.getIdentifier().isPresent()) {
             printer.print(" ");
-            printer.print(n.getId().get());
+            printer.print(n.getIdentifier().get());
         }
         printer.print(";");
     }
@@ -1328,9 +1328,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ContinueStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("continue");
-        if (n.getId().isPresent()) {
+        if (n.getIdentifier().isPresent()) {
             printer.print(" ");
-            printer.print(n.getId().get());
+            printer.print(n.getIdentifier().get());
         }
         printer.print(";");
     }
@@ -1360,8 +1360,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ForStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("for (");
-        if (n.getInit() != null) {
-            for (final Iterator<Expression> i = n.getInit().iterator(); i.hasNext();) {
+        if (n.getInitialization() != null) {
+            for (final Iterator<Expression> i = n.getInitialization().iterator(); i.hasNext();) {
                 final Expression e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
@@ -1429,8 +1429,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print(") ");
         }
         n.getTryBlock().accept(this, arg);
-        if (n.getCatchs() != null) {
-            for (final CatchClause c : n.getCatchs()) {
+        if (n.getCatchClauses() != null) {
+            for (final CatchClause c : n.getCatchClauses()) {
                 c.accept(this, arg);
             }
         }
@@ -1444,7 +1444,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final CatchClause n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print(" catch (");
-        n.getParam().accept(this, arg);
+        n.getParameter().accept(this, arg);
         printer.print(") ");
         n.getBody().accept(this, arg);
 

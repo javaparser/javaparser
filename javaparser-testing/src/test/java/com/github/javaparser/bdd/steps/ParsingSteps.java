@@ -185,7 +185,7 @@ public class ParsingSteps {
     public void thenLambdaInStatementInMethodInClassBlockStatementIsNull(int statementPosition, int methodPosition, int classPosition) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
-        assertEquals(true, blockStmt.getStmts().isEmpty());
+        assertEquals(true, blockStmt.getStatements().isEmpty());
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition has parameters with non-null type")
@@ -201,7 +201,7 @@ public class ParsingSteps {
                                                                    String expectedBody) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
-        Statement lambdaStmt = blockStmt.getStmt(0);
+        Statement lambdaStmt = blockStmt.getStatement(0);
         assertThat(lambdaStmt.toString(), is(expectedBody));
     }
 
@@ -256,7 +256,7 @@ public class ParsingSteps {
     private Statement getStatementInMethodInClass(int statementPosition, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        return method.getBody().get().getStmt(statementPosition - 1);
+        return method.getBody().get().getStatement(statementPosition - 1);
     }
 
     private LambdaExpr getLambdaExprInStatementInMethodInClass(int statementPosition, int methodPosition, int classPosition) {
@@ -346,7 +346,7 @@ public class ParsingSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) compilationUnit.getType(0);
         ConstructorDeclaration ctor = (ConstructorDeclaration) classDeclaration.getMember(1);
-        ExpressionStmt assignStmt = (ExpressionStmt) ctor.getBody().getStmt(0);
+        ExpressionStmt assignStmt = (ExpressionStmt) ctor.getBody().getStatement(0);
         AssignExpr assignExpr = (AssignExpr) assignStmt.getExpression();
         assertNotNull(assignExpr.getTarget());
         assertEquals(NameExpr.class, assignExpr.getTarget().getClass());
