@@ -41,6 +41,6 @@ public interface NodeWithSimpleName<N extends Node> {
     }
 
     default String getNameAsString(){
-        return getName().getId();
+        return getName().getIdentifier();
     }
 }

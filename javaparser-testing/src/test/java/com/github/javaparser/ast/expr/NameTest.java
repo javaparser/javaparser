@@ -8,7 +8,7 @@ public class NameTest {
     @Test
     public void outerNameExprIsTheRightMostIdentifier() {
         Name name = Name.parse("a.b.c");
-        assertEquals("c", name.getId());
+        assertEquals("c", name.getIdentifier());
     }
 
     @Test

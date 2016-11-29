@@ -1091,7 +1091,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 			return false;
 		}
 
-		if (!objEquals(n1.getId(), n2.getId())) {
+		if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
 			return false;
 		}
 
@@ -1102,7 +1102,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(SimpleName n, Visitable arg) {
         final SimpleName n2 = (SimpleName) arg;
 
-        return objEquals(n.getId(), n2.getId());
+        return objEquals(n.getIdentifier(), n2.getIdentifier());
     }
 
     @Override public Boolean visit(final ThisExpr n1, final Visitable arg) {

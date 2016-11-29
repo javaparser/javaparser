@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import com.github.javaparser.JavaParser;
 import org.junit.Test;
 
-import com.github.javaparser.ast.expr.Name;
-
 public class ImportDeclarationTest {
     @Test
     public void singleTypeImportDeclaration() {
@@ -20,7 +18,7 @@ public class ImportDeclarationTest {
         ImportDeclaration importDeclaration = JavaParser.parseImport("import a.b.c.D.*;");
         TypeImportOnDemandDeclaration i = (TypeImportOnDemandDeclaration) importDeclaration;
         assertEquals("a.b.c.D", i.getName().toString());
-        assertEquals("D", i.getName().getId());
+        assertEquals("D", i.getName().getIdentifier());
     }
 
     @Test

@@ -46,20 +46,20 @@ public final class UnaryExpr extends Expression implements
 
 	private Expression expression;
 
-	private Operator op;
+	private Operator operator;
 
 	public UnaryExpr() {
         this(null, new IntegerLiteralExpr(), Operator.postIncrement);
 	}
 
-	public UnaryExpr(final Expression expression, final Operator op) {
-        this(null, expression, op);
+	public UnaryExpr(final Expression expression, final Operator operator) {
+        this(null, expression, operator);
 	}
 
-	public UnaryExpr(final Range range, final Expression expression, final Operator op) {
+	public UnaryExpr(final Range range, final Expression expression, final Operator operator) {
 		super(range);
 		setExpression(expression);
-		setOperator(op);
+		setOperator(operator);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -76,7 +76,7 @@ public final class UnaryExpr extends Expression implements
 	}
 
 	public Operator getOperator() {
-		return op;
+		return operator;
 	}
 
     @Override
@@ -88,8 +88,8 @@ public final class UnaryExpr extends Expression implements
 	}
 
 	public UnaryExpr setOperator(final Operator op) {
-		notifyPropertyChange(ObservableProperty.OPERATOR, this.op, op);
-		this.op = op;
+		notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, op);
+		this.operator = op;
 		return this;
 	}
 }

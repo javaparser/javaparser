@@ -131,7 +131,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return true if found, false if not
      */
     default boolean isAnnotationPresent(String annotationName) {
-        return getAnnotations().stream().anyMatch(a -> a.getName().getId().equals(annotationName));
+        return getAnnotations().stream().anyMatch(a -> a.getName().getIdentifier().equals(annotationName));
     }
 
     /**
@@ -151,7 +151,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return null if not found, the annotation otherwise
      */
     default AnnotationExpr getAnnotationByName(String annotationName) {
-        return getAnnotations().stream().filter(a -> a.getName().getId().equals(annotationName)).findFirst()
+        return getAnnotations().stream().filter(a -> a.getName().getIdentifier().equals(annotationName)).findFirst()
                 .orElse(null);
     }
 

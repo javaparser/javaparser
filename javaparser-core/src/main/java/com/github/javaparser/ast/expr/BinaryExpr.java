@@ -57,21 +57,21 @@ public final class BinaryExpr extends Expression {
 
     private Expression right;
 
-    private Operator op;
+    private Operator operator;
 
     public BinaryExpr() {
         this(null, new BooleanLiteralExpr(), new BooleanLiteralExpr(), Operator.equals);
     }
 
-    public BinaryExpr(Expression left, Expression right, Operator op) {
-        this(null, left, right, op);
+    public BinaryExpr(Expression left, Expression right, Operator operator) {
+        this(null, left, right, operator);
     }
 
-    public BinaryExpr(Range range, Expression left, Expression right, Operator op) {
+    public BinaryExpr(Range range, Expression left, Expression right, Operator operator) {
         super(range);
     	setLeft(left);
     	setRight(right);
-    	setOperator(op);
+    	setOperator(operator);
     }
 
     @Override
@@ -89,7 +89,7 @@ public final class BinaryExpr extends Expression {
     }
 
     public Operator getOperator() {
-        return op;
+        return operator;
     }
 
     public Expression getRight() {
@@ -104,8 +104,8 @@ public final class BinaryExpr extends Expression {
     }
 
     public BinaryExpr setOperator(Operator op) {
-        notifyPropertyChange(ObservableProperty.OPERATOR, this.op, op);
-        this.op = op;
+        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, op);
+        this.operator = op;
         return this;
     }
 

@@ -845,7 +845,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 		Name r = new Name(
 				_n.getRange().orElse(null),
 				scope,
-                _n.getId()
+                _n.getIdentifier()
 		);
 		r.setComment(comment);
 		return r;
@@ -853,7 +853,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(SimpleName n, Object arg) {
-        return new SimpleName(n.getId());
+        return new SimpleName(n.getIdentifier());
     }
 
     @Override
