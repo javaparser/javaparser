@@ -1315,7 +1315,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
 
         final NodeList<Parameter> parameters = n.getParameters();
-        final boolean printPar = n.isParametersEnclosed();
+        final boolean printPar = n.isEnclosingParameters();
 
         if (printPar) {
             printer.print("(");

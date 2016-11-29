@@ -1503,7 +1503,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodesEquals(n1.getParameters(), n2.getParameters())) {
             return false;
         }
-        if(n1.isParametersEnclosed() != n2.isParametersEnclosed()){
+        if(n1.isEnclosingParameters() != n2.isEnclosingParameters()){
             return false;
         }
         if (!nodeEquals(n1.getBody(), n2.getBody())) {

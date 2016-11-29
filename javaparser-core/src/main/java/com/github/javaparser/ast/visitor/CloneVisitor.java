@@ -1262,7 +1262,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 		Statement body = cloneNode(_n.getBody(), _arg);
 
 		return new LambdaExpr(_n.getRange().orElse(null), lambdaParameters, body,
-				_n.isParametersEnclosed());
+				_n.isEnclosingParameters());
 	}
 
 	@Override

@@ -58,7 +58,7 @@ public enum ObservableProperty {
     PAIRS,
     PARAMETER,
     PARAMETERS,
-    PARAMETERS_ENCLOSED,
+    ENCLOSING_PARAMETERS,
     QUALIFIER,
     RANGE,
     RESOURCES,
