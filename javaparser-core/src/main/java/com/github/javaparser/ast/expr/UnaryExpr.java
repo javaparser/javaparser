@@ -34,22 +34,42 @@ public final class UnaryExpr extends Expression implements
         NodeWithExpression<UnaryExpr> {
 
 	public enum Operator {
-		positive, // +
-		negative, // -
-		preIncrement, // ++
-		preDecrement, // --
-		not, // !
-		inverse, // ~
-        postIncrement, // ++
-        postDecrement, // --
-	}
+        PLUS("+", false),
+        MINUS("-", false),
+        PREFIX_INCREMENT("++", false),
+        PREFIX_DECREMENT("--", false),
+        LOGICAL_COMPLEMENT("!", false),
+        BITWISE_COMPLEMENT("~", false),
+        POSTFIX_INCREMENT("++", true),
+        POSTFIX_DECREMENT("--", true);
+
+        private final String codeRepresentation;
+        private final boolean isPostfix;
+
+        Operator(String codeRepresentation, boolean isPostfix) {
+            this.codeRepresentation = codeRepresentation;
+            this.isPostfix = isPostfix;
+        }
+        
+        public String asString() {
+            return codeRepresentation;
+        }
+
+        public boolean isPostfix() {
+            return isPostfix;
+        }
+        
+        public boolean isPrefix() {
+            return !isPostfix();
+        }
+    }
 
 	private Expression expression;
 
 	private Operator operator;
 
 	public UnaryExpr() {
-        this(null, new IntegerLiteralExpr(), Operator.postIncrement);
+        this(null, new IntegerLiteralExpr(), Operator.POSTFIX_INCREMENT);
 	}
 
 	public UnaryExpr(final Expression expression, final Operator operator) {

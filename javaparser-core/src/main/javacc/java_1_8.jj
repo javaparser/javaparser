@@ -2365,11 +2365,11 @@ Expression UnaryExpression():
 	|
 	  ret = PreDecrementExpression()
 	|
-	  ( "+" { op = UnaryExpr.Operator.positive; begin=tokenBegin();} |
-	    "-" { op = UnaryExpr.Operator.negative; begin=tokenBegin();}
+	  ( "+" { op = UnaryExpr.Operator.PLUS; begin=tokenBegin();} |
+	    "-" { op = UnaryExpr.Operator.MINUS; begin=tokenBegin();}
 	  ) ret = UnaryExpression()
 	  {
-	  	 if(op == UnaryExpr.Operator.negative) {
+	  	 if(op == UnaryExpr.Operator.MINUS) {
 	  	 	if (ret instanceof IntegerLiteralExpr && ((IntegerLiteralExpr)ret).isMinValue()) {
 	  	 		ret = new IntegerLiteralMinValueExpr(range(begin, tokenEnd()));
 	  	 	} else if (ret instanceof LongLiteralExpr && ((LongLiteralExpr)ret).isMinValue()) {
@@ -2393,7 +2393,7 @@ Expression PreIncrementExpression():
 	Position begin = INVALID;
 }
 {
-  "++" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.preIncrement); }
+  "++" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.PREFIX_INCREMENT); }
   { return ret; }
 }
 
@@ -2403,7 +2403,7 @@ Expression PreDecrementExpression():
 	Position begin;
 }
 {
-  "--" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.preDecrement); }
+  "--" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.PREFIX_DECREMENT); }
   { return ret; }
 }
 
@@ -2415,8 +2415,8 @@ Expression UnaryExpressionNotPlusMinus():
 }
 {
   (
-	  ( "~" { op = UnaryExpr.Operator.inverse; begin=tokenBegin(); } |
-	    "!" { op = UnaryExpr.Operator.not;     begin=tokenBegin(); }
+	  ( "~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=tokenBegin(); } |
+	    "!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=tokenBegin(); }
 	  ) ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, op); }
 	|
 	  LOOKAHEAD( CastExpression() )
@@ -2436,8 +2436,8 @@ Expression PostfixExpression():
   ret = PrimaryExpression()
   [
   	LOOKAHEAD(2)
-    ( "++" { op = UnaryExpr.Operator.postIncrement; } |
-      "--" { op = UnaryExpr.Operator.postDecrement; }
+    ( "++" { op = UnaryExpr.Operator.POSTFIX_INCREMENT; } |
+      "--" { op = UnaryExpr.Operator.POSTFIX_DECREMENT; }
     ) { ret = new UnaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, op); }
   ]
   { return ret; }
@@ -2930,9 +2930,9 @@ ExpressionStmt StatementExpression():
 	|
 	  expr = PrimaryExpression()
 	  [
-	    "++" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.postIncrement);  }
+	    "++" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
 	  |
-	    "--" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.postDecrement);  }
+	    "--" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
 	  |
 	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin().get(), tokenEnd()), expr, value, op); }
 	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
