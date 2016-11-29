@@ -32,25 +32,35 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class BinaryExpr extends Expression {
 
     public enum Operator {
-        or, // ||
-        and, // &&
-        binOr, // |
-        binAnd, // &
-        xor, // ^
-        equals, // ==
-        notEquals, // !=
-        less, // <
-        greater, // >
-        lessEquals, // <=
-        greaterEquals, // >=
-        lShift, // <<
-        rSignedShift, // >>
-        rUnsignedShift, // >>>
-        plus, // +
-        minus, // -
-        times, // *
-        divide, // /
-        remainder, // %
+        OR("||"),
+        AND("&&"),
+        BINARY_OR("|"),
+        BINARY_AND("&"),
+        XOR("^"),
+        EQUALS("=="),
+        NOT_EQUALS("!="),
+        LESS("<"),
+        GREATER(">"),
+        LESS_EQUALS("<="),
+        GREATER_EQUALS(">="),
+        LEFT_SHIFT("<<"),
+        SIGNED_RIGHT_SHIFT(">>"),
+        UNSIGNED_RIGHT_SHIFT(">>>"),
+        PLUS("+"),
+        MINUS("-"),
+        MULTIPLY("*"),
+        DIVIDE("/"),
+        MODULO("%");
+
+        private final String codeRepresentation;
+
+        Operator(String codeRepresentation) {
+            this.codeRepresentation = codeRepresentation;
+        }
+        
+        public String asString() {
+            return codeRepresentation;
+        }
     }
 
     private Expression left;
@@ -60,7 +70,7 @@ public final class BinaryExpr extends Expression {
     private Operator operator;
 
     public BinaryExpr() {
-        this(null, new BooleanLiteralExpr(), new BooleanLiteralExpr(), Operator.equals);
+        this(null, new BooleanLiteralExpr(), new BooleanLiteralExpr(), Operator.EQUALS);
     }
 
     public BinaryExpr(Expression left, Expression right, Operator operator) {

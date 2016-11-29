@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.ast.expr.AssignExpr.Operator.*;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
@@ -661,65 +662,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         n.getLeft().accept(this, arg);
         printer.print(" ");
-        switch (n.getOperator()) {
-            case or:
-                printer.print("||");
-                break;
-            case and:
-                printer.print("&&");
-                break;
-            case binOr:
-                printer.print("|");
-                break;
-            case binAnd:
-                printer.print("&");
-                break;
-            case xor:
-                printer.print("^");
-                break;
-            case equals:
-                printer.print("==");
-                break;
-            case notEquals:
-                printer.print("!=");
-                break;
-            case less:
-                printer.print("<");
-                break;
-            case greater:
-                printer.print(">");
-                break;
-            case lessEquals:
-                printer.print("<=");
-                break;
-            case greaterEquals:
-                printer.print(">=");
-                break;
-            case lShift:
-                printer.print("<<");
-                break;
-            case rSignedShift:
-                printer.print(">>");
-                break;
-            case rUnsignedShift:
-                printer.print(">>>");
-                break;
-            case plus:
-                printer.print("+");
-                break;
-            case minus:
-                printer.print("-");
-                break;
-            case times:
-                printer.print("*");
-                break;
-            case divide:
-                printer.print("/");
-                break;
-            case remainder:
-                printer.print("%");
-                break;
-        }
+        printer.print(n.getOperator().asString());
         printer.print(" ");
         n.getRight().accept(this, arg);
     }

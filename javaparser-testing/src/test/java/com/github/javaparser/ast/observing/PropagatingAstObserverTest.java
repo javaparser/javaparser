@@ -39,6 +39,6 @@ public class PropagatingAstObserverTest {
         assertEquals(Arrays.asList("FieldDeclaration.modifiers changed from [] to []",
                 "FieldDeclaration.element_type changed from empty to String",
                 "VariableDeclaratorId.array_bracket_pairs_after_id changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1",
-                "VariableDeclarator.id changed from foo to Bar"), changes);
+                "VariableDeclarator.identifier changed from foo to Bar"), changes);
     }
 }
