@@ -2181,18 +2181,18 @@ AssignExpr.Operator AssignmentOperator():
 }
 {
   (
-      "="    { ret = AssignExpr.Operator.assign; }
-    | "*="   { ret = AssignExpr.Operator.star; }
-    | "/="   { ret = AssignExpr.Operator.slash; }
-    | "%="   { ret = AssignExpr.Operator.rem; }
-    | "+="   { ret = AssignExpr.Operator.plus; }
-    | "-="   { ret = AssignExpr.Operator.minus; }
-    | "<<="  { ret = AssignExpr.Operator.lShift; }
-    | ">>="  { ret = AssignExpr.Operator.rSignedShift; }
-    | ">>>=" { ret = AssignExpr.Operator.rUnsignedShift; }
-    | "&="   { ret = AssignExpr.Operator.and; }
-    | "^="   { ret = AssignExpr.Operator.xor; }
-    | "|="   { ret = AssignExpr.Operator.or; }
+      "="    { ret = AssignExpr.Operator.ASSIGN; }
+    | "*="   { ret = AssignExpr.Operator.MULTIPLY; }
+    | "/="   { ret = AssignExpr.Operator.DIVIDE; }
+    | "%="   { ret = AssignExpr.Operator.MODULO; }
+    | "+="   { ret = AssignExpr.Operator.PLUS; }
+    | "-="   { ret = AssignExpr.Operator.MINUS; }
+    | "<<="  { ret = AssignExpr.Operator.LEFT_SHIFT; }
+    | ">>="  { ret = AssignExpr.Operator.SIGNED_RIGHT_SHIFT; }
+    | ">>>=" { ret = AssignExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
+    | "&="   { ret = AssignExpr.Operator.AND; }
+    | "^="   { ret = AssignExpr.Operator.XOR; }
+    | "|="   { ret = AssignExpr.Operator.OR; }
   )
   { return ret; }
 }

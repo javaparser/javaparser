@@ -615,44 +615,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         n.getTarget().accept(this, arg);
         printer.print(" ");
-        switch (n.getOperator()) {
-            case assign:
-                printer.print("=");
-                break;
-            case and:
-                printer.print("&=");
-                break;
-            case or:
-                printer.print("|=");
-                break;
-            case xor:
-                printer.print("^=");
-                break;
-            case plus:
-                printer.print("+=");
-                break;
-            case minus:
-                printer.print("-=");
-                break;
-            case rem:
-                printer.print("%=");
-                break;
-            case slash:
-                printer.print("/=");
-                break;
-            case star:
-                printer.print("*=");
-                break;
-            case lShift:
-                printer.print("<<=");
-                break;
-            case rSignedShift:
-                printer.print(">>=");
-                break;
-            case rUnsignedShift:
-                printer.print(">>>=");
-                break;
-        }
+        printer.print(n.getOperator().asString());
         printer.print(" ");
         n.getValue().accept(this, arg);
     }

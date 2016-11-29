@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -32,18 +32,28 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class AssignExpr extends Expression {
 
     public enum Operator {
-        assign, // =
-        plus, // +=
-        minus, // -=
-        star, // *=
-        slash, // /=
-        and, // &=
-        or, // |=
-        xor, // ^=
-        rem, // %=
-        lShift, // <<=
-        rSignedShift, // >>=
-        rUnsignedShift, // >>>=
+        ASSIGN("="),
+        PLUS("+="),
+        MINUS("-="),
+        MULTIPLY("*="),
+        DIVIDE("/="),
+        AND("&="),
+        OR("|="),
+        XOR("^="),
+        MODULO("%="),
+        LEFT_SHIFT("<<="),
+        SIGNED_RIGHT_SHIFT(">>="),
+        UNSIGNED_RIGHT_SHIFT(">>>=");
+
+        private final String codeRepresentation;
+
+        Operator(String codeRepresentation) {
+            this.codeRepresentation = codeRepresentation;
+        }
+
+        public String asString() {
+            return codeRepresentation;
+        }
     }
 
     private Expression target;
@@ -53,7 +63,7 @@ public final class AssignExpr extends Expression {
     private Operator operator;
 
     public AssignExpr() {
-        this(null, new NameExpr(), new StringLiteralExpr(), Operator.assign);
+        this(null, new NameExpr(), new StringLiteralExpr(), Operator.ASSIGN);
     }
 
     public AssignExpr(Expression target, Expression value, Operator operator) {
@@ -97,14 +107,14 @@ public final class AssignExpr extends Expression {
     public AssignExpr setTarget(Expression target) {
         notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
         this.target = target;
-		setAsParentNodeOf(this.target);
+        setAsParentNodeOf(this.target);
         return this;
     }
 
     public AssignExpr setValue(Expression value) {
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
-		setAsParentNodeOf(this.value);
+        setAsParentNodeOf(this.value);
         return this;
     }
 }
