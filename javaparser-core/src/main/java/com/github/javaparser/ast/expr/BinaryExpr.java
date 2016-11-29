@@ -50,7 +50,7 @@ public final class BinaryExpr extends Expression {
         MINUS("-"),
         MULTIPLY("*"),
         DIVIDE("/"),
-        MODULO("%");
+        REMAINDER("%");
 
         private final String codeRepresentation;
 

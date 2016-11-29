@@ -40,7 +40,7 @@ public final class AssignExpr extends Expression {
         AND("&="),
         OR("|="),
         XOR("^="),
-        MODULO("%="),
+        REMAINDER("%="),
         LEFT_SHIFT("<<="),
         SIGNED_RIGHT_SHIFT(">>="),
         UNSIGNED_RIGHT_SHIFT(">>>=");

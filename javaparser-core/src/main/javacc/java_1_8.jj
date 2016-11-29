@@ -2184,7 +2184,7 @@ AssignExpr.Operator AssignmentOperator():
       "="    { ret = AssignExpr.Operator.ASSIGN; }
     | "*="   { ret = AssignExpr.Operator.MULTIPLY; }
     | "/="   { ret = AssignExpr.Operator.DIVIDE; }
-    | "%="   { ret = AssignExpr.Operator.MODULO; }
+    | "%="   { ret = AssignExpr.Operator.REMAINDER; }
     | "+="   { ret = AssignExpr.Operator.PLUS; }
     | "-="   { ret = AssignExpr.Operator.MINUS; }
     | "<<="  { ret = AssignExpr.Operator.LEFT_SHIFT; }
@@ -2347,7 +2347,7 @@ Expression MultiplicativeExpression():
   (
   	( "*" { op = BinaryExpr.Operator.MULTIPLY; } |
   	  "/" { op = BinaryExpr.Operator.DIVIDE; } |
-  	  "%" { op = BinaryExpr.Operator.MODULO; }
+  	  "%" { op = BinaryExpr.Operator.REMAINDER; }
   	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, op); }
   )*
   { return ret; }
