@@ -1504,13 +1504,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getCatchClauses() != null) {
-            for (final CatchClause c : n.getCatchClauses()) {
-                {
-                    R result = c.accept(this, arg);
-                    if (result != null) {
-                        return result;
-                    }
+        for (final CatchClause c : n.getCatchClauses()) {
+            {
+                R result = c.accept(this, arg);
+                if (result != null) {
+                    return result;
                 }
             }
         }

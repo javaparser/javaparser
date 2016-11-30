@@ -1287,10 +1287,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.getTryBlock().isPresent()) {
             n.getTryBlock().get().accept(this, arg);
         }
-        if (n.getCatchClauses() != null) {
-            for (final CatchClause c : n.getCatchClauses()) {
-                c.accept(this, arg);
-            }
+        for (final CatchClause c : n.getCatchClauses()) {
+            c.accept(this, arg);
         }
         if (n.getFinallyBlock().isPresent()) {
             printer.print(" finally ");
