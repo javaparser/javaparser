@@ -1497,9 +1497,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getTryBlock().accept(this, arg);
-            if (result != null) {
-                return result;
+            if (n.getTryBlock().isPresent()) {
+                R result = n.getTryBlock().get().accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
             }
         }
         if (n.getCatchClauses() != null) {
@@ -1512,9 +1514,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getFinallyBlock() != null) {
+        if (n.getFinallyBlock().isPresent()) {
             {
-                R result = n.getFinallyBlock().accept(this, arg);
+                R result = n.getFinallyBlock().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }

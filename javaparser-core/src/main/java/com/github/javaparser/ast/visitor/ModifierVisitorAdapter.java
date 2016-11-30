@@ -792,10 +792,12 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final TryStmt n, final A arg) {
         visitComment(n, arg);
         n.setResources((NodeList<VariableDeclarationExpr>) n.getResources().accept(this, arg));
-        n.setTryBlock((BlockStmt) n.getTryBlock().accept(this, arg));
+        if (n.getTryBlock().isPresent()) {
+            n.setTryBlock((BlockStmt) n.getTryBlock().get().accept(this, arg));
+        }
         n.setCatchClauses((NodeList<CatchClause>) n.getCatchClauses().accept(this, arg));
-        if (n.getFinallyBlock() != null) {
-            n.setFinallyBlock((BlockStmt) n.getFinallyBlock().accept(this, arg));
+        if (n.getFinallyBlock().isPresent()) {
+            n.setFinallyBlock((BlockStmt) n.getFinallyBlock().get().accept(this, arg));
         }
         return n;
     }

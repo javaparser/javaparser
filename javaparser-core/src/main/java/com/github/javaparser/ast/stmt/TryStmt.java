@@ -30,6 +30,8 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 
 import static com.github.javaparser.utils.Utils.*;
 
+import java.util.Optional;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -37,12 +39,10 @@ public final class TryStmt extends Statement {
 	
 	private NodeList<VariableDeclarationExpr> resources;
 
-    // TODO can be null
 	private BlockStmt tryBlock;
 
 	private NodeList<CatchClause> catchClauses;
 
-    // TODO can be null
 	private BlockStmt finallyBlock;
 
 	public TryStmt() {
@@ -85,12 +85,12 @@ public final class TryStmt extends Statement {
         return catchClauses;
 	}
 
-	public BlockStmt getFinallyBlock() {
-		return finallyBlock;
+	public Optional<BlockStmt> getFinallyBlock() {
+		return Optional.ofNullable(finallyBlock);
 	}
 
-	public BlockStmt getTryBlock() {
-		return tryBlock;
+	public Optional<BlockStmt> getTryBlock() {
+		return Optional.ofNullable(tryBlock);
 	}
 	
 	public NodeList<VariableDeclarationExpr> getResources() {

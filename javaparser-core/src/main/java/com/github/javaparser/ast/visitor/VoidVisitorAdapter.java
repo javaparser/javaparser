@@ -791,14 +791,16 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
                 v.accept(this, arg);
             }
         }
-        n.getTryBlock().accept(this, arg);
+        if (n.getTryBlock().isPresent()) {
+            n.getTryBlock().get().accept(this, arg);
+        }
         if (n.getCatchClauses() != null) {
             for (final CatchClause c : n.getCatchClauses()) {
                 c.accept(this, arg);
             }
         }
-        if (n.getFinallyBlock() != null) {
-            n.getFinallyBlock().accept(this, arg);
+        if (n.getFinallyBlock().isPresent()) {
+            n.getFinallyBlock().get().accept(this, arg);
         }
     }
 
