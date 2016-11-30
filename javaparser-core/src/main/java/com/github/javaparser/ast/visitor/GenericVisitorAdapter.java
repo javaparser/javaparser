@@ -1245,8 +1245,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final Name n, final A arg) {
         visitComment(n, arg);
-        if (n.getQualifier() != null) {
-            R result = n.getQualifier().accept(this, arg);
+        if (n.getQualifier().isPresent()) {
+            R result = n.getQualifier().get().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1460,9 +1460,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ThisExpr n, final A arg) {
         visitComment(n, arg);
-        if (n.getClassExpr() != null) {
+        if (n.getClassExpr().isPresent()) {
             {
-                R result = n.getClassExpr().accept(this, arg);
+                R result = n.getClassExpr().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -1497,24 +1497,24 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getTryBlock().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
-        if (n.getCatchClauses() != null) {
-            for (final CatchClause c : n.getCatchClauses()) {
-                {
-                    R result = c.accept(this, arg);
-                    if (result != null) {
-                        return result;
-                    }
+            if (n.getTryBlock().isPresent()) {
+                R result = n.getTryBlock().get().accept(this, arg);
+                if (result != null) {
+                    return result;
                 }
             }
         }
-        if (n.getFinallyBlock() != null) {
+        for (final CatchClause c : n.getCatchClauses()) {
             {
-                R result = n.getFinallyBlock().accept(this, arg);
+                R result = c.accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        if (n.getFinallyBlock().isPresent()) {
+            {
+                R result = n.getFinallyBlock().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }

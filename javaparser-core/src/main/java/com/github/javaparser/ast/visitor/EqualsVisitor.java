@@ -1087,7 +1087,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 	@Override public Boolean visit(final Name n1, final Visitable arg) {
 		final Name n2 = (Name) arg;
 
-		if (!nodeEquals(n1.getQualifier(), n2.getQualifier())) {
+        if (!nodeEquals(n1.getQualifier().orElse(null), n2.getQualifier().orElse(null))) {
 			return false;
 		}
 
@@ -1108,7 +1108,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override public Boolean visit(final ThisExpr n1, final Visitable arg) {
 		final ThisExpr n2 = (ThisExpr) arg;
 
-		if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr())) {
+        if (!nodeEquals(n1.getClassExpr().orElse(null), n2.getClassExpr().orElse(null))) {
 			return false;
 		}
 
@@ -1464,7 +1464,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 	@Override public Boolean visit(final TryStmt n1, final Visitable arg) {
 		final TryStmt n2 = (TryStmt) arg;
 
-		if (!nodeEquals(n1.getTryBlock(), n2.getTryBlock())) {
+        if (!nodeEquals(n1.getTryBlock().orElse(null), n2.getTryBlock().orElse(null))) {
 			return false;
 		}
 
@@ -1476,7 +1476,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 			return false;
 		}
 
-		if (!nodeEquals(n1.getFinallyBlock(), n2.getFinallyBlock())) {
+        if (!nodeEquals(n1.getFinallyBlock().orElse(null), n2.getFinallyBlock().orElse(null))) {
 			return false;
 		}
 

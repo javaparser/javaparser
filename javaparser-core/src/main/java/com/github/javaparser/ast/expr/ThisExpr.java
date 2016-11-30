@@ -21,6 +21,8 @@
  
 package com.github.javaparser.ast.expr;
 
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -31,7 +33,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class ThisExpr extends Expression {
 
-    // TODO can be null
 	private Expression classExpr;
 
 	public ThisExpr() {
@@ -55,8 +56,8 @@ public final class ThisExpr extends Expression {
 		v.visit(this, arg);
 	}
 
-	public Expression getClassExpr() {
-		return classExpr;
+	public Optional<Expression> getClassExpr() {
+		return Optional.ofNullable(classExpr);
 	}
 
 	public ThisExpr setClassExpr(final Expression classExpr) {
