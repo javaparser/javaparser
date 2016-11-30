@@ -30,6 +30,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Optional;
+
 /**
  * A name that may consist of multiple identifiers.
  * In other words: it.may.contain.dots.
@@ -44,7 +46,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class Name extends Node implements NodeWithIdentifier<Name> {
     private String identifier;
-    // TODO nullable
     private Name qualifier;
 
     public Name() {
@@ -111,8 +112,8 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         return identifier;
     }
 
-    public Name getQualifier() {
-        return qualifier;
+    public Optional<Name> getQualifier() {
+        return Optional.ofNullable(qualifier);
     }
 
     public Name setQualifier(final Name qualifier) {
