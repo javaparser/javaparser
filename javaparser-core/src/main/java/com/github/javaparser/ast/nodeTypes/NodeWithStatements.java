@@ -9,24 +9,24 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
 public interface NodeWithStatements<N extends Node> {
-    NodeList<Statement> getStmts();
+    NodeList<Statement> getStatements();
 
-    default Statement getStmt(int i) {
-        return getStmts().get(i);
+    default Statement getStatement(int i) {
+        return getStatements().get(i);
     }
 
-    N setStmts(final NodeList<Statement> stmts);
+    N setStatements(final NodeList<Statement> statements);
 
     @SuppressWarnings("unchecked")
     default N addStatement(Statement statement) {
-        getStmts().add(statement);
+        getStatements().add(statement);
         statement.setParentNode((Node) this);
         return (N) this;
     }
 
     @SuppressWarnings("unchecked")
     default N addStatement(int index, final Statement statement) {
-        getStmts().add(index, statement);
+        getStatements().add(index, statement);
         statement.setParentNode((Node) this);
         return (N) this;
     }
@@ -39,9 +39,6 @@ public interface NodeWithStatements<N extends Node> {
 
     /**
      * It will use {@link JavaParser#parseStatement(String)} inside, so it should end with a semi column
-     * 
-     * @param statement
-     * @return
      */
     default N addStatement(String statement) {
         return addStatement(JavaParser.parseStatement(statement));
@@ -54,13 +51,13 @@ public interface NodeWithStatements<N extends Node> {
     }
 
     default <A extends Statement> A addAndGetStatement(A statement) {
-        getStmts().add(statement);
+        getStatements().add(statement);
         statement.setParentNode((Node) this);
         return statement;
     }
 
     default Statement addAndGetStatement(int index, final Statement statement) {
-        getStmts().add(index, statement);
+        getStatements().add(index, statement);
         statement.setParentNode((Node) this);
         return statement;
     }
@@ -76,7 +73,7 @@ public interface NodeWithStatements<N extends Node> {
     }
 
     default boolean isEmpty() {
-        return getStmts().isEmpty();
+        return getStatements().isEmpty();
     }
 
     @SuppressWarnings("unchecked")
@@ -88,6 +85,6 @@ public interface NodeWithStatements<N extends Node> {
     }
 
     default N copyStatements(NodeWithStatements<?> other) {
-        return copyStatements(other.getStmts());
+        return copyStatements(other.getStatements());
     }
 }

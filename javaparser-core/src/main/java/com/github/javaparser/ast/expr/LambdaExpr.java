@@ -43,7 +43,7 @@ public class LambdaExpr extends Expression implements
 
 	private NodeList<Parameter> parameters;
 
-	private boolean parametersEnclosed;
+	private boolean isEnclosingParameters;
 
 	private Statement body;
 
@@ -55,12 +55,12 @@ public class LambdaExpr extends Expression implements
 	}
 
 	public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body,
-                      boolean parametersEnclosed) {
+                      boolean isEnclosingParameters) {
 
 		super(range);
 		setParameters(parameters);
 		setBody(body);
-        setParametersEnclosed(parametersEnclosed);
+        setEnclosingParameters(isEnclosingParameters);
 	}
 
     @Override
@@ -96,13 +96,13 @@ public class LambdaExpr extends Expression implements
 		v.visit(this, arg);
 	}
 
-	public boolean isParametersEnclosed() {
-		return parametersEnclosed;
+	public boolean isEnclosingParameters() {
+		return isEnclosingParameters;
 	}
 
-	public LambdaExpr setParametersEnclosed(boolean parametersEnclosed) {
-		notifyPropertyChange(ObservableProperty.PARAMETERS_ENCLOSED, this.parametersEnclosed, parametersEnclosed);
-		this.parametersEnclosed = parametersEnclosed;
+	public LambdaExpr setEnclosingParameters(boolean enclosingParameters) {
+		notifyPropertyChange(ObservableProperty.ENCLOSING_PARAMETERS, this.isEnclosingParameters, enclosingParameters);
+		this.isEnclosingParameters = enclosingParameters;
 		return this;
 	}
 

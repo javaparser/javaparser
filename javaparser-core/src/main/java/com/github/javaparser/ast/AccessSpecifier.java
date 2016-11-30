@@ -41,7 +41,7 @@ public enum AccessSpecifier {
         this.codeRepresenation = codeRepresentation;
     }
 
-    public String getCodeRepresenation(){
+    public String asString(){
         return this.codeRepresenation;
     }
 }

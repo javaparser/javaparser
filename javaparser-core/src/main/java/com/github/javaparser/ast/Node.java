@@ -101,7 +101,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
     private Node parentNode;
 
-    private List<Node> childrenNodes = new LinkedList<>();
+    private List<Node> childNodes = new LinkedList<>();
     private List<Comment> orphanComments = new LinkedList<>();
 
     private IdentityHashMap<DataKey<?>, Object> data = null;
@@ -244,7 +244,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @return all nodes that have this node as their parent.
      */
     public List<Node> getChildNodes() {
-        return unmodifiableList(childrenNodes);
+        return unmodifiableList(childNodes);
     }
 
     public <N extends Node> boolean containsWithin(N other) {
@@ -308,12 +308,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
         // remove from old parent, if any
         if (this.parentNode != null) {
-            this.parentNode.childrenNodes.remove(this);
+            this.parentNode.childNodes.remove(this);
         }
         this.parentNode = parentNode;
         // add to new parent, if any
         if (this.parentNode != null) {
-            this.parentNode.childrenNodes.add(this);
+            this.parentNode.childNodes.add(this);
         }
         return this;
     }

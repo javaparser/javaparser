@@ -17,7 +17,6 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.ReferenceType;
 
 public class NodeWithMembersBuildersTest {
 	CompilationUnit cu;
@@ -40,7 +39,7 @@ public class NodeWithMembersBuildersTest {
 		FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
 		assertEquals(1, classDeclaration.getMembers().size());
 		assertEquals(addField, classDeclaration.getMember(0));
-		assertEquals("fieldName", addField.getVariable(0).getId().getNameAsString());
+		assertEquals("fieldName", addField.getVariable(0).getIdentifier().getNameAsString());
 	}
 
 	@Test

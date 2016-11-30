@@ -60,7 +60,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithElementType<MethodDeclaration>,
         NodeWithModifiers<MethodDeclaration>,
         NodeWithParameters<MethodDeclaration>,
-        NodeWithThrowable<MethodDeclaration>,
+        NodeWithThrownExceptions<MethodDeclaration>,
         NodeWithOptionalBlockStmt<MethodDeclaration>,
         NodeWithTypeParameters<MethodDeclaration> {
 
@@ -74,7 +74,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> throws_;
+    private NodeList<ReferenceType<?>> thrownExceptions;
 
     private BlockStmt body;
 
@@ -139,7 +139,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final boolean isDefault,
                              final NodeList<Parameter> parameters,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final NodeList<ReferenceType<?>> throws_,
+                             final NodeList<ReferenceType<?>> thrownExceptions,
                              final BlockStmt body) {
         this(null,
                 modifiers,
@@ -151,7 +151,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 isDefault,
                 parameters,
                 arrayBracketPairsAfterParameterList,
-                throws_,
+                thrownExceptions,
                 body);
     }
 
@@ -165,7 +165,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final boolean isDefault,
                              final NodeList<Parameter> parameters,
                              final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final NodeList<ReferenceType<?>> throws_,
+                             final NodeList<ReferenceType<?>> thrownExceptions,
                              final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -175,7 +175,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         setParameters(parameters);
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
         setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
-        setThrows(throws_);
+        setThrownExceptions(thrownExceptions);
         setBody(body);
         setDefault(isDefault);
     }
@@ -217,8 +217,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public NodeList<ReferenceType<?>> getThrows() {
-        return throws_;
+    public NodeList<ReferenceType<?>> getThrownExceptions() {
+        return thrownExceptions;
     }
 
     @Override
@@ -228,6 +228,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 getArrayBracketPairsAfterParameterList());
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public Type<?> getElementType() {
         return elementType;
@@ -276,10 +278,10 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setThrows(final NodeList<ReferenceType<?>> throws_) {
-        notifyPropertyChange(ObservableProperty.THROWS, this.throws_, throws_);
-        this.throws_ = assertNotNull(throws_);
-        setAsParentNodeOf(this.throws_);
+    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
+        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
+        this.thrownExceptions = assertNotNull(thrownExceptions);
+        setAsParentNodeOf(this.thrownExceptions);
         return this;
     }
 
@@ -292,6 +294,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         return this;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public MethodDeclaration setElementType(final Type<?> elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
@@ -342,7 +346,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
-            sb.append(accessSpecifier.getCodeRepresenation());
+            sb.append(accessSpecifier.asString());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
             if (getModifiers().contains(Modifier.STATIC)) {
                 sb.append("static ");
@@ -384,7 +388,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType<?> thr : getThrows()) {
+            for (ReferenceType<?> thr : getThrownExceptions()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
@@ -407,12 +411,15 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
-     */
+     * @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public MethodDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
         this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
@@ -422,11 +429,14 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * @return the array brackets in this position: <code>int abc()[] {...}</code>
-     */
+    * @deprecated will be removed in 3.0 */
+    @Deprecated
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterParameterList() {
         return arrayBracketPairsAfterParameterList;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     public MethodDeclaration setArrayBracketPairsAfterParameterList(NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList) {
         this.arrayBracketPairsAfterParameterList = assertNotNull(arrayBracketPairsAfterParameterList);
         setAsParentNodeOf(arrayBracketPairsAfterParameterList);
@@ -438,7 +448,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(typeParameters);
         res.add(parameters);
-        res.add(throws_);
+        res.add(thrownExceptions);
         res.add(arrayBracketPairsAfterType);
         res.add(arrayBracketPairsAfterParameterList);
         return res;

@@ -60,7 +60,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class CompilationUnit extends Node {
 
-    private PackageDeclaration pakage;
+    private PackageDeclaration packageDeclaration;
 
     private NodeList<ImportDeclaration> imports;
 
@@ -70,14 +70,14 @@ public final class CompilationUnit extends Node {
         this(null, null, new NodeList<>(), new NodeList<>());
     }
 
-    public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
-        this(null, pakage, imports, types);
+    public CompilationUnit(PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
+        this(null, packageDeclaration, imports, types);
     }
 
-    public CompilationUnit(Range range, PackageDeclaration pakage, NodeList<ImportDeclaration> imports,
+    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports,
                            NodeList<TypeDeclaration<?>> types) {
         super(range);
-        setPackage(pakage);
+        setPackage(packageDeclaration);
         setImports(imports);
         setTypes(types);
     }
@@ -129,7 +129,7 @@ public final class CompilationUnit extends Node {
      * @return the package declaration or <code>null</code>
      */
     public Optional<PackageDeclaration> getPackage() {
-        return Optional.ofNullable(pakage);
+        return Optional.ofNullable(packageDeclaration);
     }
 
     /**
@@ -174,13 +174,13 @@ public final class CompilationUnit extends Node {
      * Sets or clear the package declarations of this compilation unit.
      * 
      * @param pakage
-     *            the pakage declaration to set or <code>null</code> to default
+     *            the packageDeclaration declaration to set or <code>null</code> to default
      *            package
      */
     public CompilationUnit setPackage(PackageDeclaration pakage) {
-        notifyPropertyChange(ObservableProperty.PACKAGE, this.pakage, pakage);
-        this.pakage = pakage;
-        setAsParentNodeOf(this.pakage);
+        notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, pakage);
+        this.packageDeclaration = pakage;
+        setAsParentNodeOf(this.packageDeclaration);
         return this;
     }
 

@@ -37,7 +37,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class ForeachStmt extends Statement implements NodeWithBody<ForeachStmt> {
 
-    private VariableDeclarationExpr var;
+    private VariableDeclarationExpr variable;
 
     private Expression iterable;
 
@@ -50,22 +50,22 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
                 new EmptyStmt());
     }
 
-    public ForeachStmt(final VariableDeclarationExpr var,
+    public ForeachStmt(final VariableDeclarationExpr variable,
                        final Expression iterable, final Statement body) {
-        this(null, var, iterable, body);
+        this(null, variable, iterable, body);
     }
 
     public ForeachStmt(Range range,
-                       final VariableDeclarationExpr var, final Expression iterable,
+                       final VariableDeclarationExpr variable, final Expression iterable,
                        final Statement body) {
         super(range);
-        setVariable(var);
+        setVariable(variable);
         setIterable(iterable);
         setBody(body);
     }
 
-    public ForeachStmt(VariableDeclarationExpr var, String iterable, BlockStmt body) {
-        this(null, var, new NameExpr(iterable), body);
+    public ForeachStmt(VariableDeclarationExpr variable, String iterable, BlockStmt body) {
+        this(null, variable, new NameExpr(iterable), body);
     }
 
     @Override
@@ -88,7 +88,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     }
 
     public VariableDeclarationExpr getVariable() {
-        return var;
+        return variable;
     }
 
     @Override
@@ -107,9 +107,9 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     }
 
     public ForeachStmt setVariable(final VariableDeclarationExpr var) {
-        notifyPropertyChange(ObservableProperty.VARIABLE, this.var, var);
-        this.var = assertNotNull(var);
-        setAsParentNodeOf(this.var);
+        notifyPropertyChange(ObservableProperty.VARIABLE, this.variable, var);
+        this.variable = assertNotNull(var);
+        setAsParentNodeOf(this.variable);
         return this;
     }
 }

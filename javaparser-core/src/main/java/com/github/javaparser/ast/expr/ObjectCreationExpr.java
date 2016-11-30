@@ -57,7 +57,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     private NodeList<Type<?>> typeArguments;
 
-    private NodeList<Expression> args;
+    private NodeList<Expression> arguments;
 
     private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
@@ -75,27 +75,27 @@ public final class ObjectCreationExpr extends Expression implements
      * 
      * @param scope may be null
      * @param type this is the class that the constructor is being called for.
-     * @param args Any arguments to pass to the constructor
+     * @param arguments Any arguments to pass to the constructor
      */
     public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type,
-                              final NodeList<Expression> args) {
+                              final NodeList<Expression> arguments) {
         this(null,
                 scope,
                 type,
                 new NodeList<>(),
-                args,
+                arguments,
                 null);
     }
 
     public ObjectCreationExpr(final Range range,
                               final Expression scope, final ClassOrInterfaceType type,
                               final NodeList<Type<?>> typeArguments,
-                              final NodeList<Expression> args, final NodeList<BodyDeclaration<?>> anonymousBody) {
+                              final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousBody) {
         super(range);
         setScope(scope);
         setType(type);
         setTypeArguments(typeArguments);
-        setArgs(args);
+        setArguments(arguments);
         setAnonymousClassBody(anonymousBody);
     }
 
@@ -120,8 +120,8 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     @Override
-    public NodeList<Expression> getArgs() {
-        return args;
+    public NodeList<Expression> getArguments() {
+        return arguments;
     }
 
     public Optional<Expression> getScope() {
@@ -149,10 +149,10 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     @Override
-    public ObjectCreationExpr setArgs(final NodeList<Expression> args) {
-        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
-        this.args = assertNotNull(args);
-        setAsParentNodeOf(this.args);
+    public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
+        notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+        this.arguments = assertNotNull(arguments);
+        setAsParentNodeOf(this.arguments);
         return this;
     }
 

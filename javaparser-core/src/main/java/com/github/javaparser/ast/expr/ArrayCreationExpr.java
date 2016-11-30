@@ -100,6 +100,8 @@ public final class ArrayCreationExpr extends Expression {
         return Optional.ofNullable(initializer);
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     public Type<?> getElementType() {
         return elementType;
     }
@@ -117,6 +119,8 @@ public final class ArrayCreationExpr extends Expression {
         return this;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     public ArrayCreationExpr setElementType(Type<?> elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);

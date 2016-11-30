@@ -35,46 +35,46 @@ import java.util.HashMap;
  */
 public final class PrimitiveType extends Type<PrimitiveType> implements NodeWithAnnotations<PrimitiveType> {
 
-    public static final PrimitiveType BYTE_TYPE = new PrimitiveType(Primitive.Byte);
+    public static final PrimitiveType BYTE_TYPE = new PrimitiveType(Primitive.BYTE);
 
-    public static final PrimitiveType SHORT_TYPE = new PrimitiveType(Primitive.Short);
+    public static final PrimitiveType SHORT_TYPE = new PrimitiveType(Primitive.SHORT);
 
-    public static final PrimitiveType INT_TYPE = new PrimitiveType(Primitive.Int);
+    public static final PrimitiveType INT_TYPE = new PrimitiveType(Primitive.INT);
 
-    public static final PrimitiveType LONG_TYPE = new PrimitiveType(Primitive.Long);
+    public static final PrimitiveType LONG_TYPE = new PrimitiveType(Primitive.LONG);
 
-    public static final PrimitiveType FLOAT_TYPE = new PrimitiveType(Primitive.Float);
+    public static final PrimitiveType FLOAT_TYPE = new PrimitiveType(Primitive.FLOAT);
 
-    public static final PrimitiveType DOUBLE_TYPE = new PrimitiveType(Primitive.Double);
+    public static final PrimitiveType DOUBLE_TYPE = new PrimitiveType(Primitive.DOUBLE);
 
-    public static final PrimitiveType BOOLEAN_TYPE = new PrimitiveType(Primitive.Boolean);
+    public static final PrimitiveType BOOLEAN_TYPE = new PrimitiveType(Primitive.BOOLEAN);
 
-    public static final PrimitiveType CHAR_TYPE = new PrimitiveType(Primitive.Char);
+    public static final PrimitiveType CHAR_TYPE = new PrimitiveType(Primitive.CHAR);
 
     public enum Primitive {
-        Boolean("Boolean", "boolean"),
-        Char("Character", "char"),
-        Byte("Byte", "byte"),
-        Short("Short", "short"),
-        Int("Integer", "int"),
-        Long("Long", "long"),
-        Float("Float", "float"),
-        Double("Double", "double");
+        BOOLEAN("Boolean"),
+        CHAR("Character"),
+        BYTE("Byte"),
+        SHORT("Short"),
+        INT("Integer"),
+        LONG("Long"),
+        FLOAT("Float"),
+        DOUBLE("Double");
 
         final String nameOfBoxedType;
-        private String asString;
+        private String codeRepresentation;
 
         public ClassOrInterfaceType toBoxedType() {
             return new ClassOrInterfaceType(nameOfBoxedType);
         }
 
         public String asString() {
-            return asString;
+            return codeRepresentation;
         }
 
-        Primitive(String nameOfBoxedType, String asString) {
+        Primitive(String nameOfBoxedType) {
             this.nameOfBoxedType = nameOfBoxedType;
-            this.asString = asString;
+            this.codeRepresentation = name().toLowerCase();
         }
     }
 
@@ -89,7 +89,7 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
     private Primitive type;
 
 	public PrimitiveType() {
-        this(null, Primitive.Int);
+        this(null, Primitive.INT);
 	}
 
 	public PrimitiveType(final Primitive type) {

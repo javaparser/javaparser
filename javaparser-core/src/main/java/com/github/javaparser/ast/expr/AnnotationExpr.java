@@ -47,10 +47,12 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         setName(name);
     }
 
+    @Override
     public Name getName() {
         return name;
     }
 
+    @Override
     public AnnotationExpr setName(Name name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);

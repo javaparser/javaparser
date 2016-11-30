@@ -24,6 +24,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -31,21 +32,22 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ThrowStmt extends Statement {
+public final class ThrowStmt extends Statement implements
+        NodeWithExpression<ThrowStmt> {
 
-	private Expression expr;
+	private Expression expression;
 
 	public ThrowStmt() {
         this(null, new NameExpr());
 	}
 
-	public ThrowStmt(final Expression expr) {
-		this(null, expr);
+	public ThrowStmt(final Expression expression) {
+		this(null, expression);
 	}
 
-	public ThrowStmt(Range range, final Expression expr) {
+	public ThrowStmt(Range range, final Expression expression) {
 		super(range);
-		setExpr(expr);
+		setExpression(expression);
 	}
 
 	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -56,14 +58,16 @@ public final class ThrowStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public Expression getExpr() {
-		return expr;
+	@Override
+	public Expression getExpression() {
+		return expression;
 	}
 
-	public ThrowStmt setExpr(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
+	@Override
+	public ThrowStmt setExpression(final Expression expression) {
+		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+		this.expression = expression;
+		setAsParentNodeOf(this.expression);
 		return this;
 	}
 }

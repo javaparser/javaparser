@@ -243,7 +243,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final BlockStmt n, final A arg) {
         visitComment(n, arg);
-        n.setStmts((NodeList<Statement>) n.getStmts().accept(this, arg));
+        n.setStatements((NodeList<Statement>) n.getStatements().accept(this, arg));
         return n;
     }
 
@@ -263,7 +263,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final CastExpr n, final A arg) {
         visitComment(n, arg);
         final Type type = (Type) n.getType().accept(this, arg);
-        final Expression expr = (Expression) n.getExpr().accept(this, arg);
+        final Expression expr = (Expression) n.getExpression().accept(this, arg);
         if (type == null) {
             return expr;
         }
@@ -271,14 +271,14 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
             return null;
         }
         n.setType(type);
-        n.setExpr(expr);
+        n.setExpression(expr);
         return n;
     }
 
     @Override
     public Visitable visit(final CatchClause n, final A arg) {
         visitComment(n, arg);
-        n.setParam((Parameter) n.getParam().accept(this, arg));
+        n.setParameter((Parameter) n.getParameter().accept(this, arg));
         n.setBody((BlockStmt) n.getBody().accept(this, arg));
         return n;
 
@@ -352,7 +352,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
         n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
         n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        n.setThrows((NodeList<ReferenceType<?>>) n.getThrows().accept(this, arg));
+        n.setThrownExceptions((NodeList<ReferenceType<?>>) n.getThrownExceptions().accept(this, arg));
         n.setBody((BlockStmt) n.getBody().accept(this, arg));
         return n;
     }
@@ -417,7 +417,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final EnumConstantDeclaration n, final A arg) {
         visitComment(n, arg);
         n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setArgs((NodeList<Expression>) n.getArgs().accept(this, arg));
+        n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
         n.setClassBody((NodeList<BodyDeclaration<?>>) n.getClassBody().accept(this, arg));
         return n;
     }
@@ -435,11 +435,11 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ExplicitConstructorInvocationStmt n, final A arg) {
         visitComment(n, arg);
-        if (!n.isThis() && n.getExpr().isPresent()) {
-            n.setExpr((Expression) n.getExpr().get().accept(this, arg));
+        if (!n.isThis() && n.getExpression().isPresent()) {
+            n.setExpression((Expression) n.getExpression().get().accept(this, arg));
         }
         n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
-        n.setArgs((NodeList<Expression>) n.getArgs().accept(this, arg));
+        n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
         return n;
     }
 
@@ -486,7 +486,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ForStmt n, final A arg) {
         visitComment(n, arg);
-        n.setInit((NodeList<Expression>) n.getInit().accept(this, arg));
+        n.setInitialization((NodeList<Expression>) n.getInitialization().accept(this, arg));
         if (n.getCompare().isPresent()) {
             n.setCompare((Expression) n.getCompare().get().accept(this, arg));
         }
@@ -527,7 +527,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final InstanceOfExpr n, final A arg) {
         visitComment(n, arg);
-        n.setExpr((Expression) n.getExpr().accept(this, arg));
+        n.setExpression((Expression) n.getExpression().accept(this, arg));
         n.setType((ReferenceType<?>) n.getType().accept(this, arg));
         return n;
     }
@@ -552,7 +552,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final LabeledStmt n, final A arg) {
         visitComment(n, arg);
-        n.setStmt((Statement) n.getStmt().accept(this, arg));
+        n.setStatement((Statement) n.getStatement().accept(this, arg));
         return n;
     }
 
@@ -589,7 +589,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
             n.setScope((Expression) n.getScope().accept(this, arg));
         }
         n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
-        n.setArgs((NodeList<Expression>) n.getArgs().accept(this, arg));
+        n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
         return n;
     }
 
@@ -600,7 +600,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
         n.setElementType((Type) n.getElementType().accept(this, arg));
         n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        n.setThrows((NodeList<ReferenceType<?>>) n.getThrows().accept(this, arg));
+        n.setThrownExceptions((NodeList<ReferenceType<?>>) n.getThrownExceptions().accept(this, arg));
         if (n.getBody().isPresent()) {
             n.setBody((BlockStmt) n.getBody().get().accept(this, arg));
         }
@@ -635,7 +635,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
         }
         n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
         n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
-        n.setArgs((NodeList<Expression>) n.getArgs().accept(this, arg));
+        n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
         if (n.getAnonymousClassBody().isPresent())
             n.setAnonymousClassBody((NodeList<BodyDeclaration<?>>) n.getAnonymousClassBody().get().accept(this, arg));
         return n;
@@ -653,7 +653,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final Parameter n, final A arg) {
         visitComment(n, arg);
         visitAnnotations(n, arg);
-        n.setId((VariableDeclaratorId) n.getId().accept(this, arg));
+        n.setIdentifier((VariableDeclaratorId) n.getIdentifier().accept(this, arg));
         n.setElementType((Type) n.getElementType().accept(this, arg));
         return n;
     }
@@ -716,8 +716,8 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ReturnStmt n, final A arg) {
         visitComment(n, arg);
-        if (n.getExpr().isPresent()) {
-            n.setExpr((Expression) n.getExpr().get().accept(this, arg));
+        if (n.getExpression().isPresent()) {
+            n.setExpression((Expression) n.getExpression().get().accept(this, arg));
         }
         return n;
     }
@@ -751,7 +751,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
         if (n.getLabel().isPresent()) {
             n.setLabel((Expression) n.getLabel().get().accept(this, arg));
         }
-        n.setStmts((NodeList<Statement>) n.getStmts().accept(this, arg));
+        n.setStatements((NodeList<Statement>) n.getStatements().accept(this, arg));
         return n;
     }
 
@@ -767,7 +767,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final SynchronizedStmt n, final A arg) {
         visitComment(n, arg);
-        n.setExpr((Expression) n.getExpr().accept(this, arg));
+        n.setExpression((Expression) n.getExpression().accept(this, arg));
         n.setBody((BlockStmt) n.getBody().accept(this, arg));
         return n;
     }
@@ -784,7 +784,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ThrowStmt n, final A arg) {
         visitComment(n, arg);
-        n.setExpr((Expression) n.getExpr().accept(this, arg));
+        n.setExpression((Expression) n.getExpression().accept(this, arg));
         return n;
     }
 
@@ -793,7 +793,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
         visitComment(n, arg);
         n.setResources((NodeList<VariableDeclarationExpr>) n.getResources().accept(this, arg));
         n.setTryBlock((BlockStmt) n.getTryBlock().accept(this, arg));
-        n.setCatchs((NodeList<CatchClause>) n.getCatchs().accept(this, arg));
+        n.setCatchClauses((NodeList<CatchClause>) n.getCatchClauses().accept(this, arg));
         if (n.getFinallyBlock() != null) {
             n.setFinallyBlock((BlockStmt) n.getFinallyBlock().accept(this, arg));
         }
@@ -817,7 +817,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final UnaryExpr n, final A arg) {
         visitComment(n, arg);
-        n.setExpr((Expression) n.getExpr().accept(this, arg));
+        n.setExpression((Expression) n.getExpression().accept(this, arg));
         return n;
     }
 
@@ -846,13 +846,13 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final VariableDeclarator n, final A arg) {
         visitComment(n, arg);
-        final VariableDeclaratorId id = (VariableDeclaratorId) n.getId().accept(this, arg);
+        final VariableDeclaratorId id = (VariableDeclaratorId) n.getIdentifier().accept(this, arg);
         if (id == null) {
             return null;
         }
-        n.setId(id);
-        if (n.getInit().isPresent()) {
-            n.setInit((Expression) n.getInit().get().accept(this, arg));
+        n.setIdentifier(id);
+        if (n.getInitializer().isPresent()) {
+            n.setInitializer((Expression) n.getInitializer().get().accept(this, arg));
         }
         return n;
     }
@@ -882,11 +882,11 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final WildcardType n, final A arg) {
         visitComment(n, arg);
         visitAnnotations(n, arg);
-        if (n.getExtends().isPresent()) {
-            n.setExtends((ReferenceType) n.getExtends().get().accept(this, arg));
+        if (n.getExtendedTypes().isPresent()) {
+            n.setExtendedTypes((ReferenceType) n.getExtendedTypes().get().accept(this, arg));
         }
-        if (n.getSuper().isPresent()) {
-            n.setSuper((ReferenceType) n.getSuper().get().accept(this, arg));
+        if (n.getSuperTypes().isPresent()) {
+            n.setSuperTypes((ReferenceType) n.getSuperTypes().get().accept(this, arg));
         }
         return n;
     }

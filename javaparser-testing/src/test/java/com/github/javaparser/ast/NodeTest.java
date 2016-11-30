@@ -33,7 +33,7 @@ public class NodeTest {
         cu.getClassByName("A").setName("MyCoolClass");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass"), changes);
 
-        cu.getClassByName("MyCoolClass").getFieldByName("f").setElementType(new PrimitiveType(PrimitiveType.Primitive.Boolean));
+        cu.getClassByName("MyCoolClass").getFieldByName("f").setElementType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "FieldDeclaration.element_type changed from int to boolean"), changes);
 
@@ -61,7 +61,7 @@ public class NodeTest {
         cu.getClassByName("A").setName("MyCoolClass");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass"), changes);
 
-        cu.getClassByName("MyCoolClass").getFieldByName("f").setElementType(new PrimitiveType(PrimitiveType.Primitive.Boolean));
+        cu.getClassByName("MyCoolClass").getFieldByName("f").setElementType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass"), changes);
 
         cu.getClassByName("MyCoolClass").getMethodsByName("foo").get(0).getParamByName("p").setName("myParam");
@@ -89,7 +89,7 @@ public class NodeTest {
         cu.getClassByName("A").setName("MyCoolClass");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass"), changes);
 
-        cu.getClassByName("MyCoolClass").getFieldByName("f").setElementType(new PrimitiveType(PrimitiveType.Primitive.Boolean));
+        cu.getClassByName("MyCoolClass").getFieldByName("f").setElementType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "FieldDeclaration.element_type changed from int to boolean"), changes);
 
@@ -122,7 +122,7 @@ public class NodeTest {
         cu.getClassByName("A").setName("MyCoolClass");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass"), changes);
 
-        cu.getClassByName("MyCoolClass").getFieldByName("f").setElementType(new PrimitiveType(PrimitiveType.Primitive.Boolean));
+        cu.getClassByName("MyCoolClass").getFieldByName("f").setElementType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "FieldDeclaration.element_type changed from int to boolean"), changes);
 
@@ -138,7 +138,7 @@ public class NodeTest {
                 "FieldDeclaration.modifiers changed from [] to []",
                 "FieldDeclaration.element_type changed from empty to int",
                 "VariableDeclaratorId.array_bracket_pairs_after_id changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1",
-                "VariableDeclarator.init changed from null to 0"), changes);
+                "VariableDeclarator.initializer changed from null to 0"), changes);
     }
 
     @Test

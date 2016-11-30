@@ -230,7 +230,7 @@ public class ManipulationSteps {
 
     @Then("Statement $position in BlockStmt toString is \"$expectedContent\"")
     public void thenTheBlockStmtContentIs(int position, String expectedContent) {
-        Statement statementUnderTest = blockStmt.getStmt(position-1);
+        Statement statementUnderTest = blockStmt.getStatement(position-1);
         assertThat(statementUnderTest.toString(), is(expectedContent));
     }
 
@@ -273,7 +273,7 @@ public class ManipulationSteps {
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameter(parameterPosition -1);
         assertThat(parameter.getType(), is(INT_TYPE));
-        assertThat(parameter.getId().getNameAsString(), is(expectedName));
+        assertThat(parameter.getIdentifier().getNameAsString(), is(expectedName));
     }
 
     private static class ChangeMethodNameToUpperCaseVisitor extends VoidVisitorAdapter<Void> {

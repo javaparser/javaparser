@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
@@ -41,7 +42,9 @@ import java.util.Optional;
  * @author Raquel Pau
  *
  */
-public class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr> {
+public class MethodReferenceExpr extends Expression implements
+        NodeWithTypeArguments<MethodReferenceExpr>,
+        NodeWithIdentifier<MethodReferenceExpr> {
 
     private Expression scope;
 
@@ -105,14 +108,15 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return this;
     }
 
+    @Override
     public String getIdentifier() {
         return identifier;
     }
 
+    @Override
     public MethodReferenceExpr setIdentifier(String identifier) {
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
     }
-
 }

@@ -40,7 +40,7 @@ public final class TryStmt extends Statement {
     // TODO can be null
 	private BlockStmt tryBlock;
 
-	private NodeList<CatchClause> catchs;
+	private NodeList<CatchClause> catchClauses;
 
     // TODO can be null
 	private BlockStmt finallyBlock;
@@ -53,21 +53,21 @@ public final class TryStmt extends Statement {
 				null);
 	}
 
-	public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchs,
+	public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses,
 			final BlockStmt finallyBlock) {
 		this(null,
 				new NodeList<>(),
 				tryBlock,
-				catchs,
+                catchClauses,
 				finallyBlock);
 	}
 
 	public TryStmt(Range range, NodeList<VariableDeclarationExpr> resources,
-	               final BlockStmt tryBlock, final NodeList<CatchClause> catchs, final BlockStmt finallyBlock) {
+                   final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
 		super(range);
 		setResources(resources);
 		setTryBlock(tryBlock);
-		setCatchs(catchs);
+		setCatchClauses(catchClauses);
 		setFinallyBlock(finallyBlock);
 	}
 
@@ -81,8 +81,8 @@ public final class TryStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-	public NodeList<CatchClause> getCatchs() {
-        return catchs;
+	public NodeList<CatchClause> getCatchClauses() {
+        return catchClauses;
 	}
 
 	public BlockStmt getFinallyBlock() {
@@ -97,10 +97,10 @@ public final class TryStmt extends Statement {
         return resources;
 	}
 
-	public TryStmt setCatchs(final NodeList<CatchClause> catchs) {
-		notifyPropertyChange(ObservableProperty.CATCHS, this.catchs, catchs);
-		this.catchs = assertNotNull(catchs);
-		setAsParentNodeOf(this.catchs);
+	public TryStmt setCatchClauses(final NodeList<CatchClause> catchClauses) {
+		notifyPropertyChange(ObservableProperty.CATCH_CLAUSES, this.catchClauses, catchClauses);
+		this.catchClauses = assertNotNull(catchClauses);
+		setAsParentNodeOf(this.catchClauses);
 		return this;
 	}
 

@@ -24,6 +24,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -35,26 +36,26 @@ import java.util.Optional;
  */
 public final class ReturnStmt extends Statement {
 
-	private Expression expr;
+	private Expression expression;
 
 	public ReturnStmt() {
         this(null, null);
 	}
 
-	public ReturnStmt(final Expression expr) {
-		this(null, expr);
+	public ReturnStmt(final Expression expression) {
+		this(null, expression);
 	}
 
-	public ReturnStmt(Range range, final Expression expr) {
+	public ReturnStmt(Range range, final Expression expression) {
 		super(range);
-		setExpr(expr);
+		setExpression(expression);
 	}
 
     /**
      * Will create a NameExpr with the string param
      */
-    public ReturnStmt(String expr) {
-        this(null, new NameExpr(expr));
+    public ReturnStmt(String expression) {
+        this(null, new NameExpr(expression));
     }
 
     @Override
@@ -66,20 +67,20 @@ public final class ReturnStmt extends Statement {
 		v.visit(this, arg);
 	}
 
-    public Optional<Expression> getExpr() {
-        return Optional.ofNullable(expr);
+    public Optional<Expression> getExpression() {
+        return Optional.ofNullable(expression);
 	}
 
     /**
-     * Sets the expr
+     * Sets the expression
      * 
-     * @param expr the expr, can be null
+     * @param expression the expression, can be null
      * @return this, the ReturnStmt
      */
-	public ReturnStmt setExpr(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
+	public ReturnStmt setExpression(final Expression expression) {
+		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+		this.expression = expression;
+		setAsParentNodeOf(this.expression);
 		return this;
 	}
 }

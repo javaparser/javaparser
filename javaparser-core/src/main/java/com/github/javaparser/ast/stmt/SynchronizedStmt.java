@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -34,9 +35,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class SynchronizedStmt extends Statement implements NodeWithBlockStmt<SynchronizedStmt> {
+public final class SynchronizedStmt extends Statement implements 
+        NodeWithBlockStmt<SynchronizedStmt>,
+        NodeWithExpression<SynchronizedStmt> {
 
-    private Expression expr;
+    private Expression expression;
 
     private BlockStmt block;
 
@@ -44,13 +47,13 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         this(null, new NameExpr(), new BlockStmt());
     }
 
-    public SynchronizedStmt(final Expression expr, final BlockStmt block) {
-        this(null, expr, block);
+    public SynchronizedStmt(final Expression expression, final BlockStmt block) {
+        this(null, expression, block);
     }
 
-    public SynchronizedStmt(Range range, final Expression expr, final BlockStmt block) {
+    public SynchronizedStmt(Range range, final Expression expression, final BlockStmt block) {
         super(range);
-        setExpr(expr);
+        setExpression(expression);
         setBody(block);
     }
 
@@ -72,8 +75,8 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         return block;
     }
 
-    public Expression getExpr() {
-        return expr;
+    public Expression getExpression() {
+        return expression;
     }
 
     /**
@@ -84,10 +87,10 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         return setBody(block);
     }
 
-    public SynchronizedStmt setExpr(final Expression expr) {
-        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-        this.expr = assertNotNull(expr);
-        setAsParentNodeOf(this.expr);
+    public SynchronizedStmt setExpression(final Expression expression) {
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        this.expression = assertNotNull(expression);
+        setAsParentNodeOf(this.expression);
         return this;
     }
 

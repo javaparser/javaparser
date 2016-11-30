@@ -56,10 +56,14 @@ public final class VariableDeclarationExpr extends Expression implements
 
     private NodeList<AnnotationExpr> annotations;
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     private Type elementType;
 
     private NodeList<VariableDeclarator> variables;
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public VariableDeclarationExpr() {
@@ -166,6 +170,8 @@ public final class VariableDeclarationExpr extends Expression implements
         return modifiers;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public Type getElementType() {
         return elementType;
@@ -191,6 +197,8 @@ public final class VariableDeclarationExpr extends Expression implements
         return this;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public VariableDeclarationExpr setElementType(final Type elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
@@ -207,10 +215,14 @@ public final class VariableDeclarationExpr extends Expression implements
         return this;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public VariableDeclarationExpr setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
         notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_TYPE, this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);

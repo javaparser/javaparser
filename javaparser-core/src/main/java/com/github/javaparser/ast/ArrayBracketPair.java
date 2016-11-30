@@ -15,7 +15,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * In, for example, <code>int[] a[];</code> there are two ArrayBracketPair objects,
  * one for the [] after int, one for the [] after a.
+ * @deprecated will be removed in 3.0
  */
+@Deprecated
 public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayBracketPair> {
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 

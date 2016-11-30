@@ -49,7 +49,7 @@ public final class MethodCallExpr extends Expression implements
 
     private SimpleName name;
 
-    private NodeList<Expression> args;
+    private NodeList<Expression> arguments;
 
     public MethodCallExpr() {
         this(null,
@@ -67,20 +67,20 @@ public final class MethodCallExpr extends Expression implements
                 new NodeList<>());
     }
 
-    public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> args) {
+    public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> arguments) {
         this(null,
                 scope,
                 new NodeList<>(),
                 name,
-                args);
+                arguments);
     }
 
-	public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final SimpleName name, final NodeList<Expression> args) {
+	public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final SimpleName name, final NodeList<Expression> arguments) {
 		super(range);
 		setScope(scope);
 		setTypeArguments(typeArguments);
 		setName(name);
-		setArgs(args);
+		setArguments(arguments);
 	}
 
     @Override
@@ -93,9 +93,8 @@ public final class MethodCallExpr extends Expression implements
         v.visit(this, arg);
     }
 
-    @Override
-    public NodeList<Expression> getArgs() {
-        return args;
+    public NodeList<Expression> getArguments() {
+        return arguments;
     }
 
     @Override
@@ -107,11 +106,10 @@ public final class MethodCallExpr extends Expression implements
         return scope;
     }
 
-    @Override
-	public MethodCallExpr setArgs(final NodeList<Expression> args) {
-        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
-		this.args = assertNotNull(args);
-		setAsParentNodeOf(this.args);
+    public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
+        notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+		this.arguments = assertNotNull(arguments);
+		setAsParentNodeOf(this.arguments);
         return this;
 	}
 

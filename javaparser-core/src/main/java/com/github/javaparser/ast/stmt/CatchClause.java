@@ -41,7 +41,7 @@ import java.util.EnumSet;
  */
 public final class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> {
 
-    private Parameter param;
+    private Parameter parameter;
 
     private BlockStmt catchBlock;
 
@@ -49,8 +49,8 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         this(null, new Parameter(), new BlockStmt());         
     }
 
-    public CatchClause(final Parameter param, final BlockStmt catchBlock) {
-        this(null, param, catchBlock);
+    public CatchClause(final Parameter parameter, final BlockStmt catchBlock) {
+        this(null, parameter, catchBlock);
     }
 
     public CatchClause(final EnumSet<Modifier> exceptModifier,
@@ -73,7 +73,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
                        final Parameter parameter,
                        final BlockStmt catchBlock) {
         super(range);
-        setParam(parameter);
+        setParameter(parameter);
         setBody(catchBlock);
     }
 
@@ -97,8 +97,8 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 	 * Note that the type of the Parameter can be a UnionType. In this case, any annotations found at the start of the catch(@X A a |...)
 	 * are found directly in the Parameter. Annotations that are on the second or later type - catch(A a | @X B b ...) are found on those types.
 	 */
-	public Parameter getParam() {
-		return param;
+	public Parameter getParameter() {
+		return parameter;
 	}
 
     /**
@@ -109,10 +109,10 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         return setBody(catchBlock);
 	}
 
-	public CatchClause setParam(final Parameter param) {
-        notifyPropertyChange(ObservableProperty.PARAM, this.param, param);
-		this.param = param;
-		setAsParentNodeOf(this.param);
+	public CatchClause setParameter(final Parameter parameter) {
+        notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
+		this.parameter = parameter;
+		setAsParentNodeOf(this.parameter);
         return this;
 	}
 

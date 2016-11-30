@@ -10,9 +10,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.ReferenceType;
 
-public class NodeWithThrowableBuildersTest {
+public class NodeWithThrownExceptionsBuildersTest {
 	CompilationUnit cu;
 
 	@Before
@@ -28,11 +27,11 @@ public class NodeWithThrowableBuildersTest {
 	@Test
 	public void testThrows() {
 		MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
-		addMethod.addThrows(IllegalStateException.class);
-		assertEquals(1, addMethod.getThrows().size());
-		assertEquals(true, addMethod.isThrows(IllegalStateException.class));
-		addMethod.addThrows(new ClassOrInterfaceType("Test"));
-		assertEquals(2, addMethod.getThrows().size());
-		assertEquals("Test", addMethod.getThrow(1).toString());
+		addMethod.addThrownException(IllegalStateException.class);
+		assertEquals(1, addMethod.getThrownExceptions().size());
+		assertEquals(true, addMethod.isThrown(IllegalStateException.class));
+		addMethod.addThrownException(new ClassOrInterfaceType("Test"));
+		assertEquals(2, addMethod.getThrownExceptions().size());
+		assertEquals("Test", addMethod.getThrownException(1).toString());
 	}
 }

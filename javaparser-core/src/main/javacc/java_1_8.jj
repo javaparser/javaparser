@@ -177,8 +177,8 @@ final class ASTParser {
             ret.setRange(range(ret.getBegin().get(), lambdaBody.getEnd().get()));
         } else if (ret instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) ret;
-            Expression inner = generateLambda(castExpr.getExpr(), lambdaBody);
-            castExpr.setExpr(inner);
+            Expression inner = generateLambda(castExpr.getExpression(), lambdaBody);
+            castExpr.setExpression(inner);
         } else {
             addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
         }
@@ -2065,21 +2065,21 @@ PrimitiveType PrimitiveType():
 }
 {
 (
-  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Boolean); }
+  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN); }
 |
-  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Char); }
+  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR); }
 |
-  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Byte); }
+  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE); }
 |
-  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Short); }
+  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT); }
 |
-  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Int); }
+  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT); }
 |
-  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Long); }
+  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG); }
 |
-  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Float); }
+  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT); }
 |
-  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Double); }
+  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE); }
 )
 { return ret; }
 }
@@ -2181,18 +2181,18 @@ AssignExpr.Operator AssignmentOperator():
 }
 {
   (
-      "="    { ret = AssignExpr.Operator.assign; }
-    | "*="   { ret = AssignExpr.Operator.star; }
-    | "/="   { ret = AssignExpr.Operator.slash; }
-    | "%="   { ret = AssignExpr.Operator.rem; }
-    | "+="   { ret = AssignExpr.Operator.plus; }
-    | "-="   { ret = AssignExpr.Operator.minus; }
-    | "<<="  { ret = AssignExpr.Operator.lShift; }
-    | ">>="  { ret = AssignExpr.Operator.rSignedShift; }
-    | ">>>=" { ret = AssignExpr.Operator.rUnsignedShift; }
-    | "&="   { ret = AssignExpr.Operator.and; }
-    | "^="   { ret = AssignExpr.Operator.xor; }
-    | "|="   { ret = AssignExpr.Operator.or; }
+      "="    { ret = AssignExpr.Operator.ASSIGN; }
+    | "*="   { ret = AssignExpr.Operator.MULTIPLY; }
+    | "/="   { ret = AssignExpr.Operator.DIVIDE; }
+    | "%="   { ret = AssignExpr.Operator.REMAINDER; }
+    | "+="   { ret = AssignExpr.Operator.PLUS; }
+    | "-="   { ret = AssignExpr.Operator.MINUS; }
+    | "<<="  { ret = AssignExpr.Operator.LEFT_SHIFT; }
+    | ">>="  { ret = AssignExpr.Operator.SIGNED_RIGHT_SHIFT; }
+    | ">>>=" { ret = AssignExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
+    | "&="   { ret = AssignExpr.Operator.AND; }
+    | "^="   { ret = AssignExpr.Operator.XOR; }
+    | "|="   { ret = AssignExpr.Operator.OR; }
   )
   { return ret; }
 }
@@ -2215,7 +2215,7 @@ Expression ConditionalOrExpression():
 	Expression right;
 }
 {
-  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.or); } )*
+  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.OR); } )*
   { return ret; }
 }
 
@@ -2225,7 +2225,7 @@ Expression ConditionalAndExpression():
 	Expression right;
 }
 {
-  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.and); } )*
+  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.AND); } )*
   { return ret; }
 }
 
@@ -2235,7 +2235,7 @@ Expression InclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.binOr); } )*
+  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
   { return ret; }
 }
 
@@ -2245,7 +2245,7 @@ Expression ExclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.xor); } )*
+  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.XOR); } )*
   { return ret; }
 }
 
@@ -2255,7 +2255,7 @@ Expression AndExpression():
 	Expression right;
 }
 {
-  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.binAnd); } )*
+  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
   { return ret; }
 }
 
@@ -2268,8 +2268,8 @@ Expression EqualityExpression():
 {
   ret = InstanceOfExpression()
   (
-    ( "==" { op = BinaryExpr.Operator.equals; } |
-      "!=" { op = BinaryExpr.Operator.notEquals; }
+    ( "==" { op = BinaryExpr.Operator.EQUALS; } |
+      "!=" { op = BinaryExpr.Operator.NOT_EQUALS; }
     ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
@@ -2294,10 +2294,10 @@ Expression RelationalExpression():
 {
   ret = ShiftExpression()
   (
-  	( "<"  { op = BinaryExpr.Operator.less; } |
-  	  ">"  { op = BinaryExpr.Operator.greater; } |
-  	  "<=" { op = BinaryExpr.Operator.lessEquals; } |
-  	  ">=" { op = BinaryExpr.Operator.greaterEquals; }
+  	( "<"  { op = BinaryExpr.Operator.LESS; } |
+  	  ">"  { op = BinaryExpr.Operator.GREATER; } |
+  	  "<=" { op = BinaryExpr.Operator.LESS_EQUALS; } |
+  	  ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
   	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
@@ -2312,9 +2312,9 @@ Expression ShiftExpression():
 {
   ret = AdditiveExpression()
   (
-  	( "<<"             { op = BinaryExpr.Operator.lShift; } |
-  	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.rSignedShift; } |
-  	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.rUnsignedShift; }
+  	( "<<"             { op = BinaryExpr.Operator.LEFT_SHIFT; } |
+  	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.SIGNED_RIGHT_SHIFT; } |
+  	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
   	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
@@ -2329,8 +2329,8 @@ Expression AdditiveExpression():
 {
   ret = MultiplicativeExpression()
   (
-  	( "+" { op = BinaryExpr.Operator.plus; } |
-  	  "-" { op = BinaryExpr.Operator.minus; }
+  	( "+" { op = BinaryExpr.Operator.PLUS; } |
+  	  "-" { op = BinaryExpr.Operator.MINUS; }
   	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
@@ -2345,9 +2345,9 @@ Expression MultiplicativeExpression():
 {
   ret = UnaryExpression()
   (
-  	( "*" { op = BinaryExpr.Operator.times; } |
-  	  "/" { op = BinaryExpr.Operator.divide; } |
-  	  "%" { op = BinaryExpr.Operator.remainder; }
+  	( "*" { op = BinaryExpr.Operator.MULTIPLY; } |
+  	  "/" { op = BinaryExpr.Operator.DIVIDE; } |
+  	  "%" { op = BinaryExpr.Operator.REMAINDER; }
   	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, op); }
   )*
   { return ret; }
@@ -2365,11 +2365,11 @@ Expression UnaryExpression():
 	|
 	  ret = PreDecrementExpression()
 	|
-	  ( "+" { op = UnaryExpr.Operator.positive; begin=tokenBegin();} |
-	    "-" { op = UnaryExpr.Operator.negative; begin=tokenBegin();}
+	  ( "+" { op = UnaryExpr.Operator.PLUS; begin=tokenBegin();} |
+	    "-" { op = UnaryExpr.Operator.MINUS; begin=tokenBegin();}
 	  ) ret = UnaryExpression()
 	  {
-	  	 if(op == UnaryExpr.Operator.negative) {
+	  	 if(op == UnaryExpr.Operator.MINUS) {
 	  	 	if (ret instanceof IntegerLiteralExpr && ((IntegerLiteralExpr)ret).isMinValue()) {
 	  	 		ret = new IntegerLiteralMinValueExpr(range(begin, tokenEnd()));
 	  	 	} else if (ret instanceof LongLiteralExpr && ((LongLiteralExpr)ret).isMinValue()) {
@@ -2393,7 +2393,7 @@ Expression PreIncrementExpression():
 	Position begin = INVALID;
 }
 {
-  "++" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.preIncrement); }
+  "++" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.PREFIX_INCREMENT); }
   { return ret; }
 }
 
@@ -2403,7 +2403,7 @@ Expression PreDecrementExpression():
 	Position begin;
 }
 {
-  "--" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.preDecrement); }
+  "--" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.PREFIX_DECREMENT); }
   { return ret; }
 }
 
@@ -2415,8 +2415,8 @@ Expression UnaryExpressionNotPlusMinus():
 }
 {
   (
-	  ( "~" { op = UnaryExpr.Operator.inverse; begin=tokenBegin(); } |
-	    "!" { op = UnaryExpr.Operator.not;     begin=tokenBegin(); }
+	  ( "~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=tokenBegin(); } |
+	    "!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=tokenBegin(); }
 	  ) ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, op); }
 	|
 	  LOOKAHEAD( CastExpression() )
@@ -2436,8 +2436,8 @@ Expression PostfixExpression():
   ret = PrimaryExpression()
   [
   	LOOKAHEAD(2)
-    ( "++" { op = UnaryExpr.Operator.postIncrement; } |
-      "--" { op = UnaryExpr.Operator.postDecrement; }
+    ( "++" { op = UnaryExpr.Operator.POSTFIX_INCREMENT; } |
+      "--" { op = UnaryExpr.Operator.POSTFIX_DECREMENT; }
     ) { ret = new UnaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, op); }
   ]
   { return ret; }
@@ -2930,9 +2930,9 @@ ExpressionStmt StatementExpression():
 	|
 	  expr = PrimaryExpression()
 	  [
-	    "++" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.postIncrement);  }
+	    "++" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
 	  |
-	    "--" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.postDecrement);  }
+	    "--" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
 	  |
 	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin().get(), tokenEnd()), expr, value, op); }
 	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }

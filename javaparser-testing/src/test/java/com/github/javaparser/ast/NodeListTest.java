@@ -1,18 +1,15 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.observing.AstObserver;
-import com.github.javaparser.ast.observing.AstObserverAdapter;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.function.UnaryOperator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -157,8 +154,8 @@ public class NodeListTest {
 
         cd.getMembers().replaceAll(bodyDeclaration -> {
             FieldDeclaration clone = (FieldDeclaration)bodyDeclaration.clone();
-            VariableDeclaratorId id = clone.getVariable(0).getId();
-            id.setName(id.getName().getId().toUpperCase());
+            VariableDeclaratorId id = clone.getVariable(0).getIdentifier();
+            id.setName(id.getName().getIdentifier().toUpperCase());
             return clone;
         });
         assertEquals(Arrays.asList("'int a;' REMOVAL in list at 0", "'int A;' ADDITION in list at 0",
@@ -174,7 +171,7 @@ public class NodeListTest {
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
         cd.getMembers().register(createObserver(changes));
 
-        cd.getMembers().removeIf(m -> ((FieldDeclaration)m).getVariable(0).getId().getName().getId().length() > 3);
+        cd.getMembers().removeIf(m -> ((FieldDeclaration)m).getVariable(0).getIdentifier().getName().getIdentifier().length() > 3);
         assertEquals(Arrays.asList("'int longName;' REMOVAL in list at 1"), changes);
     }
 }

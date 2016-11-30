@@ -35,10 +35,10 @@ public class PropagatingAstObserverTest {
                 "VariableDeclaratorId.array_bracket_pairs_after_id changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1"), changes);
         assertEquals(true, fieldDeclaration.isRegistered(observer));
 
-        cu.getClassByName("A").getFieldByName("foo").getVariables().get(0).setId(new VariableDeclaratorId("Bar"));
+        cu.getClassByName("A").getFieldByName("foo").getVariables().get(0).setIdentifier(new VariableDeclaratorId("Bar"));
         assertEquals(Arrays.asList("FieldDeclaration.modifiers changed from [] to []",
                 "FieldDeclaration.element_type changed from empty to String",
                 "VariableDeclaratorId.array_bracket_pairs_after_id changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1",
-                "VariableDeclarator.id changed from foo to Bar"), changes);
+                "VariableDeclarator.identifier changed from foo to Bar"), changes);
     }
 }

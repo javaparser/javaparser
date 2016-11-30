@@ -35,20 +35,20 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
 
-    private NodeList<Statement> stmts;
+    private NodeList<Statement> statements;
 
     public BlockStmt() {
         this(null, new NodeList<>());
     }
 
-    public BlockStmt(final NodeList<Statement> stmts) {
-        this(null, stmts);
+    public BlockStmt(final NodeList<Statement> statements) {
+        this(null, statements);
 
     }
 
-    public BlockStmt(final Range range, final NodeList<Statement> stmts) {
+    public BlockStmt(final Range range, final NodeList<Statement> statements) {
         super(range);
-        setStmts(stmts);
+        setStatements(statements);
     }
 
     @Override
@@ -61,16 +61,14 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         v.visit(this, arg);
     }
 
-    @Override
-    public NodeList<Statement> getStmts() {
-        return stmts;
+    public NodeList<Statement> getStatements() {
+        return statements;
     }
 
-    @Override
-    public BlockStmt setStmts(final NodeList<Statement> stmts) {
-        notifyPropertyChange(ObservableProperty.STMTS, this.stmts, stmts);
-        this.stmts = assertNotNull(stmts);
-        setAsParentNodeOf(this.stmts);
+    public BlockStmt setStatements(final NodeList<Statement> statements) {
+        notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
+        this.statements = assertNotNull(statements);
+        setAsParentNodeOf(this.statements);
         return this;
     }
 

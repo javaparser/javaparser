@@ -195,7 +195,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                     "You can use this only when the field is attached to a class or an enum");
 
         VariableDeclarator variable = getVariable(0);
-        String fieldName = variable.getId().getNameAsString();
+        String fieldName = variable.getIdentifier().getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         if (parentClass != null)
@@ -227,7 +227,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                     "You can use this only when the field is attached to a class or an enum");
 
         VariableDeclarator variable = getVariable(0);
-        String fieldName = variable.getId().getNameAsString();
+        String fieldName = variable.getIdentifier().getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;
@@ -239,16 +239,20 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setter.getParameters().add(new Parameter(variable.getType(), new VariableDeclaratorId(fieldName)));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
-        blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.assign));
+        blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.ASSIGN));
         return setter;
     }
 
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public Type<?> getElementType() {
         return elementType;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public FieldDeclaration setElementType(final Type<?> elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
@@ -259,11 +263,14 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
-     */
+    * @deprecated will be removed in 3.0 */
+    @Deprecated
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterElementType;
     }
 
+    /** @deprecated will be removed in 3.0 */
+    @Deprecated
     @Override
     public FieldDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
         this.arrayBracketPairsAfterElementType = assertNotNull(arrayBracketPairsAfterType);
