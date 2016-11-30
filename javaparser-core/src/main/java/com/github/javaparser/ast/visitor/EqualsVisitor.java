@@ -1108,7 +1108,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override public Boolean visit(final ThisExpr n1, final Visitable arg) {
 		final ThisExpr n2 = (ThisExpr) arg;
 
-		if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr())) {
+        if (!nodeEquals(n1.getClassExpr().orElse(null), n2.getClassExpr().orElse(null))) {
 			return false;
 		}
 

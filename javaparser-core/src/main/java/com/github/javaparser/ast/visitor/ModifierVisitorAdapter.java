@@ -775,8 +775,8 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ThisExpr n, final A arg) {
         visitComment(n, arg);
-        if (n.getClassExpr() != null) {
-            n.setClassExpr((Expression) n.getClassExpr().accept(this, arg));
+        if (n.getClassExpr().isPresent()) {
+            n.setClassExpr((Expression) n.getClassExpr().get().accept(this, arg));
         }
         return n;
     }
