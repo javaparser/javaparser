@@ -7,7 +7,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * A stray semicolon between the imports.
  * This isn't described in the JLS, but accepted by most or all tools that parse Java.
+ * @deprecated will be removed in 3.0
  */
+@Deprecated
 public class EmptyImportDeclaration extends ImportDeclaration {
     
     public EmptyImportDeclaration() {
