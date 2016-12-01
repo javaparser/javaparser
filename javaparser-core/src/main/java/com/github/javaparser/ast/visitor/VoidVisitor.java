@@ -22,47 +22,13 @@
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.imports.*;
-import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
+import com.github.javaparser.ast.imports.*;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
 /**
@@ -165,10 +131,6 @@ public interface VoidVisitor<A> {
 	void visit(IntegerLiteralExpr n, A arg);
 
 	void visit(LongLiteralExpr n, A arg);
-
-	void visit(IntegerLiteralMinValueExpr n, A arg);
-
-	void visit(LongLiteralMinValueExpr n, A arg);
 
 	void visit(CharLiteralExpr n, A arg);
 

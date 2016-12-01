@@ -166,10 +166,6 @@ public interface GenericVisitor<R, A> {
 
 	R visit(LongLiteralExpr n, A arg);
 
-	R visit(IntegerLiteralMinValueExpr n, A arg);
-
-	R visit(LongLiteralMinValueExpr n, A arg);
-
 	R visit(CharLiteralExpr n, A arg);
 
 	R visit(DoubleLiteralExpr n, A arg);

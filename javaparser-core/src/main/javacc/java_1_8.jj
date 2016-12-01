@@ -2369,17 +2369,7 @@ Expression UnaryExpression():
 	    "-" { op = UnaryExpr.Operator.MINUS; begin=tokenBegin();}
 	  ) ret = UnaryExpression()
 	  {
-	  	 if(op == UnaryExpr.Operator.MINUS) {
-	  	 	if (ret instanceof IntegerLiteralExpr && ((IntegerLiteralExpr)ret).isMinValue()) {
-	  	 		ret = new IntegerLiteralMinValueExpr(range(begin, tokenEnd()));
-	  	 	} else if (ret instanceof LongLiteralExpr && ((LongLiteralExpr)ret).isMinValue()) {
-	  	 		ret = new LongLiteralMinValueExpr(range(begin, tokenEnd()));
-	  	 	} else {
-	  	 		ret = new UnaryExpr(range(begin, tokenEnd()), ret, op);
-	  	 	}
-	  	 } else {
-	  	 	ret = new UnaryExpr(range(begin, tokenEnd()), ret, op);
-	  	 }
+        ret = new UnaryExpr(range(begin, tokenEnd()), ret, op);
 	  }
 	|
 	  ret = UnaryExpressionNotPlusMinus()

@@ -299,11 +299,6 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
         super.visit(n, arg);
     }
 
-    @Override public void visit(final IntegerLiteralMinValueExpr n, final Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
     @Override public void visit(final JavadocComment n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
@@ -320,11 +315,6 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final LongLiteralExpr n, final Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override public void visit(final LongLiteralMinValueExpr n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
