@@ -1,3 +1,8 @@
+Version 3.0.0-RC.1
+------------------
+* 499 601 renames many fields to be more consistent
+* 596 605 602 604 smaller improvements and fixes
+
 Version 3.0.0-alpha.11
 ------------------
 * 547 595 Node.range is now using Optional instead of Range.UNKNOWN
