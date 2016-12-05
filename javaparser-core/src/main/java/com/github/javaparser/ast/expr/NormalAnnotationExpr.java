@@ -72,7 +72,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 
     /**
      * adds a pair to this annotation
-     * 
+     *
      * @return this, the {@link NormalAnnotationExpr}
      */
     public NormalAnnotationExpr addPair(String key, String value) {
@@ -81,7 +81,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 
     /**
      * adds a pair to this annotation
-     * 
+     *
      * @return this, the {@link NormalAnnotationExpr}
      */
     public NormalAnnotationExpr addPair(String key, NameExpr value) {

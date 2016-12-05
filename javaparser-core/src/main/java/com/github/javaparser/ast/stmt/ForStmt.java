@@ -107,7 +107,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     /**
      * Sets the compare
-     * 
+     *
      * @param compare the compare, can be null
      * @return this, the ForStmt
      */

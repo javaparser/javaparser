@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.Node;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -30,34 +31,34 @@ import java.util.Queue;
  */
 public abstract class TreeVisitor {
 
-	/**
-	 * https://en.wikipedia.org/wiki/Depth-first_search
-	 *
-	 * @param node the start node, and the first one that is passed to process(node).
-	 */
-	public void visitDepthFirst(Node node) {
-		process(node);
-		for (Node child : node.getChildNodes()) {
-			visitDepthFirst(child);
-		}
-	}
-	
-	/**
-	* https://en.wikipedia.org/wiki/Breadth-first_search
-	*
-	* @param node the start node, and the first one that is passed to process(node).
-	*/
-	public void visitBreadthFirst(Node node) {
-		Queue<Node> queue = new LinkedList<>();
-		queue.offer(node);
-		while (queue.size() > 0) {
-			Node head = queue.peek();
-			for (Node child : head.getChildNodes()) {
-				queue.offer(child);
-			}
-			process(queue.poll());
-		}
-	}
+    /**
+     * https://en.wikipedia.org/wiki/Depth-first_search
+     *
+     * @param node the start node, and the first one that is passed to process(node).
+     */
+    public void visitDepthFirst(Node node) {
+        process(node);
+        for (Node child : node.getChildNodes()) {
+            visitDepthFirst(child);
+        }
+    }
 
-	public abstract void process(Node node);
+    /**
+     * https://en.wikipedia.org/wiki/Breadth-first_search
+     *
+     * @param node the start node, and the first one that is passed to process(node).
+     */
+    public void visitBreadthFirst(Node node) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(node);
+        while (queue.size() > 0) {
+            Node head = queue.peek();
+            for (Node child : head.getChildNodes()) {
+                queue.offer(child);
+            }
+            process(queue.poll());
+        }
+    }
+
+    public abstract void process(Node node);
 }

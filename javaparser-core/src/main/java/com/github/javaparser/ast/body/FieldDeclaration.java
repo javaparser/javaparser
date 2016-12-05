@@ -117,12 +117,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * Creates a {@link FieldDeclaration}.
      *
-     * @param modifiers
-     *            modifiers
-     * @param type
-     *            type
-     * @param name
-     *            field name
+     * @param modifiers modifiers
+     * @param type type
+     * @param name field name
      */
     public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name) {
         this(assertNotNull(modifiers), assertNotNull(type), new VariableDeclarator(new VariableDeclaratorId(assertNotNull(name))));
@@ -140,9 +137,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     /**
      * Return the modifiers of this member declaration.
-     * 
-     * @see Modifier
+     *
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -180,10 +177,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * Create a getter for this field, <b>will only work if this field declares only 1 identifier and if this field is
      * already added to a ClassOrInterfaceDeclaration</b>
-     * 
+     *
      * @return the {@link MethodDeclaration} created
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
-     *             class or enum
+     * class or enum
      */
     public MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
@@ -212,10 +209,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * Create a setter for this field, <b>will only work if this field declares only 1 identifier and if this field is
      * already added to a ClassOrInterfaceDeclaration</b>
-     * 
+     *
      * @return the {@link MethodDeclaration} created
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
-     *             class or enum
+     * class or enum
      */
     public MethodDeclaration createSetter() {
         if (getVariables().size() != 1)
@@ -244,14 +241,18 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public Type<?> getElementType() {
         return elementType;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public FieldDeclaration setElementType(final Type<?> elementType) {
@@ -263,13 +264,16 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
-    * @deprecated will be removed in 3.0 */
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterElementType;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public FieldDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {

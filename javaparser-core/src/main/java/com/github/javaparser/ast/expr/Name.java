@@ -28,9 +28,9 @@ import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -41,8 +41,8 @@ import java.util.Optional;
  * <p>
  * You can construct one from a String with the name(...) method.
  *
- * @see SimpleName
  * @author Julio Vilmar Gesser
+ * @see SimpleName
  */
 public class Name extends Node implements NodeWithIdentifier<Name> {
     private String identifier;

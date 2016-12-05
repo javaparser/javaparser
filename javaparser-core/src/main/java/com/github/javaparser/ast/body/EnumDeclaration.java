@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -41,7 +41,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements 
+public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
         NodeWithImplements<EnumDeclaration> {
 
     private NodeList<ClassOrInterfaceType> implementedTypes;
@@ -49,10 +49,10 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     private NodeList<EnumConstantDeclaration> entries;
 
     public EnumDeclaration() {
-        this(null, 
-                EnumSet.noneOf(Modifier.class), 
-                new NodeList<>(), 
-                new SimpleName(), 
+        this(null,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                new SimpleName(),
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>());
@@ -115,7 +115,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public EnumDeclaration setEntries(NodeList<EnumConstantDeclaration> entries) {
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         this.entries = assertNotNull(entries);
-		setAsParentNodeOf(this.entries);
+        setAsParentNodeOf(this.entries);
         return this;
     }
 
@@ -123,7 +123,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public EnumDeclaration setImplements(NodeList<ClassOrInterfaceType> implementsList) {
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementsList);
         this.implementedTypes = assertNotNull(implementsList);
-		setAsParentNodeOf(this.implementedTypes);
+        setAsParentNodeOf(this.implementedTypes);
         return this;
     }
 

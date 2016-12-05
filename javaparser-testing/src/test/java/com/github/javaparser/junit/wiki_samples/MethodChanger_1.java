@@ -7,7 +7,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.FileInputStream;
 
-import static com.github.javaparser.ast.type.PrimitiveType.*;
+import static com.github.javaparser.ast.type.PrimitiveType.INT_TYPE;
 
 public class MethodChanger_1 {
 

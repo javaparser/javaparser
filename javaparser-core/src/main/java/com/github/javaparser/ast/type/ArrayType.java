@@ -30,11 +30,13 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         setAnnotations(annotations);
     }
 
-    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
-    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -50,8 +52,9 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
     }
 
     /**
-     * Takes lists of arrayBracketPairs, assumes the lists are ordered left to right and the pairs are ordered left to right, mirroring the actual code.
-     * The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds to the rightmost ArrayBracketPair.
+     * Takes lists of arrayBracketPairs, assumes the lists are ordered left to right and the pairs are ordered left to
+     * right, mirroring the actual code. The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds
+     * to the rightmost ArrayBracketPair.
      */
     @SafeVarargs
     public static Type wrapInArrayTypes(Type type, NodeList<ArrayBracketPair>... arrayBracketPairLists) {
@@ -81,7 +84,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         }
         return new Pair<>(type, arrayBracketPairs);
     }
-    
+
     public static ArrayType arrayOf(Type type, AnnotationExpr... annotations) {
         return new ArrayType(type, nodeList(annotations));
     }

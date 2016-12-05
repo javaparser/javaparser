@@ -14,7 +14,7 @@ public abstract class PropagatingAstObserver implements AstObserver {
      */
     public static PropagatingAstObserver transformInPropagatingObserver(final AstObserver observer) {
         if (observer instanceof PropagatingAstObserver) {
-            return (PropagatingAstObserver)observer;
+            return (PropagatingAstObserver) observer;
         }
         return new PropagatingAstObserver() {
             @Override

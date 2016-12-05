@@ -18,15 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.bdd.visitors.PositionTestVisitor;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.bdd.visitors.PositionTestVisitor;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -50,7 +50,7 @@ public class VisitorSteps {
     /* Map that maintains shares state across step classes.  If manipulating the objects in the map you must update the state */
     private Map<String, Object> state;
 
-    public VisitorSteps(Map<String, Object> state){
+    public VisitorSteps(Map<String, Object> state) {
         this.state = state;
     }
 
@@ -92,7 +92,7 @@ public class VisitorSteps {
     @When("the CompilationUnit is cloned to the second CompilationUnit")
     public void whenTheSecondCompilationUnitIsCloned() {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        CompilationUnit compilationUnit2 = (CompilationUnit)compilationUnit.accept(new CloneVisitor(), null);
+        CompilationUnit compilationUnit2 = (CompilationUnit) compilationUnit.accept(new CloneVisitor(), null);
         state.put("cu2", compilationUnit2);
     }
 

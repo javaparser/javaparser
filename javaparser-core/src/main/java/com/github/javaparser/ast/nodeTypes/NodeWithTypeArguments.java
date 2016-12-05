@@ -21,20 +21,20 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import static com.github.javaparser.ast.NodeList.nodeList;
-
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
 
+import java.util.Optional;
+
+import static com.github.javaparser.ast.NodeList.nodeList;
+
 /**
  * A node that can have type arguments.
- * 
+ * <p>
  * <pre>
  *     new X();        --> typeArguments == Optional is empty
- *     new X&lt;>();      --> typeArguments = [], diamondOperator = true 
+ *     new X&lt;>();      --> typeArguments = [], diamondOperator = true
  *     new X&lt;C,D>();   --> typeArguments = [C,D], diamondOperator = false
  * </pre>
  */
@@ -46,7 +46,7 @@ public interface NodeWithTypeArguments<N extends Node> {
 
     /**
      * Allows you to set the generic arguments
-     * 
+     *
      * @param typeArguments The list of types of the generics, can be null
      */
     N setTypeArguments(NodeList<Type<?>> typeArguments);

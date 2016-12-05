@@ -1,12 +1,12 @@
 package com.github.javaparser;
 
-import static com.github.javaparser.utils.Utils.EOL;
-import static java.util.Collections.singletonList;
+import com.github.javaparser.ast.comments.CommentsCollection;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.github.javaparser.ast.comments.CommentsCollection;
+import static com.github.javaparser.utils.Utils.EOL;
+import static java.util.Collections.singletonList;
 
 /**
  * The results given when parsing with an instance of JavaParser.
@@ -19,6 +19,7 @@ public class ParseResult<T> {
 
     /**
      * General constructor.
+     *
      * @param result the AST, or empty if it wasn't created.
      * @param problems a list of encountered parsing problems.
      * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.

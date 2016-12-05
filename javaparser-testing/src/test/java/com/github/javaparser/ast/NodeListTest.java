@@ -9,7 +9,10 @@ import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +22,7 @@ public class NodeListTest {
         return new AstObserver() {
             @Override
             public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format("change of property %s for %s: from '%s' to '%s'", property, observedNode, oldValue, newValue ));
+                changes.add(String.format("change of property %s for %s: from '%s' to '%s'", property, observedNode, oldValue, newValue));
             }
 
             @Override
@@ -153,7 +156,7 @@ public class NodeListTest {
         cd.getMembers().register(createObserver(changes));
 
         cd.getMembers().replaceAll(bodyDeclaration -> {
-            FieldDeclaration clone = (FieldDeclaration)bodyDeclaration.clone();
+            FieldDeclaration clone = (FieldDeclaration) bodyDeclaration.clone();
             VariableDeclaratorId id = clone.getVariable(0).getIdentifier();
             id.setName(id.getName().getIdentifier().toUpperCase());
             return clone;
@@ -171,7 +174,7 @@ public class NodeListTest {
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A");
         cd.getMembers().register(createObserver(changes));
 
-        cd.getMembers().removeIf(m -> ((FieldDeclaration)m).getVariable(0).getIdentifier().getName().getIdentifier().length() > 3);
+        cd.getMembers().removeIf(m -> ((FieldDeclaration) m).getVariable(0).getIdentifier().getName().getIdentifier().length() > 3);
         assertEquals(Arrays.asList("'int longName;' REMOVAL in list at 1"), changes);
     }
 }

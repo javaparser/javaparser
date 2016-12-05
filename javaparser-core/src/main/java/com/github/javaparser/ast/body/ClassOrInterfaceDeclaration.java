@@ -44,8 +44,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements 
-        NodeWithImplements<ClassOrInterfaceDeclaration>, 
+public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements
+        NodeWithImplements<ClassOrInterfaceDeclaration>,
         NodeWithExtends<ClassOrInterfaceDeclaration>,
         NodeWithTypeParameters<ClassOrInterfaceDeclaration> {
 
@@ -59,27 +59,27 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     private NodeList<ClassOrInterfaceType> implementedTypes;
 
     public ClassOrInterfaceDeclaration() {
-        this(null, 
-                EnumSet.noneOf(Modifier.class), 
-                new NodeList<>(), 
-                false, 
+        this(null,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                false,
                 new SimpleName(),
                 new NodeList<>(),
-                new NodeList<>(), 
-                new NodeList<>(), 
-                new NodeList<>()); 
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
                                        final String name) {
-        this(null, 
-                modifiers, 
-                new NodeList<>(), 
+        this(null,
+                modifiers,
+                new NodeList<>(),
                 isInterface,
                 new SimpleName(name),
                 new NodeList<>(),
-                new NodeList<>(), 
-                new NodeList<>(), 
+                new NodeList<>(),
+                new NodeList<>(),
                 new NodeList<>());
     }
 

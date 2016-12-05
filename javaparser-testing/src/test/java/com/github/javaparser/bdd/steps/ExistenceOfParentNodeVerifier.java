@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.HasParentNode;
@@ -48,7 +48,7 @@ class ExistenceOfParentNodeVerifier {
 
     private static class Verifier extends VoidVisitorAdapter<Void> {
         private static void assertParentIsSet(HasParentNode<?> n) {
-			assertThat(n + " has no parent set!", n.getParentNode().orElse(null), is(notNullValue()));
+            assertThat(n + " has no parent set!", n.getParentNode().orElse(null), is(notNullValue()));
         }
 
         @Override

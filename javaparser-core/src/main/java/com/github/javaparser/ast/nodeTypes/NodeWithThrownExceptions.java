@@ -16,7 +16,7 @@ public interface NodeWithThrownExceptions<N extends Node> {
 
     /**
      * Adds this type to the throws clause
-     * 
+     *
      * @param throwType the exception type
      * @return this
      */
@@ -29,7 +29,7 @@ public interface NodeWithThrownExceptions<N extends Node> {
 
     /**
      * Adds this class to the throws clause
-     * 
+     *
      * @param clazz the exception class
      * @return this
      */
@@ -42,7 +42,7 @@ public interface NodeWithThrownExceptions<N extends Node> {
      * Check whether this elements throws this exception class.
      * Note that this is simply a text compare of the simple name of the class,
      * no actual type resolution takes place.
-     * 
+     *
      * @param clazz the class of the exception
      * @return true if found in throws clause, false if not
      */
@@ -54,7 +54,7 @@ public interface NodeWithThrownExceptions<N extends Node> {
      * Check whether this elements throws this exception class
      * Note that this is simply a text compare,
      * no actual type resolution takes place.
-     * 
+     *
      * @param throwableName the class of the exception
      * @return true if found in throws clause, false if not
      */

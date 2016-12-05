@@ -228,7 +228,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 getArrayBracketPairsAfterParameterList());
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public Type<?> getElementType() {
@@ -294,7 +296,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         return this;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public MethodDeclaration setElementType(final Type<?> elementType) {
@@ -411,14 +415,17 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * @return the array brackets in this position: <code>class C { int[] abc; }</code>
-     * @deprecated will be removed in 3.0 */
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public MethodDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
@@ -429,13 +436,16 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * @return the array brackets in this position: <code>int abc()[] {...}</code>
-    * @deprecated will be removed in 3.0 */
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterParameterList() {
         return arrayBracketPairsAfterParameterList;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     public MethodDeclaration setArrayBracketPairsAfterParameterList(NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList) {
         this.arrayBracketPairsAfterParameterList = assertNotNull(arrayBracketPairsAfterParameterList);

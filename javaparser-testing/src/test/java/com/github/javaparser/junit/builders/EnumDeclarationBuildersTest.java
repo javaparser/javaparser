@@ -1,29 +1,28 @@
 package com.github.javaparser.junit.builders;
 
-import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-
-import java.util.function.Function;
-
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.EnumDeclaration;
+import java.util.function.Function;
+
+import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.Assert.assertEquals;
 
 public class EnumDeclarationBuildersTest {
-	CompilationUnit cu;
+    CompilationUnit cu;
 
-	@Before
-	public void setup() {
-		cu = new CompilationUnit();
-	}
+    @Before
+    public void setup() {
+        cu = new CompilationUnit();
+    }
 
-	@After
-	public void teardown() {
-		cu = null;
-	}
+    @After
+    public void teardown() {
+        cu = null;
+    }
 
     @Test
     public void testAddImplements() {

@@ -1,48 +1,45 @@
 package com.github.javaparser.junit.builders;
 
-import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.Map;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.Map;
+
+import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.Assert.*;
 
 public class CompilationUnitBuildersTest {
-	CompilationUnit cu;
+    CompilationUnit cu;
 
-	@Before
-	public void setup() {
-		cu = new CompilationUnit();
-	}
+    @Before
+    public void setup() {
+        cu = new CompilationUnit();
+    }
 
-	@After
-	public void teardown() {
-		cu = null;
-	}
+    @After
+    public void teardown() {
+        cu = null;
+    }
 
-	@Test
-	public void testAddImport() {
-		cu.addImport(Map.class);
-		cu.addImport(Map.class);
-		cu.addImport(List.class);
-		assertEquals(2, cu.getImports().size());
-		cu.addImport("myImport");
-		assertEquals(3, cu.getImports().size());
-		assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImport(0).toString());
-		assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(1).toString());
-		assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
-	}
+    @Test
+    public void testAddImport() {
+        cu.addImport(Map.class);
+        cu.addImport(Map.class);
+        cu.addImport(List.class);
+        assertEquals(2, cu.getImports().size());
+        cu.addImport("myImport");
+        assertEquals(3, cu.getImports().size());
+        assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImport(0).toString());
+        assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(1).toString());
+        assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
+    }
 
     @Test
     public void testAddClass() {

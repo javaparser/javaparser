@@ -66,7 +66,7 @@ public final class BreakStmt extends Statement {
 
     /**
      * Sets the identifier
-     * 
+     *
      * @param identifier the identifier, can be null
      * @return this, the BreakStmt
      */

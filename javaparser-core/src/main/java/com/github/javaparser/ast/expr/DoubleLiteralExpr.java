@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -30,23 +30,25 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class DoubleLiteralExpr extends StringLiteralExpr {
 
-	public DoubleLiteralExpr() {
+    public DoubleLiteralExpr() {
         this(null, "0");
-	}
+    }
 
-	public DoubleLiteralExpr(final String value) {
-		this(null, value);
-	}
+    public DoubleLiteralExpr(final String value) {
+        this(null, value);
+    }
 
-	public DoubleLiteralExpr(final Range range, final String value) {
-		super(range, value);
-	}
+    public DoubleLiteralExpr(final Range range, final String value) {
+        super(range, value);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 }

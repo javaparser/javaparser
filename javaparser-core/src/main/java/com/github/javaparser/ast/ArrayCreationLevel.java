@@ -55,10 +55,10 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
-    
+
     /**
      * Sets the dimension
-     * 
+     *
      * @param dimension the dimension, can be null
      * @return this, the ArrayCreationLevel
      */

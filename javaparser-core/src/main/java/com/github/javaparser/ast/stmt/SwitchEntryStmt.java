@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -38,60 +38,60 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class SwitchEntryStmt extends Statement implements NodeWithStatements<SwitchEntryStmt> {
 
-	private Expression label;
+    private Expression label;
 
-	private NodeList<Statement> statements;
+    private NodeList<Statement> statements;
 
-	public SwitchEntryStmt() {
-		this(null, null, new NodeList<>());
-	}
+    public SwitchEntryStmt() {
+        this(null, null, new NodeList<>());
+    }
 
-	public SwitchEntryStmt(final Expression label, final NodeList<Statement> statements) {
-		this(null, label, statements);
-	}
+    public SwitchEntryStmt(final Expression label, final NodeList<Statement> statements) {
+        this(null, label, statements);
+    }
 
-	public SwitchEntryStmt(Range range, final Expression label,
-	                       final NodeList<Statement> statements) {
-		super(range);
-		setLabel(label);
-		setStatements(statements);
-	}
+    public SwitchEntryStmt(Range range, final Expression label,
+                           final NodeList<Statement> statements) {
+        super(range);
+        setLabel(label);
+        setStatements(statements);
+    }
 
-	@Override
-	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override
-	public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
     public Optional<Expression> getLabel() {
         return Optional.ofNullable(label);
-	}
+    }
 
-	public NodeList<Statement> getStatements() {
+    public NodeList<Statement> getStatements() {
         return statements;
-	}
+    }
 
     /**
      * Sets the label
-     * 
+     *
      * @param label the label, can be null
      * @return this, the SwitchEntryStmt
      */
-	public SwitchEntryStmt setLabel(final Expression label) {
-		notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-		this.label = label;
-		setAsParentNodeOf(this.label);
-		return this;
-	}
-
-	public SwitchEntryStmt setStatements(final NodeList<Statement> statements) {
-		notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
-		this.statements = assertNotNull(statements);
-		setAsParentNodeOf(this.statements);
+    public SwitchEntryStmt setLabel(final Expression label) {
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        this.label = label;
+        setAsParentNodeOf(this.label);
         return this;
-	}
+    }
+
+    public SwitchEntryStmt setStatements(final NodeList<Statement> statements) {
+        notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
+        this.statements = assertNotNull(statements);
+        setAsParentNodeOf(this.statements);
+        return this;
+    }
 }

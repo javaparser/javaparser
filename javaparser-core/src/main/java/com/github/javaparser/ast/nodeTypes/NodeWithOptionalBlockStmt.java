@@ -1,9 +1,9 @@
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.BlockStmt;
+
+import java.util.Optional;
 
 public interface NodeWithOptionalBlockStmt<N extends Node> {
     Optional<BlockStmt> getBody();
