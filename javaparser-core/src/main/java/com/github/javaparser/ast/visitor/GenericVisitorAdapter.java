@@ -1642,7 +1642,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(EmptyImportDeclaration n, A arg) {
+    public R visit(BadImportDeclaration n, A arg) {
         visitComment(n, arg);
         return null;
     }

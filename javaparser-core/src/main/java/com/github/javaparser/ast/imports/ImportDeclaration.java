@@ -43,4 +43,8 @@ public abstract class ImportDeclaration extends Node {
     public ImportDeclaration(Range range) {
         super(range);
     }
+
+    abstract boolean isAsterisk();
+
+    abstract boolean isStatic();
 }

@@ -216,7 +216,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(NodeList n, A arg);
 
-    R visit(EmptyImportDeclaration n, A arg);
+    R visit(BadImportDeclaration n, A arg);
 
     R visit(SingleStaticImportDeclaration n, A arg);
 

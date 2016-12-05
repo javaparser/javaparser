@@ -86,5 +86,6 @@ public enum ObservableProperty {
     VALUES,
     VARIABLE,
     VARIABLES,
+    SOURCE_TEXT, 
     VAR_ARGS
 }
