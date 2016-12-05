@@ -36,6 +36,11 @@ public class NodePositionTest {
     }
 
     @Test
+    public void packageProtectedAnnotationShouldHavePositionSet() throws IOException {
+        ensureAllNodesHaveValidBeginPosition("@interface A { }");
+    }
+
+    @Test
     public void packageProtectedFieldShouldHavePositionSet() throws IOException {
         ensureAllNodesHaveValidBeginPosition("public class A { int i; }");
     }
