@@ -45,10 +45,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements 
-        NodeWithJavaDoc<ConstructorDeclaration>, 
+public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements
+        NodeWithJavaDoc<ConstructorDeclaration>,
         NodeWithDeclaration,
-        NodeWithSimpleName<ConstructorDeclaration>, 
+        NodeWithSimpleName<ConstructorDeclaration>,
         NodeWithModifiers<ConstructorDeclaration>,
         NodeWithParameters<ConstructorDeclaration>,
         NodeWithThrownExceptions<ConstructorDeclaration>,
@@ -127,9 +127,9 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     /**
      * Return the modifiers of this member declaration.
-     * 
-     * @see Modifier
+     *
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -194,7 +194,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     /**
      * The declaration returned has this schema:
-     *
+     * <p>
      * [accessSpecifier] className ([paramType [paramName]])
      * [throws exceptionsList]
      */

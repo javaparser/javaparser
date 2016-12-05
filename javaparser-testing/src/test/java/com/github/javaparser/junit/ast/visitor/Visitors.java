@@ -1,12 +1,12 @@
 package com.github.javaparser.junit.ast.visitor;
 
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.ModifierVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 /**
- * This class tests that all visitors implement all methods, even if the visitors are abstract, by making cnocrete subclasses of them.
+ * This class tests that all visitors implement all methods, even if the visitors are abstract, by making cnocrete
+ * subclasses of them.
  */
 
 class GenericVisitorAdapterTest extends GenericVisitorAdapter<Object, Object> {

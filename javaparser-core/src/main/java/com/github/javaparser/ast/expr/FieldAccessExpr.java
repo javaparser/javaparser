@@ -86,13 +86,13 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
     public FieldAccessExpr setFieldExpr(SimpleName inner) {
         notifyPropertyChange(ObservableProperty.FIELD, this.field, inner);
         this.field = assertNotNull(inner);
-		setAsParentNodeOf(this.field);
+        setAsParentNodeOf(this.field);
         return this;
     }
 
     /**
      * Sets the scope
-     * 
+     *
      * @param scope the scope, can be null
      * @return this, the FieldAccessExpr
      */
@@ -110,7 +110,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 
     /**
      * Sets the type arguments
-     * 
+     *
      * @param types the type arguments, can be null
      * @return this, the FieldAccessExpr
      */

@@ -88,13 +88,13 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 
     private Primitive type;
 
-	public PrimitiveType() {
+    public PrimitiveType() {
         this(null, Primitive.INT);
-	}
+    }
 
-	public PrimitiveType(final Primitive type) {
+    public PrimitiveType(final Primitive type) {
         this(null, type);
-	}
+    }
 
     public PrimitiveType(Range range, final Primitive type) {
         super(range, new NodeList<>());

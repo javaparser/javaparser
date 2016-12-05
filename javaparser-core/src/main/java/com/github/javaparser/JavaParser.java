@@ -21,28 +21,6 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.ParseStart.ANNOTATION;
-import static com.github.javaparser.ParseStart.ANNOTATION_BODY;
-import static com.github.javaparser.ParseStart.BLOCK;
-import static com.github.javaparser.ParseStart.CLASS_BODY;
-import static com.github.javaparser.ParseStart.CLASS_OR_INTERFACE_TYPE;
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParseStart.EXPRESSION;
-import static com.github.javaparser.ParseStart.IMPORT_DECLARATION;
-import static com.github.javaparser.ParseStart.INTERFACE_BODY;
-import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.Providers.UTF8;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -53,6 +31,15 @@ import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.Providers.UTF8;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.

@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -32,22 +32,24 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class VoidType extends Type<VoidType> implements NodeWithAnnotations<VoidType> {
 
-	public static final VoidType VOID_TYPE = new VoidType();
+    public static final VoidType VOID_TYPE = new VoidType();
 
-	public VoidType() {
+    public VoidType() {
         this(null);
-	}
+    }
 
-	public VoidType(Range range) {
-		super(range, new NodeList<>());
-	}
+    public VoidType(Range range) {
+        super(range, new NodeList<>());
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
 }

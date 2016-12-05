@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast;
 
 import com.github.javaparser.Range;
@@ -47,9 +47,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * PackageDeclaration ::= ( }{@link AnnotationExpr}{@code )* "package" }{@link NameExpr}{@code ) ";"
  * }
  * </pre>
+ *
  * @author Julio Vilmar Gesser
  */
-public final class PackageDeclaration extends Node implements 
+public final class PackageDeclaration extends Node implements
         NodeWithAnnotations<PackageDeclaration>,
         NodeWithName<PackageDeclaration> {
 
@@ -88,7 +89,7 @@ public final class PackageDeclaration extends Node implements
     /**
      * Retrieves the list of annotations declared before the package
      * declaration. Return <code>null</code> if there are no annotations.
-     * 
+     *
      * @return list of annotations or <code>null</code>
      */
     public NodeList<AnnotationExpr> getAnnotations() {
@@ -113,8 +114,7 @@ public final class PackageDeclaration extends Node implements
     }
 
     /**
-     * @param annotations
-     *            the annotations to set
+     * @param annotations the annotations to set
      */
     public PackageDeclaration setAnnotations(NodeList<AnnotationExpr> annotations) {
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
@@ -125,9 +125,8 @@ public final class PackageDeclaration extends Node implements
 
     /**
      * Sets the name of this package declaration.
-     * 
-     * @param name
-     *            the name to set
+     *
+     * @param name the name to set
      */
     @Override
     public PackageDeclaration setName(Name name) {

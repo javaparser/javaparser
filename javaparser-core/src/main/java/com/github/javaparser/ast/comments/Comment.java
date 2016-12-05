@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.Range;
@@ -29,17 +29,17 @@ import java.util.Optional;
 
 /**
  * Abstract class for all AST nodes that represent comments.
- * 
+ *
+ * @author Julio Vilmar Gesser
  * @see BlockComment
  * @see LineComment
  * @see JavadocComment
- * @author Julio Vilmar Gesser
  */
 public abstract class Comment extends Node {
 
     private String content;
     private Node commentedNode;
-    
+
     public Comment(Range range, String content) {
         super(range);
         this.content = content;
@@ -47,7 +47,7 @@ public abstract class Comment extends Node {
 
     /**
      * Return the text of the comment.
-     * 
+     *
      * @return text of the comment
      */
     public final String getContent() {
@@ -56,9 +56,8 @@ public abstract class Comment extends Node {
 
     /**
      * Sets the text of the comment.
-     * 
-     * @param content
-     *            the text of the comment to set
+     *
+     * @param content the text of the comment to set
      */
     public Comment setContent(String content) {
         notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
@@ -66,8 +65,7 @@ public abstract class Comment extends Node {
         return this;
     }
 
-    public boolean isLineComment()
-    {
+    public boolean isLineComment() {
         return false;
     }
 
@@ -79,19 +77,17 @@ public abstract class Comment extends Node {
         }
     }
 
-    public Optional<Node> getCommentedNode()
-    {
+    public Optional<Node> getCommentedNode() {
         return Optional.ofNullable(this.commentedNode);
     }
 
     /**
      * Sets the commentedNode
-     * 
+     *
      * @param commentedNode the commentedNode, can be null
      * @return this, the Comment
      */
-    public Comment setCommentedNode(Node commentedNode)
-    {
+    public Comment setCommentedNode(Node commentedNode) {
         notifyPropertyChange(ObservableProperty.COMMENTED_NODE, this.commentedNode, commentedNode);
         if (commentedNode == null) {
             this.commentedNode = null;
@@ -107,8 +103,7 @@ public abstract class Comment extends Node {
         return this;
     }
 
-    public boolean isOrphan()
-    {
+    public boolean isOrphan() {
         return this.commentedNode == null;
     }
 }

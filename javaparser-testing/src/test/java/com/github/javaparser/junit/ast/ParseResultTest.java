@@ -5,12 +5,11 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.utils.Utils;
 import org.junit.Test;
 
-import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.Utils.*;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParseResultTest {

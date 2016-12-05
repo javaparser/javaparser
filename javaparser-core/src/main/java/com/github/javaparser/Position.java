@@ -29,110 +29,111 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * A position in a source file. Lines and columns start counting at 1.
  */
 public class Position implements Comparable<Position> {
-	public final int line;
-	public final int column;
+    public final int line;
+    public final int column;
 
-	/**
-	 * The first position in the file
-	 */
-	public static final Position HOME = new Position(1, 1);
+    /**
+     * The first position in the file
+     */
+    public static final Position HOME = new Position(1, 1);
 
-	public Position(int line, int column) {
-		if (line < Node.ABSOLUTE_END_LINE) {
-			throw new IllegalArgumentException("Can't position at line " + line);
-		}
-		if (column < -1) {
-			throw new IllegalArgumentException("Can't position at column " + column);
-		}
-		this.line = line;
-		this.column = column;
-	}
+    public Position(int line, int column) {
+        if (line < Node.ABSOLUTE_END_LINE) {
+            throw new IllegalArgumentException("Can't position at line " + line);
+        }
+        if (column < -1) {
+            throw new IllegalArgumentException("Can't position at column " + column);
+        }
+        this.line = line;
+        this.column = column;
+    }
 
-	/**
-	 * Convenient factory method.
-	 */
-	public static Position pos(int line, int column) {
-		return new Position(line, column);
-	}
+    /**
+     * Convenient factory method.
+     */
+    public static Position pos(int line, int column) {
+        return new Position(line, column);
+    }
 
-	public Position withColumn(int column) {
-		return new Position(this.line, column);
-	}
+    public Position withColumn(int column) {
+        return new Position(this.line, column);
+    }
 
-	public Position withLine(int line) {
-		return new Position(line, this.column);
-	}
+    public Position withLine(int line) {
+        return new Position(line, this.column);
+    }
 
-	/**
-	 * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after the end of the source.
-	 */
-	public boolean valid() {
-		return line > 0 && column > 0;
-	}
+    /**
+     * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after
+     * the end of the source.
+     */
+    public boolean valid() {
+        return line > 0 && column > 0;
+    }
 
-	public boolean invalid() {
-		return !valid();
-	}
+    public boolean invalid() {
+        return !valid();
+    }
 
-	public Position orIfInvalid(Position anotherPosition) {
-		if (valid()) {
-			return this;
-		}
-		return anotherPosition;
-	}
-	
-	public boolean isAfter(Position position) {
-		assertNotNull(position);
-		if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
-		if (line > position.line) {
-			return true;
-		} else if (line == position.line) {
-			return column > position.column;
-		}
-		return false;
+    public Position orIfInvalid(Position anotherPosition) {
+        if (valid()) {
+            return this;
+        }
+        return anotherPosition;
+    }
 
-	}
+    public boolean isAfter(Position position) {
+        assertNotNull(position);
+        if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
+        if (line > position.line) {
+            return true;
+        } else if (line == position.line) {
+            return column > position.column;
+        }
+        return false;
 
-	public boolean isBefore(Position position) {
-		assertNotNull(position);
-		if (position.line == Node.ABSOLUTE_END_LINE) return true;
-		if (line < position.line) {
-			return true;
-		} else if (line == position.line) {
-			return column < position.column;
-		}
-		return false;
-	}
+    }
 
-	@Override
-	public int compareTo(Position o) {
-		assertNotNull(o);
-		if (isBefore(o)) {
-			return -1;
-		}
-		if (isAfter(o)) {
-			return 1;
-		}
-		return 0;
-	}
+    public boolean isBefore(Position position) {
+        assertNotNull(position);
+        if (position.line == Node.ABSOLUTE_END_LINE) return true;
+        if (line < position.line) {
+            return true;
+        } else if (line == position.line) {
+            return column < position.column;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+    @Override
+    public int compareTo(Position o) {
+        assertNotNull(o);
+        if (isBefore(o)) {
+            return -1;
+        }
+        if (isAfter(o)) {
+            return 1;
+        }
+        return 0;
+    }
 
-		Position position = (Position) o;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-		return line == position.line && column == position.column;
-	}
+        Position position = (Position) o;
 
-	@Override
-	public int hashCode() {
-		return 31 * line + column;
-	}
+        return line == position.line && column == position.column;
+    }
 
-	@Override
-	public String toString() {
-		return "(line " + line + ",col " + column + ")";
-	}
+    @Override
+    public int hashCode() {
+        return 31 * line + column;
+    }
+
+    @Override
+    public String toString() {
+        return "(line " + line + ",col " + column + ")";
+    }
 }

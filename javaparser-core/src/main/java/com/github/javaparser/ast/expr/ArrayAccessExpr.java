@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -72,14 +72,14 @@ public final class ArrayAccessExpr extends Expression {
     public ArrayAccessExpr setIndex(Expression index) {
         notifyPropertyChange(ObservableProperty.INDEX, this.index, index);
         this.index = assertNotNull(index);
-		setAsParentNodeOf(this.index);
+        setAsParentNodeOf(this.index);
         return this;
     }
 
     public ArrayAccessExpr setName(Expression name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
-		setAsParentNodeOf(this.name);
+        setAsParentNodeOf(this.name);
         return this;
     }
 }

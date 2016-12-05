@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -41,7 +41,7 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     public ArrayInitializerExpr(NodeList<Expression> values) {
-       this(null, values);
+        this(null, values);
     }
 
     public ArrayInitializerExpr(Range range, NodeList<Expression> values) {
@@ -66,7 +66,7 @@ public final class ArrayInitializerExpr extends Expression {
     public ArrayInitializerExpr setValues(NodeList<Expression> values) {
         notifyPropertyChange(ObservableProperty.VALUES, this.values, values);
         this.values = assertNotNull(values);
-		setAsParentNodeOf(this.values);
+        setAsParentNodeOf(this.values);
         return this;
     }
 }

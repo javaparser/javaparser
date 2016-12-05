@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -39,65 +39,67 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
 
     private ReferenceType<?> superTypes;
 
-	public WildcardType() {
+    public WildcardType() {
         this(null, null, null);
-	}
+    }
 
-	public WildcardType(final ReferenceType<?> extendedTypes) {
-		this(null, extendedTypes, null);
-	}
+    public WildcardType(final ReferenceType<?> extendedTypes) {
+        this(null, extendedTypes, null);
+    }
 
-	public WildcardType(final ReferenceType<?> extendedTypes, final ReferenceType<?> superTypes) {
+    public WildcardType(final ReferenceType<?> extendedTypes, final ReferenceType<?> superTypes) {
         this(null, extendedTypes, superTypes);
-	}
+    }
 
-	public WildcardType(final Range range,
+    public WildcardType(final Range range,
                         final ReferenceType<?> extendedTypes, final ReferenceType<?> superTypes) {
-		super(range, new NodeList<>());
-		setExtendedTypes(extendedTypes);
-		setSuperTypes(superTypes);
-	}
+        super(range, new NodeList<>());
+        setExtendedTypes(extendedTypes);
+        setSuperTypes(superTypes);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
     public Optional<ReferenceType<?>> getExtendedTypes() {
         return Optional.ofNullable(extendedTypes);
-	}
+    }
 
     public Optional<ReferenceType<?>> getSuperTypes() {
         return Optional.ofNullable(superTypes);
-	}
+    }
 
     /**
      * Sets the extends
-     * 
+     *
      * @param ext the extends, can be null
      * @return this, the WildcardType
      */
     public WildcardType setExtendedTypes(final ReferenceType<?> ext) {
-	    notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, ext);
-		this.extendedTypes = ext;
-		setAsParentNodeOf(this.extendedTypes);
-		return this;
-	}
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, ext);
+        this.extendedTypes = ext;
+        setAsParentNodeOf(this.extendedTypes);
+        return this;
+    }
 
     /**
      * Sets the super
-     * 
+     *
      * @param sup the super, can be null
      * @return this, the WildcardType
      */
     public WildcardType setSuperTypes(final ReferenceType<?> sup) {
-	    notifyPropertyChange(ObservableProperty.SUPER, this.superTypes, sup);
-		this.superTypes = sup;
-		setAsParentNodeOf(this.superTypes);
-		return this;
-	}
+        notifyPropertyChange(ObservableProperty.SUPER, this.superTypes, sup);
+        this.superTypes = sup;
+        setAsParentNodeOf(this.superTypes);
+        return this;
+    }
 
 }

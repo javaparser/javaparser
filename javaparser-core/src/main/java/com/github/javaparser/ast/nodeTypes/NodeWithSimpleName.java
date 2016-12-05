@@ -26,7 +26,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 
 /**
  * A node having a name.
- *  
+ * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getName method.
  */
 public interface NodeWithSimpleName<N extends Node> {
@@ -35,12 +35,12 @@ public interface NodeWithSimpleName<N extends Node> {
     N setName(SimpleName name);
 
     @SuppressWarnings("unchecked")
-    default N setName(String name){
+    default N setName(String name) {
         setName(new SimpleName(name));
         return (N) this;
     }
 
-    default String getNameAsString(){
+    default String getNameAsString() {
         return getName().getIdentifier();
     }
 }

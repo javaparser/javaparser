@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -34,53 +34,55 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt> {
 
-	private Expression condition;
+    private Expression condition;
 
-	private Statement body;
+    private Statement body;
 
-	public WhileStmt() {
+    public WhileStmt() {
         this(null, new BooleanLiteralExpr(), new EmptyStmt());
-	}
+    }
 
-	public WhileStmt(final Expression condition, final Statement body) {
+    public WhileStmt(final Expression condition, final Statement body) {
         this(null, condition, body);
-	}
+    }
 
-	public WhileStmt(Range range, final Expression condition, final Statement body) {
-		super(range);
-		setCondition(condition);
-		setBody(body);
-	}
+    public WhileStmt(Range range, final Expression condition, final Statement body) {
+        super(range);
+        setCondition(condition);
+        setBody(body);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	@Override
+    @Override
     public Statement getBody() {
-		return body;
-	}
+        return body;
+    }
 
-	public Expression getCondition() {
-		return condition;
-	}
+    public Expression getCondition() {
+        return condition;
+    }
 
-	@Override
+    @Override
     public WhileStmt setBody(final Statement body) {
-		notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-		this.body = body;
-		setAsParentNodeOf(this.body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        this.body = body;
+        setAsParentNodeOf(this.body);
         return this;
-	}
+    }
 
-	public WhileStmt setCondition(final Expression condition) {
-		notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-		this.condition = condition;
-		setAsParentNodeOf(this.condition);
-		return this;
-	}
+    public WhileStmt setCondition(final Expression condition) {
+        notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        this.condition = condition;
+        setAsParentNodeOf(this.condition);
+        return this;
+    }
 }

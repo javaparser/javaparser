@@ -21,10 +21,6 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -37,11 +33,15 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * Defines constructor call expression.
  * Example:
  * <code>
- *     new Object()
+ * new Object()
  * </code>
  *
  * @author Julio Vilmar Gesser
@@ -72,7 +72,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     /**
      * Defines a call to a constructor.
-     * 
+     *
      * @param scope may be null
      * @param type this is the class that the constructor is being called for.
      * @param arguments Any arguments to pass to the constructor
@@ -137,7 +137,7 @@ public final class ObjectCreationExpr extends Expression implements
      * Sets the anonymousClassBody<br>
      * Null means no class body<br>
      * Empty NodeList means new ClassName(){ }
-     * 
+     *
      * @param anonymousClassBody the anonymousClassBody, can be null or empty
      * @return this, the ObjectCreationExpr
      */
@@ -158,7 +158,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     /**
      * Sets the scope
-     * 
+     *
      * @param scope the scope, can be null
      * @return this, the ObjectCreationExpr
      */
@@ -185,7 +185,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     /**
      * Sets the typeArguments
-     * 
+     *
      * @param typeArguments the typeArguments, can be null
      * @return this, the ObjectCreationExpr
      */

@@ -9,7 +9,7 @@ import com.github.javaparser.ast.type.TypeParameter;
  * <pre>
  *     class X {}        --> typeParameters == []
  *     class X&lt;> {}      --> does not occur.
- *     class X&lt;C,D> {}   --> typeParameters = [C,D] 
+ *     class X&lt;C,D> {}   --> typeParameters = [C,D]
  * </pre>
  */
 public interface NodeWithTypeParameters<N extends Node> {

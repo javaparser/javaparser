@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -30,10 +30,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class UnaryExpr extends Expression implements 
+public final class UnaryExpr extends Expression implements
         NodeWithExpression<UnaryExpr> {
 
-	public enum Operator {
+    public enum Operator {
         PLUS("+", false),
         MINUS("-", false),
         PREFIX_INCREMENT("++", false),
@@ -50,7 +50,7 @@ public final class UnaryExpr extends Expression implements
             this.codeRepresentation = codeRepresentation;
             this.isPostfix = isPostfix;
         }
-        
+
         public String asString() {
             return codeRepresentation;
         }
@@ -58,58 +58,60 @@ public final class UnaryExpr extends Expression implements
         public boolean isPostfix() {
             return isPostfix;
         }
-        
+
         public boolean isPrefix() {
             return !isPostfix();
         }
     }
 
-	private Expression expression;
+    private Expression expression;
 
-	private Operator operator;
+    private Operator operator;
 
-	public UnaryExpr() {
+    public UnaryExpr() {
         this(null, new IntegerLiteralExpr(), Operator.POSTFIX_INCREMENT);
-	}
+    }
 
-	public UnaryExpr(final Expression expression, final Operator operator) {
+    public UnaryExpr(final Expression expression, final Operator operator) {
         this(null, expression, operator);
-	}
+    }
 
-	public UnaryExpr(final Range range, final Expression expression, final Operator operator) {
-		super(range);
-		setExpression(expression);
-		setOperator(operator);
-	}
-
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
-
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
-
-	@Override
-	public Expression getExpression() {
-		return expression;
-	}
-
-	public Operator getOperator() {
-		return operator;
-	}
+    public UnaryExpr(final Range range, final Expression expression, final Operator operator) {
+        super(range);
+        setExpression(expression);
+        setOperator(operator);
+    }
 
     @Override
-	public UnaryExpr setExpression(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expr);
-		this.expression = expr;
-		setAsParentNodeOf(this.expression);
-		return this;
-	}
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	public UnaryExpr setOperator(final Operator op) {
-		notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, op);
-		this.operator = op;
-		return this;
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    @Override
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public Operator getOperator() {
+        return operator;
+    }
+
+    @Override
+    public UnaryExpr setExpression(final Expression expr) {
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expr);
+        this.expression = expr;
+        setAsParentNodeOf(this.expression);
+        return this;
+    }
+
+    public UnaryExpr setOperator(final Operator op) {
+        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, op);
+        this.operator = op;
+        return this;
+    }
 }

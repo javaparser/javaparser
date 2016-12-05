@@ -21,8 +21,14 @@
 
 package com.github.javaparser.bdd.steps;
 
-import static com.github.javaparser.utils.Utils.readerToString;
-import static org.junit.Assert.assertEquals;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.ModifierVisitorAdapter;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 
 import java.io.File;
 import java.io.FileReader;
@@ -30,15 +36,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.ModifierVisitorAdapter;
+import static com.github.javaparser.utils.Utils.readerToString;
+import static org.junit.Assert.assertEquals;
 
 public class PrettyPrintingSteps {
 

@@ -22,15 +22,13 @@
 package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
-import static org.hamcrest.CoreMatchers.*;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 
-import java.io.StringReader;
-
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ComparingSteps {
 

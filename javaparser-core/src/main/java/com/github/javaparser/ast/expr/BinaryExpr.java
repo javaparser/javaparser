@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -57,7 +57,7 @@ public final class BinaryExpr extends Expression {
         Operator(String codeRepresentation) {
             this.codeRepresentation = codeRepresentation;
         }
-        
+
         public String asString() {
             return codeRepresentation;
         }
@@ -79,9 +79,9 @@ public final class BinaryExpr extends Expression {
 
     public BinaryExpr(Range range, Expression left, Expression right, Operator operator) {
         super(range);
-    	setLeft(left);
-    	setRight(right);
-    	setOperator(operator);
+        setLeft(left);
+        setRight(right);
+        setOperator(operator);
     }
 
     @Override
@@ -109,7 +109,7 @@ public final class BinaryExpr extends Expression {
     public BinaryExpr setLeft(Expression left) {
         notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
         this.left = left;
-		setAsParentNodeOf(this.left);
+        setAsParentNodeOf(this.left);
         return this;
     }
 
@@ -122,7 +122,7 @@ public final class BinaryExpr extends Expression {
     public BinaryExpr setRight(Expression right) {
         notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
         this.right = right;
-		setAsParentNodeOf(this.right);
+        setAsParentNodeOf(this.right);
         return this;
     }
 }

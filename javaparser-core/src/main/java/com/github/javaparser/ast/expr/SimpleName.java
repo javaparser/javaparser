@@ -12,6 +12,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * A name that consists of a single identifier.
  * In other words: it.does.NOT.contain.dots.
+ *
  * @see Name
  */
 public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {

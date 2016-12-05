@@ -9,8 +9,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Example: <code>import static com.github.javaparser.JavaParser.*;</code>
- * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.4">7.5.4. Static-Import-on-Demand Declarations</a></p>
+ * Example: <code>import static com.github.javaparser.JavaParser.*;</code> <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.4">7.5.4.
+ * Static-Import-on-Demand Declarations</a></p>
  */
 public class StaticImportOnDemandDeclaration extends NonEmptyImportDeclaration {
     private ClassOrInterfaceType type;
@@ -23,7 +23,7 @@ public class StaticImportOnDemandDeclaration extends NonEmptyImportDeclaration {
         super(range);
         setType(type);
     }
-    
+
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);

@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -31,9 +31,9 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type<T> {
 
     public ReferenceType() {
         this(null);
-	}
+    }
 
-	public ReferenceType(final Range range) {
-		super(range, new NodeList<>());
-	}
+    public ReferenceType(final Range range) {
+        super(range, new NodeList<>());
+    }
 }

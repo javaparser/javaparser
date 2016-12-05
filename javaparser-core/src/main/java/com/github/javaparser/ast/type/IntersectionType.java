@@ -12,10 +12,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
  * As of Java 8 it is used in casts or while expressing bounds for generic types.
- *
+ * <p>
  * For example:
  * <code>public class A&lt;T extends Serializable &amp; Cloneable&gt; { }</code>
- *
+ * <p>
  * Or:
  * <code>void foo((Serializable &amp; Cloneable)myObject);</code>
  *

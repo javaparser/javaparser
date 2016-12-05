@@ -1,9 +1,8 @@
 package japa.bdd.samples;
 
 import com.github.javaparser.JavaParser;
-
-import japa.parser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import japa.parser.ParseException;
 import org.junit.Ignore;
 
 import java.io.*;
@@ -104,18 +103,18 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
 
     char cc = 'a';
 
-    int[][] arr3 = { { 1, 2 }, { 3, 4 } };
+    int[][] arr3 = {{1, 2}, {3, 4}};
 
     static int[] arr4[] = {};
 
     public static JavaConcepts t;
 
     static {
-        arr4 = new int[][] { { 2 }, { 1 } };
+        arr4 = new int[][]{{2}, {1}};
     }
 
     {
-        arr3 = new int[][] { { 2 }, { 1 } };
+        arr3 = new int[][]{{2}, {1}};
     }
 
     public enum Teste {
@@ -139,17 +138,13 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
     public enum Enum {
 
         m(1) {
-
             @Override
             void mm() {
             }
-        }
-        , f(2) {
-
+        }, f(2) {
             void mm() {
             }
-        }
-        ;
+        };
 
         native void nnn();
 
@@ -225,7 +220,8 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
                 int iii = 3;
                 iii += 3;
             }
-            label: {
+            label:
+            {
                 int iii = 1;
             }
             ;
@@ -233,17 +229,17 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
             int min = -2147483648;
             long sl = 123123123123l;
             long minl = -9223372036854775808L;
-            switch(i) {
+            switch (i) {
             }
-            ll: switch(i) {
+            ll:
+            switch (i) {
                 case 1:
                     System.out.println(1);
                     break ll;
-                default:
-                    {
-                        System.out.println("default");
-                        break;
-                    }
+                default: {
+                    System.out.println("default");
+                    break;
+                }
                 case 2:
                     if (t instanceof Base) {
                         System.out.println(1);
@@ -255,7 +251,7 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
 
         private synchronized int doSomething()[] {
             List<? extends Number> x = new ArrayList<Integer>();
-            return new int[] { 1 };
+            return new int[]{1};
         }
     }
 
@@ -284,7 +280,8 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
         else
             x = 2;
         while (true) {
-            xxx: while (x == 3) continue xxx;
+            xxx:
+            while (x == 3) continue xxx;
             break;
         }
         do {
@@ -342,7 +339,7 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
             System.out.println("catch");
         }
         try (InputStream in = createInputStream();
-            InputStream in2 = createInputStream()) {
+             InputStream in2 = createInputStream()) {
             System.out.println(in);
         } catch (IOException e) {
             System.out.println("catch");

@@ -46,10 +46,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements 
+public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements
         NodeWithJavaDoc<AnnotationMemberDeclaration>,
         NodeWithSimpleName<AnnotationMemberDeclaration>,
-        NodeWithType<AnnotationMemberDeclaration, Type<?>>, 
+        NodeWithType<AnnotationMemberDeclaration, Type<?>>,
         NodeWithModifiers<AnnotationMemberDeclaration> {
 
     private EnumSet<Modifier> modifiers;
@@ -113,9 +113,9 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     /**
      * Return the modifiers of this member declaration.
-     * 
-     * @see Modifier
+     *
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -134,6 +134,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     /**
      * Sets the default value
+     *
      * @param defaultValue the default value, can be null
      * @return this, the AnnotationMemberDeclaration
      */
