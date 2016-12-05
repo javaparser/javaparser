@@ -26,6 +26,16 @@ public class NodePositionTest {
     }
 
     @Test
+    public void packageProtectedInterfaceShouldHavePositionSet() throws IOException {
+        ensureAllNodesHaveValidBeginPosition("interface A { }");
+    }
+
+    @Test
+    public void packageProtectedEnumShouldHavePositionSet() throws IOException {
+        ensureAllNodesHaveValidBeginPosition("enum A { }");
+    }
+
+    @Test
     public void packageProtectedFieldShouldHavePositionSet() throws IOException {
         ensureAllNodesHaveValidBeginPosition("public class A { int i; }");
     }
