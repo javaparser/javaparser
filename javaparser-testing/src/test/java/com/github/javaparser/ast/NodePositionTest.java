@@ -1,9 +1,6 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.StreamProvider;
+import com.github.javaparser.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,18 +21,27 @@ public class NodePositionTest {
     }
 
     @Test
+    public void packageProtectedClassShouldHavePositionSet() throws IOException {
+        ensureAllNodesHaveValidBeginPosition("class A { }");
+    }
+
+    @Test
+    public void packageProtectedFieldShouldHavePositionSet() throws IOException {
+        ensureAllNodesHaveValidBeginPosition("public class A { int i; }");
+    }
+
+    @Test
     public void packageProtectedMethodShouldHavePositionSet() throws IOException {
-      ensureAllNodesHaveValidBeginPosition("SourcesHelperOldVersion.java.txt");
+      ensureAllNodesHaveValidBeginPosition("public class A { void foo() {} }");
     }
 
     @Test
     public void packageProtectedConstructorShouldHavePositionSet() throws IOException {
-      ensureAllNodesHaveValidBeginPosition("PackageProtectedCtorNodePositionTest.java.txt");
+      ensureAllNodesHaveValidBeginPosition("public class A { A() {} }");
     }
 
-    private void ensureAllNodesHaveValidBeginPosition(final String testResourceName) throws IOException {
-        InputStream is = this.getClass().getResourceAsStream("/com/github/javaparser/issue_samples/" + testResourceName);
-        ParseResult<CompilationUnit> res = new JavaParser().parse(ParseStart.COMPILATION_UNIT, new StreamProvider(is));
+    private void ensureAllNodesHaveValidBeginPosition(final String code) throws IOException {
+        ParseResult<CompilationUnit> res = new JavaParser().parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
         assertTrue(res.getProblems().isEmpty());
 
         CompilationUnit cu = res.getResult().get();
