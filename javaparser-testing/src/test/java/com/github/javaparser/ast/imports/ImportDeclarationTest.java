@@ -1,9 +1,9 @@
 package com.github.javaparser.ast.imports;
 
-import static org.junit.Assert.assertEquals;
-
 import com.github.javaparser.JavaParser;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ImportDeclarationTest {
     @Test
@@ -34,9 +34,9 @@ public class ImportDeclarationTest {
         ImportDeclaration importDeclaration = JavaParser.parseImport("import static a.b.c.X.*;");
         StaticImportOnDemandDeclaration i = (StaticImportOnDemandDeclaration) importDeclaration;
         assertEquals("X", i.getType().getNameAsString());
-		assertEquals("c", i.getType().getScope().get().getNameAsString());
-		assertEquals("b", i.getType().getScope().get().getScope().get().getNameAsString());
-		assertEquals("a", i.getType().getScope().get().getScope().get().getScope().get().getNameAsString());
+        assertEquals("c", i.getType().getScope().get().getNameAsString());
+        assertEquals("b", i.getType().getScope().get().getScope().get().getNameAsString());
+        assertEquals("a", i.getType().getScope().get().getScope().get().getScope().get().getNameAsString());
     }
 
 }

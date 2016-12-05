@@ -3,7 +3,7 @@ package com.github.javaparser.printer;
 public class PrettyPrinterConfiguration {
     private boolean printComments = true;
     private String indent = "    ";
-    
+
     public String getIndent() {
         return indent;
     }

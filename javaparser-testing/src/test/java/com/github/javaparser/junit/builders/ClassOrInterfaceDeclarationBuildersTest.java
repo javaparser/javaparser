@@ -1,34 +1,32 @@
 package com.github.javaparser.junit.builders;
 
-import static com.github.javaparser.utils.Utils.*;
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-import java.util.function.Function;
-
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import java.util.List;
+import java.util.function.Function;
+
+import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.Assert.assertEquals;
 
 public class ClassOrInterfaceDeclarationBuildersTest {
-	CompilationUnit cu;
+    CompilationUnit cu;
 
-	@Before
-	public void setup() {
-		cu = new CompilationUnit();
-	}
+    @Before
+    public void setup() {
+        cu = new CompilationUnit();
+    }
 
-	@After
-	public void teardown() {
-		cu = null;
-	}
+    @After
+    public void teardown() {
+        cu = null;
+    }
 
-	@Test
-	public void testAddExtends() {
+    @Test
+    public void testAddExtends() {
         ClassOrInterfaceDeclaration testClass = cu.addClass("test");
         testClass.addExtends(List.class);
         assertEquals(1, cu.getImports().size());
@@ -36,7 +34,7 @@ public class ClassOrInterfaceDeclarationBuildersTest {
                 cu.getImport(0).toString());
         assertEquals(1, testClass.getExtends().size());
         assertEquals(List.class.getSimpleName(), testClass.getExtends(0).getNameAsString());
-	}
+    }
 
     @Test
     public void testAddImplements() {

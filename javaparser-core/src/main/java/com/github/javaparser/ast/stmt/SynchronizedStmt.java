@@ -35,7 +35,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class SynchronizedStmt extends Statement implements 
+public final class SynchronizedStmt extends Statement implements
         NodeWithBlockStmt<SynchronizedStmt>,
         NodeWithExpression<SynchronizedStmt> {
 

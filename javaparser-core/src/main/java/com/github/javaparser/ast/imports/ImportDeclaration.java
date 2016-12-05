@@ -27,18 +27,15 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.NameExpr;
 
 /**
- * <p>
- * This class is a base class for classes representing import declarations. Imports are optional for the
- * {@link CompilationUnit}.
- * </p>
- * The ImportDeclaration is constructed following the syntax:<br>
+ * <p> This class is a base class for classes representing import declarations. Imports are optional for the {@link
+ * CompilationUnit}. </p> The ImportDeclaration is constructed following the syntax:<br>
  * <pre>
  * {@code
  * ImportDeclaration ::= "import" ( "static" )? }{@link NameExpr}{@code ( "." "*" )? ";"
  * }
  * </pre>
- * An EmptyImportDeclaration is simply a semicolon among the import declarations.
- * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5">JLS 7.5. Import Declarations</a></p>
+ * An EmptyImportDeclaration is simply a semicolon among the import declarations. <p><a
+ * href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5">JLS 7.5. Import Declarations</a></p>
  *
  * @author Julio Vilmar Gesser
  */

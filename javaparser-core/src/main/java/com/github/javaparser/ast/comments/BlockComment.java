@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.Range;
@@ -31,7 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * </p>
  * Block comments can has multi lines and are delimited by "/&#42;" and
  * "&#42;/".
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public final class BlockComment extends Comment {

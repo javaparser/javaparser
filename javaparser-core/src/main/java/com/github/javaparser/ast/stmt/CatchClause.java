@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -46,7 +46,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     private BlockStmt catchBlock;
 
     public CatchClause() {
-        this(null, new Parameter(), new BlockStmt());         
+        this(null, new Parameter(), new BlockStmt());
     }
 
     public CatchClause(final Parameter parameter, final BlockStmt catchBlock) {
@@ -58,13 +58,13 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
                        final ClassOrInterfaceType exceptType,
                        final VariableDeclaratorId exceptId,
                        final BlockStmt catchBlock) {
-        this(null, 
-                new Parameter(null, 
-                        exceptModifier, 
-                        exceptAnnotations, 
-                        exceptType, 
-                        new NodeList<>(), 
-                        false, 
+        this(null,
+                new Parameter(null,
+                        exceptModifier,
+                        exceptAnnotations,
+                        exceptType,
+                        new NodeList<>(),
+                        false,
                         exceptId),
                 catchBlock);
     }
@@ -77,44 +77,47 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         setBody(catchBlock);
     }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
     /**
      * Use {@link #getBody()} instead
      */
     @Deprecated
-	public BlockStmt getCatchBlock() {
-		return catchBlock;
-	}
+    public BlockStmt getCatchBlock() {
+        return catchBlock;
+    }
 
-	/**
-	 * Note that the type of the Parameter can be a UnionType. In this case, any annotations found at the start of the catch(@X A a |...)
-	 * are found directly in the Parameter. Annotations that are on the second or later type - catch(A a | @X B b ...) are found on those types.
-	 */
-	public Parameter getParameter() {
-		return parameter;
-	}
+    /**
+     * Note that the type of the Parameter can be a UnionType. In this case, any annotations found at the start of the
+     * catch(@X A a |...) are found directly in the Parameter. Annotations that are on the second or later type -
+     * catch(A a | @X B b ...) are found on those types.
+     */
+    public Parameter getParameter() {
+        return parameter;
+    }
 
     /**
      * Use {@link #setBody(BlockStmt)} instead
      */
     @Deprecated
-	public CatchClause setCatchBlock(final BlockStmt catchBlock) {
+    public CatchClause setCatchBlock(final BlockStmt catchBlock) {
         return setBody(catchBlock);
-	}
+    }
 
-	public CatchClause setParameter(final Parameter parameter) {
+    public CatchClause setParameter(final Parameter parameter) {
         notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
-		this.parameter = parameter;
-		setAsParentNodeOf(this.parameter);
+        this.parameter = parameter;
+        setAsParentNodeOf(this.parameter);
         return this;
-	}
+    }
 
     @Override
     public BlockStmt getBody() {

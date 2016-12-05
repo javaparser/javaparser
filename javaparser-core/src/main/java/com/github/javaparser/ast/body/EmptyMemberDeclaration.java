@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -54,7 +54,7 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
 
     @Override
     public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
+        if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
         return null;

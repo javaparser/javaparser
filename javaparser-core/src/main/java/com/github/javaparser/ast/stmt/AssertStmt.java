@@ -86,7 +86,7 @@ public final class AssertStmt extends Statement {
 
     /**
      * Sets the message
-     * 
+     *
      * @param msg the message, can be null
      * @return this, the AssertStmt
      */

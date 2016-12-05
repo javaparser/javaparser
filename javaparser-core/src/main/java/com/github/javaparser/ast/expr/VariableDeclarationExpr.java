@@ -56,13 +56,17 @@ public final class VariableDeclarationExpr extends Expression implements
 
     private NodeList<AnnotationExpr> annotations;
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     private Type elementType;
 
     private NodeList<VariableDeclarator> variables;
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
@@ -161,16 +165,18 @@ public final class VariableDeclarationExpr extends Expression implements
 
     /**
      * Return the modifiers of this variable declaration.
-     * 
-     * @see Modifier
+     *
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public Type getElementType() {
@@ -197,7 +203,9 @@ public final class VariableDeclarationExpr extends Expression implements
         return this;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public VariableDeclarationExpr setElementType(final Type elementType) {
@@ -215,13 +223,17 @@ public final class VariableDeclarationExpr extends Expression implements
         return this;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
         return arrayBracketPairsAfterType;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     @Override
     public VariableDeclarationExpr setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {

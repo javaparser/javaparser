@@ -41,7 +41,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     public AnnotationExpr(Name name) {
         this(null, name);
     }
-    
+
     public AnnotationExpr(Range range, Name name) {
         super(range);
         setName(name);

@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -35,57 +35,59 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class MemberValuePair extends Node implements NodeWithSimpleName<MemberValuePair> {
 
-	private SimpleName name;
+    private SimpleName name;
 
-	private Expression value;
+    private Expression value;
 
-	public MemberValuePair() {
+    public MemberValuePair() {
         this(null, new SimpleName(), new StringLiteralExpr());
-	}
+    }
 
-	public MemberValuePair(final String name, final Expression value) {
+    public MemberValuePair(final String name, final Expression value) {
         this(null, new SimpleName(name), value);
-	}
+    }
 
-	public MemberValuePair(final SimpleName name, final Expression value) {
+    public MemberValuePair(final SimpleName name, final Expression value) {
         this(null, name, value);
-	}
+    }
 
-	public MemberValuePair(final Range range, final SimpleName name, final Expression value) {
-		super(range);
-		setName(name);
-		setValue(value);
-	}
+    public MemberValuePair(final Range range, final SimpleName name, final Expression value) {
+        super(range);
+        setName(name);
+        setValue(value);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	@Override
-	public SimpleName getName() {
-		return name;
-	}
+    @Override
+    public SimpleName getName() {
+        return name;
+    }
 
-	public Expression getValue() {
-		return value;
-	}
+    public Expression getValue() {
+        return value;
+    }
 
     @Override
     public MemberValuePair setName(final SimpleName name) {
-	    notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-		this.name = assertNotNull(name);
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;
-	}
+    }
 
-	public MemberValuePair setValue(final Expression value) {
+    public MemberValuePair setValue(final Expression value) {
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-		this.value = assertNotNull(value);
-		setAsParentNodeOf(this.value);
-		return this;
-	}
+        this.value = assertNotNull(value);
+        setAsParentNodeOf(this.value);
+        return this;
+    }
 }

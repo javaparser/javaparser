@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -37,75 +37,77 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class IfStmt extends Statement {
 
-	private Expression condition;
+    private Expression condition;
 
-	private Statement thenStmt;
+    private Statement thenStmt;
 
-	private Statement elseStmt;
+    private Statement elseStmt;
 
-	public IfStmt() {
+    public IfStmt() {
         this(null,
                 new BooleanLiteralExpr(),
                 new EmptyStmt(),
                 null);
-	}
+    }
 
-	public IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+    public IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
         this(null, condition, thenStmt, elseStmt);
-	}
+    }
 
-	public IfStmt(Range range,
-	              final Expression condition, final Statement thenStmt, final Statement elseStmt) {
-		super(range);
-		setCondition(condition);
-		setThenStmt(thenStmt);
-		setElseStmt(elseStmt);
-	}
+    public IfStmt(Range range,
+                  final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+        super(range);
+        setCondition(condition);
+        setThenStmt(thenStmt);
+        setElseStmt(elseStmt);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Expression getCondition() {
-		return condition;
-	}
+    public Expression getCondition() {
+        return condition;
+    }
 
     public Optional<Statement> getElseStmt() {
         return Optional.ofNullable(elseStmt);
-	}
+    }
 
-	public Statement getThenStmt() {
-		return thenStmt;
-	}
+    public Statement getThenStmt() {
+        return thenStmt;
+    }
 
-	public IfStmt setCondition(final Expression condition) {
-		notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-		this.condition = assertNotNull(condition);
-		setAsParentNodeOf(this.condition);
-		return this;
-	}
+    public IfStmt setCondition(final Expression condition) {
+        notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        this.condition = assertNotNull(condition);
+        setAsParentNodeOf(this.condition);
+        return this;
+    }
 
     /**
      * Sets the elseStmt
-     * 
+     *
      * @param elseStmt the elseStmt, can be null
      * @return this, the IfStmt
      */
-	public IfStmt setElseStmt(final Statement elseStmt) {
-		notifyPropertyChange(ObservableProperty.ELSE_STMT, this.elseStmt, elseStmt);
-		this.elseStmt = elseStmt;
-		setAsParentNodeOf(this.elseStmt);
-		return this;
-	}
+    public IfStmt setElseStmt(final Statement elseStmt) {
+        notifyPropertyChange(ObservableProperty.ELSE_STMT, this.elseStmt, elseStmt);
+        this.elseStmt = elseStmt;
+        setAsParentNodeOf(this.elseStmt);
+        return this;
+    }
 
-	public IfStmt setThenStmt(final Statement thenStmt) {
-		notifyPropertyChange(ObservableProperty.THEN_STMT, this.thenStmt, thenStmt);
-		this.thenStmt = assertNotNull(thenStmt);
-		setAsParentNodeOf(this.thenStmt);
-		return this;
-	}
+    public IfStmt setThenStmt(final Statement thenStmt) {
+        notifyPropertyChange(ObservableProperty.THEN_STMT, this.thenStmt, thenStmt);
+        this.thenStmt = assertNotNull(thenStmt);
+        setAsParentNodeOf(this.thenStmt);
+        return this;
+    }
 }

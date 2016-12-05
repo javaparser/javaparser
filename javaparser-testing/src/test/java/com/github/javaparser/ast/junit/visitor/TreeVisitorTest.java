@@ -6,7 +6,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TreeVisitorTest {
     @Test

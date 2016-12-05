@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -38,7 +38,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 // NOTE does not implement NodeWithType because setType is problematic
@@ -100,7 +100,9 @@ public final class ArrayCreationExpr extends Expression {
         return Optional.ofNullable(initializer);
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     public Type<?> getElementType() {
         return elementType;
@@ -108,23 +110,25 @@ public final class ArrayCreationExpr extends Expression {
 
     /**
      * Sets the initializer
-     * 
+     *
      * @param initializer the initializer, can be null
      * @return this, the ArrayCreationExpr
      */
     public ArrayCreationExpr setInitializer(ArrayInitializerExpr initializer) {
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         this.initializer = initializer;
-		setAsParentNodeOf(this.initializer);
+        setAsParentNodeOf(this.initializer);
         return this;
     }
 
-    /** @deprecated will be removed in 3.0 */
+    /**
+     * @deprecated will be removed in 3.0
+     */
     @Deprecated
     public ArrayCreationExpr setElementType(Type<?> elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
-		setAsParentNodeOf(this.elementType);
+        setAsParentNodeOf(this.elementType);
         return this;
     }
 

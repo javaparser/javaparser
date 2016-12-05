@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -35,12 +35,12 @@ import java.util.Optional;
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * These are some examples:
+ * <p>
+ * System.out::println;
+ * <p>
+ * (test ? stream.map(String::trim) : stream)::toArray;
  *
- * System.out::println; 
- *
- * (test ? stream.map(String::trim) : stream)::toArray; 
  * @author Raquel Pau
- *
  */
 public class MethodReferenceExpr extends Expression implements
         NodeWithTypeArguments<MethodReferenceExpr>,
@@ -96,7 +96,7 @@ public class MethodReferenceExpr extends Expression implements
 
     /**
      * Sets the typeArguments
-     * 
+     *
      * @param typeArguments the typeArguments, can be null
      * @return this, the MethodReferenceExpr
      */

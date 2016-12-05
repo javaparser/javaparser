@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -37,39 +37,41 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public final class ExpressionStmt extends Statement implements
         NodeWithExpression<ExpressionStmt> {
 
-	private Expression expression;
+    private Expression expression;
 
-	public ExpressionStmt() {
+    public ExpressionStmt() {
         this(null, new BooleanLiteralExpr());
-	}
+    }
 
-	public ExpressionStmt(final Expression expression) {
-		this(null, expression);
-	}
+    public ExpressionStmt(final Expression expression) {
+        this(null, expression);
+    }
 
-	public ExpressionStmt(Range range, final Expression expression) {
-		super(range);
-		setExpression(expression);
-	}
+    public ExpressionStmt(Range range, final Expression expression) {
+        super(range);
+        setExpression(expression);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	@Override
-	public Expression getExpression() {
-		return expression;
-	}
+    @Override
+    public Expression getExpression() {
+        return expression;
+    }
 
-	@Override
-	public ExpressionStmt setExpression(final Expression expression) {
-		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-		this.expression = assertNotNull(expression);
-		setAsParentNodeOf(this.expression);
-		return this;
-	}
+    @Override
+    public ExpressionStmt setExpression(final Expression expression) {
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        this.expression = assertNotNull(expression);
+        setAsParentNodeOf(this.expression);
+        return this;
+    }
 }

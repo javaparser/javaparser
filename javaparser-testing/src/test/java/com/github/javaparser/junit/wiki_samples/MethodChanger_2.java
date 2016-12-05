@@ -1,8 +1,5 @@
 package com.github.javaparser.junit.wiki_samples;
 
-import java.io.FileInputStream;
-import java.util.List;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
@@ -10,7 +7,9 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 
-import static com.github.javaparser.ast.type.PrimitiveType.*;
+import java.io.FileInputStream;
+
+import static com.github.javaparser.ast.type.PrimitiveType.INT_TYPE;
 
 public class MethodChanger_2 {
 
@@ -31,10 +30,10 @@ public class MethodChanger_2 {
     }
 
     private static void changeMethods(CompilationUnit cu) {
-		NodeList<TypeDeclaration<?>> types = cu.getTypes();
-		for (TypeDeclaration<?> type : types) {
-			NodeList<BodyDeclaration<?>> members = type.getMembers();
-			for (BodyDeclaration<?> member : members) {
+        NodeList<TypeDeclaration<?>> types = cu.getTypes();
+        for (TypeDeclaration<?> type : types) {
+            NodeList<BodyDeclaration<?>> members = type.getMembers();
+            for (BodyDeclaration<?> member : members) {
                 if (member instanceof MethodDeclaration) {
                     MethodDeclaration method = (MethodDeclaration) member;
                     changeMethod(method);

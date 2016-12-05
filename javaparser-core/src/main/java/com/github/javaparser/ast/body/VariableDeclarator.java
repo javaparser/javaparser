@@ -69,8 +69,8 @@ public final class VariableDeclarator extends Node implements
      * Defines the declaration of a variable.
      *
      * @param identifier The identifier for this variable. IE. The variables name.
-     * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr} is
-     * unnecessary as the <code>=</code> operator is already added.
+     * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr}
+     * is unnecessary as the <code>=</code> operator is already added.
      */
     public VariableDeclarator(VariableDeclaratorId identifier, Expression initializer) {
         this(null, identifier, initializer);

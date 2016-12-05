@@ -153,7 +153,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     /**
      * Sets the parentNode
-     * 
+     *
      * @param parentNode the parentNode
      * @return this, the NodeList
      */
@@ -225,7 +225,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public boolean remove(Object o) {
         if (o instanceof Node) {
-            return remove((Node)o);
+            return remove((Node) o);
         } else {
             return false;
         }
@@ -302,7 +302,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public void replaceAll(UnaryOperator<N> operator) {
-        for (int i=0; i<this.size(); i++) {
+        for (int i = 0; i < this.size(); i++) {
             set(i, operator.apply(this.get(i)));
         }
     }
@@ -315,14 +315,13 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public boolean removeIf(Predicate<? super N> filter) {
         boolean changed = false;
-        for (Object e : this.stream().filter(filter).toArray()){
+        for (Object e : this.stream().filter(filter).toArray()) {
             changed = remove(e) || changed;
         }
         return changed;
     }
 
     /**
-     * 
      * @see java.util.List#clear()
      */
     @Override

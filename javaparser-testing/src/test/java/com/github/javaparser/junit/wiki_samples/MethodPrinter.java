@@ -26,7 +26,7 @@ public class MethodPrinter {
     }
 
     /**
-     * Simple visitor implementation for visiting MethodDeclaration nodes. 
+     * Simple visitor implementation for visiting MethodDeclaration nodes.
      */
     private static class MethodVisitor extends VoidVisitorAdapter {
 

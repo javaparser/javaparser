@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -28,6 +28,6 @@ import com.github.javaparser.Range;
  */
 public abstract class LiteralExpr extends Expression {
     public LiteralExpr(Range range) {
-		super(range);
-	}
+        super(range);
+    }
 }

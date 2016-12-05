@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -50,7 +50,7 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
 
     public BodyDeclaration(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
-    	setAnnotations(annotations);
+        setAnnotations(annotations);
     }
 
     @Override
@@ -59,16 +59,15 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     }
 
     /**
-     *
-     * @param annotations a null value is currently treated as an empty list. This behavior could change
-     *                    in the future, so please avoid passing null
+     * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
+     * so please avoid passing null
      */
     @SuppressWarnings("unchecked")
     @Override
     public final T setAnnotations(NodeList<AnnotationExpr> annotations) {
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
-		setAsParentNodeOf(this.annotations);
+        setAsParentNodeOf(this.annotations);
         return (T) this;
     }
 

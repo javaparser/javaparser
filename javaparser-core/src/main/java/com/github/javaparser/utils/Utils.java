@@ -23,11 +23,7 @@ package com.github.javaparser.utils;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Any kind of utility.
@@ -35,62 +31,63 @@ import java.util.List;
  * @author Federico Tomassetti
  */
 public class Utils {
-	public static final String EOL = System.getProperty("line.separator");
-	public static <T> List<T> ensureNotNull(List<T> list) {
-		return list == null ? new ArrayList<>() : list;
-	}
+    public static final String EOL = System.getProperty("line.separator");
 
-	public static <E> boolean isNullOrEmpty(Collection<E> collection) {
-		return collection == null || collection.isEmpty();
-	}
+    public static <T> List<T> ensureNotNull(List<T> list) {
+        return list == null ? new ArrayList<>() : list;
+    }
+
+    public static <E> boolean isNullOrEmpty(Collection<E> collection) {
+        return collection == null || collection.isEmpty();
+    }
 
 
-	public static <T> T assertNotNull(T o) {
-		if (o == null) {
-			throw new AssertionError("A reference was unexpectedly null.");
-		}
-		return o;
-	}
+    public static <T> T assertNotNull(T o) {
+        if (o == null) {
+            throw new AssertionError("A reference was unexpectedly null.");
+        }
+        return o;
+    }
 
-	/**
-	 * @return string with ASCII characters 10 and 13 replaced by the text "\n" and "\r".
-	 */
-	public static String escapeEndOfLines(String string) {
-		StringBuilder escapedString = new StringBuilder();
-		for (char c : string.toCharArray()) {
-			switch (c) {
-				case '\n':
-					escapedString.append("\\n");
-					break;
-				case '\r':
-					escapedString.append("\\r");
-					break;
-				default:
-					escapedString.append(c);
-			}
-		}
-		return escapedString.toString();
-	}
+    /**
+     * @return string with ASCII characters 10 and 13 replaced by the text "\n" and "\r".
+     */
+    public static String escapeEndOfLines(String string) {
+        StringBuilder escapedString = new StringBuilder();
+        for (char c : string.toCharArray()) {
+            switch (c) {
+                case '\n':
+                    escapedString.append("\\n");
+                    break;
+                case '\r':
+                    escapedString.append("\\r");
+                    break;
+                default:
+                    escapedString.append(c);
+            }
+        }
+        return escapedString.toString();
+    }
 
-	public static String readerToString(Reader reader) throws IOException {
-		final StringBuilder result = new StringBuilder();
-		final char[] buffer = new char[8 * 1024];
-		int numChars;
+    public static String readerToString(Reader reader) throws IOException {
+        final StringBuilder result = new StringBuilder();
+        final char[] buffer = new char[8 * 1024];
+        int numChars;
 
-		while ((numChars = reader.read(buffer, 0, buffer.length)) > 0) {
-			result.append(buffer, 0, numChars);
-		}
+        while ((numChars = reader.read(buffer, 0, buffer.length)) > 0) {
+            result.append(buffer, 0, numChars);
+        }
 
-		return result.toString();
-	}
+        return result.toString();
+    }
 
-	/**
-	 * Puts varargs in a mutable list.
-	 * This does not have the disadvantage of Arrays#asList that it has a static size. 
-	 */
-	public static <T> List<T> arrayToList(T[] array){
-		List<T> list = new LinkedList<>();
-		Collections.addAll(list, array);
-		return list;
-	}
+    /**
+     * Puts varargs in a mutable list.
+     * This does not have the disadvantage of Arrays#asList that it has a static size.
+     */
+    public static <T> List<T> arrayToList(T[] array) {
+        List<T> list = new LinkedList<>();
+        Collections.addAll(list, array);
+        return list;
+    }
 }

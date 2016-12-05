@@ -103,7 +103,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         NodeList<Type<?>> typeArguments = nodeWithTypeArguments.getTypeArguments().orElse(null);
         if (!isNullOrEmpty(typeArguments)) {
             printer.print("<");
-            for (final Iterator<Type<?>> i = typeArguments.iterator(); i.hasNext();) {
+            for (final Iterator<Type<?>> i = typeArguments.iterator(); i.hasNext(); ) {
                 final Type<?> t = i.next();
                 t.accept(this, arg);
                 if (i.hasNext()) {
@@ -117,7 +117,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     private void printTypeParameters(final NodeList<TypeParameter> args, final Void arg) {
         if (!isNullOrEmpty(args)) {
             printer.print("<");
-            for (final Iterator<TypeParameter> i = args.iterator(); i.hasNext();) {
+            for (final Iterator<TypeParameter> i = args.iterator(); i.hasNext(); ) {
                 final TypeParameter t = i.next();
                 t.accept(this, arg);
                 if (i.hasNext()) {
@@ -131,7 +131,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     private void printArguments(final NodeList<Expression> args, final Void arg) {
         printer.print("(");
         if (!isNullOrEmpty(args)) {
-            for (final Iterator<Expression> i = args.iterator(); i.hasNext();) {
+            for (final Iterator<Expression> i = args.iterator(); i.hasNext(); ) {
                 final Expression e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
@@ -161,7 +161,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.println();
         }
 
-        for (final Iterator<TypeDeclaration<?>> i = n.getTypes().iterator(); i.hasNext();) {
+        for (final Iterator<TypeDeclaration<?>> i = n.getTypes().iterator(); i.hasNext(); ) {
             i.next().accept(this, arg);
             printer.println();
             if (i.hasNext()) {
@@ -227,7 +227,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!n.getExtends().isEmpty()) {
             printer.print(" extends ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator(); i.hasNext();) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {
@@ -238,7 +238,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!n.getImplements().isEmpty()) {
             printer.print(" implements ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext();) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {
@@ -306,7 +306,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
         if (!isNullOrEmpty(n.getTypeBound())) {
             printer.print(" extends ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getTypeBound().iterator(); i.hasNext();) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getTypeBound().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {
@@ -413,7 +413,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
 
         printer.print(" ");
-        for (final Iterator<VariableDeclarator> i = n.getVariables().iterator(); i.hasNext();) {
+        for (final Iterator<VariableDeclarator> i = n.getVariables().iterator(); i.hasNext(); ) {
             final VariableDeclarator var = i.next();
             var.accept(this, arg);
             if (i.hasNext()) {
@@ -449,7 +449,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("{");
         if (!isNullOrEmpty(n.getValues())) {
             printer.print(" ");
-            for (final Iterator<Expression> i = n.getValues().iterator(); i.hasNext();) {
+            for (final Iterator<Expression> i = n.getValues().iterator(); i.hasNext(); ) {
                 final Expression expr = i.next();
                 expr.accept(this, arg);
                 if (i.hasNext()) {
@@ -698,7 +698,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         printer.print("(");
         if (!n.getParameters().isEmpty()) {
-            for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext();) {
+            for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
                 final Parameter p = i.next();
                 p.accept(this, arg);
                 if (i.hasNext()) {
@@ -710,7 +710,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext();) {
+            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
                 final ReferenceType<?> name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {
@@ -746,7 +746,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         printer.print("(");
         if (!isNullOrEmpty(n.getParameters())) {
-            for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext();) {
+            for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
                 final Parameter p = i.next();
                 p.accept(this, arg);
                 if (i.hasNext()) {
@@ -762,7 +762,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext();) {
+            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
                 final ReferenceType name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {
@@ -826,7 +826,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         printer.print(" ");
 
-        for (final Iterator<VariableDeclarator> i = n.getVariables().iterator(); i.hasNext();) {
+        for (final Iterator<VariableDeclarator> i = n.getVariables().iterator(); i.hasNext(); ) {
             final VariableDeclarator v = i.next();
             v.accept(this, arg);
             if (i.hasNext()) {
@@ -964,7 +964,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!n.getImplements().isEmpty()) {
             printer.print(" implements ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext();) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {
@@ -977,7 +977,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.indent();
         if (n.getEntries() != null) {
             printer.println();
-            for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext();) {
+            for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
@@ -1112,7 +1112,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printer.print("for (");
         if (n.getInitialization() != null) {
-            for (final Iterator<Expression> i = n.getInitialization().iterator(); i.hasNext();) {
+            for (final Iterator<Expression> i = n.getInitialization().iterator(); i.hasNext(); ) {
                 final Expression e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
@@ -1126,7 +1126,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         printer.print("; ");
         if (n.getUpdate() != null) {
-            for (final Iterator<Expression> i = n.getUpdate().iterator(); i.hasNext();) {
+            for (final Iterator<Expression> i = n.getUpdate().iterator(); i.hasNext(); ) {
                 final Expression e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
@@ -1259,7 +1259,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
         printer.print("(");
         if (n.getPairs() != null) {
-            for (final Iterator<MemberValuePair> i = n.getPairs().iterator(); i.hasNext();) {
+            for (final Iterator<MemberValuePair> i = n.getPairs().iterator(); i.hasNext(); ) {
                 final MemberValuePair m = i.next();
                 m.accept(this, arg);
                 if (i.hasNext()) {
@@ -1308,7 +1308,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (printPar) {
             printer.print("(");
         }
-        for (Iterator<Parameter> i = parameters.iterator(); i.hasNext();) {
+        for (Iterator<Parameter> i = parameters.iterator(); i.hasNext(); ) {
             Parameter p = i.next();
             p.accept(this, arg);
             if (i.hasNext()) {

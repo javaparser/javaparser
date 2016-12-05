@@ -19,10 +19,9 @@ import static java.util.stream.Collectors.*;
 
 /**
  * A node having members.
- *
+ * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getMembers
  * method.
- *
  */
 public interface NodeWithMembers<N extends Node> {
     NodeList<BodyDeclaration<?>> getMembers();
@@ -102,7 +101,7 @@ public interface NodeWithMembers<N extends Node> {
 
     /**
      * Add a public field to this
-     * 
+     *
      * @param typeClass the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created
@@ -166,7 +165,7 @@ public interface NodeWithMembers<N extends Node> {
 
     /**
      * Adds a constructor to this
-     * 
+     *
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
@@ -223,31 +222,31 @@ public interface NodeWithMembers<N extends Node> {
     /**
      * Try to find a {@link MethodDeclaration} by its parameters types
      *
-     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
-     *            void foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
      * @return the methods found (multiple in case of polymorphism)
      */
     default List<MethodDeclaration> getMethodsByParameterTypes(String... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
                         && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
-                                .collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())))
+                        .collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
 
     /**
      * Try to find a {@link MethodDeclaration} by its parameters types
      *
-     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
-     *            void foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
      * @return the methods found (multiple in case of polymorphism)
      */
     default List<MethodDeclaration> getMethodsByParameterTypes(Class<?>... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
                         && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
-                                .collect(toSet())
-                                .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())))
+                        .collect(toSet())
+                        .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
 
@@ -265,13 +264,13 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-	 * Find all fields in the members of this node.
+     * Find all fields in the members of this node.
      *
-	 * @return the fields found. This list is immutable.
+     * @return the fields found. This list is immutable.
      */
     default List<FieldDeclaration> getFields() {
         return unmodifiableList(getMembers().stream()
-                .filter(m -> m instanceof FieldDeclaration )
+                .filter(m -> m instanceof FieldDeclaration)
                 .map(m -> (FieldDeclaration) m)
                 .collect(toList()));
     }

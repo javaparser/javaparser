@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd;
 
 import com.github.javaparser.bdd.steps.ParsingSteps;
@@ -33,7 +33,7 @@ import java.util.Map;
 
 @RunWith(JUnitReportingRunner.class)
 public class ParsingTest extends BasicJBehaveTest {
-    
+
     @Override
     public InjectableStepsFactory stepsFactory() {
         Map<String, Object> state = new HashMap<>();
@@ -42,7 +42,7 @@ public class ParsingTest extends BasicJBehaveTest {
                 new SharedSteps(state),
                 new ParsingSteps(state));
     }
-    
+
     public ParsingTest() {
         super("**/bdd/parsing*.story");
     }

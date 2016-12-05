@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd;
 
 
@@ -50,15 +50,15 @@ abstract class BasicJBehaveTest extends JUnitStories {
         return new MostUsefulConfiguration()
                 // where to find the stories
                 .useStoryLoader(new LoadFromClasspath(this.getClass()))
-                        // Fails if Steps are not implemented
+                // Fails if Steps are not implemented
                 .usePendingStepStrategy(new FailingUponPendingStep())
-                        // CONSOLE and HTML reporting
+                // CONSOLE and HTML reporting
                 .useStoryReporterBuilder(new StoryReporterBuilder().withDefaultFormats()
                         .withFormats(Format.CONSOLE, Format.HTML));
     }
 
     @Override
-    public final  List<String> storyPaths() {
+    public final List<String> storyPaths() {
         return new StoryFinder().findPaths(codeLocationFromClass(this.getClass()), storiesPath, "");
     }
 

@@ -35,10 +35,10 @@ public class ClassCreator {
         // create the type declaration 
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
         // create a method
-		EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
-		MethodDeclaration method = new MethodDeclaration(modifiers, VOID_TYPE, "main");
-		modifiers.add(Modifier.STATIC);
-		method.setModifiers(modifiers);
+        EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
+        MethodDeclaration method = new MethodDeclaration(modifiers, VOID_TYPE, "main");
+        modifiers.add(Modifier.STATIC);
+        method.setModifiers(modifiers);
         type.addMember(method);
 
         // add a parameter to the method

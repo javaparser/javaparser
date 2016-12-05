@@ -18,13 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -36,20 +35,20 @@ import java.util.Optional;
  */
 public final class ReturnStmt extends Statement {
 
-	private Expression expression;
+    private Expression expression;
 
-	public ReturnStmt() {
+    public ReturnStmt() {
         this(null, null);
-	}
+    }
 
-	public ReturnStmt(final Expression expression) {
-		this(null, expression);
-	}
+    public ReturnStmt(final Expression expression) {
+        this(null, expression);
+    }
 
-	public ReturnStmt(Range range, final Expression expression) {
-		super(range);
-		setExpression(expression);
-	}
+    public ReturnStmt(Range range, final Expression expression) {
+        super(range);
+        setExpression(expression);
+    }
 
     /**
      * Will create a NameExpr with the string param
@@ -60,27 +59,28 @@ public final class ReturnStmt extends Statement {
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
     public Optional<Expression> getExpression() {
         return Optional.ofNullable(expression);
-	}
+    }
 
     /**
      * Sets the expression
-     * 
+     *
      * @param expression the expression, can be null
      * @return this, the ReturnStmt
      */
-	public ReturnStmt setExpression(final Expression expression) {
-		notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-		this.expression = expression;
-		setAsParentNodeOf(this.expression);
-		return this;
-	}
+    public ReturnStmt setExpression(final Expression expression) {
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        this.expression = expression;
+        setAsParentNodeOf(this.expression);
+        return this;
+    }
 }

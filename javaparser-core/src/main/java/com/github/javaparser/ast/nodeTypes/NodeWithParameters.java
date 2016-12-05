@@ -27,7 +27,7 @@ public interface NodeWithParameters<N extends Node> {
 
     /**
      * Remember to import the class in the compilation unit yourself
-     * 
+     *
      * @param className the name of the class, ex : org.test.Foo or Foo if you added manually the import
      * @param name the name of the parameter
      */
@@ -52,7 +52,7 @@ public interface NodeWithParameters<N extends Node> {
 
     /**
      * Remember to import the class in the compilation unit yourself
-     * 
+     *
      * @param className the name of the class, ex : org.test.Foo or Foo if you added manually the import
      * @param name the name of the parameter
      * @return the {@link Parameter} created
@@ -68,7 +68,7 @@ public interface NodeWithParameters<N extends Node> {
 
     /**
      * Try to find a {@link Parameter} by its name
-     * 
+     *
      * @param name the name of the param
      * @return null if not found, the param found otherwise
      */
@@ -79,7 +79,7 @@ public interface NodeWithParameters<N extends Node> {
 
     /**
      * Try to find a {@link Parameter} by its type
-     * 
+     *
      * @param type the type of the param
      * @return null if not found, the param found otherwise
      */
@@ -90,7 +90,7 @@ public interface NodeWithParameters<N extends Node> {
 
     /**
      * Try to find a {@link Parameter} by its type
-     * 
+     *
      * @param type the type of the param <b>take care about generics, it wont work</b>
      * @return null if not found, the param found otherwise
      */

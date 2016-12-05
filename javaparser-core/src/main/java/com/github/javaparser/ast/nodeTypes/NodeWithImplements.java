@@ -15,7 +15,7 @@ public interface NodeWithImplements<N extends Node> {
 
     /**
      * Add an implements to this
-     * 
+     *
      * @param name the name of the type to extends from
      * @return this
      */
@@ -29,7 +29,7 @@ public interface NodeWithImplements<N extends Node> {
 
     /**
      * Add an implements to this and automatically add the import
-     * 
+     *
      * @param clazz the type to implements from
      * @return this
      */
