@@ -24,7 +24,19 @@ public class NodePositionTest {
 
     @Test
     public void issue506() throws IOException {
-        InputStream is = this.getClass().getResourceAsStream("/com/github/javaparser/SourcesHelperOldVersion.java.txt");
+      ensureAllNodesHaveValidBeginPosition( "SourcesHelperOldVersion.java.txt" );
+    }
+
+    @Test
+    public void someIssueAsYetWithoutIssueNumber() throws IOException {
+      ensureAllNodesHaveValidBeginPosition( "PackageProtectedCtorNodePositionTest.java.txt" );
+    }
+
+    private void ensureAllNodesHaveValidBeginPosition(
+      final String pTestResourceName
+    ) throws IOException
+    {
+        InputStream is = this.getClass().getResourceAsStream("/com/github/javaparser/" + pTestResourceName);
         ParseResult<CompilationUnit> res = new JavaParser().parse(ParseStart.COMPILATION_UNIT, new StreamProvider(is));
         assertTrue(res.getProblems().isEmpty());
 
