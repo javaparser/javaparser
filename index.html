@@ -20,11 +20,16 @@
 
     <section class="main-content">
       <h2>
-<a id="java-parser-and-abstract-syntax-tree" class="anchor" href="#java-parser-and-abstract-syntax-tree" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java Parser and Abstract Syntax Tree</h2>
+<a id="java-parser-and-abstract-syntax-tree" class="anchor" href="#java-parser-and-abstract-syntax-tree" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Java Parser and Abstract Syntax Tree</h2>
 
 <p>This package contains a Java 1.8 Parser with AST generation and visitor support.</p>
 
-<p>The AST records the source code structure, javadoc and comments. It is also possible to change the AST nodes or create new ones to modify the source code.</p>
+<p>The AST records the source code structure.
+You can analyze source code for any purpose.
+It is possible to change the AST nodes or create new ones to modify the source code.</p>
+
+<p>When you need not only the text from the source code but you also need type information,
+you can use <a href="https://github.com/javaparser/javasymbolsolver">the Java Symbol Solver project.</a></p>
 
 <p><a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.javaparser%22%20AND%20a%3A%22javaparser-core%22"><img src="https://img.shields.io/maven-central/v/com.github.javaparser/javaparser-core.svg" alt="Maven Central"></a>
 <a href="https://travis-ci.org/javaparser/javaparser"><img src="https://travis-ci.org/javaparser/javaparser.svg?branch=master" alt="Build Status"></a>
@@ -32,94 +37,102 @@
 <a href="https://gitter.im/javaparser/javaparser?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/javaparser/javaparser"></a></p>
 
 <h2>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
 
 <ul>
 <li>  Light weight</li>
 <li>  Performant</li>
 <li>  Easy to use</li>
 <li>  Modifiable AST</li>
-<li>  Create AST from scratch</li>
+<li>  Code generation</li>
 <li>  Support of comments</li>
 </ul>
 
 <h2>
-<a id="dependency-management" class="anchor" href="#dependency-management" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependency Management</h2>
+<a id="dependency-management" class="anchor" href="#dependency-management" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependency Management</h2>
 
-<p>The project binaries are available in Maven Central.  Just add the following to your maven configuration or taylor to your own dependency management system.</p>
+<p>The project binaries are available in Maven Central.  Just add the following to your maven configuration or tailor to your own dependency management system.</p>
 
-<p>Current 1.8 Release</p>
+<p>Suggested version (many fixes, new features, and mostly stable API):</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.github.javaparser&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;javaparser-core&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.0.0-RC.1&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p>Current production release:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;com.github.javaparser&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;javaparser-core&lt;/<span class="pl-ent">artifactId</span>&gt;
     &lt;<span class="pl-ent">version</span>&gt;2.5.1&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
-<p>Final 1.7 Release</p>
-
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
-    &lt;<span class="pl-ent">groupId</span>&gt;com.google.code.javaparser&lt;/<span class="pl-ent">groupId</span>&gt;
-    &lt;<span class="pl-ent">artifactId</span>&gt;javaparser&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;1.0.11&lt;/<span class="pl-ent">version</span>&gt;
-&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
-
 <h2>
-<a id="how-to-compile-sources" class="anchor" href="#how-to-compile-sources" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To Compile Sources</h2>
+<a id="how-to-compile-sources" class="anchor" href="#how-to-compile-sources" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How To Compile Sources</h2>
 
 <p>If you have checkout the project from GitHub you can build the project with maven using:</p>
 
 <pre><code>mvn clean install
 </code></pre>
 
-<p>If you checkout the sources and want to view the project in an IDE, it is best to generate the additional source files; otherwise you will get many compilation complaints in the IDE</p>
+<p>If you checkout the sources and want to view the project in an IDE, it is best to first generate some of the source files; otherwise you will get many compilation complaints in the IDE. (mvn clean install already does this for you.)</p>
 
 <pre><code>mvn javacc:javacc
 </code></pre>
 
 <h2>
-<a id="manual" class="anchor" href="#manual" aria-hidden="true"><span class="octicon octicon-link"></span></a>Manual</h2>
+<a id="manual" class="anchor" href="#manual" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Manual</h2>
 
 <p>Examples of how to use the library can be found on the <a href="https://github.com/javaparser/javaparser/wiki/Manual">Manual</a> page of the wiki</p>
 
 <h2>
-<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Troubleshooting</h2>
 
-<p>In the first instance try the <a href="https://github.com/javaparser/javaparser/wiki">wiki</a></p>
+<p>First try the <a href="https://github.com/javaparser/javaparser/wiki">wiki</a>.</p>
 
-<p>In the second instance please feel free to open an <a href="https://github.com/javaparser/javaparser/issues">issue</a>.</p>
+<p>Didn't find an answer? Try <a href="https://github.com/javaparser/javaparser/issues?utf8=%E2%9C%93&amp;q=is%3Aissue%20">searching for existing issues</a></p>
+
+<p>Still nothing? <a href="https://github.com/javaparser/javaparser/issues/new">Open an issue</a> or <a href="https://gitter.im/javaparser/javaparser">come chat on Gitter</a></p>
 
 <h2>
-<a id="javadoc" class="anchor" href="#javadoc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Javadoc</h2>
+<a id="javadoc" class="anchor" href="#javadoc" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Javadoc</h2>
 
 <p>The libraries javadoc can be found <a href="http://www.javadoc.io/doc/com.github.javaparser/javaparser-core/">here</a></p>
 
 <h2>
-<a id="history" class="anchor" href="#history" aria-hidden="true"><span class="octicon octicon-link"></span></a>History</h2>
+<a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
 
 <p>This parser is based on work by Sreenivasa Viswanadha and Júlio Vilmar Gesser. The original project, now inactive, was originally hosted at <a href="http://code.google.com/p/javaparser/">Google Code</a> and supported only parsing Java 1.5.</p>
 
 <p>The project now supports parsing Java 1.8 and aims to continue support for features in future versions of the Java language.</p>
 
 <h2>
-<a id="related-projects" class="anchor" href="#related-projects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Related projects</h2>
+<a id="related-projects" class="anchor" href="#related-projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Related projects</h2>
+
+<p><a href="https://github.com/javaparser/javasymbolsolver">JavaSymbolSolver</a> is a project from the same committers working on JavaParser.
+You can use it to calculate the type of JavaParser expressions and connecting references with their declarations. </p>
 
 <p>From JavaParser other projects have been derived:</p>
 
 <ul>
 <li>
 <a href="http://walkmod.com/">Walkmod</a>: a tool to automatically correct violations of code conventions</li>
+<li>
+<a href="http://jooby.org/doc/spec">jooby spec</a>: analyze and exports <a href="http://jooby.org">jooby routes</a> to <a href="http://raml.org">raml</a> and <a href="http://swagger.io">Swagger</a>
+</li>
 </ul>
 
 <h2>
-<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Credits</h2>
 
 <p>This project has been maintained thanks to the joint efforts of many contributors: we are extremely grateful to all of them.</p>
 
 <p>In particular we are thankful to the contributions we received by the <a href="http://walkmod.com/">Walkmod</a> project which permitted to finalize support for Java 8. The author granted us the permissions to release that code also under the Apache License and we have greatly appreciated that.</p>
 
 <h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
 <p>JavaParser is available either under the terms of the LGPL License or the Apache License. You as the user are entitled to choose the terms under which adopt JavaParser.</p>
 
