@@ -68,7 +68,7 @@ public interface NodeWithMembers<N extends Node> {
     default FieldDeclaration addField(Type<?> type, String name, Modifier... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         getMembers().add(fieldDeclaration);
-        VariableDeclarator variable = new VariableDeclarator(new VariableDeclaratorId(name));
+        VariableDeclarator variable = new VariableDeclarator(type, new VariableDeclaratorId(name));
         fieldDeclaration.getVariables().add(variable);
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));

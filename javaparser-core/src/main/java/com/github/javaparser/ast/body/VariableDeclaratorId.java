@@ -43,30 +43,24 @@ public final class VariableDeclaratorId extends Node implements NodeWithSimpleNa
 
     private SimpleName name;
 
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterId;
-
     public VariableDeclaratorId() {
         this(null,
-                new SimpleName(),
-                new NodeList<>());
+                new SimpleName());
     }
 
     public VariableDeclaratorId(String name) {
         this(null,
-                new SimpleName(name),
-                new NodeList<>());
+                new SimpleName(name));
     }
 
     public VariableDeclaratorId(SimpleName name) {
         this(null,
-                name,
-                new NodeList<>());
+                name);
     }
 
-    public VariableDeclaratorId(Range range, SimpleName name, NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
+    public VariableDeclaratorId(Range range, SimpleName name) {
         super(range);
         setName(name);
-        setArrayBracketPairsAfterId(assertNotNull(arrayBracketPairsAfterId));
     }
 
     @Override
@@ -92,19 +86,8 @@ public final class VariableDeclaratorId extends Node implements NodeWithSimpleNa
         return this;
     }
 
-    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterId() {
-        return arrayBracketPairsAfterId;
-    }
-
-    public VariableDeclaratorId setArrayBracketPairsAfterId(NodeList<ArrayBracketPair> arrayBracketPairsAfterId) {
-        notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_ID, this.arrayBracketPairsAfterId, arrayBracketPairsAfterId);
-        this.arrayBracketPairsAfterId = assertNotNull(arrayBracketPairsAfterId);
-        setAsParentNodeOf(arrayBracketPairsAfterId);
-        return this;
-    }
-
     @Override
     public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(arrayBracketPairsAfterId);
+        return Arrays.asList();
     }
 }

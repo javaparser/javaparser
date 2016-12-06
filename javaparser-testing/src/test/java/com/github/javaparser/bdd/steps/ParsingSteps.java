@@ -172,7 +172,7 @@ public class ParsingSteps {
     public void thenLambdaInStatementInMethodInClassHasParametersWithNonNullType(int statementPosition, int methodPosition, int classPosition) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         for (Parameter parameter : lambdaExpr.getParameters()) {
-            assertThat(parameter.getElementType(), is(notNullValue()));
+            assertThat(parameter.getType(), is(notNullValue()));
         }
     }
 

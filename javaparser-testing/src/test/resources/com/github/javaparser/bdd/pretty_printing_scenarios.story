@@ -381,7 +381,7 @@ When the class is parsed by the Java parser
 Then it is printed as:
 public class Foo {
 
-    public void m1(boolean[] boolArray) {
+    public void m1(boolean boolArray[]) {
     }
 
     public void m1(boolean boolArray[]) {

@@ -63,7 +63,6 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
                         exceptModifier,
                         exceptAnnotations,
                         exceptType,
-                        new NodeList<>(),
                         false,
                         exceptId),
                 catchBlock);

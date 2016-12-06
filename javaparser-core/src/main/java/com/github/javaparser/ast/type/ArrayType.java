@@ -24,6 +24,10 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         this(null, componentType, annotations);
     }
 
+    public ArrayType(Type<?> type, AnnotationExpr... annotations) {
+        this(type, nodeList(annotations));
+    }
+
     public ArrayType(Range range, Type<?> componentType, NodeList<AnnotationExpr> annotations) {
         super(range);
         setComponentType(componentType);
@@ -85,7 +89,4 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         return new Pair<>(type, arrayBracketPairs);
     }
 
-    public static ArrayType arrayOf(Type type, AnnotationExpr... annotations) {
-        return new ArrayType(type, nodeList(annotations));
-    }
 }

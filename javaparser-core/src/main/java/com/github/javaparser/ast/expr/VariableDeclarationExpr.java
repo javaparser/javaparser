@@ -22,16 +22,13 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observing.ObservableProperty;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -47,7 +44,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarationExpr extends Expression implements
-        NodeWithElementType<VariableDeclarationExpr>,
         NodeWithModifiers<VariableDeclarationExpr>,
         NodeWithAnnotations<VariableDeclarationExpr>,
         NodeWithVariables<VariableDeclarationExpr> {
@@ -56,96 +52,65 @@ public final class VariableDeclarationExpr extends Expression implements
 
     private NodeList<AnnotationExpr> annotations;
 
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    private Type elementType;
-
     private NodeList<VariableDeclarator> variables;
-
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
 
     public VariableDeclarationExpr() {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
-                new ClassOrInterfaceType(),
-                new NodeList<>(),
                 new NodeList<>());
     }
 
-    public VariableDeclarationExpr(final Type elementType, String variableName) {
+    public VariableDeclarationExpr(final Type<?> type, String variableName) {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
-                elementType,
-                nodeList(new VariableDeclarator(variableName)),
-                new NodeList<>());
+                nodeList(new VariableDeclarator(type, variableName)));
     }
 
-    public VariableDeclarationExpr(final Type elementType, VariableDeclarator var) {
+    public VariableDeclarationExpr(VariableDeclarator var) {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
-                elementType,
-                nodeList(var),
-                new NodeList<>());
+                nodeList(var));
     }
 
-    public VariableDeclarationExpr(final Type elementType, String variableName, Modifier... modifiers) {
+    public VariableDeclarationExpr(final Type<?> type, String variableName, Modifier... modifiers) {
         this(null,
                 Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 new NodeList<>(),
-                elementType,
-                nodeList(new VariableDeclarator(variableName)),
-                new NodeList<>());
+                nodeList(new VariableDeclarator(type, variableName)));
     }
 
-    public VariableDeclarationExpr(final Type elementType, VariableDeclarator var, Modifier... modifiers) {
+    public VariableDeclarationExpr(VariableDeclarator var, Modifier... modifiers) {
         this(null,
                 Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 new NodeList<>(),
-                elementType,
-                nodeList(var),
-                new NodeList<>());
+                nodeList(var));
     }
 
-    public VariableDeclarationExpr(final Type elementType, final NodeList<VariableDeclarator> variables) {
+    public VariableDeclarationExpr(final NodeList<VariableDeclarator> variables) {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
-                elementType,
-                variables,
-                new NodeList<>());
+                variables);
     }
 
-    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final Type elementType,
-                                   final NodeList<VariableDeclarator> variables) {
+    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final NodeList<VariableDeclarator> variables) {
         this(null,
                 modifiers,
                 new NodeList<>(),
-                elementType,
-                variables,
-                new NodeList<>());
+                variables);
     }
 
     public VariableDeclarationExpr(final Range range,
                                    final EnumSet<Modifier> modifiers,
                                    final NodeList<AnnotationExpr> annotations,
-                                   final Type elementType,
-                                   final NodeList<VariableDeclarator> variables,
-                                   final NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
+                                   final NodeList<VariableDeclarator> variables) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
-        setElementType(elementType);
         setVariables(variables);
-        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterType);
     }
 
     @Override
@@ -174,15 +139,6 @@ public final class VariableDeclarationExpr extends Expression implements
         return modifiers;
     }
 
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    @Override
-    public Type getElementType() {
-        return elementType;
-    }
-
     @Override
     public NodeList<VariableDeclarator> getVariables() {
         return variables;
@@ -202,44 +158,12 @@ public final class VariableDeclarationExpr extends Expression implements
         this.modifiers = modifiers;
         return this;
     }
-
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    @Override
-    public VariableDeclarationExpr setElementType(final Type elementType) {
-        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
-        this.elementType = elementType;
-        setAsParentNodeOf(this.elementType);
-        return this;
-    }
-
+    
     @Override
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         this.variables = variables;
         setAsParentNodeOf(this.variables);
-        return this;
-    }
-
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        return arrayBracketPairsAfterType;
-    }
-
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    @Override
-    public VariableDeclarationExpr setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
-        notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_TYPE, this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
-        this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
-        setAsParentNodeOf(arrayBracketPairsAfterType);
         return this;
     }
 }

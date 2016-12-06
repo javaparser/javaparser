@@ -22,7 +22,6 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -30,21 +29,17 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
@@ -56,62 +51,47 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements
         NodeWithJavaDoc<FieldDeclaration>,
-        NodeWithElementType<FieldDeclaration>,
         NodeWithModifiers<FieldDeclaration>,
         NodeWithVariables<FieldDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
-    private Type<?> elementType;
-
     private NodeList<VariableDeclarator> variables;
-
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType;
 
     public FieldDeclaration() {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
-                new ClassOrInterfaceType(),
-                new NodeList<>(),
                 new NodeList<>());
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclarator variable) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, VariableDeclarator variable) {
         this(null,
                 modifiers,
                 new NodeList<>(),
-                elementType,
-                nodeList(variable),
-                new NodeList<>());
+                nodeList(variable));
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> elementType, NodeList<VariableDeclarator> variables) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<VariableDeclarator> variables) {
         this(null,
                 modifiers,
                 new NodeList<>(),
-                elementType,
-                variables,
-                new NodeList<>());
+                variables);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> elementType, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
+    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, 
                             NodeList<VariableDeclarator> variables) {
         this(null,
                 modifiers,
                 annotations,
-                elementType,
-                variables,
-                arrayBracketPairsAfterElementType);
+                variables);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> elementType,
-                            NodeList<VariableDeclarator> variables, NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType) {
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, 
+                            NodeList<VariableDeclarator> variables) {
         super(range, annotations);
         setModifiers(modifiers);
-        setElementType(elementType);
         setVariables(variables);
-        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
     /**
@@ -122,7 +102,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      * @param name field name
      */
     public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name) {
-        this(assertNotNull(modifiers), assertNotNull(type), new VariableDeclarator(new VariableDeclaratorId(assertNotNull(name))));
+        this(assertNotNull(modifiers), new VariableDeclarator(type, new VariableDeclaratorId(assertNotNull(name))));
     }
 
     @Override
@@ -238,55 +218,5 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setter.setBody(blockStmt2);
         blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.ASSIGN));
         return setter;
-    }
-
-
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    @Override
-    public Type<?> getElementType() {
-        return elementType;
-    }
-
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    @Override
-    public FieldDeclaration setElementType(final Type<?> elementType) {
-        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
-        this.elementType = assertNotNull(elementType);
-        setAsParentNodeOf(this.elementType);
-        return this;
-    }
-
-    /**
-     * @return the array brackets in this position: <code>class C { int[] abc; }</code>
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        return arrayBracketPairsAfterElementType;
-    }
-
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
-    @Override
-    public FieldDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterElementType = assertNotNull(arrayBracketPairsAfterType);
-        setAsParentNodeOf(arrayBracketPairsAfterType);
-        return this;
-    }
-
-    @Override
-    public List<NodeList<?>> getNodeLists() {
-        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(variables);
-        res.add(arrayBracketPairsAfterElementType);
-        return res;
     }
 }

@@ -377,15 +377,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
-            return false;
-        }
-
         if (!nodesEquals(n1.getVariables(), n2.getVariables())) {
-            return false;
-        }
-
-        if (!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())) {
             return false;
         }
 
@@ -400,6 +392,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
+        if (!nodeEquals(n1.getType(), n2.getType())) {
+            return false;
+        }
+
         if (!nodeEquals(n1.getInitializer().orElse(null), n2.getInitializer().orElse(null))) {
             return false;
         }
@@ -410,10 +406,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final VariableDeclaratorId n1, final Visitable arg) {
         final VariableDeclaratorId n2 = (VariableDeclaratorId) arg;
-
-        if (!nodesEquals(n1.getArrayBracketPairsAfterId(), n2.getArrayBracketPairsAfterId())) {
-            return false;
-        }
 
         if (!objEquals(n1.getName(), n2.getName())) {
             return false;
@@ -469,19 +461,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())) {
-            return false;
-        }
-
-        if (!nodesEquals(n1.getArrayBracketPairsAfterParameterList(), n2.getArrayBracketPairsAfterParameterList())) {
-            return false;
-        }
-
         if (!objEquals(n1.getName(), n2.getName())) {
             return false;
         }
 
-        if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
+        if (!nodeEquals(n1.getType(), n2.getType())) {
             return false;
         }
 
@@ -513,11 +497,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final Parameter n1, final Visitable arg) {
         final Parameter n2 = (Parameter) arg;
-        if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
-            return false;
-        }
-
-        if (!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())) {
+        if (!nodeEquals(n1.getType(), n2.getType())) {
             return false;
         }
 
@@ -1094,15 +1074,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
-            return false;
-        }
-
         if (!nodesEquals(n1.getVariables(), n2.getVariables())) {
-            return false;
-        }
-
-        if (!nodesEquals(n1.getArrayBracketPairsAfterElementType(), n2.getArrayBracketPairsAfterElementType())) {
             return false;
         }
 

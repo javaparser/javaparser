@@ -4,12 +4,14 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static org.junit.Assert.assertEquals;
 
 public class FieldDeclarationBuildersTest {
@@ -98,14 +100,14 @@ public class FieldDeclarationBuildersTest {
     @Test(expected = IllegalStateException.class)
     public void testCreateGetterWithANonValidField() {
         FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
-        myPrivateField.getVariables().add(new VariableDeclarator(new VariableDeclaratorId("secondField")));
+        myPrivateField.getVariables().add(new VariableDeclarator(INT_TYPE, new VariableDeclaratorId("secondField")));
         myPrivateField.createGetter();
     }
 
     @Test(expected = IllegalStateException.class)
     public void testCreateSetterWithANonValidField() {
         FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
-        myPrivateField.getVariables().add(new VariableDeclarator(new VariableDeclaratorId("secondField")));
+        myPrivateField.getVariables().add(new VariableDeclarator(INT_TYPE, new VariableDeclaratorId("secondField")));
         myPrivateField.createSetter();
     }
 
