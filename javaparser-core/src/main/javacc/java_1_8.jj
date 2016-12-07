@@ -155,7 +155,8 @@ final class ASTParser {
     }
 
     private void addProblem(String message) {
-        problems.add(new Problem(message + ": \"" + token.image, tokenRange(), null));
+        // TODO tokenRange only takes the final token. Need all the tokens.
+        problems.add(new Problem(message, tokenRange(), null));
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {
@@ -1348,7 +1349,7 @@ ImportDeclaration ImportDeclaration():
             {
                 if(!type.getScope().isPresent()){
                     addProblem("import static has only one identifier");
-                    ret = new BadImportDeclaration(range(begin, tokenEnd()), token.image);
+                    ret = new BadImportDeclaration(range(begin, tokenEnd()));
                 } else {
                     ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
                 }

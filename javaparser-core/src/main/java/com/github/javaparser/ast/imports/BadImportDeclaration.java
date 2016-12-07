@@ -14,15 +14,12 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class BadImportDeclaration extends ImportDeclaration implements
         BadNode<BadImportDeclaration> {
 
-    private String sourceText;
-
     public BadImportDeclaration() {
-        this(null, "import ???;");
+        this(null);
     }
 
-    public BadImportDeclaration(Range range, String sourceText) {
+    public BadImportDeclaration(Range range) {
         super(range);
-        setSourceText(sourceText);
     }
 
     @Override
@@ -33,18 +30,6 @@ public class BadImportDeclaration extends ImportDeclaration implements
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
-    }
-
-    @Override
-    public String getSourceText() {
-        return sourceText;
-    }
-
-    @Override
-    public BadImportDeclaration setSourceText(String sourceText) {
-        notifyPropertyChange(ObservableProperty.SOURCE_TEXT, this.sourceText, sourceText);
-        this.sourceText = assertNotNull(sourceText);
-        return this;
     }
 
     @Override
