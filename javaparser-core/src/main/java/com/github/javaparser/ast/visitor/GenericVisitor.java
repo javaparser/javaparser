@@ -210,8 +210,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(TypeExpr n, A arg);
 
-    R visit(ArrayBracketPair arrayBracketPair, A arg);
-
     R visit(NodeList n, A arg);
 
     R visit(EmptyImportDeclaration n, A arg);

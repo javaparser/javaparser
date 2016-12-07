@@ -194,10 +194,10 @@ final class ASTParser {
         return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
     }
 
-    private Type<?> juggleArrayType(Type<?> partialType, NodeList<ArrayBracketPair> additionalBrackets) {
-        Pair<Type<?>, NodeList<ArrayBracketPair>> partialParts = ArrayType.unwrapArrayTypes(partialType);
+    private Type<?> juggleArrayType(Type<?> partialType, List<ArrayBracketPair> additionalBrackets) {
+        Pair<Type<?>, List<ArrayBracketPair>> partialParts = ArrayType.unwrapArrayTypes(partialType);
         Type<?> elementType = partialParts.a;
-        NodeList<ArrayBracketPair> leftMostBrackets = partialParts.b;
+        List<ArrayBracketPair> leftMostBrackets = partialParts.b;
         return ArrayType.wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets);
     }
 
@@ -1688,7 +1688,7 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 
 VariableDeclarator VariableDeclarator(Type partialType):
 {
-	Pair<SimpleName, NodeList<ArrayBracketPair>> id;
+	Pair<SimpleName, List<ArrayBracketPair>> id;
 	Expression init = null;
 }
 {
@@ -1696,12 +1696,12 @@ VariableDeclarator VariableDeclarator(Type partialType):
     { return new VariableDeclarator(range(id.a.getBegin().get(), tokenEnd()), juggleArrayType(partialType, id.b), id.a, init); }
 }
 
-Pair<SimpleName, NodeList<ArrayBracketPair>> VariableDeclaratorId():
+Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
 {
 	SimpleName name;
 	Position begin;
 	ArrayBracketPair arrayBracketPair;
-	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 }
 {
     name = SimpleName() { begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
@@ -1742,7 +1742,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
 	ArrayBracketPair arrayBracketPair;
-	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 	NodeList<ReferenceType<?>> throws_ = emptyList();
 	BlockStmt block = null;
 	Position begin = modifier.begin;
@@ -1806,7 +1806,7 @@ NodeList<Parameter> FormalLambdaParameters():
 NodeList<Parameter> InferredLambdaParameters():
 {
     NodeList<Parameter> ret = null;
-    Pair<SimpleName, NodeList<ArrayBracketPair>> id;
+    Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
     ","
@@ -1822,7 +1822,7 @@ Parameter FormalParameter():
 	ModifierHolder modifier;
 	Type partialType;
 	boolean isVarArg = false;
-	Pair<SimpleName, NodeList<ArrayBracketPair>> id;
+	Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
   modifier = Modifiers() partialType = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
@@ -1933,7 +1933,7 @@ ReferenceType<?> ReferenceType():
 {
 	Type<?> type;
 	ArrayBracketPair arrayBracketPair;
-	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 }
 {
   (
@@ -3142,7 +3142,7 @@ TryStmt TryStatement():
 	ModifierHolder exceptModifier;
 	ReferenceType exceptionType;
 	NodeList<ReferenceType<?>> exceptionTypes = emptyList();
-	Pair<SimpleName, NodeList<ArrayBracketPair>> exceptId;
+	Pair<SimpleName, List<ArrayBracketPair>> exceptId;
 	Position begin;
 	Position catchBegin;
 	Position typesBegin;

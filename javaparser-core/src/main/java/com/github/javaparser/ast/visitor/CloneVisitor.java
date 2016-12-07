@@ -1147,13 +1147,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(ArrayBracketPair _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-
-        return new ArrayBracketPair(_n.getRange().orElse(null), annotations);
-    }
-
-    @Override
     public Visitable visit(NodeList n, Object arg) {
         NodeList<Node> newNodes = new NodeList<>(null);
         for (Object node : n) {

@@ -1467,16 +1467,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(ArrayBracketPair n1, Visitable arg) {
-        ArrayBracketPair n2 = (ArrayBracketPair) arg;
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
     public Boolean visit(EmptyImportDeclaration n1, Visitable arg) {
         return true;
     }

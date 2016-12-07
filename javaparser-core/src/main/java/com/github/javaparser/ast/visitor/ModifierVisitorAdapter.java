@@ -804,12 +804,6 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(ArrayBracketPair n, A arg) {
-        visitAnnotations(n, arg);
-        return n;
-    }
-
-    @Override
     public Visitable visit(NodeList n, A arg) {
         for (int i = 0; i < n.size(); i++) {
             n.set(i, (Node) n.get(i).accept(this, arg));

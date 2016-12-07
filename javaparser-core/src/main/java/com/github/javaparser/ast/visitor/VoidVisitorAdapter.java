@@ -805,11 +805,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(ArrayBracketPair n, A arg) {
-        visitAnnotations(n, arg);
-    }
-
-    @Override
     public void visit(NodeList n, A arg) {
         for (Object node : n) {
             ((Node) node).accept(this, arg);

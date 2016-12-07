@@ -1349,12 +1349,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(ArrayBracketPair arrayBracketPair, Void arg) {
-        printAnnotations(arrayBracketPair.getAnnotations(), true, arg);
-        printer.print("[]");
-    }
-
-    @Override
     public void visit(NodeList n, Void arg) {
         for (Object node : n) {
             ((Node) node).accept(this, arg);

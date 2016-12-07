@@ -210,8 +210,6 @@ public interface VoidVisitor<A> {
 
     void visit(TypeExpr n, A arg);
 
-    void visit(ArrayBracketPair arrayBracketPair, A arg);
-
     void visit(NodeList n, A arg);
 
     void visit(EmptyImportDeclaration n, A arg);

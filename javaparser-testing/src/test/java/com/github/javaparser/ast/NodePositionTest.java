@@ -63,7 +63,7 @@ public class NodePositionTest {
         getAllNodes(cu).forEach(n -> {
             assertNotNull(String.format("There should be no node without a range: %s (class: %s)",
                     n, n.getClass().getCanonicalName()), n.getRange());
-            if (n.getBegin().get().line == 0 && !n.toString().isEmpty() && !(n instanceof ArrayBracketPair)) {
+            if (n.getBegin().get().line == 0 && !n.toString().isEmpty()) {
                 throw new IllegalArgumentException("There should be no node at line 0: " + n + " (class: "
                         + n.getClass().getCanonicalName() + ")");
             }

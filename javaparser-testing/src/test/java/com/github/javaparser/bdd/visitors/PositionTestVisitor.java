@@ -146,12 +146,6 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override
-    public void visit(ArrayBracketPair n, Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override
     public void visit(EmptyImportDeclaration n, Object arg) {
         doTest(n);
         super.visit(n, arg);
