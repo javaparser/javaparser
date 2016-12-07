@@ -162,14 +162,14 @@ final class ASTParser {
         if (ret instanceof EnclosedExpr) {
             Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
             if (inner.isPresent() && inner.get() instanceof NameExpr) {
-                VariableDeclaratorId id = new VariableDeclaratorId(inner.get().getRange().get(), ((NameExpr) inner.get()).getName());
+                SimpleName id = ((NameExpr)inner.get()).getName();
                 NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id));
                 ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), params, lambdaBody, true);
             } else {
                 ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), emptyList(), lambdaBody, true);
             }
         } else if (ret instanceof NameExpr) {
-            VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange().get(), ((NameExpr) ret).getName());
+            SimpleName id = ((NameExpr)ret).getName();
             NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id));
             ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
@@ -1688,7 +1688,7 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 
 VariableDeclarator VariableDeclarator(Type partialType):
 {
-	Pair<VariableDeclaratorId, NodeList<ArrayBracketPair>> id;
+	Pair<SimpleName, NodeList<ArrayBracketPair>> id;
 	Expression init = null;
 }
 {
@@ -1696,7 +1696,7 @@ VariableDeclarator VariableDeclarator(Type partialType):
     { return new VariableDeclarator(range(id.a.getBegin().get(), tokenEnd()), juggleArrayType(partialType, id.b), id.a, init); }
 }
 
-Pair<VariableDeclaratorId, NodeList<ArrayBracketPair>> VariableDeclaratorId():
+Pair<SimpleName, NodeList<ArrayBracketPair>> VariableDeclaratorId():
 {
 	SimpleName name;
 	Position begin;
@@ -1704,8 +1704,11 @@ Pair<VariableDeclaratorId, NodeList<ArrayBracketPair>> VariableDeclaratorId():
 	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
 }
 {
-  name = SimpleName() { begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-  { return new Pair(new VariableDeclaratorId(range(begin, tokenEnd()), name), arrayBracketPairs); }
+    name = SimpleName() { begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    {
+        name.setRange(name.getRange().get().withEnd(tokenEnd()));    
+        return new Pair(name, arrayBracketPairs);
+    }
 }
 
 Expression VariableInitializer():
@@ -1803,7 +1806,7 @@ NodeList<Parameter> FormalLambdaParameters():
 NodeList<Parameter> InferredLambdaParameters():
 {
     NodeList<Parameter> ret = null;
-    Pair<VariableDeclaratorId, NodeList<ArrayBracketPair>> id;
+    Pair<SimpleName, NodeList<ArrayBracketPair>> id;
 }
 {
     ","
@@ -1819,7 +1822,7 @@ Parameter FormalParameter():
 	ModifierHolder modifier;
 	Type partialType;
 	boolean isVarArg = false;
-	Pair<VariableDeclaratorId, NodeList<ArrayBracketPair>> id;
+	Pair<SimpleName, NodeList<ArrayBracketPair>> id;
 }
 {
   modifier = Modifiers() partialType = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
@@ -2499,7 +2502,7 @@ Expression PrimaryPrefix():
 	Type type;
 	Position begin;
 	Parameter p = null;
-	VariableDeclaratorId id = null;
+	SimpleName id = null;
 }
 {
   (
@@ -2540,7 +2543,7 @@ Expression PrimaryPrefix():
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
-	  		  		    id = new VariableDeclaratorId(range(ret.getBegin().get(), ret.getEnd().get()), ((NameExpr)ret).getName());
+	  		  		    id = ((NameExpr)ret).getName();
 	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id);
 	  		  		  }
 
@@ -3139,7 +3142,7 @@ TryStmt TryStatement():
 	ModifierHolder exceptModifier;
 	ReferenceType exceptionType;
 	NodeList<ReferenceType<?>> exceptionTypes = emptyList();
-	Pair<VariableDeclaratorId, NodeList<ArrayBracketPair>> exceptId;
+	Pair<SimpleName, NodeList<ArrayBracketPair>> exceptId;
 	Position begin;
 	Position catchBegin;
 	Position typesBegin;

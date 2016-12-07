@@ -1111,7 +1111,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getIdentifier().accept(this, arg);
+            R result = n.getName().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1482,7 +1482,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final VariableDeclarator n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getIdentifier().accept(this, arg);
+            R result = n.getName().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1501,12 +1501,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        return null;
-    }
-
-    @Override
-    public R visit(final VariableDeclaratorId n, final A arg) {
-        visitComment(n, arg);
         return null;
     }
 

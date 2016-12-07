@@ -100,14 +100,14 @@ public class FieldDeclarationBuildersTest {
     @Test(expected = IllegalStateException.class)
     public void testCreateGetterWithANonValidField() {
         FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
-        myPrivateField.getVariables().add(new VariableDeclarator(INT_TYPE, new VariableDeclaratorId("secondField")));
+        myPrivateField.getVariables().add(new VariableDeclarator(INT_TYPE, "secondField"));
         myPrivateField.createGetter();
     }
 
     @Test(expected = IllegalStateException.class)
     public void testCreateSetterWithANonValidField() {
         FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
-        myPrivateField.getVariables().add(new VariableDeclarator(INT_TYPE, new VariableDeclaratorId("secondField")));
+        myPrivateField.getVariables().add(new VariableDeclarator(INT_TYPE, "secondField"));
         myPrivateField.createSetter();
     }
 

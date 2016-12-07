@@ -196,7 +196,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(VariableDeclarator _n, Object _arg) {
-        VariableDeclaratorId id = cloneNode(_n.getIdentifier(), _arg);
+        SimpleName id = cloneNode(_n.getName(), _arg);
         Expression init = cloneNode(_n.getInitializer(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
         Type<?> type = cloneNode(_n.getType(), _arg);
@@ -206,18 +206,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
                 type,
                 id, 
                 init
-        );
-        r.setComment(comment);
-        return r;
-    }
-
-    @Override
-    public Visitable visit(VariableDeclaratorId _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-
-        VariableDeclaratorId r = new VariableDeclaratorId(
-                _n.getRange().orElse(null),
-                _n.getName()
         );
         r.setComment(comment);
         return r;
@@ -272,7 +260,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(Parameter _n, Object _arg) {
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
         Type<?> type_ = cloneNode(_n.getType(), _arg);
-        VariableDeclaratorId id = cloneNode(_n.getIdentifier(), _arg);
+        SimpleName id = cloneNode(_n.getName(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
 
         Parameter r = new Parameter(

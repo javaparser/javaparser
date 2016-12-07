@@ -68,8 +68,6 @@ public interface VoidVisitor<A> {
 
     void visit(VariableDeclarator n, A arg);
 
-    void visit(VariableDeclaratorId n, A arg);
-
     void visit(ConstructorDeclaration n, A arg);
 
     void visit(MethodDeclaration n, A arg);

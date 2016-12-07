@@ -547,7 +547,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final Parameter n, final A arg) {
         visitComment(n, arg);
         visitAnnotations(n, arg);
-        n.setIdentifier((VariableDeclaratorId) n.getIdentifier().accept(this, arg));
+        n.setName((SimpleName) n.getName().accept(this, arg));
         n.setType((Type) n.getType().accept(this, arg));
         return n;
     }
@@ -734,21 +734,15 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final VariableDeclarator n, final A arg) {
         visitComment(n, arg);
-        final VariableDeclaratorId id = (VariableDeclaratorId) n.getIdentifier().accept(this, arg);
+        final SimpleName id = (SimpleName) n.getName().accept(this, arg);
         if (id == null) {
             return null;
         }
-        n.setIdentifier(id);
+        n.setName(id);
         n.setType((Type) n.getType().accept(this, arg));
         if (n.getInitializer().isPresent()) {
             n.setInitializer((Expression) n.getInitializer().get().accept(this, arg));
         }
-        return n;
-    }
-
-    @Override
-    public Visitable visit(final VariableDeclaratorId n, final A arg) {
-        visitComment(n, arg);
         return n;
     }
 

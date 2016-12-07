@@ -47,8 +47,7 @@ public final class Parameter extends Node implements
         NodeWithType<Parameter,Type<?>>,
         NodeWithAnnotations<Parameter>,
         NodeWithSimpleName<Parameter>,
-        NodeWithModifiers<Parameter>,
-        NodeWithVariableDeclaratorId<Parameter> {
+        NodeWithModifiers<Parameter> {
 
     private Type<?> type;
 
@@ -58,7 +57,7 @@ public final class Parameter extends Node implements
 
     private NodeList<AnnotationExpr> annotations;
 
-    private VariableDeclaratorId identifier;
+    private SimpleName name;
 
     public Parameter() {
         this(null,
@@ -66,16 +65,16 @@ public final class Parameter extends Node implements
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
                 false,
-                new VariableDeclaratorId());
+                new SimpleName());
     }
 
-    public Parameter(Type<?> type, VariableDeclaratorId identifier) {
+    public Parameter(Type<?> type, SimpleName name) {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 type,
                 false,
-                identifier);
+                name);
     }
 
     /**
@@ -90,16 +89,16 @@ public final class Parameter extends Node implements
                 new NodeList<>(),
                 type,
                 false,
-                new VariableDeclaratorId(name));
+                new SimpleName(name));
     }
 
-    public Parameter(EnumSet<Modifier> modifiers, Type<?> type, VariableDeclaratorId identifier) {
+    public Parameter(EnumSet<Modifier> modifiers, Type<?> type, SimpleName name) {
         this(null,
                 modifiers,
                 new NodeList<>(),
                 type,
                 false,
-                identifier);
+                name);
     }
 
     public Parameter(final Range range,
@@ -107,11 +106,11 @@ public final class Parameter extends Node implements
                      NodeList<AnnotationExpr> annotations,
                      Type<?> type,
                      boolean isVarArgs,
-                     VariableDeclaratorId identifier) {
+                     SimpleName name) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
-        setIdentifier(identifier);
+        setName(name);
         setType(type);
         setVarArgs(isVarArgs);
     }
@@ -158,28 +157,10 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public VariableDeclaratorId getIdentifier() {
-        return identifier;
-    }
-
-    @Override
     public SimpleName getName() {
-        return getIdentifier().getName();
+        return name;
     }
-
-    @Override
-    public Parameter setName(SimpleName name) {
-        assertNotNull(name);
-        if (identifier != null) {
-            identifier.setName(name);
-        } else {
-            VariableDeclaratorId newId = new VariableDeclaratorId(name);
-            notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, newId);
-            identifier = newId;
-        }
-        return this;
-    }
-
+    
     /**
      * Return the modifiers of this parameter declaration.
      *
@@ -204,9 +185,10 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public Parameter setIdentifier(VariableDeclaratorId identifier) {
-        this.identifier = identifier;
-        setAsParentNodeOf(this.identifier);
+    public Parameter setName(SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 

@@ -40,7 +40,7 @@ public class NodeTest {
         cu.getClassByName("MyCoolClass").getMethodsByName("foo").get(0).getParamByName("p").setName("myParam");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "VariableDeclarator.type changed from int to boolean",
-                "VariableDeclaratorId.name changed from p to myParam"), changes);
+                "Parameter.name changed from p to myParam"), changes);
     }
 
     @Test
@@ -96,12 +96,12 @@ public class NodeTest {
         cu.getClassByName("MyCoolClass").getMethodsByName("foo").get(0).getParamByName("p").setName("myParam");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "VariableDeclarator.type changed from int to boolean",
-                "VariableDeclaratorId.name changed from p to myParam"), changes);
+                "Parameter.name changed from p to myParam"), changes);
 
         cu.getClassByName("MyCoolClass").addField("int", "bar").getVariables().get(0).setInit("0");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "VariableDeclarator.type changed from int to boolean",
-                "VariableDeclaratorId.name changed from p to myParam"), changes);
+                "Parameter.name changed from p to myParam"), changes);
     }
 
     @Test
@@ -129,12 +129,12 @@ public class NodeTest {
         cu.getClassByName("MyCoolClass").getMethodsByName("foo").get(0).getParamByName("p").setName("myParam");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "VariableDeclarator.type changed from int to boolean",
-                "VariableDeclaratorId.name changed from p to myParam"), changes);
+                "Parameter.name changed from p to myParam"), changes);
 
         cu.getClassByName("MyCoolClass").addField("int", "bar").getVariables().get(0).setInit("0");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "VariableDeclarator.type changed from int to boolean",
-                "VariableDeclaratorId.name changed from p to myParam",
+                "Parameter.name changed from p to myParam",
                 "FieldDeclaration.modifiers changed from [] to []",
                 "VariableDeclarator.type changed from empty to int",
                 "VariableDeclarator.initializer changed from null to 0"), changes);

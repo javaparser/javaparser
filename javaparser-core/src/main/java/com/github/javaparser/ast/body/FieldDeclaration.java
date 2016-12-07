@@ -102,7 +102,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      * @param name field name
      */
     public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name) {
-        this(assertNotNull(modifiers), new VariableDeclarator(type, new VariableDeclaratorId(assertNotNull(name))));
+        this(assertNotNull(modifiers), new VariableDeclarator(type, assertNotNull(name)));
     }
 
     @Override
@@ -172,7 +172,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                     "You can use this only when the field is attached to a class or an enum");
 
         VariableDeclarator variable = getVariable(0);
-        String fieldName = variable.getIdentifier().getNameAsString();
+        String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         if (parentClass != null)
@@ -204,7 +204,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                     "You can use this only when the field is attached to a class or an enum");
 
         VariableDeclarator variable = getVariable(0);
-        String fieldName = variable.getIdentifier().getNameAsString();
+        String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;
@@ -213,7 +213,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         else
             setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
         setter.setType(VOID_TYPE);
-        setter.getParameters().add(new Parameter(variable.getType(), new VariableDeclaratorId(fieldName)));
+        setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
         blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.ASSIGN));

@@ -25,8 +25,9 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
-import com.github.javaparser.ast.nodeTypes.NodeWithVariableDeclaratorId;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -41,44 +42,44 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class VariableDeclarator extends Node implements
         NodeWithType<VariableDeclarator, Type<?>>,
-        NodeWithVariableDeclaratorId<VariableDeclarator> {
+        NodeWithSimpleName<VariableDeclarator> {
 
-    private VariableDeclaratorId identifier;
+    private SimpleName name;
 
     private Expression initializer;
 
     private Type<?> type;
 
     public VariableDeclarator() {
-        this(null, new VariableDeclaratorId(), null);
+        this(null, new SimpleName(), null);
     }
 
-    public VariableDeclarator(Type<?> type, VariableDeclaratorId identifier) {
-        this(null, type, identifier, null);
+    public VariableDeclarator(Type<?> type, SimpleName name) {
+        this(null, type, name, null);
     }
 
     public VariableDeclarator(Type<?> type, String variableName) {
-        this(null, type, new VariableDeclaratorId(variableName), null);
+        this(null, type, new SimpleName(variableName), null);
     }
 
     /**
      * Defines the declaration of a variable.
      *
-     * @param identifier The identifier for this variable. IE. The variables name.
+     * @param name The identifier for this variable. IE. The variables name.
      * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr}
      * is unnecessary as the <code>=</code> operator is already added.
      */
-    public VariableDeclarator(Type<?> type, VariableDeclaratorId identifier, Expression initializer) {
-        this(null, type, identifier, initializer);
+    public VariableDeclarator(Type<?> type, SimpleName name, Expression initializer) {
+        this(null, type, name, initializer);
     }
 
     public VariableDeclarator(Type<?> type, String variableName, Expression initializer) {
-        this(null, type, new VariableDeclaratorId(variableName), initializer);
+        this(null, type, new SimpleName(variableName), initializer);
     }
 
-    public VariableDeclarator(Range range, Type<?> type, VariableDeclaratorId identifier, Expression initializer) {
+    public VariableDeclarator(Range range, Type<?> type, SimpleName name, Expression initializer) {
         super(range);
-        setIdentifier(identifier);
+        setName(name);
         setInitializer(initializer);
         setType(type);
     }
@@ -93,18 +94,20 @@ public final class VariableDeclarator extends Node implements
         v.visit(this, arg);
     }
 
-    public VariableDeclaratorId getIdentifier() {
-        return identifier;
-    }
-
     public Optional<Expression> getInitializer() {
         return Optional.ofNullable(initializer);
     }
 
-    public VariableDeclarator setIdentifier(VariableDeclaratorId identifier) {
-        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
-        this.identifier = assertNotNull(identifier);
-        setAsParentNodeOf(this.identifier);
+    @Override
+    public SimpleName getName() {
+        return name;
+    }
+
+    @Override
+    public VariableDeclarator setName(SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 

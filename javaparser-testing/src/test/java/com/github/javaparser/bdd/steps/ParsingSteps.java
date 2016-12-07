@@ -139,7 +139,7 @@ public class ParsingSteps {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr expression = (VariableDeclarationExpr) ((ExpressionStmt) statement).getExpression();
         VariableDeclarator variableDeclarator = expression.getVariable(0);
-        assertThat(variableDeclarator.getIdentifier().getNameAsString(), is(expectedName));
+        assertThat(variableDeclarator.getNameAsString(), is(expectedName));
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition body is \"$expectedBody\"")

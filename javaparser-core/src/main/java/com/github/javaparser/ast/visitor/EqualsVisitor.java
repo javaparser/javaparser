@@ -388,7 +388,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final VariableDeclarator n1, final Visitable arg) {
         final VariableDeclarator n2 = (VariableDeclarator) arg;
 
-        if (!nodeEquals(n1.getIdentifier(), n2.getIdentifier())) {
+        if (!nodeEquals(n1.getName(), n2.getName())) {
             return false;
         }
 
@@ -397,17 +397,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         }
 
         if (!nodeEquals(n1.getInitializer().orElse(null), n2.getInitializer().orElse(null))) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public Boolean visit(final VariableDeclaratorId n1, final Visitable arg) {
-        final VariableDeclaratorId n2 = (VariableDeclaratorId) arg;
-
-        if (!objEquals(n1.getName(), n2.getName())) {
             return false;
         }
 
@@ -505,7 +494,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getIdentifier(), n2.getIdentifier())) {
+        if (!nodeEquals(n1.getName(), n2.getName())) {
             return false;
         }
 

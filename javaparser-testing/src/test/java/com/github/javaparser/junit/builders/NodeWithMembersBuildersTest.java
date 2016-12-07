@@ -4,8 +4,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -14,27 +12,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class NodeWithMembersBuildersTest {
-    CompilationUnit cu;
-    private ClassOrInterfaceDeclaration classDeclaration;
-
-    @Before
-    public void setup() {
-        cu = new CompilationUnit();
-        classDeclaration = cu.addClass("test");
-    }
-
-    @After
-    public void teardown() {
-        cu = null;
-        classDeclaration = null;
-    }
+    private final CompilationUnit cu = new CompilationUnit();
+    private final ClassOrInterfaceDeclaration classDeclaration = cu.addClass("test");
 
     @Test
     public void testAddField() {
         FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(addField, classDeclaration.getMember(0));
-        assertEquals("fieldName", addField.getVariable(0).getIdentifier().getNameAsString());
+        assertEquals("fieldName", addField.getVariable(0).getNameAsString());
     }
 
     @Test

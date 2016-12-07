@@ -426,7 +426,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final VariableDeclarator n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        n.getIdentifier().accept(this, arg);
+        n.getName().accept(this, arg);
 
 
         final List<ArrayType> arrayTypeBuffer = new LinkedList<>();
@@ -446,12 +446,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print(" = ");
             n.getInitializer().get().accept(this, arg);
         }
-    }
-
-    @Override
-    public void visit(final VariableDeclaratorId n, final Void arg) {
-        printJavaComment(n.getComment(), arg);
-        n.getName().accept(this, arg);
     }
 
     @Override
@@ -794,7 +788,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print("...");
         }
         printer.print(" ");
-        n.getIdentifier().accept(this, arg);
+        n.getName().accept(this, arg);
     }
 
     @Override
