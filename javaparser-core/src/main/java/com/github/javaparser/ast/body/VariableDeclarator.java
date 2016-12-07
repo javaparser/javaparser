@@ -130,12 +130,8 @@ public final class VariableDeclarator extends Node implements
      * @param init the initializer expression, can be null
      * @return this, the VariableDeclarator
      */
-    public VariableDeclarator setInit(String init) {
-        NameExpr newInit = new NameExpr(assertNotNull(init));
-        notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, newInit);
-        this.initializer = newInit;
-        setAsParentNodeOf(this.initializer);
-        return this;
+    public VariableDeclarator setInitializer(String init) {
+        return setInitializer(new NameExpr(assertNotNull(init)));
     }
 
     @Override

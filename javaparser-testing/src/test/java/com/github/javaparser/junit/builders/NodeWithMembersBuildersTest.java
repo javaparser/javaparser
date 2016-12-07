@@ -33,7 +33,7 @@ public class NodeWithMembersBuildersTest {
 
     @Test
     public void testAddCtor() {
-        ConstructorDeclaration addCtor = classDeclaration.addCtor(Modifier.PUBLIC);
+        ConstructorDeclaration addCtor = classDeclaration.addConstructor(Modifier.PUBLIC);
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(addCtor, classDeclaration.getMember(0));
         assertEquals(classDeclaration.getName(), addCtor.getName());

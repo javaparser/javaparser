@@ -72,7 +72,6 @@ public interface NodeWithMembers<N extends Node> {
         fieldDeclaration.getVariables().add(variable);
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        variable.setType(type);
         return fieldDeclaration;
     }
 
@@ -169,7 +168,7 @@ public interface NodeWithMembers<N extends Node> {
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
-    default ConstructorDeclaration addCtor(Modifier... modifiers) {
+    default ConstructorDeclaration addConstructor(Modifier... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
         constructorDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
