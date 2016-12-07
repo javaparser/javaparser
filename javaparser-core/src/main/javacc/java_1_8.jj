@@ -1735,7 +1735,7 @@ ArrayInitializerExpr ArrayInitializer():
 MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
-	Type type;
+	Type<?> type;
 	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
 	ArrayBracketPair arrayBracketPair;
@@ -1746,16 +1746,17 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	ReferenceType throwType;
 }
 {
-  // Modifiers already matched in the caller!
-  [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
-  type = ResultType() { begin = begin.orIfInvalid(type.getBegin().get()); }
-  name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
-    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
-  ( block = Block() | ";" )
-  { 
+    // Modifiers already matched in the caller!
+    [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
+    type = ResultType() { begin = begin.orIfInvalid(type.getBegin().get()); }
+    name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+      ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); } )* ]
+    ( block = Block() | ";" )
+    { 
+        type = juggleArrayType(type, arrayBracketPairs);
         return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, false, parameters, throws_, block);
-  }
+    }
 }
 
 ReferenceType ReferenceTypeWithAnnotations():

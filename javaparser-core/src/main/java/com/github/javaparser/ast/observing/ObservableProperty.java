@@ -80,5 +80,6 @@ public enum ObservableProperty {
     VALUES,
     VARIABLE,
     VARIABLES,
-    ELEMENT_TYPE, VAR_ARGS
+    ELEMENT_TYPE, 
+    VAR_ARGS
 }

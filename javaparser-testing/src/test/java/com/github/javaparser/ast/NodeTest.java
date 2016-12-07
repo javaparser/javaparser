@@ -137,7 +137,6 @@ public class NodeTest {
                 "VariableDeclaratorId.name changed from p to myParam",
                 "FieldDeclaration.modifiers changed from [] to []",
                 "VariableDeclarator.type changed from empty to int",
-                "VariableDeclaratorId.array_bracket_pairs_after_id changed from com.github.javaparser.ast.NodeList@1 to com.github.javaparser.ast.NodeList@1",
                 "VariableDeclarator.initializer changed from null to 0"), changes);
     }
 
