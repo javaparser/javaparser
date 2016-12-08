@@ -3245,7 +3245,7 @@ NodeList<AnnotationExpr> Annotations():
 	AnnotationExpr annotation;
 }
 {
-   (annotation = Annotation()  {annotations = add(annotations, annotation);} )*
+   (LOOKAHEAD("@") annotation = Annotation()  {annotations = add(annotations, annotation);} )*
    { return annotations; }
 }
 
