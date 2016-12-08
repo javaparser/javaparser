@@ -2698,7 +2698,7 @@ NodeList<Expression> ArgumentList():
 Expression AllocationExpression(Expression scope):
 {
 	Expression ret;
-	Type type;
+	Type<?> type;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
 	NodeList<Expression> args;
@@ -2706,29 +2706,25 @@ Expression AllocationExpression(Expression scope):
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin().get();} }
-
-  annotations = Annotations() 
-  (
-	  type = PrimitiveType() {type.setAnnotations(annotations); }
-	  ret = ArrayCreation(begin, type)
-	|
-	 [ typeArgs = TypeArguments() annotations = Annotations() ]
-	  type = AnnotatedClassOrInterfaceType()
-      (
-	      ret = ArrayCreation(begin, type)
-	  |
-	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
-      )
-  )
-  { return ret; }
+    "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin().get();} }
+    
+    annotations = Annotations() 
+    (
+        type = PrimitiveType() { type.setAnnotations(annotations); }
+        ret = ArrayCreation(begin, type)
+    |
+        [ typeArgs = TypeArguments() annotations = Annotations() ]
+        type = AnnotatedClassOrInterfaceType()
+        (
+            ret = ArrayCreation(begin, type)
+        |
+            args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
+            { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
+        )
+    )
+    { return ret; }
 }
 
-/*
- * The third LOOKAHEAD specification below is to parse to PrimarySuffix
- * if there is an expression between the "[...]".
- */
 ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
 	Expression expr = null;
@@ -2738,11 +2734,10 @@ ArrayCreationExpr ArrayCreation(Position begin, Type type):
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 { 
-    (
+    ( LOOKAHEAD(2)
         annotations = Annotations() 
         "[" 
-        (expr = Expression())? 
-            { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
+        (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
         "]" 
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
