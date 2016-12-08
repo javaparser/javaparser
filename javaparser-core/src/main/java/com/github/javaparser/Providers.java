@@ -57,4 +57,27 @@ public final class Providers {
         return new StringProvider(assertNotNull(source));
     }
 
+
+
+    /**
+     * Provide a Provider from the resource found in classLoader
+     * @param classLoader Class loader in which resource is searched
+     * @param pathToResource path to resource in provided class loader. As working relatively to a class loader, no "/"
+     * at the beginning of the path
+     * @param encoding encoding
+     * @return the provider associated to pathToResource
+     */
+    public static Provider resourceProvider(ClassLoader classLoader, String pathToResource, Charset encoding) {
+        return provider(classLoader.getResourceAsStream(pathToResource), encoding);
+    }
+
+    public static Provider resourceProvider(String pathToResource, Charset encoding) {
+        ClassLoader classLoader = Provider.class.getClassLoader();
+        return resourceProvider(classLoader, pathToResource, encoding);
+    }
+
+    public static Provider resourceProvider(String pathToResource) {
+        return resourceProvider(pathToResource, UTF8);
+    }
+
 }

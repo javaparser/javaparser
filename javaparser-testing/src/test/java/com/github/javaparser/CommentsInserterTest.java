@@ -33,9 +33,8 @@ import static org.junit.Assert.assertEquals;
 public class CommentsInserterTest {
 
     private ParseResult parseSample(String sampleName) {
-        InputStream is = this.getClass().getResourceAsStream(
-                "/com/github/javaparser/issue_samples/" + sampleName + ".java.txt");
-        Provider p = Providers.provider(is, Charsets.UTF_8);
+        Provider p = Providers.resourceProvider(
+                "com/github/javaparser/issue_samples/" + sampleName + ".java.txt");
         return new JavaParser().parse(ParseStart.COMPILATION_UNIT, p);
     }
 
