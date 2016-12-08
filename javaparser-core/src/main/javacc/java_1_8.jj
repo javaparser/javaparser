@@ -23,7 +23,7 @@ options {
   LOOKAHEAD=1;
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
-  COMMON_TOKEN_ACTION=true; // Using the CommonTokenAction callback to collect tokens for later usage
+  COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
   TOKEN_FACTORY = "ASTParser.GTToken";
   JAVA_TEMPLATE_TYPE = "modern";
@@ -146,7 +146,7 @@ final class ASTParser {
      *
      * @return a list of tokens
      */
-    public List<Token> getTokens() {
+    public List<JavaToken> getTokens() {
         return token_source.getTokens();
     }
 
@@ -251,7 +251,7 @@ PARSER_END(ASTParser)
 
 /* WHITE SPACE */
 
-SKIP :
+SPECIAL_TOKEN :
 {
   " "
 | "\t"
@@ -287,46 +287,44 @@ SKIP :
 
 TOKEN_MGR_DECLS :
 {
-    private List<Token> tokens = new ArrayList<Token>();
+    private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
 
     void reset() {
-        tokens = new ArrayList<Token>();
+        tokens = new ArrayList<JavaToken>();
         commentsCollection = new CommentsCollection();
     }
 
-    List<Token> getTokens() {
+    List<JavaToken> getTokens() {
         return tokens;
     }
-    
+
     CommentsCollection getCommentsCollection() {
         return commentsCollection;
     }
 
     private void CommonTokenAction(Token token) {
-        tokens.add(token);
+        if(token.specialToken!=null) {
+            CommonTokenAction(token.specialToken);
+        }
+        tokens.add(new JavaToken(token));
 
-        while (token.specialToken != null) {
-            token = token.specialToken;
-            String commentText = token.image;
-            if (token.kind == JAVA_DOC_COMMENT) {
-                JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == MULTI_LINE_COMMENT) {
-                BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == SINGLE_LINE_COMMENT) {
-                // line comments have their end of line character(s) included, and we don't want that.
-                Range range = tokenRange(token);
-                while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
-                    commentText = commentText.substring(0, commentText.length() - 1);
-                }
-                range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-                LineComment comment = new LineComment(range, commentText.substring(2));
-                commentsCollection.addComment(comment);
-            } else {
-                throw new AssertionError("Didn't expect to get here. Please file a bug report. [" + commentText + "]");
+        String commentText = token.image;
+        if (token.kind == JAVA_DOC_COMMENT) {
+            JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
+            commentsCollection.addComment(comment);
+        } else if (token.kind == MULTI_LINE_COMMENT) {
+            BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
+            commentsCollection.addComment(comment);
+        } else if (token.kind == SINGLE_LINE_COMMENT) {
+            // line comments have their end of line character(s) included, and we don't want that.
+            Range range = tokenRange(token);
+            while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
+                commentText = commentText.substring(0, commentText.length() - 1);
             }
+            range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
+            LineComment comment = new LineComment(range, commentText.substring(2));
+            commentsCollection.addComment(comment);
         }
     }
 }
