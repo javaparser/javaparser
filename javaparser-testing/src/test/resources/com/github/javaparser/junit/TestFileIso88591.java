@@ -2,17 +2,6 @@ package com.github.javaparser;
 
 public class TestFile {
 
-    public String usésciiString = "?$??";
-    public int foo(int e) {
-        int a = 20;
-        return a;
-    }
+    public String strïng = "Strange attribute name [check the i]";
 
-    public void abc() {
-
-    }
-
-    public int def() {
-        return 10;
-    }
 }

@@ -60,22 +60,26 @@ public final class Providers {
 
 
     /**
-     * Provide a Provider from the resource found in classLoader
-     * @param classLoader Class loader in which resource is searched
-     * @param pathToResource path to resource in provided class loader. As working relatively to a class loader, no "/"
-     * at the beginning of the path
-     * @param encoding encoding
-     * @return the provider associated to pathToResource
+     * Provide a Provider from the resource found in class loader with the provided encoding.<br/>
+     * As resource is accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
     public static Provider resourceProvider(ClassLoader classLoader, String pathToResource, Charset encoding) {
         return provider(classLoader.getResourceAsStream(pathToResource), encoding);
     }
 
+    /**
+     * Provide a Provider from the resource found in the current class loader with the provided encoding.<br/>
+     * As resource is accessed through a class loader, a leading "/" is not allowed in pathToResource
+     */
     public static Provider resourceProvider(String pathToResource, Charset encoding) {
         ClassLoader classLoader = Provider.class.getClassLoader();
         return resourceProvider(classLoader, pathToResource, encoding);
     }
 
+    /**
+     * Provide a Provider from the resource found in the current class loader with UTF-8 encoding.<br/>
+     * As resource is accessed through a class loader, a leading "/" is not allowed in pathToResource
+     */
     public static Provider resourceProvider(String pathToResource) {
         return resourceProvider(pathToResource, UTF8);
     }
