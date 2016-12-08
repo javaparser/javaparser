@@ -3252,50 +3252,25 @@ NodeList<AnnotationExpr> Annotations():
 AnnotationExpr Annotation():
 {
 	AnnotationExpr ret;
-}
-{
-  (
-	   LOOKAHEAD( "@" Name() "(" ( <IDENTIFIER> "=" | ")" ))
-	   ret = NormalAnnotation()
-	 |
-	   LOOKAHEAD( "@" Name() "(" )
-	   ret = SingleMemberAnnotation()
-	 |
-	   ret = MarkerAnnotation()
-  )
-  { return ret; }
-}
-
-NormalAnnotationExpr NormalAnnotation():
-{
 	Name name;
 	NodeList<MemberValuePair> pairs = emptyList();
 	Position begin;
-}
-{
-   "@" {begin=tokenBegin();} name = Name() "(" [ pairs = MemberValuePairs() ] ")"
-   { return new NormalAnnotationExpr(range(begin, tokenEnd()),name, pairs); }
-}
-
-MarkerAnnotationExpr MarkerAnnotation():
-{
-	Name name;
-	Position begin;
-}
-{
-  "@" {begin=tokenBegin();} name = Name()
-  { return new MarkerAnnotationExpr(range(begin, tokenEnd()),name); }
-}
-
-SingleMemberAnnotationExpr SingleMemberAnnotation():
-{
-	Name name;
 	Expression memberVal;
-	Position begin;
 }
 {
-  "@" {begin=tokenBegin();} name = Name() "(" memberVal = MemberValue() ")"
-  { return new SingleMemberAnnotationExpr(range(begin, tokenEnd()),name, memberVal); }
+    "@" { begin=tokenBegin(); } name = Name()
+    (
+        LOOKAHEAD( "(" ( <IDENTIFIER> "=" | ")" ))
+        "(" [ pairs = MemberValuePairs() ] ")"
+        { ret = new NormalAnnotationExpr(range(begin, tokenEnd()), name, pairs); }
+    |
+        LOOKAHEAD( "(" )
+        "(" memberVal = MemberValue() ")"
+        { ret = new SingleMemberAnnotationExpr(range(begin, tokenEnd()), name, memberVal); }
+    |
+        { ret = new MarkerAnnotationExpr(range(begin, tokenEnd()), name); }
+    )
+    { return ret; }
 }
 
 NodeList<MemberValuePair> MemberValuePairs():
