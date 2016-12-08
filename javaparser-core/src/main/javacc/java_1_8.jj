@@ -1307,7 +1307,7 @@ CompilationUnit CompilationUnit():
 }
 {
   [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-  ( in = ImportDeclaration() { imports = add(imports, in); } )*
+  ( LOOKAHEAD(ImportDeclaration()) in = ImportDeclaration() { imports = add(imports, in); } )*
   ( tn = TypeDeclaration() { types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
   { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
