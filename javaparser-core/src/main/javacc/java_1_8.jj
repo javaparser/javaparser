@@ -1313,7 +1313,7 @@ CompilationUnit CompilationUnit():
 }
 {
   [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-  ( in = ImportDeclaration() { imports = add(imports, in); } )*
+  ( LOOKAHEAD(ImportDeclaration()) in = ImportDeclaration() { imports = add(imports, in); } )*
   ( tn = TypeDeclaration() { types = add(types, tn); } )*
   (<EOF> | "\u001A" /** ctrl+z char **/)
   { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
@@ -2704,7 +2704,7 @@ NodeList<Expression> ArgumentList():
 Expression AllocationExpression(Expression scope):
 {
 	Expression ret;
-	Type type;
+	Type<?> type;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
 	NodeList<Expression> args;
@@ -2712,29 +2712,25 @@ Expression AllocationExpression(Expression scope):
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin().get();} }
-
-  annotations = Annotations() 
-  (
-	  type = PrimitiveType() {type.setAnnotations(annotations); }
-	  ret = ArrayCreation(begin, type)
-	|
-	 [ typeArgs = TypeArguments() annotations = Annotations() ]
-	  type = AnnotatedClassOrInterfaceType()
-      (
-	      ret = ArrayCreation(begin, type)
-	  |
-	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
-      )
-  )
-  { return ret; }
+    "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin().get();} }
+    
+    annotations = Annotations() 
+    (
+        type = PrimitiveType() { type.setAnnotations(annotations); }
+        ret = ArrayCreation(begin, type)
+    |
+        [ typeArgs = TypeArguments() annotations = Annotations() ]
+        type = AnnotatedClassOrInterfaceType()
+        (
+            ret = ArrayCreation(begin, type)
+        |
+            args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
+            { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
+        )
+    )
+    { return ret; }
 }
 
-/*
- * The third LOOKAHEAD specification below is to parse to PrimarySuffix
- * if there is an expression between the "[...]".
- */
 ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
 	Expression expr = null;
@@ -2744,11 +2740,10 @@ ArrayCreationExpr ArrayCreation(Position begin, Type type):
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 { 
-    (
+    ( LOOKAHEAD(2)
         annotations = Annotations() 
         "[" 
-        (expr = Expression())? 
-            { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
+        (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
         "]" 
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
@@ -3241,57 +3236,32 @@ NodeList<AnnotationExpr> Annotations():
 	AnnotationExpr annotation;
 }
 {
-   (annotation = Annotation()  {annotations = add(annotations, annotation);} )*
+   (LOOKAHEAD("@") annotation = Annotation()  {annotations = add(annotations, annotation);} )*
    { return annotations; }
 }
 
 AnnotationExpr Annotation():
 {
 	AnnotationExpr ret;
-}
-{
-  (
-	   LOOKAHEAD( "@" Name() "(" ( <IDENTIFIER> "=" | ")" ))
-	   ret = NormalAnnotation()
-	 |
-	   LOOKAHEAD( "@" Name() "(" )
-	   ret = SingleMemberAnnotation()
-	 |
-	   ret = MarkerAnnotation()
-  )
-  { return ret; }
-}
-
-NormalAnnotationExpr NormalAnnotation():
-{
 	Name name;
 	NodeList<MemberValuePair> pairs = emptyList();
 	Position begin;
-}
-{
-   "@" {begin=tokenBegin();} name = Name() "(" [ pairs = MemberValuePairs() ] ")"
-   { return new NormalAnnotationExpr(range(begin, tokenEnd()),name, pairs); }
-}
-
-MarkerAnnotationExpr MarkerAnnotation():
-{
-	Name name;
-	Position begin;
-}
-{
-  "@" {begin=tokenBegin();} name = Name()
-  { return new MarkerAnnotationExpr(range(begin, tokenEnd()),name); }
-}
-
-SingleMemberAnnotationExpr SingleMemberAnnotation():
-{
-	Name name;
 	Expression memberVal;
-	Position begin;
 }
 {
-  "@" {begin=tokenBegin();} name = Name() "(" memberVal = MemberValue() ")"
-  { return new SingleMemberAnnotationExpr(range(begin, tokenEnd()),name, memberVal); }
+    "@" { begin=tokenBegin(); } name = Name()
+    (
+        LOOKAHEAD( "(" ( <IDENTIFIER> "=" | ")" ))
+        "(" [ pairs = MemberValuePairs() ] ")"
+        { ret = new NormalAnnotationExpr(range(begin, tokenEnd()), name, pairs); }
+    |
+        LOOKAHEAD( "(" )
+        "(" memberVal = MemberValue() ")"
+        { ret = new SingleMemberAnnotationExpr(range(begin, tokenEnd()), name, memberVal); }
+    |
+        { ret = new MarkerAnnotationExpr(range(begin, tokenEnd()), name); }
+    )
+    { return ret; }
 }
 
 NodeList<MemberValuePair> MemberValuePairs():
