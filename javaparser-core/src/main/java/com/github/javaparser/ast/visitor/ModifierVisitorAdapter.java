@@ -817,7 +817,7 @@ public class ModifierVisitorAdapter<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(EmptyImportDeclaration n, A arg) {
+    public Visitable visit(BadImportDeclaration n, A arg) {
         visitComment(n, arg);
         return n;
     }

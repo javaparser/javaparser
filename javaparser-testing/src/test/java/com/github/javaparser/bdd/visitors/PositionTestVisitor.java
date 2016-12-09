@@ -146,7 +146,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override
-    public void visit(EmptyImportDeclaration n, Object arg) {
+    public void visit(BadImportDeclaration n, Object arg) {
         doTest(n);
         super.visit(n, arg);
     }

@@ -23,7 +23,7 @@ options {
   LOOKAHEAD=1;
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
-  COMMON_TOKEN_ACTION=true; // Using the CommonTokenAction callback to collect tokens for later usage
+  COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
   TOKEN_FACTORY = "ASTParser.GTToken";
   JAVA_TEMPLATE_TYPE = "modern";
@@ -146,7 +146,7 @@ final class ASTParser {
      *
      * @return a list of tokens
      */
-    public List<Token> getTokens() {
+    public List<JavaToken> getTokens() {
         return token_source.getTokens();
     }
 
@@ -155,7 +155,8 @@ final class ASTParser {
     }
 
     private void addProblem(String message) {
-        problems.add(new Problem(message + ": \"" + token.image, tokenRange(), null));
+        // TODO tokenRange only takes the final token. Need all the tokens.
+        problems.add(new Problem(message, tokenRange(), null));
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {
@@ -257,7 +258,7 @@ PARSER_END(ASTParser)
 
 /* WHITE SPACE */
 
-SKIP :
+SPECIAL_TOKEN :
 {
   " "
 | "\t"
@@ -293,46 +294,44 @@ SKIP :
 
 TOKEN_MGR_DECLS :
 {
-    private List<Token> tokens = new ArrayList<Token>();
+    private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
 
     void reset() {
-        tokens = new ArrayList<Token>();
+        tokens = new ArrayList<JavaToken>();
         commentsCollection = new CommentsCollection();
     }
 
-    List<Token> getTokens() {
+    List<JavaToken> getTokens() {
         return tokens;
     }
-    
+
     CommentsCollection getCommentsCollection() {
         return commentsCollection;
     }
 
     private void CommonTokenAction(Token token) {
-        tokens.add(token);
+        if(token.specialToken!=null) {
+            CommonTokenAction(token.specialToken);
+        }
+        tokens.add(new JavaToken(token));
 
-        while (token.specialToken != null) {
-            token = token.specialToken;
-            String commentText = token.image;
-            if (token.kind == JAVA_DOC_COMMENT) {
-                JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == MULTI_LINE_COMMENT) {
-                BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == SINGLE_LINE_COMMENT) {
-                // line comments have their end of line character(s) included, and we don't want that.
-                Range range = tokenRange(token);
-                while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
-                    commentText = commentText.substring(0, commentText.length() - 1);
-                }
-                range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-                LineComment comment = new LineComment(range, commentText.substring(2));
-                commentsCollection.addComment(comment);
-            } else {
-                throw new AssertionError("Didn't expect to get here. Please file a bug report. [" + commentText + "]");
+        String commentText = token.image;
+        if (token.kind == JAVA_DOC_COMMENT) {
+            JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
+            commentsCollection.addComment(comment);
+        } else if (token.kind == MULTI_LINE_COMMENT) {
+            BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
+            commentsCollection.addComment(comment);
+        } else if (token.kind == SINGLE_LINE_COMMENT) {
+            // line comments have their end of line character(s) included, and we don't want that.
+            Range range = tokenRange(token);
+            while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
+                commentText = commentText.substring(0, commentText.length() - 1);
             }
+            range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
+            LineComment comment = new LineComment(range, commentText.substring(2));
+            commentsCollection.addComment(comment);
         }
     }
 }
@@ -1312,11 +1311,15 @@ CompilationUnit CompilationUnit():
 	TypeDeclaration tn = null;
 }
 {
-  [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-  ( in = ImportDeclaration() { imports = add(imports, in); } )*
-  ( tn = TypeDeclaration() { types = add(types, tn); } )*
-  (<EOF> | "\u001A" /** ctrl+z char **/)
-  { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
+    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+    ( LOOKAHEAD(ImportDeclaration())
+        in = ImportDeclaration() { imports = add(imports, in); }
+        |
+        ";"
+    )*
+    ( tn = TypeDeclaration() { types = add(types, tn); } )*
+    (<EOF> | "\u001A" /** ctrl+z char **/)
+    { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -1339,37 +1342,32 @@ ImportDeclaration ImportDeclaration():
     ImportDeclaration ret;
 }
 {
+    "import" {begin = tokenBegin();}
     (
-        "import" {begin = tokenBegin();}
+        "static" type = ClassOrInterfaceType()
         (
-            "static" type = ClassOrInterfaceType()
-            (
-                "." "*" ";"
-                { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
-            |
-                ";"
-                {
-                    if(!type.getScope().isPresent()){
-                        addProblem("import static has only one identifier");
-                        ret = new EmptyImportDeclaration(range(begin, tokenEnd()));
-                    } else {
-                        ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
-                    }
-                }
-            )
+            "." "*" ";"
+            { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
         |
-            ( LOOKAHEAD(Name() "." "*")
-                name = Name() "." "*" ";"
-                { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
-            |
-                type = ClassOrInterfaceType() ";"
-                { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
-            )
+            ";"
+            {
+                if(!type.getScope().isPresent()){
+                    addProblem("import static has only one identifier");
+                    ret = new BadImportDeclaration(range(begin, tokenEnd()));
+                } else {
+                    ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
+                }
+            }
         )
     |
-        ";" {begin = tokenBegin();}
-        { ret = new EmptyImportDeclaration(range(begin, tokenEnd())); }
-    )    
+        ( LOOKAHEAD(Name() "." "*")
+            name = Name() "." "*" ";"
+            { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
+        |
+            type = ClassOrInterfaceType() ";"
+            { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
+        )
+    )
     { return ret; }
 }
 
@@ -2704,7 +2702,7 @@ NodeList<Expression> ArgumentList():
 Expression AllocationExpression(Expression scope):
 {
 	Expression ret;
-	Type type;
+	Type<?> type;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
 	NodeList<Expression> args;
@@ -2712,29 +2710,25 @@ Expression AllocationExpression(Expression scope):
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin().get();} }
-
-  annotations = Annotations() 
-  (
-	  type = PrimitiveType() {type.setAnnotations(annotations); }
-	  ret = ArrayCreation(begin, type)
-	|
-	 [ typeArgs = TypeArguments() annotations = Annotations() ]
-	  type = AnnotatedClassOrInterfaceType()
-      (
-	      ret = ArrayCreation(begin, type)
-	  |
-	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
-      )
-  )
-  { return ret; }
+    "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin().get();} }
+    
+    annotations = Annotations() 
+    (
+        type = PrimitiveType() { type.setAnnotations(annotations); }
+        ret = ArrayCreation(begin, type)
+    |
+        [ typeArgs = TypeArguments() annotations = Annotations() ]
+        type = AnnotatedClassOrInterfaceType()
+        (
+            ret = ArrayCreation(begin, type)
+        |
+            args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
+            { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
+        )
+    )
+    { return ret; }
 }
 
-/*
- * The third LOOKAHEAD specification below is to parse to PrimarySuffix
- * if there is an expression between the "[...]".
- */
 ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
 	Expression expr = null;
@@ -2744,11 +2738,10 @@ ArrayCreationExpr ArrayCreation(Position begin, Type type):
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 { 
-    (
+    ( LOOKAHEAD(2)
         annotations = Annotations() 
         "[" 
-        (expr = Expression())? 
-            { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
+        (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
         "]" 
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
@@ -3241,57 +3234,32 @@ NodeList<AnnotationExpr> Annotations():
 	AnnotationExpr annotation;
 }
 {
-   (annotation = Annotation()  {annotations = add(annotations, annotation);} )*
+   (LOOKAHEAD("@") annotation = Annotation()  {annotations = add(annotations, annotation);} )*
    { return annotations; }
 }
 
 AnnotationExpr Annotation():
 {
 	AnnotationExpr ret;
-}
-{
-  (
-	   LOOKAHEAD( "@" Name() "(" ( <IDENTIFIER> "=" | ")" ))
-	   ret = NormalAnnotation()
-	 |
-	   LOOKAHEAD( "@" Name() "(" )
-	   ret = SingleMemberAnnotation()
-	 |
-	   ret = MarkerAnnotation()
-  )
-  { return ret; }
-}
-
-NormalAnnotationExpr NormalAnnotation():
-{
 	Name name;
 	NodeList<MemberValuePair> pairs = emptyList();
 	Position begin;
-}
-{
-   "@" {begin=tokenBegin();} name = Name() "(" [ pairs = MemberValuePairs() ] ")"
-   { return new NormalAnnotationExpr(range(begin, tokenEnd()),name, pairs); }
-}
-
-MarkerAnnotationExpr MarkerAnnotation():
-{
-	Name name;
-	Position begin;
-}
-{
-  "@" {begin=tokenBegin();} name = Name()
-  { return new MarkerAnnotationExpr(range(begin, tokenEnd()),name); }
-}
-
-SingleMemberAnnotationExpr SingleMemberAnnotation():
-{
-	Name name;
 	Expression memberVal;
-	Position begin;
 }
 {
-  "@" {begin=tokenBegin();} name = Name() "(" memberVal = MemberValue() ")"
-  { return new SingleMemberAnnotationExpr(range(begin, tokenEnd()),name, memberVal); }
+    "@" { begin=tokenBegin(); } name = Name()
+    (
+        LOOKAHEAD( "(" ( <IDENTIFIER> "=" | ")" ))
+        "(" [ pairs = MemberValuePairs() ] ")"
+        { ret = new NormalAnnotationExpr(range(begin, tokenEnd()), name, pairs); }
+    |
+        LOOKAHEAD( "(" )
+        "(" memberVal = MemberValue() ")"
+        { ret = new SingleMemberAnnotationExpr(range(begin, tokenEnd()), name, memberVal); }
+    |
+        { ret = new MarkerAnnotationExpr(range(begin, tokenEnd()), name); }
+    )
+    { return ret; }
 }
 
 NodeList<MemberValuePair> MemberValuePairs():

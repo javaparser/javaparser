@@ -212,7 +212,7 @@ public interface VoidVisitor<A> {
 
     void visit(NodeList n, A arg);
 
-    void visit(EmptyImportDeclaration n, A arg);
+    void visit(BadImportDeclaration n, A arg);
 
     void visit(SingleStaticImportDeclaration n, A arg);
 

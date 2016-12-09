@@ -12,7 +12,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Example: <code>import static com.github.javaparser.JavaParser.*;</code> <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.4">7.5.4.
  * Static-Import-on-Demand Declarations</a></p>
  */
-public class StaticImportOnDemandDeclaration extends NonEmptyImportDeclaration {
+public class StaticImportOnDemandDeclaration extends ImportDeclaration {
     private ClassOrInterfaceType type;
 
     public StaticImportOnDemandDeclaration() {

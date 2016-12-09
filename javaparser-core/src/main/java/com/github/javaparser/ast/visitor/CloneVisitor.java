@@ -1159,9 +1159,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(EmptyImportDeclaration _n, Object _arg) {
+    public Visitable visit(BadImportDeclaration _n, Object _arg) {
         Comment comment = cloneNode(_n.getComment(), _arg);
-        return new EmptyImportDeclaration(_n.getRange().orElse(null)).setComment(comment);
+        return new BadImportDeclaration(_n.getRange().orElse(null)).setComment(comment);
     }
 
     @Override
