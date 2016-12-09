@@ -187,7 +187,6 @@ public class ClassCreator {
 We're trying to delete a=20 from this class:
 ```java
 public class D {
-
     public void foo(int e) {
         int a = 20;
     }
@@ -217,8 +216,7 @@ class MyVisitor extends ModifierVisitorAdapter<Void> {
 ```
 In result you'll receive this:
 ```java
-class D {
-
+public class D {
     public void foo(int e) {
     }
 }
