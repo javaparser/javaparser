@@ -32,19 +32,29 @@ public class ClassCreator {
         // set the package
         cu.setPackage(new PackageDeclaration(Name.parse("java.parser.test")));
 
+        // or a shortcut
+        cu.setPackage("java.parser.test");
+
         // create the type declaration 
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
+
         // create a method
         EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
         MethodDeclaration method = new MethodDeclaration(modifiers, VOID_TYPE, "main");
         modifiers.add(Modifier.STATIC);
         method.setModifiers(modifiers);
         type.addMember(method);
+        
+        // or a shortcut
+        MethodDeclaration main2 = type.addMethod("main2", Modifier.PUBLIC, Modifier.STATIC);
 
         // add a parameter to the method
         Parameter param = new Parameter(new ClassOrInterfaceType("String"), "args");
         param.setVarArgs(true);
         method.addParameter(param);
+        
+        // or a shortcut
+        main2.addAndGetParameter(String.class, "args").setVarArgs(true);
 
         // add a body to the method
         BlockStmt block = new BlockStmt();

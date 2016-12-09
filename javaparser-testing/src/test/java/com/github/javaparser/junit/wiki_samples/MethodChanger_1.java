@@ -26,9 +26,9 @@ public class MethodChanger_1 {
     /**
      * Simple visitor implementation for visiting MethodDeclaration nodes.
      */
-    private static class MethodChangerVisitor extends VoidVisitorAdapter<Object> {
+    private static class MethodChangerVisitor extends VoidVisitorAdapter<Void> {
         @Override
-        public void visit(MethodDeclaration n, Object arg) {
+        public void visit(MethodDeclaration n, Void arg) {
             // change the name of the method to upper case
             n.setName(n.getNameAsString().toUpperCase());
 

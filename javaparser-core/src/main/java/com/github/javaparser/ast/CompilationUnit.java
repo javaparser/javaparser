@@ -416,4 +416,11 @@ public final class CompilationUnit extends Node {
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(imports, types);
     }
+
+    /**
+     * Shortcut: set the package declaration with a string.
+     */
+    public CompilationUnit setPackage(String s) {
+        return setPackage(new PackageDeclaration(Name.parse(assertNotNull(s))));
+    }
 }
