@@ -14,7 +14,7 @@ import static java.util.Collections.singletonList;
 public class ParseResult<T> {
     private final T result;
     private final List<Problem> problems;
-    private final List<Token> tokens;
+    private final List<JavaToken> tokens;
     private final CommentsCollection commentsCollection;
 
     /**
@@ -24,7 +24,7 @@ public class ParseResult<T> {
      * @param problems a list of encountered parsing problems.
      * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
-    ParseResult(T result, List<Problem> problems, List<Token> tokens, CommentsCollection commentsCollection) {
+    ParseResult(T result, List<Problem> problems, List<JavaToken> tokens, CommentsCollection commentsCollection) {
         this.commentsCollection = commentsCollection;
         this.result = result;
         this.problems = problems;
@@ -71,7 +71,7 @@ public class ParseResult<T> {
     /**
      * @return the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
-    public Optional<List<Token>> getTokens() {
+    public Optional<List<JavaToken>> getTokens() {
         return Optional.ofNullable(tokens);
     }
 
